@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache\Http;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheControlDirectives;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntityAggregatorInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\Schema\DynamicEntityDefinition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

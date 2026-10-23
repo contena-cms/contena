@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Uuid;
 use Ramsey\Uuid\BinaryUtils;
 use Ramsey\Uuid\Generator\RandomGeneratorFactory;
 use Ramsey\Uuid\Generator\UnixTimeGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 
 class Uuid

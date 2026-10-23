@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Service;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\ShopApiSource;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Service\ServiceException;
 use Symfony\Component\HttpFoundation\Response;

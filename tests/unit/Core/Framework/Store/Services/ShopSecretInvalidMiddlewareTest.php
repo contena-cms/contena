@@ -10,7 +10,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Services\ShopSecretInvalidMiddleware;
 use Contena\Core\Framework\Store\StoreException;

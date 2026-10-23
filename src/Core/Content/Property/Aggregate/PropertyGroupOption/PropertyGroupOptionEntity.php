@@ -2,14 +2,11 @@
 
 namespace Contena\Core\Content\Property\Aggregate\PropertyGroupOption;
 
-use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOptionTranslation\PropertyGroupOptionTranslationCollection;
 use Contena\Core\Content\Property\PropertyGroupEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -33,7 +30,6 @@ class PropertyGroupOptionEntity extends Entity
 
     protected ?PropertyGroupOptionTranslationCollection $translations = null;
 
-    protected ?BlogConfiguratorSettingCollection $blogConfiguratorSettings = null;
 
     protected ?BlogCollection $blogProperties = null;
 
@@ -43,10 +39,6 @@ class PropertyGroupOptionEntity extends Entity
 
     protected bool $combinable = false;
 
-    /**
-     * @internal
-     */
-    private ?BlogConfiguratorSettingEntity $configuratorSetting = null;
 
     public function getGroupId(): string
     {
@@ -108,15 +100,7 @@ class PropertyGroupOptionEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getBlogConfiguratorSettings(): ?BlogConfiguratorSettingCollection
-    {
-        return $this->blogConfiguratorSettings;
-    }
 
-    public function setBlogConfiguratorSettings(BlogConfiguratorSettingCollection $blogConfiguratorSettings): void
-    {
-        $this->blogConfiguratorSettings = $blogConfiguratorSettings;
-    }
 
     public function getBlogProperties(): ?BlogCollection
     {
@@ -168,13 +152,5 @@ class PropertyGroupOptionEntity extends Entity
         $this->combinable = $combinable;
     }
 
-    public function getConfiguratorSetting(): ?BlogConfiguratorSettingEntity
-    {
-        return $this->configuratorSetting;
-    }
 
-    public function setConfiguratorSetting(BlogConfiguratorSettingEntity $configuratorSetting): void
-    {
-        $this->configuratorSetting = $configuratorSetting;
-    }
 }

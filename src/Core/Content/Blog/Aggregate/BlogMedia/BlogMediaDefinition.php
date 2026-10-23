@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Blog\Aggregate\BlogMedia;
 
-use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

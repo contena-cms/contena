@@ -10,7 +10,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

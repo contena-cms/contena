@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\MessageQueue\Command;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskScheduler;
 use Contena\Core\Framework\Util\MemorySizeCalculator;
 use Symfony\Component\Console\Attribute\AsCommand;

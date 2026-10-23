@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Api\StoreController;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreClient;

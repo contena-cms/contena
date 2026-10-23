@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ScheduledTask\DeleteThemeFilesTaskHandler;
 use Contena\Frontend\Theme\UnusedThemeDirectoryDeleter;
 

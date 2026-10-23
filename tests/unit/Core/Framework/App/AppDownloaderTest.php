@@ -9,7 +9,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppDownloader;
 use Contena\Core\Framework\App\Exception\AppDownloadException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpClient\Chunk\DataChunk;
 use Symfony\Component\HttpClient\Response\ResponseStream;

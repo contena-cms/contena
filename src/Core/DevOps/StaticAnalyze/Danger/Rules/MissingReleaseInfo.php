@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Reminds authors to document externally relevant changes in the central release-info file.

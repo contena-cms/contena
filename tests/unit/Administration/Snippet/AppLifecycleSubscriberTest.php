@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Symfony\Component\Finder\SplFileInfo;
 

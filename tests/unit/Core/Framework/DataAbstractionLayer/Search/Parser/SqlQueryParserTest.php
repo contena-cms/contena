@@ -16,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\SqlQueryParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ListDefinition;
 use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationDefinition;
 use Contena\Core\System\Unit\UnitDefinition;

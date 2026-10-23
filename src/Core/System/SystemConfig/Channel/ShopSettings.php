@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig\Channel;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
@@ -14,18 +13,6 @@ use Contena\Core\Framework\Struct\Struct;
  */
 final class ShopSettings extends Struct
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        public readonly ShopGeneralSettings $general,
-        public readonly ShopContactFormSettings $contactForm,
-        public readonly ShopLoginRegistrationSettings $loginRegistration,
-        public readonly ShopCartSettings $cart,
-        public readonly ShopListingSettings $listing,
-        public readonly ShopNewsletterSettings $newsletter,
-    ) {
-    }
 
     public function getApiAlias(): string
     {

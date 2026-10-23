@@ -8,10 +8,9 @@ use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBui
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\File\Event\ChannelFileTemplateResolveEvent;
-use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Twig\Environment;

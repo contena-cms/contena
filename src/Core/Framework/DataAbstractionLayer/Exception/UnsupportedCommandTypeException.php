@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

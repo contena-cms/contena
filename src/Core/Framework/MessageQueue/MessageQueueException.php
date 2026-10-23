@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\MessageQueue;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\ScheduledTaskExecutorCompilerPass;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskExecutor;
 use Symfony\Component\HttpFoundation\Response;
 

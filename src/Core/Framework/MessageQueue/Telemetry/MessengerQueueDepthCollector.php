@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\Telemetry;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInterface;
 use Symfony\Component\DependencyInjection\ServiceLocator;

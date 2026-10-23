@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\Suggest;
 
 use Contena\Core\Content\Blog\Channel\Suggest\AbstractBlogSuggestRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\GenericPageLoaderInterface;

@@ -3,22 +3,21 @@
 namespace Contena\Core\Test;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
-use Contena\Core\System\Country\CountryEntity;
-use Contena\Core\System\Currency\CurrencyEntity;
-use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Channel\Context\LanguageInfo;
+use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
+use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\Tax\TaxEntity;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

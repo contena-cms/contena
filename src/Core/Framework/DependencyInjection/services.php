@@ -6,7 +6,6 @@ use Cocur\Slugify\Bridge\Twig\SlugifyExtension;
 use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\System\User\ImitateUserTokenGenerator;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheStateValidator;
@@ -72,16 +71,15 @@ use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
 use Contena\Core\Framework\Log\ScheduledTask\LogCleanupTask;
 use Contena\Core\Framework\Log\ScheduledTask\LogCleanupTaskHandler;
 use Contena\Core\Framework\Log\SystemActivitySubscriber;
-use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Routing\Annotation\CriteriaValueResolver;
 use Contena\Core\Framework\Routing\ApiRequestContextResolver;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\CanonicalRedirectService;
+use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\ContextResolverListener;
 use Contena\Core\Framework\Routing\CoreSubscriber;
 use Contena\Core\Framework\Routing\Facade\RequestFacadeFactory;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
-use Contena\Core\Framework\Routing\PaymentScopeWhitelist;
 use Contena\Core\Framework\Routing\QueryDataBagResolver;
 use Contena\Core\Framework\Routing\RequestDataBagResolver;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
@@ -90,7 +88,6 @@ use Contena\Core\Framework\Routing\RouteParamsCleanupListener;
 use Contena\Core\Framework\Routing\RouteScope;
 use Contena\Core\Framework\Routing\RouteScopeListener;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
-use Contena\Core\Framework\Routing\ChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
@@ -111,6 +108,8 @@ use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Validation\Constraint\NoHtmlValidator;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\Kernel;
+use Contena\Core\System\Channel\Context\ChannelContextPersister;
+use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Currency\CurrencyFormatter;
 use Contena\Core\System\CustomEntity\CustomEntityLifecycleService;
 use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
@@ -119,15 +118,13 @@ use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchemaValidato
 use Contena\Core\System\CustomEntity\Xml\Config\CustomEntityEnrichmentService;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchemaValidator;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
-use Contena\Core\System\Channel\Context\ChannelContextPersister;
-use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Snippet\Api\SnippetController;
 use Contena\Core\System\Snippet\Api\TranslationController;
 use Contena\Core\System\Snippet\Files\AppSnippetFileLoader;
+use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\SnippetFileCollectionFactory;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
-use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;
 use Contena\Core\System\Snippet\Filter\AddedFilter;
 use Contena\Core\System\Snippet\Filter\AuthorFilter;
 use Contena\Core\System\Snippet\Filter\EditedFilter;
@@ -143,6 +140,7 @@ use Contena\Core\System\Snippet\Service\TranslationUpdater;
 use Contena\Core\System\Snippet\SnippetService;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\ImitateUserTokenGenerator;
 use Symfony\Bridge\Twig\Extension\TranslationExtension;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -154,6 +152,14 @@ use Symfony\Component\Runtime\Runner\Symfony\ResponseRunner;
 use Symfony\Component\Runtime\SymfonyRuntime;
 use Twig\Extra\Intl\IntlExtension;
 use Twig\Extra\String\StringExtension;
+use Contena\Core\Framework\Migration\Command\MigrationCommand;
+use Contena\Core\Framework\Migration\Command\MigrationDestructiveCommand;
+use Contena\Core\Framework\Migration\Command\RefreshMigrationCommand;
+use Contena\Core\Framework\Migration\IndexerQueuer;
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
+use Contena\Core\Framework\Migration\MigrationInfo;
+use Contena\Core\Framework\Migration\MigrationRuntime;
+use Contena\Core\Framework\Migration\MigrationSource;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -302,13 +308,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ]);
 
-    $services->set(CreateMigrationCommand::class)
-        ->args([
-            service(KernelPluginCollection::class),
-            param('kernel.contena_core_dir'),
-            param('kernel.contena_version'),
-        ])
-        ->tag('console.command');
 
     $services->set(RefreshMigrationCommand::class)
         ->args([
@@ -368,8 +367,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SymfonyRouteScopeWhitelist::class)
         ->tag('contena.route_scope_whitelist');
 
-    $services->set(PaymentScopeWhitelist::class)
-        ->tag('contena.route_scope_whitelist');
 
     $services->set(RouteScopeListener::class)
         ->args([
@@ -745,11 +742,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(RouteScopeRegistry::class),
         ]);
 
-    $services->set(ApiOrderCartService::class)
-        ->args([
-            service(CartService::class),
-            service(ChannelContextPersister::class),
-        ]);
 
     $services->set(ChannelProxyController::class)
         ->public()
@@ -760,9 +752,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ChannelContextPersister::class),
             service(ChannelContextService::class),
             service('event_dispatcher'),
-            service(ApiOrderCartService::class),
-            service(CartOrderRoute::class),
-            service(CartService::class),
             service('request_stack'),
             service(ImitateUserTokenGenerator::class),
         ])

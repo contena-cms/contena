@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Cms\Aggregate\CmsBlock;
 
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<CmsBlockEntity>

@@ -31,7 +31,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTermInterpreter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Doctrine\QueryBuilderDataExtractor;
 
 /**

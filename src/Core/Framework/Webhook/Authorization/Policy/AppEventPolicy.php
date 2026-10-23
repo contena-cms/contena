@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Event\AppInstalledEvent;
 use Contena\Core\Framework\App\Event\AppLifecycleEvent;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriberType;
 use Contena\Core\Framework\Webhook\Hookable;

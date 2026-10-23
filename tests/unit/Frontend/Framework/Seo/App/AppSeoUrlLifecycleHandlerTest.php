@@ -20,15 +20,12 @@ use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 use Contena\Frontend\Framework\Seo\App\AppEntitySeoUrlConfig;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlConfig;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlLifecycleHandler;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlSynchronizer;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 use Symfony\Component\Messenger\Envelope;
 
 /**

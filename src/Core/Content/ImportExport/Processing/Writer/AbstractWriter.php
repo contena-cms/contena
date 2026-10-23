@@ -3,7 +3,7 @@
 namespace Contena\Core\Content\ImportExport\Processing\Writer;
 
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 abstract class AbstractWriter
 {

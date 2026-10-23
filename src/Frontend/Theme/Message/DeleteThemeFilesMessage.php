@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\Message;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Contena\Frontend\Theme\ScheduledTask\DeleteThemeFilesTask;
 use Contena\Frontend\Theme\ScheduledTask\DeleteThemeFilesTaskHandler;

@@ -3,8 +3,6 @@
 namespace Contena\Frontend\Test\Page;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogEntity;
@@ -15,13 +13,14 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
-use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Page\PageLoadedEvent;
 use Contena\Frontend\Pagelet\PageletLoadedEvent;

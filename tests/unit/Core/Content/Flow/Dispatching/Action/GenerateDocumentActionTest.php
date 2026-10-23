@@ -43,16 +43,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Checkout\DocumentV2\Fixtures\DocumentConfigLoaderFactory;
-use Contena\Tests\Unit\Core\Checkout\DocumentV2\Fixtures\StaticDocumentDataProvider;
-use Contena\Tests\Unit\Core\Checkout\DocumentV2\Fixtures\StaticDocumentRenderer;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

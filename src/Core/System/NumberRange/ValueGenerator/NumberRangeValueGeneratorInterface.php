@@ -3,7 +3,6 @@
 namespace Contena\Core\System\NumberRange\ValueGenerator;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @deprecated tag:v6.8.0 - use AbstractNumberRangeValueGenerator instead

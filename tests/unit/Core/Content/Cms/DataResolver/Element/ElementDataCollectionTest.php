@@ -5,12 +5,11 @@ namespace Contena\Tests\Unit\Core\Content\Cms\DataResolver\Element;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

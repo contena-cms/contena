@@ -4,21 +4,12 @@ namespace Contena\Tests\Integration\Frontend\Theme;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Frontend;
 use Contena\Frontend\Test\Theme\ThemeRuntimeConfigTestService;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilder;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\ConfigWithoutFrontendDefined\ConfigWithoutFrontendDefined;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\InheritanceWithConfig\InheritanceWithConfig;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\PluginWildcardAndExplicit\PluginWildcardAndExplicit;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\SimpleTheme\SimpleTheme;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithMultiInheritance\ThemeWithMultiInheritance;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithoutFrontend\ThemeWithoutFrontend;
 
 /**
  * @internal

@@ -14,18 +14,18 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Sso\SsoService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKeyCollection;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKeyCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class AdminUserController extends AbstractController

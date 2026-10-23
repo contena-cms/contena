@@ -2,11 +2,8 @@
 
 namespace Contena\Frontend\Controller\Exception;
 
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\HttpFoundation\Response;
 
 class FrontendException extends HttpException
@@ -24,43 +21,6 @@ class FrontendException extends HttpException
 
     private const CUSTOM_APP_PATH = 'custom/apps/';
 
-    /**
-     * @param array<string, mixed> $parameters
-     */
-    public static function renderViewException(string $view, TwigError $error, array $parameters): self
-    {
-        /**
-         * The parameters array often contains large objects (like the page context). Passing them into the exception
-         * message may overflow further regex functions. Therefore, we filter out all objects.
-         */
-        $parameters = array_filter($parameters, static function (mixed $param): bool {
-            return !\is_object($param);
-        });
-
-        $isCustomApp = str_contains($error->getFile(), self::CUSTOM_APP_PATH);
-        $errorCode = $isCustomApp ? self::CAN_NOT_RENDER_CUSTOM_APP_VIEW : self::CAN_NOT_RENDER_VIEW;
-
-        $exception = new self(
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            $errorCode,
-            'Can not render {{ view }} view: {{ message }} with these parameters: {{ parameters }}',
-            [
-                'message' => $error->getMessage(),
-                'view' => $error->getSourceContext()?->getName() ?: $view,
-                'parameters' => \json_encode($parameters) ?: '',
-            ],
-            $error
-        );
-
-        if ($error->getLine() !== -1) {
-            $exception->line = $error->getLine();
-        }
-        if ($error->getFile()) {
-            $exception->file = $error->getFile();
-        }
-
-        return $exception;
-    }
 
     public static function unSupportFrontendResponse(): self
     {
@@ -115,20 +75,6 @@ class FrontendException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function domainNotFound(ChannelEntity $channel): self|ChannelDomainNotFoundException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return new ChannelDomainNotFoundException($channel);
-        }
-
-        return new self(
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            self::CHANNEL_DOMAIN_NOT_FOUND,
-            'No domain found for sales channel {{ channel }}',
-            ['channel' => $channel->getTranslation('name')],
-        );
-    }
 
     /**
      * Throwing the custom exception allows to still catch {@see RouteNotFoundException} as usual

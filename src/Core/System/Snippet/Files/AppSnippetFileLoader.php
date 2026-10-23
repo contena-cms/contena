@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Files;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 

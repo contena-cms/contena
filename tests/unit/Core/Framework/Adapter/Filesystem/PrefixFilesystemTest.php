@@ -11,7 +11,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

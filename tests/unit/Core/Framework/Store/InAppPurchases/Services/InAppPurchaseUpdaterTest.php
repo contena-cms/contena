@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\JWT\JWTDecoder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\InAppPurchase;

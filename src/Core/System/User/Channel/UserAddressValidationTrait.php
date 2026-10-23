@@ -2,12 +2,11 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 
 trait UserAddressValidationTrait
 {

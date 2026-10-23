@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

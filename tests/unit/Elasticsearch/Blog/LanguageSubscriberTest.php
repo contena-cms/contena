@@ -13,15 +13,14 @@ use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageDefinition;
-use Contena\Elasticsearch\Framework\ElasticsearchHelper;
-use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
-use Contena\Elasticsearch\Framework\SystemUpdateListener;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Contena\Elasticsearch\Blog\LanguageSubscriber;
+use Contena\Elasticsearch\Framework\ElasticsearchHelper;
+use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
+use Contena\Elasticsearch\Framework\SystemUpdateListener;
 
 /**
  * @internal

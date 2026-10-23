@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\CustomFieldsAccessorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CustomFieldsSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class CustomFields extends JsonField
 {

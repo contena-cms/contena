@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinition
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 
 /**

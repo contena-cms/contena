@@ -97,6 +97,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Content\Media\Thumbnail\Processor\GdImageThumbnailProcessor;
+use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

@@ -7,15 +7,14 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Rule\BillingStateRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfUuid;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\Rule\BillingStateRule;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 

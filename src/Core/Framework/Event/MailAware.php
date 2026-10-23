@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Event;
 
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
-use Contena\Core\Framework\Log\Package;
 
 #[IsFlowEventAware]
 interface MailAware

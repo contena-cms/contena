@@ -6,8 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeMappingDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

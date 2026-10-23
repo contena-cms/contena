@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\Channel\Struct;
 
 use Contena\Core\Content\Blog\Channel\CrossSelling\CrossSellingElementCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

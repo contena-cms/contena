@@ -5,10 +5,9 @@ namespace Contena\Tests\Unit\Core\System\User\Rule;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Rule\IsCompanyRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Rule\IsCompanyRule;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

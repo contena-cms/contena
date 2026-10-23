@@ -3,21 +3,10 @@
 namespace Contena\Core\Framework\Plugin\Context;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 
 class UninstallContext extends InstallContext
 {
-    public function __construct(
-        Plugin $plugin,
-        Context $context,
-        string $currentContenaVersion,
-        string $currentPluginVersion,
-        MigrationCollection $migrationCollection,
-        private readonly bool $keepUserData
-    ) {
-        parent::__construct($plugin, $context, $currentContenaVersion, $currentPluginVersion, $migrationCollection);
-    }
 
     /**
      * If false is returned, the plugin should remove its data (e.g. its tables) in `uninstall()`.

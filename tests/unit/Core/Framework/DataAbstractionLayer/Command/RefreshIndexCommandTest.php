@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Command\RefreshIndexCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Event\RefreshIndexEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\EventDispatcher\EventDispatcher;

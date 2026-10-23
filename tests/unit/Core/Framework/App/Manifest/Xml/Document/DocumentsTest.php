@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Document\Documents;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

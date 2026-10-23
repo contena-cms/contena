@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig\DTO;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field\Flag;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Flag a text column that an empty string should not be considered as null

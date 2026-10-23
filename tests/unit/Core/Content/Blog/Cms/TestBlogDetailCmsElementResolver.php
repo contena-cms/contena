@@ -2,12 +2,11 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\Cms;
 
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Cms\AbstractBlogDetailCmsElementResolver;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Blog\Cms\AbstractBlogDetailCmsElementResolver;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

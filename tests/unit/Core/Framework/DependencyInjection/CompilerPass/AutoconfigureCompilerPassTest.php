@@ -10,7 +10,6 @@ use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\Cors\CorsHeaders;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AutoconfigureCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEntityInterface;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

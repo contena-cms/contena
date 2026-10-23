@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp\Prompt;
 
 use Mcp\Capability\Attribute\McpPrompt;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

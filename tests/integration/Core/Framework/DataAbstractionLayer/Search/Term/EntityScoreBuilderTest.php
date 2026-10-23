@@ -21,9 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTerm;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\TestDefaults;
 
 /**

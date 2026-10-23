@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Flag;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\Log\Package;
 
 class AttributeEntityDefinition extends EntityDefinition
 {

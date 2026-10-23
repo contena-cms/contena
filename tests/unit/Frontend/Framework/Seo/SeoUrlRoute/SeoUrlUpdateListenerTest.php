@@ -5,16 +5,15 @@ namespace Contena\Tests\Unit\Frontend\Framework\Seo\SeoUrlRoute;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
-use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\LandingPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
-use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\SeoUrlUpdateListener;
 
 /**

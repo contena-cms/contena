@@ -15,7 +15,6 @@ use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnore\Exemption
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnore\LogicDetector;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnore\UseMap;
 use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
-use Contena\Core\Framework\Log\Package;
 
 // Trait scanning was intentionally removed: a trait's methods are the trait's
 // own coverage concern; a class carrying @codeCoverageIgnore should not be

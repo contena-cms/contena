@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App;
 
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

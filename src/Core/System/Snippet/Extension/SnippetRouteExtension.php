@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Extension;
 
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Snippet\Channel\SnippetRouteResponse;
 use Symfony\Component\HttpFoundation\Request;

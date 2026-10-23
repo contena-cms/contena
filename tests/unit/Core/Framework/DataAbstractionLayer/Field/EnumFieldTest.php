@@ -7,9 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Field\EnumField;
-use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field\EnumField\TestIntegerEnum;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field\EnumField\TestStringEnum;
 
 /**
  * @internal

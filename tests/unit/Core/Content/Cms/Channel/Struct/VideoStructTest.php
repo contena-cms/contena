@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Channel\Struct\VideoStruct;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

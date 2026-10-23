@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\Dispatching;
 
 use Psr\Container\ContainerInterface;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\KernelEvents;

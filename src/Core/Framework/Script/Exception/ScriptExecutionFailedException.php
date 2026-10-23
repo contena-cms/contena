@@ -2,9 +2,8 @@
 
 namespace Contena\Core\Framework\Script\Exception;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\ScriptException;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\Script\ScriptException;
 use Symfony\Component\HttpFoundation\Response;
 
 class ScriptExecutionFailedException extends ScriptException

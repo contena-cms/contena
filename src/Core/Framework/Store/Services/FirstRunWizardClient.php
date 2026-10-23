@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Store\Services;
 use GuzzleHttp\ClientInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Symfony\Component\HttpFoundation\Request;
 

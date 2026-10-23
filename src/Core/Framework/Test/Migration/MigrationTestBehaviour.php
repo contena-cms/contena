@@ -7,6 +7,9 @@ use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Migration\MigrationCollection;
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
+use Contena\Core\Framework\Migration\MigrationSource;
 
 trait MigrationTestBehaviour
 {

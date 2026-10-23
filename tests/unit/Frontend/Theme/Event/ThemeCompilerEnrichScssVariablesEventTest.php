@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Cache\Http;
 use Contena\Core\Framework\Adapter\Cache\Http\Event\BeforeCacheControlEvent;
 use Contena\Core\Framework\Event\BeforeSendResponseEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

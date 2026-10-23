@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework;
 
 use OpenSearch\Client;
-use Contena\Core\Framework\Log\Package;
 
 class ElasticsearchOutdatedIndexDetector
 {

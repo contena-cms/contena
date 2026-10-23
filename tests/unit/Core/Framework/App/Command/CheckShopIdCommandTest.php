@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
 use Contena\Core\Framework\App\ShopId\FingerprintGenerator;
 use Contena\Core\Framework\App\ShopId\FingerprintMatch;
 use Contena\Core\Framework\App\ShopId\FingerprintMismatch;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

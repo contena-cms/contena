@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\LandingPage;
 
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class LandingPage extends Page

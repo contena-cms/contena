@@ -7,12 +7,9 @@ use League\OAuth2\Server\Grant\GrantTypeInterface;
 use League\OAuth2\Server\Repositories\AuthCodeRepositoryInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\ContenaGrantType;
 use Contena\Core\Framework\Sso\ContenaPasswordGrantType;
 use Contena\Core\Framework\Sso\ContenaRefreshTokenGrantType;
-use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
-use Contena\Core\Framework\Sso\AdminUserService\AdminUserService;
 
 /**
  * Builds the grant types that are enabled on the Admin API authorization server for each request.
@@ -21,17 +18,6 @@ use Contena\Core\Framework\Sso\AdminUserService\AdminUserService;
  */
 final class GrantTypeFactory
 {
-    public function __construct(
-        private readonly AdminUserRepositoryInterface $admin_userRepository,
-        private readonly RefreshTokenRepository $refreshTokenRepository,
-        private readonly AuthCodeRepositoryInterface $authCodeRepository,
-        private readonly AdminUserService $admin_userService,
-        private readonly ExternalTokenService $tokenService,
-        private readonly ClockInterface $clock,
-        private readonly string $refreshTokenTtl = 'P1W',
-        private readonly string $authCodeTtl = 'PT5M',
-    ) {
-    }
 
     /**
      * @return list<GrantTypeInterface>

@@ -3,7 +3,7 @@
 namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * Allows project overrides to change cheapest price selection

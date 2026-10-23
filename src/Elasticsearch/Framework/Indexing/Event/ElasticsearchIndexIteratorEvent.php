@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework\Indexing\Event;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 
 class ElasticsearchIndexIteratorEvent

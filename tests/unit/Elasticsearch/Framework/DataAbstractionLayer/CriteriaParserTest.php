@@ -36,15 +36,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationDefinition;
 use Contena\Core\System\Unit\UnitDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
+use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\CriteriaParser;
-use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

@@ -8,7 +8,6 @@ use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Content\Cookie\Struct\CookieEntry;
 use Contena\Core\Content\Cookie\Struct\CookieEntryCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**

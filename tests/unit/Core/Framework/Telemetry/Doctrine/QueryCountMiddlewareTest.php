@@ -8,7 +8,6 @@ use Doctrine\DBAL\Driver\Result;
 use Doctrine\DBAL\Driver\Statement;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCountDriver;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCounter;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCountMiddleware;

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Robots\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore - Enum is tested indirectly through RobotsDirective and parser tests

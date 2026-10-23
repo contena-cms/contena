@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Page\Cms;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Page\Cms\CmsPageLoadedHook;
 

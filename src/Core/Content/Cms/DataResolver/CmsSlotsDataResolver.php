@@ -18,11 +18,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Util\Hasher;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 
 class CmsSlotsDataResolver
 {

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\Util\LocaleHelper;
 use Twig\Extension\AbstractExtension;
 use Twig\Extra\Intl\IntlExtension;

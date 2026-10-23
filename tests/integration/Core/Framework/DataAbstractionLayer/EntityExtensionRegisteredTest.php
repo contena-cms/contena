@@ -4,10 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 
 /**
  * @internal

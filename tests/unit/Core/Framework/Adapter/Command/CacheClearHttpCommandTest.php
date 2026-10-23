@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Command\CacheClearAllCommand;
 use Contena\Core\Framework\Adapter\Command\CacheClearHttpCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

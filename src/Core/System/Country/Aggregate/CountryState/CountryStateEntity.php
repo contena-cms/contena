@@ -2,13 +2,10 @@
 
 namespace Contena\Core\System\Country\Aggregate\CountryState;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryStateTranslation\CountryStateTranslationCollection;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 
 /**
  * @codeCoverageIgnore
@@ -34,7 +31,6 @@ class CountryStateEntity extends Entity
 
     protected ?UserAddressCollection $userAddresses = null;
 
-    protected ?OrderAddressCollection $orderAddresses = null;
 
     public function getCountryId(): string
     {
@@ -116,13 +112,5 @@ class CountryStateEntity extends Entity
         $this->userAddresses = $userAddresses;
     }
 
-    public function getOrderAddresses(): ?OrderAddressCollection
-    {
-        return $this->orderAddresses;
-    }
 
-    public function setOrderAddresses(OrderAddressCollection $orderAddresses): void
-    {
-        $this->orderAddresses = $orderAddresses;
-    }
 }

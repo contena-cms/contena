@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailData;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailDataNormalizer;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**

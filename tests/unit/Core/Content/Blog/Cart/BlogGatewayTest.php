@@ -4,12 +4,11 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Cart;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Cart\BlogGateway;
 use Contena\Core\Content\Blog\Events\BlogGatewayCriteriaEvent;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Generator;

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Indexing\Telemetry;
 
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Instrumentation\OperationResult;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;

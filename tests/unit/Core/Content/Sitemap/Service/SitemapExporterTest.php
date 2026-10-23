@@ -21,7 +21,6 @@ use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;

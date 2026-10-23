@@ -5,7 +5,6 @@ namespace Contena\Core\System\Snippet\Channel;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\PlatformRequest;
@@ -13,6 +12,7 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Snippet\Extension\SnippetRouteExtension;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @experimental stableVersion:v6.8.0 feature:STORE_API_SNIPPETS

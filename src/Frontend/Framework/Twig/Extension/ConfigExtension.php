@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Twig\Extension;
 
 use Contena\Core\Framework\Adapter\Twig\TwigContextHelper;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Frontend\Framework\FrontendFrameworkException;

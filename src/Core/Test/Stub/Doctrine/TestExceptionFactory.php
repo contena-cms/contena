@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test\Stub\Doctrine;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal
@@ -19,11 +18,4 @@ class TestExceptionFactory
         };
     }
 
-    public static function createDriverException(string $message): Exception\DriverException
-    {
-        return new Exception\DriverException(
-            new \Doctrine\DBAL\Driver\PDO\Exception($message),
-            null,
-        );
-    }
 }

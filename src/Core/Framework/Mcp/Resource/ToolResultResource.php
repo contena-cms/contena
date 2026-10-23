@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\Resource;
 
 use Mcp\Capability\Attribute\McpResourceTemplate;
 use Mcp\Server\RequestContext;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPointer;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPrincipal;

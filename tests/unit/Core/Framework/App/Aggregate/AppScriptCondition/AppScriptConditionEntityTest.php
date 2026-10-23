@@ -8,7 +8,6 @@ use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionEntity;
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationCollection;
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

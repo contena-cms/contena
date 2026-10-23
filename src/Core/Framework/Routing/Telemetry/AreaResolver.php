@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;

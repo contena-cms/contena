@@ -4,11 +4,10 @@ namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\StoreApiMcpContextProvider;
-use Contena\Core\System\Channel\Mcp\Tool\StoreApiContextTool;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Mcp\Tool\StoreApiContextTool;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

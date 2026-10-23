@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Flow\Extension;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @public

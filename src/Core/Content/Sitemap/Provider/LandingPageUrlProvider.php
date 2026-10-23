@@ -13,10 +13,10 @@ use Contena\Core\Content\Sitemap\Struct\Url;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class LandingPageUrlProvider extends AbstractUrlProvider
 {

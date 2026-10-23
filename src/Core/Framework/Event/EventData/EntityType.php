@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Event\EventData;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 
 class EntityType implements EventDataType
 {

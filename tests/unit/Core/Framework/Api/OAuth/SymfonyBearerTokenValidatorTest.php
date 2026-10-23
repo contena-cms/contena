@@ -16,7 +16,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

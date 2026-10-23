@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\Channel\Listing\Filter\RatingListingFilterHandler;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

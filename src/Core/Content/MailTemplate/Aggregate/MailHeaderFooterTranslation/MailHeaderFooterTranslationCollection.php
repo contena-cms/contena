@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooterTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<MailHeaderFooterTranslationEntity>

@@ -9,7 +9,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\VoidType;
-use Contena\Core\Framework\Log\Package;
 use Symplify\PHPStanRules\Rules\NoReturnSetterMethodRule;
 
 /**

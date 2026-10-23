@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Kernel;
 
 use Contena\Core\Framework\Event\BeforeSendResponseEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

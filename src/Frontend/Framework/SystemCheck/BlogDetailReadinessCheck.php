@@ -6,7 +6,6 @@ use Contena\Core\Content\Blog\Channel\AbstractBlogCloseoutFilterFactory;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\BaseCheck;
 use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Result;

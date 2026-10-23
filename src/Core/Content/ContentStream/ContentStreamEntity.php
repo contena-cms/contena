@@ -2,14 +2,11 @@
 
 namespace Contena\Core\Content\ContentStream;
 
-use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterCollection;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\ContentStreamTranslationCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -38,9 +35,7 @@ class ContentStreamEntity extends Entity
 
     protected ?ContentStreamTranslationCollection $translations = null;
 
-    protected ?BlogExportCollection $blogExports = null;
 
-    protected ?BlogCrossSellingCollection $blogCrossSellings = null;
 
     protected ?CategoryCollection $categories = null;
 
@@ -132,25 +127,9 @@ class ContentStreamEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getBlogExports(): ?BlogExportCollection
-    {
-        return $this->blogExports;
-    }
 
-    public function setBlogExports(BlogExportCollection $blogExports): void
-    {
-        $this->blogExports = $blogExports;
-    }
 
-    public function getBlogCrossSellings(): ?BlogCrossSellingCollection
-    {
-        return $this->blogCrossSellings;
-    }
 
-    public function setBlogCrossSellings(BlogCrossSellingCollection $blogCrossSellings): void
-    {
-        $this->blogCrossSellings = $blogCrossSellings;
-    }
 
     public function getCategories(): ?CategoryCollection
     {

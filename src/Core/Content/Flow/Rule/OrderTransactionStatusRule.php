@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Rule;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\FlowRule;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleComparison;

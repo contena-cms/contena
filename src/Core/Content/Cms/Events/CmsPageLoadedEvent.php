@@ -7,10 +7,9 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
+use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

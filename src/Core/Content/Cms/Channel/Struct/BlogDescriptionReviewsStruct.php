@@ -2,9 +2,8 @@
 
 namespace Contena\Core\Content\Cms\Channel\Struct;
 
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

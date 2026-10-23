@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 use Contena\Core\System\StateMachine\Event\StateMachineStateChangeEvent;
 use Contena\Core\System\StateMachine\StateMachineEntity;

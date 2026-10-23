@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Flow;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Rule\FlowRuleScopeBuilder;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

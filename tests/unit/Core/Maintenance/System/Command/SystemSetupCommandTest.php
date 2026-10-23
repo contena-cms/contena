@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Maintenance\System\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\System\Command\SystemSetupCommand;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Console\Application;

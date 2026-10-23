@@ -10,7 +10,6 @@ use Contena\Core\Framework\JWT\Constraints\HasValidRSAJWKSignature;
 use Contena\Core\Framework\JWT\JWTException;
 use Contena\Core\Framework\JWT\Struct\JWKCollection;
 use Contena\Core\Framework\JWT\Struct\JWKStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

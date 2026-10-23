@@ -8,7 +8,6 @@ use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\AudioType;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\TypeDetector\AudioTypeDetector;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

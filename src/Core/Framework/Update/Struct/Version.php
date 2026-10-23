@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Update\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\Clock\Clock;
 

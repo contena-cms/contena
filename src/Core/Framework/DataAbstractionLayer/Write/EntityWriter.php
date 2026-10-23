@@ -24,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageLoaderInterface;
 

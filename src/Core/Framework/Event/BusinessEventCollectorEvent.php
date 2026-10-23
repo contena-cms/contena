@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -2,22 +2,17 @@
 
 namespace Contena\Frontend\Page\Address\Detail;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Channel\AbstractListAddressRoute;
-use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Uuid\UuidException;
-use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Country\Channel\AbstractCountryRoute;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Frontend\Page\GenericPageLoaderInterface;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,19 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class AddressDetailPageLoader
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly GenericPageLoaderInterface $genericLoader,
-        private readonly AbstractCountryRoute $countryRoute,
-        private readonly AbstractSalutationRoute $salutationRoute,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly AbstractListAddressRoute $listAddressRoute,
-        private readonly AbstractSalutationsSorter $salutationsSorter,
-        private readonly AbstractTranslator $translator
-    ) {
-    }
 
     /**
      * @throws AddressNotFoundException
@@ -82,15 +64,6 @@ class AddressDetailPageLoader
         }
     }
 
-    /**
-     * @throws InconsistentCriteriaIdsException
-     */
-    private function getSalutations(ChannelContext $channelContext): SalutationCollection
-    {
-        $salutations = $this->salutationRoute->load(new Request(), $channelContext, new Criteria())->getSalutations();
-
-        return $this->salutationsSorter->sort($salutations);
-    }
 
     /**
      * @throws InconsistentCriteriaIdsException

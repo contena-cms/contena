@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\Script\Facade;
 
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The `cache` service allows you to invalidate the cache if some entity is updated.

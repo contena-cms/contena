@@ -2,18 +2,16 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Channel\Context\LanguageInfo;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Tax\TaxCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\UserEntity;
 
 class ChannelContext extends Struct
 {

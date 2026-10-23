@@ -7,7 +7,6 @@ use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\MigrationFileRenderer;
 use Contena\Core\Framework\DataAbstractionLayer\MigrationQueryGenerator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

@@ -7,7 +7,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\JWT\Struct\JWKCollection;
 use Contena\Core\Framework\JWT\Struct\JWKStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\System\SystemConfig\SystemConfigService;

@@ -19,20 +19,20 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
-use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @phpstan-import-type MailData from AbstractMailFactory

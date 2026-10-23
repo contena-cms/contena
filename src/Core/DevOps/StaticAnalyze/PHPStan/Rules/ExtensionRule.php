@@ -14,7 +14,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\BCChangeMarkers;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements Rule<InClassNode>

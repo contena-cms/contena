@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\SearchKeyword;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
-use Contena\Core\Framework\Log\Package;
 
 interface BlogSearchTermInterpreterInterface
 {

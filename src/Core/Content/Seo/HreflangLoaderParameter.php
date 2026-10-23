@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 class HreflangLoaderParameter

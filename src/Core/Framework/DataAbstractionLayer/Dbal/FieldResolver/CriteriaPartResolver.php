@@ -25,7 +25,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SingleFieldFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\SqlQueryParser;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal This class is not intended for service decoration

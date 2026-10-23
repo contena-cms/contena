@@ -5,11 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\Generator\O
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinitionSchemaBuilder;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\EntityDefinition\SimpleDefinition;
-use Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\EntityDefinition\SinceDefinition;
 
 /**
  * @internal

@@ -4,10 +4,8 @@ namespace Contena\Core\Framework\App\Command;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppStorage;
-use Contena\Core\Framework\Console\OutputFormatTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

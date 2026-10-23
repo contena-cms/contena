@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch\Blog;
 use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 
 /**

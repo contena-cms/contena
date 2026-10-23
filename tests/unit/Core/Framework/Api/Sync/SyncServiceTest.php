@@ -35,7 +35,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteResult;
 use Contena\Core\Framework\Event\NestedEventDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;

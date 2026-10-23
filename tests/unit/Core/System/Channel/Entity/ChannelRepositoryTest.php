@@ -24,11 +24,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntityAggregatorInterface
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\DalSearchInstrumentor;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

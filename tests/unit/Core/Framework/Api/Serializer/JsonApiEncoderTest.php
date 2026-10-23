@@ -4,8 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Api\Serializer;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\Api\Serializer\JsonApiEncoder;
@@ -18,11 +16,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestAttributeEntity;
-use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestChildEntity;
-use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestItemEntity;
-use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestParentEntity;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\DependencyInjection\Container;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Administration\Snippet;
 
 use League\Flysystem\Filesystem;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Symfony\Component\Filesystem\Path;
 

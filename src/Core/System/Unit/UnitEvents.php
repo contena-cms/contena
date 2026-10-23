@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Unit;
 
-use Contena\Core\Framework\Log\Package;
 
 class UnitEvents
 {

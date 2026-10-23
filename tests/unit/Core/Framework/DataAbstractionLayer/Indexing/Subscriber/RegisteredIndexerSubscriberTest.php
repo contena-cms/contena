@@ -4,11 +4,10 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Indexing\Subscr
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\Infrastructure\Path\MediaPathPostUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
+use Contena\Core\Content\Media\Infrastructure\Path\MediaPathPostUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\Subscriber\RegisteredIndexerSubscriber;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\IndexerQueuer;
 use Contena\Core\Framework\Plugin\Event\PluginPostInstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUninstallEvent;

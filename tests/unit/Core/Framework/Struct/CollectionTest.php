@@ -4,15 +4,13 @@ namespace Contena\Tests\Unit\Core\Framework\Struct;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Unit\Core\Framework\Struct\Fixture\TestCollection;
 
 /**
  * @internal

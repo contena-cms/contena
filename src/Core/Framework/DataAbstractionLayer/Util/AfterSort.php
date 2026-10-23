@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class AfterSort

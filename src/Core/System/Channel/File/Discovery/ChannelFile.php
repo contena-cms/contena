@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\File\Discovery;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore Simple value object without behavior.

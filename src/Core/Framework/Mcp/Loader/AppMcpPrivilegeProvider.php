@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\Loader;
 
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

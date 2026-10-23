@@ -7,7 +7,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
+use Contena\Core\System\Channel\Exception\ChannelRepositoryNotFoundException;
 
 /**
  * @internal

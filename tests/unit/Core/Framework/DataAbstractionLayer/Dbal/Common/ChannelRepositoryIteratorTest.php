@@ -4,11 +4,11 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Dbal\Common;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\ChannelRepositoryIterator;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -16,10 +16,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

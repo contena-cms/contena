@@ -9,7 +9,6 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\MessageStorer;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mime\Email;
 
 /**

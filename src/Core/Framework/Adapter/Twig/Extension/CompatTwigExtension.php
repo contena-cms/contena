@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig\Extension;
 
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

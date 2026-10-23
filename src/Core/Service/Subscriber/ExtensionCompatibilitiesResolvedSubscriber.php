@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\ExtensionCompatibilitiesResolvedEvent;
 use Contena\Core\Framework\Update\Services\ExtensionCompatibility;
 use Contena\Core\Service\ServiceRegistry\Client;

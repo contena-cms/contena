@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Listing\Filter;
 use Contena\Core\Content\Blog\Channel\Listing\FilterCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

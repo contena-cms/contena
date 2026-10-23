@@ -3,23 +3,23 @@
 namespace Contena\Core\Content\Blog\Channel\Detail;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
-use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
-use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoaderInterface;
-use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\Extension\BlogDetailRouteExtension;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\AbstractBlogCloseoutFilterFactory;
-use Contena\Core\Content\Blog\Channel\Detail\Event\ResolveVariantIdEvent;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Channel\Detail\Event\ResolveVariantIdEvent;
+use Contena\Core\Content\Blog\Extension\BlogDetailRouteExtension;
+use Contena\Core\Content\Category\CategoryEntity;
+use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
+use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoaderInterface;
+use Contena\Core\Content\Cms\CmsPageEntity;
+use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
+use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
@@ -30,17 +30,17 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogDetailRoute extends AbstractBlogDetailRoute

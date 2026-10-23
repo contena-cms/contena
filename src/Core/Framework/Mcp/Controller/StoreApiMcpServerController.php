@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\Controller;
 
 use Mcp\Server;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;

@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

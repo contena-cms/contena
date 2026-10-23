@@ -8,12 +8,8 @@ use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 
 /**
  * @internal

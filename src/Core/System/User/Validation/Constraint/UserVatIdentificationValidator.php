@@ -3,9 +3,8 @@
 namespace Contena\Core\System\User\Validation\Constraint;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\UserException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 

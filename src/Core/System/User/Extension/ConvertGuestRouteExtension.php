@@ -2,13 +2,12 @@
 
 namespace Contena\Core\System\User\Extension;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\SuccessResponse;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @public

@@ -34,7 +34,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\SqlQueryParser;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Uuid\Uuid;
 

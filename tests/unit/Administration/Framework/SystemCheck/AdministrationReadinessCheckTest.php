@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\SystemCheck\AdministrationReadinessCheck;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;

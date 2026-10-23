@@ -5,7 +5,6 @@ namespace Contena\Core\DevOps\Docs\App;
 use Contena\Core\DevOps\Docs\ArrayWriter;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\BusinessEventCollector;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PolicyRegistry;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventCollector;

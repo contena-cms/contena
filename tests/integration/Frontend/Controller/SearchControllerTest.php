@@ -4,14 +4,11 @@ namespace Contena\Tests\Integration\Frontend\Controller;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Frontend\Page\Search\SearchPageLoadedHook;
 use Contena\Frontend\Page\Search\SearchWidgetLoadedHook;
 use Contena\Frontend\Page\Suggest\SuggestPageLoadedHook;
-use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Category\Service;
 
 use Contena\Core\Content\Category\Tree\Tree;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 interface NavigationLoaderInterface

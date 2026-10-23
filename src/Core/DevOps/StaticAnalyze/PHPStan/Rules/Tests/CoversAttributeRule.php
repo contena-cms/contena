@@ -13,7 +13,6 @@ use PHPUnit\Framework\Attributes\CoversFunction;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

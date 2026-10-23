@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Event;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 class InvalidateExpiredCacheRequestEvent

@@ -17,7 +17,6 @@ use Contena\Core\Framework\App\Template\AbstractTemplateLoader;
 use Contena\Core\Framework\App\Template\TemplateCollection;
 use Contena\Core\Framework\App\Template\TemplateEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchIndexingCommand;
 use Contena\Elasticsearch\Framework\Indexing\CreateAliasTaskHandler;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;

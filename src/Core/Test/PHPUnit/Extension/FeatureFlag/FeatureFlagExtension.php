@@ -6,7 +6,6 @@ use PHPUnit\Runner\Extension\Extension;
 use PHPUnit\Runner\Extension\Facade;
 use PHPUnit\Runner\Extension\ParameterCollection;
 use PHPUnit\TextUI\Configuration\Configuration;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestFinishedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestPreparationStartedSubscriber;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestSkippedSubscriber;

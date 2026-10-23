@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Snippet;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\SnippetPatterns;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginRegistry;

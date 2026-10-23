@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Validation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore Simple struct with public readonly properties.

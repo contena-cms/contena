@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Twig;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Twig\TokenParser\IconTokenParser;
 use Twig\Extension\AbstractExtension;
 

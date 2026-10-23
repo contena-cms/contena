@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<MailTemplateTypeEntity>

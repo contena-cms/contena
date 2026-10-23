@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Event\EventData;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 
 class EntityCollectionType implements EventDataType
 {

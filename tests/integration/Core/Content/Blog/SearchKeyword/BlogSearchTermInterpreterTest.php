@@ -15,8 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTerm;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\ArrayNormalizer;
 use Contena\Core\Framework\Uuid\Uuid;
 

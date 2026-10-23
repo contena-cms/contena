@@ -4,9 +4,8 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig\Filter;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Service\EmailIdnConverter;
 use Contena\Core\Framework\Adapter\Twig\Filter\EmailIdnTwigFilter;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Service\EmailIdnConverter;
 
 /**
  * @internal

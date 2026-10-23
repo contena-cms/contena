@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Event\MediaLocationEvent;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

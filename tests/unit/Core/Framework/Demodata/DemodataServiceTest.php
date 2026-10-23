@@ -13,7 +13,6 @@ use Contena\Core\Framework\Demodata\DemodataContext;
 use Contena\Core\Framework\Demodata\DemodataGeneratorInterface;
 use Contena\Core\Framework\Demodata\DemodataRequest;
 use Contena\Core\Framework\Demodata\DemodataService;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**

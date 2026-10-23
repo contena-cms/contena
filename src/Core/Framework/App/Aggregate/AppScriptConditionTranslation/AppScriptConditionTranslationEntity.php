@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation;
 
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

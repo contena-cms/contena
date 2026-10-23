@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\FastlyReverseProxyGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Symfony\Component\HttpFoundation\Response;
 

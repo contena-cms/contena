@@ -8,7 +8,6 @@ use Contena\Core\Framework\Event\BusinessEventDefinition;
 use Contena\Core\Framework\Event\EventData\EntityCollectionType;
 use Contena\Core\Framework\Event\EventData\EntityType;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
-use Contena\Core\Framework\Log\Package;
 
 class HookableEventDoc
 {

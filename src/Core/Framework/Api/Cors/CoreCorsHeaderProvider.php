@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Cors;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 
 /**

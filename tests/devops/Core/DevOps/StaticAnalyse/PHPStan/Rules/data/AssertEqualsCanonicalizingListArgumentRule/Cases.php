@@ -3,7 +3,6 @@
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\AssertEqualsCanonicalizingListArgumentRule;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Mcp\Context;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\StoreApiMcpContextProvider;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

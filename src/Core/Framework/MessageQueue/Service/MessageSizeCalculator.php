@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\Service;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\SerializedMessageStamp;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;

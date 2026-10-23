@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\RateLimiter\Policy;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Lock\LockInterface;

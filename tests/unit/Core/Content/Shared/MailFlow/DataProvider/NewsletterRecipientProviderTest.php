@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\NewsletterRecipientProvider;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

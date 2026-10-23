@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Profiling;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Profiler;
 use Contena\Core\Profiling\Profiling;
 use Symfony\Component\DependencyInjection\Container;

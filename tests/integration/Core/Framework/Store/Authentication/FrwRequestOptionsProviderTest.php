@@ -7,11 +7,8 @@ use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\FrwRequestOptionsProvider;
 use Contena\Core\Framework\Store\Services\FirstRunWizardService;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigCollection;
 
 /**

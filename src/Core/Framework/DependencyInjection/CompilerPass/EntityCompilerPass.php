@@ -16,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Telemetry\DalSearchInstrumentor;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

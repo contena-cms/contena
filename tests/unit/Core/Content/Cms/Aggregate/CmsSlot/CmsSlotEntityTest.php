@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

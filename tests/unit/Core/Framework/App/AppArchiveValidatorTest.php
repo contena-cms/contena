@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppArchiveValidator;
 use Contena\Core\Framework\App\Exception\AppArchiveValidationFailure;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
 

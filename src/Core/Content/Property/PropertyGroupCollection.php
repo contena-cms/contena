@@ -6,7 +6,6 @@ use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOpt
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<PropertyGroupEntity>

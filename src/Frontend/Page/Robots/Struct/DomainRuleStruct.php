@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Robots\Struct;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Frontend\Page\Robots\Parser\ParsedRobots;
 use Contena\Frontend\Page\Robots\Parser\RobotsDirectiveParser;

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Serializer\JsonApiEncodingResult;
 use Contena\Core\Framework\Api\Serializer\Record;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

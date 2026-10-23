@@ -10,11 +10,10 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
-use Contena\Frontend\Theme\Snippet\ThemeSnippetFileWriter;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
+use Contena\Frontend\Theme\Snippet\ThemeSnippetFileWriter;
 
 /**
  * @internal

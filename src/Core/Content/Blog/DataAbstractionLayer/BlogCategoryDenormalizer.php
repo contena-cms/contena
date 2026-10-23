@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 class BlogCategoryDenormalizer

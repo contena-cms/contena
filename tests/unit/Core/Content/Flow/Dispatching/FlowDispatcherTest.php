@@ -24,7 +24,6 @@ use Contena\Core\Content\Flow\Exception\ExecuteSequenceException;
 use Contena\Core\Content\Flow\FlowException;
 use Contena\Core\Framework\Event\FlowLogEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Generator;

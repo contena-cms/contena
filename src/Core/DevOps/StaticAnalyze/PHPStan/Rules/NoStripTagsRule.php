@@ -9,7 +9,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This rule detects usage of the strip_tags() function, it silently drops everything after a stray "<",

@@ -3,9 +3,8 @@ declare(strict_types=1);
 
 namespace Contena\Frontend\Framework\Media\Exception;
 
-use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\Feature;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 
 /**

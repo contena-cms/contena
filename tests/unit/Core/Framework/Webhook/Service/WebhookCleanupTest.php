@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Webhook\Service;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Outbox\StreamLockService;
 use Contena\Core\Framework\Webhook\Service\WebhookCleanup;
 use Contena\Core\System\SystemConfig\SystemConfigService;

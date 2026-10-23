@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Struct\Struct;

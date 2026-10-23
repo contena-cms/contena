@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
 use Danger\Struct\File;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * SQL strings belong in Nowdoc (`<<<'SQL'`) instead of Heredoc (`<<<SQL`), so accidental

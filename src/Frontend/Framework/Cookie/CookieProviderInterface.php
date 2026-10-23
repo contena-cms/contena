@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Cookie;
 
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-type CookieEntryArray array{cookie?: string, value?: string, expiration?: string, snippet_name?: string, snippet_description?: string, hidden?: bool}

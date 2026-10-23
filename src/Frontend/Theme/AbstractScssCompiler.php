@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal - may be changed in the future

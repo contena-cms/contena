@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\AbstractRouteScope;
 use Contena\Core\Framework\Routing\ApiContextRouteScopeDependant;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

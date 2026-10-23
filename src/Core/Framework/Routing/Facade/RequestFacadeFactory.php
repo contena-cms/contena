@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Facade;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\Script;

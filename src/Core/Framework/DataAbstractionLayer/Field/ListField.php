@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ListFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Stores a JSON formatted value list. This can be typed using the third constructor parameter.

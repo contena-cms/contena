@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Message;
 
 use League\Flysystem\Visibility;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 
 class DeleteFileMessage implements AsyncMessageInterface

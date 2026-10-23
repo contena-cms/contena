@@ -66,13 +66,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\XOrFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldService;
+use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\ElasticsearchDateHistogramAggregation;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
-use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\Sort\CountSort;
 
 class CriteriaParser

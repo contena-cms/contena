@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test\Stub\Framework\Util;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Returns null when `getHTMLDefinition(true)` is called to exercise the

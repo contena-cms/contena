@@ -7,7 +7,6 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class ImportExportBeforeExportRecordEvent extends Event implements ContenaEvent

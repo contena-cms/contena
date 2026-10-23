@@ -6,7 +6,6 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Seo\Hreflang\HreflangCollection;
 use Contena\Core\Content\Seo\Hreflang\HreflangStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Routing\RouterInterface;
 

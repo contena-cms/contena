@@ -3,7 +3,7 @@
 namespace Contena\Frontend\Theme;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Frontend\Theme\Exception\InvalidThemeConfigException;
 
 class ThemeConfigFieldFactory
 {

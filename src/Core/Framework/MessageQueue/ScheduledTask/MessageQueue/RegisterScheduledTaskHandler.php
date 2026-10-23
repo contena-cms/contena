@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\MessageQueue;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

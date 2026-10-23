@@ -21,7 +21,6 @@ use Contena\Core\Content\Media\Upload\MediaUploadParameters;
 use Contena\Core\Content\Media\Upload\MediaUploadService;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;

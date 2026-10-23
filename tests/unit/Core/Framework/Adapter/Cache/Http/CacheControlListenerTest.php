@@ -13,7 +13,6 @@ use Contena\Core\Framework\Adapter\Cache\Http\Event\BeforeCacheControlEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Event\BeforeSendResponseEvent;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Request;

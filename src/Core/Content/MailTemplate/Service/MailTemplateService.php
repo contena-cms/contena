@@ -14,11 +14,10 @@ use Contena\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

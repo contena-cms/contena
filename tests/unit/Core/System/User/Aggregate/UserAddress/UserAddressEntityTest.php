@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

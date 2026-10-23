@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme\Controller;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Theme\AbstractScssCompiler;
@@ -14,6 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Frontend\Theme\Exception\ThemeConfigException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class ThemeController extends AbstractController

@@ -2,15 +2,14 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Content\Category\Channel\AbstractCategoryRoute;
-use Contena\Core\Content\Cms\CmsException;
-use Contena\Core\Content\Cms\Channel\AbstractCmsRoute;
 use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\FindVariant\AbstractFindBlogVariantRoute;
 use Contena\Core\Content\Blog\Channel\Listing\AbstractBlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Review\AbstractBlogReviewLoader;
+use Contena\Core\Content\Category\Channel\AbstractCategoryRoute;
+use Contena\Core\Content\Cms\Channel\AbstractCmsRoute;
+use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

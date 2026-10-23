@@ -12,8 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEventFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Tax\TaxEntity;

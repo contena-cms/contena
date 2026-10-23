@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Telemetry\AreaResolver;
 use Contena\Core\Framework\Routing\Telemetry\DomainResolver;
 use Contena\Core\Framework\Routing\Telemetry\HttpRequestMetricSubscriber;

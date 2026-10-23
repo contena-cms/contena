@@ -6,7 +6,6 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Rules\IdentifierRuleError;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

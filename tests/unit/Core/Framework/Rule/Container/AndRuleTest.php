@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Rule\Container;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\Test\Stub\Rule\FalseRule;

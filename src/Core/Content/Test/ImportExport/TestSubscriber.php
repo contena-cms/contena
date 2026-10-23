@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Test\ImportExport;
 use Contena\Core\Content\ImportExport\Event\ImportExportAfterImportRecordEvent;
 use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRecordEvent;
 use Contena\Core\Content\ImportExport\Event\ImportExportExceptionImportRecordEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 

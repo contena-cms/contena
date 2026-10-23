@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\Staging\Handler;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

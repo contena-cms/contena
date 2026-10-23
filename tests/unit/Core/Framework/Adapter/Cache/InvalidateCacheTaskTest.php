@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\InvalidateCacheTask;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 
 /**

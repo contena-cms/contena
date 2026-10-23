@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;

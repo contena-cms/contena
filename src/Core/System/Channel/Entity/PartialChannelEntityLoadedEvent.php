@@ -4,7 +4,6 @@ namespace Contena\Core\System\Channel\Entity;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

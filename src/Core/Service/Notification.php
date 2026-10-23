@@ -3,7 +3,6 @@
 namespace Contena\Core\Service;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Uuid\Uuid;
 

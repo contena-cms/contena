@@ -51,8 +51,6 @@ return static function (ContainerConfigurator $container): void {
     $services->set(ConsentScope\System::class)
         ->tag('contena.consent.scope');
 
-    $services->set(ConsentScope\AdminUser::class)
-        ->tag('contena.consent.scope');
 
     $services->set(Definition\BackendData::class)
         ->tag('contena.consent.definition');

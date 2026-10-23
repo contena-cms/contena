@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Mcp\Resource;
 
 use Mcp\Capability\Attribute\McpResourceTemplate;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPointer;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPrincipal;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;

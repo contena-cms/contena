@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Context;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Serializer\Attribute\DiscriminatorMap;
 
 #[DiscriminatorMap(

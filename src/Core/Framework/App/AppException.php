@@ -8,8 +8,15 @@ use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\Validation\Requirements\UnmetRequirement;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\App\Exception\AdminUserAbortedCommandException;
+use Contena\Core\Framework\App\Exception\AppAlreadyInstalledException;
+use Contena\Core\Framework\App\Exception\AppNotFoundException;
+use Contena\Core\Framework\App\Exception\AppRegistrationException;
+use Contena\Core\Framework\App\Exception\AppRegistrationRejectedException;
+use Contena\Core\Framework\App\Exception\InvalidAppFlowActionVariableException;
+use Contena\Core\Framework\App\Exception\ShopIdChangeStrategyNotFoundException;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 
 /**
  * @internal
@@ -178,16 +185,6 @@ class AppException extends HttpException
         );
     }
 
-    public static function invalidConfiguration(string $appName, Error $error, ?\Throwable $previous = null): self
-    {
-        return new self(
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            self::INVALID_CONFIGURATION,
-            'Configuration of app "{{ appName }}" is invalid: {{ error }}',
-            ['appName' => $appName, 'error' => $error->getMessage()],
-            $previous
-        );
-    }
 
     public static function appSystemRequestNotAllowed(string $reason): self
     {

@@ -5,7 +5,6 @@ namespace Contena\Tests\DevOps\Core\Framework\Mcp;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Framework;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Frontend;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

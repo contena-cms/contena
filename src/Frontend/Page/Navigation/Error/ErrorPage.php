@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Navigation\Error;
 
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class ErrorPage extends Page

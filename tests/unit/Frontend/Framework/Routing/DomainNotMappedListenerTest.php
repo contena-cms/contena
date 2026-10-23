@@ -4,9 +4,8 @@ namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Framework\Routing\DomainNotMappedListener;
 use Contena\Frontend\Framework\FrontendFrameworkException;
+use Contena\Frontend\Framework\Routing\DomainNotMappedListener;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -4,12 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\Webhook\Service;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclRoles;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestIntegration;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -17,6 +13,7 @@ use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriberType;
 use Contena\Core\Framework\Webhook\Authorization\WebhookSubscription;
 use Contena\Core\Framework\Webhook\Service\WebhookLoader;
 use Contena\Core\Framework\Webhook\Webhook;
+use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 

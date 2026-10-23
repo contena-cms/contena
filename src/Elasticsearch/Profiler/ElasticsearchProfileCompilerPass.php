@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Profiler;
 
 use OpenSearch\Client;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

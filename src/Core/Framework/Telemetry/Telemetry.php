@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Instrumentation\ElapsedTimer;
 use Contena\Core\Framework\Telemetry\Instrumentation\Span;

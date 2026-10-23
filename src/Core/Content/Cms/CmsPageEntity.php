@@ -2,18 +2,15 @@
 
 namespace Contena\Core\Content\Cms;
 
+use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsPageTranslation\CmsPageTranslationEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 class CmsPageEntity extends Entity
 {

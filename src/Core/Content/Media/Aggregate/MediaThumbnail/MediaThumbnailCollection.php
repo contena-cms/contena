@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Aggregate\MediaThumbnail;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<MediaThumbnailEntity>

@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Test\Migration\_test_migrations_valid_run_time;
 
 use Doctrine\DBAL\Connection;
+use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @internal

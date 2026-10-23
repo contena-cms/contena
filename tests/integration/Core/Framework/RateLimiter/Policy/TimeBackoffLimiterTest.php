@@ -4,13 +4,9 @@ namespace Contena\Tests\Integration\Core\Framework\RateLimiter\Policy;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\Policy\TimeBackoff;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\Integration\Traits\UserTestTrait;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Lock\LockFactory;

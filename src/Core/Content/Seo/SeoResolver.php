@@ -5,9 +5,9 @@ namespace Contena\Core\Content\Seo;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @phpstan-import-type ResolvedSeoUrlArray from AbstractSeoResolver

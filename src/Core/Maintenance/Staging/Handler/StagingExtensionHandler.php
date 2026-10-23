@@ -4,7 +4,6 @@ namespace Contena\Core\Maintenance\Staging\Handler;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\ComposerPluginLoader;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;

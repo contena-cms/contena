@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Template\TemplateCollection;
 use Contena\Core\Framework\App\Template\TemplateDefinition;
 use Contena\Core\Framework\App\Template\TemplateEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

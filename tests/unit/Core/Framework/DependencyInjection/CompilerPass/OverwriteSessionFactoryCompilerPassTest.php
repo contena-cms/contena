@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Session\SessionFactory;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\OverwriteSessionFactoryCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpFoundation\Session\SessionFactory as SymfonySessionFactory;

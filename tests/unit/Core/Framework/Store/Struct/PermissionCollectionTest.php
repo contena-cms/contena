@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Store\Struct;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Struct\PermissionCollection;
 
 /**

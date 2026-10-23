@@ -6,9 +6,9 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Composer\ComposerInfoProvider;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 
 /**
  * @internal

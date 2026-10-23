@@ -4,8 +4,6 @@ namespace Contena\Tests\Integration\Core\Content\Media\Message;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Message\UpdateThumbnailsMessage;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\Serializer\SerializerInterface;
 
 /**

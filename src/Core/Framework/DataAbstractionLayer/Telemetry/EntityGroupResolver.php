@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Buckets a DAL entity name into a small, bounded set of groups, so the large, plugin-extensible set of

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineTransition;
 
-use Contena\Core\Framework\Log\Package;
 
 final class StateMachineTransitionActions
 {

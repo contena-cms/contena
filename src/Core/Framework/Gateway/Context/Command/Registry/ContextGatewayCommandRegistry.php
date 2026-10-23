@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Gateway\Context\Command\Registry;
 
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\AbstractContextGatewayCommandHandler;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Attribute\AutowireIterator;
 
 /**

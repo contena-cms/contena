@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\Seo;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Test\Seo\Twig\LastLetterBigTwigFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Twig\Environment;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\SystemConfig\Service;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\Service\AppConfigReader;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;

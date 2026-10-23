@@ -7,14 +7,12 @@ use Doctrine\DBAL\ParameterType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1768545320RevocationRequestCmsForm;
 use Contena\Core\Migration\V6_7\Migration1768545322AssignRevocationPageToSystemConfigSetting;
 use Contena\Core\Migration\V6_7\Migration1779173129RepairRevocationRequestCmsPageVersion;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

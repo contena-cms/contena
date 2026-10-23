@@ -3,14 +3,13 @@
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\UserGroupAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 
 /**
  * @internal

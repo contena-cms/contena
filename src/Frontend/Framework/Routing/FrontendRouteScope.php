@@ -2,10 +2,9 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Routing\AbstractRouteScope;
 use Contena\Core\Framework\Routing\ChannelContextRouteScopeDependant;
-use Contena\Core\ChannelRequest;
 use Symfony\Component\HttpFoundation\Request;
 
 class FrontendRouteScope extends AbstractRouteScope implements ChannelContextRouteScopeDependant

@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\ParameterBag;

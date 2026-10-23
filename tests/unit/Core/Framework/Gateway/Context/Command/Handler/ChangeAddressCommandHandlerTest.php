@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeBillingAddressCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingAddressCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeAddressCommandHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

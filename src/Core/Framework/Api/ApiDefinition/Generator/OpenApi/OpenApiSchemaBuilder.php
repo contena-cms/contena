@@ -13,7 +13,6 @@ use OpenApi\Annotations\SecurityScheme;
 use OpenApi\Annotations\Server;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -63,12 +62,10 @@ class OpenApiSchemaBuilder
 
         if ($this->shouldUseRelativeServerUrl($url)) {
             return [
-                new Server(['url' => self::API[$api]['url']]),
             ];
         }
 
         return [
-            new Server(['url' => rtrim($url, '/') . self::API[$api]['url']]),
         ];
     }
 

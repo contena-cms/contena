@@ -16,7 +16,6 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Flags assertions that can never run because they are placed after the call an

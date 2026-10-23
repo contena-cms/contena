@@ -6,9 +6,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Sso\AdminUserService\ExternalAuthUser;
+use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Plugin\Command;
 
 use Composer\IO\ConsoleIO;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginService;
 use Symfony\Component\Console\Application;

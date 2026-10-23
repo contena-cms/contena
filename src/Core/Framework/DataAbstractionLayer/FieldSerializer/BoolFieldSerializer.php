@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraints\Type;
 
 /**

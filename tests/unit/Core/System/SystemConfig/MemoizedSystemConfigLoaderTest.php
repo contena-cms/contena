@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\SystemConfig;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\AbstractSystemConfigLoader;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;

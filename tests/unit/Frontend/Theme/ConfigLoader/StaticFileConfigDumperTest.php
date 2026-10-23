@@ -7,7 +7,6 @@ use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ConfigLoader\DatabaseAvailableThemeProvider;
 use Contena\Frontend\Theme\ConfigLoader\DatabaseConfigLoader;
 use Contena\Frontend\Theme\ConfigLoader\StaticFileAvailableThemeProvider;

@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\TypeDetector;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\MediaType\VideoType;
-use Contena\Core\Framework\Log\Package;
 
 class VideoTypeDetector implements TypeDetectorInterface
 {

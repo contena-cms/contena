@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\Plugin\KernelPluginLoader;
 
 use Contena\Core\Framework\Adapter\Composer\ComposerInfoProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Util\PluginFinder;
 use Contena\Core\Framework\Util\IOStreamHelper;
 

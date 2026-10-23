@@ -4,8 +4,6 @@ namespace Contena\Core\Content\ImportExport\Aggregate\ImportExportFile;
 
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 
 /**

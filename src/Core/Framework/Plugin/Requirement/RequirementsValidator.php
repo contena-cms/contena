@@ -20,6 +20,9 @@ use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Plugin\Util\PluginFinder;
+use Contena\Core\Framework\Plugin\Requirement\Exception\ComposerNameMissingException;
+use Contena\Core\Framework\Plugin\Requirement\Exception\ConflictingPackageException;
+use Contena\Core\Framework\Plugin\Requirement\Exception\MissingRequirementException;
 
 class RequirementsValidator
 {

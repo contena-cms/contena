@@ -4,15 +4,14 @@ namespace Contena\Tests\Unit\Core\Content\Sitemap\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Sitemap\Extension\SitemapRouteExtension;
 use Contena\Core\Content\Sitemap\Channel\SitemapRoute;
 use Contena\Core\Content\Sitemap\Channel\SitemapRouteResponse;
+use Contena\Core\Content\Sitemap\Extension\SitemapRouteExtension;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Content\Sitemap\Service\SitemapListerInterface;
 use Contena\Core\Content\Sitemap\Struct\SitemapCollection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Generator;
 use Symfony\Component\EventDispatcher\EventDispatcher;

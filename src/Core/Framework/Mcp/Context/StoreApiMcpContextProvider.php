@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp\Context;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\RequestStack;

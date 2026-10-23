@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7\UriResolver;
 use OpenSearch\Client;
 use Psr\Http\Message\UriInterface;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-type RequestInfo array{url: string, request: array<string, mixed>, response: array<string, mixed>, time: float, backtrace: string, client?: string}

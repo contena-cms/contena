@@ -5,7 +5,6 @@ namespace Contena\Frontend\Framework\Seo;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Service\AbstractCategoryUrlGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\Routing\RouterInterface;
 

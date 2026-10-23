@@ -2,20 +2,19 @@
 
 namespace Contena\Core\Content\Blog\Cms;
 
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\BuyBoxStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\BuyBoxStruct;
-use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\CountAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\CountResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 class BuyBoxCmsElementResolver extends AbstractBlogDetailCmsElementResolver
@@ -86,11 +85,6 @@ class BuyBoxCmsElementResolver extends AbstractBlogDetailCmsElementResolver
 
         $criteria->addFilter(
             new MultiFilter(MultiFilter::CONNECTION_AND, [
-                new MultiFilter(MultiFilter::CONNECTION_OR, $reviewFilters),
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('blog.id', $blogId),
-                    new EqualsFilter('blog.parentId', $blogId),
-                ]),
             ])
         );
 

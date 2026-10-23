@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Framework\Media\Validator;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Framework\Media\FrontendMediaValidatorInterface;
 use Contena\Frontend\Framework\FrontendFrameworkException;
+use Contena\Frontend\Framework\Media\FrontendMediaValidatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FrontendMediaImageValidator implements FrontendMediaValidatorInterface

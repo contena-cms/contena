@@ -6,7 +6,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Enriches a criteria with a blog stream's filters and grouping state.

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\MailTemplate\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class MailSendSubscriberConfig extends Struct

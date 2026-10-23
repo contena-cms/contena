@@ -3,36 +3,22 @@
 namespace Contena\Core\Content\Blog\Channel\Garan;
 
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\Extension\GaranLabelRouteExtension;
-use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Extension\GaranLabelRouteExtension;
+use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class GaranLabelRoute extends AbstractGaranLabelRoute
 {
-    /**
-     * @internal
-     *
-     * @param ChannelRepository<BlogCollection> $blogRepository
-     */
-    public function __construct(
-        private readonly ChannelRepository $blogRepository,
-        private readonly GaranLabelResolver $resolver,
-        private readonly ExtensionDispatcher $extensions,
-    ) {
-    }
 
     public function getDecorated(): AbstractGaranLabelRoute
     {

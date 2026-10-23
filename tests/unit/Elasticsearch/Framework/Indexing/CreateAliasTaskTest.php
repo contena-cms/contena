@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\CreateAliasTask;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 

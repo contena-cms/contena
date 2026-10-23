@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\InAppPurchase;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 /**

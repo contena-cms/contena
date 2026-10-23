@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\Requirements\Requirement;
 use Contena\Core\Framework\App\Validation\Requirements\UnmetRequirement;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

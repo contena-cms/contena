@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Profiling;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal experimental atm

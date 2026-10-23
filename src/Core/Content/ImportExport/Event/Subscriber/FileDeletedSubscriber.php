@@ -7,7 +7,6 @@ use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFil
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogEntity;
 use Contena\Core\Content\ImportExport\Message\DeleteFileMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 

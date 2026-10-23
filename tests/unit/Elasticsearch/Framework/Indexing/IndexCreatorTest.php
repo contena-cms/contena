@@ -8,14 +8,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexConfigEvent;
 use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexCreatedEvent;
 use Contena\Elasticsearch\Framework\Indexing\IndexCreator;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingProvider;
-use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Events;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Events\BlogListingCollectSortingEvent;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
+use Contena\Core\Content\Blog\Events\BlogListingCollectSortingEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

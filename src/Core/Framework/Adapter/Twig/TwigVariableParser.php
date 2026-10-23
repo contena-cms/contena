@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Node\Expression\ArrowFunctionExpression;

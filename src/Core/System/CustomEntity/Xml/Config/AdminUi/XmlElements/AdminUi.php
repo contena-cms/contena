@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\Xml\Config\ConfigXmlElement;
 
 /**

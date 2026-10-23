@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\AllServiceInstaller;
 use Contena\Core\Service\LifecycleManager;
 use Contena\Core\Service\Permission\PermissionsService;
@@ -18,7 +17,6 @@ use Contena\Core\Service\ServiceRegistry\ServiceEntry;
 use Contena\Core\Service\ServiceStorage;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

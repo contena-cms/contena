@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Cms\DefaultMediaResolver;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**

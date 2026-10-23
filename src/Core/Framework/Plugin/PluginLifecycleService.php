@@ -10,14 +10,10 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Plugin\Composer\CommandExecutor;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
 use Contena\Core\Framework\Plugin\Context\DeactivateContext;
 use Contena\Core\Framework\Plugin\Context\InstallContext;
@@ -36,19 +32,15 @@ use Contena\Core\Framework\Plugin\Event\PluginPreUninstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPreUpdateEvent;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
-use Contena\Core\Framework\Plugin\Requirement\RequirementsValidator;
-use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
-use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
-use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
-use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFields;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\EventListener\StopWorkerOnRestartSignalListener;
+use Contena\Core\Framework\Migration\MigrationCollection;
+use Contena\Core\Framework\Migration\MigrationSource;
 
 /**
  * @internal
@@ -72,32 +64,6 @@ class PluginLifecycleService
      */
     private EventDispatcherInterface $originalEventDispatcher;
 
-    /**
-     * @param EntityRepository<PluginCollection> $pluginRepo
-     */
-    public function __construct(
-        private readonly EntityRepository $pluginRepo,
-        private EventDispatcherInterface $eventDispatcher,
-        private readonly KernelPluginCollection $pluginCollection,
-        private ContainerInterface $container,
-        private readonly MigrationCollectionLoader $migrationLoader,
-        private readonly AssetService $assetInstaller,
-        private readonly CommandExecutor $executor,
-        private readonly RequirementsValidator $requirementValidator,
-        private readonly CacheItemPoolInterface $restartSignalCachePool,
-        private readonly string $contenaVersion,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly CustomEntityPersister $customEntityPersister,
-        private readonly CustomEntitySchemaUpdater $customEntitySchemaUpdater,
-        private readonly PluginService $pluginService,
-        private readonly VersionSanitizer $versionSanitizer,
-        private readonly DefinitionInstanceRegistry $definitionRegistry,
-        private readonly RequestStack $requestStack,
-        private readonly CustomFieldSetPersister $customFieldSetPersister,
-        private readonly ClockInterface $clock,
-    ) {
-        $this->originalEventDispatcher = $eventDispatcher;
-    }
 
     /**
      * @throws RequirementStackException

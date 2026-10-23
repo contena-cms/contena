@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding\Generator;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;

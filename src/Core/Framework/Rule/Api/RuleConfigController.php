@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Rule\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\PlatformRequest;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp\Result;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

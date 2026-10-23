@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Metric;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 
 readonly class Metric

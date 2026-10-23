@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\BundleHierarchyBuilder;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**

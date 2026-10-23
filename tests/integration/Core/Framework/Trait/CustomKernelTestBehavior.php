@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\Trait;
 
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;

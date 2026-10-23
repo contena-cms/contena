@@ -15,7 +15,6 @@ use Contena\Core\Content\Media\Message\GenerateThumbnailsMessage;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Content\Media\Upload\MediaFileCleanupService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 
 /**

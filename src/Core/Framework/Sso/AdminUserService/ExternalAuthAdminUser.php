@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Sso\AdminUserService;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints\Collection;

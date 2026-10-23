@@ -8,7 +8,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\FileNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements Rule<FileNode>

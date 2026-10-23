@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Event;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Context\DeactivateContext;
 use Contena\Core\Framework\Plugin\PluginEntity;
 

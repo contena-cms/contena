@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Api\Acl;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;

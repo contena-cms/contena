@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 
 /**

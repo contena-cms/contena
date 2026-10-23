@@ -7,7 +7,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentDefinition;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;
 use Contena\Core\System\Consent\ConsentException;
@@ -21,7 +20,6 @@ use Contena\Core\System\Consent\Event\ConsentAcceptedEvent;
 use Contena\Core\System\Consent\Event\ConsentRevokedEvent;
 use Contena\Core\System\Consent\Service\ConsentService;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
-use Contena\Tests\Unit\Core\System\Consent\TestDefinition;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

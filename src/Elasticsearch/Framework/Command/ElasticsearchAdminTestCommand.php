@@ -2,16 +2,15 @@
 
 namespace Contena\Elasticsearch\Framework\Command;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
-use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
+use Contena\Core\System\User\UserDefinition;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

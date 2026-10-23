@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Snippet\Mock;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Files\AbstractSnippetFile;
 
 /**

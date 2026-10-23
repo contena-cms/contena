@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Twig;
 
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Symfony\Component\DependencyInjection\ContainerInterface;

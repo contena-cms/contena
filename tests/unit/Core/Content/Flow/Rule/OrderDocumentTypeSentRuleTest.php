@@ -12,7 +12,6 @@ use Contena\Core\Checkout\DocumentV2\DocumentEntity;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderDocumentTypeSentRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleScope;

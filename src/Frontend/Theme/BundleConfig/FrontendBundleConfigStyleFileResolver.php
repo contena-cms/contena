@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\BundleConfig;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\BundleConfigStyleFileResolver;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Symfony\Component\Filesystem\Path;

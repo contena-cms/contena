@@ -20,7 +20,6 @@ use Contena\Core\Framework\Gateway\Context\Command\Registry\ContextGatewayComman
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
 use Contena\Core\Framework\Gateway\GatewayException;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ContextTokenResponse;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

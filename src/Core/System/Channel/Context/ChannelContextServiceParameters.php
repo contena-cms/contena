@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Context;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class ChannelContextServiceParameters extends Struct

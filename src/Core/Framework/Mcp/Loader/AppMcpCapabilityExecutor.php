@@ -4,9 +4,7 @@ namespace Contena\Core\Framework\Mcp\Loader;
 
 use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\App\AppSecretResolver;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,21 +23,6 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class AppMcpCapabilityExecutor
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly Client $client,
-        private readonly string $shopUrl,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly int $timeout,
-        private readonly LoggerInterface $logger,
-        private readonly KernelInterface $kernel,
-        private readonly RequestStack $requestStack,
-        private readonly RouterInterface $router,
-        private readonly AppSecretResolver $secretResolver,
-    ) {
-    }
 
     /**
      * @param array<string, mixed> $arguments

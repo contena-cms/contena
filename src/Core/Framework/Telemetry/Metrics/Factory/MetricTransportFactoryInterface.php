@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Factory;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Config\TransportConfig;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 

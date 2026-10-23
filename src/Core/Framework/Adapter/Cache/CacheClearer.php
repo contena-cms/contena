@@ -7,7 +7,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\Cache\PruneableInterface;
 use Symfony\Component\Filesystem\Filesystem;

@@ -4,9 +4,7 @@ namespace Contena\Tests\Unit\Core\Framework\Struct;
 
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\StateAwareTrait;
-use Contena\Tests\Unit\Core\Framework\Struct\Fixture\StateStruct;
 
 /**
  * @internal

@@ -4,9 +4,6 @@ namespace Contena\Core\System\Tax;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -15,6 +12,7 @@ class TaxEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 
     protected float $taxRate;
 
@@ -26,7 +24,6 @@ class TaxEntity extends Entity
 
     protected ?TaxRuleCollection $rules = null;
 
-    protected ?ShippingMethodCollection $shippingMethods = null;
 
     public function getTaxRate(): float
     {
@@ -78,13 +75,5 @@ class TaxEntity extends Entity
         $this->rules = $rules;
     }
 
-    public function getShippingMethods(): ?ShippingMethodCollection
-    {
-        return $this->shippingMethods;
-    }
 
-    public function setShippingMethods(ShippingMethodCollection $shippingMethods): void
-    {
-        $this->shippingMethods = $shippingMethods;
-    }
 }

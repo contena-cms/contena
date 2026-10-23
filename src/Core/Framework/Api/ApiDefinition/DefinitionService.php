@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Api\ApiDefinition;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 

@@ -37,7 +37,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\WriteCommandExc
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterNameChange;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\Validator\ConstraintViolation;

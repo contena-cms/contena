@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\DataAbstractionLayer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 
 /**

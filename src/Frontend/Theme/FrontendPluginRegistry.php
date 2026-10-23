@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme;
 
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

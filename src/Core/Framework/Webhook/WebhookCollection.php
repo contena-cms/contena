@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook;
 
 use Contena\Core\Framework\App\Event\ManifestChangedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

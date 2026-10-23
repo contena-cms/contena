@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\Tool;
 
 use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Tool;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
 use Contena\Core\Framework\Mcp\Tool\Search\ToolSearch;
 

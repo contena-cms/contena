@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\System\User\Service\BlogReviewCountService;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

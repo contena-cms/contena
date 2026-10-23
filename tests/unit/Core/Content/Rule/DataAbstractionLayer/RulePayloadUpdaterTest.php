@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Rule\DataAbstractionLayer\RulePayloadUpdater;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\DateRangeRule;

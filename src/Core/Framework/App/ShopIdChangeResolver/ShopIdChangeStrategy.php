@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\ShopIdChangeResolver;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

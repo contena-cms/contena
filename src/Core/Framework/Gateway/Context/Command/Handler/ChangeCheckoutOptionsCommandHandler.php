@@ -9,7 +9,6 @@ use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand
 use Contena\Core\Framework\Gateway\Context\Command\ChangePaymentMethodCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingMethodCommand;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

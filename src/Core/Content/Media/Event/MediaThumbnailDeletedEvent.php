@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Event;
 
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

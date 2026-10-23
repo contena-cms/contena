@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\Api\AppPrivilegeController;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Privileges\Privileges;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

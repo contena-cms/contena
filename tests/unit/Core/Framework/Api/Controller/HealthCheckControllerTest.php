@@ -11,7 +11,6 @@ use Contena\Core\Framework\Api\Controller\HealthCheckController;
 use Contena\Core\Framework\Api\HealthCheck\Event\HealthCheckEvent;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\SystemChecker;

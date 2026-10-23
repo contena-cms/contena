@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Store\Services;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\HandlerStack;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**

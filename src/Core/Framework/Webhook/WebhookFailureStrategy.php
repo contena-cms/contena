@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

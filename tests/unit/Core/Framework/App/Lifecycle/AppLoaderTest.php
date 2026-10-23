@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Composer\ComposerPackage;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Manifest\Xml\Setup\Setup;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

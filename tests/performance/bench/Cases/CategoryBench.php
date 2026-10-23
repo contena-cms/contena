@@ -7,7 +7,6 @@ use PhpBench\Attributes as Bench;
 use PhpBench\Attributes\BeforeMethods;
 use Contena\Core\Content\Category\Channel\NavigationRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Tests\Bench\AbstractBenchCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

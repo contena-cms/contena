@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Response;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\JsonResponse;
 
 class JsonApiResponse extends JsonResponse

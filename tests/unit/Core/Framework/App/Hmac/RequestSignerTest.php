@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

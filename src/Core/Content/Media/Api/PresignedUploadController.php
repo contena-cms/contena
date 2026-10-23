@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\Upload\PresignedMediaUploadService;
 use Contena\Core\Content\Media\Upload\PresignedUploadFinalizePayload;
 use Contena\Core\Content\Media\Upload\PresignedUploadPreparePayload;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;

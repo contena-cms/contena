@@ -2,15 +2,11 @@
 
 namespace Contena\Frontend\Page\Account\Login;
 
-use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Country\Channel\AbstractCountryRoute;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Frontend\Page\GenericPageLoaderInterface;
+use Contena\Core\System\Country\CountryCollection;
 use Contena\Frontend\Page\MetaInformation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -20,18 +16,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class AccountLoginPageLoader
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly GenericPageLoaderInterface $genericLoader,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly AbstractCountryRoute $countryRoute,
-        private readonly AbstractSalutationRoute $salutationRoute,
-        private readonly AbstractSalutationsSorter $salutationsSorter,
-        private readonly AbstractTranslator $translator
-    ) {
-    }
 
     /**
      * @throws CategoryNotFoundException
@@ -69,15 +53,6 @@ class AccountLoginPageLoader
         );
     }
 
-    /**
-     * @throws InconsistentCriteriaIdsException
-     */
-    private function getSalutations(ChannelContext $channelContext): SalutationCollection
-    {
-        $salutations = $this->salutationRoute->load(new Request(), $channelContext, new Criteria())->getSalutations();
-
-        return $this->salutationsSorter->sort($salutations);
-    }
 
     private function getCountries(ChannelContext $channelContext): CountryCollection
     {

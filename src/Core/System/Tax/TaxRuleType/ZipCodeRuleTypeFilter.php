@@ -2,47 +2,11 @@
 
 namespace Contena\Core\System\Tax\TaxRuleType;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
 
 class ZipCodeRuleTypeFilter extends AbstractTaxRuleTypeFilter
 {
     final public const TECHNICAL_NAME = 'zip_code';
 
-    public function match(TaxRuleEntity $taxRuleEntity, ?UserEntity $user, ShippingLocation $shippingLocation): bool
-    {
-        if ($taxRuleEntity->getType()->getTechnicalName() !== self::TECHNICAL_NAME
-            || !$this->metPreconditions($taxRuleEntity, $shippingLocation)
-        ) {
-            return false;
-        }
 
-        $shippingZipCode = $this->getZipCode($shippingLocation);
 
-        $zipCode = $taxRuleEntity->getData()['zipCode'] ?? null;
-
-        if ($shippingZipCode !== $zipCode) {
-            return false;
-        }
-
-        if ($taxRuleEntity->getActiveFrom() !== null) {
-            return $this->isTaxActive($taxRuleEntity);
-        }
-
-        return true;
-    }
-
-    private function metPreconditions(TaxRuleEntity $taxRuleEntity, ShippingLocation $shippingLocation): bool
-    {
-        if ($this->getZipCode($shippingLocation) === null) {
-            return false;
-        }
-
-        return $shippingLocation->getCountry()->getId() === $taxRuleEntity->getCountryId();
-    }
-
-    private function getZipCode(ShippingLocation $shippingLocation): ?string
-    {
-        return $shippingLocation->getAddress()?->getZipcode();
-    }
 }

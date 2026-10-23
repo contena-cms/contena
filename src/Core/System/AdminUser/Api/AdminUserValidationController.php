@@ -3,11 +3,10 @@
 namespace Contena\Core\System\AdminUser\Api;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\AdminUser\Service\AdminUserValidationService;
 use Contena\Core\System\AdminUser\AdminUserException;
+use Contena\Core\System\AdminUser\Service\AdminUserValidationService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

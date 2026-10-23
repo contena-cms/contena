@@ -8,9 +8,7 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
-use Contena\Core\Framework\Store\InAppPurchase;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -22,13 +20,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class AppJWTGenerateRoute
 {
-    public function __construct(
-        private readonly Connection $connection,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly InAppPurchase $inAppPurchase,
-        private readonly ClockInterface $clock,
-    ) {
-    }
 
     #[Route('/store-api/app-system/{name}/generate-token', name: 'store-api.app-system.generate-token', methods: ['POST'])]
     public function generate(string $name, ChannelContext $context): JsonResponse

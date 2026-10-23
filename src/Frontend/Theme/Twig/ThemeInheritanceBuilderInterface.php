@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Twig;
 
-use Contena\Core\Framework\Log\Package;
 
 interface ThemeInheritanceBuilderInterface
 {

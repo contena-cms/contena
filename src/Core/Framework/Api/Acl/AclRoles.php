@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Acl;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The ACL roles of a admin_user or integration. An admin's roles are unrestricted: they allow everything.

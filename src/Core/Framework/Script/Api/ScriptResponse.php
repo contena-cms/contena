@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Script\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Script\Facade\ArrayFacade;
 use Contena\Core\Framework\Script\ScriptException;

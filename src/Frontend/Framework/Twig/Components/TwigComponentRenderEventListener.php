@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Frontend\Framework\Twig\Components;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\UX\TwigComponent\ComponentAttributes;
 use Symfony\UX\TwigComponent\Event\PreRenderEvent;

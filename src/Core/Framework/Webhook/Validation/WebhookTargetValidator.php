@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook\Validation;
 
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

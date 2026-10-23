@@ -11,15 +11,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationDefinition;
 use Contena\Core\System\CustomField\CustomFieldDefinition;
 use Contena\Core\System\CustomField\CustomFieldTypes;
-use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Blog\CustomFieldSetGateway;
 use Contena\Elasticsearch\Blog\CustomFieldUpdater;
 use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
+use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 
 // Covers also ElasticsearchCustomFieldsMappingHelper for mapping tests
 

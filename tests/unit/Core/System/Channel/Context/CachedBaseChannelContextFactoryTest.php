@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\Channel\Context;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\BaseChannelContext;
 use Contena\Core\System\Channel\Context\AbstractBaseChannelContextFactory;
 use Contena\Core\System\Channel\Context\CachedBaseChannelContextFactory;

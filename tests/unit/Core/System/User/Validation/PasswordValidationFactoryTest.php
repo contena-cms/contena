@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\User\Validation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\System\User\Validation\PasswordValidationFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Symfony\Component\Validator\Constraints\Length;

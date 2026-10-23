@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Template\TemplateLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;

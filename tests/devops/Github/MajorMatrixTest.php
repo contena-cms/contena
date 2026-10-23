@@ -3,7 +3,6 @@
 namespace Contena\Tests\DevOps\Github;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Process\Process;
 
 /**

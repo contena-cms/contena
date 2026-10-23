@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Blog;
 
-use Contena\Core\Framework\Log\Package;
 
 class SearchFieldConfig
 {

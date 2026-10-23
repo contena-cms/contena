@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

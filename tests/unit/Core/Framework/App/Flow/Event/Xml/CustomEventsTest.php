@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App\Flow\Event\Xml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Flow\Event\Xml\CustomEvents;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

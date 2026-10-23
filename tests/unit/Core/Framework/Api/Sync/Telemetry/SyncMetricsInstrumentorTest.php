@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncResult;
 use Contena\Core\Framework\Api\Sync\Telemetry\SyncMetricsInstrumentor;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Telemetry;
 use Contena\Core\Test\Stub\Telemetry\CollectingMeter;

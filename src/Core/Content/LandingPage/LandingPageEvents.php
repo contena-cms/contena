@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\LandingPage;
 
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
-use Contena\Core\Framework\Log\Package;
 
 class LandingPageEvents
 {

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Test\Media\File;
 
 use Contena\Core\Content\Media\File\FileUrlValidatorInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

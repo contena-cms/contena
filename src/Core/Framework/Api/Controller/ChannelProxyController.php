@@ -2,21 +2,18 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Checkout\CheckoutPermissions;
-use Contena\Core\System\User\ImitateUserTokenGenerator;
-use Contena\Core\System\User\Struct\ImitateUserToken;
 use Contena\Core\Content\Flow\Dispatching\Action\SendMailAction;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
@@ -24,17 +21,13 @@ use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
-use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
-use Contena\Core\System\Channel\Context\ChannelContextPersister;
-use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
-use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
-use Contena\Core\System\Channel\Event\ChannelContextSwitchEvent;
-use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Channel\Context\ChannelContextService;
+use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
+use Contena\Core\System\Channel\Event\ChannelContextSwitchEvent;
+use Contena\Core\System\User\Struct\ImitateUserToken;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -61,25 +54,6 @@ class ChannelProxyController extends AbstractController
         CheckoutPermissions::ALLOW_BLOG_PRICE_OVERWRITES => true,
     ];
 
-    /**
-     * @internal
-     *
-     * @param EntityRepository<ChannelCollection> $channelRepository
-     */
-    public function __construct(
-        private readonly KernelInterface $kernel,
-        private readonly EntityRepository $channelRepository,
-        protected DataValidator $validator,
-        protected ChannelContextPersister $contextPersister,
-        private readonly ChannelContextServiceInterface $contextService,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly ApiOrderCartService $adminOrderCartService,
-        private readonly AbstractCartOrderRoute $orderRoute,
-        private readonly CartService $cartService,
-        private readonly RequestStack $requestStack,
-        private readonly ImitateUserTokenGenerator $imitateUserTokenGenerator
-    ) {
-    }
 
     #[Route(
         path: '/api/_proxy/store-api/{channelId}/{_path}',
@@ -465,12 +439,6 @@ class ChannelProxyController extends AbstractController
         $this->contextPersister->save($contextToken, $payload, $channelId);
     }
 
-    private function parseCalculatedPriceByRequest(Request $request): CalculatedPrice
-    {
-        $shippingCosts = $this->validateShippingCostsParameters($request);
-
-        return new CalculatedPrice($shippingCosts['unitPrice'], $shippingCosts['totalPrice'], new CalculatedTaxCollection(), new TaxRuleCollection());
-    }
 
     /**
      * @return array{unitPrice: float, totalPrice: float}

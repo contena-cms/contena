@@ -2,12 +2,10 @@
 
 namespace Contena\Core\Service\ServiceRegistry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Message\LogPermissionToRegistryMessage;
 use Contena\Core\Service\Permission\ConsentState;
 use Contena\Core\Service\Permission\PermissionsConsent;
 use Contena\Core\Service\Permission\RemoteLogger;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**
@@ -17,13 +15,6 @@ class PermissionLogger implements RemoteLogger
 {
     public const CONFIG_STORE_LICENSE_HOST = 'core.store.licenseHost';
 
-    public function __construct(
-        private readonly Client $client,
-        private readonly MessageBusInterface $messageBus,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly SystemConfigService $systemConfigService,
-    ) {
-    }
 
     public function log(PermissionsConsent $consent, ConsentState $state): void
     {

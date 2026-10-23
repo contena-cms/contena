@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\AbstractScssCompiler;
 use Contena\Frontend\Theme\AbstractThemePathBuilder;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;

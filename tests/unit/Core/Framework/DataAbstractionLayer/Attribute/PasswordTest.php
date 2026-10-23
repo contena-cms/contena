@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Attribute;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Password;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

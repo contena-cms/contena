@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

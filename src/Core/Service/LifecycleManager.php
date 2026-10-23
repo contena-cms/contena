@@ -3,7 +3,6 @@
 namespace Contena\Core\Service;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\DTO\Service;
 use Contena\Core\Service\Permission\PermissionsService;
 use Contena\Core\Service\ServiceRegistry\Client;

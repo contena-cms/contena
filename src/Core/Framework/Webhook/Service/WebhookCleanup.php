@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Types\Types;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogDefinition;
 use Contena\Core\Framework\Webhook\Outbox\StreamLockService;
 use Contena\Core\System\SystemConfig\SystemConfigService;

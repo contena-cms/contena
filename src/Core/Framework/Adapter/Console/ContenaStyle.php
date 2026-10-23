@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Console;
 
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Style\SymfonyStyle;
 

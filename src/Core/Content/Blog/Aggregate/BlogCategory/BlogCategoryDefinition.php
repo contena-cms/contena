@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Blog\Aggregate\BlogCategory;
 
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -5,7 +5,6 @@ namespace Contena\Core\Maintenance\System\Service;
 use Doctrine\DBAL\Configuration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DriverManager;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
 

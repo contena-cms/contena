@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ContextTokenResponse;
 

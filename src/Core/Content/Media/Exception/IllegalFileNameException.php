@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Exception;
 
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\Webhook;
 
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Validation\WebhookTargetValidator;
 
 /**

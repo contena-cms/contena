@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Channel;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\System\Channel\ChannelContext;
 

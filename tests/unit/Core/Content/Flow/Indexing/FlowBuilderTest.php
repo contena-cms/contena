@@ -8,7 +8,6 @@ use Contena\Core\Content\Flow\Dispatching\Struct\ActionSequence;
 use Contena\Core\Content\Flow\Dispatching\Struct\IfSequence;
 use Contena\Core\Content\Flow\Indexing\FlowBuilder;
 use Contena\Core\Content\Flow\Indexing\FlowBuilder\Sequence;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\RateLimiter;
 
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
-use Contena\Core\Framework\Log\Package;
 
 class RateLimiter
 {

@@ -5,10 +5,9 @@ namespace Contena\Tests\Unit\Core\Maintenance\AdminUser\Service;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
+use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Test\Stub\Doctrine\FakeQueryBuilder;
 use Symfony\Component\Clock\NativeClock;
 

@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\Aggregate\ThemeMediaDefinition;
 use Contena\Frontend\Theme\ThemeDefinition;
 

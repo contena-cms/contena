@@ -12,10 +12,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
 use Contena\Core\System\StateMachine\StateMachineDefinition;
-use Contena\Core\System\AdminUser\AdminUserDefinition;
 
 /**
  * @codeCoverageIgnore

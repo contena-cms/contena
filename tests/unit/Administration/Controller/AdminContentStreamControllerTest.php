@@ -16,10 +16,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
-use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

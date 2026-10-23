@@ -6,7 +6,6 @@ use PHPUnit\Event\Code\Phpt;
 use PHPUnit\Event\Test\Finished;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\Subscriber\TestFinishedSubscriber;
 use Contena\Tests\Unit\Core\Test\PHPUnit\TelemetryInfoFactory;

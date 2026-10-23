@@ -3,10 +3,8 @@
 namespace Contena\Tests\Integration\Core\Framework\Routing;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;

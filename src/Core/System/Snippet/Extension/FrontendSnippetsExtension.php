@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\System\Snippet\Extension;
 
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 
 /**

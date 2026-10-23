@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Command;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\Util\TranslationCommandHelper;
 use Contena\Core\System\Snippet\DataTransfer\TranslationUpdate\TranslationInstallPlan;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;

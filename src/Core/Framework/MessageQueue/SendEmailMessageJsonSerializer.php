@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mailer\Messenger\SendEmailMessage;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;

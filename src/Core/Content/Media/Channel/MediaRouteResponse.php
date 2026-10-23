@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Channel;
 
 use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig\Extension;
 
 use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Util\FloatComparator;
 use Twig\Extension\AbstractExtension;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Messenger\Middleware;
 
 use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\ClockAwareTrait;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;

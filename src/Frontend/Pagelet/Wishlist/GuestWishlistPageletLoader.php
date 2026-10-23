@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\Channel\AbstractBlogListRoute;
 use Contena\Core\Content\Blog\Channel\BlogListResponse;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;

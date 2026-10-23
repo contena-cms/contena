@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook\EventLog;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<WebhookEventLogEntity>

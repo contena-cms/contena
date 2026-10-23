@@ -2,16 +2,11 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Extension\ImitateUserRouteExtension;
-use Contena\Core\System\User\ImitateUserTokenGenerator;
-use Contena\Core\System\User\Struct\ImitateUserToken;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterNameChange;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
@@ -20,13 +15,18 @@ use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\ContextTokenResponse;
-use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Extension\ImitateUserRouteExtension;
+use Contena\Core\System\User\ImitateUserTokenGenerator;
+use Contena\Core\System\User\Struct\ImitateUserToken;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(
     defaults: [

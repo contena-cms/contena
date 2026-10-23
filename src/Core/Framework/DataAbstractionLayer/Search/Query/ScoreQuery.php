@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Query;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Search\CriteriaCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationEntity;
 
 /**

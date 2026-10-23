@@ -6,7 +6,7 @@ namespace Contena\Frontend\Theme\ConfigLoader;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 
 class DatabaseAvailableThemeProvider extends AbstractAvailableThemeProvider

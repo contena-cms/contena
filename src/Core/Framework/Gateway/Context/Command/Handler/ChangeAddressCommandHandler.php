@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Gateway\Context\Command\Handler;
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeBillingAddressCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingAddressCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

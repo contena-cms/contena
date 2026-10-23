@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\Aggregate\CmsSlot;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<CmsSlotEntity>

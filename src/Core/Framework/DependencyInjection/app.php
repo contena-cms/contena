@@ -93,7 +93,6 @@ use Contena\Core\Framework\App\Lifecycle\Handler\ModuleLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\PaymentMethodLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\RuleConditionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
-use Contena\Core\Framework\App\Lifecycle\Handler\ShippingMethodLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TaxProviderLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TemplateLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\WebhookLifecycleHandler;
@@ -116,8 +115,8 @@ use Contena\Core\Framework\App\ScheduledTask\SystemHeartbeatTask;
 use Contena\Core\Framework\App\ScheduledTask\UpdateAppsHandler;
 use Contena\Core\Framework\App\ScheduledTask\UpdateAppsTask;
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
-use Contena\Core\Framework\App\ShopId\Fingerprint\InstallationPath;
 use Contena\Core\Framework\App\ShopId\Fingerprint\ChannelDomainUrls;
+use Contena\Core\Framework\App\ShopId\Fingerprint\InstallationPath;
 use Contena\Core\Framework\App\ShopId\FingerprintGenerator;
 use Contena\Core\Framework\App\ShopIdChangeResolver\MoveShopPermanentlyStrategy;
 use Contena\Core\Framework\App\ShopIdChangeResolver\ReinstallAppsStrategy;
@@ -132,7 +131,6 @@ use Contena\Core\Framework\App\Subscriber\AppLoadedSubscriber;
 use Contena\Core\Framework\App\Subscriber\AppScriptConditionConstraintsSubscriber;
 use Contena\Core\Framework\App\Subscriber\CustomFieldProtectionSubscriber;
 use Contena\Core\Framework\App\Subscriber\DiscardUnconfirmedAppSecretsListener;
-use Contena\Core\Framework\App\TaxProvider\Payload\TaxProviderPayloadService;
 use Contena\Core\Framework\App\Telemetry\AppTelemetrySubscriber;
 use Contena\Core\Framework\App\Template\TemplateDefinition;
 use Contena\Core\Framework\App\Template\TemplateLoader;
@@ -165,12 +163,13 @@ use Contena\Core\Framework\Webhook\WebhookCacheClearer;
 use Contena\Core\System\CustomEntity\CustomEntityLifecycleService;
 use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
-use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Symfony\Component\Clock\ClockInterface as SymfonyClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Contena\Core\Framework\Adapter\Asset\AssetService;
+use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
@@ -309,14 +308,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.app_lifecycle.handler', ['priority' => -500]);
 
-    $services->set(ShippingMethodLifecycleHandler::class)
-        ->args([
-            service('shipping_method.repository'),
-            service('app_shipping_method.repository'),
-            service('media.repository'),
-            service(MediaService::class),
-        ])
-        ->tag('contena.app_lifecycle.handler', ['priority' => -600]);
 
     $services->set(RuleConditionLifecycleHandler::class)
         ->args([
@@ -417,25 +408,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('kernel.reset', ['method' => 'reset'])
         ->tag('kernel.event_listener', ['event' => 'console.terminate', 'method' => 'reset']);
 
-    $services->set(PaymentPayloadService::class)
-        ->args([
-            service(AppPayloadServiceHelper::class),
-            service('contena.app_system.guzzle'),
-        ]);
 
-    $services->set(TaxProviderPayloadService::class)
-        ->args([
-            service(AppPayloadServiceHelper::class),
-            service('contena.app_system.guzzle'),
-            service(ExceptionLogger::class),
-        ]);
 
-    $services->set(AppCheckoutGatewayPayloadService::class)
-        ->args([
-            service(AppPayloadServiceHelper::class),
-            service('contena.app_system.guzzle'),
-            service(ExceptionLogger::class),
-        ]);
 
     $services->set(AppContextGatewayPayloadService::class)
         ->args([
@@ -443,17 +417,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('contena.app_system.guzzle'),
         ]);
 
-    $services->set(AppCheckoutGateway::class)
-        ->args([
-            service(AppCheckoutGatewayPayloadService::class),
-            service(CheckoutGatewayCommandExecutor::class),
-            service(CheckoutGatewayCommandRegistry::class),
-            service('app.repository'),
-            service('event_dispatcher'),
-            service(ExceptionLogger::class),
-            service(ActiveAppsLoader::class),
-            service(AppCapability::class),
-        ]);
 
     $services->set(AppContextGateway::class)
         ->args([
@@ -472,16 +435,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_listener');
 
-    $services->set(AppPaymentHandler::class)
-        ->args([
-            service(StateMachineRegistry::class),
-            service(PaymentPayloadService::class),
-            service('order_transaction_capture_refund.repository'),
-            service('order_transaction.repository'),
-            service('app.repository'),
-            service(Connection::class),
-        ])
-        ->tag('contena.payment.method');
 
     $services->set(AppRegistrationService::class)
         ->args([

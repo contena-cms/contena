@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field\Flag;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
-use Contena\Core\Framework\Log\Package;
 
 class ApiAware extends Flag
 {

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Twig\Extension\ComparisonExtension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 

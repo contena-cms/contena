@@ -7,6 +7,7 @@ use Composer\Semver\Constraint\ConstraintInterface;
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
 use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\App\Validation\Error\MissingTranslationError;
 
 /**
  * @internal only for use by the app-system

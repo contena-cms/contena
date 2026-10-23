@@ -7,8 +7,6 @@ use Contena\Core\Framework\Adapter\Twig\AppTemplateIterator;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

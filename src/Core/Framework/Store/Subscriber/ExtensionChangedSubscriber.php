@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Store\Subscriber;
 
 use Contena\Core\Framework\App\AppEvents;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEvents;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

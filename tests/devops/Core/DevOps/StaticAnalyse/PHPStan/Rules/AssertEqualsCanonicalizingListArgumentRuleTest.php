@@ -5,7 +5,6 @@ namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\AssertEqualsCanonicalizingListArgumentRule;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

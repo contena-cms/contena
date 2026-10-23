@@ -9,9 +9,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 
 /**
  * The `store` service can be used to access publicly available `store-api` data.

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ContentStream\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 
 /**

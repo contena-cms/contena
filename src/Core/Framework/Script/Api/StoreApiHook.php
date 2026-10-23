@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Framework\Script\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\Framework\Script\Execution\InterfaceHook;
 use Contena\Core\Framework\Script\ScriptException;

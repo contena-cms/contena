@@ -4,7 +4,6 @@ namespace Contena\Core\Maintenance\System\Command;
 
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostPrepareEvent;
 use Contena\Core\Framework\Update\Event\UpdatePrePrepareEvent;
 use Symfony\Component\Console\Attribute\AsCommand;

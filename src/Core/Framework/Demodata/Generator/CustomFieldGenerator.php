@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Demodata\DemodataContext;
 use Contena\Core\Framework\Demodata\DemodataException;
 use Contena\Core\Framework\Demodata\DemodataGeneratorInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;

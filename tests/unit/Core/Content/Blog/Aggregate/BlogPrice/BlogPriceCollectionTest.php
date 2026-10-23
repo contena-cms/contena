@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

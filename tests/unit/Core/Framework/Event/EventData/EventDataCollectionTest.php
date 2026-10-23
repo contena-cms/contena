@@ -4,11 +4,10 @@ namespace Contena\Tests\Unit\Core\Framework\Event\EventData;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Framework\Event\EventData\EntityType;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\UserDefinition;
 
 /**
  * @internal

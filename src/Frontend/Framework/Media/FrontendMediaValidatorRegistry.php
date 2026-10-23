@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Media;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 

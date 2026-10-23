@@ -2,8 +2,6 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\NoClassAliasUsageRule;
 
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\ClassMovedAttributeUsage;
-use Contena\Tests\Legacy\UnregisteredClass;
 
 class ClassAliasUsage
 {

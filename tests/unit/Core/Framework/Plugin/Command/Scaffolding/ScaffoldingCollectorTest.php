@@ -4,12 +4,11 @@ namespace Contena\Tests\Unit\Core\Framework\Plugin\Command\Scaffolding;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\CommandGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\EventSubscriberGenerator;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\FrontendControllerGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\StoreApiRouteGenerator;
-use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\FrontendControllerGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingCollector;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;

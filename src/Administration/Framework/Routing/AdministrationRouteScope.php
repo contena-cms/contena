@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\AbstractRouteScope;
 use Contena\Core\Framework\Routing\ApiContextRouteScopeDependant;
 use Contena\Core\Framework\Routing\ApiRouteScope;

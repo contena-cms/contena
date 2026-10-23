@@ -10,7 +10,6 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\ScalarValuesStorer;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

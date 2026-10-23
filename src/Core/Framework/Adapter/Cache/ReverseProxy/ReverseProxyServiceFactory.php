@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\ReverseProxy;
 
 use Psr\Container\ContainerInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 
 /**

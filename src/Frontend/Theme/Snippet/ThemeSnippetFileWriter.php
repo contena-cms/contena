@@ -5,7 +5,6 @@ namespace Contena\Frontend\Theme\Snippet;
 use League\Flysystem\FilesystemOperator;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Files\FilesystemAdministrationSnippets;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 

@@ -9,7 +9,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\Hookable;
 use Symfony\Contracts\EventDispatcher\Event;

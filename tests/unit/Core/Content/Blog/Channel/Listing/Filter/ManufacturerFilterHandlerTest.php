@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\Channel\Listing\Filter;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\ManufacturerListingFilterHandler;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

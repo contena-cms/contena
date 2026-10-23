@@ -2,12 +2,11 @@
 
 namespace Contena\Core\System\Channel\File;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\Context\ChannelContextRequestRestorer;
 use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\File\Loader\ChannelFileLoader;
-use Contena\Core\System\Channel\ChannelException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

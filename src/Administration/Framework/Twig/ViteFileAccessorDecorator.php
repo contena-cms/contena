@@ -4,7 +4,6 @@ namespace Contena\Administration\Framework\Twig;
 
 use Pentatrion\ViteBundle\Service\FileAccessor;
 use Contena\Core\Framework\Bundle as ContenaBundle;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Asset\PackageInterface as AssetPackage;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;

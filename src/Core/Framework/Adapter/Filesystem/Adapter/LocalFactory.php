@@ -8,7 +8,6 @@ use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\Local\LocalFilesystemAdapter;
 use League\Flysystem\UnixVisibility\PortableVisibilityConverter;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class LocalFactory implements FilesystemOperatorFactoryInterface

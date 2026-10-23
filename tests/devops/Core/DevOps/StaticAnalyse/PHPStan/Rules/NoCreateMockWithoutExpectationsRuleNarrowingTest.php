@@ -6,7 +6,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\NoCreateMockWithoutExpectationsRule;
-use Contena\Core\Framework\Log\Package;
 
 // the abstract-base fixtures are not autoloadable (their namespace deliberately sits in the rule's
 // enabled namespaces); loading them lets reflection resolve the subclass -> ancestor walk

@@ -3,16 +3,12 @@
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Field\Flag;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

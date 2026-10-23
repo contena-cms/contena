@@ -8,11 +8,7 @@ use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

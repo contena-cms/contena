@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Installer\Controller\DatabaseImportController;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;

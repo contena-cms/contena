@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Table;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Database\TableHelper;
 
 /**

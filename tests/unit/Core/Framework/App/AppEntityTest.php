@@ -15,7 +15,6 @@ use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Template\TemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;

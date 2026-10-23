@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheControlDirectives;
 use Contena\Core\Framework\Adapter\Cache\Http\CachePolicy;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

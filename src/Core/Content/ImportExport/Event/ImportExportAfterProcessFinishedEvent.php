@@ -5,7 +5,6 @@ namespace Contena\Core\Content\ImportExport\Event;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogEntity;
 use Contena\Core\Content\ImportExport\Struct\Progress;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

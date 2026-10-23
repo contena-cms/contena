@@ -9,15 +9,14 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\Rule\LineItemScope;
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Rule\UserBirthdayRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Rule\UserBirthdayRule;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Type;
 

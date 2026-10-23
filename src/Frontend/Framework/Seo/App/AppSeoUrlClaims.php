@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Seo\App;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 
 /**

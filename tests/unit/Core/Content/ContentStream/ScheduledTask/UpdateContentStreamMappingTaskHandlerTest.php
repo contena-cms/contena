@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
 use Contena\Core\Content\ContentStream\ContentStreamCollection;
 use Contena\Core\Content\ContentStream\ScheduledTask\UpdateBlogStreamMappingTaskHandler;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;

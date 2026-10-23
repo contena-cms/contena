@@ -7,7 +7,6 @@ use Contena\Core\Content\ImportExport\Message\ImportExportMessage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class ImportExportExceptionImportExportHandlerEvent extends Event implements ContenaEvent

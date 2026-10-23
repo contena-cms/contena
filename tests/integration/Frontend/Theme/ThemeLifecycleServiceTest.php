@@ -18,10 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
 use Contena\Core\System\Language\LanguageCollection;
@@ -30,19 +26,16 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationCollection;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationEntity;
-use Contena\Frontend\Theme\Snippet\ThemeSnippetFileWriter;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\Snippet\ThemeSnippetFileWriter;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeEntity;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\SimpleTheme\SimpleTheme;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithFileAssociations\ThemeWithFileAssociations;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\ThemeWithLabels\ThemeWithLabels;
 
 /**
  * @internal

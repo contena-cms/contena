@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

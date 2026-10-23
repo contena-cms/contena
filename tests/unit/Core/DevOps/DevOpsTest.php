@@ -10,7 +10,6 @@ use Contena\Core\DevOps\Docs\App\DocsAppEventCommand;
 use Contena\Core\DevOps\Docs\Script\HooksReferenceGenerator;
 use Contena\Core\DevOps\System\Command\SyncComposerVersionCommand;
 use Contena\Core\DevOps\Test\Command\MakeCoverageTestCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

@@ -9,7 +9,6 @@ use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Payment\Cart\Recurring\RecurringDataStruct;
 use Contena\Core\Framework\App\Payload\Source;
 use Contena\Core\Framework\App\Payment\Payload\Struct\PaymentPayload;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook;
 
 use Contena\Core\Framework\Api\Acl\AclRoles;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Simple DTO for internal use

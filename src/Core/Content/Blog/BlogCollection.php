@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template TElement of BlogEntity = BlogEntity

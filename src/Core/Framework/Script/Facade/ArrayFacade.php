@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Script\Facade;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The ArrayFacade acts as a wrapper around an array and allows easier manipulation of arrays inside scripts.

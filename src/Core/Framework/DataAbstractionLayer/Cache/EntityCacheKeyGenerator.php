@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\DataAbstractionLayer\Cache;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\ChannelContext;
 

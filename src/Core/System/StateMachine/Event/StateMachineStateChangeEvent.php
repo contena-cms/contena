@@ -4,7 +4,6 @@ namespace Contena\Core\System\StateMachine\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 use Contena\Core\System\StateMachine\StateMachineEntity;
 use Contena\Core\System\StateMachine\Transition;

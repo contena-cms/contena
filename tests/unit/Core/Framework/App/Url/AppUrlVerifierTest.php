@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
 use Contena\Core\Framework\App\Url\VerificationState;
 use Contena\Core\Framework\App\Url\VerificationStatus;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\HttpClient\Exception\TransportException;

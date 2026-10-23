@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\ContextTokenResponse;
 
 /**
  * This route is used to login and get a new context token

@@ -3,7 +3,6 @@
 namespace Contena\Administration\Command;
 
 use Contena\Administration\Administration;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;

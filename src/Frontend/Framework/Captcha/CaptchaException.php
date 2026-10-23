@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Captcha;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

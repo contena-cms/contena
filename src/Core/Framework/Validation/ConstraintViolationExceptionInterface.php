@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Validation;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaException;
 use Symfony\Component\Validator\ConstraintViolationList;
 

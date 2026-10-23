@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Test\AnnotationTagTester;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

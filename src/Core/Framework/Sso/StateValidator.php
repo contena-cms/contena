@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Sso;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\String\ByteString;
 use Symfony\Component\Validator\Constraints\EqualTo;
@@ -56,7 +55,6 @@ class StateValidator
         $violations = $validator->validate($storedState, [
             new NotNull(),
             new NotBlank(),
-            new Length(self::RANDOM_LENGTH),
         ]);
 
         if ($violations->count() > 0) {

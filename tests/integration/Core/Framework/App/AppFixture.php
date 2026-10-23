@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture as UnitAppFixture;
 
 /**
  * Helpers for testing app lifecycle components in integration tests

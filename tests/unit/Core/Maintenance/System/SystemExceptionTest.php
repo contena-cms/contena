@@ -6,7 +6,6 @@ namespace Contena\Tests\Unit\Core\Maintenance\System;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\MaintenanceException;
 use Symfony\Component\HttpFoundation\Response;
 

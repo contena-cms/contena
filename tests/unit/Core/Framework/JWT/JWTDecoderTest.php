@@ -10,7 +10,6 @@ use Contena\Core\Framework\JWT\Constraints\MatchesLicenceDomain;
 use Contena\Core\Framework\JWT\JWTDecoder;
 use Contena\Core\Framework\JWT\JWTException;
 use Contena\Core\Framework\JWT\Struct\JWKCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

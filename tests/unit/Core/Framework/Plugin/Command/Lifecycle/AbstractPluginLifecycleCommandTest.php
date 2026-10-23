@@ -10,7 +10,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Lifecycle\AbstractPluginLifecycleCommand;
 use Contena\Core\Framework\Plugin\Command\Lifecycle\PluginDeactivateCommand;
 use Contena\Core\Framework\Plugin\PluginCollection;

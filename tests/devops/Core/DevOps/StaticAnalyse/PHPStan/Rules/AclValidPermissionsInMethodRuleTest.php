@@ -6,7 +6,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsHelper;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\AclValidPermissionsInMethodRule;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

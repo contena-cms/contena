@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AsyncAwsS3WriteBatchAdapter;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

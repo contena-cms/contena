@@ -20,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 
 /**

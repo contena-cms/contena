@@ -6,7 +6,6 @@ namespace Contena\Tests\Unit\Core\Profiling\Subscriber;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Subscriber\CacheTagCollectorSubscriber;
 use Symfony\Component\HttpFoundation\RequestStack;
 

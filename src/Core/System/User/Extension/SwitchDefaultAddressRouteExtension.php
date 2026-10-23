@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User\Extension;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @public

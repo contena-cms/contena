@@ -9,10 +9,9 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminChannelApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Event\ContextCreatedEvent;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\Event\ContextCreatedEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

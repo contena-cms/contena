@@ -8,9 +8,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeCurrencyCommand;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Currency\CurrencyCollection;
 
 /**
  * @extends AbstractContextGatewayCommandHandler<ChangeCurrencyCommand>

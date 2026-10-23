@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Sitemap\Exception;
 
 use Contena\Core\Content\Sitemap\SitemapException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Response;
 

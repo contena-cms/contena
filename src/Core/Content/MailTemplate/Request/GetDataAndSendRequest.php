@@ -4,7 +4,6 @@ namespace Contena\Core\Content\MailTemplate\Request;
 
 use Contena\Core\Content\Mail\Payload\MailPayload;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

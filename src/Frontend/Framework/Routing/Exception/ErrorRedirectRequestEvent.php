@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Routing\Exception;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 class ErrorRedirectRequestEvent implements ContenaEvent

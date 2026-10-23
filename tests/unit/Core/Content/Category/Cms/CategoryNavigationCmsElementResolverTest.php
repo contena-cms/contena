@@ -14,7 +14,6 @@ use Contena\Core\Content\Category\Tree\TreeItem;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Request;

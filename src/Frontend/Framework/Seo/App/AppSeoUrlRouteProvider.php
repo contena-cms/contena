@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Seo\App;
 
 use Contena\Core\Framework\App\AppEvents;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\File;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

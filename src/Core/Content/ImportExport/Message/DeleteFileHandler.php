@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\Message;
 
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToDeleteFile;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

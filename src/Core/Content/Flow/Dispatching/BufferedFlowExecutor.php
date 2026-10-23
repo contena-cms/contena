@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\Content\Flow\Dispatching;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal not intended for decoration or replacement

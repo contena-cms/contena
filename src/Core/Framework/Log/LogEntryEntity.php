@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Log;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

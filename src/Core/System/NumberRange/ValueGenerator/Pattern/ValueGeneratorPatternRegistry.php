@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-import-type ValueGeneratorConfig from AbstractValueGenerator

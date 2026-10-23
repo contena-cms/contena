@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Value object extended for cache attribute in request

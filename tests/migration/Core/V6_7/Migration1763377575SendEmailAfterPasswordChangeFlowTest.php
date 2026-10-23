@@ -5,12 +5,10 @@ namespace Contena\Tests\Migration\Core\V6_7;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Event\UserPasswordChangedEvent;
 use Contena\Core\Content\Flow\Dispatching\Action\SendMailAction;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Migration\V6_7\Migration1763377575SendEmailAfterPasswordChangeFlow;
+use Contena\Core\System\User\Event\UserPasswordChangedEvent;
 
 /**
  * @internal

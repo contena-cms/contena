@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook\Outbox;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

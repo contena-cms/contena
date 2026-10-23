@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\ConfigHandler;
 
-use Contena\Core\Framework\Log\Package;
 
 interface ConfigHandlerInterface
 {

@@ -3,17 +3,16 @@
 namespace Contena\Core\Content\Media\Cms;
 
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\VideoStruct;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\VideoStruct;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 class VideoCmsElementResolver extends AbstractCmsElementResolver
 {

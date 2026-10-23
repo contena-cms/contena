@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Contracts\Cache\CacheInterface;

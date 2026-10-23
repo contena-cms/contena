@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Serializer\StructNormalizer;
 use Contena\Core\Test\Assert\Serialization;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlIndexingMessage;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Maintenance\Staging\Handler;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 
 /**
@@ -11,11 +10,6 @@ use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
  */
 readonly class StagingAppHandler
 {
-    public function __construct(
-        private Connection $connection,
-        private ShopIdProvider $shopIdProvider
-    ) {
-    }
 
     public function __invoke(SetupStagingEvent $event): void
     {

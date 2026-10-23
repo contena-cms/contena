@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Store\Struct;
 
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template-extends StoreCollection<FaqStruct>

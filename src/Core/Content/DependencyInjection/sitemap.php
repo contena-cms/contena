@@ -47,7 +47,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('contena.filesystem.sitemap'),
             service(SitemapHandleFactoryInterface::class),
             service('event_dispatcher'),
-            service(CartRuleLoader::class),
         ]);
 
     $services->set(SitemapLister::class)

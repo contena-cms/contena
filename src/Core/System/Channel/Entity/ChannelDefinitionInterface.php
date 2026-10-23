@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Entity;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 interface ChannelDefinitionInterface

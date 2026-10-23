@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Core\Application;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Updater for the storage path of media and thumbnails

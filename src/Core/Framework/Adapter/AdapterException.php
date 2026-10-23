@@ -5,10 +5,12 @@ namespace Contena\Core\Framework\Adapter;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Source;
+use Contena\Core\Framework\Adapter\Filesystem\Exception\AdapterFactoryNotFoundException;
+use Contena\Core\Framework\Adapter\Filesystem\Exception\DuplicateFilesystemFactoryException;
+use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
 
 class AdapterException extends HttpException
 {

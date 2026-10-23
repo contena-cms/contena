@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\BundleConfigGeneratorInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

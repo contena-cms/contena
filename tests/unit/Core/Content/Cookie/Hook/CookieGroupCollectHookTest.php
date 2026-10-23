@@ -7,9 +7,8 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Hook\CookieGroupCollectHook;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacadeHookFactory;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
 

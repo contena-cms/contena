@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Exception;
 
 use Contena\Core\Content\Flow\FlowException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

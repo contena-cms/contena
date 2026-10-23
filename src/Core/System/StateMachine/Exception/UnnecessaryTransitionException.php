@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\StateMachine\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\StateMachineException;
 use Symfony\Component\HttpFoundation\Response;
 

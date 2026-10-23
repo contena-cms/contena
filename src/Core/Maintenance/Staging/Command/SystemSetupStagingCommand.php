@@ -4,7 +4,6 @@ namespace Contena\Core\Maintenance\Staging\Command;
 
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
 use Contena\Core\System\SystemConfig\SystemConfigService;

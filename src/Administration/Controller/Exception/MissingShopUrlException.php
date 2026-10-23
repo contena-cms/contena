@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Controller\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 
 class MissingShopUrlException extends ContenaHttpException

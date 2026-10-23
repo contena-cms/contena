@@ -4,12 +4,12 @@ namespace Contena\Frontend\Page\Robots\Parser;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Robots\Event\RobotsDirectiveParsingEvent;
 use Contena\Frontend\Page\Robots\Event\RobotsUnknownDirectiveEvent;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Frontend\Page\Robots\Struct\RobotsAdminUserAgentBlock;
 
 class RobotsDirectiveParser
 {

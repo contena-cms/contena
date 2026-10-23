@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

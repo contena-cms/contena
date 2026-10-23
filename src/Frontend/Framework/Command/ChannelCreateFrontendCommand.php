@@ -7,7 +7,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Channel\Command\ChannelCreateCommand;
 use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;

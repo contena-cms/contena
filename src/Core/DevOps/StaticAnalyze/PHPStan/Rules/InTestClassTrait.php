@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules;
 
 use PHPStan\Analyser\Scope;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -12,14 +12,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Integration\PaymentHandler\TestPaymentHandler;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**

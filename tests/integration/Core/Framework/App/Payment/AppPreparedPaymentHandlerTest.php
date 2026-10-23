@@ -8,7 +8,6 @@ use Psr\Http\Message\RequestInterface;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Payment\Response\ValidateResponse;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Test\Generator;

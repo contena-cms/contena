@@ -5,9 +5,6 @@ namespace Contena\Tests\Integration\Core\Maintenance\Channel\Command;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Maintenance\Channel\Command\ChannelMaintenanceEnableCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 

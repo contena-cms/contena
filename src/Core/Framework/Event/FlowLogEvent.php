@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class FlowLogEvent extends Event implements FlowEventAware

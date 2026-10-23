@@ -12,14 +12,11 @@ use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Contracts\Cache\CacheInterface;
 

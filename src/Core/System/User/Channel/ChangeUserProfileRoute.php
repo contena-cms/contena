@@ -2,20 +2,12 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserEvents;
-use Contena\Core\System\User\Extension\ChangeUserProfileRouteExtension;
-use Contena\Core\System\User\Validation\Constraint\UserVatIdentification;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\DataMappingEvent;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -27,6 +19,13 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
 use Contena\Core\System\Channel\SuccessResponse;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\Extension\ChangeUserProfileRouteExtension;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserEvents;
+use Contena\Core\System\User\Validation\Constraint\UserVatIdentification;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -42,6 +41,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ChangeUserProfileRoute extends AbstractChangeUserProfileRoute
 {
     use UserVatIdNormalizerTrait;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @internal

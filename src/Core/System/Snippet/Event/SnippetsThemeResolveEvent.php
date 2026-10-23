@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Event;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

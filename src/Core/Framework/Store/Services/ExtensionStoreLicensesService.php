@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\Store\Services;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
 
 /**

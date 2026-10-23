@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Event\NewServicesInstalledEvent;
 use Contena\Core\Service\Notification;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

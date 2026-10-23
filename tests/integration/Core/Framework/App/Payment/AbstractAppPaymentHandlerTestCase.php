@@ -9,7 +9,6 @@ use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\System\User\UserCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCapture\OrderTransactionCaptureCollection;
@@ -32,20 +31,20 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
-use Contena\Core\Test\Integration\Builder\User\UserBuilder;
+use Contena\Core\System\User\UserCollection;
 use Contena\Core\Test\Integration\Builder\Order\OrderBuilder;
 use Contena\Core\Test\Integration\Builder\Order\OrderTransactionBuilder;
 use Contena\Core\Test\Integration\Builder\Order\OrderTransactionCaptureBuilder;
 use Contena\Core\Test\Integration\Builder\Order\OrderTransactionCaptureRefundBuilder;
+use Contena\Core\Test\Integration\Builder\User\UserBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 
 /**
  * @internal

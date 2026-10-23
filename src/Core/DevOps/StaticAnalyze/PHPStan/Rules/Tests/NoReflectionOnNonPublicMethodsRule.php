@@ -16,7 +16,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Tests must not reach into non-public methods of Contena classes via reflection: test the

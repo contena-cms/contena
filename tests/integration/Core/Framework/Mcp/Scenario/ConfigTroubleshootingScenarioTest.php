@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Mcp\Scenario;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\TestDefaults;
 
 /**

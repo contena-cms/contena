@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Core\System\User;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
 use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
+use Contena\Core\System\User\UserException;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Response;
 

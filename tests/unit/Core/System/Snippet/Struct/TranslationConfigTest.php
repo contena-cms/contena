@@ -5,14 +5,12 @@ namespace Contena\Tests\Unit\Core\System\Snippet\Struct;
 use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\DataTransfer\Language\Language;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMapping;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMappingCollection;
 use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
-use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
 
 /**
  * @internal

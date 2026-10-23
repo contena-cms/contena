@@ -3,13 +3,12 @@
 namespace Contena\Frontend\Framework\Twig;
 
 use Doctrine\DBAL\Connection;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

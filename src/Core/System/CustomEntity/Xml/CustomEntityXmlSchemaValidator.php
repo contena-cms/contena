@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomEntity\Xml;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Schema\CustomEntityNameValidator;
 use Contena\Core\System\CustomEntity\Xml\Field\AssociationField;

@@ -2,12 +2,13 @@
 
 namespace Contena\Core\Content\Category;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
+use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 
 class CategoryException extends HttpException
 {

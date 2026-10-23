@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field\Flag;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Prevents FkFieldSerializer from auto-filling required FK values from the WriteContext.

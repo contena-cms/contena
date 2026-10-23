@@ -3,9 +3,8 @@
 namespace Contena\Core\System\Language\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Language\LanguageCollection;
 
 /**
  * @extends StoreApiResponse<EntitySearchResult<LanguageCollection>>

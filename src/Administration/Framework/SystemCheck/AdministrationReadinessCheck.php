@@ -6,7 +6,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Bundle as ContenaBundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\BaseCheck;
 use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Result;

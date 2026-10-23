@@ -4,10 +4,10 @@ namespace Contena\Core\System\Locale\Subscriber;
 
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\Locale\Util\LocaleHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\System\Locale\Exception\InvalidLocaleCodeException;
 
 /**
  * @internal

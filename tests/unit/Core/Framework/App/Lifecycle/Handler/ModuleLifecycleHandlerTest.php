@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Manifest\Xml\Administration\Admin;
 use Contena\Core\Framework\App\Manifest\Xml\Administration\MainModule;
 use Contena\Core\Framework\App\Manifest\Xml\Administration\Module;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;

@@ -3,11 +3,9 @@
 namespace Contena\Tests\Integration\Core\Framework\Rule\Api;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\Rule\UserGroupRule;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Rule\RuleConfig;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

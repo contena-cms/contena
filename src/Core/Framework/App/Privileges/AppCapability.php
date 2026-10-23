@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Privileges;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Answers whether an app is allowed to perform a capability action, i.e. whether Contena may

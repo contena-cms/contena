@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Stock\StockData;
 use Contena\Core\Content\Blog\Stock\StockDataCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

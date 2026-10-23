@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\Script\Facade;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 
 class WrittenEventScriptFacade
 {

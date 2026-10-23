@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Event;
 
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

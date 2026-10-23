@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CreatedAtFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class CreatedAtField extends DateTimeField
 {

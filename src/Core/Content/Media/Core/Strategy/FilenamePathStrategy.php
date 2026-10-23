@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\Core\Strategy;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal Concrete implementation is not allowed to be decorated or extended. The implementation details can change

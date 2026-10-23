@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Composer;
 
 use Composer\InstalledVersions;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

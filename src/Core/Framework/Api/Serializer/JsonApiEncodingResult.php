@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Serializer;
 
-use Contena\Core\Framework\Log\Package;
 
 class JsonApiEncodingResult implements \JsonSerializable
 {

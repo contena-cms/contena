@@ -23,7 +23,6 @@ use PHPStan\Symfony\ServiceMap;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;

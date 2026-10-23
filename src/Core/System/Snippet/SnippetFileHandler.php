@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet;
 
 use Contena\Administration\Administration;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\ValidateSnippetsCommand;
 use Contena\Frontend\Frontend;
 use Symfony\Component\Filesystem\Filesystem;

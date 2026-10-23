@@ -7,13 +7,12 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\File\Discovery\ChannelFile;
-use Contena\Core\System\Channel\File\Rendering\Extension\ChannelFileRenderParametersExtension;
-use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
+use Contena\Core\System\Channel\File\Discovery\ChannelFile;
+use Contena\Core\System\Channel\File\Rendering\Extension\ChannelFileRenderParametersExtension;
 use Twig\Environment;
 
 /**

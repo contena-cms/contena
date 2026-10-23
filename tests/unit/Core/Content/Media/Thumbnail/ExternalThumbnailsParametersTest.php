@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailCollection;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailData;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailsParameters;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

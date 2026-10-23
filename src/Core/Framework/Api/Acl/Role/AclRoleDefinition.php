@@ -18,8 +18,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 
 /**
  * @codeCoverageIgnore

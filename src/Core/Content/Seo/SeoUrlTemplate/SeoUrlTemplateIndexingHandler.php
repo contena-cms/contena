@@ -8,7 +8,6 @@ use Contena\Core\Content\Seo\SeoUrlUpdater;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
 

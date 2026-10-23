@@ -8,9 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Kernel;
 use Contena\Core\System\SystemConfig\Service\AppConfigReader;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
@@ -19,11 +17,10 @@ use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Theme\CompilerConfiguration;
 use Contena\Frontend\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
-use Contena\Frontend\Theme\ScssPhpCompiler;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\ScssPhpCompiler;
 use Contena\Frontend\Theme\Subscriber\ThemeCompilerEnrichScssVarSubscriber;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin;
 
 /**
  * @internal

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResultCollection;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

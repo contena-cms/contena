@@ -2,30 +2,21 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
-use Contena\Core\Content\Media\Upload\PresignedMediaUploadService;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
-use Contena\Core\Framework\Api\Route\ApiRouteInfoResolver;
 use Contena\Core\Framework\Api\Route\RouteInfo;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Store\InAppPurchase;
 use Contena\Core\Kernel;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
-use Contena\Core\Maintenance\System\Service\AppUrlVerifier;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -33,31 +24,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\Increment\Exception\IncrementGatewayNotFoundException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class InfoController extends AbstractController
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly DefinitionService $definitionService,
-        private readonly ParameterBagInterface $params,
-        private readonly BusinessEventCollector $eventCollector,
-        private readonly IncrementGatewayRegistry $incrementGatewayRegistry,
-        private readonly MigrationInfo $migrationInfo,
-        private readonly AppUrlVerifier $appUrlVerifier,
-        private readonly FlowActionCollector $flowActionCollector,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly ApiRouteInfoResolver $apiRouteInfoResolver,
-        private readonly InAppPurchase $inAppPurchase,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly StatsService $messageStatsService,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly ?PresignedMediaUploadService $presignedMediaUploadService,
-        private readonly MediaFileExtensionListProvider $mediaFileExtensionListProvider,
-    ) {
-    }
 
     #[Route(
         path: '/api/_info/openapi3.json',

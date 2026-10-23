@@ -4,19 +4,17 @@ namespace Contena\Tests\Integration\Core\Content\Cms\Subscriber;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\CmsPageCollection;
 use Contena\Core\Content\Cms\Subscriber\UnusedMediaSubscriber;
 use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
 use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Content\Test\Category\CategoryBuilder;
 use Contena\Core\Content\Test\Cms\LayoutBuilder;
-use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

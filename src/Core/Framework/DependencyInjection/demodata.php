@@ -4,46 +4,39 @@ namespace Contena\Core\Framework\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\Service\BlogReviewCountService;
+use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
+use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Content\MailTemplate\MailTemplateDefinition;
 use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\Demodata\Command\DemodataCommand;
 use Contena\Core\Framework\Demodata\DemodataService;
+use Contena\Core\Framework\Demodata\Generator\AdminUserGenerator;
+use Contena\Core\Framework\Demodata\Generator\BlogGenerator;
 use Contena\Core\Framework\Demodata\Generator\CategoryGenerator;
-use Contena\Core\Framework\Demodata\Generator\UserGenerator;
+use Contena\Core\Framework\Demodata\Generator\ChannelDomainGenerator;
+use Contena\Core\Framework\Demodata\Generator\ContentStreamGenerator;
 use Contena\Core\Framework\Demodata\Generator\CustomFieldGenerator;
 use Contena\Core\Framework\Demodata\Generator\FlowGenerator;
 use Contena\Core\Framework\Demodata\Generator\MailHeaderFooterGenerator;
 use Contena\Core\Framework\Demodata\Generator\MailTemplateGenerator;
 use Contena\Core\Framework\Demodata\Generator\MediaGenerator;
-use Contena\Core\Framework\Demodata\Generator\NewsletterRecipientGenerator;
-use Contena\Core\Framework\Demodata\Generator\OrderGenerator;
-use Contena\Core\Framework\Demodata\Generator\BlogGenerator;
-use Contena\Core\Framework\Demodata\Generator\BlogManufacturerGenerator;
-use Contena\Core\Framework\Demodata\Generator\BlogReviewGenerator;
-use Contena\Core\Framework\Demodata\Generator\ContentStreamGenerator;
-use Contena\Core\Framework\Demodata\Generator\PromotionGenerator;
 use Contena\Core\Framework\Demodata\Generator\PropertyGroupGenerator;
 use Contena\Core\Framework\Demodata\Generator\RuleGenerator;
-use Contena\Core\Framework\Demodata\Generator\ChannelDomainGenerator;
 use Contena\Core\Framework\Demodata\Generator\TagGenerator;
-use Contena\Core\Framework\Demodata\Generator\AdminUserGenerator;
+use Contena\Core\Framework\Demodata\Generator\UserGenerator;
 use Contena\Core\Framework\Event\BusinessEventCollector;
-use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
-use Contena\Core\System\Channel\Context\ChannelContextFactory;
-use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
+use Contena\Core\System\Tag\TagDefinition;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -107,12 +100,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.cnmodata_generator', ['option-name' => 'categories', 'option-default' => 10, 'option_name' => 'categories', 'option_default' => 10]);
 
-    $services->set(BlogManufacturerGenerator::class)
-        ->args([
-            service(EntityWriter::class),
-            service(BlogManufacturerDefinition::class),
-        ])
-        ->tag('contena.cnmodata_generator', ['option-name' => 'manufacturers', 'option-default' => 60, 'option_name' => 'manufacturers', 'option_default' => 60]);
 
     $services->set(TagGenerator::class)
         ->args([
@@ -121,14 +108,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.cnmodata_generator', ['option-name' => 'tags', 'option-default' => 50, 'option_name' => 'tags', 'option_default' => 50]);
 
-    $services->set(BlogReviewGenerator::class)
-        ->args([
-            service(EntityWriter::class),
-            service(BlogReviewDefinition::class),
-            service(Connection::class),
-            service(BlogReviewCountService::class),
-        ])
-        ->tag('contena.cnmodata_generator', ['option-name' => 'reviews', 'option-default' => 20, 'option_name' => 'reviews', 'option_default' => 20]);
 
     $services->set(BlogGenerator::class)
         ->args([
@@ -139,12 +118,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.cnmodata_generator', ['option-name' => 'blogs', 'option-default' => 1000, 'option_name' => 'blogs', 'option_default' => 1000]);
 
-    $services->set(PromotionGenerator::class)
-        ->args([
-            service(Connection::class),
-            service(DefinitionInstanceRegistry::class),
-        ])
-        ->tag('contena.cnmodata_generator', ['option-name' => 'promotions', 'option-default' => 50, 'option_name' => 'promotions', 'option_default' => 50]);
 
     $services->set(FlowGenerator::class)
         ->args([
@@ -174,17 +147,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.cnmodata_generator', ['option-name' => 'blog-streams', 'option-default' => 10, 'option_name' => 'blog-streams', 'option_default' => 10]);
 
-    $services->set(OrderGenerator::class)
-        ->args([
-            service(Connection::class),
-            service(ChannelContextFactory::class),
-            service(CartService::class),
-            service(OrderConverter::class),
-            service(EntityWriter::class),
-            service(OrderDefinition::class),
-            service(CartCalculator::class),
-        ])
-        ->tag('contena.cnmodata_generator', ['option-name' => 'orders', 'option-default' => 60, 'option_name' => 'orders', 'option_default' => 60]);
 
     $services->set(CustomFieldGenerator::class)
         ->args([
@@ -223,11 +185,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.cnmodata_generator', ['option-name' => 'users', 'option-default' => 0, 'option_name' => 'users', 'option_default' => 0]);
 
-    $services->set(NewsletterRecipientGenerator::class)
-        ->args([
-            service(EntityWriter::class),
-            service(NewsletterRecipientDefinition::class),
-            service(Connection::class),
-        ])
-        ->tag('contena.cnmodata_generator', ['option-name' => 'newsletter-recipients', 'option-default' => 20, 'option_name' => 'newsletter-recipients', 'option_default' => 20]);
 };

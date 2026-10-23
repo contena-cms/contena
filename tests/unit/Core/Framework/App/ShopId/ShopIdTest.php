@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

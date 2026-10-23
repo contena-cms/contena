@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Frontend\Theme\ScheduledTask;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 /**

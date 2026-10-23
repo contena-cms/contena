@@ -2,15 +2,14 @@
 
 namespace Contena\Core\System\User\Subscriber;
 
-use Contena\Core\System\User\UserEvents;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Context\ChannelContextPersister;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextPersister;
+use Contena\Core\System\User\UserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

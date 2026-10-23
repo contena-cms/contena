@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing\Telemetry;
 
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

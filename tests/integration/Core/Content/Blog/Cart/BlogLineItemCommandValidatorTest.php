@@ -3,32 +3,28 @@
 namespace Contena\Tests\Integration\Core\Content\Blog\Cart;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
 use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
+use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Exception\BlogLineItemDifferentIdException;
 use Contena\Core\Content\Blog\Exception\BlogLineItemInconsistentException;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CountryAddToChannelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\TestDefaults;
 
 /**

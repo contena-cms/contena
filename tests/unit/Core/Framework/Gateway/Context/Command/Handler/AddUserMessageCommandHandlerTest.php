@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Gateway\Context\Command\AddUserMessageCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\AddUserMessageCommandHandler;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

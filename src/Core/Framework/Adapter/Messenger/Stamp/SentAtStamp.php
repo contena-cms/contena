@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Messenger\Stamp;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Messenger\Stamp\StampInterface;
 

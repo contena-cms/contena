@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\ReverseProxy;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 abstract class AbstractReverseProxyGateway

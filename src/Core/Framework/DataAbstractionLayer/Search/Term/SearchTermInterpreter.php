@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Term;
 
-use Contena\Core\Framework\Log\Package;
 
 class SearchTermInterpreter
 {

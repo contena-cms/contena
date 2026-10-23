@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\Dispatching;
 
 use Contena\Core\Content\Flow\FlowEvents;
 use Contena\Core\Framework\Adapter\Cache\CacheValueCompressor;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;

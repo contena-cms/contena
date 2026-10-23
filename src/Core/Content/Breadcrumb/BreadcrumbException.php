@@ -3,9 +3,10 @@
 namespace Contena\Core\Content\Breadcrumb;
 
 use Contena\Core\Content\Category\CategoryException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
+use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 
 class BreadcrumbException extends CategoryException
 {

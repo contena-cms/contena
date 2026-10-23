@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
@@ -28,6 +27,7 @@ use Contena\Core\System\StateMachine\Event\StateMachineStateChangeEvent;
 use Contena\Core\System\StateMachine\Event\StateMachineTransitionEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\System\StateMachine\Exception\UnnecessaryTransitionException;
 
 class StateMachineRegistry implements ResetInterface
 {

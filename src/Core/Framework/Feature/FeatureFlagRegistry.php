@@ -6,7 +6,6 @@ use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\Event\BeforeFeatureFlagToggleEvent;
 use Contena\Core\Framework\Feature\Event\FeatureFlagToggledEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Privileges\Utils;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Store\Authentication\LocaleProvider;

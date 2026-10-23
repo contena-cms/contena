@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\InAppPurchase\Subscriber;
 
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseProvider;
 use Contena\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseUpdater;

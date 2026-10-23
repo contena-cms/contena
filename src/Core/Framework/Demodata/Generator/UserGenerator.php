@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Demodata\Generator;
 
 use Doctrine\DBAL\Connection;
 use Faker\Generator;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -15,9 +13,10 @@ use Contena\Core\Framework\Demodata\DemodataContext;
 use Contena\Core\Framework\Demodata\DemodataException;
 use Contena\Core\Framework\Demodata\DemodataGeneratorInterface;
 use Contena\Core\Framework\Demodata\DemodataService;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\TestDefaults;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Account\Profile;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\PageLoadedEvent;
 use Symfony\Component\HttpFoundation\Request;

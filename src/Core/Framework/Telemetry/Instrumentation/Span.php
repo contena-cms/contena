@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Instrumentation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental feature:TELEMETRY_METRICS stableVersion:v6.8.0

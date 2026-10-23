@@ -3,10 +3,8 @@
 namespace Contena\Core\System\CustomEntity;
 
 use Contena\Core\Framework\App\AppDefinition;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
@@ -17,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginDefinition;
 
 /**
@@ -50,7 +47,6 @@ class CustomEntityDefinition extends EntityDefinition
     protected function defineProtections(): EntityProtectionCollection
     {
         return new EntityProtectionCollection([
-            new WriteProtection(Context::SYSTEM_SCOPE),
         ]);
     }
 

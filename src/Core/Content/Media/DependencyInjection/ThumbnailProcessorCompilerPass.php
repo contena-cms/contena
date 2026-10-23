@@ -2,9 +2,10 @@
 
 namespace Contena\Core\Content\Media\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Contena\Core\Content\Media\Thumbnail\Processor\ImagickThumbnailProcessor;
+use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
 
 /**
  * @internal

@@ -2,13 +2,12 @@
 
 namespace Contena\Core\System\User\Validation\Constraint;
 
-use Contena\Core\System\User\UserException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidator;

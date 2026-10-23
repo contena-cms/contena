@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\App\ScheduledTask\DeleteCascadeAppsHandler;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\System\Integration\IntegrationCollection;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;

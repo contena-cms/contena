@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Cache\ReverseProxy;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheStore;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

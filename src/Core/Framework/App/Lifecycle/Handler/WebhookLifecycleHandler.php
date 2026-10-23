@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Webhook\Webhook;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Validation\WebhookTargetValidator;

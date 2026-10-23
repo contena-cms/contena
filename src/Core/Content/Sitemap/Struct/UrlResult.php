@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class UrlResult extends Struct

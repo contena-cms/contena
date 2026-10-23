@@ -7,14 +7,13 @@ use Contena\Core\Framework\Gateway\Context\Command\Registry\ContextGatewayComman
 use Contena\Core\Framework\Gateway\Context\Command\TokenCommandInterface;
 use Contena\Core\Framework\Gateway\GatewayException;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\System\Channel\ContextTokenResponse;
-use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
-use Contena\Core\System\Channel\ChannelContext;
 
 /**
  * @internal

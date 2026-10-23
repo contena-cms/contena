@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\MailTemplate;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

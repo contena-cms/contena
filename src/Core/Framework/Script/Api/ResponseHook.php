@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Script\Api;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Symfony\Component\HttpFoundation\Response;
 

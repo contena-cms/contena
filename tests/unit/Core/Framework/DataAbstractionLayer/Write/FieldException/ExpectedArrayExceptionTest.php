@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write\FieldExce
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Write\FieldException\ExpectedArrayException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -6,9 +6,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

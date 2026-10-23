@@ -4,16 +4,12 @@ namespace Contena\Core\Framework\App\Payload;
 
 use GuzzleHttp\Psr7\Request;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Store\InAppPurchase;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Webhook\Service\WebhookRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -23,18 +19,6 @@ use Contena\Core\System\Channel\ChannelContext;
  */
 class AppPayloadServiceHelper
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly DefinitionInstanceRegistry $definitionRegistry,
-        private readonly JsonEntityEncoder $entityEncoder,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly InAppPurchase $inAppPurchase,
-        private readonly string $shopUrl,
-        private readonly ClockInterface $clock,
-    ) {
-    }
 
     /**
      * @throws ShopIdChangeSuggestedException

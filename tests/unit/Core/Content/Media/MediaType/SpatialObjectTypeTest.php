@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Media\MediaType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaType\SpatialObjectType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

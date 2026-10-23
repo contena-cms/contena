@@ -5,10 +5,9 @@ namespace Contena\Tests\Integration\Core\Framework\Mcp\Scenario;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Integration\Builder\User\UserBuilder;
 use Contena\Core\Test\Integration\Builder\Order\OrderBuilder;
+use Contena\Core\Test\Integration\Builder\User\UserBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 

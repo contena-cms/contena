@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 
 class UrlProviderNotFound extends ContenaHttpException

@@ -2,11 +2,11 @@
 
 namespace Contena\Frontend\Page\Blog;
 
-use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Content\Blog\Channel\Review\RatingMatrix;
+use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -213,10 +212,6 @@ class BlogPageLoader
         // Only approved reviews; also scope to this blog (or its parent for variants).
         $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_AND, [
             new EqualsFilter('status', true),
-            new MultiFilter(MultiFilter::CONNECTION_OR, [
-                new EqualsFilter('blog.id', $blogId),
-                new EqualsFilter('blog.parentId', $blogId),
-            ]),
         ]));
 
         $criteria->addAggregation(

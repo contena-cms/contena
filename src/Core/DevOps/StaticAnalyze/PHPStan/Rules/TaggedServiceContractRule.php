@@ -15,7 +15,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Symfony\ServiceDefinition;
 use PHPStan\Symfony\ServiceMap;
 use PHPStan\Type\Type;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 use Symfony\Contracts\Service\ServiceProviderInterface;
 

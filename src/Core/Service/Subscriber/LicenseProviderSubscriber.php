@@ -3,7 +3,6 @@
 namespace Contena\Core\Service\Subscriber;
 
 use Contena\Core\Framework\App\Event\AppActivatedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Event\CommercialLicenseProvidedEvent;
 use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigChangedEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;

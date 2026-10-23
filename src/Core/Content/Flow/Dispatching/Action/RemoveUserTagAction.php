@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

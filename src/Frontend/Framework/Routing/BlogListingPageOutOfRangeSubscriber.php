@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Content\Blog\BlogException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Content\Blog\BlogException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

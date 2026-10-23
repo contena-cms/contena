@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Category\Aggregate\CategoryTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<CategoryTranslationEntity>

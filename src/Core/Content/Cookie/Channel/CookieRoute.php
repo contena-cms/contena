@@ -9,7 +9,6 @@ use Contena\Core\Content\Cookie\Struct\CookieEntry;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\UtilException;
@@ -17,6 +16,7 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @experimental stableVersion:v6.8.0 feature:COOKIE_GROUPS_STORE_API

@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\File\FileService;
 use Contena\Core\Content\Media\File\FileUrlValidatorInterface;
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\HttpFoundation\HeaderBag;

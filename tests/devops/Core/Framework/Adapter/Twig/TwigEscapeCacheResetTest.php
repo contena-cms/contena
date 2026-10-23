@@ -4,8 +4,6 @@ namespace Contena\Tests\DevOps\Core\Framework\Adapter\Twig;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Runtime\CachedEscaperRuntime;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
 use Twig\Environment;
 use Twig\Runtime\EscaperRuntime;

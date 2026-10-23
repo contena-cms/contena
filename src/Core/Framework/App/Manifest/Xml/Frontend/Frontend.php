@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Manifest\Xml\Frontend;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

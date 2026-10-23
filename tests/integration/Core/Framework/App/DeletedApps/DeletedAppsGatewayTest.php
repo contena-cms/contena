@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\App\DeletedApps;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\DeletedApps\DeletedAppsGateway;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

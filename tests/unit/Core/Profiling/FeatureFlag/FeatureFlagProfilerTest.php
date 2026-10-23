@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\FeatureFlag\FeatureFlagProfiler;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

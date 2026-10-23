@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Validation\Constraint;
 
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;

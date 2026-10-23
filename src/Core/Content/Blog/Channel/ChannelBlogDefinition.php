@@ -2,10 +2,10 @@
 
 namespace Contena\Core\Content\Blog\Channel;
 
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiCriteriaAware;
@@ -22,9 +22,8 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 
 class ChannelBlogDefinition extends BlogDefinition implements ChannelDefinitionInterface
 {

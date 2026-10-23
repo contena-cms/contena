@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Manifest\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Country\Event;
 
 use Contena\Core\Framework\Adapter\Cache\StoreApiRouteCacheKeyEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldResolver;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

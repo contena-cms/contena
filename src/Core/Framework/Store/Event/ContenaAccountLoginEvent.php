@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

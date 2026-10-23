@@ -3,12 +3,11 @@
 namespace Contena\Core\System\Channel\File\Api;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileEntity;
+use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Contena\Core\System\Channel\File\Loader\ChannelFileConfigurationLoader;
-use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Twig\Environment;
 
 /**

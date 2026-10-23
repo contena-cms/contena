@@ -5,9 +5,7 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageHandlerCompilerPass;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 

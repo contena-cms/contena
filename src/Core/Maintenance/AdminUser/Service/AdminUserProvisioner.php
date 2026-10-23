@@ -7,7 +7,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\PasswordFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\MaintenanceException;

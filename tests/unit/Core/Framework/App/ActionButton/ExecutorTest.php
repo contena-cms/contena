@@ -16,7 +16,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Payload\Source;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\Request as SfRequest;

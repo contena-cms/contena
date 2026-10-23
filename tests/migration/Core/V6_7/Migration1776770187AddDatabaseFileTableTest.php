@@ -7,7 +7,6 @@ use Doctrine\DBAL\Schema\Index\IndexType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentFile\DocumentFileDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_7\Migration1776770187AddDocumentFileTable;

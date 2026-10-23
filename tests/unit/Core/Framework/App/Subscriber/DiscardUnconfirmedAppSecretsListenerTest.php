@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\ShopId\ShopIdDeletedEvent;
 use Contena\Core\Framework\App\Subscriber\DiscardUnconfirmedAppSecretsListener;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App\Payment\Response;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Payment\Response\RefundResponse;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
 
 /**

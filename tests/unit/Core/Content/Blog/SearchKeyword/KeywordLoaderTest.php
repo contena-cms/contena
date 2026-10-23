@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\SearchKeyword\KeywordLoader;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

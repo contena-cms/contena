@@ -12,8 +12,6 @@ use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

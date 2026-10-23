@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\TypeDetector;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\MediaType\SpatialObjectType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0 feature:SPATIAL_BASES

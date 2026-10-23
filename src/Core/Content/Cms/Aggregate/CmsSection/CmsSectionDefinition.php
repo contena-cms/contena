@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -24,7 +23,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -76,10 +74,6 @@ class CmsSectionDefinition extends EntityDefinition
             (new ReferenceVersionField(CmsPageDefinition::class))->addFlags(new Required(), new ApiAware()),
 
             (new IntField('position', 'position'))->addFlags(new ApiAware(), new Required())->setDescription('Position of occurrence of each section denoted by numerical values 0, 1, 2...'),
-            (new StringField('type', 'type'))->addFlags(new ApiAware(), new Required(), new Choice([
-                self::TYPE_DEFAULT,
-                self::TYPE_SIDEBAR,
-            ]))->setDescription('Types of sections can be `default` or `sidebar`.'),
             new LockedField(),
             (new StringField('name', 'name'))->addFlags(new ApiAware())->setDescription('Name of the CMS section defined.'),
             (new StringField('sizing_mode', 'sizingMode'))->addFlags(new ApiAware())->setDescription('Sizing mode can be `boxed` or `full_width`.'),

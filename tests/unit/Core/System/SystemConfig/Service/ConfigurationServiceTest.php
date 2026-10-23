@@ -9,9 +9,7 @@ use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\System\System;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigCard;
@@ -24,9 +22,6 @@ use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\BrokenConfigPlugin\BrokenConfigPlugin;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\SwagExample\SwagExample;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\ValidConfigPlugin\ValidConfigPlugin;
 
 /**
  * @internal

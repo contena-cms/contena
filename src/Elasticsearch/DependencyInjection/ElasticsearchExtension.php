@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;

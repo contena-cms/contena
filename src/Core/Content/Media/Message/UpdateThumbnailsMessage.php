@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Message;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

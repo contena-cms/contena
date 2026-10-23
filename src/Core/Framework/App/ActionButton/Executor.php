@@ -5,11 +5,9 @@ namespace Contena\Core\Framework\App\ActionButton;
 use GuzzleHttp\Client;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\App\ActionButton\Response\ActionButtonResponseFactory;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -18,23 +16,13 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 
 /**
  * @internal only for use by the app-system
  */
 class Executor
 {
-    public function __construct(
-        private readonly Client $guzzleClient,
-        private readonly LoggerInterface $logger,
-        private readonly ActionButtonResponseFactory $actionButtonResponseFactory,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly RouterInterface $router,
-        private readonly RequestStack $requestStack,
-        private readonly KernelInterface $kernel,
-        private readonly ClockInterface $clock,
-    ) {
-    }
 
     public function execute(AppAction $action, Context $context): Response
     {

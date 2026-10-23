@@ -7,7 +7,6 @@ use League\Flysystem\UnableToCheckExistence;
 use League\Flysystem\UnableToCreateDirectory;
 use League\Flysystem\UnableToDeleteDirectory;
 use Contena\Core\Framework\App\ActiveAppsLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Installer;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

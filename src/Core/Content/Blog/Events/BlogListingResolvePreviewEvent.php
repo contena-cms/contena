@@ -5,9 +5,8 @@ namespace Contena\Core\Content\Blog\Events;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 
 class BlogListingResolvePreviewEvent extends NestedEvent implements ContenaChannelEvent

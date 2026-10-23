@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching\Aware;
 
 use Contena\Core\Framework\Event\IsFlowEventAware;
-use Contena\Core\Framework\Log\Package;
 
 #[IsFlowEventAware]
 interface NewsletterRecipientAware

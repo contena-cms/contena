@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Subscriber;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\Service\MessageSizeCalculator;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueSizeRestrictListener;

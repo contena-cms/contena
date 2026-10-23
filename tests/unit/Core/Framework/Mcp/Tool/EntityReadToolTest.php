@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Result\McpToolError;
 use Contena\Core\Framework\Mcp\Tool\EntityReadTool;

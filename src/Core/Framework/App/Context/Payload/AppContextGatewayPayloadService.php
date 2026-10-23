@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Context\Gateway\AppContextGatewayResponse;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 
 /**

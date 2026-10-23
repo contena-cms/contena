@@ -6,7 +6,6 @@ use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\ImportExport\Event\EnrichExportCriteriaEvent;
 use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

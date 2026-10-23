@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfoValidator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidatorFactoryInterface;
 use Symfony\Component\Validator\ConstraintValidatorInterface;

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

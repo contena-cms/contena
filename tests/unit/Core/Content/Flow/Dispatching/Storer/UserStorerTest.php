@@ -5,8 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\UserStorer;
@@ -15,8 +13,9 @@ use Contena\Core\Content\Shared\MailFlow\DataProvider\UserProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
+use Contena\Core\System\User\Event\UserRegisterEvent;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

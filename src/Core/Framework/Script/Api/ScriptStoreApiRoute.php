@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheCompressor;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\PlatformRequest;

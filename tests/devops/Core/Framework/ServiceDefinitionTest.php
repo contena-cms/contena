@@ -4,7 +4,6 @@ namespace Contena\Tests\Devops\Core\Framework;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use Contena\Core\Framework\Test\TestKernel;
 use Symfony\Bundle\FrameworkBundle\Console\Application;

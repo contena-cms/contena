@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Resolves the tab/block/section hierarchy of a theme.json field and builds the

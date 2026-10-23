@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;

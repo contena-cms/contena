@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Aggregate\ActionButtonTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

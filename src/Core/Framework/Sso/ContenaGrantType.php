@@ -10,9 +10,8 @@ use League\OAuth2\Server\RequestRefreshTokenEvent;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ServerRequestInterface;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
 use Contena\Core\Framework\Sso\AdminUserService\AdminUserService;
+use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
 
 /**
  * @internal
@@ -61,22 +60,4 @@ class ContenaGrantType extends AbstractGrant
         return $responseType;
     }
 
-    private function validateUser(ServerRequestInterface $request): ExternalAuthUser
-    {
-        $code = $this->getRequestParameter('code', $request);
-        if ($code === null) {
-            throw SsoException::noCodeProvided();
-        }
-
-        try {
-            $token = $this->tokenService->getUserToken($code);
-            $admin_user = $this->admin_userService->getAndUpdateUserByExternalToken($token);
-        } catch (\Throwable $exception) {
-            $this->getEmitter()->emit(new RequestEvent(RequestEvent::USER_AUTHENTICATION_FAILED, $request));
-
-            throw $exception;
-        }
-
-        return $admin_user;
-    }
 }

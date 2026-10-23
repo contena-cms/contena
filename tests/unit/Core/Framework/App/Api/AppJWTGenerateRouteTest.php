@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Api\AppJWTGenerateRoute;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\Store\StaticInAppPurchaseFactory;
 use Contena\Core\Test\Generator;
 use Symfony\Component\Clock\NativeClock;

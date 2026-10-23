@@ -6,7 +6,6 @@ use Doctrine\DBAL\Query\Expression\CompositeExpression;
 use Doctrine\DBAL\Query\From;
 use Doctrine\DBAL\Query\Join;
 use Doctrine\DBAL\Query\QueryBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This class is created to have a quick working solution for BC breaks in DAL QueryBuilder API.

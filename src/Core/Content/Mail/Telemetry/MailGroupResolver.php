@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Buckets a mail send into a small, bounded group, keyed by the triggering business event

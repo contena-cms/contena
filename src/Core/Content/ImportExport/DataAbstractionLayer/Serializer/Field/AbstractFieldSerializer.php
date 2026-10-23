@@ -5,7 +5,6 @@ namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Fiel
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractFieldSerializer
 {

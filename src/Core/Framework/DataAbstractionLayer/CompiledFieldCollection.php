@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Flag;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\Log\Package;
 
 class CompiledFieldCollection extends FieldCollection
 {

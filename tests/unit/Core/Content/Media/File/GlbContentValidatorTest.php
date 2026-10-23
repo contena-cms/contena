@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\GlbContentValidator;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Symfony\Component\Filesystem\Filesystem;
 

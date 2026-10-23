@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\Content\Flow\Dispatching\Aware\NewsletterRecipientAware;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\NewsletterRecipientStorer;
@@ -14,7 +13,7 @@ use Contena\Core\Content\Newsletter\Event\NewsletterConfirmEvent;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\NewsletterRecipientProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Event\UserRegisterEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

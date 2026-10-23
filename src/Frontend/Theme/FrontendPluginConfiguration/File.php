@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\FrontendPluginConfiguration;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class File extends Struct

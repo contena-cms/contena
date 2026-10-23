@@ -5,7 +5,6 @@ namespace Contena\Core\Migration\Traits;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 trait EnsureThumbnailSizesTrait

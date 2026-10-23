@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Gateway\Context\Command\Event;
 use Contena\Core\Framework\App\Context\Gateway\AppContextGateway;
 use Contena\Core\Framework\Gateway\Context\Command\ContextGatewayCommandCollection;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -35,10 +34,6 @@ class ContextGatewayCommandsCollectedEvent extends Event implements CartAware
         return $this->commands;
     }
 
-    public function getCart(): Cart
-    {
-        return $this->payload->getCart();
-    }
 
     public function getChannelContext(): ChannelContext
     {

@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch\Framework\Indexing\Event;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class ElasticsearchIndexerLanguageCriteriaEvent extends Event implements ContenaEvent

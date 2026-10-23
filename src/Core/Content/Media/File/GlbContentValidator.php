@@ -3,7 +3,7 @@
 namespace Contena\Core\Content\Media\File;
 
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * Rejects GLB files that reference external resources.

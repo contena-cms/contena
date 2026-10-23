@@ -3,9 +3,8 @@
 namespace Contena\Core\Content\Cms\Exception;
 
 use Contena\Core\Content\Cms\CmsException;
-use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\Feature;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

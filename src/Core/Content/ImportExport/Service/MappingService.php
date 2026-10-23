@@ -20,8 +20,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class MappingService extends AbstractMappingService
 {

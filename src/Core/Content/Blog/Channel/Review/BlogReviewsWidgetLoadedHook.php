@@ -2,11 +2,9 @@
 
 namespace Contena\Core\Content\Blog\Channel\Review;
 
-use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacadeHookFactory;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;

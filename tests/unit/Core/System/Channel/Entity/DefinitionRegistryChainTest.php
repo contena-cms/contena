@@ -7,10 +7,9 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\DefinitionRegistryChain;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
+use Contena\Core\System\Channel\Entity\DefinitionRegistryChain;
 use Contena\Core\System\Channel\Exception\ChannelRepositoryNotFoundException;
 
 /**

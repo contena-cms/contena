@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig\Extension;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Extension\InAppPurchaseExtension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\Store\StaticInAppPurchaseFactory;
 
 /**

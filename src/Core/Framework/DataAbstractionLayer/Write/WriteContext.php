@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Language\LanguageLoaderInterface;

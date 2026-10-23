@@ -7,9 +7,6 @@ use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\ImportExport\Event\ImportExportAfterImportBatchEvent;
 use Contena\Core\Content\ImportExport\Event\ImportExportAfterImportRecordsEvent;
 use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRecordEvent;
@@ -24,9 +21,11 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 
 /**

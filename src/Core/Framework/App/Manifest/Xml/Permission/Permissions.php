@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Manifest\Xml\Permission;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

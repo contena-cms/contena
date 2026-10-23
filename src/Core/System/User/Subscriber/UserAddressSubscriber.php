@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User\Subscriber;
 
+use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
+use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\UserEvents;
-use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

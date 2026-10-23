@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
-use Contena\Core\Framework\Log\Package;
 
 class ImageTypeDetector implements TypeDetectorInterface
 {

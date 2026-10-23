@@ -6,19 +6,10 @@ use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 class FormCmsElementResolver extends AbstractCmsElementResolver
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractSalutationRoute $salutationRoute,
-        private readonly AbstractSalutationsSorter $salutationSorter
-    ) {
-    }
 
     public function getType(): string
     {

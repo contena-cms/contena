@@ -19,7 +19,6 @@ use PHPStan\Type\Type;
 use PHPStan\Type\VerbosityLevel;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesReadonly;
 use Contena\Core\Framework\Deprecation\BCChange\PropertyTypeNarrowing;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Detects assignments that will be incompatible with an announced property change.

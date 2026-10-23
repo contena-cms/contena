@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Context;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
 class ChannelApiSource implements ContextSource, \JsonSerializable
 {

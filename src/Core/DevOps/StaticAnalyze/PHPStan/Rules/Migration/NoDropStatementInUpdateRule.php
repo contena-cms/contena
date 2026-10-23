@@ -14,7 +14,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This rule checks the "update" methods of migrations for usage of "DROP" statements, which are not allowed due to blue-green compatibility reasons.

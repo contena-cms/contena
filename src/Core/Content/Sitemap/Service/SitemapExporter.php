@@ -6,12 +6,10 @@ use League\Flysystem\FilesystemOperator;
 use Psr\Cache\CacheItemPoolInterface;
 use Contena\Core\Content\Sitemap\Event\SitemapGeneratedEvent;
 use Contena\Core\Content\Sitemap\Event\SitemapGenerationStartEvent;
-use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Content\Sitemap\SitemapException;
 use Contena\Core\Content\Sitemap\Struct\SitemapGenerationResult;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -23,21 +21,6 @@ class SitemapExporter implements SitemapExporterInterface
      */
     private array $sitemapHandles = [];
 
-    /**
-     * @param iterable<AbstractUrlProvider> $urlProvider
-     *
-     * @internal
-     */
-    public function __construct(
-        private readonly iterable $urlProvider,
-        private readonly CacheItemPoolInterface $cache,
-        private readonly int $batchSize,
-        private readonly FilesystemOperator $filesystem,
-        private readonly SitemapHandleFactoryInterface $sitemapHandleFactory,
-        private readonly EventDispatcherInterface $dispatcher,
-        private readonly CartRuleLoader $ruleLoader,
-    ) {
-    }
 
     /**
      * {@inheritdoc}

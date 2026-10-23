@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Feature\TranslatedString;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptConfig;
 use Contena\Core\Framework\App\Mcp\Feature\McpResourceConfig;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityDetector;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Uuid\Uuid;

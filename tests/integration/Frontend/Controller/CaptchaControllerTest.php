@@ -3,12 +3,8 @@
 namespace Contena\Tests\Integration\Frontend\Controller;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha;
-use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Symfony\Component\Filesystem\Filesystem;
 

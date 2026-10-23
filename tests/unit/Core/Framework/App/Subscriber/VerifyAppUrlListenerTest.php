@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdChangedEvent;
 use Contena\Core\Framework\App\Subscriber\VerifyAppUrlListener;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

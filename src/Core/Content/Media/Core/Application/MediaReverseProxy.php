@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Core\Application;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Used to invalidate the cached media urls from the reverse proxy

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\Hreflang;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

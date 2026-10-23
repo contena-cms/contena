@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Frontend\Framework\Twig\Extension\UrlEncodingTwigFilter;

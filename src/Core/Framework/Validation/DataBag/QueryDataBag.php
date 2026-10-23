@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Validation\DataBag;
 
-use Contena\Core\Framework\Log\Package;
 
 class QueryDataBag extends DataBag
 {

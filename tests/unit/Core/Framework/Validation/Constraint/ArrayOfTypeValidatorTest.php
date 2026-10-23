@@ -7,7 +7,6 @@ namespace Contena\Tests\Unit\Core\Framework\Validation\Constraint;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfType;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfTypeValidator;
 use Contena\Core\Framework\Validation\Constraint\Uuid;

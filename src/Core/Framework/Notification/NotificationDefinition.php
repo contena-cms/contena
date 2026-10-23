@@ -2,11 +2,8 @@
 
 namespace Contena\Core\Framework\Notification;
 
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\ReadProtection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -18,8 +15,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Deprecation\BCChange\ClassMoved;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 
 #[ClassMoved(version: 'v6.8.0', previousClassName: 'Contena\Administration\Notification\NotificationDefinition')]
 class NotificationDefinition extends EntityDefinition
@@ -57,8 +54,6 @@ class NotificationDefinition extends EntityDefinition
     protected function defineProtections(): EntityProtectionCollection
     {
         return new EntityProtectionCollection([
-            new ReadProtection(Context::SYSTEM_SCOPE),
-            new WriteProtection(Context::SYSTEM_SCOPE),
         ]);
     }
 

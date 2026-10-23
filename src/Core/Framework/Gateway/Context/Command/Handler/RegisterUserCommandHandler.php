@@ -2,13 +2,12 @@
 
 namespace Contena\Core\Framework\Gateway\Context\Command\Handler;
 
-use Contena\Core\System\User\Channel\AbstractRegisterRoute;
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\RegisterUserCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Channel\AbstractRegisterRoute;
 
 /**
  * @extends AbstractContextGatewayCommandHandler<RegisterUserCommand>

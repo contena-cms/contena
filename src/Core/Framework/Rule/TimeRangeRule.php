@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Rule;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
 use Symfony\Component\Validator\Constraints\Timezone;

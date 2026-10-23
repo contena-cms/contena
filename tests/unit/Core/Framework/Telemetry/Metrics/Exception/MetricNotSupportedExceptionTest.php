@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Telemetry\Metrics\Exception;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Exception\MetricNotSupportedException;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;

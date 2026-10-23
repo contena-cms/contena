@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\MessageQueue\Subscriber;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Envelope;

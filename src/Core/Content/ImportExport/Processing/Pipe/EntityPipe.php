@@ -8,7 +8,6 @@ use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Serializer
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

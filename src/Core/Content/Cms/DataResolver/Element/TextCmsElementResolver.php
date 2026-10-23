@@ -3,11 +3,10 @@
 namespace Contena\Core\Content\Cms\DataResolver\Element;
 
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\TextStruct;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\TextStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 
 class TextCmsElementResolver extends AbstractCmsElementResolver

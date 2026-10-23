@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;

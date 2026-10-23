@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\Channel\Listing\Filter\PriceListingFilterHandler;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\StatsAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter as DALFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

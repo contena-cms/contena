@@ -5,10 +5,7 @@ namespace Contena\Core\Framework\Script\Api;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryWriterFacadeHookFactory;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
-use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
 

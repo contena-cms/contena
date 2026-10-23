@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionsCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;

@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\User\Password;
 
+use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
-use Contena\Core\Framework\Log\Package;
 
 class LegacyPasswordVerifier
 {

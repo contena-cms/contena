@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Runtime\CachedEscaperRuntime;
-use Contena\Core\Framework\Log\Package;
 use Twig\Error\RuntimeError;
 use Twig\Runtime\EscaperRuntime;
 

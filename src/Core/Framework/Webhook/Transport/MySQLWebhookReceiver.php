@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Webhook\Transport;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogDefinition;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;

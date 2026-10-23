@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel\Review;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\Bucket;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class RatingMatrix extends Struct

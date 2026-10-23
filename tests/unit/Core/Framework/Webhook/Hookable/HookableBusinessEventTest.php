@@ -10,7 +10,6 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\Webhook\_fixtures\BusinessEvents\ArrayBusinessEvent;
 use Contena\Core\Framework\Test\Webhook\_fixtures\BusinessEvents\CollectionBusinessEvent;
 use Contena\Core\Framework\Test\Webhook\_fixtures\BusinessEvents\EntityBusinessEvent;

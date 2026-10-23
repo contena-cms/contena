@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfigurator
 use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
 use Contena\Core\Content\Property\PropertyGroupEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

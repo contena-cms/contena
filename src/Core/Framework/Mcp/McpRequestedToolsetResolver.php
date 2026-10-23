@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Session;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 

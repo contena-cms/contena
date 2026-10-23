@@ -7,7 +7,6 @@ use Psr\Log\NullLogger;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\RedisInvalidatorStorage;
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

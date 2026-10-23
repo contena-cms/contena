@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Event\RouteRequest;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

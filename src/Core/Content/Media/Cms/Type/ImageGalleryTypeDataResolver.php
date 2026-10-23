@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Cms\Type;
 
-use Contena\Core\Framework\Log\Package;
 
 class ImageGalleryTypeDataResolver extends ImageSliderTypeDataResolver
 {

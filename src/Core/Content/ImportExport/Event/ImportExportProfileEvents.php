@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 class ImportExportProfileEvents
 {

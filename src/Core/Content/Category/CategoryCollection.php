@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Category;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Util\AfterSort;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<CategoryEntity>

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User;
 
-use Contena\Core\Framework\Log\Package;
 
 class UserEvents
 {

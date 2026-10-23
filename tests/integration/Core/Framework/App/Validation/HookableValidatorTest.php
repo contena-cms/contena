@@ -9,8 +9,6 @@ use Contena\Core\Framework\App\Validation\Error\NotHookableError;
 use Contena\Core\Framework\App\Validation\Error\WebhookNotPermittedError;
 use Contena\Core\Framework\App\Validation\HookableValidator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Service\Event\CommercialLicenseProvidedEvent;
 

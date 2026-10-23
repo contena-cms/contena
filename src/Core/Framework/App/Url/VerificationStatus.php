@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Url;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

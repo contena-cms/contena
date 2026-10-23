@@ -4,7 +4,6 @@ namespace Contena\Core\System\Snippet\Command;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\SnippetFixer;
 use Contena\Core\System\Snippet\SnippetValidator;
 use Contena\Core\System\Snippet\Struct\InvalidPluralizationCollection;

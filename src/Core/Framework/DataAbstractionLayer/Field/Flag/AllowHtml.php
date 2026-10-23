@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field\Flag;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * In case a column is allowed to contain HTML-esque data. Beware of injection possibilities

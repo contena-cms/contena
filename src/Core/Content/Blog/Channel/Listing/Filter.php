@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Channel\Listing;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Aggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter as DALFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class Filter extends Struct

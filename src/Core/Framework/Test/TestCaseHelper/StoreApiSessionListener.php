@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\TestCaseHelper;
 
 use PHPUnit\Framework\Assert;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;

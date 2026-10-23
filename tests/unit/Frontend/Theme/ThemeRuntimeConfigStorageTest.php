@@ -8,7 +8,6 @@ use Doctrine\DBAL\Exception\DeadlockException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\ThemeRuntimeConfig;
 use Contena\Frontend\Theme\ThemeRuntimeConfigStorage;

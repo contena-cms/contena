@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Sitemap;
 
 use Contena\Core\Content\Sitemap\Channel\AbstractSitemapRoute;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;

@@ -11,7 +11,6 @@ use Contena\Core\Content\ImportExport\Processing\Mapping\Mapping;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

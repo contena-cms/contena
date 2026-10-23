@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\NumberRange\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Buckets a number-range type technical name into a small, bounded set of groups, so plugin-defined

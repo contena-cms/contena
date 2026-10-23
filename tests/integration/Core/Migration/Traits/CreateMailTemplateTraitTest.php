@@ -5,14 +5,10 @@ namespace Contena\Tests\Integration\Core\Migration\Traits;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\Structs\MailTemplateCreateStruct;
 use Contena\Core\Migration\Structs\MailTemplateTypeCreateStruct;
-use Contena\Core\Migration\Traits\CreateMailTemplateTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

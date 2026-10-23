@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\Authentication;
 
 use League\OAuth2\Server\Repositories\ClientRepositoryInterface;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\EntityProtection;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Read protection is currently experimental, as it is not guaranteed that the right scope is consistently

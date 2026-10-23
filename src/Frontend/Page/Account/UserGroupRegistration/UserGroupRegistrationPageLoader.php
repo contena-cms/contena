@@ -2,12 +2,12 @@
 
 namespace Contena\Frontend\Page\Account\UserGroupRegistration;
 
-use Contena\Core\System\User\Channel\AbstractUserGroupRegistrationSettingsRoute;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Channel\AbstractUserGroupRegistrationSettingsRoute;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.

@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
 
 /**

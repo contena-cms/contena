@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\Util\ZipUtils;
 use Symfony\Component\Filesystem\Filesystem;

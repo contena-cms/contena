@@ -5,14 +5,13 @@ namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Action;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserCollection;
 use Contena\Core\Content\Flow\Dispatching\Action\ChangeUserStatusAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\UserCollection;
 
 /**
  * @internal

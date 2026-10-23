@@ -4,9 +4,8 @@ namespace Contena\Core\System\Currency\Extension;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Currency\Channel\CurrencyRouteResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Currency\Channel\CurrencyRouteResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

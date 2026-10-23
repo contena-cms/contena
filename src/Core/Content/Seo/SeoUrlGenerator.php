@@ -21,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\ChannelEntity;

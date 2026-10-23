@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Cms\DataResolver\Element;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements \IteratorAggregate<array-key, EntitySearchResult<covariant EntityCollection<covariant Entity>>>

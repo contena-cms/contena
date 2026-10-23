@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Requirements;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Extracted to be able to mock all ini values

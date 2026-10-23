@@ -8,7 +8,6 @@ use Contena\Core\Content\Media\DependencyInjection\ThumbnailProcessorCompilerPas
 use Contena\Core\Content\Media\Thumbnail\Processor\GdImageThumbnailProcessor;
 use Contena\Core\Content\Media\Thumbnail\Processor\ImagickThumbnailProcessor;
 use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

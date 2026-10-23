@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Update\Api;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;

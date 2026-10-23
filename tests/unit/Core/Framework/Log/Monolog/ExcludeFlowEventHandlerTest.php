@@ -10,11 +10,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
-use Contena\Core\System\User\Event\UserAccountRecoverRequestEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
 use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
+use Contena\Core\System\User\Event\UserAccountRecoverRequestEvent;
 
 /**
  * @internal

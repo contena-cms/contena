@@ -13,7 +13,6 @@ use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderDeliveryStatusRule;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;

@@ -6,7 +6,6 @@ use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
 use Contena\Core\Content\Flow\Dispatching\Struct\Sequence;
 use Contena\Core\Content\Flow\FlowException;
 use Contena\Core\Content\Flow\Indexing\FlowBuilder\Sequence as SequenceDto;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 
 /**

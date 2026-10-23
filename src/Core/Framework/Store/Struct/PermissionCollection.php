@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\Struct;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Helper\PermissionCategorization;
 
 /**

@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme\Validator;
 
 use ScssPhp\ScssPhp\Colors;
 use ScssPhp\ScssPhp\OutputStyle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\AbstractScssCompiler;
 use Contena\Frontend\Theme\CompilerConfiguration;
 

@@ -10,7 +10,6 @@ use Contena\Administration\Framework\Adapter\Cache\Http\AdministrationCacheContr
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Core\Framework\Adapter\Cache\Http\Event\BeforeCacheControlEvent;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Request;

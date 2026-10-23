@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Outbox\DeliveryResponse;
 use Contena\Core\Framework\Webhook\Service\WebhookRequest;
 use Contena\Core\Framework\Webhook\Service\WebhookResult;

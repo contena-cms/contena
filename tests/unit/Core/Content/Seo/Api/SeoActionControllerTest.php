@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\Api\SeoActionController;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;
 

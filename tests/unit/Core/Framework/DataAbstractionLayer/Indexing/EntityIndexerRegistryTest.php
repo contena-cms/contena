@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\PostUpdateIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\Telemetry\IndexerMetricsInstrumentor;
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
 use Contena\Core\Framework\Event\ProgressStartedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

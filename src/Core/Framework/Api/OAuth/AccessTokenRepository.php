@@ -7,7 +7,6 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * OAuth integrations should rely on {@see AccessTokenRepositoryInterface} instead of this concrete Contena class.

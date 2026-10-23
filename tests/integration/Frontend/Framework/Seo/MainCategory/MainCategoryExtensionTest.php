@@ -3,18 +3,15 @@
 namespace Contena\Tests\Integration\Frontend\Framework\Seo\MainCategory;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

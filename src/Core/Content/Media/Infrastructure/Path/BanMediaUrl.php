@@ -7,7 +7,6 @@ use Contena\Core\Content\Media\Core\Application\MediaReverseProxy;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\Core\Params\UrlParamsSource;
 use Contena\Core\Content\Media\Event\MediaPathChangedEvent;
-use Contena\Core\Framework\Log\Package;
 
 class BanMediaUrl
 {

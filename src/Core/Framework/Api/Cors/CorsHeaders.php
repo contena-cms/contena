@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Cors;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The header names the API answers CORS preflight requests with, while they are being collected

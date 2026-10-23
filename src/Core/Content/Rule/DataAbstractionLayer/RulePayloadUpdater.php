@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\Event\AppScriptConditionEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\ContainerInterface;

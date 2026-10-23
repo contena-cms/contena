@@ -18,7 +18,6 @@ use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;
 use Doctrine\DBAL\Schema\Name\Parser;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use Doctrine\Deprecations\Deprecation;
-use Contena\Core\Framework\Log\Package;
 
 if (class_exists('\\' . AbstractAsset::class, false)) {
     return;

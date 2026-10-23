@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Event\Hooks;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\TraceHook;
 
 /**

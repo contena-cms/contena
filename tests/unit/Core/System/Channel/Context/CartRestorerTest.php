@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\CartCalculator;
 use Contena\Core\Checkout\Cart\CartPersister;
 use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Context\CartRestorer;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;

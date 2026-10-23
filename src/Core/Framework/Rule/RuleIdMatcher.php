@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Rule;
 
 use Contena\Core\Framework\DataAbstractionLayer\Contract\IdAware;
 use Contena\Core\Framework\DataAbstractionLayer\Contract\RuleIdAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

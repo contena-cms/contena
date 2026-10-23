@@ -17,7 +17,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Locale\LocaleCollection;
@@ -33,7 +32,6 @@ use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
 

@@ -5,7 +5,6 @@ namespace Contena\Frontend\Page\Search;
 use Contena\Core\Content\Blog\Channel\Search\AbstractBlogSearchRoute;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

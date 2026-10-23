@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ContentStream\ScheduledTask;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 class UpdateContentStreamMappingTask extends ScheduledTask

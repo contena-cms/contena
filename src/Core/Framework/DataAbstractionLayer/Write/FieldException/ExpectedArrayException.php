@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\FieldException;
 
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class ExpectedArrayException extends DataAbstractionLayerException implements WriteFieldException

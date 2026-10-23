@@ -3,47 +3,32 @@
 namespace Contena\Core\Content\Blog\Cms\BlogSlider;
 
 use Psr\Log\LoggerInterface;
+use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
+use Contena\Core\Content\Blog\Events\BlogSliderStreamCriteriaEvent;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\BlogSliderStruct;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\BlogSliderStruct;
-use Contena\Core\Content\Blog\Events\BlogSliderStreamCriteriaEvent;
-use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\Channel\AbstractBlogCloseoutFilterFactory;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Content\ContentStream\Exception\EmptyContentStreamException;
+use Contena\Core\Content\ContentStream\Exception\NoFilterException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ContentStreamProcessor extends AbstractBlogSliderProcessor
 {
     private const FALLBACK_LIMIT = 50;
 
-    /**
-     * @internal
-     *
-     * @param ChannelRepository<BlogCollection> $blogRepository
-     */
-    public function __construct(
-        private readonly ContentStreamBuilderInterface|AbstractContentStreamBuilder $contentStreamBuilder,
-        private readonly ChannelRepository $blogRepository,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly LoggerInterface $logger,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly AbstractBlogCloseoutFilterFactory $blogCloseoutFilterFactory,
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogSliderProcessor
     {

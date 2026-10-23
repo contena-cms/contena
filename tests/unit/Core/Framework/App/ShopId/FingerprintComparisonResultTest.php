@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
 use Contena\Core\Framework\App\ShopId\FingerprintMismatch;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
-use Contena\Core\Framework\Log\Package;
 
 class TreePathField extends LongTextField
 {

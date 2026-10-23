@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Frontend\Theme\ThemeDefinition;
 

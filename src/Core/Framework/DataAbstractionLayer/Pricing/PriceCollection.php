@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Pricing;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

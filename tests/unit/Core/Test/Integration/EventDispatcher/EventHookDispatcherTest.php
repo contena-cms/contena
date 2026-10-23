@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Test\Integration\EventDispatcher;
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;

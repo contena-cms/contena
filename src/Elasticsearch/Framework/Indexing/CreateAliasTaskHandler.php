@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use OpenSearch\Client;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;

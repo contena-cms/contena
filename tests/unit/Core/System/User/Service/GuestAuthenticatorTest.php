@@ -5,13 +5,12 @@ namespace Contena\Tests\Unit\Core\System\User\Service;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Service\GuestAuthenticator;
 use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderUser\OrderUserEntity;
 use Contena\Core\Checkout\Order\OrderEntity;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Service\GuestAuthenticator;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

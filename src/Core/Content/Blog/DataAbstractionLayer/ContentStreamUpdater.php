@@ -20,11 +20,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ContentStreamUpdater extends AbstractContentStreamUpdater
 {

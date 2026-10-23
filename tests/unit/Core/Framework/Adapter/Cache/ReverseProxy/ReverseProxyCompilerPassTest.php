@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGatewa
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\FastlyReverseProxyGateway;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCache;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;

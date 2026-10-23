@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Api\EventListener;
 use Composer\InstalledVersions;
 use Composer\Semver\Semver;
 use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;

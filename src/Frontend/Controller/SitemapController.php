@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Controller;
 
 use Contena\Core\Content\Sitemap\Channel\SitemapFileRoute;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;

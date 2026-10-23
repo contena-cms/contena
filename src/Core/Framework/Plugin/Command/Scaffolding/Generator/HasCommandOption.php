@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding\Generator;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Input\InputOption;
 
 /**

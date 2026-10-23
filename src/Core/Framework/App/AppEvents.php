@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App;
 
-use Contena\Core\Framework\Log\Package;
 
 class AppEvents
 {

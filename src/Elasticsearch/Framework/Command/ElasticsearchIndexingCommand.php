@@ -2,8 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework\Command;
 
-use Contena\Core\Framework\DataAbstractionLayer\Command\ConsoleProgressTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\CreateAliasTaskHandler;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexingMessage;

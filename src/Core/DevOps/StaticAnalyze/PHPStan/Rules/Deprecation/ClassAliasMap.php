@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation;
 
 use Contena\Core\Framework\Deprecation\ClassAliasRegistry;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

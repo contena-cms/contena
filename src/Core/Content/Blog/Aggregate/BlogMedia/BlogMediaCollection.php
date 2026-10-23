@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogMedia;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaType\SpatialObjectType;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<BlogMediaEntity>

@@ -12,7 +12,6 @@ use phpDocumentor\Reflection\DocBlock\Tags\TagWithType;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use Contena\Core\DevOps\Docs\DocsException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ServiceStubs;
 use Symfony\Component\Finder\SplFileInfo;
 use Twig\Environment;

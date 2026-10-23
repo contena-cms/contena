@@ -6,7 +6,6 @@ use PHPStan\BetterReflection\Reflection\ReflectionMethod as BetterReflectionMeth
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ExtendedMethodReflection;
 use Contena\Core\Framework\Deprecation\BCChange\BCChangeAttribute;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Detects announced BC changes on reflected symbols inside PHPStan rules.

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Cache\Script;
 use Contena\Core\Framework\Adapter\Cache\Script\Facade\CacheInvalidatorFacadeHookFactory;
 use Contena\Core\Framework\Adapter\Cache\Script\Facade\WrittenEventScriptFacade;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 
 /**

@@ -3,10 +3,9 @@
 namespace Contena\Core\System\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeCollection;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeCollection;
 
 /**
  * @extends EntityCollection<ChannelEntity>

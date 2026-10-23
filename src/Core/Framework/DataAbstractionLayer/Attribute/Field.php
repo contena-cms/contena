@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Attribute;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This attribute class is intentionally not final, as it's extended by other field attributes

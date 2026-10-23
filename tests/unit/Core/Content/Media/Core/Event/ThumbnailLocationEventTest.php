@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Event\ThumbnailLocationEvent;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

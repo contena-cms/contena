@@ -5,7 +5,6 @@ namespace Contena\Core\Content;
 use Contena\Core\Content\Mail\MailerConfigurationCompilerPass;
 use Contena\Core\Content\Media\DependencyInjection\ThumbnailProcessorCompilerPass;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -40,7 +39,6 @@ class Content extends Bundle
         $phpLoader->load('sitemap.php');
         $phpLoader->load('landing_page.php');
         $phpLoader->load('flow.php');
-        $phpLoader->load('legal_guarantee_notice.php');
         $phpLoader->load('shared.php');
 
 

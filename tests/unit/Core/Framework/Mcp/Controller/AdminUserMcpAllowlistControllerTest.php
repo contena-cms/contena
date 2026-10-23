@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Controller\AdminUserMcpAllowlistController;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;

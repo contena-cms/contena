@@ -9,7 +9,6 @@ use Psr\Clock\ClockInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

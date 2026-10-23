@@ -3,19 +3,16 @@
 namespace Contena\Tests\Integration\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\UserSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Response;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;
 use Symfony\Component\HttpKernel\ControllerMetadata\ArgumentMetadata;

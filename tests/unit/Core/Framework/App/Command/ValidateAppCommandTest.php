@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\Exception\AppValidationException;
 use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 use Contena\Core\Framework\App\Validation\Error\MissingPermissionError;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

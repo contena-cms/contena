@@ -4,12 +4,8 @@ namespace Contena\Core\Framework\Sso\Controller;
 
 use League\OAuth2\Server\AuthorizationServer;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\TrustedOriginUrlGenerator;
-use Contena\Core\Framework\Sso\Config\LoginConfigService;
-use Contena\Core\Framework\Sso\LoginResponseService;
-use Contena\Core\Framework\Sso\SsoService;
 use Contena\Core\Framework\Sso\StateValidator;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
@@ -28,18 +24,6 @@ use Symfony\Component\Routing\RouterInterface;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class SsoController extends AbstractController
 {
-    public function __construct(
-        private readonly AuthorizationServer $authorizationServer,
-        private readonly PsrHttpFactory $psrHttpFactory,
-        private readonly LoginConfigService $loginConfigService,
-        private readonly LoginResponseService $loginResponseService,
-        private readonly StateValidator $stateValidator,
-        private readonly SsoAdminUserService $ssoUserService,
-        private readonly SsoAdminUserInvitationMailService $ssoUserInvitationMailService,
-        private readonly SsoService $ssoService,
-        private readonly RouterInterface $router,
-    ) {
-    }
 
     #[Route(
         path: '/api/oauth/sso/config',

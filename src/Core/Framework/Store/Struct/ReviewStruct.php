@@ -2,9 +2,9 @@
 
 namespace Contena\Core\Framework\Store\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Store\Exception\InvalidExtensionRatingValueException;
 
 class ReviewStruct extends StoreStruct
 {

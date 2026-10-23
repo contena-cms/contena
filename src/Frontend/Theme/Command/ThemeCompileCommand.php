@@ -6,7 +6,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ConfigLoader\AbstractAvailableThemeProvider;
 use Contena\Frontend\Theme\ThemeService;
 use Symfony\Component\Console\Attribute\AsCommand;

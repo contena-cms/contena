@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Rule\DataAbstractionLayer;
 use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Content\Rule\RuleEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\Container;
 use Contena\Core\Framework\Rule\Container\FilterRule;
 use Contena\Core\Framework\Rule\Rule;

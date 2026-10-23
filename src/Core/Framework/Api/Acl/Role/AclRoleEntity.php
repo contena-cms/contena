@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Api\Acl\Role;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 
 /**
@@ -14,6 +12,7 @@ use Contena\Core\System\AdminUser\AdminUserCollection;
 class AclRoleEntity extends Entity
 {
     use EntityIdTrait;
+use Contena\Core\System\Integration\IntegrationCollection;
 
     protected string $name;
 

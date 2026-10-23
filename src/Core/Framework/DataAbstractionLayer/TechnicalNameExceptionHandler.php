@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 class TechnicalNameExceptionHandler implements ExceptionHandlerInterface
 {

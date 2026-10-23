@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\AdminUser;
 
-use Contena\Core\Framework\Log\Package;
 
 class AdminUserEvents
 {

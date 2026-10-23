@@ -16,7 +16,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MakeVersionableMigrationHelper;
 use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationDefinition;
 use Contena\Core\System\Unit\UnitDefinition;

@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch\Framework\DataAbstractionLayer;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Tokenizer used by the Elasticsearch search path.

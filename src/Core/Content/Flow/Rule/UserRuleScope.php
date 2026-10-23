@@ -3,9 +3,8 @@
 namespace Contena\Core\Content\Flow\Rule;
 
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @codeCoverageIgnore

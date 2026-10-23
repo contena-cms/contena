@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Filter;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\SnippetException;
 
 class SnippetFilterFactory

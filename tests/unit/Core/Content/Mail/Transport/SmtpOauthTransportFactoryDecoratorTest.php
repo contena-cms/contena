@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Transport\SmtpOauthAuthenticator;
 use Contena\Core\Content\Mail\Transport\SmtpOauthTransportFactoryDecorator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;

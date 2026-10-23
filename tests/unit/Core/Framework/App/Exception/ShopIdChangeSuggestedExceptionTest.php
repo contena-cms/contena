@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
 use Contena\Core\Framework\App\ShopId\FingerprintMatch;
 use Contena\Core\Framework\App\ShopId\FingerprintMismatch;
 use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

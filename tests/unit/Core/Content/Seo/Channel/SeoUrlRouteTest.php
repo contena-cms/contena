@@ -4,12 +4,11 @@ namespace Contena\Tests\Unit\Core\Content\Seo\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Seo\Extension\SeoUrlRouteExtension;
 use Contena\Core\Content\Seo\Channel\SeoUrlRoute;
 use Contena\Core\Content\Seo\Channel\SeoUrlRouteResponse;
+use Contena\Core\Content\Seo\Extension\SeoUrlRouteExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Generator;
 use Symfony\Component\EventDispatcher\EventDispatcher;

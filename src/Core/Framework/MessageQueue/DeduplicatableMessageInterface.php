@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Implement on messages that can safely be deduplicated (has to be implemented in the middleware/transport).

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Filter;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-ignore-next-line cannot be final, as it is extended, also designed to be used directly

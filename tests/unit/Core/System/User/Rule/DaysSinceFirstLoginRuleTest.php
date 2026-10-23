@@ -7,11 +7,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

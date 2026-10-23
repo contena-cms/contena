@@ -11,7 +11,6 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 

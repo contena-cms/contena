@@ -10,7 +10,6 @@ use Contena\Core\Content\Cookie\Struct\CookieEntryCollection;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

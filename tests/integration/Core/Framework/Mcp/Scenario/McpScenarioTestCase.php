@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Tool\EntityAggregateTool;
 use Contena\Core\Framework\Mcp\Tool\EntityReadTool;
@@ -19,9 +18,6 @@ use Contena\Core\Framework\Mcp\Tool\EntityUpsertTool;
 use Contena\Core\Framework\Mcp\Tool\OrderStateTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigReadTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigWriteTool;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

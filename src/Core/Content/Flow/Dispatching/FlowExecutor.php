@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\Dispatching;
 
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
 use Contena\Core\Content\Flow\Dispatching\Struct\ActionSequence;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
@@ -13,19 +12,16 @@ use Contena\Core\Content\Flow\Dispatching\Struct\Sequence;
 use Contena\Core\Content\Flow\Extension\FlowExecutorExtension;
 use Contena\Core\Content\Flow\FlowException;
 use Contena\Core\Content\Flow\Rule\UserRuleScope;
-use Contena\Core\Content\Flow\Rule\FlowRuleScopeBuilder;
-use Contena\Core\Content\Flow\Telemetry\FlowMetricsInstrumentor;
 use Contena\Core\Framework\App\Event\AppFlowActionEvent;
-use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
-use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Event\ChannelContextAware;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Event\OrderAware;
+use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Content\Flow\Exception\ExecuteSequenceException;
 
 /**
  * @internal not intended for decoration or replacement
@@ -41,22 +37,6 @@ class FlowExecutor
      */
     private readonly array $actions;
 
-    /**
-     * @param FlowAction[] $actions
-     */
-    public function __construct(
-        private readonly EventDispatcherInterface $dispatcher,
-        private readonly AppFlowActionProvider $appFlowActionProvider,
-        private readonly AbstractRuleLoader $ruleLoader,
-        private readonly FlowRuleScopeBuilder $scopeBuilder,
-        private readonly Connection $connection,
-        private readonly ExtensionDispatcher $extensions,
-        private readonly LoggerInterface $logger,
-        $actions,
-        private readonly FlowMetricsInstrumentor $flowMetrics,
-    ) {
-        $this->actions = $actions instanceof \Traversable ? iterator_to_array($actions) : $actions;
-    }
 
     /**
      * @param array<FlowHolder> $flowHolders

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
-use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\OrderStorer;
@@ -14,7 +13,7 @@ use Contena\Core\Content\Shared\MailFlow\DataProvider\OrderProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\OrderAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Event\UserRegisterEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

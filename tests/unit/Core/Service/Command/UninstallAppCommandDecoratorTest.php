@@ -9,13 +9,11 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppStorage;
 use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Command\UninstallAppCommandDecorator;
 use Contena\Core\Service\DTO\Service;
 use Contena\Core\Service\LifecycleManager;
 use Contena\Core\Service\ServiceLifecycle;
 use Contena\Core\Service\ServiceStorage;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

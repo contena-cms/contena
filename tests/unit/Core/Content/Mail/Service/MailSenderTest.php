@@ -9,7 +9,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Message\SendMailMessage;
 use Contena\Core\Content\Mail\Service\MailSender;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;

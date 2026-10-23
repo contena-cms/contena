@@ -7,7 +7,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\Api\ConsentController;
 use Contena\Core\System\Consent\ConsentScope;
 use Contena\Core\System\Consent\ConsentStatus;

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ServiceLocatorTrait;
 
 /**

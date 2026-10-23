@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Routing\Validation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;

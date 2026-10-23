@@ -11,7 +11,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

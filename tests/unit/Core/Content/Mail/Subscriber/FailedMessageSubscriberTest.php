@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Subscriber\FailedMessageSubscriber;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Mailer\Event\FailedMessageEvent;
 use Symfony\Component\Mime\RawMessage;

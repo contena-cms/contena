@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Property\Aggregate\PropertyGroupOption;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Content\Property\PropertyGroupEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<PropertyGroupOptionEntity>

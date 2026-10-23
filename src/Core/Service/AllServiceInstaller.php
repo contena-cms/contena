@@ -4,7 +4,6 @@ namespace Contena\Core\Service;
 
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\DTO\Service;
 use Contena\Core\Service\Event\NewServicesInstalledEvent;
 use Contena\Core\Service\Message\InstallServicesMessage;

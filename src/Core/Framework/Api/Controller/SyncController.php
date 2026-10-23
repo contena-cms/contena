@@ -10,7 +10,6 @@ use Contena\Core\Framework\Api\Sync\SyncResult;
 use Contena\Core\Framework\Api\Sync\SyncServiceInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;

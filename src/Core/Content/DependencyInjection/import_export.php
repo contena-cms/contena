@@ -15,8 +15,6 @@ use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\Ent
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\LanguageSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\MediaSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\MediaSerializerSubscriber;
-use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\OrderSerializer;
-use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\BlogCrossSellingSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\BlogSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\PromotionIndividualCodeSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\SalutationSerializer;
@@ -276,14 +274,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.import_export.entity_serializer', ['priority' => -400]);
 
-    $services->set(BlogCrossSellingSerializer::class)
-        ->args([
-            service('blog_cross_selling_assigned_products.repository'),
-        ])
-        ->tag('contena.import_export.entity_serializer', ['priority' => -400]);
 
-    $services->set(OrderSerializer::class)
-        ->tag('contena.import_export.entity_serializer', ['priority' => -400]);
 
     $services->set(CsvReaderFactory::class)
         ->tag('contena.import_export.reader_factory');

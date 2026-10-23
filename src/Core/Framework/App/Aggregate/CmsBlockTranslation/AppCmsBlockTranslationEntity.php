@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\App\Aggregate\CmsBlockTranslation;
 
 use Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageEntity;
 
 /**

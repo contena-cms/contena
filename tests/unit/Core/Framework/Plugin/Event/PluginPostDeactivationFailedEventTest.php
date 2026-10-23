@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Plugin\Event;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
 use Contena\Core\Framework\Plugin\Event\PluginPostDeactivationFailedEvent;
 use Contena\Core\Framework\Plugin\PluginEntity;

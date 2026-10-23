@@ -6,7 +6,6 @@ use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\Dsn;

@@ -4,7 +4,6 @@ namespace Contena\Core\Test\Constraint;
 
 use Countable;
 use PHPUnit\Framework\Constraint\Constraint;
-use Contena\Core\Framework\Log\Package;
 use Traversable;
 
 /**

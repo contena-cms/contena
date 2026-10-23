@@ -31,7 +31,6 @@ use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailSizeCalculator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

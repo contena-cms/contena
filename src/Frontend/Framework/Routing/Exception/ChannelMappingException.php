@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Routing\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 use Symfony\Component\HttpFoundation\Response;
 

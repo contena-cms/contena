@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Aggregate\UserGroupTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<UserGroupTranslationEntity>

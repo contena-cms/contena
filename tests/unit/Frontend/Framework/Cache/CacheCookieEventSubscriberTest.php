@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\Extension\CacheHashRequiredExtension;
 use Contena\Core\Framework\Adapter\Session\SessionFactory;
 use Contena\Core\Framework\Adapter\Session\StatefulFlashBag;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Cache\CacheCookieEventSubscriber;
 use Symfony\Component\HttpFoundation\Request;

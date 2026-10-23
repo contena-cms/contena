@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Event\AppActivatedEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 

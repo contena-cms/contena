@@ -3,11 +3,10 @@
 namespace Contena\Core\Content\Blog\Cms;
 
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\TextStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\TextStruct;
-use Contena\Core\Framework\Log\Package;
 
 class BlogNameCmsElementResolver extends AbstractBlogDetailCmsElementResolver
 {

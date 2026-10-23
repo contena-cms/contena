@@ -4,7 +4,6 @@ namespace Contena\Core\System\CustomEntity\Xml\Field;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

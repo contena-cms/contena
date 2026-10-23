@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Page\LandingPage;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Page\LandingPage\LandingPage;
 use Contena\Frontend\Page\LandingPage\LandingPageLoadedHook;

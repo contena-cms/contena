@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Admin\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Event\RefreshIndexEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminIndexingBehavior;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Contena\Elasticsearch\Admin\Subscriber\RefreshIndexSubscriber;

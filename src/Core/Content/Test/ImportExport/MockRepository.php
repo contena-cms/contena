@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal can only be used in test setups where bypass finals is activated

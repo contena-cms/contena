@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Represents Cache-Control header directives.

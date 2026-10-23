@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Integration;
 
-use Contena\Core\Framework\Log\Package;
 
 class IntegrationEvents
 {

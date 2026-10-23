@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\Channel\Channel;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\ContextTokenResponse;
 
 /**
  * This route allows changing configurations inside the context.

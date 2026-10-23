@@ -20,7 +20,6 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Symfony\ServiceMap;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

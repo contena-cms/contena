@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Message;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Contena\Core\Framework\MessageQueue\DeduplicatableMessageInterface;
 

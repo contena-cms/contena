@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Profiling\Integration;
 
-use Contena\Core\Framework\Log\Package;
 use Tideways\Profiler;
 
 /**

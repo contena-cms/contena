@@ -6,7 +6,6 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\Hookable;
 

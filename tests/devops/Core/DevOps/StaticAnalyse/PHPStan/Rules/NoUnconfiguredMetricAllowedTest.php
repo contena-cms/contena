@@ -7,7 +7,6 @@ use PHPStan\Symfony\DefaultParameterMap;
 use PHPStan\Symfony\Parameter;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoUnconfiguredMetricAllowed;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

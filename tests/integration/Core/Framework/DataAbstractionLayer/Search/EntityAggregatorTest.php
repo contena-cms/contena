@@ -40,10 +40,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Search\TestAggregation;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Search\Util\DateHistogramCase;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 

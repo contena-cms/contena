@@ -9,12 +9,10 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Frontend\Framework\Routing\CachedDomainLoader;
 use Contena\Frontend\Framework\Routing\CachedDomainLoaderInvalidator;
 use Contena\Frontend\Theme\Aggregate\ThemeChannelDefinition;
-use Contena\Tests\Unit\Frontend\Theme\MockedCacheInvalidator;
 
 /**
  * @internal

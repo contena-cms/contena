@@ -7,7 +7,6 @@ use Contena\Core\Content\Media\Upload\MediaUploadParameters;
 use Contena\Core\Content\Media\Upload\MediaUploadService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;

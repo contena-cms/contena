@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Hookable;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Marker interface that EntityDefinitions can implement to automatically be tagged as hookable.

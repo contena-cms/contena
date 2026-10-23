@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Service;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 
 abstract class AbstractTranslationLoader

@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

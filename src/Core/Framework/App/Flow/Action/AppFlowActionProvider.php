@@ -7,7 +7,6 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\BusinessEventEncoder;
 

@@ -16,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -26,6 +25,7 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Rule\Exception\InvalidConditionException;
 
 /**
  * @internal

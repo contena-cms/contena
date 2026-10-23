@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework\Indexing;
 
-use Contena\Core\Framework\Log\Package;
 
 class IndexingDto
 {

@@ -6,7 +6,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Symplify\NoReturnSetterMethodWithFluentSettersRule;
-use Contena\Core\Framework\Log\Package;
 use Symplify\PHPStanRules\Rules\NoReturnSetterMethodRule;
 
 /**

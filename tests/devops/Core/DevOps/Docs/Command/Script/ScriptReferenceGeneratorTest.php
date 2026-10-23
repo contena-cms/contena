@@ -6,8 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceDataCollector;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceGenerator;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceGeneratorCommand;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

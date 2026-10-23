@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Seo\MainCategory;
 
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 
 /**

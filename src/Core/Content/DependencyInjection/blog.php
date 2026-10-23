@@ -39,7 +39,6 @@ use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogSlider\ContentStreamProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSlider\StaticBlogProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceAccessorBuilder;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceQuantitySelector;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
@@ -53,14 +52,6 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate\StockUpdateFilterProvider;
 use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingUpdater;
-use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
-use Contena\Core\Content\Blog\Garan\GaranLabelInlineImage;
-use Contena\Core\Content\Blog\Garan\GaranLabelMailSubscriber;
-use Contena\Core\Content\Blog\Garan\GaranLabelOrderSubscriber;
-use Contena\Core\Content\Blog\Garan\GaranLabelBlogValidator;
-use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
-use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
-use Contena\Core\Content\Blog\Garan\GaranLabelTwigFilter;
 use Contena\Core\Content\Blog\IsNewDetector;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogTypeRegistry;
@@ -121,6 +112,14 @@ use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\AggregationListingProcessor;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\AssociationLoadingListingProcessor;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\BehaviorListingProcessor;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\CompressedCriteriaListingProcessor;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\PagingListingProcessor;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\SortingListingProcessor;
+use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -157,18 +156,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogTagDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(BlogConfiguratorSettingDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogConfiguratorSettingExceptionHandler::class)
-        ->tag('contena.dal.exception_handler');
 
-    $services->set(BlogPriceDefinition::class)
-        ->tag('contena.entity.definition')
-        ->tag('contena.entity.hookable');
 
-    $services->set(BlogPropertyDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(BlogSearchKeywordDefinition::class)
         ->tag('contena.entity.definition');
@@ -176,44 +166,24 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogKeywordDictionaryDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(BlogReviewDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogManufacturerDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogManufacturerTranslationDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(BlogMediaDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(BlogDownloadDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(BlogTranslationDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(BlogOptionDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(BlogCategoryTreeDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(BlogCrossSellingDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogCrossSellingTranslationDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogCrossSellingAssignedBlogsDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogFeatureSetDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(BlogFeatureSetTranslationDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(BlogSortingDefinition::class)
         ->tag('contena.entity.definition');
@@ -233,18 +203,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogSearchConfigExceptionHandler::class)
         ->tag('contena.dal.exception_handler');
 
-    $services->set(BlogGateway::class)
-        ->args([
-            service('channel.blog.repository'),
-            service('event_dispatcher'),
-        ]);
 
-    $services->set(AbstractPropertyGroupSorter::class, PropertyGroupSorter::class);
 
-    $services->set(AbstractBlogMaxPurchaseCalculator::class, BlogMaxPurchaseCalculator::class)
-        ->args([
-            service(SystemConfigService::class),
-        ]);
 
     $services->set(AbstractIsNewDetector::class, IsNewDetector::class)
         ->args([
@@ -252,49 +212,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ClockInterface::class),
         ]);
 
-    $services->set(BlogVariationBuilder::class);
 
-    $services->set(GaranLabelDurationFormatter::class);
 
-    $services->set(GaranLabelRenderer::class)
-        ->args([
-            service('twig'),
-        ]);
 
-    $services->set(GaranLabelResolver::class)
-        ->args([
-            service(GaranLabelDurationFormatter::class),
-            service(GaranLabelRenderer::class),
-        ]);
 
-    $services->set(GaranLabelTwigFilter::class)
-        ->args([
-            service(GaranLabelDurationFormatter::class),
-            service('blog.repository'),
-            service(GaranLabelResolver::class),
-            service(GaranLabelInlineImage::class),
-        ])
-        ->tag('twig.extension');
 
-    $services->set(GaranLabelInlineImage::class);
 
-    $services->set(GaranLabelMailSubscriber::class)
-        ->args([
-            service(GaranLabelInlineImage::class),
-            service('blog.repository'),
-            service(GaranLabelResolver::class),
-        ])
-        ->tag('kernel.event_subscriber');
 
-    $services->set(GaranLabelOrderSubscriber::class)
-        ->args([
-            service('blog.repository'),
-            service(GaranLabelResolver::class),
-        ])
-        ->tag('kernel.event_subscriber');
 
-    $services->set(GaranLabelBlogValidator::class)
-        ->tag('kernel.event_subscriber');
 
     $services->set(CustomFieldSearchableSubscriber::class)
         ->args([
@@ -315,14 +240,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(BlogSubscriber::class)
         ->args([
-            service(BlogVariationBuilder::class),
             service(BlogPriceCalculator::class),
-            service(AbstractPropertyGroupSorter::class),
-            service(AbstractBlogMaxPurchaseCalculator::class),
             service(AbstractIsNewDetector::class),
             service(SystemConfigService::class),
-            service(BlogMeasurementUnitBuilder::class),
-            service(MeasurementUnitConverter::class),
             service('request_stack'),
             service(Connection::class),
         ])
@@ -347,22 +267,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.entity_indexer');
 
-    $services->set(OrderStockSubscriber::class)
-        ->args([
-            service(Connection::class),
-            service(StockStorage::class),
-            param('contena.stock.enable_stock_management'),
-        ])
-        ->tag('kernel.event_subscriber');
 
-    $services->set(AvailableStockMirrorSubscriber::class)
-        ->tag('kernel.event_listener');
 
-    $services->set(LoadBlogStockSubscriber::class)
-        ->args([
-            service(StockStorage::class),
-        ])
-        ->tag('kernel.event_subscriber');
 
     $services->set(BlogSearchKeywordAnalyzer::class)
         ->args([
@@ -374,7 +280,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogActionController::class)
         ->public()
         ->args([
-            service(VariantCombinationLoader::class),
             service(BlogTypeRegistry::class),
         ])
         ->call('setContainer', [
@@ -384,13 +289,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogVisibilityDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(VariantCombinationLoader::class)
-        ->args([
-            service(Connection::class),
-        ]);
 
-    $services->set(DeliveryTimeDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(BlogBoxCmsElementResolver::class)
         ->args([
@@ -453,7 +352,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogPriceCalculator::class)
         ->args([
             service('unit.repository'),
-            service(QuantityPriceCalculator::class),
             service(ExtensionDispatcher::class),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
@@ -463,7 +361,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(AppScriptBlogPriceCalculator::class . '.inner'),
             service(ScriptExecutor::class),
-            service(ScriptPriceStubs::class),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
 
@@ -530,11 +427,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             param('contena.blog.search_keyword.indexing'),
         ]);
 
-    $services->set(BlogLineItemCommandValidator::class)
-        ->args([
-            service(Connection::class),
-        ])
-        ->tag('kernel.event_subscriber');
 
     $services->set(ResolvedCriteriaBlogSuggestRoute::class)
         ->decorate(BlogSuggestRoute::class, null, -2000)
@@ -613,7 +505,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SearchKeywordUpdater::class),
             service(ChildCountUpdater::class),
             service(ManyToManyIdFieldUpdater::class),
-            service(StockStorage::class),
             service('event_dispatcher'),
             service(CheapestPriceUpdater::class),
             service(ContentStreamUpdater::class),
@@ -689,11 +580,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             tagged_iterator('contena.blog.stock_filter'),
         ]);
 
-    $services->set(StockStorage::class)
-        ->args([
-            service(Connection::class),
-            service('event_dispatcher'),
-        ]);
 
     $services->set(BlogListingLoader::class)
         ->args([
@@ -727,7 +613,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service('channel.blog.repository'),
-            service(AbstractBlogMaxPurchaseCalculator::class),
             service(ExtensionDispatcher::class),
         ]);
 
@@ -758,7 +643,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AvailableCombinationLoader::class)
         ->args([
             service(Connection::class),
-            service(StockStorage::class),
             service(SystemConfigService::class),
         ]);
 
@@ -800,7 +684,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service('channel.blog.repository'),
-            service(GaranLabelResolver::class),
             service(ExtensionDispatcher::class),
         ]);
 
@@ -819,12 +702,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
 
-    $services->set(CheapestPriceAccessorBuilder::class)
-        ->args([
-            param('contena.dal.max_rule_prices'),
-            service('logger'),
-        ])
-        ->tag('contena.field_accessor_builder', ['priority' => -200]);
 
     $services->set(CleanupBlogKeywordDictionaryTask::class)
         ->tag('contena.scheduled.task');

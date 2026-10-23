@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Twig\NodeVisitor;
 
-use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\Binary\HasEveryBinary;

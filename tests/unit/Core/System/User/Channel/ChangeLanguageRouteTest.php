@@ -4,15 +4,14 @@ namespace Contena\Tests\Unit\Core\System\User\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Extension\ChangeLanguageRouteExtension;
-use Contena\Core\System\User\Channel\ChangeLanguageRoute;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Channel\SuccessResponse;
+use Contena\Core\System\User\Channel\ChangeLanguageRoute;
+use Contena\Core\System\User\Extension\ChangeLanguageRouteExtension;
+use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Generator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

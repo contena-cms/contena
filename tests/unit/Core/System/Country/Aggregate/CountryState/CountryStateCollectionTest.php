@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\Country\Aggregate\CountryState;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\Test\Annotation\DisabledFeatures;

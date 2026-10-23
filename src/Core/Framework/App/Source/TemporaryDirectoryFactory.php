@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Source;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Path;
 
 /**

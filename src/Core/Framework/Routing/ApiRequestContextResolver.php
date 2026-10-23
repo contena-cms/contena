@@ -5,15 +5,14 @@ namespace Contena\Core\Framework\Routing;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
-use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
+use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
@@ -26,6 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
 class ApiRequestContextResolver implements RequestContextResolverInterface
 {
     use RouteScopeCheckTrait;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 
     /**
      * @internal

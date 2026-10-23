@@ -6,7 +6,6 @@ use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFil
 use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
 use Contena\Core\Content\ImportExport\Processing\Writer\AbstractWriter;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractFileService

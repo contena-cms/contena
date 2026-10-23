@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseProvider;
 use Symfony\Contracts\Service\ResetInterface;
 

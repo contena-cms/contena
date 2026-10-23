@@ -5,7 +5,6 @@ namespace Contena\Frontend\Framework\Cookie;
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider as NewCookieProvider;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 
 /**

@@ -8,7 +8,6 @@ use PHPUnit\Event\Telemetry\HRTime;
 use PHPUnit\Event\Telemetry\Info;
 use PHPUnit\Event\Telemetry\MemoryUsage;
 use PHPUnit\Event\Telemetry\Snapshot;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

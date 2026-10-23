@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 class DeleteUnusedGuestUserTask extends ScheduledTask

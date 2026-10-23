@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LogLevel;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\Log\Monolog\ErrorCodeLogLevelHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Exception\HandlerFailedException;

@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Resource\ToolResultResource;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\Uuid\Uuid;

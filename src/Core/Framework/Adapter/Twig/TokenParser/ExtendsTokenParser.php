@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinderInterface;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
-use Contena\Core\Framework\Log\Package;
 use Twig\Node\EmptyNode;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ArrayExpression;
@@ -47,10 +46,6 @@ final class ExtendsTokenParser extends AbstractTokenParser
         } while (!$next->test(Token::BLOCK_END_TYPE));
 
         $tokens = [
-            new Token(Token::BLOCK_START_TYPE, '', 2),
-            new Token(Token::NAME_TYPE, 'extends', 2),
-            new Token(Token::STRING_TYPE, $parent, 2),
-            new Token(Token::BLOCK_END_TYPE, '', 2),
         ];
 
         if ($this->shouldEndFile($options['scopes'], $source)) {

@@ -13,7 +13,6 @@ use PHPStan\Type\MethodTypeSpecifyingExtension;
 use PHPStan\Type\NullType;
 use PHPStan\Type\TypeCombinator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

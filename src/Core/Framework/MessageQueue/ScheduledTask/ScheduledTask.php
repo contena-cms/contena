@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 

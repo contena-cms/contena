@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Rule;
 
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\ZipCodeRule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleScope;

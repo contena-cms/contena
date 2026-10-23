@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Installer\Controller\DatabaseConfigurationController;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Maintenance\MaintenanceException;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\Subscriber;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\BeforeVersionMergeEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

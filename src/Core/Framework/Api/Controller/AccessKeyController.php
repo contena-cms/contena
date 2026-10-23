@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\Controller;
 
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

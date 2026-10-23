@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Maintenance\Staging\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Command\SystemSetupStagingCommand;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;

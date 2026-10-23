@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\CashRoundingConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

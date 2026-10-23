@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\AdminUserRecoveryProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryDefinition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

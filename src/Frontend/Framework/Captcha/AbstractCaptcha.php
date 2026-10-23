@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Captcha;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -48,7 +47,6 @@ abstract class AbstractCaptcha
 
         // An empty list would read as valid, so a failure always needs a violation.
         return new ConstraintViolationList([
-            new ConstraintViolation('', '', [], '', '', '', null, CaptchaException::INVALID_CAPTCHA_ERROR),
         ]);
     }
 

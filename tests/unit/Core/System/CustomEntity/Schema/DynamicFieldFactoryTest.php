@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\CustomEntity\Schema;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Schema\DynamicFieldFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;

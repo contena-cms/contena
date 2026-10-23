@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Seo;
 
 use Cocur\Slugify\SlugifyInterface;
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Path;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;

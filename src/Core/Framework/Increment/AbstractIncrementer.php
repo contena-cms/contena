@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Increment;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesAbstract;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractIncrementer
 {

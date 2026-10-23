@@ -5,16 +5,15 @@ namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\AdminUserStorer;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\AdminUserRecoveryProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\AdminUserAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryEntity;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
+use Contena\Core\System\User\Event\UserRegisterEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

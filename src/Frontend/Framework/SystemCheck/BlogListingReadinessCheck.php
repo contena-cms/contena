@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\BaseCheck;
 use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Result;

@@ -4,13 +4,12 @@ namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Events\BlogStatesBeforeChangeEvent;
 use Contena\Core\Content\Blog\Events\BlogStatesChangedEvent;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

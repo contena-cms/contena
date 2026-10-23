@@ -7,7 +7,6 @@ use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Kernel;

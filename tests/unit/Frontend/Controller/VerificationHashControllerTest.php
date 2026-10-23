@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Controller;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Controller\VerificationHashController;
 use Symfony\Component\HttpFoundation\Response;

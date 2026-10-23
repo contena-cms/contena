@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Migration;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
-use Contena\Core\Framework\Log\Package;
 
 class MigrationCollection
 {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\Validation;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\Collection;

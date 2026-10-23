@@ -5,9 +5,7 @@ declare(strict_types=1);
 namespace Contena\Tests\Integration\Core\Framework\Store\Command;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Command\StoreLoginCommand;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Validator\Constraints\NotBlank;

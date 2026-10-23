@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractContentStreamUpdater extends EntityIndexer
 {

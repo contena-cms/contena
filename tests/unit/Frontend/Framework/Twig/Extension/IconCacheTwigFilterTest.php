@@ -12,7 +12,6 @@ use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\BundleHierarchyBuilde
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

@@ -2,10 +2,9 @@
 
 namespace Contena\Frontend\Page\Address\Listing;
 
+use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\CountryCollection;
 use Contena\Frontend\Page\Page;
 
 class AddressListingPage extends Page
@@ -26,15 +25,7 @@ class AddressListingPage extends Page
         $this->addresses = $addresses;
     }
 
-    public function getSalutations(): SalutationCollection
-    {
-        return $this->salutations;
-    }
 
-    public function setSalutations(SalutationCollection $salutations): void
-    {
-        $this->salutations = $salutations;
-    }
 
     public function getCountries(): CountryCollection
     {
@@ -46,15 +37,7 @@ class AddressListingPage extends Page
         $this->countries = $countries;
     }
 
-    public function getCart(): Cart
-    {
-        return $this->cart;
-    }
 
-    public function setCart(Cart $cart): void
-    {
-        $this->cart = $cart;
-    }
 
     public function getAddress(): ?UserAddressEntity
     {

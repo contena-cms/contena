@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RouteScopeWhitelistInterface;
 use Contena\Frontend\Controller\StorybookController;
 

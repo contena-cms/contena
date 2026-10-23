@@ -3,7 +3,6 @@
 namespace Contena\Core\System\CustomField\Xml;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

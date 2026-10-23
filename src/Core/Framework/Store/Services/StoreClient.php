@@ -6,7 +6,6 @@ use GuzzleHttp\ClientInterface;
 use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Event\ContenaAccountLoginEvent;
@@ -28,6 +27,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
 
 /**
  * @internal

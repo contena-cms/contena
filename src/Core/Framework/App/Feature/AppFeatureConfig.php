@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Feature;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The typed data of a single feature an app declares in its manifest, stored as the

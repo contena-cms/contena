@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Exception\CustomFieldTypeNotFoundException;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\CustomFieldTypeFactory;
 
 /**

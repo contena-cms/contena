@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Admin;
 
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

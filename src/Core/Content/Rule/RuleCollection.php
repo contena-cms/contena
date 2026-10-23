@@ -4,27 +4,13 @@ namespace Contena\Core\Content\Rule;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
-use Contena\Core\System\Channel\ChannelContext;
 
 /**
  * @extends EntityCollection<RuleEntity>
  */
 class RuleCollection extends EntityCollection
 {
-    public function filterMatchingRules(Cart $cart, ChannelContext $context): self
-    {
-        return $this->filter(
-            static function (RuleEntity $rule) use ($cart, $context) {
-                if (!$rule->getPayload() instanceof Rule) {
-                    return false;
-                }
-
-                return $rule->getPayload()->match(new CartRuleScope($cart, $context));
-            }
-        );
-    }
 
     public function filterForContext(): self
     {

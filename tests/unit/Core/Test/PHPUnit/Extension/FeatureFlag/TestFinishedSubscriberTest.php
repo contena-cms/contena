@@ -7,7 +7,6 @@ use PHPUnit\Event\Test\Finished;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\SavedConfig;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestFinishedSubscriber;
 use Contena\Tests\Unit\Core\Test\PHPUnit\TelemetryInfoFactory;

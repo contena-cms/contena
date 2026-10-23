@@ -11,12 +11,11 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -129,7 +128,6 @@ class AppSeoUrlSynchronizer
         $criteria->setTitle('app-seo-url::static-sync');
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
-            new EqualsFilter('typeId', Defaults::CHANNEL_TYPE_API),
         ]));
         $criteria->addAssociation('domains');
 

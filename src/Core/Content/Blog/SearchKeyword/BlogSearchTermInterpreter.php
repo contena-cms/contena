@@ -7,11 +7,8 @@ use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTerm;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\ArrayNormalizer;
 use Contena\Core\Framework\Uuid\Uuid;
 
@@ -19,19 +16,6 @@ class BlogSearchTermInterpreter implements BlogSearchTermInterpreterInterface
 {
     private const RELEVANT_KEYWORD_COUNT = 8;
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly Connection $connection,
-        private readonly TokenizerInterface $tokenizer,
-        private readonly LoggerInterface $logger,
-        private readonly AbstractTokenFilter $tokenFilter,
-        private readonly KeywordLoader $keywordLoader,
-        private readonly SearchConfigLoader $configLoader,
-        private readonly int $relevantKeywordCount = self::RELEVANT_KEYWORD_COUNT,
-    ) {
-    }
 
     public function interpret(string $word, Context $context): SearchPattern
     {

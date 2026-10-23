@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\Util\Database;
 
 use Doctrine\DBAL\Schema\Index as DbalIndex;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

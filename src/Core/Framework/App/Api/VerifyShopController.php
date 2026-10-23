@@ -6,7 +6,6 @@ namespace Contena\Core\Framework\App\Api;
 
 use Contena\Core\Framework\App\Api\DTO\VerifyShop;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;

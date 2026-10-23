@@ -6,14 +6,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserCollection;
 use Contena\Core\Content\Flow\Dispatching\Action\AddUserTagAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\UserCollection;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

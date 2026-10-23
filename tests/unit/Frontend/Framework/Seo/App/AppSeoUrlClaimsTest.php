@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Seo\App;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlClaims;
 

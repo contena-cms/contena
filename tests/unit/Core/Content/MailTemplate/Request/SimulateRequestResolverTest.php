@@ -10,7 +10,6 @@ use Contena\Core\Content\MailTemplate\Request\Resolver\SimulateRequestResolver;
 use Contena\Core\Content\MailTemplate\Request\SimulateRequest;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\ChannelProvider;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelEntity;

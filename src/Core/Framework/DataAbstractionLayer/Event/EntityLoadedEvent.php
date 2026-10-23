@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template TEntity of Entity

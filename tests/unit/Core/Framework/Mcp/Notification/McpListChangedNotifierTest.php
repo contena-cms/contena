@@ -7,7 +7,6 @@ use Mcp\Server\Session\SessionStoreInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
 use Contena\Core\Framework\Mcp\Notification\McpListVersions;

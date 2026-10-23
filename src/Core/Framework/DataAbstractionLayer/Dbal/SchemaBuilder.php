@@ -6,9 +6,9 @@ use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Content\Cms\DataAbstractionLayer\Field\SlotConfigField;
 use Contena\Core\Content\Flow\DataAbstractionLayer\Field\FlowTemplateConfigField;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
@@ -72,7 +72,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VariantListingConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionDataPayloadField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 
 /**

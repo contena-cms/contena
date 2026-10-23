@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Api\DTO\VerifyShop;
 use Contena\Core\Framework\App\Api\VerifyShopController;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Symfony\Component\HttpFoundation\Request;

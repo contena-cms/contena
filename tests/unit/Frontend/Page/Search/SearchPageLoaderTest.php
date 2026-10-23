@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Search\AbstractBlogSearchRoute;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Generator;

@@ -4,7 +4,6 @@ namespace Contena\Administration\Events;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class PreResetExcludedSearchTermEvent extends Event implements ContenaEvent

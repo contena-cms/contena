@@ -19,7 +19,6 @@ use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\App\Payload\AppPayloadStruct;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Exception\JsonDecodingException;
 use Contena\Core\Test\Generator;
 

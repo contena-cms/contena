@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogDefinition;

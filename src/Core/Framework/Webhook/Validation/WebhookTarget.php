@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Validation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

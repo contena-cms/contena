@@ -225,7 +225,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(Connection::class),
             service('event_dispatcher'),
-            service(CartPersister::class),
             service(ClockInterface::class),
             param('contena.api.store.context_lifetime'),
         ]);
@@ -242,7 +241,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('user_group.repository'),
             service('user_address.repository'),
             service('payment_method.repository'),
-            service(TaxDetector::class),
             tagged_iterator('tax.rule_type_filter'),
             service('event_dispatcher'),
             service('currency_country_rounding.repository'),
@@ -292,9 +290,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChannelContextService::class)
         ->args([
             service(ChannelContextFactory::class),
-            service(CartCalculator::class),
             service(ChannelContextPersister::class),
-            service(CartService::class),
             service('event_dispatcher'),
             service(RequestStack::class),
         ]);
@@ -302,8 +298,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChannelContextRestorer::class)
         ->args([
             service(ChannelContextFactory::class),
-            service(CartRuleLoader::class),
-            service(OrderConverter::class),
             service('order.repository'),
             service(Connection::class),
             service('event_dispatcher'),
@@ -313,9 +307,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(ChannelContextFactory::class),
             service(ChannelContextPersister::class),
-            service(CartService::class),
-            service(CartCalculator::class),
-            service(CartPersister::class),
             service('event_dispatcher'),
             service(RequestStack::class),
         ]);

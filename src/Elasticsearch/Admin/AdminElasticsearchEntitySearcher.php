@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntitySearcher;
 
 class AdminElasticsearchEntitySearcher implements EntitySearcherInterface

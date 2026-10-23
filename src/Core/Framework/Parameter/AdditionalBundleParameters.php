@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Parameter;
 
 use Composer\Autoload\ClassLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 
 final class AdditionalBundleParameters

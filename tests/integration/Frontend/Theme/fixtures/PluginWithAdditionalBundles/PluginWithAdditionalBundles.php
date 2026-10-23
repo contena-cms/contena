@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Frontend\Theme\fixtures\PluginWithAdditional
 
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\PluginWithAdditionalBundles\SubBundle1\SubBundle1;
 
 /**
  * @internal

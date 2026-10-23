@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnore;
 
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

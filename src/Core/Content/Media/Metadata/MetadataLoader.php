@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\Metadata;
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\Metadata\MetadataLoader\MetadataLoaderInterface;
-use Contena\Core\Framework\Log\Package;
 
 class MetadataLoader
 {

@@ -13,7 +13,6 @@ use Contena\Core\Content\Mail\Transport\MailerTransportLoader;
 use Contena\Core\Content\Mail\Transport\SmtpOauthAuthenticator;
 use Contena\Core\Content\Mail\Transport\SmtpOauthTransportFactoryDecorator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;

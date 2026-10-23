@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\SystemCheck;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Category;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;

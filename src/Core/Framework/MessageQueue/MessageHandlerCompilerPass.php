@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

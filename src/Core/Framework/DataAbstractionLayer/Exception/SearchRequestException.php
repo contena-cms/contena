@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaException;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;

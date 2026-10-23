@@ -2,13 +2,12 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
-use Contena\Core\System\User\UserCollection;
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\UserCollection;
 
 /**
  * @internal

@@ -14,8 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityNotExists;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleDefinition;

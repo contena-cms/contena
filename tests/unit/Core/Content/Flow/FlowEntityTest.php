@@ -10,7 +10,6 @@ use Contena\Core\Content\Flow\FlowEntity;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventEntity;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

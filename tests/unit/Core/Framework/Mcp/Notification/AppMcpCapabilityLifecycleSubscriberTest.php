@@ -10,13 +10,11 @@ use Contena\Core\Framework\App\Event\AppDeletedEvent;
 use Contena\Core\Framework\App\Event\AppInstalledEvent;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityDetector;
 use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityLifecycleSubscriber;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

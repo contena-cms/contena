@@ -15,7 +15,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\DTO\Service as ServiceDto;
 use Contena\Core\Service\Event\ServiceInstalledEvent;
 use Contena\Core\Service\Event\ServiceUpdatedEvent;
@@ -24,6 +23,8 @@ use Contena\Core\Service\Requirement\RequirementsValidator;
 use Contena\Core\Service\ServiceRegistry\Client;
 use Contena\Core\Service\ServiceRegistry\ServiceEntry;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\App\Exception\AppAlreadyInstalledException;
+use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 
 /**
  * Installs, updates and uninstalls self-managed service apps.

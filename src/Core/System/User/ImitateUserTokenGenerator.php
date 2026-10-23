@@ -5,12 +5,11 @@ namespace Contena\Core\System\User;
 use Lcobucci\JWT\Configuration;
 use Lcobucci\JWT\Token\RegisteredClaims;
 use Psr\Clock\ClockInterface;
-use Contena\Core\System\User\Struct\ImitateUserToken;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\JWT\Channel\JWTGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\System\User\Struct\ImitateUserToken;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 

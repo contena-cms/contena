@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 
 use Contena\Core\Framework\Adapter\Twig\Node\SwInclude;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
-use Contena\Core\Framework\Log\Package;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\IncludeNode;
 use Twig\Node\Node;

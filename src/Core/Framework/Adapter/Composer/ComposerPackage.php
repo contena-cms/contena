@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Composer;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

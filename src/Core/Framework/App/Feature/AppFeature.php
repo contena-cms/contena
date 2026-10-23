@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Feature;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * A feature as declared by an app: the typed config together with the declaring app.

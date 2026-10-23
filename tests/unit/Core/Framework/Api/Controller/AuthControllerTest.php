@@ -12,7 +12,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Controller\AuthController;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;

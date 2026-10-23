@@ -11,7 +11,6 @@ use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderTagRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfUuid;
 use Contena\Core\System\Channel\ChannelContext;

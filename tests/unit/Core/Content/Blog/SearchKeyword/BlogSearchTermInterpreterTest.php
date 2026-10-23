@@ -6,13 +6,12 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Blog\SearchKeyword\KeywordLoader;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchTermInterpreter;
+use Contena\Core\Content\Blog\SearchKeyword\KeywordLoader;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\TokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 
 /**

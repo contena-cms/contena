@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Inherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyIdField;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 class ManyToManyIdFieldUpdater

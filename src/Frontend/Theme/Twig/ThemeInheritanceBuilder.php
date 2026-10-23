@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Twig;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 

@@ -4,16 +4,14 @@ namespace Contena\Tests\Integration\Core\Content\ImportExport\Subscriber;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRecordEvent;
 use Contena\Core\Content\ImportExport\Event\Subscriber\BlogCategoryPathsSubscriber;
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\Sync\SyncService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

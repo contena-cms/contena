@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Attribute;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 #[\Attribute(\Attribute::TARGET_CLASS)]
 final class Entity

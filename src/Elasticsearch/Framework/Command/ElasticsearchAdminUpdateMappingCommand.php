@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

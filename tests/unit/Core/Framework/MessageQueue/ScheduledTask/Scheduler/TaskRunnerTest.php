@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\ScheduledTask\Scheduler
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;

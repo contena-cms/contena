@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Flow\Action;
 
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

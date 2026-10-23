@@ -4,12 +4,9 @@ namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
 use Contena\Core\Content\Flow\Dispatching\Aware\OrderTransactionAware;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\OrderTransactionProvider;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class OrderTransactionStorer extends FlowStorer
@@ -54,33 +51,4 @@ class OrderTransactionStorer extends FlowStorer
         );
     }
 
-    private function lazyLoad(StorableFlow $storableFlow): ?OrderTransactionEntity
-    {
-        $id = $storableFlow->getStore(OrderTransactionAware::ORDER_TRANSACTION_ID);
-        if ($id === null) {
-            return null;
-        }
-
-        if (!Feature::isActive('v6.8.0.0')) {
-            $criteria = $this->orderTransactionProvider->getCriteria($id, $storableFlow->getContext());
-
-            $event = new BeforeLoadStorableFlowDataEvent(
-                OrderTransactionDefinition::ENTITY_NAME,
-                $criteria,
-                $storableFlow->getContext(),
-            );
-
-            $this->dispatcher->dispatch($event, $event->getName());
-
-            $orderTransaction = $this->orderTransactionRepository->search($criteria, $storableFlow->getContext())->getEntities()->get($id);
-
-            if ($orderTransaction) {
-                return $orderTransaction;
-            }
-
-            return null;
-        }
-
-        return $this->orderTransactionProvider->getData($id, $storableFlow->getContext());
-    }
 }

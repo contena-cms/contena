@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Redis;
 
 use Psr\Container\ContainerInterface;
 use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * RedisConnection corresponds to a return type of symfony's RedisAdapter::createConnection and may change with symfony update.

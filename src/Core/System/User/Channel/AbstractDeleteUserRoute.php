@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * This route can be used to delete a user

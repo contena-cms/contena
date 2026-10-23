@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Script\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\System\Channel\Api\ResponseFields;
 use Contena\Core\System\Channel\Api\StructEncoder;

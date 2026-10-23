@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
 use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Represents a single HTTP cache policy with cache control directives.

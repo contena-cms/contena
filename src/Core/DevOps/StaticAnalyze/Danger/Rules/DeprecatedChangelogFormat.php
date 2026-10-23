@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The per-change markdown files under `changelog/_unreleased/` were replaced by the central

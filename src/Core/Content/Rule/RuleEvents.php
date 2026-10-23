@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Rule;
 
 use Contena\Core\Content\Rule\Event\RuleIndexerEvent;
-use Contena\Core\Framework\Log\Package;
 
 class RuleEvents
 {

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinderInterface;
-use Contena\Core\Framework\Log\Package;
 use Twig\Node\EmptyNode;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Node;

@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core\System\NumberRange\Command;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\Command\MigrateIncrementStorageCommand;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementSqlStorage;

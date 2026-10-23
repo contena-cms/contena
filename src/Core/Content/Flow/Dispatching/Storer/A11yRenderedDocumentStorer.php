@@ -4,16 +4,13 @@ namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
-use Contena\Core\Content\Shared\MailFlow\DocumentResolver;
 use Contena\Core\Content\Shared\MailFlow\Event\MailFlowDataCriteriaEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\A11yRenderedDocumentAware;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -21,18 +18,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
  */
 class A11yRenderedDocumentStorer extends FlowStorer
 {
-    /**
-     * @internal
-     *
-     * @param EntityRepository<DocumentCollection> $documentRepository
-     */
-    public function __construct(
-        private readonly EntityRepository $documentRepository,
-        private readonly EventDispatcherInterface $dispatcher,
-        private readonly DocumentResolver $documentResolver,
-        private readonly DocumentFileResolver $documentFileResolver
-    ) {
-    }
 
     public function store(FlowEventAware $event, array $stored): array
     {

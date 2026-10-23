@@ -6,7 +6,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\NoNativeTimeFunctionRule;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

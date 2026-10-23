@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Stock;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Stock\StockAlteration;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

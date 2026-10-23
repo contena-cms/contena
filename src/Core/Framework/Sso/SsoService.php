@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Sso;
 
 use Contena\Core\Framework\Api\OAuth\AuthCodeRepository;
 use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfig;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 

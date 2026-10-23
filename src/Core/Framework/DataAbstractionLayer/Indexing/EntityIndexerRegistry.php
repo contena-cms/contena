@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\Telemetry\IndexerMetric
 use Contena\Core\Framework\Event\ProgressAdvancedEvent;
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
 use Contena\Core\Framework\Event\ProgressStartedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;

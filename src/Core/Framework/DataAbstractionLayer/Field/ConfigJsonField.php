@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\ConfigJsonFieldAccessorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ConfigJsonFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -19,7 +18,6 @@ class ConfigJsonField extends JsonField
         array $propertyMapping = []
     ) {
         $wrappedPropertyMapping = [
-            new JsonField(self::STORAGE_KEY, self::STORAGE_KEY, $propertyMapping),
         ];
         parent::__construct($storageName, $propertyName, $wrappedPropertyMapping);
     }

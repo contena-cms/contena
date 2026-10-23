@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Lifecycle\PluginInstallCommand;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
 use Contena\Core\Framework\Plugin\Context\InstallContext;

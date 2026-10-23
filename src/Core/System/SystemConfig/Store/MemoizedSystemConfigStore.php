@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig\Store;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;

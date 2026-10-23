@@ -8,9 +8,8 @@ use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Blog\Events\BlogStockAlteredEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
-use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Contena\Elasticsearch\Blog\BlogUpdater;
+use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 
 /**
  * @internal

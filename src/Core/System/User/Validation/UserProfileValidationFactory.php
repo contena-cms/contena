@@ -2,14 +2,13 @@
 
 namespace Contena\Core\System\User\Validation;
 
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\Constraint\NoHtml;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\Length;

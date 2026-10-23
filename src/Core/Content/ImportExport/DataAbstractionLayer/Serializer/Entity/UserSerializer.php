@@ -2,16 +2,15 @@
 
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Contracts\Service\ResetInterface;
 
 class UserSerializer extends EntitySerializer implements ResetInterface

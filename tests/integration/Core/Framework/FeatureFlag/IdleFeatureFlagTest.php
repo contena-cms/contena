@@ -4,9 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\FeatureFlag;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Tests\Unit\Core\Framework\FeatureTest;
 use Symfony\Component\Finder\Finder;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework;
 
-use Contena\Core\Framework\Log\Package;
 
 interface ThemeInterface
 {

@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
 use Danger\Struct\File;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Redis tests are selected by the "redis" testsuite in phpunit.xml.dist (a static file list), not by a

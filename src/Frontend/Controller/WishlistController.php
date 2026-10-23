@@ -2,23 +2,22 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Channel\AbstractAddWishlistBlogRoute;
-use Contena\Core\System\User\Channel\AbstractLoadWishlistRoute;
-use Contena\Core\System\User\Channel\AbstractMergeWishlistBlogRoute;
-use Contena\Core\System\User\Channel\AbstractRemoveWishlistBlogRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Channel\AbstractAddWishlistBlogRoute;
+use Contena\Core\System\User\Channel\AbstractLoadWishlistRoute;
+use Contena\Core\System\User\Channel\AbstractMergeWishlistBlogRoute;
+use Contena\Core\System\User\Channel\AbstractRemoveWishlistBlogRoute;
+use Contena\Core\System\User\UserEntity;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Wishlist\GuestWishlistPageLoadedHook;
 use Contena\Frontend\Page\Wishlist\GuestWishlistPageLoader;
+use Contena\Frontend\Page\Wishlist\WishListPageBlogCriteriaEvent;
 use Contena\Frontend\Page\Wishlist\WishlistPageLoadedHook;
 use Contena\Frontend\Page\Wishlist\WishlistPageLoader;
-use Contena\Frontend\Page\Wishlist\WishListPageBlogCriteriaEvent;
 use Contena\Frontend\Page\Wishlist\WishlistWidgetLoadedHook;
 use Contena\Frontend\Pagelet\Wishlist\GuestWishlistPageletLoadedHook;
 use Contena\Frontend\Pagelet\Wishlist\GuestWishlistPageletLoader;
@@ -27,6 +26,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\System\User\Exception\DuplicateWishlistBlogException;
+use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
 
 /**
  * @internal

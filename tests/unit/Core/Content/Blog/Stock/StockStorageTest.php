@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\Events\BlogNoLongerAvailableEvent;
 use Contena\Core\Content\Blog\Stock\StockLoadRequest;
 use Contena\Core\Content\Blog\Stock\StockStorage;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

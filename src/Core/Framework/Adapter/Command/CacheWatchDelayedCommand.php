@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Command;
 
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\SignalableCommandInterface;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Cms;
 
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractDefaultMediaResolver
 {

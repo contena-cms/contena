@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Cms\DataResolver;
 
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements \IteratorAggregate<string, array<string, Criteria>>

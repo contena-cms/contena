@@ -36,7 +36,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\CronInterval;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final
@@ -49,7 +48,6 @@ class EntityGenerator
 namespace #domain#;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 #uses#
 
 class #entity#Entity extends Entity

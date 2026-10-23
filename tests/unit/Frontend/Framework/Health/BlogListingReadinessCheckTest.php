@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;

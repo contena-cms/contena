@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Mcp\Feature;
 
 use Contena\Core\Framework\App\Feature\AppFeatureConfig;
 use Contena\Core\Framework\App\Feature\TranslatedString;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

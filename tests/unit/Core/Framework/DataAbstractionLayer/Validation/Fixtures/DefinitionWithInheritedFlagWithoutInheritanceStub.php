@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Validation\Fixtures;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

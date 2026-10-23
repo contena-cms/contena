@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Framework;
 
 use OpenSearchDSL\Aggregation\AbstractAggregation;
 use OpenSearchDSL\Aggregation\Type\BucketingTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

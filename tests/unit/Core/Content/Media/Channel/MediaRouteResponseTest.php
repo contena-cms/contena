@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Core\Content\Media\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Media\Channel\MediaRouteResponse;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Media\Channel\MediaRouteResponse;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

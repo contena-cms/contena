@@ -12,7 +12,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PolicyRegistry;
 use Contena\Core\Framework\Webhook\Hookable;
@@ -27,6 +26,7 @@ use Contena\Core\Framework\Webhook\Webhook;
 use Contena\Core\Profiling\Profiler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 
 /**
  * @internal

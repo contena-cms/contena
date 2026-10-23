@@ -4,7 +4,6 @@ namespace Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\Subscriber;
 
 use PHPUnit\Event\Test\Finished;
 use PHPUnit\Event\Test\FinishedSubscriber;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 
 /**

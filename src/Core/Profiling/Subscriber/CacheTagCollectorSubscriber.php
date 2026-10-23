@@ -4,7 +4,6 @@ namespace Contena\Core\Profiling\Subscriber;
 
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Event\AddCacheTagEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;

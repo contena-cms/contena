@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Filesystem\Plugin;
 
-use Contena\Core\Framework\Log\Package;
 
 interface WriteBatchInterface
 {

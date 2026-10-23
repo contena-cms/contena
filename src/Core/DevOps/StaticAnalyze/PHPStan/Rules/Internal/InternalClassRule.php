@@ -22,12 +22,12 @@ use Contena\Core\Framework\Demodata\DemodataService;
 use Contena\Core\Framework\Demodata\Event\DemodataRequestCreatedEvent;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Frontend\Controller\FrontendController;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @implements Rule<InClassNode>

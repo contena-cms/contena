@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template IDStructure of string|array<string, string> = string

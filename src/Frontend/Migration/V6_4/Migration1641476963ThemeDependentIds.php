@@ -3,7 +3,7 @@
 namespace Contena\Frontend\Migration\V6_4;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @internal

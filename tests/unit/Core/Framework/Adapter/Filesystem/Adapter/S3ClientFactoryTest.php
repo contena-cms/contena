@@ -6,7 +6,6 @@ use AsyncAws\S3\S3Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\S3ClientFactory;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Component\OptionsResolver\Exception\MissingOptionsException;

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\ShopId;
 
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

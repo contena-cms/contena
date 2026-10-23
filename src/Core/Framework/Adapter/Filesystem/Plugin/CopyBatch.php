@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Filesystem\Plugin;
 use League\Flysystem\Filesystem;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Framework\Log\Package;
 
 class CopyBatch
 {

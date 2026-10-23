@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\Script\Facade;
 
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\Script;

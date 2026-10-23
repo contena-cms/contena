@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Administration;
 use Contena\Administration\DependencyInjection\AdministrationMigrationCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Migration\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\Command\MigrationCommand;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;

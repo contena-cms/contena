@@ -15,7 +15,6 @@ use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Framework\Deprecation\BCChange\VisibilityChange;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Detects Core property accesses that will be outside the announced visibility scope.

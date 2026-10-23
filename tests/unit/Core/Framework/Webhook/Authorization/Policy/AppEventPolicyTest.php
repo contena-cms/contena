@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\Event\AppDeletedEvent;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Policy\AppEventPolicy;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Hookable;

@@ -5,7 +5,6 @@ namespace Contena\Core\Test\Stub\App;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 

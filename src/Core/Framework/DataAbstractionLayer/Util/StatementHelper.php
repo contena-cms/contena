@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Util;
 
 use Doctrine\DBAL\Result;
 use Doctrine\DBAL\Statement;
-use Contena\Core\Framework\Log\Package;
 
 final class StatementHelper
 {

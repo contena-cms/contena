@@ -3,21 +3,21 @@
 namespace Contena\Core\Content\Blog\Channel\Search;
 
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\Extension\BlogSearchRouteExtension;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
-use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
+use Contena\Core\Content\Blog\Extension\BlogSearchRouteExtension;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilderInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogSearchRoute extends AbstractBlogSearchRoute

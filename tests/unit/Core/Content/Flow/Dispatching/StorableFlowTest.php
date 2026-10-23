@@ -8,7 +8,6 @@ use Contena\Core\Content\Flow\Dispatching\FlowState;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\FlowException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

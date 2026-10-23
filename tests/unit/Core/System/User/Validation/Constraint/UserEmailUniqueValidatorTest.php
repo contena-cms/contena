@@ -4,14 +4,13 @@ namespace Contena\Tests\Unit\Core\System\User\Validation\Constraint;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\User\UserException;
 use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Contena\Core\System\User\Validation\Constraint\UserEmailUniqueValidator;
 use Contena\Core\System\User\Validation\UserEmailUniqueCheck;
 use Contena\Core\System\User\Validation\UserEmailUniqueChecker;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\ConstraintValidatorInterface;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;

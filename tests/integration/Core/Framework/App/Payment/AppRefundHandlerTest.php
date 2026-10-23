@@ -9,7 +9,6 @@ use Contena\Core\Checkout\Payment\PaymentException;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Payment\Response\RefundResponse;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -7,7 +7,6 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\InAppPurchases\Response\InAppPurchasesResponse;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

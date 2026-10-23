@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\QueryDataBag;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Controller\ValueResolverInterface;

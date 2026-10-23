@@ -75,27 +75,6 @@ trait BasicTestDataBehaviour
         return $id;
     }
 
-    protected function getAvailablePaymentMethod(?string $channelId = null): PaymentMethodEntity
-    {
-        /** @var EntityRepository<PaymentMethodCollection> $repository */
-        $repository = static::getContainer()->get('payment_method.repository');
-
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('active', true))
-            ->addFilter(new EqualsFilter('availabilityRuleId', null));
-
-        if ($channelId) {
-            $criteria->addFilter(new EqualsFilter('channels.id', $channelId));
-        }
-
-        $paymentMethod = $repository->search($criteria, Context::createDefaultContext())->getEntities()->first();
-        if ($paymentMethod === null) {
-            throw new \LogicException('No available Payment method configured');
-        }
-
-        return $paymentMethod;
-    }
 
     protected function getValidShippingMethodId(?string $channelId = null): string
     {
@@ -117,31 +96,6 @@ trait BasicTestDataBehaviour
         return $id;
     }
 
-    protected function getAvailableShippingMethod(?string $channelId = null): ShippingMethodEntity
-    {
-        /** @var EntityRepository<ShippingMethodCollection> $repository */
-        $repository = static::getContainer()->get('shipping_method.repository');
-
-        $criteria = (new Criteria())
-            ->addAssociation('prices')
-            ->addFilter(new EqualsFilter('shipping_method.prices.calculation', 1))
-            ->addFilter(new EqualsFilter('active', true))
-            ->addSorting(new FieldSorting('name'));
-
-        if ($channelId) {
-            $criteria->addFilter(new EqualsFilter('channels.id', $channelId));
-        }
-
-        $shippingMethods = $repository->search($criteria, Context::createDefaultContext())->getEntities();
-
-        foreach ($shippingMethods as $shippingMethod) {
-            if ($shippingMethod->getAvailabilityRuleId() !== null) {
-                return $shippingMethod;
-            }
-        }
-
-        throw new \LogicException('No available ShippingMethod configured');
-    }
 
     protected function getValidSalutationId(): string
     {

@@ -3,14 +3,13 @@
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
+use Contena\Core\Framework\Event\ChannelContextAware;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
-use Contena\Core\Framework\Event\ChannelContextAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\ChannelContext;
 
 class ChannelContextStorer extends FlowStorer
 {

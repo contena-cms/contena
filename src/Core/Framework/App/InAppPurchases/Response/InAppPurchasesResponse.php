@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Framework\App\InAppPurchases\Response;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\AssignArrayInterface;
-use Contena\Core\Framework\Struct\AssignArrayTrait;
 
 /**
  * @internal

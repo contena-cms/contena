@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Finish;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

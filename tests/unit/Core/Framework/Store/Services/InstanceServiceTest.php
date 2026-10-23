@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Store\Services;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\InstanceService;
 use Contena\Core\Kernel;
 

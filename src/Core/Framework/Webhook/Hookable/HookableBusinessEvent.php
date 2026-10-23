@@ -12,7 +12,6 @@ use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ObjectType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\BusinessEventEncoder;
 use Contena\Core\Framework\Webhook\Hookable;

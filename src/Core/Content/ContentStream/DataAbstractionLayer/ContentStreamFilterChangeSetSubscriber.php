@@ -5,7 +5,6 @@ namespace Contena\Core\Content\ContentStream\DataAbstractionLayer;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSetAware;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

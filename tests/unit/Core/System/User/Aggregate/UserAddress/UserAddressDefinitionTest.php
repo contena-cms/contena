@@ -4,9 +4,6 @@ namespace Contena\Tests\Unit\Core\System\User\Aggregate\UserAddress;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -14,7 +11,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

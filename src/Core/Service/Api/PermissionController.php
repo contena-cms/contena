@@ -3,7 +3,6 @@
 namespace Contena\Core\Service\Api;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Service\Permission\PermissionsService;

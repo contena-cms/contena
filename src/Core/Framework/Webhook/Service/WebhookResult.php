@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Service;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

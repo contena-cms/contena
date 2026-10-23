@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig\Node;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Node\ReturnNode;
-use Contena\Core\Framework\Log\Package;
 use Twig\Compiler;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;

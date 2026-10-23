@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceGeneratorCommand;
 use Contena\Core\DevOps\Docs\Script\ServiceReferenceGenerator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

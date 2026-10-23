@@ -4,14 +4,12 @@ namespace Contena\Tests\Unit\Core\System\User\Extension;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Extension\RegisterRouteExtension;
-use Contena\Core\System\User\Channel\UserResponse;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\User\Channel\UserResponse;
+use Contena\Core\System\User\Extension\RegisterRouteExtension;
+use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Examples\RegisterRouteExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

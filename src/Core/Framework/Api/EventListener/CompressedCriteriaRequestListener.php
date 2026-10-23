@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\EventListener;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;

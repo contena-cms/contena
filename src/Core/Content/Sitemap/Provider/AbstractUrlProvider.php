@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Sitemap\Provider;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 

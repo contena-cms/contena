@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ConfigJsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -11,8 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\Test\Annotation\DisabledFeatures;
@@ -23,8 +21,6 @@ use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeEntity;
 use Contena\Frontend\Theme\ThemeMergedConfigBuilder;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeFixtures;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeFixtures_6_7;
 
 /**
  * @internal

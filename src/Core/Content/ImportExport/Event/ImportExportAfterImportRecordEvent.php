@@ -5,7 +5,6 @@ namespace Contena\Core\Content\ImportExport\Event;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

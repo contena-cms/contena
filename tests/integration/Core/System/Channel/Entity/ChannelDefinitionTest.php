@@ -3,29 +3,27 @@
 namespace Contena\Tests\Integration\Core\System\Channel\Entity;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Category\Channel\ChannelCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Category\Channel\ChannelCategoryDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
-use Contena\Core\System\Channel\ChannelCollection;
-use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
 

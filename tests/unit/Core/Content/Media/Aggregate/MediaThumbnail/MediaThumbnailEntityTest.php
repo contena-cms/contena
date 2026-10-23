@@ -8,7 +8,6 @@ use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailEntity;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeEntity;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

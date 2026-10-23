@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 trait CustomFieldActionTrait

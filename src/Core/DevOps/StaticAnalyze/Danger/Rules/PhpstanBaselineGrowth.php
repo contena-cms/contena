@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
 use Danger\Struct\File;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The PHPStan baseline may only shrink: a pull request must not add more baseline entries than

@@ -6,8 +6,8 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @internal

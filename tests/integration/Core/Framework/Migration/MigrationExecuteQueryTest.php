@@ -4,10 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\Migration;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Migration\MigrationStep;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Migration\Test\NullConnection;
 
 /**

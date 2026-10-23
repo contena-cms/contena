@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer;
 
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field\AbstractFieldSerializer;
+use Contena\Core\Content\ImportExport\Exception\UpdatedByValueNotFoundException;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -15,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationFie
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageDefinition;
 
 class PrimaryKeyResolver

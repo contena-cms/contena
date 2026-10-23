@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Rule;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\RuleConfig;
 
 /**

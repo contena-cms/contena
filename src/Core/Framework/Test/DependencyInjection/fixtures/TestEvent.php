@@ -17,12 +17,6 @@ class TestEvent extends Event implements FlowEventAware
 {
     final public const EVENT_NAME = 'test.event';
 
-    public function __construct(
-        private readonly Context $context,
-        private readonly UserEntity $user,
-        private readonly OrderEntity $order
-    ) {
-    }
 
     public function getName(): string
     {
@@ -39,10 +33,6 @@ class TestEvent extends Event implements FlowEventAware
         return $this->context;
     }
 
-    public function getOrder(): OrderEntity
-    {
-        return $this->order;
-    }
 
     public static function getAvailableData(): EventDataCollection
     {

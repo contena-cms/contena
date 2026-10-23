@@ -13,7 +13,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\WebhookException;
 
 /**

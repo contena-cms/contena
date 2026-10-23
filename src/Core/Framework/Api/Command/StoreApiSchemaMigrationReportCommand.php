@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\Command;
 
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreStoreApiSchemaMigrationScopeProvider;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\StoreApiSchemaMigrationReporter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;

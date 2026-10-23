@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\BoolFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class BoolField extends Field implements StorageAware
 {

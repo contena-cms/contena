@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Mcp\Authentication;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\ClientRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Authentication\McpAuthenticationListener;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;

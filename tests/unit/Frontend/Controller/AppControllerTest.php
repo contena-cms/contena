@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Api\AppJWTGenerateRoute;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\AppController;
 use Symfony\Component\HttpFoundation\Response;

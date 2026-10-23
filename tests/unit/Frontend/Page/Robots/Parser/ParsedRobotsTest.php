@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Page\Robots\Parser;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Robots\Parser\ParsedRobots;
 use Contena\Frontend\Page\Robots\Parser\ParseIssue;
 use Contena\Frontend\Page\Robots\Parser\ParseIssueSeverity;

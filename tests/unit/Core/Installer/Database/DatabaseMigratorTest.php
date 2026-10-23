@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Installer\Database\DatabaseMigrator;

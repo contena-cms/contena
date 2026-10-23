@@ -6,7 +6,6 @@ use Google\Cloud\Storage\StorageClient;
 use League\Flysystem\FilesystemAdapter;
 use League\Flysystem\GoogleCloudStorage\GoogleCloudStorageAdapter;
 use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class GoogleStorageFactory implements AdapterFactoryInterface

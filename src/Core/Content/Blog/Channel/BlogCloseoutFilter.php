@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

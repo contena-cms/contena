@@ -3,7 +3,6 @@
 namespace Contena\Core\System\NumberRange\Exception;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\NumberRange\NumberRangeException;
 use Symfony\Component\HttpFoundation\Response;
 

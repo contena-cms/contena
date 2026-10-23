@@ -6,7 +6,6 @@ use Mcp\Capability\Attribute\McpTool;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolAttributeReader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Tool\McpToolResponse;
 
 /**

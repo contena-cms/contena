@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Profiling\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
@@ -20,16 +19,6 @@ class CartDataCollectorSubscriber extends AbstractDataCollector implements Event
 
     private ?ChannelContext $channelContext = null;
 
-    /**
-     * @param array<string, array{serviceId: string, priority: int, decoratedBy: list<array{serviceId: string, priority: int}>}> $cartCollectors
-     * @param array<string, array{serviceId: string, priority: int, decoratedBy: list<array{serviceId: string, priority: int}>}> $cartProcessors
-     */
-    public function __construct(
-        private readonly AbstractCartPersister $cartPersister,
-        private readonly array $cartCollectors = [],
-        private readonly array $cartProcessors = [],
-    ) {
-    }
 
     public static function getSubscribedEvents(): array
     {
@@ -45,15 +34,6 @@ class CartDataCollectorSubscriber extends AbstractDataCollector implements Event
         $this->channelContext = null;
     }
 
-    public function getCart(): ?Cart
-    {
-        $cart = $this->data['cart'] ?? null;
-        if (!$cart instanceof Cart) {
-            return null;
-        }
-
-        return $cart;
-    }
 
     public function getCurrency(): string
     {
@@ -108,16 +88,4 @@ class CartDataCollectorSubscriber extends AbstractDataCollector implements Event
         $this->channelContext = $event->getChannelContext();
     }
 
-    private function getCartData(): ?Cart
-    {
-        if ($this->cartToken === null || $this->channelContext === null) {
-            return null;
-        }
-
-        try {
-            return $this->cartPersister->load($this->cartToken, $this->channelContext);
-        } catch (\Exception) {
-            return null;
-        }
-    }
 }

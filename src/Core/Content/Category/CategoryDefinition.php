@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Category;
 
-use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
-use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
-use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
+use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
+use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -20,13 +20,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Deprecated;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ReverseInherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
@@ -44,9 +42,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TreePathField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\CustomEntity\CustomEntityDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\CustomEntity\CustomEntityDefinition;
 use Contena\Core\System\Tag\TagDefinition;
 
 class CategoryDefinition extends EntityDefinition
@@ -129,18 +126,12 @@ class CategoryDefinition extends EntityDefinition
             (new TreePathField('path', 'path'))->addFlags(new ApiAware())->setDescription('A relative URL to the category.'),
             (new ChildCountField())->addFlags(new ApiAware()),
 
-            (new StringField('type', 'type'))->addFlags(new ApiAware(), new Required(), new Choice([
-                self::TYPE_PAGE,
-                self::TYPE_LINK,
-                self::TYPE_FOLDER,
-            ]))->setDescription('Type of categories like `page`, `folder`, `link`.'),
             (new StringField('blog_assignment_type', 'blogAssignmentType'))->addFlags(new ApiAware(), new Required())->setDescription('Type of blog assignment: Dynamic blog group as or `content_stream` or Manual assignment as `blog`.'),
             (new BoolField('visible', 'visible'))->addFlags(new ApiAware())->setDescription('Displays categories on category page when true.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the category is listed for selection.'),
 
             (new IntField('visible_child_count', 'visibleChildCount'))->addFlags(new Runtime(), new ApiAware()),
 
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             new TranslatedField('slotConfig'),
             (new TranslatedField('linkType'))->addFlags(new ApiAware()),

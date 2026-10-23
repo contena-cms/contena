@@ -3,7 +3,6 @@
 namespace Contena\Core\System\SystemConfig\Util;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\XmlReader;
 use Contena\Core\System\SystemConfig\SystemConfigException;
 use Symfony\Component\Config\Util\XmlUtils;

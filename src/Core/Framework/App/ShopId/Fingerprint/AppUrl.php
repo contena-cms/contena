@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\ShopId\Fingerprint;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\Fingerprint;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

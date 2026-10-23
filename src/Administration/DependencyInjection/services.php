@@ -47,6 +47,8 @@ use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\Tag\Service\FilterTagIdsService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Administration\Controller\AdminContentStreamController;
+use Contena\Administration\System\Channel\Subscriber\ChannelAdminUserConfigSubscriber;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -230,7 +232,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(OrderAmountService::class)
         ->args([
             service(Connection::class),
-            service(CashRounding::class),
             param('contena.dbal.time_zone_support_enabled'),
         ]);
 

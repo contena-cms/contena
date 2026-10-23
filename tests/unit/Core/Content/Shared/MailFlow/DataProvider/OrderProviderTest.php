@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\OrderProvider;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ConfigJsonField;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigChangedEvent;
@@ -24,6 +23,7 @@ use Contena\Core\System\SystemConfig\Event\SystemConfigMultipleChangedEvent;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\System\SystemConfig\Exception\BundleConfigNotFoundException;
 
 class SystemConfigService implements ResetInterface
 {

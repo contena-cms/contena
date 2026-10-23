@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Script\Execution;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only rely on the concrete hook implementations

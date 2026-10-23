@@ -9,7 +9,6 @@ use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Search\SearchPageLoader;
-use Contena\Tests\Bench\AbstractBenchCase;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

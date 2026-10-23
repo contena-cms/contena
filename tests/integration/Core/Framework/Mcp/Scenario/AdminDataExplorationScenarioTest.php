@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Mcp\Scenario;
 
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

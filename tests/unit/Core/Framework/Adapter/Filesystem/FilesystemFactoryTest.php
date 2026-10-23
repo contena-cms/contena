@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\LocalFactory;
 use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**

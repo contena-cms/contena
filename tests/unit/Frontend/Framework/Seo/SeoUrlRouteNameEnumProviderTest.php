@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRouteNameEnumProvider;
 

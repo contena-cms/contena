@@ -51,6 +51,7 @@ use Contena\Frontend\Framework\Captcha\AbstractCaptcha;
 use Contena\Frontend\Framework\Media\FrontendMediaValidatorInterface;
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 use Twig\Extension\ExtensionInterface;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
 
 return [
     'parameters' => [

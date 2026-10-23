@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\OAuth\AuthCodeRepository;
 use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

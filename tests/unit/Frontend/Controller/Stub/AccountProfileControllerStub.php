@@ -9,7 +9,6 @@ use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Controller\AccountProfileController;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
-use Contena\Tests\Unit\Frontend\Controller\FrontendControllerRecorder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;

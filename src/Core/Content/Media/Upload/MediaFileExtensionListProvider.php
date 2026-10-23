@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Upload;
 
 use Contena\Core\Content\Media\Event\MediaFileExtensionWhitelistEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mime\MimeTypes;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

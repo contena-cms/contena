@@ -11,7 +11,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 use Contena\Frontend\Framework\Seo\App\AppEntitySeoUrlConfig;

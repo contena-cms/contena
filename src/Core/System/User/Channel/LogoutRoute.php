@@ -2,40 +2,24 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Event\UserLogoutEvent;
-use Contena\Core\System\User\Extension\LogoutRouteExtension;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Context\ChannelContextPersister;
-use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\System\Channel\ContextTokenResponse;
-use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\Event\UserLogoutEvent;
+use Contena\Core\System\User\Extension\LogoutRouteExtension;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class LogoutRoute extends AbstractLogoutRoute
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly ChannelContextPersister $contextPersister,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly SystemConfigService $systemConfig,
-        private readonly CartService $cartService,
-        private readonly ChannelContextServiceInterface $contextService,
-        private readonly ExtensionDispatcher $extensions,
-    ) {
-    }
 
     public function getDecorated(): AbstractLogoutRoute
     {

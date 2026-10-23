@@ -7,7 +7,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Rule\RuleEvents;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\PluginPostActivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostInstallEvent;
@@ -20,15 +19,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class RuleIndexerSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly Connection $connection,
-        private readonly CartRuleLoader $cartRuleLoader,
-        private readonly ClockInterface $clock
-    ) {
-    }
 
     public static function getSubscribedEvents(): array
     {

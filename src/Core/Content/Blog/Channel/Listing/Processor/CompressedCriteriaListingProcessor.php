@@ -6,11 +6,11 @@ use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * This processor adds support of BlogListingCriteria fields passed in the compressed criteria payload.

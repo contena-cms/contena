@@ -4,7 +4,6 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailTemplateMedia;
 
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<MailTemplateMediaEntity>

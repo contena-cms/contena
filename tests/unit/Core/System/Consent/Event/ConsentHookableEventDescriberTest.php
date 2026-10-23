@@ -4,11 +4,9 @@ namespace Contena\Tests\Unit\Core\System\Consent\Event;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;
 use Contena\Core\System\Consent\Event\ConsentHookableEventDescriber;
-use Contena\Tests\Unit\Core\System\Consent\TestDefinition;
 
 /**
  * @internal

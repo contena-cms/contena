@@ -7,7 +7,6 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Feature\Triggerer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 
 /**

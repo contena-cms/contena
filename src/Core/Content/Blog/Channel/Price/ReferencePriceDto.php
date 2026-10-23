@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Content\Blog\Channel\Price;
 
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
@@ -28,10 +26,6 @@ class ReferencePriceDto extends Struct
         );
     }
 
-    public static function createFromCheapestPrice(CheapestPrice $price): ReferencePriceDto
-    {
-        return new ReferencePriceDto($price->getPurchase(), $price->getReference(), $price->getUnitId());
-    }
 
     public function getPurchase(): ?float
     {

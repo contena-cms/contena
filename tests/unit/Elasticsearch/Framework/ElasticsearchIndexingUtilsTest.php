@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Event\ElasticsearchCustomFieldsMappingEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;

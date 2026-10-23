@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\Acl;
 
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

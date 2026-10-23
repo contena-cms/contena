@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\PartialEntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 
 class MediaLoadedSubscriber
 {

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Cache;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\StoreApiResponse;

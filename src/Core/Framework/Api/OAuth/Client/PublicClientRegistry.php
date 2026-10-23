@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\OAuth\Client;
 
 use League\OAuth2\Server\RedirectUriValidators\RedirectUriValidator;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Holds the public OAuth clients configured under `contena.api.oauth_clients`.

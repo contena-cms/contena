@@ -4,14 +4,13 @@ namespace Contena\Tests\Unit\Core\System\Channel\Context;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Defaults;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextRequestRestorer;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Request;
 

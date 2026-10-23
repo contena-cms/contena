@@ -6,7 +6,6 @@ use Contena\Core\Content\Mail\Payload\MailPayloadFactory;
 use Contena\Core\Content\MailTemplate\Request\GetDataAndSendRequest;
 use Contena\Core\Content\MailTemplate\Service\MailTemplateService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;

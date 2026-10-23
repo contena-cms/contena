@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Filesystem\Adapter;
 
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Framework\Log\Package;
 
 interface FilesystemOperatorFactoryInterface extends AdapterFactoryInterface
 {

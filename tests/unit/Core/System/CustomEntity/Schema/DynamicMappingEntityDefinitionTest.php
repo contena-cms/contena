@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\CustomEntity\Schema\DynamicMappingEntityDefinition;
 use Contena\Core\System\Tax\TaxDefinition;

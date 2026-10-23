@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\Dispatching\Action;
 
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

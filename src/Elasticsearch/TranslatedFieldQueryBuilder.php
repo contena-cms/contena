@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 

@@ -6,7 +6,6 @@ use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\CategoryException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\HttpFoundation\Request;

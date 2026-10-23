@@ -11,7 +11,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\AsyncAwsSigner;
 

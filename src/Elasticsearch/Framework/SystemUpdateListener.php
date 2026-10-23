@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework;
 
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexingMessage;

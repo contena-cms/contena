@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Provides cache policies and resolves which policy to use for a given request

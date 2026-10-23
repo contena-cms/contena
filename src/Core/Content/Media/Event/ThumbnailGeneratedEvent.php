@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Event;
 
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

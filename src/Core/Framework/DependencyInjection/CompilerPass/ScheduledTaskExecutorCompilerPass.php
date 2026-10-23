@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskExecutor;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

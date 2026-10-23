@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Telemetry\DomainResolver;
 use Symfony\Component\HttpFoundation\Request;
 

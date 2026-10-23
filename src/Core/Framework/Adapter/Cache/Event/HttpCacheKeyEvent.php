@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Event;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 class HttpCacheKeyEvent

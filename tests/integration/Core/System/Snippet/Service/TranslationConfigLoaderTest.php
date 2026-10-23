@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core\System\Snippet\Service;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\Snippet\Service\TranslationConfigLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Symfony\Component\Filesystem\Filesystem;

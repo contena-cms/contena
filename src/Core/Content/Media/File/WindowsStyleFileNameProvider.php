@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\File;
 
 use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\Framework\Log\Package;
 
 class WindowsStyleFileNameProvider extends FileNameProvider
 {

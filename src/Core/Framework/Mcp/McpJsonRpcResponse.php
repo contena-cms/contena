@@ -13,7 +13,6 @@ use Mcp\Schema\Result\ListResourcesResult;
 use Mcp\Schema\Result\ListToolsResult;
 use Mcp\Schema\ServerCapabilities;
 use Mcp\Schema\Tool;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\MailTemplate\Service\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

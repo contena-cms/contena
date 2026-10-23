@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Feature\AppFeatureDefinition;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
 use Contena\Core\Framework\Util\Filesystem;
 

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingExceptionHandler;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

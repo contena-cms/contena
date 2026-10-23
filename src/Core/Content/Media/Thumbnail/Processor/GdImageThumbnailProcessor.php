@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\Thumbnail\Processor;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
-use Contena\Core\Framework\Log\Package;
 
 class GdImageThumbnailProcessor implements ThumbnailProcessorInterface
 {

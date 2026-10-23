@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Service;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 
 class EmailIdnConverter

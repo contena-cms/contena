@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandler;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;

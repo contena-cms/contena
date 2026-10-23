@@ -7,14 +7,10 @@ use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_3\Migration1536233560BasicData;
-use Contena\Tests\Migration\MigrationUntouchedDbTestTrait;
 
 /**
  * @internal

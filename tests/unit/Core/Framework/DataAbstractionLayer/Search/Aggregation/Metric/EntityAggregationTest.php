@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Aggregat
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\EntityAggregation;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

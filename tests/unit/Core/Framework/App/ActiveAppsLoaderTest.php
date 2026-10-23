@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

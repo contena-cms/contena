@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Filesystem\Adapter\AsyncAwsS3WriteBatchAdapte
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatch;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\WriteBatchInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

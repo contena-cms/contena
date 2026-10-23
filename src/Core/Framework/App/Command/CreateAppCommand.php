@@ -7,7 +7,6 @@ use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

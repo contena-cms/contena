@@ -2,10 +2,15 @@
 
 namespace Contena\Core\Content\ImportExport;
 
-use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Content\ImportExport\Exception\InvalidFileAccessTokenException;
+use Contena\Core\Content\ImportExport\Exception\InvalidIdentifierException;
+use Contena\Core\Content\ImportExport\Exception\ProcessingException;
+use Contena\Core\Content\ImportExport\Exception\ProfileNotFoundException;
+use Contena\Core\Content\ImportExport\Exception\RequiredByAdminUserException;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ImportExportException extends HttpException
 {

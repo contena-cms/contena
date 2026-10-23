@@ -6,7 +6,6 @@ use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStre
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 final class ContentStreamWriteResultHelper

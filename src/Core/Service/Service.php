@@ -3,7 +3,6 @@
 namespace Contena\Core\Service;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\DependencyInjection\ServiceExtension;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

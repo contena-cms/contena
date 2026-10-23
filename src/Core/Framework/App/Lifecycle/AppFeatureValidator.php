@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Lifecycle;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

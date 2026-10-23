@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\DeletedApps;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -22,16 +21,6 @@ class MissingTranslationLanguageException extends WriteConstraintViolationExcept
     ) {
         $template = 'Translation requires a language id.';
         $constraintViolationList = new ConstraintViolationList([
-            new ConstraintViolation(
-                $template,
-                $template,
-                [],
-                null,
-                "/{$translationIndex}",
-                null,
-                null,
-                self::VIOLATION_MISSING_TRANSLATION_LANGUAGE
-            ),
         ]);
         parent::__construct($constraintViolationList, $path);
     }

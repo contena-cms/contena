@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\Framework\Event\NestedEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

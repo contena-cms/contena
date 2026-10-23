@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\SeoUrlRoute;
 
-use Contena\Core\Framework\Log\Package;
 
 class SeoUrlRouteRegistry
 {

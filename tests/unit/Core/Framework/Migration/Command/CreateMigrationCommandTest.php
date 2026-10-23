@@ -5,12 +5,9 @@ namespace Contena\Tests\Unit\Core\Framework\Migration\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\Command\CreateMigrationCommand;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
-use Contena\Tests\Integration\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin as SimplePluginIntegration;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

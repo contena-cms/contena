@@ -10,7 +10,6 @@ use Doctrine\DBAL\DriverManager;
 use Doctrine\DBAL\Tools\DsnParser;
 use Pdo\Mysql;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

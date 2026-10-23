@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\DataTransfer\SnippetPath;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

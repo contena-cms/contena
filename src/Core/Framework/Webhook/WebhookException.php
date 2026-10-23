@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook;
 
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class WebhookException extends HttpException

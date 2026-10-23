@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Deprecation\BCChange;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

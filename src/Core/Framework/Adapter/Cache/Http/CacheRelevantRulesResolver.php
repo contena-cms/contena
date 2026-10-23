@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Cache\Http;
 use Contena\Core\Framework\Adapter\Cache\Http\Extension\ResolveCacheRelevantRuleIdsExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

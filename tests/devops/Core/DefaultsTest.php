@@ -5,7 +5,6 @@ namespace Contena\Tests\DevOps\Core;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

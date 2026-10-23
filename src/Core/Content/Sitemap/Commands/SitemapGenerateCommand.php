@@ -2,18 +2,18 @@
 
 namespace Contena\Core\Content\Sitemap\Commands;
 
-use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelLoader;
+use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 
 #[AsCommand(
     name: 'sitemap:generate',

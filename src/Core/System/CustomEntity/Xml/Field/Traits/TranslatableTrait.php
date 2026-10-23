@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomEntity\Xml\Field\Traits;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

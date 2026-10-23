@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Transport;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mailer\Transport\Smtp\Auth\AuthenticatorInterface;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 

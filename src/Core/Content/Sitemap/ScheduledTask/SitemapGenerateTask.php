@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\ScheduledTask;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 

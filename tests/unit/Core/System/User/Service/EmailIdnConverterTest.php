@@ -5,9 +5,8 @@ namespace Contena\Tests\Unit\Core\System\User\Service;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Service\EmailIdnConverter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
+use Contena\Core\System\User\Service\EmailIdnConverter;
 
 /**
  * @internal

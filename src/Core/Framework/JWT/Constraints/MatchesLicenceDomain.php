@@ -6,7 +6,6 @@ use Lcobucci\JWT\Token;
 use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint;
 use Contena\Core\Framework\JWT\JWTException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\InAppPurchase\Services\DecodedPurchasesCollectionStruct;
 use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\System\SystemConfig\SystemConfigService;

@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginDefinition;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Test\Annotation\DisabledFeatures;

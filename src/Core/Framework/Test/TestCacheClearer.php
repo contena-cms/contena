@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test;
 
 use Psr\Cache\CacheItemPoolInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\CacheClearer\CacheClearerInterface;
 

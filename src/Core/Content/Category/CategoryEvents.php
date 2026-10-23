@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Category;
 
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
-use Contena\Core\Framework\Log\Package;
 
 class CategoryEvents
 {

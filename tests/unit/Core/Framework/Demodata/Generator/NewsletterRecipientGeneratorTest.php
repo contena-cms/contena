@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\Demodata\DemodataContext;
 use Contena\Core\Framework\Demodata\DemodataException;
 use Contena\Core\Framework\Demodata\Generator\NewsletterRecipientGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityWriter;
 use Symfony\Component\Console\Style\SymfonyStyle;

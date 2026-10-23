@@ -8,7 +8,6 @@ use League\OAuth2\Server\Entities\ClientEntityInterface;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\AdminUserRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserEntity;

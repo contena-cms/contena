@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\Robots;
 
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Contena\Frontend\Page\Robots\Parser\ParseIssueSeverity;
 use Contena\Frontend\Page\Robots\Parser\RobotsDirectiveParser;

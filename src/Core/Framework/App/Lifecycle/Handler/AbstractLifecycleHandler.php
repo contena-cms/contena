@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Lifecycle\Handler;
 use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Lifecycle handlers take part in the app lifecycle without going through the event system, so they

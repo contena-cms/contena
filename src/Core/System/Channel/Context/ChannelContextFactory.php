@@ -2,51 +2,20 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
-use Contena\Core\System\Channel\BaseChannelContext;
-use Contena\Core\System\Channel\Event\ChannelContextPermissionsChangedEvent;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Tax\TaxCollection;
-use Contena\Core\System\Tax\TaxRuleType\TaxRuleTypeFilterInterface;
+use Contena\Core\System\Channel\Event\ChannelContextPermissionsChangedEvent;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ChannelContextFactory extends AbstractChannelContextFactory
 {
-    /**
-     * @internal
-     *
-     * @param EntityRepository<UserCollection> $userRepository
-     * @param EntityRepository<UserGroupCollection> $userGroupRepository
-     * @param EntityRepository<UserAddressCollection> $addressRepository
-     * @param EntityRepository<PaymentMethodCollection> $paymentMethodRepository
-     * @param iterable<TaxRuleTypeFilterInterface> $taxRuleTypeFilter
-     * @param EntityRepository<CurrencyCountryRoundingCollection> $currencyCountryRepository
-     */
-    public function __construct(
-        private readonly EntityRepository $userRepository,
-        private readonly EntityRepository $userGroupRepository,
-        private readonly EntityRepository $addressRepository,
-        private readonly EntityRepository $paymentMethodRepository,
-        private readonly AbstractTaxDetector $taxDetector,
-        private readonly iterable $taxRuleTypeFilter,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly EntityRepository $currencyCountryRepository,
-        private readonly AbstractBaseChannelContextFactory $baseChannelContextFactory,
-    ) {
-    }
 
     public function getDecorated(): AbstractChannelContextFactory
     {
@@ -145,75 +114,7 @@ class ChannelContextFactory extends AbstractChannelContextFactory
         return $channelContext;
     }
 
-    private function getTaxRules(BaseChannelContext $context, ?UserEntity $user, ShippingLocation $shippingLocation): TaxCollection
-    {
-        $taxes = $context->getTaxRules()->getElements();
 
-        foreach ($taxes as $tax) {
-            $taxRules = $tax->getRules();
-            if ($taxRules === null) {
-                continue;
-            }
-
-            $taxRules = $taxRules->filter(function (TaxRuleEntity $taxRule) use ($user, $shippingLocation) {
-                foreach ($this->taxRuleTypeFilter as $ruleTypeFilter) {
-                    if ($ruleTypeFilter->match($taxRule, $user, $shippingLocation)) {
-                        return true;
-                    }
-                }
-
-                return false;
-            });
-
-            $matchingRules = new TaxRuleCollection();
-            $taxRule = $taxRules->highestTypePosition();
-
-            if (!$taxRule) {
-                $tax->setRules($matchingRules);
-
-                continue;
-            }
-
-            $taxRules = $taxRules->filterByTypePosition($taxRule->getType()->getPosition());
-            $taxRule = $taxRules->latestActivationDate();
-
-            if ($taxRule) {
-                $matchingRules->add($taxRule);
-            }
-            $tax->setRules($matchingRules);
-        }
-
-        return new TaxCollection($taxes);
-    }
-
-    /**
-     * @codeCoverageIgnore
-     *
-     * @see \Contena\Tests\Integration\Core\System\Channel\Context\ChannelContextTest
-     *
-     * @param array<string, mixed> $options
-     */
-    private function getPaymentMethod(array $options, BaseChannelContext $context, ?UserEntity $user): PaymentMethodEntity
-    {
-        if ($user === null || isset($options[ChannelContextService::PAYMENT_METHOD_ID])) {
-            return $context->getPaymentMethod();
-        }
-
-        $id = $user->getLastPaymentMethodId();
-
-        if ($id === null || $id === $context->getPaymentMethod()->getId()) {
-            return $context->getPaymentMethod();
-        }
-
-        $criteria = new Criteria([$id]);
-        $criteria->addAssociation('media');
-        $criteria->addAssociation('appPaymentMethod');
-        $criteria->setTitle('context-factory::payment-method');
-        $criteria->addFilter(new EqualsFilter('active', 1));
-        $criteria->addFilter(new EqualsFilter('channels.id', $context->getChannelId()));
-
-        return $this->paymentMethodRepository->search($criteria, $context->getContext())->getEntities()->get($id) ?? $context->getPaymentMethod();
-    }
 
     /**
      * @param array<string, mixed> $options
@@ -296,34 +197,4 @@ class ChannelContextFactory extends AbstractChannelContextFactory
         return $address instanceof UserAddressEntity ? $address : null;
     }
 
-    /**
-     * @codeCoverageIgnore
-     *
-     * @see \Contena\Tests\Integration\Core\System\Channel\Context\ChannelContextTest
-     *
-     * @return array{CashRoundingConfig, CashRoundingConfig}
-     */
-    private function getCashRounding(BaseChannelContext $context, ShippingLocation $shippingLocation): array
-    {
-        if ($context->getShippingLocation()->getCountry()->getId() === $shippingLocation->getCountry()->getId()) {
-            return [$context->getItemRounding(), $context->getTotalRounding()];
-        }
-
-        $criteria = new Criteria();
-        $criteria->setTitle('context-factory::cash-rounding');
-        $criteria->setLimit(1);
-        $criteria->addFilter(new EqualsFilter('currencyId', $context->getCurrencyId()));
-        $criteria->addFilter(new EqualsFilter('countryId', $shippingLocation->getCountry()->getId()));
-
-        $countryConfig = $this->currencyCountryRepository
-            ->search($criteria, $context->getContext())
-            ->getEntities()
-            ->first();
-
-        if ($countryConfig !== null) {
-            return [$countryConfig->getItemRounding(), $countryConfig->getTotalRounding()];
-        }
-
-        return [$context->getCurrency()->getItemRounding(), $context->getCurrency()->getTotalRounding()];
-    }
 }

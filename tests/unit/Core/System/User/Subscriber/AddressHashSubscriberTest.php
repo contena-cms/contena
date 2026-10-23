@@ -5,13 +5,12 @@ namespace Contena\Tests\Unit\Core\System\User\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\Subscriber\AddressHashSubscriber;
 use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\Subscriber\AddressHashSubscriber;
 
 /**
  * @internal

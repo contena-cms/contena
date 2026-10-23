@@ -2,9 +2,7 @@
 
 namespace Contena\Core\System\Channel\Aggregate\ChannelTranslation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 
 /**

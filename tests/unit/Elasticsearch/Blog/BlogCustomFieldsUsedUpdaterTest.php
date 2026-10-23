@@ -10,11 +10,10 @@ use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStre
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Elasticsearch\Framework\ElasticsearchHelper;
-use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
 use Contena\Elasticsearch\Blog\BlogCustomFieldsUsedUpdater;
+use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
+use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 
 /**
  * @internal

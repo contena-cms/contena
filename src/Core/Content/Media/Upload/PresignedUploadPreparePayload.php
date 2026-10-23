@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Upload;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**

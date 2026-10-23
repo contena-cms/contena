@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook\Transport;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 use Contena\Core\Framework\Webhook\Outbox\OutboxInsert;
 use Contena\Core\Framework\Webhook\Outbox\WebhookOutboxStore;

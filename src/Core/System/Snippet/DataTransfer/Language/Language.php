@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\DataTransfer\Language;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\SnippetPatterns;
 use Symfony\Component\Intl\Locales;

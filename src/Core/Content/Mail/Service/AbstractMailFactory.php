@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Service;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 

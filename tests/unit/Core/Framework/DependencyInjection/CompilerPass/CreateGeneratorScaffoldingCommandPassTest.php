@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\CreateGeneratorScaffoldingCommandPass;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;

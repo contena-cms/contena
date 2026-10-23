@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel\Suggest;
 
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
 
 /**

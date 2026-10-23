@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use GuzzleHttp\ClientInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\InAppPurchase;
 use Contena\Core\Framework\Store\InAppPurchase\Event\InAppPurchaseChangedEvent;

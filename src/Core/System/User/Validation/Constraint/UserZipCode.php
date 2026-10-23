@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User\Validation\Constraint;
 
-use Contena\Core\System\User\UserException;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterRemoval;
 use Contena\Core\Framework\Deprecation\BCChange\VisibilityChange;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\Validator\Attribute\HasNamedArguments;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\NotBlank;

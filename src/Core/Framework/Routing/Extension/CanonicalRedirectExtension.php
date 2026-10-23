@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing\Extension;
 
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -4,11 +4,10 @@ namespace Contena\Frontend\Framework\SystemCheck\Util;
 
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
-use Contena\Core\ChannelRequest;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

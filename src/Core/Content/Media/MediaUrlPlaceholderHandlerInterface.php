@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media;
 
-use Contena\Core\Framework\Log\Package;
 
 interface MediaUrlPlaceholderHandlerInterface
 {

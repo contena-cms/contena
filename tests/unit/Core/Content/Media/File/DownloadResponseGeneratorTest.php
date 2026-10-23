@@ -17,7 +17,6 @@ use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseHelper\AssertResponseHelper;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;

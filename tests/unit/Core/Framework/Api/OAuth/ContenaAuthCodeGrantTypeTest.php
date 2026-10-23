@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\OAuth\ContenaAuthCodeGrantType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

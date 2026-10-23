@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Telemetry;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntitySearchedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

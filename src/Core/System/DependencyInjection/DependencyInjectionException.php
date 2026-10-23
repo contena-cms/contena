@@ -2,9 +2,9 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
+use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\_fixture;
 
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\AbstractContextGatewayCommandHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

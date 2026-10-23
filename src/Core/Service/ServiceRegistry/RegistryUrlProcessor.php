@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\ServiceRegistry;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
 
 /**

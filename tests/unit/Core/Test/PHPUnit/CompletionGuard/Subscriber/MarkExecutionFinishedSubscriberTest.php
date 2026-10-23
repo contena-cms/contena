@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Test\PHPUnit\CompletionGuard\Subscriber;
 use PHPUnit\Event\TestRunner\ExecutionFinished;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
 use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionFinishedSubscriber;
 use Contena\Tests\Unit\Core\Test\PHPUnit\TelemetryInfoFactory;

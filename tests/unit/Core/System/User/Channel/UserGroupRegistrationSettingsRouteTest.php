@@ -4,14 +4,13 @@ namespace Contena\Tests\Unit\Core\System\User\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\Extension\UserGroupRegistrationSettingsRouteExtension;
-use Contena\Core\System\User\Channel\UserGroupRegistrationSettingsRoute;
-use Contena\Core\System\User\Channel\UserGroupRegistrationSettingsRouteResponse;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\Channel\UserGroupRegistrationSettingsRoute;
+use Contena\Core\System\User\Channel\UserGroupRegistrationSettingsRouteResponse;
+use Contena\Core\System\User\Extension\UserGroupRegistrationSettingsRouteExtension;
 use Contena\Core\Test\Generator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

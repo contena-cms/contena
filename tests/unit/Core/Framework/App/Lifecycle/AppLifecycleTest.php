@@ -11,10 +11,7 @@ use Contena\Core\Framework\App\Lifecycle\AppManager;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppUpdateParameters;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\RateLimit;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\PlatformRequest;

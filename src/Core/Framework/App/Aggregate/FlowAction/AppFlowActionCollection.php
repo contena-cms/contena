@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Aggregate\FlowAction;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<AppFlowActionEntity>

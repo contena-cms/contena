@@ -4,13 +4,12 @@ namespace Contena\Core\System\Snippet\Channel;
 
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Snippet\SnippetException;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 

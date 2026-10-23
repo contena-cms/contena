@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\JsonFieldSeriali
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Symfony\Component\Validator\Constraints\All;

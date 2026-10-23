@@ -2,11 +2,10 @@
 
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

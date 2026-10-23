@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Api;
 
 use Contena\Core\Content\Media\MediaFolderService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

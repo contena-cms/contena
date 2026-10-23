@@ -9,7 +9,6 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Installer\InstallerException;
 use Contena\Core\Maintenance\System\Service\ShopConfigurator;

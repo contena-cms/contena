@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandler;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

@@ -10,7 +10,6 @@ use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Api\Context\ShopApiSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

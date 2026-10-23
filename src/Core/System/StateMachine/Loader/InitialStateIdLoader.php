@@ -3,7 +3,6 @@
 namespace Contena\Core\System\StateMachine\Loader;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

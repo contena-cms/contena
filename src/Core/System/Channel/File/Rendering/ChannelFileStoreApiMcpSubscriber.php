@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\File\Rendering;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\File\Rendering\Extension\ChannelFileRenderParametersExtension;

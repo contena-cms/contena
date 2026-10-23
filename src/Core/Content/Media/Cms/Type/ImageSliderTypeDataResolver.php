@@ -2,25 +2,24 @@
 
 namespace Contena\Core\Content\Media\Cms\Type;
 
+use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
+use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
+use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\ImageSliderItemStruct;
+use Contena\Core\Content\Cms\Channel\Struct\ImageSliderStruct;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\ImageSliderItemStruct;
-use Contena\Core\Content\Cms\Channel\Struct\ImageSliderStruct;
 use Contena\Core\Content\Media\Cms\AbstractDefaultMediaResolver;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
-use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class ImageSliderTypeDataResolver extends AbstractCmsElementResolver

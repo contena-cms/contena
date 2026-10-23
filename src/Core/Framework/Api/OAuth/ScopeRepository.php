@@ -15,7 +15,6 @@ use Contena\Core\Framework\Api\OAuth\Scope\AdminScope;
 use Contena\Core\Framework\Api\OAuth\Scope\AdminUserVerifiedScope;
 use Contena\Core\Framework\Api\OAuth\Scope\WriteScope;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\ContenaGrantType;
 
 /**

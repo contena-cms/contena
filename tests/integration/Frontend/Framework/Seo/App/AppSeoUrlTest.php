@@ -4,8 +4,8 @@ namespace Contena\Tests\Integration\Frontend\Framework\Seo\App;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
@@ -22,20 +22,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlIndexer;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
-use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

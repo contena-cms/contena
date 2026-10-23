@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Api;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Api\ScheduledTaskController;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskScheduler;
 use Contena\Core\PlatformRequest;

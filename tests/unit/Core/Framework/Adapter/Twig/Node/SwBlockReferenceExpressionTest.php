@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Twig\Extension\TwigFeaturesWithInheritanceExt
 use Contena\Core\Framework\Adapter\Twig\Node\SwBlockReferenceExpression;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;

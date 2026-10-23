@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp\Tool\Search;
 
 use Mcp\Schema\Tool;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

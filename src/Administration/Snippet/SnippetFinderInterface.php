@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Snippet;
 
-use Contena\Core\Framework\Log\Package;
 
 interface SnippetFinderInterface
 {

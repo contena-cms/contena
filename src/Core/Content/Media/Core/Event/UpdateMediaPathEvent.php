@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Core\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements \IteratorAggregate<array-key, string>

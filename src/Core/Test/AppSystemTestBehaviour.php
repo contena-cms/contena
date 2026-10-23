@@ -18,6 +18,7 @@ use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 
 trait AppSystemTestBehaviour
 {

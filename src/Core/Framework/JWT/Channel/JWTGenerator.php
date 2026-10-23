@@ -9,7 +9,6 @@ use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint;
 use Contena\Core\Framework\JWT\JWTException;
 use Contena\Core\Framework\JWT\Struct\JWTStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;

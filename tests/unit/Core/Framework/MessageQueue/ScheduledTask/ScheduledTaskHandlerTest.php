@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;

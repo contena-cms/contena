@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Sort;
 
 use OpenSearchDSL\BuilderInterface;
 use OpenSearchDSL\Sort\FieldSort;
-use Contena\Core\Framework\Log\Package;
 
 class CountSort extends FieldSort
 {

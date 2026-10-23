@@ -7,7 +7,6 @@ use League\OAuth2\Server\Entities\Traits\ClientTrait;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * OAuth integrations should rely on {@see ClientEntityInterface} instead of this concrete Contena class.

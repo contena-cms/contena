@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\MediaType;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 abstract class MediaType extends Struct

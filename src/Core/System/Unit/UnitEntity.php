@@ -4,9 +4,6 @@ namespace Contena\Core\System\Unit;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -15,6 +12,7 @@ class UnitEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
+use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationCollection;
 
     protected ?string $shortCode = null;
 

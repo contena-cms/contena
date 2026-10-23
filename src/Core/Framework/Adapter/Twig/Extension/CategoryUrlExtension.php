@@ -7,7 +7,6 @@ use Contena\Core\Content\Category\Channel\ChannelCategoryEntity;
 use Contena\Core\Content\Category\Service\AbstractCategoryUrlGenerator;
 use Contena\Core\Framework\Adapter\Twig\TwigContextHelper;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

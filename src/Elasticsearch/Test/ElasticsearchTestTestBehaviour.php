@@ -13,7 +13,6 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityAggregator;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntitySearcher;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CachedSearchConfigLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchIndexingCommand;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\AbstractElasticsearchAggregationHydrator;

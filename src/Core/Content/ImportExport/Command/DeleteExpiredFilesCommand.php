@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\Command;
 
 use Contena\Core\Content\ImportExport\Service\DeleteExpiredFilesService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

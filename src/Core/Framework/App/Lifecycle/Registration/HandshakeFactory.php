@@ -5,9 +5,8 @@ namespace Contena\Core\Framework\App\Lifecycle\Registration;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Store\Services\StoreClient;
 
 /**
  * @internal only for use by the app-system
@@ -16,14 +15,6 @@ use Contena\Core\Framework\Store\Services\StoreClient;
  */
 readonly class HandshakeFactory
 {
-    public function __construct(
-        private string $shopUrl,
-        private ShopIdProvider $shopIdProvider,
-        private StoreClient $storeClient,
-        private string $contenaVersion,
-        private ClockInterface $clock,
-    ) {
-    }
 
     public function create(Manifest $manifest, AppEntity $app, #[\SensitiveParameter] ?string $currentSecret = null): AppHandshakeInterface
     {

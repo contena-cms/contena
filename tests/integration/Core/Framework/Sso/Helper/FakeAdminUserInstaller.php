@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\Sso\Helper;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

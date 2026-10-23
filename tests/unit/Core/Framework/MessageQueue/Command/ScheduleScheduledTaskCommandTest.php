@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Command\ScheduleScheduledTaskCommand;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;

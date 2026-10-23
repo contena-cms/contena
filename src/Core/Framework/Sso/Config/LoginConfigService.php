@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Sso\Config;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\TrustedOriginUrlGenerator;
 use Contena\Core\Framework\Sso\SsoException;
 use Symfony\Component\Routing\RouterInterface;

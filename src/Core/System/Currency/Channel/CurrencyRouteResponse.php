@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\Currency\Channel;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Currency\CurrencyCollection;
 
 /**
  * @extends StoreApiResponse<CurrencyCollection>

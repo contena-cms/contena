@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\M
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

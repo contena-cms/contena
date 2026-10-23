@@ -17,7 +17,6 @@ use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Language\LanguageCollection;
@@ -33,7 +32,6 @@ use Contena\Frontend\Pagelet\Header\HeaderPagelet;
 use Contena\Frontend\Pagelet\Header\HeaderPageletLoadedHook;
 use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
 use Contena\Frontend\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoaderInterface;
-use Contena\Tests\Unit\Frontend\Controller\Stub\NavigationControllerStub;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 

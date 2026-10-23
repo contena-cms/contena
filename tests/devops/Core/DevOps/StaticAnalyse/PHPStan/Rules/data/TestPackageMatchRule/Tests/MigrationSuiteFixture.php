@@ -4,8 +4,6 @@ namespace Contena\Tests\Migration\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\T
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\TestPackageMatchRule\Covered\CheckoutService;
 
 #[CoversClass(CheckoutService::class)]
 class MigrationSuiteFixture extends TestCase

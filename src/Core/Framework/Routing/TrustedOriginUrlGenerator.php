@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing;
 
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RequestContext;

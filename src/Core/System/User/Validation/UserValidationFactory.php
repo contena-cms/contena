@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Validation;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
 use Contena\Core\System\Channel\ChannelContext;

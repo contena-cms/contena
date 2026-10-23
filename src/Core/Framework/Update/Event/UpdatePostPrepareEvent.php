@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Update\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 class UpdatePostPrepareEvent extends UpdateEvent
 {

@@ -4,21 +4,10 @@ namespace Contena\Core\Content\Blog\Channel\Price;
 
 use Contena\Core\Content\Blog\Hook\Pricing\BlogPricingHook;
 use Contena\Core\Content\Blog\Hook\Pricing\BlogProxy;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\System\Channel\ChannelContext;
 
 class AppScriptBlogPriceCalculator extends AbstractBlogPriceCalculator
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractBlogPriceCalculator $decorated,
-        private readonly ScriptExecutor $scriptExecutor,
-        private readonly ScriptPriceStubs $priceStubs
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogPriceCalculator
     {

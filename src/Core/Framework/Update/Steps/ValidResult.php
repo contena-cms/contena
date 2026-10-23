@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Update\Steps;
 
-use Contena\Core\Framework\Log\Package;
 
 class ValidResult
 {

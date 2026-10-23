@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Framework\Command;
 
 use OpenSearch\Client;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\CustomEntity\Xml\Config;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

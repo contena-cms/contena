@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\MessageHandler;
 use Contena\Core\Framework\App\Lifecycle\AppSecretRotationService;
 use Contena\Core\Framework\App\Message\RotateAppSecretMessage;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

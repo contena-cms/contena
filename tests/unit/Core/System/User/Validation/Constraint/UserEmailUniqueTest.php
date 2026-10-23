@@ -5,12 +5,11 @@ namespace Contena\Tests\Unit\Core\System\User\Validation\Constraint;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
 

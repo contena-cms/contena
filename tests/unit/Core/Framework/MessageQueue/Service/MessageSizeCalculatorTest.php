@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Service;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Service\MessageSizeCalculator;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Stamp\SerializedMessageStamp;

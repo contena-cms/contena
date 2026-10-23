@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Event\PermissionsGrantedEvent;
 use Contena\Core\Service\Event\PermissionsRevokedEvent;
 use Contena\Core\Service\ServiceLifecycle;

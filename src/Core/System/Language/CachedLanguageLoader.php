@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Language;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Cache\CacheInterface;
 

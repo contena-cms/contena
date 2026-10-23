@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Seo\Channel;
 
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
 
 /**

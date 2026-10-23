@@ -2,7 +2,7 @@
 
 namespace Contena\Core\Framework\Plugin;
 
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\PluginExtractionException;
 use Contena\Core\Framework\Plugin\Util\ZipUtils;
 
 /**

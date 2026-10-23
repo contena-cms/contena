@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme;
 
 use ScssPhp\ScssPhp\Compiler;
 use ScssPhp\ScssPhp\OutputStyle;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal - may be changed in the future

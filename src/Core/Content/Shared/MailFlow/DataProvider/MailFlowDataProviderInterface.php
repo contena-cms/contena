@@ -6,7 +6,6 @@ use Contena\Core\Content\Shared\MailFlow\Event\MailFlowDataCriteriaEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template TEntity of Entity

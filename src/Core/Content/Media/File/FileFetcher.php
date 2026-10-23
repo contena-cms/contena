@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\File;
 
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\HttpClient\NoPrivateNetworkHttpClient;
 use Symfony\Component\HttpFoundation\Request;

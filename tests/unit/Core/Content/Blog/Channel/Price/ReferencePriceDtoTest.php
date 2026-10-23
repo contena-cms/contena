@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Channel\Price;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\Price\ReferencePriceDto;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 
 /**
  * @internal

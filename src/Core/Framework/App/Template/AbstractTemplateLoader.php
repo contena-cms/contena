@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Template;
 
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

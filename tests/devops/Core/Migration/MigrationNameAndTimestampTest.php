@@ -3,9 +3,7 @@
 namespace Contena\Tests\DevOps\Core\Migration;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

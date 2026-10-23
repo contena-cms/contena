@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Pagelet\Captcha;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha\BasicCaptchaImage;
 use Contena\Frontend\Pagelet\Pagelet;
 

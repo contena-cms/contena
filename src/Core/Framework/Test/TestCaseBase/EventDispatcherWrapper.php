@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Notification\Api;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Deprecation\BCChange\ClassMoved;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationException;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\RateLimiter\RateLimiter;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Test\PHPUnit\Extension\FeatureFlag;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\FeatureFlagExtension;
 
 /**

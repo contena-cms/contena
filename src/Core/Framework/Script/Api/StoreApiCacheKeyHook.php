@@ -2,10 +2,8 @@
 
 namespace Contena\Core\Framework\Script\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
-use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 use Contena\Core\Framework\Script\Execution\OptionalFunctionHook;
 use Contena\Core\System\Channel\ChannelContext;
 

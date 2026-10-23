@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Language\Rule;
 
-use Contena\Core\System\User\UserException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;
@@ -11,6 +9,7 @@ use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Language\LanguageException;
+use Contena\Core\System\User\UserException;
 
 /**
  * @final

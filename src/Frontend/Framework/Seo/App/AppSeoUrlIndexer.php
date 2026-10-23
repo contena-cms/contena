@@ -7,8 +7,8 @@ use Contena\Core\Content\Seo\SeoUrlUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 use function Symfony\Component\String\u;
 

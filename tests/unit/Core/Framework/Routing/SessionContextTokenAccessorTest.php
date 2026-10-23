@@ -4,11 +4,10 @@ namespace Contena\Tests\Unit\Core\Framework\Routing;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;

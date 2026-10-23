@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\LastIdQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Doctrine\FakeConnection;

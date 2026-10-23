@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

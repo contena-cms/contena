@@ -3,12 +3,10 @@
 namespace Contena\Tests\Integration\Core\Content\ImportExport\Processing\Mapping;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\ImportExport\Processing\Mapping\CriteriaBuilder;
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

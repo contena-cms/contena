@@ -13,7 +13,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Symfony\ParameterMap;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 

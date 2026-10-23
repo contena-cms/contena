@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Api\Controller\CacheController;
 use Contena\Core\Framework\Api\Event\InvalidateExpiredCacheRequestEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
 use Contena\Elasticsearch\Framework\Indexing\IndexManager;
 use Symfony\Component\Cache\Adapter\NullAdapter;

@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Frontend\Controller\fixtures;
 
 use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Frontend\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\RedirectResponse;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Event\ChannelIndexerEvent;
 
 class ChannelEvents

@@ -22,7 +22,6 @@ use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Event\ProgressAdvancedEvent;
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
 use Contena\Core\Framework\Event\ProgressStartedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\TestDefaults;
 use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use Contena\Elasticsearch\Admin\AdminIndexingBehavior;

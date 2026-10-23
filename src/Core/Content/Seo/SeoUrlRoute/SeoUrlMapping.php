@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo\SeoUrlRoute;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\Log\Package;
 
 class SeoUrlMapping
 {

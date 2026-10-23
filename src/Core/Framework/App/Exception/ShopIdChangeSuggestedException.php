@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Exception;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
 use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

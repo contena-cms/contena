@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingLocationCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeShippingLocationCommandHandler;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

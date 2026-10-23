@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AdapterFactoryInterface;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\FilesystemOperatorFactoryInterface;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 

@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Adapter\Cache\InvalidateCacheEvent;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCache;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Symfony\Component\HttpFoundation\Request;

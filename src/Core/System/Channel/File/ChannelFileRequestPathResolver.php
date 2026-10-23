@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\Channel\File;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 
 /**
  * @internal

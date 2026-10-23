@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Page\Address\Detail;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Frontend\Page\Page;
 
 class AddressDetailPage extends Page
@@ -23,15 +22,7 @@ class AddressDetailPage extends Page
         $this->address = $address;
     }
 
-    public function getSalutations(): SalutationCollection
-    {
-        return $this->salutations;
-    }
 
-    public function setSalutations(SalutationCollection $salutations): void
-    {
-        $this->salutations = $salutations;
-    }
 
     public function getCountries(): CountryCollection
     {

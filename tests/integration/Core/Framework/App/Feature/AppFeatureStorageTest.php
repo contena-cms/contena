@@ -8,12 +8,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Feature\AppFeatureDefinitionRegistry;
 use Contena\Core\Framework\App\Feature\AppFeatureException;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 use Symfony\Component\Clock\MockClock;
 
 /**

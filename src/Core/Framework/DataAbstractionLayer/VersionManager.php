@@ -49,7 +49,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteResult;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;

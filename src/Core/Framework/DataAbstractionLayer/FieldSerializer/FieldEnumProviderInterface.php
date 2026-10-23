@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 
-use Contena\Core\Framework\Log\Package;
 
 interface FieldEnumProviderInterface
 {

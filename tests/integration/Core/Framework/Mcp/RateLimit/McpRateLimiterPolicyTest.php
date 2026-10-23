@@ -4,12 +4,10 @@ namespace Contena\Tests\Integration\Core\Framework\Mcp\RateLimit;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\Mcp\RateLimit\McpRateLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bridge\PhpUnit\ClockMock;

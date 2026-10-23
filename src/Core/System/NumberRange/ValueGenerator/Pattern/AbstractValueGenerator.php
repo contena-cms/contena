@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-type ValueGeneratorConfig array{id: string, pattern: string, start: ?int, technical_name?: string}

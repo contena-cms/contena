@@ -2,41 +2,30 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Channel\AbstractRegisterConfirmRoute;
-use Contena\Core\System\User\Channel\AbstractRegisterRoute;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\QueryDataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\UserEntity;
 use Contena\Frontend\Framework\AffiliateTracking\AffiliateTrackingListener;
-use Contena\Frontend\Framework\Guard\DoubleSubmitGuard;
-use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
-use Contena\Frontend\Page\Account\UserGroupRegistration\AbstractUserGroupRegistrationPageLoader;
-use Contena\Frontend\Page\Account\UserGroupRegistration\UserGroupRegistrationPageLoadedHook;
-use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
+use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Account\Register\AccountRegisterPageLoadedHook;
-use Contena\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
-use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
+use Contena\Frontend\Page\Account\UserGroupRegistration\UserGroupRegistrationPageLoadedHook;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Contena\Core\System\User\Exception\UserNotFoundByHashException;
 
 /**
  * @internal
@@ -50,27 +39,6 @@ class RegisterController extends FrontendController
      */
     public const DOUBLE_SUBMIT_SCOPE = 'frontend-registration';
 
-    /**
-     * @internal
-     *
-     * @param EntityRepository<UserCollection> $userRepository
-     * @param EntityRepository<ChannelDomainCollection> $domainRepository
-     */
-    public function __construct(
-        private readonly AccountLoginPageLoader $loginPageLoader,
-        private readonly AbstractRegisterRoute $registerRoute,
-        private readonly AbstractRegisterConfirmRoute $registerConfirmRoute,
-        private readonly CartService $cartService,
-        private readonly CheckoutRegisterPageLoader $registerPageLoader,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly EntityRepository $userRepository,
-        private readonly AbstractUserGroupRegistrationPageLoader $userGroupRegistrationPageLoader,
-        private readonly EntityRepository $domainRepository,
-        private readonly HeaderPageletLoaderInterface $headerPageletLoader,
-        private readonly FooterPageletLoaderInterface $footerPageletLoader,
-        private readonly DoubleSubmitGuard $doubleSubmitGuard,
-    ) {
-    }
 
     #[Route(
         path: '/account/register',

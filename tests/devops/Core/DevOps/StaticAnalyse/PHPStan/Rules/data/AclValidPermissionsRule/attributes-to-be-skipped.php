@@ -1,6 +1,5 @@
 <?php declare(strict_types=1);
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Controller\FrontendController;
 use Symfony\Component\Routing\Attribute\Route;

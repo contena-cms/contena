@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Core\Event;
 
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The event is dispatched, when location for a thumbnail should be generated afterward and can be used

@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Blog\Channel\Listing\Processor;
 
-use Contena\Core\Content\Blog\Events\BlogListingCollectSortingEvent;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingEntity;
+use Contena\Core\Content\Blog\Events\BlogListingCollectSortingEvent;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -14,12 +14,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class SortingListingProcessor extends AbstractListingProcessor
 {

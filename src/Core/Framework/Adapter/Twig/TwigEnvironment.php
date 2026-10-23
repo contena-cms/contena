@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Adapter\Twig\Runtime\CachedEscaperRuntime;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ResetInterface;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;

@@ -4,10 +4,10 @@ namespace Contena\Core\System\Channel\Subscriber;
 
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\System\Channel\Exception\DefaultChannelTypeCannotBeDeleted;
 
 /**
  * @internal

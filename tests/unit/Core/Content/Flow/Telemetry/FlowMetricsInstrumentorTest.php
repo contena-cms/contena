@@ -8,7 +8,6 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Telemetry\FlowMetricsInstrumentor;
 use Contena\Core\Content\Flow\Telemetry\TriggerGroupResolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Telemetry;
 use Contena\Core\Test\Stub\Telemetry\CollectingMeter;
 

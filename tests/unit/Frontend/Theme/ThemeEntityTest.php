@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationCollection;

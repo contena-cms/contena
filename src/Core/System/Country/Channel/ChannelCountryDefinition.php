@@ -4,10 +4,9 @@ namespace Contena\Core\System\Country\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\CountryDefinition;
-use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
+use Contena\Core\System\Country\CountryDefinition;
 
 class ChannelCountryDefinition extends CountryDefinition implements ChannelDefinitionInterface
 {

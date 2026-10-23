@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Blog\Channel\Sorting;
 
+use Contena\Core\Content\Blog\Exception\DuplicateBlogSortingKeyException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 class BlogSortingExceptionHandler implements ExceptionHandlerInterface
 {

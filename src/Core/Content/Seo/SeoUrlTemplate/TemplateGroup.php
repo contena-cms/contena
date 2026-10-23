@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo\SeoUrlTemplate;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed with the next major version, as it is unused

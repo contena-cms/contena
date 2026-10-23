@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -19,12 +18,13 @@ use Contena\Frontend\Theme\ConfigLoader\StaticFileConfigLoader;
 use Contena\Frontend\Theme\Event\ThemeAssignedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigChangedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigResetEvent;
-use Contena\Frontend\Theme\Message\CompileThemeMessage;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
+use Contena\Frontend\Theme\Message\CompileThemeMessage;
 use Contena\Frontend\Theme\Validator\SCSSValidator;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Frontend\Theme\Exception\ThemeConfigException;
 
 class ThemeService implements ResetInterface
 {

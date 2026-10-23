@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\Event\ProgressAdvancedEvent;
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
 use Contena\Core\Framework\Event\ProgressStartedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
 use Contena\Elasticsearch\ElasticsearchException;

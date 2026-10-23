@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Channel\CookieRouteResponse;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslatedFieldS
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Container;
 
 /**

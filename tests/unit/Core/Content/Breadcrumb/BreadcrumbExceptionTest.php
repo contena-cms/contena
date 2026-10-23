@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Core\Content\Breadcrumb;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Content\Breadcrumb\BreadcrumbException;
 use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
-use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

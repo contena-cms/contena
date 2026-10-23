@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Struct;
 
 use GuzzleHttp\Psr7\Uri;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;

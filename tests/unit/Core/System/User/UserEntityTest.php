@@ -6,6 +6,17 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Order\Aggregate\OrderUser\OrderUserCollection;
+use Contena\Core\Checkout\Payment\PaymentMethodEntity;
+use Contena\Core\Checkout\Promotion\PromotionCollection;
+use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
+use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\System\Salutation\SalutationEntity;
+use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
@@ -13,18 +24,6 @@ use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Order\Aggregate\OrderUser\OrderUserCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
-use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Channel\ChannelEntity;
-use Contena\Core\System\Salutation\SalutationEntity;
-use Contena\Core\System\Tag\TagCollection;
-use Contena\Core\System\AdminUser\AdminUserEntity;
 
 /**
  * @internal

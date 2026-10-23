@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\EventListener\Acl;
 
 use Contena\Core\Framework\Api\Acl\Event\CommandAclValidationEvent;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

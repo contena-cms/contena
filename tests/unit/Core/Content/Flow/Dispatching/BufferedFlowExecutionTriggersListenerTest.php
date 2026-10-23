@@ -9,7 +9,6 @@ use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutionTriggersListener;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutor;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowQueue;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 

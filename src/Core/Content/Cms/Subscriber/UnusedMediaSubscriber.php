@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Cms\Subscriber;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

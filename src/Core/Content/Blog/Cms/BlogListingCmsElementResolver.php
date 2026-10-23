@@ -2,12 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Cms;
 
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
-use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
-use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
-use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\BlogListingStruct;
 use Contena\Core\Content\Blog\Channel\Listing\AbstractBlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\ManufacturerListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\PriceListingFilterHandler;
@@ -15,10 +9,15 @@ use Contena\Core\Content\Blog\Channel\Listing\Filter\PropertyListingFilterHandle
 use Contena\Core\Content\Blog\Channel\Listing\Filter\RatingListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\ShippingFreeListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
+use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\BlogListingStruct;
+use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
+use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
+use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
+use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

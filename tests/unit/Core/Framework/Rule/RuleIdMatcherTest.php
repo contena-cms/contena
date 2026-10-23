@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Contract\IdAware;
 use Contena\Core\Framework\DataAbstractionLayer\Contract\RuleIdAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\RuleIdMatcher;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Uuid\Uuid;

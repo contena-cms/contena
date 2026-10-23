@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\AllowList;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

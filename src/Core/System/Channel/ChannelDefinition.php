@@ -2,16 +2,12 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
-use Contena\Core\System\User\Aggregate\UserGroupRegistrationChannel\UserGroupRegistrationChannelDefinition;
-use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistDefinition;
-use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageChannel\LandingPageChannelDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateDefinition;
@@ -40,22 +36,23 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\CountryDefinition;
-use Contena\Core\System\Currency\CurrencyDefinition;
-use Contena\Core\System\Language\LanguageDefinition;
-use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelCountry\ChannelCountryDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelLanguage\ChannelLanguageDefinition;
-use Contena\Core\System\Channel\Aggregate\ChannelPaymentMethod\ChannelPaymentMethodDefinition;
-use Contena\Core\System\Channel\Aggregate\ChannelShippingMethod\ChannelShippingMethodDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelTranslation\ChannelTranslationDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeDefinition;
+use Contena\Core\System\Country\CountryDefinition;
+use Contena\Core\System\Currency\CurrencyDefinition;
+use Contena\Core\System\Language\LanguageDefinition;
+use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigDefinition;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
+use Contena\Core\System\User\Aggregate\UserGroupRegistrationChannel\UserGroupRegistrationChannelDefinition;
+use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistDefinition;
+use Contena\Core\System\User\UserDefinition;
 
 /**
  * @codeCoverageIgnore
@@ -131,15 +128,12 @@ class ChannelDefinition extends EntityDefinition
             new ManyToManyAssociationField('currencies', CurrencyDefinition::class, ChannelCurrencyDefinition::class, 'channel_id', 'currency_id'),
             new ManyToManyAssociationField('languages', LanguageDefinition::class, ChannelLanguageDefinition::class, 'channel_id', 'language_id'),
             new ManyToManyAssociationField('countries', CountryDefinition::class, ChannelCountryDefinition::class, 'channel_id', 'country_id'),
-            new ManyToManyAssociationField('paymentMethods', PaymentMethodDefinition::class, ChannelPaymentMethodDefinition::class, 'channel_id', 'payment_method_id'),
             (new ManyToManyIdField('payment_method_ids', 'paymentMethodIds', 'paymentMethods'))->setDescription('Unique identity of payment method.'),
-            new ManyToManyAssociationField('shippingMethods', ShippingMethodDefinition::class, ChannelShippingMethodDefinition::class, 'channel_id', 'shipping_method_id'),
             new ManyToOneAssociationField('type', 'type_id', ChannelTypeDefinition::class, 'id', false),
             (new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default language for the sales channel'),
             new ManyToOneAssociationField('userGroup', 'user_group_id', UserGroupDefinition::class, 'id', false),
             (new ManyToOneAssociationField('currency', 'currency_id', CurrencyDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default currency for the sales channel'),
             (new ManyToOneAssociationField('country', 'country_id', CountryDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default country for the sales channel'),
-            new OneToManyAssociationField('orders', OrderDefinition::class, 'channel_id', 'id'),
 
             new OneToManyAssociationField('users', UserDefinition::class, 'channel_id', 'id'),
 
@@ -162,13 +156,10 @@ class ChannelDefinition extends EntityDefinition
             (new OneToManyAssociationField('blogVisibilities', BlogVisibilityDefinition::class, 'channel_id'))->addFlags(new CascadeDelete()),
             (new OneToOneAssociationField('hreflangDefaultDomain', 'hreflang_default_domain_id', 'id', ChannelDomainDefinition::class, false))->addFlags(new ApiAware()),
             new ManyToOneAssociationField('mailHeaderFooter', 'mail_header_footer_id', MailHeaderFooterDefinition::class, 'id', false),
-            new OneToManyAssociationField('newsletterRecipients', NewsletterRecipientDefinition::class, 'channel_id', 'id'),
             (new OneToManyAssociationField('numberRangeChannels', NumberRangeChannelDefinition::class, 'channel_id'))->addFlags(new CascadeDelete()),
-            new OneToManyAssociationField('blogReviews', BlogReviewDefinition::class, 'channel_id', 'id'),
             (new OneToManyAssociationField('seoUrls', SeoUrlDefinition::class, 'channel_id', 'id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('seoUrlTemplates', SeoUrlTemplateDefinition::class, 'channel_id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('mainCategories', MainCategoryDefinition::class, 'channel_id'))->addFlags(new CascadeDelete()),
-            new OneToManyAssociationField('blogExports', BlogExportDefinition::class, 'channel_id', 'id'),
             (new OneToManyAssociationField('channelFiles', ChannelFileDefinition::class, 'channel_id', 'id'))->addFlags(new ApiAware(AdminApiSource::class), new CascadeDelete()),
             (new OneToOneAssociationField('analytics', 'analytics_id', 'id', ChannelAnalyticsDefinition::class, false))->addFlags(new CascadeDelete()),
             new ManyToManyAssociationField('userGroupsRegistrations', UserGroupDefinition::class, UserGroupRegistrationChannelDefinition::class, 'channel_id', 'user_group_id', 'id', 'id'),

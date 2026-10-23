@@ -3,13 +3,12 @@
 namespace Contena\Core\System\User\Rule;
 
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @final

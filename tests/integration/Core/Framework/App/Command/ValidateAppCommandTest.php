@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\App\Command;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Command\ValidateAppCommand;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

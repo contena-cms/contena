@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Validation;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
 

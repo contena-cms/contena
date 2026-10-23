@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 
 use Contena\Core\Framework\Adapter\Twig\TemplateFinderInterface;
-use Contena\Core\Framework\Log\Package;
 use Twig\Node\EmbedNode;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ConstantExpression;
@@ -50,10 +49,8 @@ final class EmbedTokenParser extends AbstractTokenParser
 
         // inject a fake parent to make the parent() function work
         $stream->injectTokens([
-            new Token(Token::BLOCK_START_TYPE, '', $token->getLine()),
             new Token(Token::NAME_TYPE, 'extends', $token->getLine()),
             $parentToken,
-            new Token(Token::BLOCK_END_TYPE, '', $token->getLine()),
         ]);
 
         $module = $this->parser->parse($stream, $this->decideBlockEnd(...), true);

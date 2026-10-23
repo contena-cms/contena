@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\Event;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Symfony\Contracts\EventDispatcher\Event;

@@ -102,11 +102,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(MediaService::class),
             service('media.repository'),
-            service(DocumentGenerator::class),
             service('document.repository'),
             service('monolog.logger.business_events'),
             service(DocumentResolver::class),
-            service(DocumentMediaGuard::class),
         ]);
 
     $services->set(MailPayloadFactory::class);

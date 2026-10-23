@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\Aggregate\ImportExportFile;
 
-use Contena\Core\Framework\Log\Package;
 
 class ImportExportFileEvents
 {

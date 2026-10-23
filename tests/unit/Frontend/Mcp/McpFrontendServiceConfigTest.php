@@ -4,9 +4,7 @@ namespace Contena\Tests\Unit\Frontend\Mcp;
 
 use PHPUnit\Framework\Attributes\CoversNothing;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
-use Contena\Tests\DevOps\Core\Framework\Mcp\McpDiscoveryScanDirsConfigTest;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

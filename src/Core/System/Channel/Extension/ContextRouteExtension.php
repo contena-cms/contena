@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Extension;
 
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Channel\ContextLoadRouteResponse;
 use Contena\Core\System\Channel\ChannelContext;
 

@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageLoaderInterface;
 use Contena\Elasticsearch\Blog\ElasticsearchCustomFieldsMappingHelper;
 

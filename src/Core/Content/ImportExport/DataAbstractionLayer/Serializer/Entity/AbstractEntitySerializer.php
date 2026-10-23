@@ -5,9 +5,9 @@ namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Enti
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 abstract class AbstractEntitySerializer implements ResetInterface
 {

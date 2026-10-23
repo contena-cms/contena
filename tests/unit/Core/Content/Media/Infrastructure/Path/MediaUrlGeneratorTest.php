@@ -11,7 +11,6 @@ use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\Core\Params\UrlParamsSource;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\StateMachineStateProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

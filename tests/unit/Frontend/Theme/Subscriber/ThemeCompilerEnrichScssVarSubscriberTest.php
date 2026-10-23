@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigCard;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigElement;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigTab;

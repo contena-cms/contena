@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppStorage;
 use Contena\Core\Framework\App\Command\AppListCommand;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Console\Tester\CommandTester;
 

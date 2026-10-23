@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Sitemap\Service;
 
 use Contena\Core\Content\Sitemap\SitemapException;
 use Contena\Core\Content\Sitemap\Struct\SitemapGenerationResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 interface SitemapExporterInterface

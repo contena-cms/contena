@@ -5,8 +5,6 @@ namespace Contena\Tests\DevOps\Core\DevOps\Docs\Command\App;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Docs\App\DocsAppEventCommand;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
 
 /**

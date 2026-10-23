@@ -5,10 +5,9 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Channel\Price;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Facade\ScriptPriceStubs;
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Blog\Channel\Price\AppScriptBlogPriceCalculator;
 use Contena\Core\Content\Blog\Channel\Price\BlogPriceCalculator;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\System\Channel\ChannelContext;
 

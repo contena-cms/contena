@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\OAuth;
 
 use Lcobucci\JWT\Configuration;
 use League\OAuth2\Server\CryptKey;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

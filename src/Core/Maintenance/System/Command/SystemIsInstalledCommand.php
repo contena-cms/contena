@@ -3,7 +3,6 @@
 namespace Contena\Core\Maintenance\System\Command;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

@@ -4,7 +4,6 @@ namespace Contena\Core\Maintenance\System\Struct;
 
 use Pdo\Mysql;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Maintenance\MaintenanceException;
 

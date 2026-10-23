@@ -2,11 +2,10 @@
 
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryCollection;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryDefinition;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

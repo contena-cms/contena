@@ -62,7 +62,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RuleIndexerSubscriber::class)
         ->args([
             service(Connection::class),
-            service(CartRuleLoader::class),
             service(ClockInterface::class),
         ])
         ->tag('kernel.event_subscriber');

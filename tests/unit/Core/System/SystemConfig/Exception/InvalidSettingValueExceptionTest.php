@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\SystemConfig\Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Exception\InvalidSettingValueException;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 

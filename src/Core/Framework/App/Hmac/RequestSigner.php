@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Hmac;
 
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestSigner

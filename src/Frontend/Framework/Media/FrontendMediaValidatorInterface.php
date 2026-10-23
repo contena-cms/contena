@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Media;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 interface FrontendMediaValidatorInterface

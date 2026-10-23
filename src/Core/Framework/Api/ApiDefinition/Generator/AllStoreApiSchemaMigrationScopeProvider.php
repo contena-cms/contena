@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\ApiDefinition\Generator;
 
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

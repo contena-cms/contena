@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Search;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

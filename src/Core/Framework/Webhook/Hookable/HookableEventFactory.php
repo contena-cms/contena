@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Webhook\Hookable;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\BusinessEventEncoder;
 use Contena\Core\Framework\Webhook\Hookable;
 

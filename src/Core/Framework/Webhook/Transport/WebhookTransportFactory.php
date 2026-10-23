@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Transport;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Outbox\WebhookOutboxStore;
 use Symfony\Component\Messenger\Transport\Serialization\SerializerInterface;
 use Symfony\Component\Messenger\Transport\TransportFactoryInterface;

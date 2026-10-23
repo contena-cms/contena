@@ -35,17 +35,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(BlogConfiguratorSettingHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(BlogPriceHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
     $services->set(BlogSearchKeywordHydrator::class)
         ->public()
@@ -59,17 +49,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(BlogReviewHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(BlogManufacturerHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
     $services->set(BlogMediaHydrator::class)
         ->public()
@@ -77,23 +57,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(BlogCrossSellingHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(BlogCrossSellingAssignedBlogsHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(BlogFeatureSetHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
     $services->set(BlogSortingHydrator::class)
         ->public()
@@ -131,11 +96,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(BlogExportHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
     $services->set(PropertyGroupHydrator::class)
         ->public()

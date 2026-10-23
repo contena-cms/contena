@@ -9,7 +9,6 @@ use Mcp\Schema\Enum\ProtocolVersion;
 use Mcp\Schema\JsonRpc\Request;
 use Mcp\Server\RequestContext;
 use Mcp\Server\Session\SessionInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

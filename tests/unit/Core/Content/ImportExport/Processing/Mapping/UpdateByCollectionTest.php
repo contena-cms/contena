@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\ImportExport\Processing\Mapping\UpdateBy;
 use Contena\Core\Content\ImportExport\Processing\Mapping\UpdateByCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -10,24 +10,12 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Store\Authentication\LocaleProvider;
-use Contena\Core\Framework\Store\InAppPurchase;
 
 /**
  * @internal only for use by the app-system
  */
 class QuerySigner
 {
-    public function __construct(
-        private readonly string $shopUrl,
-        private readonly string $contenaVersion,
-        private readonly LocaleProvider $localeProvider,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly InAppPurchase $inAppPurchase,
-        private readonly ClockInterface $clock,
-    ) {
-    }
 
     public function signUri(string $uri, AppEntity $app, Context $context): UriInterface
     {

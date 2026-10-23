@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Webhook\Authorization;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriberType;
 use Contena\Core\Framework\Webhook\Authorization\WebhookSubscription;

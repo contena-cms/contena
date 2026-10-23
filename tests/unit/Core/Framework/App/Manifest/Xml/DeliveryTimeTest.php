@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App\Manifest\Xml;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Xml\ShippingMethod\DeliveryTime;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework;
 
-use Contena\Core\Framework\Log\Package;
 
 interface ContenaException extends \Throwable
 {

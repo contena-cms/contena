@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
-use Contena\Core\Framework\Log\Package;
 
 final class FlowMailVariables
 {

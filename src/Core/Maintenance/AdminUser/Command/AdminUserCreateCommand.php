@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\AdminUser\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

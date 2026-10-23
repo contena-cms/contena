@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Rule\Fixture;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\DaysSinceRule;
 use Contena\Core\Framework\Rule\RuleScope;
 

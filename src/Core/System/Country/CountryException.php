@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Country;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class CountryException extends HttpException

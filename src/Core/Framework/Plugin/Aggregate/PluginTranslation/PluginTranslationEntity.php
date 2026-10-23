@@ -2,10 +2,7 @@
 
 namespace Contena\Core\Framework\Plugin\Aggregate\PluginTranslation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 
 /**

@@ -6,9 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Extension\LoadPreviewExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Tests\Examples\BlogListingCriteriaExtensionExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

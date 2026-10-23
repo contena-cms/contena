@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Cms\Channel\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 class VideoStruct extends ImageStruct
 {

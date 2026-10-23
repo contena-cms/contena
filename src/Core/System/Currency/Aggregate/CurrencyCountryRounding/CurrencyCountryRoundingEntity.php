@@ -3,9 +3,7 @@
 namespace Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
 

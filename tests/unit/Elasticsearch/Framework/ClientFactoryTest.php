@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Client\ClientInterface;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\ClientFactory;
 use Contena\Elasticsearch\Profiler\ClientProfiler;
 

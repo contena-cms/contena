@@ -12,7 +12,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Event\AddCacheTagEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This rule prevents the individual usage of the AddCacheTagEvent and promotes the use of the CacheTagCollector->addTag method.

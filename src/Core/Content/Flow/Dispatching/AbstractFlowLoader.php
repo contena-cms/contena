@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching;
 
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal not intended for decoration or replacement

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class Page extends Struct

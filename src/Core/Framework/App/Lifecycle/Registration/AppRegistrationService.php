@@ -6,15 +6,13 @@ use GuzzleHttp\Client;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
@@ -28,20 +26,6 @@ class AppRegistrationService
      */
     private const MAX_UNCONFIRMED_APP_SECRETS = 5;
 
-    /**
-     * @param EntityRepository<AppCollection> $appRepository
-     */
-    public function __construct(
-        private readonly HandshakeFactory $handshakeFactory,
-        private readonly Client $httpClient,
-        private readonly EntityRepository $appRepository,
-        private readonly string $shopUrl,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly string $contenaVersion,
-        private readonly ClockInterface $clock,
-        private readonly LoggerInterface $logger,
-    ) {
-    }
 
     public function registerApp(Manifest $manifest, string $id, #[\SensitiveParameter] string $secretAccessKey, Context $context): void
     {

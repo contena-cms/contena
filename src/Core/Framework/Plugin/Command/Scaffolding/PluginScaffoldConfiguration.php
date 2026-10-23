@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

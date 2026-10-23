@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchAdminTestCommand;
 use Symfony\Component\Console\Command\Command;

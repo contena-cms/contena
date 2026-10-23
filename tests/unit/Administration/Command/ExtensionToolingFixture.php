@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Administration\Command;
 
 use PHPUnit\Framework\Assert;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

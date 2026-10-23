@@ -7,7 +7,6 @@ namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\Migration
 use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\AddColumnRule;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

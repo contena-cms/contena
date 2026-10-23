@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityRegistrar;
 use Contena\Core\System\System;
 use Symfony\Component\DependencyInjection\Container;

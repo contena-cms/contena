@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use OpenSearch\Client;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use Contena\Elasticsearch\Admin\AdminSearchIndexingMessage;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -14,6 +13,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Contena\Core\Framework\Increment\Exception\IncrementGatewayNotFoundException;
 
 /**
  * @internal

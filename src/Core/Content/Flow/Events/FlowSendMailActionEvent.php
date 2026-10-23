@@ -6,7 +6,6 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 
 class FlowSendMailActionEvent implements ContenaEvent

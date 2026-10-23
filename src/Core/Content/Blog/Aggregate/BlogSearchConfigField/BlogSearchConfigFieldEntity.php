@@ -4,8 +4,6 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField;
 
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfig\BlogSearchConfigEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldEntity;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Util;
 
-use Contena\Core\Framework\Log\Package;
 
 /** This class is based on Rand.php of Component_ZendMath
  *

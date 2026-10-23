@@ -6,7 +6,6 @@ use Mcp\Capability\Registry\ReferenceHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolResultRendererCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Result\McpToolResultParser;
 use Contena\Core\Framework\Mcp\Result\McpToolResultReferenceHandler;
 use Contena\Core\Framework\Mcp\Result\McpToolResultRenderer;

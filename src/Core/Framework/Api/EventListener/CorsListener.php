@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\EventListener;
 
 use Contena\Core\Framework\Api\Cors\CorsHeaderProviderInterface;
 use Contena\Core\Framework\Api\Cors\CorsHeaders;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\RequestEvent;

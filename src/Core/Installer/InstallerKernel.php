@@ -4,7 +4,6 @@ namespace Contena\Core\Installer;
 
 use Composer\InstalledVersions;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\VersionParser;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\FrameworkBundle\Kernel\MicroKernelTrait;

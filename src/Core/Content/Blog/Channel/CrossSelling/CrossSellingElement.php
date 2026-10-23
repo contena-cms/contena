@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel\CrossSelling;
 
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class CrossSellingElement extends Struct
@@ -15,15 +14,7 @@ class CrossSellingElement extends Struct
 
     protected ?string $streamId = null;
 
-    public function getCrossSelling(): BlogCrossSellingEntity
-    {
-        return $this->crossSelling;
-    }
 
-    public function setCrossSelling(BlogCrossSellingEntity $crossSelling): void
-    {
-        $this->crossSelling = $crossSelling;
-    }
 
     public function getBlogs(): BlogCollection
     {

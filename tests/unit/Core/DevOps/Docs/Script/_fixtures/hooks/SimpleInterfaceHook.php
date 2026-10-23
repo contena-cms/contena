@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\DevOps\Docs\Script\_fixtures\hooks;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
-use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\InterfaceHook;
 
 /**

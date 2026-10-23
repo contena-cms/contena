@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Consent;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

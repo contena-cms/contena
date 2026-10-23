@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Outbox;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

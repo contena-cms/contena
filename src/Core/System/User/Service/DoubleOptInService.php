@@ -3,20 +3,19 @@
 namespace Contena\Core\System\User\Service;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Event\UserConfirmRegisterUrlEvent;
-use Contena\Core\System\User\Event\UserDoubleOptInRegistrationEvent;
-use Contena\Core\System\User\Event\DoubleOptInGuestOrderEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\Event\DoubleOptInGuestOrderEvent;
+use Contena\Core\System\User\Event\UserConfirmRegisterUrlEvent;
+use Contena\Core\System\User\Event\UserDoubleOptInRegistrationEvent;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class DoubleOptInService

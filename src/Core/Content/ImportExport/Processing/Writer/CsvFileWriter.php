@@ -5,7 +5,6 @@ namespace Contena\Core\Content\ImportExport\Processing\Writer;
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Framework\Log\Package;
 
 class CsvFileWriter extends AbstractFileWriter
 {

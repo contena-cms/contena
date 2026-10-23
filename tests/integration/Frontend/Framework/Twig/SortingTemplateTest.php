@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Frontend\Framework\Twig;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingEntity;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\TestDefaults;

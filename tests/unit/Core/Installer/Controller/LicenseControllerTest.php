@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Installer\Controller;
 use GuzzleHttp\Exception\TransferException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Controller\LicenseController;
 use Contena\Core\Installer\License\LicenseFetcher;
 use Symfony\Component\HttpFoundation\RedirectResponse;

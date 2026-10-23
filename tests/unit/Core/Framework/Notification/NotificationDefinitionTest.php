@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Notification;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationCollection;
 use Contena\Core\Framework\Notification\NotificationDefinition;
 use Contena\Core\Framework\Notification\NotificationEntity;

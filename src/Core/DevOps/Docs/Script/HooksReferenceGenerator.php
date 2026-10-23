@@ -8,7 +8,6 @@ use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use phpDocumentor\Reflection\DocBlockFactory;
 use phpDocumentor\Reflection\DocBlockFactoryInterface;
 use Contena\Core\DevOps\Docs\DocsException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
 use Contena\Core\Framework\Script\Execution\DeprecatedHook;

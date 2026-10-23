@@ -3,12 +3,11 @@
 namespace Contena\Core\Framework\Adapter\Translation;
 
 use Doctrine\DBAL\Connection;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Locale\LocaleException;
 use Contena\Core\System\Snippet\SnippetService;
@@ -28,6 +27,7 @@ use Symfony\Contracts\Translation\TranslatorTrait;
 class Translator extends AbstractTranslator
 {
     use TranslatorTrait;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     public const ALL_CACHE_TAG = 'translation.catalog.all';
 

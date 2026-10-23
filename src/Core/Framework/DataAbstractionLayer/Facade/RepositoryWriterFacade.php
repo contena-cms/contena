@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Sync\SyncService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The `writer` service allows you to write data, that is stored inside contena.

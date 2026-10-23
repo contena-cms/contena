@@ -14,7 +14,6 @@ use Psr\Http\Message\RequestInterface;
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Http\AppSystemHttpMiddleware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

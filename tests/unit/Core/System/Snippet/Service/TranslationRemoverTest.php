@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Event\TranslationRemovedEvent;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;

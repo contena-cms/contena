@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Maintenance\Channel\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\Channel\Command\ChannelListCommand;
 use Contena\Core\System\Channel\ChannelCollection;

@@ -9,7 +9,6 @@ use Contena\Core\DevOps\Docs\Script\TriggerReferenceGeneratorCommand;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Event\BusinessEventCollectorResponse;
 use Contena\Core\Framework\Event\BusinessEventDefinition;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Exception\IOException;

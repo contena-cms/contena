@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventDefinition;
 use Contena\Core\Framework\App\Template\TemplateDefinition;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
@@ -35,10 +34,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptDefinition;
 use Contena\Core\Framework\Webhook\WebhookDefinition;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\TaxProvider\TaxProviderDefinition;
 
 /**
@@ -101,8 +100,6 @@ class AppDefinition extends EntityDefinition
             (new StringField('version', 'version'))->addFlags(new Required())->setDescription('Version of the plugin.'),
             (new BlobField('icon', 'iconRaw'))->removeFlag(ApiAware::class),
             (new StringField('icon', 'icon'))->addFlags(new WriteProtected(), new Runtime())->setDescription('Icon for the app.'),
-            (new StringField('app_secret', 'appSecret'))->removeFlag(ApiAware::class)->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
-            (new ListField('unconfirmed_app_secrets', 'unconfirmedAppSecrets', StringField::class))->removeFlag(ApiAware::class)->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
             (new ListField('modules', 'modules', JsonField::class))->setDescription('Configuration properties or settings related to modules of an app.'),
             (new JsonField('main_module', 'mainModule'))->setDescription('Configuration properties or settings related to main modules of an app.'),
             (new ListField('cookies', 'cookies', JsonField::class))->setDescription('Configuration properties or settings related to cookies of an app.'),

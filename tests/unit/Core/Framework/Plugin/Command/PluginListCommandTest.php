@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\PluginListCommand;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\ComposerPluginLoader;
 use Contena\Core\Framework\Plugin\PluginCollection;

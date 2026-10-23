@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\Log\Package;
 
 class UserIndexingMessage extends EntityIndexingMessage
 {

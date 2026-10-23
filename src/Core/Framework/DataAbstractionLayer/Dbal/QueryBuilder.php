@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
 use Doctrine\DBAL\Query\QueryBuilder as DBALQueryBuilder;
-use Contena\Core\Framework\Log\Package;
 
 class QueryBuilder extends DBALQueryBuilder
 {

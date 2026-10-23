@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
 
 /**

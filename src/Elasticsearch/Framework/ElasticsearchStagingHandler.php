@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 
 /**

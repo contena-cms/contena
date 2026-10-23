@@ -4,16 +4,15 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Checkout\Promotion\Aggregate\PromotionTranslation\PromotionTranslationDefinition;
 use Contena\Core\Checkout\Promotion\PromotionDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsPageTranslation\CmsPageTranslationDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSlotTranslation\CmsSlotTranslationDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupTranslation\PropertyGroupTranslationDefinition;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -23,12 +22,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationDefinition;
 use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
+use Contena\Core\System\User\UserDefinition;
 
 /**
  * @internal

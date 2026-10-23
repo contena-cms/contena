@@ -3,7 +3,6 @@
 namespace Contena\Core\System\StateMachine\Command;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\StateMachine\Util\StateMachineGraphvizDumper;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -31,8 +30,6 @@ class WorkflowDumpCommand extends Command
     {
         $this
             ->setDefinition([
-                new InputArgument('name', InputArgument::REQUIRED, 'A state machine name'),
-                new InputOption('label', 'l', InputOption::VALUE_REQUIRED, 'Labels a graph'),
             ])
             ->setHelp(
                 <<<'EOF'

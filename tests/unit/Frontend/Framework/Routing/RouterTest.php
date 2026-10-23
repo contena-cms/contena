@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Routing;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\Router;

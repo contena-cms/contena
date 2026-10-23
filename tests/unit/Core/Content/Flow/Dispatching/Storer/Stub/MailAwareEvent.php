@@ -8,7 +8,6 @@ use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

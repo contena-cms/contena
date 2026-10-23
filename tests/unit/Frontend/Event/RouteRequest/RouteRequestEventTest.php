@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Event\RouteRequest;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Event\RouteRequest\LanguageRouteRequestEvent;
 use Contena\Frontend\Event\RouteRequest\RouteRequestEvent;

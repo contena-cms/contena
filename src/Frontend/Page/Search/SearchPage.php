@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Search;
 
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class SearchPage extends Page

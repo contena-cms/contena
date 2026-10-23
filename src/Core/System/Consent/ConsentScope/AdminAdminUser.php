@@ -4,7 +4,6 @@ namespace Contena\Core\System\Consent\ConsentScope;
 
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentException;
 use Contena\Core\System\Consent\ConsentScope;
 

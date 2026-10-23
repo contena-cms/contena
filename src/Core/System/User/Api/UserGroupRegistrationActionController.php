@@ -2,20 +2,19 @@
 
 namespace Contena\Core\System\User\Api;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Event\UserGroupRegistrationAccepted;
-use Contena\Core\System\User\Event\UserGroupRegistrationDeclined;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Context\ChannelContextRestorer;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\Event\UserGroupRegistrationAccepted;
+use Contena\Core\System\User\Event\UserGroupRegistrationDeclined;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

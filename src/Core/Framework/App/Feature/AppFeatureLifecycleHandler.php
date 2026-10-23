@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Feature;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Lifecycle\Handler\AbstractLifecycleHandler;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Syncs the features declared in an app's manifest to the `app_feature` table on

@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Framework;
 
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 
 class ElasticsearchFieldMapper

@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\Infrastructure\Path;
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\UrlEncoder;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Blog\Subscriber;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

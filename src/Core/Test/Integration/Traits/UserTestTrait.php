@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Test\Integration\Traits;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
 use Contena\Core\Test\TestDefaults;

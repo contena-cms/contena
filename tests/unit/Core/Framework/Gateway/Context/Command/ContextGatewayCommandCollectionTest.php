@@ -9,7 +9,6 @@ use Contena\Core\Framework\Gateway\Context\Command\ChangePaymentMethodCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ContextGatewayCommandCollection;
 use Contena\Core\Framework\Gateway\Context\Command\LoginUserCommand;
 use Contena\Core\Framework\Gateway\Context\Command\RegisterUserCommand;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

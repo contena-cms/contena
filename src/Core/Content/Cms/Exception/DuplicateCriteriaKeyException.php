@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\Exception;
 
 use Contena\Core\Content\Cms\CmsException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class DuplicateCriteriaKeyException extends CmsException

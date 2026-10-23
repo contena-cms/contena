@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Cache;
 
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template TCachedContent

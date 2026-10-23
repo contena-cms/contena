@@ -4,7 +4,6 @@ namespace Contena\Core\Installer\Configuration;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
 
 /**

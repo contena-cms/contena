@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook\Service;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\App\DeletedApps\DeletedAppsGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 

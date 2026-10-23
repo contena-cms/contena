@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnore;
 
 use PhpParser\Node;
 use PHPStan\Reflection\ReflectionProvider;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Decides whether a docblock's @see references exempt the annotated symbol

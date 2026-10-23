@@ -4,17 +4,17 @@ namespace Contena\Elasticsearch\Admin\Indexer;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
-use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
+use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationDefinition;
 
 final class UserGroupAdminSearchIndexer extends AbstractAdminIndexer
 {

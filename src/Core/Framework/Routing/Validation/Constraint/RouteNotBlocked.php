@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Validation\Constraint;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;
 
 /**

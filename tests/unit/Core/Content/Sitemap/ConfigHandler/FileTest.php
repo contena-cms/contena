@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\ConfigHandler\File;
 use Contena\Core\Content\Sitemap\Service\ConfigHandler;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

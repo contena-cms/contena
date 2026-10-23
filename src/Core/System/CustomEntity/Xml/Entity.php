@@ -4,7 +4,6 @@ namespace Contena\Core\System\CustomEntity\Xml;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\Xml\Config\ConfigXmlElement;
 use Contena\Core\System\CustomEntity\Xml\Field\Field;
 use Contena\Core\System\CustomEntity\Xml\Field\FieldFactory;

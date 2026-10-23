@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Manifest\Xml\Document;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Parses the manifest `<documents>` block into raw document-type declarations. The typed

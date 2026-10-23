@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\Acl\Event;
 
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

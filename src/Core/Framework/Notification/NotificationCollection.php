@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Notification;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Deprecation\BCChange\ClassMoved;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<NotificationEntity>

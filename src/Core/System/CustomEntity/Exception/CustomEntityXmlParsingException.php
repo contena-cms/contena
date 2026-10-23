@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomEntity\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -5,10 +5,10 @@ namespace Contena\Tests\Integration\Core\Content\ContentStream\DataAbstractionLa
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamIndexer;
 use Contena\Core\Content\ContentStream\ContentStreamCollection;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Content\ContentStream\ContentStreamEntity;
+use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamIndexer;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -21,9 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

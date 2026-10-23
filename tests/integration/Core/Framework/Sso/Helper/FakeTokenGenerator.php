@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\Sso\Helper;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\SystemCheck\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
 use Contena\Core\Framework\SystemCheck\SystemChecker;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\Capability;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

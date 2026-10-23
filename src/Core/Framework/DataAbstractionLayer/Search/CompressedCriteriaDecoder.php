@@ -3,8 +3,8 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search;
 
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Base64;
+use Contena\Core\Framework\Util\Exception\Base64DecodingException;
 
 /**
  * @internal

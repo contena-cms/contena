@@ -2,7 +2,6 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\Fixture;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Fixture for the NoReflectionOnNonPublicMethodsRule test: a Contena class with every method

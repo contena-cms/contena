@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolation;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

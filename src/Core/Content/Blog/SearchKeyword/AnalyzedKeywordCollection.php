@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\SearchKeyword;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

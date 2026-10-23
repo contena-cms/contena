@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\Clock;
 
 /**

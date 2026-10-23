@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Validation\Requirements;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

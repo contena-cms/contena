@@ -5,7 +5,6 @@ namespace Contena\Frontend\Theme\Subscriber;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\System\Channel\ChannelCollection;
@@ -13,6 +12,7 @@ use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Frontend\Theme\Exception\ThemeCompileException;
 
 /**
  * @internal

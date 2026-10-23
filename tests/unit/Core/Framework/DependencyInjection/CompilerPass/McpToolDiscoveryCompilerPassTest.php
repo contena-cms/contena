@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolDiscoveryCompilerPass;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\Tool\McpToolResponse;

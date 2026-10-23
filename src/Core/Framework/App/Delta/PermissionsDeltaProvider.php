@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Delta;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Privileges\Utils;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Struct\PermissionCollection;
 
 /**

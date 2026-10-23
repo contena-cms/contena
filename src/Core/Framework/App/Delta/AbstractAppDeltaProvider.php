@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Delta;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

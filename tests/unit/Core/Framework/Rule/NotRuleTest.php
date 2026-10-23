@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutRuleScope;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\NotRule;
 use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
 use Contena\Core\Framework\Rule\RuleException;

@@ -4,11 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\Plugin;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\BundleConfigGenerator;
 use Contena\Core\Framework\Plugin\BundleConfigGeneratorInterface;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 
 /**

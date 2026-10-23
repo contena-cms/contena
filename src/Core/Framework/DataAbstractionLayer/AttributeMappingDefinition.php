@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Flag;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
-use Contena\Core\Framework\Log\Package;
 
 class AttributeMappingDefinition extends MappingEntityDefinition
 {

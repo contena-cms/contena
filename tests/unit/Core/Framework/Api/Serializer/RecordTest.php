@@ -4,18 +4,16 @@ namespace Contena\Tests\Unit\Core\Framework\Api\Serializer;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionDefinition;
 use Contena\Core\Framework\Api\Serializer\Record;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\Tag\TagEntity;
 use Contena\Core\System\Tax\TaxEntity;
-use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestAttributeEntity;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

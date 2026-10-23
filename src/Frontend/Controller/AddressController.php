@@ -2,28 +2,27 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Channel\AbstractDeleteAddressRoute;
-use Contena\Core\System\User\Channel\AbstractListAddressRoute;
-use Contena\Core\System\User\Channel\AbstractUpsertAddressRoute;
-use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Uuid\UuidException;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\System\Channel\NoContentResponse;
-use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
-use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\Channel\AbstractDeleteAddressRoute;
+use Contena\Core\System\User\Channel\AbstractListAddressRoute;
+use Contena\Core\System\User\Channel\AbstractUpsertAddressRoute;
+use Contena\Core\System\User\Channel\AccountService;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Address\AddressEditorModalStruct;
 use Contena\Frontend\Page\Address\Detail\AddressDetailPageLoadedHook;
@@ -36,6 +35,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
+use Contena\Core\System\User\Exception\AddressNotFoundException;
 
 /**
  * @internal

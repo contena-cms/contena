@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\DataTransfer\PluginMapping;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

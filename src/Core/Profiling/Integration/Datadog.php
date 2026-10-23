@@ -5,7 +5,6 @@ namespace Contena\Core\Profiling\Integration;
 use DDTrace\Contracts\Tracer;
 use DDTrace\GlobalTracer;
 use DDTrace\Tag;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal experimental atm

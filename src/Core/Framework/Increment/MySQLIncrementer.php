@@ -8,7 +8,6 @@ use Doctrine\DBAL\ParameterType;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

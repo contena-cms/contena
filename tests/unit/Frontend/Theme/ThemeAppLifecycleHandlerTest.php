@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;

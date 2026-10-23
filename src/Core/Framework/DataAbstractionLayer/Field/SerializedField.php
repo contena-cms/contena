@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldSerializerI
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\JsonFieldSerializer;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * General field to support custom serializes in attribute entities, should never be used directly, but only over the #[Serialized] attribute.

@@ -9,7 +9,6 @@ use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\Message\ImportExportMessage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 

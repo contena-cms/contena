@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Version;
 
-use Contena\Core\Framework\Log\Package;
 
 class VersionEvents
 {

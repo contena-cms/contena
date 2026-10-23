@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\System\Command\SystemConfigureShopCommand;
 use Contena\Core\Maintenance\System\Service\ShopConfigurator;
 use Symfony\Component\Console\Command\Command;

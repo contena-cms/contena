@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Migration\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\Command\RefreshMigrationCommand;
 use Contena\Core\Framework\Migration\MigrationException;
 use Symfony\Component\Clock\MockClock;

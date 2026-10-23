@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ResetInterface;
 
 abstract class AbstractTokenFilter implements ResetInterface

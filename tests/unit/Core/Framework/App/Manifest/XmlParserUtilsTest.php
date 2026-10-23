@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\SeoUrlTemplate;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 
 /**

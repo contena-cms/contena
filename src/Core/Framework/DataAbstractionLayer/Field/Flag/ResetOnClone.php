@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field\Flag;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Omits the field's current value when an entity is cloned, allowing its normal default to apply.

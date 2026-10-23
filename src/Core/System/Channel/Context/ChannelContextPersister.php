@@ -7,29 +7,16 @@ use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Event\ChannelContextTokenChangeEvent;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Event\ChannelContextTokenChangeEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ChannelContextPersister
 {
     private readonly string $lifetimeInterval;
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly Connection $connection,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly AbstractCartPersister $cartPersister,
-        private readonly ClockInterface $clock,
-        ?string $lifetimeInterval = 'P1D',
-    ) {
-        $this->lifetimeInterval = $lifetimeInterval ?? 'P1D';
-    }
 
     /**
      * @codeCoverageIgnore

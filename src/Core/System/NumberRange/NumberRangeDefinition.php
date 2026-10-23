@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelDefinition;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeState\NumberRangeStateDefinition;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeTranslation\NumberRangeTranslationDefinition;

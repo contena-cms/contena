@@ -16,7 +16,6 @@ use Contena\Core\Content\Media\TypeDetector\DocumentTypeDetector;
 use Contena\Core\Content\Media\TypeDetector\ImageTypeDetector;
 use Contena\Core\Content\Media\TypeDetector\TypeDetector;
 use Contena\Core\Content\Media\TypeDetector\VideoTypeDetector;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

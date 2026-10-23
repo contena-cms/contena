@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Util;
 
 use GuzzleHttp\Psr7\Uri;
-use Contena\Core\Framework\Log\Package;
 
 class UrlEncoder
 {

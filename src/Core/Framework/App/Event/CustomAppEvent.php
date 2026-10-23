@@ -6,7 +6,6 @@ use Contena\Core\Content\Flow\Dispatching\Aware\CustomAppAware;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

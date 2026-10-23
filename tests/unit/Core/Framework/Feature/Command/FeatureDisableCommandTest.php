@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\Command\FeatureDisableCommand;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

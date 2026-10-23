@@ -3,7 +3,6 @@
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Type;
 
 use PHPStan\Testing\TypeInferenceTestCase;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

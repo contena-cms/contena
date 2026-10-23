@@ -8,6 +8,7 @@ use Contena\Core\Framework\App\Manifest\Xml\Administration\Admin;
 use Contena\Core\Framework\App\Manifest\Xml\AllowedHost\AllowedHosts;
 use Contena\Core\Framework\App\Manifest\Xml\Cookie\Cookies;
 use Contena\Core\Framework\App\Manifest\Xml\Document\Documents;
+use Contena\Core\Framework\App\Manifest\Xml\Frontend\Frontend;
 use Contena\Core\Framework\App\Manifest\Xml\Gateway\CheckoutGateway;
 use Contena\Core\Framework\App\Manifest\Xml\Gateway\ContextGateway;
 use Contena\Core\Framework\App\Manifest\Xml\Gateway\Gateways;
@@ -17,10 +18,8 @@ use Contena\Core\Framework\App\Manifest\Xml\Permission\Permissions;
 use Contena\Core\Framework\App\Manifest\Xml\RuleCondition\RuleConditions;
 use Contena\Core\Framework\App\Manifest\Xml\Setup\Setup;
 use Contena\Core\Framework\App\Manifest\Xml\ShippingMethod\ShippingMethods;
-use Contena\Core\Framework\App\Manifest\Xml\Frontend\Frontend;
 use Contena\Core\Framework\App\Manifest\Xml\Tax\Tax;
 use Contena\Core\Framework\App\Manifest\Xml\Webhook\Webhooks;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Symfony\Component\Config\Util\XmlUtils;
 

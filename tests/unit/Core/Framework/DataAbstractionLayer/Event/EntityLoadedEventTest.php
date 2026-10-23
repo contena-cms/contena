@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginDefinition;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;

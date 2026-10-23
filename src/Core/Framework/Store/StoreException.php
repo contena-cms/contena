@@ -6,8 +6,15 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceAdminUserException;
+use Contena\Core\Framework\Plugin\Exception\PluginNotAZipFileException;
+use Contena\Core\Framework\Store\Exception\ExtensionNotFoundException;
+use Contena\Core\Framework\Store\Exception\ExtensionUpdateRequiresConsentAffirmationException;
+use Contena\Core\Framework\Store\Exception\ShopSecretInvalidException;
+use Contena\Core\Framework\Store\Exception\StoreApiException;
+use Contena\Core\Framework\Store\Exception\StoreInvalidCredentialsException;
+use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
 
 class StoreException extends HttpException
 {

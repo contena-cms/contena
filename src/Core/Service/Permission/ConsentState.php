@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Permission;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

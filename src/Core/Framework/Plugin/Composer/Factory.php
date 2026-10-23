@@ -7,7 +7,6 @@ use Composer\Factory as ComposerFactory;
 use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 
 class Factory

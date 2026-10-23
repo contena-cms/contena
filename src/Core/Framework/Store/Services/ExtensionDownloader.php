@@ -6,7 +6,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Store\StoreException;

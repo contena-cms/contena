@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Migration\Command;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

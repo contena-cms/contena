@@ -11,14 +11,13 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
+use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingProvider;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingUpdater;
 use Contena\Elasticsearch\Framework\SystemUpdateListener;
-use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
-use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 
 /**
  * @internal

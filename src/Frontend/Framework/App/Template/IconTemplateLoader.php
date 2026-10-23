@@ -5,7 +5,6 @@ namespace Contena\Frontend\Framework\App\Template;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\App\Template\AbstractTemplateLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Symfony\Component\Finder\Finder;

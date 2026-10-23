@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Event\CartMergedEvent;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Event\CartMergedSubscriber;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Cleanup;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTask;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

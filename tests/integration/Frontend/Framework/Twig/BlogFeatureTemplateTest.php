@@ -5,9 +5,6 @@ namespace Contena\Tests\Integration\Frontend\Framework\Twig;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Content\Blog\Aggregate\BlogFeatureSet\BlogFeatureSetDefinition;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 

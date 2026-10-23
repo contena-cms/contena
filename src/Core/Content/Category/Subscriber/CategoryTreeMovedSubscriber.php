@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Category\Subscriber;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

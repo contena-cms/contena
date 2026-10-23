@@ -11,7 +11,6 @@ use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\OAuth\Client\PublicClientRegistry;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

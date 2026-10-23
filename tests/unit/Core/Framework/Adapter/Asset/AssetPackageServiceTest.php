@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Asset\AssetPackageService;
 use Contena\Core\Framework\Adapter\Asset\FallbackUrlPackage;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Symfony\Component\Asset\Exception\InvalidArgumentException;
 use Symfony\Component\Asset\Package;
 use Symfony\Component\Asset\Packages;

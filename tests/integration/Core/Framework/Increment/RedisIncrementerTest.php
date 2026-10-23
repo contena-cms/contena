@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
 use Contena\Core\Framework\Increment\RedisIncrementer;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

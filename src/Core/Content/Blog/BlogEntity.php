@@ -2,35 +2,34 @@
 
 namespace Contena\Core\Content\Blog;
 
-use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogCollection;
-use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
 use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingConfig;
+use Contena\Core\Content\Category\CategoryCollection;
+use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\ContentStream\ContentStreamCollection;
+use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tax\TaxEntity;
+use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogCollection;
 use Symfony\Component\Clock\Clock;
 
 class BlogEntity extends Entity implements \Stringable
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
+use Contena\Core\System\Unit\UnitEntity;
 
     protected ?string $parentId = null;
 
@@ -78,7 +77,6 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?string $deliveryTimeId = null;
 
-    protected ?DeliveryTimeEntity $deliveryTime = null;
 
     protected ?int $restockTime = null;
 
@@ -164,7 +162,6 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?TaxEntity $tax = null;
 
-    protected ?BlogManufacturerEntity $manufacturer = null;
 
     protected ?UnitEntity $unit = null;
 
@@ -199,7 +196,6 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?PropertyGroupOptionCollection $options = null;
 
-    protected ?BlogConfiguratorSettingCollection $configuratorSettings = null;
 
     protected ?CategoryCollection $categoriesRo = null;
 
@@ -217,7 +213,6 @@ class BlogEntity extends Entity implements \Stringable
      */
     protected ?array $categoryIds = null;
 
-    protected ?BlogReviewCollection $blogReviews = null;
 
     protected ?float $ratingAverage = null;
 
@@ -225,15 +220,11 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?SeoUrlCollection $seoUrls = null;
 
-    protected ?OrderLineItemCollection $orderLineItems = null;
 
-    protected ?BlogCrossSellingCollection $crossSellings = null;
 
-    protected ?BlogCrossSellingAssignedBlogsCollection $crossSellingAssignedBlogs = null;
 
     protected ?string $featureSetId = null;
 
-    protected ?BlogFeatureSetEntity $featureSet = null;
 
     protected ?bool $customFieldSetSelectionActive = null;
 
@@ -250,7 +241,6 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?ContentStreamCollection $streams = null;
 
-    protected ?BlogDownloadCollection $downloads = null;
 
     protected ?string $openGraphMediaId = null;
 
@@ -273,15 +263,7 @@ class BlogEntity extends Entity implements \Stringable
         return (string) ($this->getTranslation('name') ?? $this->getName());
     }
 
-    public function getBlogReviews(): ?BlogReviewCollection
-    {
-        return $this->blogReviews;
-    }
 
-    public function setBlogReviews(BlogReviewCollection $blogReviews): void
-    {
-        $this->blogReviews = $blogReviews;
-    }
 
     public function getParentId(): ?string
     {
@@ -694,15 +676,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->tax = $tax;
     }
 
-    public function getManufacturer(): ?BlogManufacturerEntity
-    {
-        return $this->manufacturer;
-    }
 
-    public function setManufacturer(BlogManufacturerEntity $manufacturer): void
-    {
-        $this->manufacturer = $manufacturer;
-    }
 
     public function getUnit(): ?UnitEntity
     {
@@ -714,15 +688,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->unit = $unit;
     }
 
-    public function getPrices(): ?BlogPriceCollection
-    {
-        return $this->prices;
-    }
 
-    public function setPrices(BlogPriceCollection $prices): void
-    {
-        $this->prices = $prices;
-    }
 
     public function getRestockTime(): ?int
     {
@@ -734,20 +700,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->restockTime = $restockTime;
     }
 
-    public function getDeliveryDate(): DeliveryDate
-    {
-        return new DeliveryDate(
-            Clock::get()->now()->add(new \DateInterval('P1D')),
-            Clock::get()->now()->add(new \DateInterval('P2D'))
-        );
-    }
 
-    public function getRestockDeliveryDate(): DeliveryDate
-    {
-        $deliveryDate = $this->getDeliveryDate();
-
-        return $deliveryDate->add(new \DateInterval('P' . $this->getRestockTime() . 'D'));
-    }
 
     public function isReleased(): bool
     {
@@ -952,15 +905,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->options = $options;
     }
 
-    public function getConfiguratorSettings(): ?BlogConfiguratorSettingCollection
-    {
-        return $this->configuratorSettings;
-    }
 
-    public function setConfiguratorSettings(BlogConfiguratorSettingCollection $configuratorSettings): void
-    {
-        $this->configuratorSettings = $configuratorSettings;
-    }
 
     public function getCategoriesRo(): ?CategoryCollection
     {
@@ -1100,15 +1045,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->deliveryTimeId = $deliveryTimeId;
     }
 
-    public function getDeliveryTime(): ?DeliveryTimeEntity
-    {
-        return $this->deliveryTime;
-    }
 
-    public function setDeliveryTime(?DeliveryTimeEntity $deliveryTime): void
-    {
-        $this->deliveryTime = $deliveryTime;
-    }
 
     public function getChildCount(): ?int
     {
@@ -1170,35 +1107,11 @@ class BlogEntity extends Entity implements \Stringable
         $this->seoUrls = $seoUrls;
     }
 
-    public function getOrderLineItems(): ?OrderLineItemCollection
-    {
-        return $this->orderLineItems;
-    }
 
-    public function setOrderLineItems(OrderLineItemCollection $orderLineItems): void
-    {
-        $this->orderLineItems = $orderLineItems;
-    }
 
-    public function getCrossSellings(): ?BlogCrossSellingCollection
-    {
-        return $this->crossSellings;
-    }
 
-    public function setCrossSellings(BlogCrossSellingCollection $crossSellings): void
-    {
-        $this->crossSellings = $crossSellings;
-    }
 
-    public function getCrossSellingAssignedBlogs(): ?BlogCrossSellingAssignedBlogsCollection
-    {
-        return $this->crossSellingAssignedBlogs;
-    }
 
-    public function setCrossSellingAssignedBlogs(BlogCrossSellingAssignedBlogsCollection $crossSellingAssignedBlogs): void
-    {
-        $this->crossSellingAssignedBlogs = $crossSellingAssignedBlogs;
-    }
 
     public function getFeatureSetId(): ?string
     {
@@ -1210,15 +1123,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->featureSetId = $featureSetId;
     }
 
-    public function getFeatureSet(): ?BlogFeatureSetEntity
-    {
-        return $this->featureSet;
-    }
 
-    public function setFeatureSet(BlogFeatureSetEntity $featureSet): void
-    {
-        $this->featureSet = $featureSet;
-    }
 
     public function getCustomFieldSetSelectionActive(): ?bool
     {
@@ -1302,15 +1207,7 @@ class BlogEntity extends Entity implements \Stringable
         $this->categoryIds = $categoryIds;
     }
 
-    public function getDownloads(): ?BlogDownloadCollection
-    {
-        return $this->downloads;
-    }
 
-    public function setDownloads(BlogDownloadCollection $downloads): void
-    {
-        $this->downloads = $downloads;
-    }
 
     /**
      * @return array<int, string>

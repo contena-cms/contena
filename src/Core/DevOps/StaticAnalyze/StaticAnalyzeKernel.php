@@ -2,7 +2,6 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 
 /**

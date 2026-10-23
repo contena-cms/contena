@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\Processing\Reader;
 
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Framework\Log\Package;
 
 class CsvReader extends AbstractReader
 {

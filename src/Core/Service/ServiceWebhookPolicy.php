@@ -3,7 +3,6 @@
 namespace Contena\Core\Service;
 
 use Contena\Core\Framework\App\ActiveAppsLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Policy\Policy;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Hookable;

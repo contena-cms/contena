@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 
 class CategoryStoreApiUrlRoute implements EntitySeoUrlRouteInterface
@@ -37,8 +36,6 @@ class CategoryStoreApiUrlRoute implements EntitySeoUrlRouteInterface
     {
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
-            new EqualsFilter('type', CategoryDefinition::TYPE_FOLDER),
-            new EqualsFilter('type', CategoryDefinition::TYPE_LINK),
         ]));
 
         $rootCategoryIds = array_values(array_filter([

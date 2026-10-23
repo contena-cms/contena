@@ -14,7 +14,6 @@ use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Content\Sitemap\Provider\LandingPageUrlProvider;
 use Contena\Core\Content\Sitemap\Service\ConfigHandler;
 use Contena\Core\Content\Sitemap\Struct\Url;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class McpException extends HttpException
@@ -51,8 +50,4 @@ class McpException extends HttpException
         );
     }
 
-    public static function toolResultNotFound(string $id): ResourceNotFoundException
-    {
-        return new ResourceNotFoundException(\sprintf('Tool result "%s" not found. It may have expired or been stored by another caller.', $id));
-    }
 }

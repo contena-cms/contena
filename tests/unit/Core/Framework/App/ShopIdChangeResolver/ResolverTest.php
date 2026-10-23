@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopIdChangeResolver\Resolver;
 use Contena\Core\Framework\App\ShopIdChangeResolver\ShopIdChangeStrategy;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

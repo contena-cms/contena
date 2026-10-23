@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @description This class is used to build a select part of a SQL.

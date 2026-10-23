@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Extension\ConfigExtension;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Annotation\DisabledFeatures;

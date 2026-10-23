@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Pagelet;
 
 use Contena\Core\Content\Category\Tree\Tree;
-use Contena\Core\Framework\Log\Package;
 
 abstract class NavigationPagelet extends Pagelet
 {

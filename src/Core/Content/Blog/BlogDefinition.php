@@ -2,21 +2,19 @@
 
 namespace Contena\Core\Content\Blog;
 
-use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogDefinition;
-use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCustomFieldSet\BlogCustomFieldSetDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordDefinition;
-use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
+use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
-use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionDefinition;
+use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -38,7 +36,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SetNullOnDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -60,11 +57,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\VariantListingConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\Tax\TaxDefinition;
+use Contena\Core\System\Unit\UnitDefinition;
+use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogDefinition;
 
 class BlogDefinition extends EntityDefinition
 {
@@ -167,11 +165,9 @@ class BlogDefinition extends EntityDefinition
             (new StringField('display_group', 'displayGroup'))->addFlags(new ApiAware(), new WriteProtected())->setDescription('Runtime field, cannot be used as part of the criteria.'),
             (new VariantListingConfigField('variant_listing_config', 'variantListingConfig'))->addFlags(new Inherited())->setDescription('Information regarding if this variant should included in listing or not.'),
             (new JsonField('variant_restrictions', 'variantRestrictions'))->setDescription('Configuration about which variants and its combination are not available like red shirt in medium size in not available.'),
-            (new StringField('manufacturer_number', 'manufacturerNumber'))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Unique number that describes the manufacturer.'),
             (new IntField('guarantee_months', 'guaranteeMonths'))->addFlags(new ApiAware(), new Inherited())->setDescription('Commercial durability guarantee duration in months.'),
             (new BoolField('guarantee_confirmed', 'guaranteeConfirmed'))->addFlags(new ApiAware(), new Inherited())->setDescription('Merchant confirmation that the producer commercial durability guarantee information is accurate and has been made available.'),
             (new StringField('guarantee_terms_url', 'guaranteeTermsUrl', 2048))->addFlags(new ApiAware(), new Inherited())->setDescription('URL of the producer commercial durability guarantee terms.'),
-            (new StringField('ean', 'ean'))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Indicates EAN of the blog.'),
             (new IntField('purchase_steps', 'purchaseSteps', 1))->addFlags(new ApiAware(), new Inherited())->setDescription('Specifies the scales in which the item is to be offered. For example, a scale of 2 means that your users can purchase 2, 4, 6 blogs, etc., but not 1, 3 or 5.'),
             (new IntField('max_purchase', 'maxPurchase'))->addFlags(new ApiAware(), new Inherited())->setDescription('Maximum number of items that can be purchased.'),
             (new IntField('min_purchase', 'minPurchase', 1))->addFlags(new ApiAware(), new Inherited())->setDescription('Minimum number of items that can be purchased.'),
@@ -197,7 +193,6 @@ class BlogDefinition extends EntityDefinition
             (new IntField('sales', 'sales'))->addFlags(new ApiAware(), new WriteProtected())->setDescription('Frequency of the blog sales.'),
 
             (new TranslatedField('metaDescription'))->addFlags(new ApiAware(), new Inherited()),
-            (new TranslatedField('name', true))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('keywords'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('description'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('descriptionTeaser'))->addFlags(new ApiAware(), new Inherited())->setDescription('Read-only, HTML-stripped excerpt of the description, derived on write.'),
@@ -206,7 +201,6 @@ class BlogDefinition extends EntityDefinition
             (new TranslatedField('packUnitPlural'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('customFields'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('slotConfig'))->addFlags(new Inherited()),
-            (new TranslatedField('customSearchKeywords'))->addFlags(new Inherited(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('ogTitle'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('ogDescription'))->addFlags(new ApiAware(), new Inherited()),
 

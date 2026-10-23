@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\Service;
 
 use Contena\Core\Content\ImportExport\Processing\Mapping\MappingCollection;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 abstract class AbstractMappingService

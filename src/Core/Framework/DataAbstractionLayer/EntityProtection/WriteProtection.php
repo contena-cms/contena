@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\EntityProtection;
 
-use Contena\Core\Framework\Log\Package;
 
 class WriteProtection extends EntityProtection
 {

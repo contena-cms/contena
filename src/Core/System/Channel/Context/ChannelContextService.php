@@ -4,13 +4,12 @@ namespace Contena\Core\System\Channel\Context;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
-use Contena\Core\System\Channel\Event\ChannelContextCreatedEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\Event\ChannelContextCreatedEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -66,18 +65,6 @@ class ChannelContextService implements ChannelContextServiceInterface
      */
     final public const SHIPPING_ADDRESS = 'sw-shipping-address';
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractChannelContextFactory $factory,
-        private readonly CartCalculator $cartCalculator,
-        private readonly ChannelContextPersister $contextPersister,
-        private readonly CartService $cartService,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly RequestStack $requestStack
-    ) {
-    }
 
     public function get(ChannelContextServiceParameters $parameters): ChannelContext
     {

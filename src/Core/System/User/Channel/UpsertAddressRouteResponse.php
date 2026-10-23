@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 
 /**
  * @extends StoreApiResponse<UserAddressEntity>

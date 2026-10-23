@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch;
 use OpenSearchDSL\BuilderInterface;
 use OpenSearchDSL\Query\Joining\NestedQuery;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 
 /**

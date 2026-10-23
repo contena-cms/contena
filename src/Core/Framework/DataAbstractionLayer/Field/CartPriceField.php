@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CartPriceFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

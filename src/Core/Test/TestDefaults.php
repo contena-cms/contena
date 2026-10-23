@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -4,14 +4,13 @@ namespace Contena\Core\Framework\Mcp\Tool;
 
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Controller\McpServerController;
 use Contena\Core\Framework\Mcp\Result\McpToolError;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPrincipal;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Util\Json;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

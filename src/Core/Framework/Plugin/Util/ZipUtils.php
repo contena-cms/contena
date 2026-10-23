@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginException;
 
 class ZipUtils

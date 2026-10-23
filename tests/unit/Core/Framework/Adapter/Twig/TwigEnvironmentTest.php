@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Runtime\CachedEscaperRuntime;
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Extension\AbstractExtension;

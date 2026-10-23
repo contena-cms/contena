@@ -3,24 +3,22 @@
 namespace Contena\Tests\Integration\Core\Content\Blog\Cms\Type;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
+use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Cms\ManufacturerLogoCmsElementResolver;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\ManufacturerLogoStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\ManufacturerLogoStruct;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
-use Contena\Core\Content\Blog\Cms\ManufacturerLogoCmsElementResolver;
-use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 

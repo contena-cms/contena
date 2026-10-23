@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Upload;
 
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

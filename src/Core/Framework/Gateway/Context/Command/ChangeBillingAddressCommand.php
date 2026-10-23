@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Gateway\Context\Command;
 
-use Contena\Core\Framework\Log\Package;
 
 class ChangeBillingAddressCommand extends AbstractContextGatewayCommand
 {

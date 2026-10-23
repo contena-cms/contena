@@ -12,8 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 
@@ -46,9 +44,6 @@ class NavigationPageSeoUrlRoute implements SeoUrlRouteInterface
     {
         $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_AND, [
             new EqualsFilter('active', true),
-            new NotFilter(NotFilter::CONNECTION_OR, [
-                new EqualsFilter('type', CategoryDefinition::TYPE_FOLDER),
-            ]),
         ]));
     }
 

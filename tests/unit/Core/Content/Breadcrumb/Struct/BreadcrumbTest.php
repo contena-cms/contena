@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Breadcrumb\Struct;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Breadcrumb\Struct\Breadcrumb;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

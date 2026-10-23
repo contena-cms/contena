@@ -8,7 +8,6 @@ use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\Core\Params\UrlParamsSource;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Profiling\Profiler;
 

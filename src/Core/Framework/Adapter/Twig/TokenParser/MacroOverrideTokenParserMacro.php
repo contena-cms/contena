@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 
-use Contena\Core\Framework\Log\Package;
 use Twig\Token;
 
 /**

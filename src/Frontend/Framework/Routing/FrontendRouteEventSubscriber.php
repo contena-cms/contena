@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Event\FrontendRenderEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

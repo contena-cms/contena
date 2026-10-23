@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\User\Aggregate\UserWishlist;
 
-use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogDefinition;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
@@ -15,8 +13,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogDefinition;
+use Contena\Core\System\User\UserDefinition;
 
 /**
  * @codeCoverageIgnore

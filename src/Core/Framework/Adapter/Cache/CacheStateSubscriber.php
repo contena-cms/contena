@@ -2,12 +2,11 @@
 
 namespace Contena\Core\Framework\Adapter\Cache;
 
-use Contena\Core\System\User\Event\UserLoginEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Event\UserLoginEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
@@ -29,12 +28,6 @@ class CacheStateSubscriber implements EventSubscriberInterface
      */
     final public const STATE_CART_FILLED = 'cart-filled';
 
-    /**
-     * @internal
-     */
-    public function __construct(private readonly CartService $cartService)
-    {
-    }
 
     /**
      * @return array<string, string|array{0: string, 1: int}|list<array{0: string, 1?: int}>>
@@ -65,20 +58,6 @@ class CacheStateSubscriber implements EventSubscriberInterface
         $event->getChannelContext()->addState(self::STATE_LOGGED_IN);
     }
 
-    public function cartChanged(CartChangedEvent $event): void
-    {
-        Feature::throwIfActive('v6.8.0.0', Feature::deprecatedClassMessage(self::class, 'v6.8.0.0'));
-
-        if (Feature::isActive('PERFORMANCE_TWEAKS') || Feature::isActive('CACHE_REWORK')) {
-            return;
-        }
-
-        $event->getChannelContext()->removeState(self::STATE_CART_FILLED);
-
-        if ($event->getCart()->getLineItems()->count() > 0) {
-            $event->getChannelContext()->addState(self::STATE_CART_FILLED);
-        }
-    }
 
     public function setStates(ControllerEvent $event): void
     {

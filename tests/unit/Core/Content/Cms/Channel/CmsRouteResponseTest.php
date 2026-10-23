@@ -4,9 +4,8 @@ namespace Contena\Tests\Unit\Core\Content\Cms\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Cms\Channel\CmsRouteResponse;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Content\Cms\CmsPageEntity;
 
 /**
  * @internal

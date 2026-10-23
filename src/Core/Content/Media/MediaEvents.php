@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\Event\MediaFolderConfigurationIndexerEvent;
 use Contena\Core\Content\Media\Event\MediaFolderIndexerEvent;
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;
 use Contena\Core\Content\Media\Event\MediaUploadedEvent;
-use Contena\Core\Framework\Log\Package;
 
 class MediaEvents
 {

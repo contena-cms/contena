@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 class ChildCountUpdater

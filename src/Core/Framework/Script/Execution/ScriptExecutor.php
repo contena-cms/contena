@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Script\Execution;
 
 use Contena\Core\Framework\App\Event\Hooks\AppLifecycleHook;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\AclFacadeHookFactory;
 use Contena\Core\Framework\Script\Debugging\Debug;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;

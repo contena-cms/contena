@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook\Authorization\Subscription;
 
 use Contena\Core\Framework\Api\Acl\ApiCallerType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\InvalidatorStorage;
 
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractInvalidatorStorage
 {

@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\Docs\Script;
 
 use Composer\ClassMapGenerator\ClassMapGenerator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework\Indexing\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 class ElasticsearchIndexAliasSwitchedEvent
 {

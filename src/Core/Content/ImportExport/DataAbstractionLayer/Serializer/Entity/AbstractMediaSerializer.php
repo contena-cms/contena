@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractMediaSerializer extends EntitySerializer
 {

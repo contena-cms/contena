@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Country;
 
-use Contena\Core\Framework\Log\Package;
 
 class CountryEvents
 {

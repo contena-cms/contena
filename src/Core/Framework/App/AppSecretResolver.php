@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Resolves an app's current secret by name, read fresh on each call so a rotation

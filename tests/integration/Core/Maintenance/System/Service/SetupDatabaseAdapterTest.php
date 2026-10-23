@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Maintenance\System\Service;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;

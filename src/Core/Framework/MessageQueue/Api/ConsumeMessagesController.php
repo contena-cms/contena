@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\Api;
 
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\Subscriber\CountHandledMessagesListener;
 use Contena\Core\Framework\MessageQueue\Subscriber\EarlyReturnMessagesListener;

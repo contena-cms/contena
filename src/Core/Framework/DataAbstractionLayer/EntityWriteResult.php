@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Contains the result of the entity write process

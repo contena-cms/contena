@@ -12,7 +12,6 @@ use Contena\Core\Framework\Gateway\Context\Command\ChangePaymentMethodCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingMethodCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeCheckoutOptionsCommandHandler;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

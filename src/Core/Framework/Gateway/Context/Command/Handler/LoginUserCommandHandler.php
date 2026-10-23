@@ -2,11 +2,10 @@
 
 namespace Contena\Core\Framework\Gateway\Context\Command\Handler;
 
-use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\LoginUserCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Channel\AccountService;
 
 /**
  * @extends AbstractContextGatewayCommandHandler<LoginUserCommand>

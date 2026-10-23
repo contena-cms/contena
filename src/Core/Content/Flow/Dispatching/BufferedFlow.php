@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Temporary buffered flow that can be converted into

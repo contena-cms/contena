@@ -10,7 +10,6 @@ use Contena\Core\DevOps\Docs\App\DocsAppEventCommand;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Event\BusinessEventCollectorResponse;
 use Contena\Core\Framework\Event\BusinessEventDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PolicyRegistry;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventCollector;
 use Symfony\Component\Console\Command\Command;

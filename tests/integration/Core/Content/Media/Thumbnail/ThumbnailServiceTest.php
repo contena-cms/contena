@@ -19,15 +19,11 @@ use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\Subscriber\MediaDeletionSubscriber;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
-use Contena\Core\Content\Test\Media\MediaFixtures;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 

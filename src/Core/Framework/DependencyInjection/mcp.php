@@ -23,11 +23,11 @@ use Contena\Core\Framework\Mcp\Authentication\McpExceptionListener;
 use Contena\Core\Framework\Mcp\Command\DebugMcpCommand;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Context\StoreApiMcpContextProvider;
+use Contena\Core\Framework\Mcp\Controller\AdminUserMcpAllowlistController;
 use Contena\Core\Framework\Mcp\Controller\IntegrationMcpAllowlistController;
 use Contena\Core\Framework\Mcp\Controller\McpServerController;
 use Contena\Core\Framework\Mcp\Controller\McpToolListController;
 use Contena\Core\Framework\Mcp\Controller\StoreApiMcpServerController;
-use Contena\Core\Framework\Mcp\Controller\AdminUserMcpAllowlistController;
 use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
 use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
 use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
@@ -46,12 +46,12 @@ use Contena\Core\Framework\Mcp\Notification\McpListVersions;
 use Contena\Core\Framework\Mcp\Prompt\ContenaContextPrompt;
 use Contena\Core\Framework\Mcp\RateLimit\McpRateLimiter;
 use Contena\Core\Framework\Mcp\Resource\BusinessEventsResource;
+use Contena\Core\Framework\Mcp\Resource\ChannelListResource;
 use Contena\Core\Framework\Mcp\Resource\CurrencyListResource;
 use Contena\Core\Framework\Mcp\Resource\EntityListResource;
 use Contena\Core\Framework\Mcp\Resource\ExtensionsResource;
 use Contena\Core\Framework\Mcp\Resource\FlowActionsResource;
 use Contena\Core\Framework\Mcp\Resource\LanguageListResource;
-use Contena\Core\Framework\Mcp\Resource\ChannelListResource;
 use Contena\Core\Framework\Mcp\Resource\StateMachineResource;
 use Contena\Core\Framework\Mcp\Resource\ToolResultResource;
 use Contena\Core\Framework\Mcp\Result\McpToolResultParser;
@@ -70,7 +70,6 @@ use Contena\Core\Framework\Mcp\Tool\EntitySchemaTool;
 use Contena\Core\Framework\Mcp\Tool\EntitySearchTool;
 use Contena\Core\Framework\Mcp\Tool\EntityUpsertTool;
 use Contena\Core\Framework\Mcp\Tool\MediaUploadTool;
-use Contena\Core\Framework\Mcp\Tool\OrderStateTool;
 use Contena\Core\Framework\Mcp\Tool\Search\ToolSearch;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigReadTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigWriteTool;
@@ -79,15 +78,15 @@ use Contena\Core\Framework\Mcp\Tool\ToolsetEnableTool;
 use Contena\Core\Framework\Mcp\Tool\ToolsetsListTool;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
-use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Channel\Mcp\Resource\StoreApiToolResultResource;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiContextTool;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolSearchTool;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolsetEnableTool;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolsetsListTool;
-use Contena\Core\System\StateMachine\StateMachineRegistry;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -423,14 +422,6 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('mcp.tool');
 
-    $services->set(OrderStateTool::class)
-        ->args([
-            service(DefinitionInstanceRegistry::class),
-            service(McpContextProvider::class),
-            service(StateMachineRegistry::class),
-            service(Connection::class),
-        ])
-        ->tag('mcp.tool');
 
     $services->set(MediaUploadTool::class)
         ->args([

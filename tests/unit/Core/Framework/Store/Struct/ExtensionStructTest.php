@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Struct\BinaryCollection;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Store\Struct\FaqCollection;

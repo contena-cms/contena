@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\NodeVisitor\CallbackOperatorSecurityNodeVisitor;
 use Contena\Core\Framework\Adapter\Twig\NodeVisitor\SecurityGuardedCallbackNode;
-use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Node\Expression\Binary\HasEveryBinary;

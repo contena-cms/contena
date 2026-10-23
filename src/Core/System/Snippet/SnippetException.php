@@ -4,7 +4,6 @@ namespace Contena\Core\System\Snippet;
 
 use GuzzleHttp\Psr7\Uri;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class SnippetException extends HttpException

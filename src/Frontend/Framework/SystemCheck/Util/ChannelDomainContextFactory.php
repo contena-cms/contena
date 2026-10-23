@@ -3,11 +3,9 @@
 namespace Contena\Frontend\Framework\SystemCheck\Util;
 
 use Contena\Core\Checkout\CheckoutPermissions;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
-use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextService;
 
 /**
  * @internal
@@ -17,12 +15,6 @@ use Contena\Core\System\Channel\ChannelContext;
  */
 class ChannelDomainContextFactory
 {
-    public function __construct(
-        private readonly AbstractChannelContextFactory $channelContextFactory,
-        private readonly CartRuleLoader $cartRuleLoader,
-        private readonly CartFactory $cartFactory,
-    ) {
-    }
 
     /**
      * @description Language, currency and domain are taken from the domain whose URL is probed, not from the

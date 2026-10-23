@@ -6,7 +6,6 @@ use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogE
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\PrimaryKeyResolver;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

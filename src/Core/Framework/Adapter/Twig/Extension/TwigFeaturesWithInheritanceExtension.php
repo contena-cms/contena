@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Twig\TokenParser\EmbedTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\FromTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ImportTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\UseTokenParser;
-use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\CoreExtension;

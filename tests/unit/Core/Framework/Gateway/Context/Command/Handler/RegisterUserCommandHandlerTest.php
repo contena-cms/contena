@@ -4,13 +4,12 @@ namespace Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\Handler;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Channel\AbstractRegisterRoute;
-use Contena\Core\System\User\Channel\UserResponse;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\RegisterUserCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\RegisterUserCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\User\Channel\AbstractRegisterRoute;
+use Contena\Core\System\User\Channel\UserResponse;
+use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Generator;
 
 /**

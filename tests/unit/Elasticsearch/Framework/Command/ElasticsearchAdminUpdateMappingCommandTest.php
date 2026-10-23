@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchAdminUpdateMappingCommand;
 use Symfony\Component\Console\Command\Command;

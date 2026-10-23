@@ -3,7 +3,6 @@
 namespace Contena\Core\Service\MessageHandler;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\LifecycleManager;
 use Contena\Core\Service\Message\InstallServicesMessage;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

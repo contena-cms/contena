@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

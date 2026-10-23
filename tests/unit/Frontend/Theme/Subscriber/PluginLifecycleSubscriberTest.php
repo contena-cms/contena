@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
 use Contena\Core\Framework\Plugin\Context\DeactivateContext;
 use Contena\Core\Framework\Plugin\Context\UninstallContext;
@@ -27,7 +26,6 @@ use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\Subscriber\PluginLifecycleSubscriber;
 use Contena\Frontend\Theme\ThemeLifecycleHandler;
 use Contena\Frontend\Theme\ThemeLifecycleService;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeAndPlugin\AsyncPlugin\AsyncPlugin;
 
 /**
  * @internal

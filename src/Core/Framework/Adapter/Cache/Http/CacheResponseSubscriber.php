@@ -2,16 +2,13 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Framework\Adapter\Cache\CacheStateSubscriber;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
@@ -37,29 +34,6 @@ class CacheResponseSubscriber implements EventSubscriberInterface
      */
     private const HEADER_NO_VARY_SEARCH = 'No-Vary-Search';
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly CartService $cartService,
-        /**
-         * @deprecated tag:v6.8.0 - Will be removed, use cache policies instead
-         */
-        private readonly int $defaultTtl,
-        private readonly bool $httpCacheEnabled,
-        private readonly MaintenanceModeResolver $maintenanceResolver,
-        /**
-         * @deprecated tag:v6.8.0 - Will be removed, use cache policies instead
-         */
-        private readonly ?string $staleWhileRevalidate,
-        /**
-         * @deprecated tag:v6.8.0 - Will be removed, use cache policies instead
-         */
-        private readonly ?string $staleIfError,
-        private readonly CacheHeadersService $cacheHeadersService,
-        private readonly CachePolicyProvider $policyProvider,
-    ) {
-    }
 
     /**
      * @return array<string, string|array{0: string, 1: int}|list<array{0: string, 1?: int}>>
@@ -307,54 +281,7 @@ class CacheResponseSubscriber implements EventSubscriberInterface
         return false;
     }
 
-    /**
-     * System states can be used to stop caching routes at certain states. For example,
-     * the checkout routes are no longer cached if the user has blogs in the cart or is logged in.
-     *
-     * @return list<string>
-     */
-    private function updateSystemState(Cart $cart, ChannelContext $context, Request $request, Response $response): array
-    {
-        $states = $this->getSystemStates($request, $context, $cart);
 
-        if ($states === []) {
-            if ($request->cookies->has(HttpCacheKeyGenerator::SYSTEM_STATE_COOKIE)) {
-                $response->headers->removeCookie(HttpCacheKeyGenerator::SYSTEM_STATE_COOKIE);
-                $response->headers->clearCookie(HttpCacheKeyGenerator::SYSTEM_STATE_COOKIE);
-            }
-
-            return [];
-        }
-
-        $newStates = implode(',', $states);
-
-        if ($request->cookies->get(HttpCacheKeyGenerator::SYSTEM_STATE_COOKIE) !== $newStates) {
-            $cookie = Cookie::create(HttpCacheKeyGenerator::SYSTEM_STATE_COOKIE, $newStates);
-            $cookie->setSecureDefault($request->isSecure());
-
-            $response->headers->setCookie($cookie);
-        }
-
-        return $states;
-    }
-
-    /**
-     * @return list<string>
-     */
-    private function getSystemStates(Request $request, ChannelContext $context, Cart $cart): array
-    {
-        $states = [];
-        $swStates = (string) $request->cookies->get(HttpCacheKeyGenerator::SYSTEM_STATE_COOKIE);
-        if ($swStates !== '') {
-            $states = array_flip(explode(',', $swStates));
-        }
-
-        $states = $this->switchState($states, CacheStateSubscriber::STATE_LOGGED_IN, $context->getUser() !== null);
-
-        $states = $this->switchState($states, CacheStateSubscriber::STATE_CART_FILLED, $cart->getLineItems()->count() > 0);
-
-        return array_keys($states);
-    }
 
     /**
      * @param array<string, int|bool> $states

@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\Seo\Channel\FixturesPhp;
 use Contena\Core\Content\Category\Channel\AbstractCategoryRoute;
 use Contena\Core\Content\Category\Channel\CategoryRoute;
 use Contena\Core\Content\Category\Channel\CategoryRouteResponse;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;

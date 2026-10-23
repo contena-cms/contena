@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Script\Execution;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Marker that a function does not need to be implemented by a script

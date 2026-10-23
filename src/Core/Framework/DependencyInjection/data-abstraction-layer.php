@@ -146,6 +146,8 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
+use Contena\Core\Framework\Migration\IndexerQueuer;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -574,12 +576,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.field_serializer');
 
-    $services->set(WasModifiedByUserFieldSerializer::class)
-        ->args([
-            service('validator'),
-            service(DefinitionInstanceRegistry::class),
-        ])
-        ->tag('contena.field_serializer');
 
     $services->set(CreatedAtFieldSerializer::class)
         ->args([

@@ -5,8 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel\Listing;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter as DALFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

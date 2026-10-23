@@ -2,11 +2,10 @@
 
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -4,13 +4,11 @@ namespace Contena\Tests\Unit\Core\System\User\Extension;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Extension\SendPasswordRecoveryMailRouteExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\SuccessResponse;
+use Contena\Core\System\User\Extension\SendPasswordRecoveryMailRouteExtension;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Examples\SendPasswordRecoveryMailRouteExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

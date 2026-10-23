@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\App\Event\AppUploadedEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\PluginUploadedEvent;
 use Contena\Core\Framework\Plugin\ExtensionExtractor;
 use Contena\Core\Framework\Plugin\PluginEntity;

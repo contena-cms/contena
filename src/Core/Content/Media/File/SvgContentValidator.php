@@ -3,10 +3,10 @@
 namespace Contena\Core\Content\Media\File;
 
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class SvgContentValidator extends AbstractFileContentValidator implements ResetInterface
 {

@@ -12,13 +12,11 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\Bucket;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Store\Event\ExtensionLoadedEvent;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Frontend\Framework\Store\Subscriber\ExtensionThemeDetectionSubscriber;
 use Contena\Frontend\Theme\ThemeCollection;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\MockFrontend\MockFrontend;
 
 /**
  * @internal

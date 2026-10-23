@@ -3,15 +3,14 @@
 namespace Contena\Core\Content\Cms\Command;
 
 use Faker\Factory;
+use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Content\Cms\CmsPageCollection;
 use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

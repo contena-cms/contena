@@ -5,9 +5,9 @@ namespace Contena\Core\Content\ContentStream\DataAbstractionLayer;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\ContentStream\Event\ContentStreamIndexerEvent;
 use Contena\Core\Content\ContentStream\ContentStreamCollection;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\ContentStream\Event\ContentStreamIndexerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
@@ -16,10 +16,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidFilterQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ContentStreamIndexer extends EntityIndexer
 {

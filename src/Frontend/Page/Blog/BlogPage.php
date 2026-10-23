@@ -2,14 +2,13 @@
 
 namespace Contena\Frontend\Page\Blog;
 
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class BlogPage extends Page

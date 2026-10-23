@@ -2,11 +2,9 @@
 
 namespace Contena\Frontend\Theme\Twig;
 
-use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
 use Contena\Core\System\Channel\File\Event\ChannelFileTemplateResolveEvent;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -52,19 +50,6 @@ class ThemeNamespaceHierarchyBuilder implements TemplateNamespaceHierarchyBuilde
         $this->themes = $this->detectedThemes($request);
     }
 
-    public function onDocumentRendering(DocumentTemplateRendererParameterEvent $event): void
-    {
-        $parameters = $event->getParameters();
-
-        if (!\array_key_exists('context', $parameters)) {
-            return;
-        }
-
-        /** @var ChannelContext $context */
-        $context = $parameters['context'];
-
-        $this->resolveThemesForChannel($context->getChannelId());
-    }
 
     public function onChannelFileTemplateResolve(ChannelFileTemplateResolveEvent $event): void
     {

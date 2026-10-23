@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Flow\Dispatching\Storer;
 use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 
 class ScalarValuesStorer extends FlowStorer
 {

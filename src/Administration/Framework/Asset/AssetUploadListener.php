@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Administration\Framework\Asset;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\AssetUploadEvent;
 
 /**

@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
 use Contena\Core\Content\Media\Event\UnusedMediaSearchStartEvent;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\UnusedMediaPurger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\MemorySizeCalculator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

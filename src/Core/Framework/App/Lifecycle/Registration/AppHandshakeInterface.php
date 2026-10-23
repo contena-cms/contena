@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Lifecycle\Registration;
 
 use Psr\Http\Message\RequestInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

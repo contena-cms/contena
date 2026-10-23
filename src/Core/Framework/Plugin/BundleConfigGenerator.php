@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Plugin;
 
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Kernel;
 use Symfony\Component\Filesystem\Path;

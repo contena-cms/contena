@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionC
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<VersionCommitDataEntity>

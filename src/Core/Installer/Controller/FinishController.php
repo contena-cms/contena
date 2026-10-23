@@ -4,7 +4,6 @@ namespace Contena\Core\Installer\Controller;
 
 use GuzzleHttp\Client;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Finish\SystemLocker;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;

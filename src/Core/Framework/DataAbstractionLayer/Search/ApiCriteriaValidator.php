@@ -5,11 +5,12 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\ApiProtectionException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\RuntimeFieldInCriteriaException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiCriteriaAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

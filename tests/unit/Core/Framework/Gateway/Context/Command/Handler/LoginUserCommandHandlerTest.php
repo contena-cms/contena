@@ -4,11 +4,10 @@ namespace Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\Handler;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\LoginUserCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\LoginUserCommand;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Channel\AccountService;
+use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Generator;
 
 /**

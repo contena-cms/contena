@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Util;
 
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 
 class PathHelper
 {

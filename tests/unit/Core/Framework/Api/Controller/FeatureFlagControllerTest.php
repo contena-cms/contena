@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Api\Controller\FeatureFlagController;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

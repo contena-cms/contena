@@ -4,16 +4,12 @@ namespace Contena\Tests\Bench\Frontend;
 
 use Doctrine\DBAL\Connection;
 use PhpBench\Attributes as Bench;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Tests\Bench\AbstractBenchCase;
-use Contena\Tests\Bench\Fixtures;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 

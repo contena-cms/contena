@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\ResponseHook;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Util\Random;

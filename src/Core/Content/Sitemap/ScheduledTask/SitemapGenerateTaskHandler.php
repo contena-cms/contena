@@ -3,11 +3,10 @@
 namespace Contena\Core\Content\Sitemap\ScheduledTask;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelLoader;
+use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Contena\Core\System\SystemConfig\SystemConfigService;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Context;
 
-use Contena\Core\Framework\Log\Package;
 
 class ActivateContext extends InstallContext
 {

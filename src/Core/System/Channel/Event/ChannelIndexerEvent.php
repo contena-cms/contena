@@ -4,7 +4,6 @@ namespace Contena\Core\System\Channel\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\NestedEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

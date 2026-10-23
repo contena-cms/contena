@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Context\ShopApiSource;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\InAppPurchase\Api\InAppPurchasesController;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Test\Store\StaticInAppPurchaseFactory;

@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SetNullOnDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
@@ -17,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 class ImportExportProfileDefinition extends EntityDefinition
 {
@@ -42,7 +40,6 @@ class ImportExportProfileDefinition extends EntityDefinition
     {
         $fields = new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of import-export profile.'),
-            (new StringField('technical_name', 'technicalName'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new StringField('type', 'type'))->setDescription('Import-export type can be orders, users, categories.'),
             (new BoolField('system_default', 'systemDefault'))->setDescription('When boolean value is true `true`, then its a system default profile.'),
             (new StringField('source_entity', 'sourceEntity'))->addFlags(new Required()),

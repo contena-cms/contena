@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Captcha;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;

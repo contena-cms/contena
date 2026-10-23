@@ -5,7 +5,6 @@ namespace Contena\Frontend\Theme\Extension;
 use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Frontend\Theme\Aggregate\ThemeChannelDefinition;
 use Contena\Frontend\Theme\ThemeDefinition;

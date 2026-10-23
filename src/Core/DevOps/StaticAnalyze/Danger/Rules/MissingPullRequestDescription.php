@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Fails pull requests whose description is empty or too short to explain the change.

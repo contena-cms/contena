@@ -4,11 +4,8 @@ namespace Contena\Tests\Migration\Administration\V6_7;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Administration\Migration\V6_7\Migration1757057005MailTemplate;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\Traits\MailUpdate;
-use Contena\Tests\Migration\MailTemplateMigrationTestCase;
-use Contena\Tests\Migration\Translations;
 
 /**
  * @internal

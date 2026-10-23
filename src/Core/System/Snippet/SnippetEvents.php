@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet;
 
-use Contena\Core\Framework\Log\Package;
 
 class SnippetEvents
 {

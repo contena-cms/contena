@@ -12,7 +12,6 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\MockObject\MockObject;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Bans the PHPUnit `any()` invocation matcher: `->expects($this->any())` (also `static::`/`self::any()`).

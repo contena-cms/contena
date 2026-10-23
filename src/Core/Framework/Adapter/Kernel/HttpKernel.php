@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Kernel;
 
 use Contena\Core\Framework\Event\BeforeSendRedirectResponseEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\CanonicalRedirectService;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;

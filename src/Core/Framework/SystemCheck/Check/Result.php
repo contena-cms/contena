@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\SystemCheck\Check;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

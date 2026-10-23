@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

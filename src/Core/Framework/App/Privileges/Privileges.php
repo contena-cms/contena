@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

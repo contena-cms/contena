@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Telemetry\MailGroupResolver;
 use Contena\Core\Content\Mail\Telemetry\MailMetricsInstrumentor;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Telemetry\CollectingMeter;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Frontend;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\DependencyInjection\DisableTemplateCachePass;
 use Contena\Frontend\DependencyInjection\FrontendMigrationReplacementCompilerPass;
 use Contena\Frontend\DependencyInjection\ThemeCompilerAssetCompilerPass;

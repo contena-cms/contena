@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Service\MessageHandler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\LifecycleManager;
 use Contena\Core\Service\Message\InstallServicesMessage;
 use Contena\Core\Service\MessageHandler\InstallServicesHandler;

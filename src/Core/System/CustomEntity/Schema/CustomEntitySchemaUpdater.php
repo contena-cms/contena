@@ -5,7 +5,6 @@ namespace Contena\Core\System\CustomEntity\Schema;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Schema\Schema;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Lock\LockFactory;
 
 /**

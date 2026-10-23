@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Tag\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

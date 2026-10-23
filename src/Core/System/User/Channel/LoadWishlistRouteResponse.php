@@ -2,12 +2,11 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
 
 /**
  * @extends StoreApiResponse<ArrayStruct<array{wishlist: UserWishlistEntity, blogs: EntitySearchResult<BlogCollection>}>>

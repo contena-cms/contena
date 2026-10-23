@@ -7,18 +7,16 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
+use Contena\Core\System\AdminUser\AdminUserCollection;
+use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryCollection;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryEntity;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryService;
-use Contena\Core\System\AdminUser\AdminUserCollection;
-use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
 /**

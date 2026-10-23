@@ -6,12 +6,13 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
@@ -20,11 +21,10 @@ use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Core\System\Channel\Event\ChannelContextSwitchEvent;
 use Contena\Core\System\Channel\Event\SwitchContextEvent;
 use Contena\Core\System\Channel\Extension\ContextSwitchRouteExtension;
-use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\ChannelException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class ContextSwitchRoute extends AbstractContextSwitchRoute

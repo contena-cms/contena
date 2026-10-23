@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\Middleware;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Middleware\MiddlewareInterface;
 use Symfony\Component\Messenger\Middleware\StackInterface;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Log\ScheduledTask;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 class LogCleanupTask extends ScheduledTask

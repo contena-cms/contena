@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\ImportExport\Processing\Mapping\Mapping;
 use Contena\Core\Content\ImportExport\Processing\Mapping\MappingCollection;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 
 /**

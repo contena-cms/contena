@@ -5,7 +5,6 @@ namespace Contena\Core\Installer\Database;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Requirements\IniConfigReader;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
 

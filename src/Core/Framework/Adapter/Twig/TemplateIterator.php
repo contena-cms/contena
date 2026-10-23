@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bundle\TwigBundle\TemplateIterator as TwigBundleIterator;
 use Symfony\Component\Finder\Finder;
 

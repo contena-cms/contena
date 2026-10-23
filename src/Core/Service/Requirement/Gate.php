@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Requirement;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Which lifecycle decision a {@see ServiceRequirement} gates: whether a service may exist

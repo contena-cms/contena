@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\TestPackageMatchRule\Covered;
 
-use Contena\Core\Framework\Log\Package;
 
 trait CheckoutHelperTrait
 {

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Demodata\Command\DemodataCommand;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\DemodataCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

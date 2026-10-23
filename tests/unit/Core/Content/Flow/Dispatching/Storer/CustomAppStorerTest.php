@@ -11,7 +11,6 @@ use Contena\Core\Content\Test\Flow\TestFlowBusinessEvent;
 use Contena\Core\Framework\App\Event\CustomAppEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

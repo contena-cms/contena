@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\LandingPage;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

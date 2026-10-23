@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Acl\ApiCallerType;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Hookable;
 use Contena\Core\Framework\Webhook\Webhook;

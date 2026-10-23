@@ -6,10 +6,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
-use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Blog\SearchKeywordReplacement;
+use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 
 /**
  * @internal

@@ -5,23 +5,21 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Parser;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\MeasurementSystem\DataAbstractionLayer\MeasurementDisplayUnitEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\MeasurementSystem\DataAbstractionLayer\MeasurementDisplayUnitEntity;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeEntityCompiler;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\AssociationIdPathNormalizer;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Parser\_fixtures\MeasurementSystemCodeReferenceEntity;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomField;
 
-use Contena\Core\Framework\Log\Package;
 
 class CustomFieldEvents
 {

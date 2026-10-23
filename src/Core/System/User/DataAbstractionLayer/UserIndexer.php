@@ -2,17 +2,13 @@
 
 namespace Contena\Core\System\User\DataAbstractionLayer;
 
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\Event\UserIndexerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Event\UserIndexerEvent;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class UserIndexer extends EntityIndexer
 {
@@ -21,19 +17,6 @@ class UserIndexer extends EntityIndexer
 
     private const PRIMARY_KEYS_WITH_PROPERTY_CHANGE = ['email', 'firstName', 'lastName'];
 
-    /**
-     * @internal
-     *
-     * @param EntityRepository<UserCollection> $repository
-     */
-    public function __construct(
-        private readonly IteratorFactory $iteratorFactory,
-        private readonly EntityRepository $repository,
-        private readonly ManyToManyIdFieldUpdater $manyToManyIdFieldUpdater,
-        private readonly UserNewsletterChannelsUpdater $userNewsletterChannelsUpdater,
-        private readonly EventDispatcherInterface $eventDispatcher
-    ) {
-    }
 
     public function getName(): string
     {

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Service\MessageSizeCalculator;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;

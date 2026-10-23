@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CriteriaPartInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

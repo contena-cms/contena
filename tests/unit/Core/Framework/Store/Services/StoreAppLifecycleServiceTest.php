@@ -9,12 +9,10 @@ use Contena\Core\Framework\App\Delta\AppConfirmationDeltaProvider;
 use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\ExtensionRemovalValidatorInterface;
 use Contena\Core\Framework\Store\Services\StoreAppLifecycleService;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\StoreException;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

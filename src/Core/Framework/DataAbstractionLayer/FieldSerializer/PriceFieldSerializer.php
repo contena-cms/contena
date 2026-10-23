@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Symfony\Component\Validator\Constraints\Collection;
@@ -20,6 +19,7 @@ use Symfony\Component\Validator\Constraints\Optional;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 
 /**
  * @internal

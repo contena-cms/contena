@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Outbox;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 

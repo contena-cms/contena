@@ -17,7 +17,6 @@ use Mcp\Schema\Result\ListToolsResult;
 use Mcp\Schema\Tool;
 use Mcp\Server\Handler\Request\RequestHandlerInterface;
 use Mcp\Server\Session\SessionInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpRequestedToolsetResolver;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;

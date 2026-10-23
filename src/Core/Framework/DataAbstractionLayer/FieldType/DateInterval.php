@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\FieldType;
 
-use Contena\Core\Framework\Log\Package;
 
 class DateInterval extends \DateInterval implements \Stringable
 {

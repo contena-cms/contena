@@ -3,9 +3,8 @@
 namespace Contena\Core\System\SystemConfig\Facade;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
+use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\Script;
 use Contena\Core\System\SystemConfig\SystemConfigService;

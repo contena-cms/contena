@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\Session;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

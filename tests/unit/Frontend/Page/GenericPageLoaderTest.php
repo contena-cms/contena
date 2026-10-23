@@ -6,7 +6,6 @@ namespace Contena\Tests\Unit\Frontend\Page;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\ChannelRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Generator;

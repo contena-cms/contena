@@ -5,7 +5,6 @@ namespace Contena\Frontend\Page\Cms;
 use Contena\Core\Content\Media\Cms\AbstractDefaultMediaResolver;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Asset\Packages;
 
 class DefaultMediaResolver extends AbstractDefaultMediaResolver

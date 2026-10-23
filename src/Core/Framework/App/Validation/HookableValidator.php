@@ -3,8 +3,11 @@
 namespace Contena\Core\Framework\App\Validation;
 
 use Contena\Core\Framework\App\Manifest\Manifest;
+use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
+use Contena\Core\Framework\App\Validation\Error\MissingPermissionError;
+use Contena\Core\Framework\App\Validation\Error\NotHookableError;
+use Contena\Core\Framework\App\Validation\Error\WebhookNotPermittedError;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriptionValidator;
 

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldResolver\ManyToManyAssociationFieldResolver;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ManyToManyAssociationFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class ManyToManyAssociationField extends AssociationField
 {

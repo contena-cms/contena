@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\FieldType;
 
 use Cron\CronExpression;
-use Contena\Core\Framework\Log\Package;
 
 class CronInterval extends CronExpression
 {

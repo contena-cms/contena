@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Context\Gateway;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

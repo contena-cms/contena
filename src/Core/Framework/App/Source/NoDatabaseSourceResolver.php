@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Source;
 
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 
 /**

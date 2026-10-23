@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 class SeoEvents
 {

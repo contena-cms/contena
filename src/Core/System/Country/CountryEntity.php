@@ -2,16 +2,13 @@
 
 namespace Contena\Core\System\Country;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TaxFreeConfig;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\Aggregate\CountryTranslation\CountryTranslationCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
-use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 
 /**
  * @codeCoverageIgnore
@@ -20,6 +17,7 @@ class CountryEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 
     protected ?string $name = null;
 
@@ -51,7 +49,6 @@ class CountryEntity extends Entity
 
     protected ?CountryTranslationCollection $translations = null;
 
-    protected ?OrderAddressCollection $orderAddresses = null;
 
     protected ?UserAddressCollection $userAddresses = null;
 
@@ -200,15 +197,7 @@ class CountryEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getOrderAddresses(): ?OrderAddressCollection
-    {
-        return $this->orderAddresses;
-    }
 
-    public function setOrderAddresses(OrderAddressCollection $orderAddresses): void
-    {
-        $this->orderAddresses = $orderAddresses;
-    }
 
     public function getUserAddresses(): ?UserAddressCollection
     {

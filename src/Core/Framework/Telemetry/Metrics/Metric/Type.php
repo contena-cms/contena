@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Metric;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-type MetricTypeValues = 'histogram'|'gauge'|'counter'|'updown_counter'

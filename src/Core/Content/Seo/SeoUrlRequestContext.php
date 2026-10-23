@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Contena\Core\Framework\Log\Package;
 
 final readonly class SeoUrlRequestContext
 {

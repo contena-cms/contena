@@ -3,12 +3,9 @@
 namespace Contena\Core\System\Channel\Aggregate\ChannelDomain;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetEntity;
 
 /**
@@ -37,7 +34,6 @@ class ChannelDomainEntity extends Entity
 
     protected ?LanguageEntity $language = null;
 
-    protected ?BlogExportCollection $blogExports = null;
 
     protected ?ChannelEntity $channelDefaultHreflang = null;
 
@@ -135,15 +131,7 @@ class ChannelDomainEntity extends Entity
         $this->snippetSet = $snippetSet;
     }
 
-    public function getBlogExports(): ?BlogExportCollection
-    {
-        return $this->blogExports;
-    }
 
-    public function setBlogExports(BlogExportCollection $blogExports): void
-    {
-        $this->blogExports = $blogExports;
-    }
 
     public function isHreflangUseOnlyLocale(): bool
     {
@@ -165,15 +153,7 @@ class ChannelDomainEntity extends Entity
         $this->channelDefaultHreflang = $channelDefaultHreflang;
     }
 
-    public function getMeasurementUnits(): MeasurementUnits
-    {
-        return $this->measurementUnits;
-    }
 
-    public function setMeasurementUnits(MeasurementUnits $measurementUnits): void
-    {
-        $this->measurementUnits = $measurementUnits;
-    }
 
     public function getIsExternalFrontend(): bool
     {

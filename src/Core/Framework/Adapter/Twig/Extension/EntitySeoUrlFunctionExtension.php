@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig\Extension;
 
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Framework\Adapter\Twig\TwigContextHelper;
-use Contena\Core\Framework\Log\Package;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;
 

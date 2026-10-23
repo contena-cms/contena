@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Frontend\Controller;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\System\SystemConfig\SystemConfigService;

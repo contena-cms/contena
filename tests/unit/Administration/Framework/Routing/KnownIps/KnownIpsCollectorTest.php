@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Administration\Framework\Routing\KnownIps;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Routing\KnownIps\KnownIpsCollector;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

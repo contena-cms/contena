@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Webhook\Authorization;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\CascadeDeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\WebhookDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

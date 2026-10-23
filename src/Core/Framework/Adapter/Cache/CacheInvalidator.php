@@ -10,7 +10,6 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\AbstractInvalidatorStorage;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyCache;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Backtrace\BacktraceCollector;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;

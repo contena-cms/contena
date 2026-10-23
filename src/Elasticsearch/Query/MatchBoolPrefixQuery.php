@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Query;
 
 use OpenSearchDSL\Query\FullText\MatchQuery;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Represents Elasticsearch "match_bool_prefix" query.

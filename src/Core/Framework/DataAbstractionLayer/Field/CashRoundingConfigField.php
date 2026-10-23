@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\JsonFieldAccessorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CashRoundingConfigFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class CashRoundingConfigField extends JsonField
 {

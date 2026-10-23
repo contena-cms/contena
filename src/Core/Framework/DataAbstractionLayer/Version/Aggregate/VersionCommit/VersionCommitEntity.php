@@ -3,10 +3,8 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommitData\VersionCommitDataCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\VersionEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

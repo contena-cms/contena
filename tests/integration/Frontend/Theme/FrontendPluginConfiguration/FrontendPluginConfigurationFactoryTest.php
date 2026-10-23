@@ -4,8 +4,6 @@ namespace Contena\Tests\Integration\Frontend\Theme\FrontendPluginConfiguration;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Framework\ThemeInterface;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;

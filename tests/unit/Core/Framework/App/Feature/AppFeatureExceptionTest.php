@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App\Feature;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Feature\AppFeatureException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

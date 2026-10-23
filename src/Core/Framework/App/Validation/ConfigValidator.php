@@ -3,8 +3,9 @@
 namespace Contena\Core\Framework\App\Validation;
 
 use Contena\Core\Framework\App\Manifest\Manifest;
+use Contena\Core\Framework\App\Validation\Error\ConfigurationError;
+use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 
 /**

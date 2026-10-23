@@ -47,26 +47,6 @@ trait BlogFeatureSetFixtures
         ];
     }
 
-    public function getBasicFeatureSet(): BlogFeatureSetEntity
-    {
-        return $this->getFeatureSetFixture('FeatureSetBasic');
-    }
 
-    public function getCompleteFeatureSet(): BlogFeatureSetEntity
-    {
-        return $this->getFeatureSetFixture('FeatureSetComplete');
-    }
 
-    private function getFeatureSetFixture(string $fixtureName): BlogFeatureSetEntity
-    {
-        $template = $this->createFixture(
-            $fixtureName,
-            $this->featureSetFixtures,
-            self::getFixtureRepository(BlogFeatureSetDefinition::ENTITY_NAME)
-        );
-
-        static::assertInstanceOf(BlogFeatureSetEntity::class, $template);
-
-        return $template;
-    }
 }

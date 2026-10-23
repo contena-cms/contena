@@ -10,7 +10,6 @@ use Lcobucci\JWT\Validation\Constraint\IssuedBy;
 use Lcobucci\JWT\Validation\Constraint\LooseValidAt;
 use Lcobucci\JWT\Validation\Constraint\SignedWith;
 use Lcobucci\JWT\Validation\Validator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfig;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoException;

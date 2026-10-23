@@ -6,7 +6,6 @@ use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\RequestInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

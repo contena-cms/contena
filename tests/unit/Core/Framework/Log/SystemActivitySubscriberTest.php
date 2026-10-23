@@ -23,7 +23,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Log\SystemActivitySubscriber;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
 use Contena\Core\Framework\Plugin\Context\DeactivateContext;

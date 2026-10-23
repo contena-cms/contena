@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\Blog\Channel\Listing\Processor;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\TestDefaults;

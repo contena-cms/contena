@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo\Exception;
 
 use Contena\Core\Content\Seo\SeoException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class SeoUrlRouteConfigException extends SeoException

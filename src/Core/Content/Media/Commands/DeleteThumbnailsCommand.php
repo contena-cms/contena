@@ -7,7 +7,6 @@ use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Installer\Database\DatabaseMigrator;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;

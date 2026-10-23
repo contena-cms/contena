@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\Api\ApiDefinition\Generator;
 
 use Contena\Core\Framework\Api\ApiDefinition\ApiDefinitionGeneratorInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**

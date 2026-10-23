@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\Channel;
 
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
 
 /**

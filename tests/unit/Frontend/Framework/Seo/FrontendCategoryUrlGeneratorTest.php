@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Service\AbstractCategoryUrlGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Frontend\Framework\Seo\FrontendCategoryUrlGenerator;

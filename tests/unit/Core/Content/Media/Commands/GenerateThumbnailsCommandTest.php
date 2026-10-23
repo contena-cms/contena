@@ -13,7 +13,6 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Message\UpdateThumbnailsMessage;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\DataAbstractionLayer\TestEntityDefinition;

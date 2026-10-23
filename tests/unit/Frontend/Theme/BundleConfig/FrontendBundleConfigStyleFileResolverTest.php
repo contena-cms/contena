@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\BundleConfig;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\BundleConfig\FrontendBundleConfigStyleFileResolver;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;

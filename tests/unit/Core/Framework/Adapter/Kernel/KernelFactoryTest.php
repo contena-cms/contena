@@ -8,7 +8,6 @@ use Doctrine\DBAL\Driver\Middleware;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 use Contena\Core\Profiling\Doctrine\ProfilingMiddleware;
 

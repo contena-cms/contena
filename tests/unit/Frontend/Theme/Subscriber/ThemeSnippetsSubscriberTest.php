@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Event\SnippetsThemeResolveEvent;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Contena\Frontend\Theme\FrontendPluginRegistry;

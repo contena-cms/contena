@@ -2,7 +2,6 @@
 
 namespace Contena\Core;
 
-use Contena\Core\Framework\Log\Package;
 
 final class PlatformRequest
 {

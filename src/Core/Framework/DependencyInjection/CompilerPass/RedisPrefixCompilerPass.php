@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Cache\Adapter\RedisAdapter;
 use Symfony\Component\Cache\Adapter\RedisTagAwareAdapter;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

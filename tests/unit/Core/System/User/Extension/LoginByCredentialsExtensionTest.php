@@ -4,11 +4,9 @@ namespace Contena\Tests\Unit\Core\System\User\Extension;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Extension\LoginByCredentialsExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Extension\LoginByCredentialsExtension;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Examples\LoginByCredentialsExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

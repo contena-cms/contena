@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

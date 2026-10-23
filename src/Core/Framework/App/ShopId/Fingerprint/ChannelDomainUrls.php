@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\ShopId\Fingerprint;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\App\ShopId\Fingerprint;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

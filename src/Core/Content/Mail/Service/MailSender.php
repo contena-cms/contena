@@ -6,7 +6,6 @@ use League\Flysystem\FilesystemOperator;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Message\SendMailMessage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueSizeRestrictListener;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
@@ -14,6 +13,7 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Mime\Email;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class MailSender extends AbstractMailSender
 {

@@ -14,6 +14,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 
 return static function (ContainerConfigurator $container): void {
     $services = $container->services();

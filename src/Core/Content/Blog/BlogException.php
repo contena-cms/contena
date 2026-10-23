@@ -5,10 +5,12 @@ namespace Contena\Core\Content\Blog;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
+use Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption;
+use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
 
 class BlogException extends HttpException
 {

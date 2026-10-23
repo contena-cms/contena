@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Script\Api;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 class ResponseCacheConfiguration
 {

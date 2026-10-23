@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Rule;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 final class RuleConfig extends Struct

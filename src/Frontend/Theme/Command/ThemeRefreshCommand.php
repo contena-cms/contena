@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\Command;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

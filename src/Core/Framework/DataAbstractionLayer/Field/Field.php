@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Flag;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldSerializerInterface;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 abstract class Field extends Struct

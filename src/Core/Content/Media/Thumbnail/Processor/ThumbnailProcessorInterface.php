@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Thumbnail\Processor;
 
 use Contena\Core\Content\Media\MediaType\MediaType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0 feature:THUMBNAIL_PROCESSORS

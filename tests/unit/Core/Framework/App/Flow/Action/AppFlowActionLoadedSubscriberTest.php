@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionEntity;
 use Contena\Core\Framework\App\Flow\Action\AppFlowActionLoadedSubscriber;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\Event\MediaUploadedEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 

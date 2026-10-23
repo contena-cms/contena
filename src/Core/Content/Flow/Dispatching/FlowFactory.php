@@ -6,7 +6,6 @@ use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

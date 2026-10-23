@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Event\InvalidateExpiredCacheRequestEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\IndexManager;
 use Contena\Elasticsearch\Framework\Subscriber\InvalidateExpiredCacheSubscriber;
 use Symfony\Component\HttpFoundation\Request;

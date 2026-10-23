@@ -4,12 +4,11 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Channel;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Extension\BlogListRouteExtension;
 use Contena\Core\Content\Blog\Channel\BlogListResponse;
 use Contena\Core\Content\Blog\Channel\BlogListRoute;
+use Contena\Core\Content\Blog\Extension\BlogListRouteExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Generator;
 use Symfony\Component\EventDispatcher\EventDispatcher;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\Clock;
 
 final readonly class FrwState

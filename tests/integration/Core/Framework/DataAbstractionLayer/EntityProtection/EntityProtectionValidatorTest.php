@@ -7,18 +7,14 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginDefinition;
+use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\AdminUserAccessKeyExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\PluginProtectionExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\SystemConfigExtension;
-use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\AdminUserAccessKeyExtension;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKeyDefinition;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\SystemConfig\SystemConfigDefinition;
-use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKeyDefinition;
 use Contena\Core\Test\TestDefaults;
 
 /**

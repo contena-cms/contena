@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Metric;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Implement this interface for metrics that should be collected on a schedule rather than emitted

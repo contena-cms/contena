@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\System\Channel\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This event can be used to react to the creation of a new context.

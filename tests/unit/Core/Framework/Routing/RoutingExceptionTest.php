@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Routing;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Exception\UserNotLoggedInRoutingException;
 use Contena\Core\Framework\Routing\RoutingException;
 use Symfony\Component\HttpFoundation\Response;

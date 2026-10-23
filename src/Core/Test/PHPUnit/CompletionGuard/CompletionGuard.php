@@ -4,7 +4,6 @@ namespace Contena\Core\Test\PHPUnit\CompletionGuard;
 
 use PHPUnit\Event\EventFacadeIsSealedException;
 use PHPUnit\Event\Facade;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionFinishedSubscriber;
 use Contena\Core\Test\PHPUnit\CompletionGuard\Subscriber\MarkExecutionStartedSubscriber;
 

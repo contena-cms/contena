@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Channel;
 
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

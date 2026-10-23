@@ -8,7 +8,6 @@ use Contena\Core\Content\Seo\AbstractSeoResolver;
 use Contena\Core\Content\Seo\EmptyPathInfoResolver;
 use Contena\Core\Content\Seo\ResolvedSeoUrl;
 use Contena\Core\Content\Seo\SeoUrlRequestContext;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 

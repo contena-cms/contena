@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Migration\Structs;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\DateHistogramAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
@@ -12,14 +13,31 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteV
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Api\Exception\InvalidSyncOperationException;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\FieldAccessorBuilderNotFoundException;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\InvalidSortingDirectionException;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\ParentAssociationCanNotBeFetched;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityRepositoryNotFoundException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\ImpossibleWriteOrderException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidAggregationQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidEntityUuidException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidFilterQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidPriceFieldTypeException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidRangeFilterParamException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidSortQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingSystemTranslationException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingTranslationLanguageException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\PropertyNotFoundException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\UnableToLoadPathException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\UnsupportedCommandTypeException;
 
 class DataAbstractionLayerException extends HttpException
 {
@@ -976,15 +994,6 @@ class DataAbstractionLayerException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function unmappedField(string $field, EntityDefinition $definition): self|UnmappedFieldException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return new UnmappedFieldException($field, $definition);
-        }
-
-        return new Exception\UnmappedFieldException($field, $definition);
-    }
 
     #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
     public static function unexpectedFieldType(string $field, string $expectedField): self|\RuntimeException

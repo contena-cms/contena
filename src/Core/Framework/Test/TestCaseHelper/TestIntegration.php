@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Test\TestCaseHelper;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 

@@ -6,7 +6,6 @@ use OpenSearch\Common\Exceptions\BadRequest400Exception;
 use OpenSearch\Exception\BadRequestHttpException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Symfony\Component\HttpFoundation\Response;

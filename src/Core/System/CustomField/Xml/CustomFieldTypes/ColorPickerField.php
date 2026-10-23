@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomField\Xml\CustomFieldTypes;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 
 /**

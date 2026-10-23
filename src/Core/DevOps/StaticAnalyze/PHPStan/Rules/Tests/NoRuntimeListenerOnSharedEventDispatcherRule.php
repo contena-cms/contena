@@ -13,7 +13,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\MockObject\MockObject;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

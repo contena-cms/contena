@@ -6,13 +6,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Category\Extension\NavigationRouteExtension;
 use Contena\Core\Content\Category\Channel\NavigationRouteResponse;
+use Contena\Core\Content\Category\Extension\NavigationRouteExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Examples\NavigationRouteExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 

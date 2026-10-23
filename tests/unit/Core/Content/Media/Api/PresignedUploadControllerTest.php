@@ -11,7 +11,6 @@ use Contena\Core\Content\Media\Upload\PresignedUploadFinalizePayload;
 use Contena\Core\Content\Media\Upload\PresignedUploadPreparePayload;
 use Contena\Core\Content\Media\Upload\PresignedUploadPrepareResult;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

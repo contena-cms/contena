@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\Core\Strategy\PathStrategyFactory;
 use Contena\Core\Content\Media\Core\Strategy\PhysicalFilenamePathStrategy;
 use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

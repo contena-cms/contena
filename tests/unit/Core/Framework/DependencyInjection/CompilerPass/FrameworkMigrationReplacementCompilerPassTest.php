@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\FrameworkMigrationReplacementCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationSource;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

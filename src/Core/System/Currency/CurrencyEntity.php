@@ -3,14 +3,11 @@
 namespace Contena\Core\System\Currency;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
-use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
+use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationCollection;
 
 /**
  * @codeCoverageIgnore
@@ -34,7 +31,6 @@ class CurrencyEntity extends Entity
 
     protected ?CurrencyTranslationCollection $translations = null;
 
-    protected ?OrderCollection $orders = null;
 
     protected ?ChannelCollection $channels = null;
 
@@ -42,11 +38,9 @@ class CurrencyEntity extends Entity
 
     protected ?ChannelDomainCollection $channelDomains = null;
 
-    protected ?PromotionDiscountPriceCollection $promotionDiscountPrices = null;
 
     protected ?bool $isSystemDefault = null;
 
-    protected ?BlogExportCollection $blogExports = null;
 
     protected ?CurrencyCountryRoundingCollection $countryRoundings = null;
 
@@ -126,15 +120,7 @@ class CurrencyEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getOrders(): ?OrderCollection
-    {
-        return $this->orders;
-    }
 
-    public function setOrders(OrderCollection $orders): void
-    {
-        $this->orders = $orders;
-    }
 
     public function getChannels(): ?ChannelCollection
     {
@@ -176,25 +162,9 @@ class CurrencyEntity extends Entity
         $this->isSystemDefault = $isSystemDefault;
     }
 
-    public function getPromotionDiscountPrices(): ?PromotionDiscountPriceCollection
-    {
-        return $this->promotionDiscountPrices;
-    }
 
-    public function setPromotionDiscountPrices(PromotionDiscountPriceCollection $promotionDiscountPrices): void
-    {
-        $this->promotionDiscountPrices = $promotionDiscountPrices;
-    }
 
-    public function getBlogExports(): ?BlogExportCollection
-    {
-        return $this->blogExports;
-    }
 
-    public function setBlogExports(BlogExportCollection $blogExports): void
-    {
-        $this->blogExports = $blogExports;
-    }
 
     public function getCountryRoundings(): ?CurrencyCountryRoundingCollection
     {

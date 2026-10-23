@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Service;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Requirement\ServiceConsentRequirement;
 use Contena\Core\Service\ServiceClient;
 use Contena\Core\Service\ServiceException;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 
 use Contena\Core\Framework\Adapter\Twig\TemplateFinderInterface;
-use Contena\Core\Framework\Log\Package;
 use Twig\Node\Expression\ConstantExpression;
 use Twig\Node\Expression\Variable\AssignContextVariable;
 use Twig\Node\Expression\Variable\AssignMacroVariable;

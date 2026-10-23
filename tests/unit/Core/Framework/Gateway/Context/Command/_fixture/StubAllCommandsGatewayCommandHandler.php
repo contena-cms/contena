@@ -13,7 +13,6 @@ use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingMethodCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\AbstractContextGatewayCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\LoginUserCommand;
 use Contena\Core\Framework\Gateway\Context\Command\RegisterUserCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

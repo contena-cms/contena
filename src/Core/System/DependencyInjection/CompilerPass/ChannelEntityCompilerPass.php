@@ -15,10 +15,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntityAggregatorInterface
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\DalSearchInstrumentor;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\DependencyInjection\DependencyInjectionException;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
+use Contena\Core\System\DependencyInjection\DependencyInjectionException;
 use Symfony\Component\DependencyInjection\Alias;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

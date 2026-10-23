@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Consent;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class ConsentException extends HttpException

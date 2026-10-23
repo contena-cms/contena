@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Event;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityLoadedEvent<PartialEntity>

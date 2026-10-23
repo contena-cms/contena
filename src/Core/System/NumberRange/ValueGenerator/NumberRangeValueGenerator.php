@@ -5,13 +5,13 @@ namespace Contena\Core\System\NumberRange\ValueGenerator;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\NumberRangeEvents;
 use Contena\Core\System\NumberRange\NumberRangeException;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\ValueGeneratorPatternRegistry;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @phpstan-import-type ValueGeneratorConfig from AbstractValueGenerator

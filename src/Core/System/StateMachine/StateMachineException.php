@@ -2,10 +2,12 @@
 
 namespace Contena\Core\System\StateMachine;
 
-use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\System\StateMachine\Exception\IllegalTransitionException;
+use Contena\Core\System\StateMachine\Exception\UnnecessaryTransitionException;
 
 /**
  * @codeCoverageIgnore

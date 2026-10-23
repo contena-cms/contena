@@ -8,13 +8,11 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\ChannelContextStorer;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Event\ChannelContextAware;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
-use Contena\Core\Framework\Event\ChannelContextAware;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\ChannelContextAwareEvent;
+use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 
 /**
  * @internal

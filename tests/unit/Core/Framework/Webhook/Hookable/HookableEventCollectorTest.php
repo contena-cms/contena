@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Event\BusinessEventCollectorResponse;
 use Contena\Core\Framework\Event\BusinessEventDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable;
 use Contena\Core\Framework\Webhook\Hookable\CoreHookableEventDescriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventCollector;

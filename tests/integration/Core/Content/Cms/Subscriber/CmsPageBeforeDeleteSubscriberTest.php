@@ -3,14 +3,12 @@
 namespace Contena\Tests\Integration\Core\Content\Cms\Subscriber;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Content\Cms\CmsPageCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;

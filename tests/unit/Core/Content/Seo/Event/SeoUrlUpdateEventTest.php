@@ -8,7 +8,6 @@ use Contena\Core\Content\Seo\Event\SeoUrlUpdateEvent;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

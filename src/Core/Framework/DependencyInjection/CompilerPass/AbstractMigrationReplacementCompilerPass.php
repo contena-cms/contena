@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Contena\Core\Framework\Migration\MigrationSource;
 
 #[BecomesInternal(version: 'v6.8.0')]
 abstract class AbstractMigrationReplacementCompilerPass implements CompilerPassInterface

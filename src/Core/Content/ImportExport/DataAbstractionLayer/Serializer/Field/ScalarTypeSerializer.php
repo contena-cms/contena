@@ -6,7 +6,6 @@ use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\Processing\Mapping\Mapping;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

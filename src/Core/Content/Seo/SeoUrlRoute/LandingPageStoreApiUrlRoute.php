@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Seo\SeoUrlRoute;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 
 class LandingPageStoreApiUrlRoute implements EntitySeoUrlRouteInterface

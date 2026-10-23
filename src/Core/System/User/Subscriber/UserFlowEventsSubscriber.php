@@ -3,17 +3,16 @@
 namespace Contena\Core\System\User\Subscriber;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\UserEvents;
-use Contena\Core\System\User\DataAbstractionLayer\UserIndexingMessage;
-use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Context\ChannelContextRestorer;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\Context\ChannelContextRestorer;
+use Contena\Core\System\User\DataAbstractionLayer\UserIndexingMessage;
+use Contena\Core\System\User\Event\UserRegisterEvent;
+use Contena\Core\System\User\UserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

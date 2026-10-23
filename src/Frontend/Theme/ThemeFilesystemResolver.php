@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme;
 
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Kernel;

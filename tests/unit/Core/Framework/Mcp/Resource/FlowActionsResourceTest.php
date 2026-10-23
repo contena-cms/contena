@@ -8,7 +8,6 @@ use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Flow\Api\FlowActionCollectorResponse;
 use Contena\Core\Content\Flow\Api\FlowActionDefinition;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Resource\FlowActionsResource;
 

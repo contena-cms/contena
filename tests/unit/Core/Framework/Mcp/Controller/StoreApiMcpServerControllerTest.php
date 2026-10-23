@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Controller\StoreApiMcpServerController;
 use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
 use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;

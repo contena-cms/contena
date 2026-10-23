@@ -11,7 +11,6 @@ use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
 use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Content\Blog\Cart\BlogCartProcessor;
 use Contena\Core\Content\Blog\Cart\BlogLineItemValidator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 

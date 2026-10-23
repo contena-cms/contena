@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 use Doctrine\DBAL\Types\Types;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\EnumFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Stores a PHP Enum

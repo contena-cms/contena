@@ -11,7 +11,6 @@ use Contena\Core\Content\Media\Message\GenerateThumbnailsHandler;
 use Contena\Core\Content\Media\Message\UpdateThumbnailsMessage;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 

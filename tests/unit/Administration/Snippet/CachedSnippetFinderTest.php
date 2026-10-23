@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Snippet\CachedSnippetFinder;
 use Contena\Administration\Snippet\SnippetFinder;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 

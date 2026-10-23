@@ -18,7 +18,6 @@ use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
 use Contena\Core\Framework\App\Http\AppSystemHttpMiddleware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Service\WebhookClient;
 use Contena\Core\Framework\Webhook\Service\WebhookRequest;
 use Symfony\Component\Clock\NativeClock;

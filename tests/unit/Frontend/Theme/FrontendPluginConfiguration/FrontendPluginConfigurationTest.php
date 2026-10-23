@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\FrontendPluginConfiguration;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 
 /**

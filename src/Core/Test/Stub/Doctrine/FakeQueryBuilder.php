@@ -5,7 +5,6 @@ namespace Contena\Core\Test\Stub\Doctrine;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Doctrine\DBAL\Result;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

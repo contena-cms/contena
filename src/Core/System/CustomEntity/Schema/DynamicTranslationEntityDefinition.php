@@ -4,7 +4,6 @@ namespace Contena\Core\System\CustomEntity\Schema;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

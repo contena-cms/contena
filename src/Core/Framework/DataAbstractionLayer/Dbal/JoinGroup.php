@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SingleFieldFilter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

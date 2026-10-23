@@ -3,9 +3,8 @@
 namespace Contena\Core\Framework\Api\ApiDefinition;
 
 use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\Feature;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

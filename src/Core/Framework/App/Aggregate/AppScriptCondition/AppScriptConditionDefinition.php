@@ -5,18 +5,14 @@ namespace Contena\Core\Framework\App\Aggregate\AppScriptCondition;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationDefinition;
 use Contena\Core\Framework\App\AppDefinition;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\AllowHtml;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SetNullOnDelete;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
@@ -26,7 +22,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 
 class AppScriptConditionDefinition extends EntityDefinition
 {
@@ -66,7 +61,6 @@ class AppScriptConditionDefinition extends EntityDefinition
             (new BoolField('active', 'active'))->addFlags(new Required())->setDescription('When boolean value is `true`, defined app script conditions are available for selection.'),
             (new StringField('group', 'group'))->setDescription('Categorizes script conditions within a specific group.'),
             (new LongTextField('script', 'script'))->addFlags(new AllowHtml(false))->setDescription('Internal field.'),
-            (new BlobField('constraints', 'constraints'))->removeFlag(ApiAware::class)->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
             (new JsonField('config', 'config'))->setDescription('Specifies detailed information about the component.'),
             (new FkField('app_id', 'appId', AppDefinition::class))->addFlags(new CascadeDelete(), new Required())->setDescription('Unique identity of app.'),
             new ManyToOneAssociationField('app', 'app_id', AppDefinition::class),

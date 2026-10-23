@@ -3,7 +3,6 @@
 namespace Contena\Core\Installer;
 
 use Contena\Core\Framework\DependencyInjection\CompilerPass\TwigEnvironmentCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Loader\DelegatingLoader;
 use Symfony\Component\Config\Loader\LoaderResolver;

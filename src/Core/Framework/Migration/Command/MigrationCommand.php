@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Migration\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -11,6 +10,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Contena\Core\Framework\Migration\Exception\UnknownMigrationSourceException;
+use Contena\Core\Framework\Migration\MigrationCollection;
 
 #[AsCommand(
     name: 'database:migrate',
@@ -20,16 +21,6 @@ class MigrationCommand extends Command
 {
     protected SymfonyStyle $io;
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        protected readonly MigrationCollectionLoader $loader,
-        private readonly TagAwareAdapterInterface $cache,
-        protected readonly string $contenaVersion
-    ) {
-        parent::__construct();
-    }
 
     /**
      * @return \Generator<class-string<MigrationStep>>

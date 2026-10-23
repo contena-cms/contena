@@ -8,12 +8,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\Delete\DeleteCascadeChildDefinition;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\Delete\DeleteCascadeManyToOneDefinition;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\Delete\DeleteCascadeParentDefinition;
 
 /**
  * @internal

@@ -2,12 +2,11 @@
 
 namespace Contena\Core\System\User\Subscriber;
 
-use Contena\Core\System\User\Service\BlogReviewCountService;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Service\BlogReviewCountService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

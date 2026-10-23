@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Api\OAuth\Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

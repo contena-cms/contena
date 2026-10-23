@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Payload;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

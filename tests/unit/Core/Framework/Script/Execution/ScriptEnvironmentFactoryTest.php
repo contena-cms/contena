@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Script\Execution;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Extension\PhpSyntaxExtension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Script;
 use Contena\Core\Framework\Script\Execution\ScriptEnvironmentFactory;
 use Contena\Core\Framework\Struct\ArrayStruct;

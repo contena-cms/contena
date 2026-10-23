@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\Snippet;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\SnippetFileHandler;
 use Contena\Core\System\Snippet\SnippetValidator;

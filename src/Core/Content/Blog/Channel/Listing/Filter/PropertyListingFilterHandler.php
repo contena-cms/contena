@@ -4,8 +4,8 @@ namespace Contena\Core\Content\Blog\Channel\Listing\Filter;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Content\Blog\Channel\Listing\Filter;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
+use Contena\Core\Content\Blog\Channel\Listing\Filter;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
@@ -19,10 +19,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class PropertyListingFilterHandler extends AbstractListingFilterHandler
 {

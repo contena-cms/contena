@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 
 #[BecomesInternal(version: 'v6.8.0')]
 class NamespaceHierarchyBuilder

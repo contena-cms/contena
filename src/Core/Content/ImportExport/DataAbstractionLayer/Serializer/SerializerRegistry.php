@@ -6,7 +6,6 @@ use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\Abs
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field\AbstractFieldSerializer;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 class SerializerRegistry
 {

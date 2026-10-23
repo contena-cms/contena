@@ -12,7 +12,6 @@ use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Log\LogAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\NotHookable;
 use Symfony\Contracts\EventDispatcher\Event;
 

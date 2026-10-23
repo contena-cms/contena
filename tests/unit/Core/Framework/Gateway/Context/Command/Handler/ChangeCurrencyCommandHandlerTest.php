@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeCurrencyCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeCurrencyCommandHandler;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

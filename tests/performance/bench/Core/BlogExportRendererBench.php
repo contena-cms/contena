@@ -4,14 +4,13 @@ namespace Contena\Tests\Bench\Core;
 
 use PhpBench\Attributes\AfterMethods;
 use PhpBench\Attributes\BeforeMethods;
-use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\BlogExport\BlogExportEntity;
 use Contena\Core\Content\BlogExport\Service\BlogExportRenderer;
+use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Bench\AbstractBenchCase;
 
 /**
  * @internal - only for performance benchmarks

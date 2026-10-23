@@ -5,7 +5,6 @@ namespace Contena\Core\System\Consent\Service;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentDefinition;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;
 use Contena\Core\System\Consent\ConsentException;

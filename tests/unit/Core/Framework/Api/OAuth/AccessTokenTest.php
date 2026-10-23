@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\OAuth\FakeCryptKey;
 use Contena\Core\Framework\Api\OAuth\JWTConfigurationFactory;
 use Contena\Core\Framework\Api\OAuth\Scope\WriteScope;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

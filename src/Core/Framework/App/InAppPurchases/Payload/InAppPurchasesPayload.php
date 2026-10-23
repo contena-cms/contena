@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\App\InAppPurchases\Payload;
 
 use Contena\Core\Framework\App\Payload\Source;
 use Contena\Core\Framework\App\Payload\SourcedPayloadInterface;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
 /**
  * @internal

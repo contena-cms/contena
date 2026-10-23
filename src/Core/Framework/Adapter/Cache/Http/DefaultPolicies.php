@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Represents default cache policies configuration for an area (e.g., frontend, store_api)

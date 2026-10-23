@@ -2,10 +2,8 @@
 
 namespace Contena\Core\System\User\Aggregate\UserRecovery;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\UserEntity;
 
 class UserRecoveryEntity extends Entity
 {

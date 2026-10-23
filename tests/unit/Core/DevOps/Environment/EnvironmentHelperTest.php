@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerData;
 use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

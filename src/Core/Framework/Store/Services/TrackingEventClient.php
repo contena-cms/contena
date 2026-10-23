@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Store\Services;
 
 use GuzzleHttp\ClientInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

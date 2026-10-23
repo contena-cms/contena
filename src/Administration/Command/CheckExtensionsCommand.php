@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 
 /**

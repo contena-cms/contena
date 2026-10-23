@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Password\LegacyEncoder;
 
-use Contena\Core\Framework\Log\Package;
 
 interface LegacyEncoderInterface
 {

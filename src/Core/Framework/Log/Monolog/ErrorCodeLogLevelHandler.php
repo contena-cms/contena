@@ -8,7 +8,6 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Monolog\ResettableInterface;
 use Psr\Log\LogLevel;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 
 class ErrorCodeLogLevelHandler extends AbstractHandler

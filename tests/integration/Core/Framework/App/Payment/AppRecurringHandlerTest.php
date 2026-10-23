@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\Payment\Response\PaymentResponse;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

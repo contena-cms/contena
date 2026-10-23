@@ -2,7 +2,6 @@
 
 namespace Contena\Core;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * System-wide defaults that are fixed for performance reasons.

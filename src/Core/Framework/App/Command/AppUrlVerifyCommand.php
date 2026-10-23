@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Framework\App\Command;
 
-use Contena\Core\Framework\App\Url\AppUrlVerificationPrinter;
-use Contena\Core\Framework\App\Url\AppUrlVerifier;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -20,13 +17,6 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class AppUrlVerifyCommand extends Command
 {
-    public function __construct(
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly AppUrlVerifier $appUrlVerifier,
-        private readonly AppUrlVerificationPrinter $printer,
-    ) {
-        parent::__construct();
-    }
 
     /**
      * {@inheritdoc}

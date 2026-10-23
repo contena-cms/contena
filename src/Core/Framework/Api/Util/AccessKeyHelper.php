@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\Util;
 
 use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 
 class AccessKeyHelper

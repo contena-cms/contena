@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\Service\LifecycleManager;
 use Contena\Core\Service\Subscriber\SystemUpdateSubscriber;

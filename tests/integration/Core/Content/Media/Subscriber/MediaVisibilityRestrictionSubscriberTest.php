@@ -17,8 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\CountResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

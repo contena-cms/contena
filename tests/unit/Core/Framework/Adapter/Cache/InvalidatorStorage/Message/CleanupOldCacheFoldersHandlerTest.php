@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFolders;
 use Contena\Core\Framework\Adapter\Cache\Message\CleanupOldCacheFoldersHandler;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

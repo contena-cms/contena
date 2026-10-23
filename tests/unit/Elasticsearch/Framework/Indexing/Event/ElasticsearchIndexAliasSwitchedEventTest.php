@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing\Event;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexAliasSwitchedEvent;
 
 /**

@@ -13,7 +13,6 @@ use Contena\Core\Content\Shared\MailFlow\DataProvider\OrderProvider;
 use Contena\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Contena\Core\Framework\App\Flow\Action\AppFlowActionProvider;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\BusinessEventEncoder;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\NumberRange\NumberRangeException;
 use Symfony\Component\DependencyInjection\ServiceLocator;
 

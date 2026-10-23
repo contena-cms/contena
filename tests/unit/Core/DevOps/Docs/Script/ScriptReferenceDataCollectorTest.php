@@ -7,7 +7,6 @@ namespace Contena\Tests\Unit\Core\DevOps\Docs\Script;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceDataCollector;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Finder\SplFileInfo;
 
 /**

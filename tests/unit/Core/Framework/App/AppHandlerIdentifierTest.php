@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppHandlerIdentifier;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

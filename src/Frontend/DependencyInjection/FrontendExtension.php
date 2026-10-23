@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\AbstractThemePathBuilder;
 use Contena\Frontend\Theme\ConfigLoader\AbstractAvailableThemeProvider;
 use Contena\Frontend\Theme\ConfigLoader\AbstractConfigLoader;

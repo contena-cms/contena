@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;

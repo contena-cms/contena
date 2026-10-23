@@ -36,7 +36,6 @@ use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteResult;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Event\NestedEventDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

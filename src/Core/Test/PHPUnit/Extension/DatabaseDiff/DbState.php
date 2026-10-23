@@ -3,7 +3,6 @@
 namespace Contena\Core\Test\PHPUnit\Extension\DatabaseDiff;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

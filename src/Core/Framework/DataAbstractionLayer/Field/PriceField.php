@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\PriceFieldAccessorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\PriceFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class PriceField extends JsonField
 {

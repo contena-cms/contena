@@ -5,9 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Mcp;
 use Mcp\Server\Session\FileSessionStore;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**

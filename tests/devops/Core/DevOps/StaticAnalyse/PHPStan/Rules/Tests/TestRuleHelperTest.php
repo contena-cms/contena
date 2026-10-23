@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\TestReflectionClassInterface;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\TestRuleHelper;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

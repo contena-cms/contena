@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Plugin\KernelPluginLoader;
 
 use Composer\Autoload\ClassLoader;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-import-type PluginInfo from KernelPluginLoader

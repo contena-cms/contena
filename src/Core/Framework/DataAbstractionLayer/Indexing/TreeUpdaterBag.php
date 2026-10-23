@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Indexing;
 
-use Contena\Core\Framework\Log\Package;
 
 class TreeUpdaterBag
 {

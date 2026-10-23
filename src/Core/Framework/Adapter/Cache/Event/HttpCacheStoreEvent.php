@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\Event;
 
 use Psr\Cache\CacheItemInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\EventDispatcher\Event;

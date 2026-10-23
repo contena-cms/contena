@@ -3,7 +3,6 @@
 namespace Contena\Core\Profiling\Controller;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Doctrine\ConnectionProfiler;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Profiler\Profiler;

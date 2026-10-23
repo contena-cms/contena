@@ -15,7 +15,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\TaxProvider\TaxProviderCollection;
 use Contena\Core\System\TaxProvider\TaxProviderDefinition;
 use Contena\Core\System\TaxProvider\TaxProviderEntity;

@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Commands\DeleteThumbnailsCommand;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\DevOps\StaticAnalyze\PHPStan;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

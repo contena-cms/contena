@@ -8,7 +8,6 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailCollection;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailData;
 use Contena\Core\Content\Media\Upload\MediaUploadParameters;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

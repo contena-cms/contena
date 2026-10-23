@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Api\Controller\FallbackController;
 use Contena\Core\Framework\Bundle as ContenaBundle;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;

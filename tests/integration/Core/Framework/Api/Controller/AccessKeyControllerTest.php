@@ -4,8 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

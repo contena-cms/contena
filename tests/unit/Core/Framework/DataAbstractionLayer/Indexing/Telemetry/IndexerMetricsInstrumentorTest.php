@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\Telemetry\IndexerMetricsInstrumentor;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Telemetry;
 use Contena\Core\Test\Stub\Telemetry\CollectingMeter;
 

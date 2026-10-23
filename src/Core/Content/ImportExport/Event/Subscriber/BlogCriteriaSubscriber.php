@@ -2,14 +2,13 @@
 
 namespace Contena\Core\Content\ImportExport\Event\Subscriber;
 
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\ImportExport\Event\EnrichExportCriteriaEvent;
 use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

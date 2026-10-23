@@ -21,14 +21,13 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteV
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Frontend\Theme\Snippet\ThemeSnippetFileWriter;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
+use Contena\Frontend\Theme\Snippet\ThemeSnippetFileWriter;
 
 #[BecomesFinal(version: 'v6.8.0')]
 class ThemeLifecycleService

@@ -19,7 +19,6 @@ use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\App\Payload\AppPayloadStruct;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Test\Generator;
 

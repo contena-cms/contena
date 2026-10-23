@@ -2,8 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework\Command;
 
-use Contena\Core\Framework\DataAbstractionLayer\Command\ConsoleProgressTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminIndexingBehavior;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Symfony\Component\Console\Attribute\AsCommand;

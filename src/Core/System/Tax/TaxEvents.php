@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Tax;
 
-use Contena\Core\Framework\Log\Package;
 
 class TaxEvents
 {

@@ -5,10 +5,10 @@ namespace Contena\Tests\Unit\Core\Content\Media\Subscriber;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\Subscriber\MediaVisibilityRestrictionSubscriber;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\BeforeEntityAggregationEvent;
@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\CountA
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryDefinition;
 
 /**

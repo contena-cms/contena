@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Request;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

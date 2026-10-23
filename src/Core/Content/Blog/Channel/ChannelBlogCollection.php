@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel;
 
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends BlogCollection<ChannelBlogEntity>

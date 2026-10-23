@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\AbstractFileContentValidator;
 use Contena\Core\Content\Media\File\FileContentValidationStrategy;
 use Contena\Core\Content\Media\File\MediaFile;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

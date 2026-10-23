@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Store\MemoizedSystemConfigStore;
 
 class MemoizedSystemConfigLoader extends AbstractSystemConfigLoader

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\Telemetry;
 
 use Contena\Core\Framework\Adapter\Cache\InvalidateCacheEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

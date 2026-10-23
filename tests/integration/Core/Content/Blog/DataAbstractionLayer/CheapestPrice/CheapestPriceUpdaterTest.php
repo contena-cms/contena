@@ -10,8 +10,6 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Assert\Serialization;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Twig;
 
-use Contena\Core\Framework\Log\Package;
 
 interface TemplateFinderInterface
 {

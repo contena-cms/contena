@@ -3,10 +3,9 @@
 namespace Contena\Core\Content\Test\Flow\fixtures;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Event\UserAware;
 
 /**
  * @internal

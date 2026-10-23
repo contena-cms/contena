@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Instrumentation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Monotonic elapsed-time measurement for telemetry.

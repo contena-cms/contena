@@ -10,10 +10,9 @@ use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\Service\DefaultCategoryLevelLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 
 /**
  * @internal

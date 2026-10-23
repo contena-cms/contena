@@ -39,7 +39,6 @@ use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeWidening;
 use Contena\Core\Framework\Deprecation\BCChange\PropertyTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\VisibilityChange;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Validates that BC-change attributes announce changes that are structurally possible:

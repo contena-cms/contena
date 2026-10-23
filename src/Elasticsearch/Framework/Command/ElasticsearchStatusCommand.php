@@ -5,8 +5,6 @@ namespace Contena\Elasticsearch\Framework\Command;
 use Doctrine\DBAL\Connection;
 use OpenSearch\Client;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\DataAbstractionLayer\Command\ConsoleProgressTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\ElasticsearchException;
 use Symfony\Component\Console\Attribute\AsCommand;

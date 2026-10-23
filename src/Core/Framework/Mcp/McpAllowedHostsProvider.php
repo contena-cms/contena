@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

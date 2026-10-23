@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Sso\Config;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

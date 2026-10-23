@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\App\Aggregate\AppPaymentMethod;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
@@ -23,7 +21,6 @@ class AppPaymentMethodEntity extends Entity
 
     protected string $paymentMethodId;
 
-    protected ?PaymentMethodEntity $paymentMethod = null;
 
     protected string $appName;
 
@@ -75,15 +72,7 @@ class AppPaymentMethodEntity extends Entity
         $this->paymentMethodId = $paymentMethodId;
     }
 
-    public function getPaymentMethod(): ?PaymentMethodEntity
-    {
-        return $this->paymentMethod;
-    }
 
-    public function setPaymentMethod(?PaymentMethodEntity $paymentMethod): void
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
     public function getAppName(): string
     {

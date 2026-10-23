@@ -3,9 +3,7 @@
 namespace Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation;
 
 use Contena\Core\Content\ContentStream\ContentStreamEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -12,7 +12,6 @@ use Contena\Core\Content\Category\Service\CachedDefaultCategoryLevelLoader;
 use Contena\Core\Content\Category\Service\DefaultCategoryLevelLoader;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;

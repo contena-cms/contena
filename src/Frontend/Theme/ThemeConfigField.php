@@ -5,7 +5,6 @@ namespace Contena\Frontend\Theme;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class ThemeConfigField extends Struct

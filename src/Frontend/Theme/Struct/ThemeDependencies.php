@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class ThemeDependencies extends Struct

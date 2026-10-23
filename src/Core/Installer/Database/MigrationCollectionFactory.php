@@ -4,7 +4,9 @@ namespace Contena\Core\Installer\Database;
 
 use Doctrine\DBAL\Connection;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
+use Contena\Core\Framework\Migration\MigrationRuntime;
+use Contena\Core\Framework\Migration\MigrationSource;
 
 /**
  * @internal

@@ -19,9 +19,13 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidLimitQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidPageQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidSortQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\QueryLimitExceededException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 
 class RequestCriteriaBuilder
 {

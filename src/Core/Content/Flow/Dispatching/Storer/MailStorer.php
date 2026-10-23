@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Framework\Event\UserAware;
+use Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\OrderAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Event\UserAware;
+use Contena\Core\System\User\UserEntity;
 
 class MailStorer extends FlowStorer
 {

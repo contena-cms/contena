@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Command\ChangeShopIdCommand;
 use Contena\Core\Framework\App\ShopIdChangeResolver\Resolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

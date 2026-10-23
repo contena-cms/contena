@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\QuestionHelper;
@@ -194,6 +193,7 @@ namespace #namespace#;
 
 use Contena\Core\Framework\Plugin;
 use Contena\Frontend\Framework\ThemeInterface;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 class #class# extends Plugin implements ThemeInterface
 {

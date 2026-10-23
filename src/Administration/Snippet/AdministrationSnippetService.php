@@ -3,7 +3,6 @@
 namespace Contena\Administration\Snippet;
 
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

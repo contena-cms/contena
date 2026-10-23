@@ -5,9 +5,8 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Garan;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Garan\GaranLabelInlineImage;
 use Contena\Core\Content\Blog\Garan\GaranLabelBlogValidator;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Content\Blog\Garan\GaranLabelInlineImage;
 
 /**
  * @internal

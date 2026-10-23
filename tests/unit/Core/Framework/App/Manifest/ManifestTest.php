@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Manifest\Xml\Gateway\CheckoutGateway;
 use Contena\Core\Framework\App\Manifest\Xml\Gateway\ContextGateway;
 use Contena\Core\Framework\App\Manifest\Xml\ShippingMethod\ShippingMethods;
 use Contena\Core\Framework\App\Manifest\Xml\Tax\Tax;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

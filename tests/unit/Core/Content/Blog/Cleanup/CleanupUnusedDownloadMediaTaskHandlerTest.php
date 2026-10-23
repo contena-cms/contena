@@ -6,11 +6,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Media\UnusedMediaPurger;
 use Contena\Core\Content\Blog\Aggregate\BlogDownload\BlogDownloadDefinition;
 use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTaskHandler;
+use Contena\Core\Content\Media\UnusedMediaPurger;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

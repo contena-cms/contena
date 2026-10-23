@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
 use Danger\Struct\File;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * A new unit test class does not pull helpers in through a trait. Fixture builders belong in a static

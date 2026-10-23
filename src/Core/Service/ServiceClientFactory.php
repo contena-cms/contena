@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\ServiceRegistry\Client as ServiceRegistryClient;
 use Contena\Core\Service\ServiceRegistry\ServiceEntry;
 use Symfony\Contracts\HttpClient\HttpClientInterface;

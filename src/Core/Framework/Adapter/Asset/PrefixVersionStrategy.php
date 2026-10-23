@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Asset;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 
 class PrefixVersionStrategy implements VersionStrategyInterface

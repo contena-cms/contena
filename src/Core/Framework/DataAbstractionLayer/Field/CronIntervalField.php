@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CronIntervalFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class CronIntervalField extends Field implements StorageAware
 {

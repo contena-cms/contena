@@ -2,10 +2,9 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;
+use Contena\Core\DevOps\Environment\EnvironmentHelper;
+use Contena\Core\PlatformRequest;
 use Contena\Frontend\Storybook\StorybookService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;

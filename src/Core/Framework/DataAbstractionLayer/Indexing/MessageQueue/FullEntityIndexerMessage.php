@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Indexing\MessageQueue;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Contena\Core\Framework\MessageQueue\DeduplicatableMessageInterface;
 use Contena\Core\Framework\Util\Hasher;

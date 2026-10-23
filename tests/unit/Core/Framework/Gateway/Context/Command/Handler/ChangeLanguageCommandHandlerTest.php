@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeLanguageCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeLanguageCommandHandler;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

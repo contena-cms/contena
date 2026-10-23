@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Aggregation;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

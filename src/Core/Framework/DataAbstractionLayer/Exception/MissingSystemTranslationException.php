@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -22,16 +21,6 @@ class MissingSystemTranslationException extends WriteConstraintViolationExceptio
         $template = 'Translation required for system language {{ systemLanguage }}';
         $parameters = ['{{ systemLanguage }}' => Defaults::LANGUAGE_SYSTEM];
         $constraintViolationList = new ConstraintViolationList([
-            new ConstraintViolation(
-                str_replace(array_keys($parameters), array_values($parameters), $template),
-                $template,
-                $parameters,
-                null,
-                '',
-                Defaults::LANGUAGE_SYSTEM,
-                null,
-                self::VIOLATION_MISSING_SYSTEM_TRANSLATION
-            ),
         ]);
         parent::__construct($constraintViolationList, $path);
     }

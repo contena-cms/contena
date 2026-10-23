@@ -6,11 +6,8 @@ use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\Entities\ClientEntityInterface;
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use League\OAuth2\Server\Repositories\UserRepositoryInterface;
-use Contena\Core\Framework\Api\OAuth\AdminUser\AdminUser;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
-use Contena\Core\Framework\Uuid\Uuid;
 
 /**
  * OAuth integrations should rely on {@see AdminUserRepositoryInterface} instead of this concrete Contena class.
@@ -32,39 +29,4 @@ class AdminUserRepository implements AdminUserRepositoryInterface
     ) {
     }
 
-    public function getUserEntityByUserCredentials(
-        string $username,
-        #[\SensitiveParameter]
-        string $password,
-        string $grantType,
-        ClientEntityInterface $clientEntity
-    ): ?AdminUserEntityInterface {
-        if ($this->loginConfigService->getConfig()?->useDefault === false) {
-            // never allow login via password if the default login is disabled (e.g. using SSO only)
-            return null;
-        }
-
-        $builder = $this->connection->createQueryBuilder();
-        $admin_user = $builder->select('admin_user.id', 'admin_user.password', 'admin_user.active')
-            ->from('admin_user')
-            ->where('username = :username')
-            ->setParameter('username', $username)
-            ->fetchAssociative();
-
-        if (!$admin_user) {
-            // Prevent admin_user enumeration via timing attacks by always running password_verify().
-            $admin_user = ['password' => self::PLACEHOLDER_PASSWORD_HASH];
-            $password = 'invalid-password-will-always-fail';
-        }
-
-        if (!password_verify($password, (string) $admin_user['password'])) {
-            return null;
-        }
-
-        if (!(bool) $admin_user['active']) {
-            return null;
-        }
-
-        return new AdminUser(Uuid::fromBytesToHex($admin_user['id']));
-    }
 }

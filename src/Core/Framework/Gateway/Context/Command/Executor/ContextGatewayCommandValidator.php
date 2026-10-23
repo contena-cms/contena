@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Gateway\Context\Command\Executor;
 use Contena\Core\Framework\Gateway\Context\Command\ContextGatewayCommandCollection;
 use Contena\Core\Framework\Gateway\GatewayException;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

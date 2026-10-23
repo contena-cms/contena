@@ -6,7 +6,6 @@ use Contena\Core\Content\Flow\Dispatching\Aware\CustomAppAware;
 use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 
 class CustomAppStorer extends FlowStorer
 {

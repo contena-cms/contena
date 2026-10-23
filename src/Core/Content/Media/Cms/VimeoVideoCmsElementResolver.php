@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Cms;
 
-use Contena\Core\Framework\Log\Package;
 
 class VimeoVideoCmsElementResolver extends YoutubeVideoCmsElementResolver
 {

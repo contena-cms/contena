@@ -14,7 +14,6 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -290,7 +289,6 @@ class MediaUploadControllerTest extends TestCase
 
 namespace Contena\Core\Content\Media\Api;
 
-use Contena\Tests\Unit\Core\Content\Media\Api\MediaUploadControllerTest;
 
 function tempnam(string $dir, string $prefix): string|false
 {

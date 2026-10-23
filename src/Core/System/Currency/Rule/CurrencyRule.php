@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Currency\Rule;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;

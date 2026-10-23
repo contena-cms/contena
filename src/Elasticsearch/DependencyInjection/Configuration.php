@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 

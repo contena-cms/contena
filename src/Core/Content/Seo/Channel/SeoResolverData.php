@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Seo\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 class SeoResolverData
 {

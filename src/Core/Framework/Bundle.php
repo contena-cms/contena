@@ -5,7 +5,6 @@ namespace Contena\Core\Framework;
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\BusinessEventRegisterCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Kernel;
 use Symfony\Component\Config\FileLocator;
@@ -27,6 +26,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\HttpKernel\Bundle\Bundle as SymfonyBundle;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Contena\Core\Framework\Migration\MigrationSource;
 
 abstract class Bundle extends SymfonyBundle
 {

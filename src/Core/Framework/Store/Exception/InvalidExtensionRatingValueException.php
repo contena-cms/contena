@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Dispatched after the downloaded translation files and metadata entry for a locale have been removed.

@@ -14,9 +14,6 @@ use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventCollection;
 use Contena\Core\Framework\App\Template\TemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
@@ -32,6 +29,7 @@ class AppEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
+use Contena\Core\System\Integration\IntegrationEntity;
 
     protected string $name;
 

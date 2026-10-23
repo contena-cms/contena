@@ -17,7 +17,6 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\JWT\JWTException;
 use Contena\Core\Framework\JWT\Struct\JWKCollection;
 use Contena\Core\Framework\JWT\Struct\JWKStruct;
-use Contena\Core\Framework\Log\Package;
 
 final readonly class HasValidRSAJWKSignature implements Constraint
 {

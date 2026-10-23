@@ -110,6 +110,8 @@ use Contena\Core\System\AdminUser\AdminUserDefinition;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\Migration\MigrationInfo;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Subscriber\CmsVersionMergeSubscriber;
 use Contena\Core\Framework\DataAbstractionLayer\Event\BeforeVersionMergeEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Buckets a flow trigger event name ({@see \Contena\Core\Content\Flow\Dispatching\StorableFlow::getName()},

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Rule;
 
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\CustomFieldRule;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleScope;

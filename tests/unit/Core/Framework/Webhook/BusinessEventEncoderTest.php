@@ -14,7 +14,6 @@ use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\EventData\ObjectType;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\BusinessEventEncoder;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\System\Tax\TaxEntity;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 abstract class BulkEntityExtension
 {

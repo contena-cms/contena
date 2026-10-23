@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Sync\FkReference;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\Api\LocaleCodeFkResolver;
 
 /**

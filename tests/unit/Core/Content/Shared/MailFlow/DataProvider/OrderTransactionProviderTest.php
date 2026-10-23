@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\OrderTransactionProvider;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

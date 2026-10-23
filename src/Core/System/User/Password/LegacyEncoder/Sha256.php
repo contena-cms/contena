@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Password\LegacyEncoder;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 
 class Sha256 implements LegacyEncoderInterface

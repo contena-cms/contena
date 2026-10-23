@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

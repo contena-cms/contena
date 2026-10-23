@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\Migration;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Migration\Exception\UnknownMigrationSourceException;
 
 class MigrationException extends HttpException
 {

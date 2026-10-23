@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Rule\Container;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 
 interface ContainerInterface

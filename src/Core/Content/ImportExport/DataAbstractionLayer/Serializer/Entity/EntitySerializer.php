@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Enti
 
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class EntitySerializer extends AbstractEntitySerializer

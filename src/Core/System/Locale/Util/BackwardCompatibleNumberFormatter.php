@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Locale\Util;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
 use Contena\Core\Framework\Plugin\Context\DeactivateContext;
 use Contena\Core\Framework\Plugin\Context\InstallContext;

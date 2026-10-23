@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\NumberRange\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Instrumentation\OperationResult;
 use Contena\Core\Framework\Telemetry\Telemetry;

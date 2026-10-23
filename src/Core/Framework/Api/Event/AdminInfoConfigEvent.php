@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 class AdminInfoConfigEvent
 {

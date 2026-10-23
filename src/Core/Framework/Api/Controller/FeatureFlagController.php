@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Api\Controller;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;

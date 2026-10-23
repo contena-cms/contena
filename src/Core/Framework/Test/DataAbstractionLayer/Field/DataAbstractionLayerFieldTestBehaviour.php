@@ -14,6 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\MappingEntityClassesException;
 
 trait DataAbstractionLayerFieldTestBehaviour
 {

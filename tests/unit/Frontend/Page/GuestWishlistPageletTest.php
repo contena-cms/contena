@@ -13,16 +13,14 @@ use Contena\Core\Content\Blog\Channel\BlogListResponse;
 use Contena\Core\Content\Blog\Channel\BlogListRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
+use Contena\Frontend\Pagelet\Wishlist\GuestWishListPageletBlogCriteriaEvent;
 use Contena\Frontend\Pagelet\Wishlist\GuestWishlistPageletLoadedEvent;
 use Contena\Frontend\Pagelet\Wishlist\GuestWishlistPageletLoader;
-use Contena\Frontend\Pagelet\Wishlist\GuestWishListPageletBlogCriteriaEvent;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 

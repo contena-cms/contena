@@ -7,8 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Lifecycle\AppFeatureValidator;
-use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal

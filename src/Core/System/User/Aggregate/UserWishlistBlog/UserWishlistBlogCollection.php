@@ -4,7 +4,6 @@ namespace Contena\Core\System\User\Aggregate\UserWishlistBlog;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<UserWishlistBlogEntity>

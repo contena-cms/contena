@@ -5,8 +5,6 @@ namespace Contena\Tests\DevOps\Core\Test;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Command\DataAbstractionLayerValidateCommand;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

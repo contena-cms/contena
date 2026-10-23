@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Service;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\ServiceClientFactory;
 use Contena\Core\Service\ServiceRegistry\Client as ServiceRegistryClient;
 use Contena\Core\Service\ServiceRegistry\ServiceEntry;

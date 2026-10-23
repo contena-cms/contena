@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 readonly class ResolvedField
 {

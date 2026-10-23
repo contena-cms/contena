@@ -6,7 +6,6 @@ use Contena\Administration\Framework\App\ActiveAdminAppLoader;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Kernel;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Filesystem\Filesystem;

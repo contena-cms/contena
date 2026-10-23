@@ -3,7 +3,6 @@
 namespace Contena\Administration\Migration\V6_7;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**
@@ -12,6 +11,7 @@ use Symfony\Component\Filesystem\Filesystem;
 class Migration1757057005MailTemplate extends MigrationStep
 {
     use UpdateMailTrait;
+use Contena\Core\Framework\Migration\MigrationStep;
 
     public function getCreationTimestamp(): int
     {
@@ -25,18 +25,4 @@ class Migration1757057005MailTemplate extends MigrationStep
         $this->updateMail($mailUpdateData, $connection);
     }
 
-    private function getMailData(): MailData
-    {
-        $filesystem = new Filesystem();
-        $mailData = new MailData(
-            'admin_sso_user_invite',
-        );
-
-        $mailData->setEnPlain($filesystem->readFile(__DIR__ . '/assets/sso_user_invitation_mail.en-GB.txt'));
-        $mailData->setEnHtml($filesystem->readFile(__DIR__ . '/assets/sso_user_invitation_mail.en-GB.html.twig'));
-        $mailData->setDePlain($filesystem->readFile(__DIR__ . '/assets/sso_user_invitation_mail.de-DE.txt'));
-        $mailData->setDeHtml($filesystem->readFile(__DIR__ . '/assets/sso_user_invitation_mail.de-DE.html.twig'));
-
-        return $mailData;
-    }
 }

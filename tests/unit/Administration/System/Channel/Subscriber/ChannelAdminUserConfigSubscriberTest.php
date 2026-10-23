@@ -13,11 +13,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\ChannelEvents;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigCollection;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigDefinition;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigEntity;
+use Contena\Core\System\Channel\ChannelEvents;
 
 /**
  * @internal

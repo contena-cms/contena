@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Script\Debugging;
 
-use Contena\Core\Framework\Log\Package;
 
 class Debug
 {

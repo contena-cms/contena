@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Checkout\Cart\Error;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Frontend\Checkout\Cart\Error\ShippingMethodChangedError;
 

@@ -3,9 +3,8 @@
 namespace Contena\Frontend\Pagelet\Country;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\Channel\AbstractCountryStateRoute;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Country\Channel\AbstractCountryStateRoute;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching;
 
 use Contena\Core\Content\Flow\Dispatching\Struct\Sequence;
-use Contena\Core\Framework\Log\Package;
 
 class FlowState
 {

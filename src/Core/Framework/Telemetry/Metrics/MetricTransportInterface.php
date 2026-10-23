@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
 
 /**

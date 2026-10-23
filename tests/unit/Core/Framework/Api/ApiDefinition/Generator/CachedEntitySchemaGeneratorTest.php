@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CachedEntitySchemaGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Cache\CacheInterface;
 
 /**

@@ -2,13 +2,12 @@
 
 namespace Contena\Core\Content\Blog\Channel;
 
-use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
+use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceContainer;
-use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Property\PropertyGroupCollection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 
 /**
  * @codeCoverageIgnore
@@ -18,7 +17,6 @@ class ChannelBlogEntity extends BlogEntity
 
     protected ?PropertyGroupCollection $sortedProperties = null;
 
-    protected CalculatedCheapestPrice $calculatedCheapestPrice;
 
     protected bool $isNew = false;
 
@@ -32,9 +30,7 @@ class ChannelBlogEntity extends BlogEntity
      */
     protected CheapestPrice|CheapestPriceContainer|null $cheapestPrice = null;
 
-    protected ?CheapestPriceContainer $cheapestPriceContainer = null;
 
-    protected ?ConvertedUnitSet $measurements = null;
 
     public function setCalculatedPrices(PriceCollection $prices): void
     {
@@ -46,15 +42,7 @@ class ChannelBlogEntity extends BlogEntity
         return $this->calculatedPrices;
     }
 
-    public function getCalculatedPrice(): CalculatedPrice
-    {
-        return $this->calculatedPrice;
-    }
 
-    public function setCalculatedPrice(CalculatedPrice $calculatedPrice): void
-    {
-        $this->calculatedPrice = $calculatedPrice;
-    }
 
     public function getSortedProperties(): ?PropertyGroupCollection
     {
@@ -96,43 +84,11 @@ class ChannelBlogEntity extends BlogEntity
         $this->seoCategory = $category;
     }
 
-    public function getCalculatedCheapestPrice(): CalculatedCheapestPrice
-    {
-        return $this->calculatedCheapestPrice;
-    }
 
-    public function setCalculatedCheapestPrice(CalculatedCheapestPrice $calculatedCheapestPrice): void
-    {
-        $this->calculatedCheapestPrice = $calculatedCheapestPrice;
-    }
 
-    public function getCheapestPrice(): CheapestPrice|CheapestPriceContainer|null
-    {
-        return $this->cheapestPrice;
-    }
 
-    public function setCheapestPrice(?CheapestPrice $cheapestPrice): void
-    {
-        $this->cheapestPrice = $cheapestPrice;
-    }
 
-    public function setCheapestPriceContainer(CheapestPriceContainer $container): void
-    {
-        $this->cheapestPriceContainer = $container;
-    }
 
-    public function getCheapestPriceContainer(): ?CheapestPriceContainer
-    {
-        return $this->cheapestPriceContainer;
-    }
 
-    public function getMeasurements(): ?ConvertedUnitSet
-    {
-        return $this->measurements;
-    }
 
-    public function setMeasurements(ConvertedUnitSet $measurements): void
-    {
-        $this->measurements = $measurements;
-    }
 }

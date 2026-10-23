@@ -7,7 +7,6 @@ use Composer\InstalledVersions;
 use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\DbalKernelPluginLoader;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCountMiddleware;

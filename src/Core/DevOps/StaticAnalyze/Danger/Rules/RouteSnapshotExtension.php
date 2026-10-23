@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
 use Danger\Struct\File;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The `routes_without_schema` snapshot freezes the list of undocumented API routes; new

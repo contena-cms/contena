@@ -2,19 +2,17 @@
 
 namespace Contena\Core\Maintenance\Channel\Command;
 
-use Contena\Core\Framework\Console\OutputFormatTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
+use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
-use Contena\Core\System\Channel\ChannelCollection;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;

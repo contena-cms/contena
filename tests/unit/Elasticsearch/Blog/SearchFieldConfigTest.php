@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Blog;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 
 /**

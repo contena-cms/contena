@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Content\Category\Service;
 
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelEntity;
 
 class CategoryUrlGenerator extends AbstractCategoryUrlGenerator

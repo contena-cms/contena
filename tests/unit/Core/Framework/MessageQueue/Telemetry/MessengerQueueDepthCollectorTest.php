@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Telemetry;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Telemetry\MessengerQueueDepthCollector;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Symfony\Component\DependencyInjection\ServiceLocator;

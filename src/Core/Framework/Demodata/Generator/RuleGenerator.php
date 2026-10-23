@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Demodata\Generator;
 
 use Faker\Generator;
 use Psr\Clock\ClockInterface;
-use Contena\Core\System\User\Rule\UserGroupRule;
-use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Defaults;
@@ -18,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Demodata\DemodataContext;
 use Contena\Core\Framework\Demodata\DemodataGeneratorInterface;
 use Contena\Core\Framework\Demodata\DemodataService;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\Container;
 use Contena\Core\Framework\Rule\Container\FilterRule;
@@ -27,6 +24,8 @@ use Contena\Core\Framework\Rule\DateRangeRule;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Currency\Rule\CurrencyRule;
+use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
+use Contena\Core\System\User\Rule\UserGroupRule;
 use Contena\Core\Test\TestDefaults;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Administration\Controller;
 use Contena\Administration\Dashboard\OrderAmountService;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;

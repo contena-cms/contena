@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

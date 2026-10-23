@@ -19,7 +19,6 @@ use Contena\Core\Framework\App\Lifecycle\Update\AbstractAppUpdater;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Deprecation\BCChange\VisibilityChange;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;
 use Contena\Core\Framework\Store\Services\AbstractExtensionStoreLicensesService;

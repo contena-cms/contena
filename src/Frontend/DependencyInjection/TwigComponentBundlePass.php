@@ -3,7 +3,6 @@
 namespace Contena\Frontend\DependencyInjection;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Filesystem\Filesystem;

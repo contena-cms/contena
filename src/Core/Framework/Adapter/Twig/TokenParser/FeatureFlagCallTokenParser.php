@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig\TokenParser;
 
 use Contena\Core\Framework\Adapter\Twig\Node\FeatureCallSilentToken;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 

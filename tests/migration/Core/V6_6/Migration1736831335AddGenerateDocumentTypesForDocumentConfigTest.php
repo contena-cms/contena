@@ -7,9 +7,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Document\Service\HtmlRenderer;
 use Contena\Core\Checkout\Document\Service\PdfRenderer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Migration\V6_6\Migration1736831335AddGenerateDocumentTypesForDocumentConfig;
 
 /**

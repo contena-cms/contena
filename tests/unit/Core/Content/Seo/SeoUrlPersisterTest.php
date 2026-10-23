@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\Clock\NativeClock;

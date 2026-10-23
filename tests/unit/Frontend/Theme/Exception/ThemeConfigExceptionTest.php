@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\Exception\ThemeConfigException;
 use Contena\Frontend\Theme\Exception\ThemeException;
 use Symfony\Component\HttpFoundation\Response;

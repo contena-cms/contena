@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Cleanup;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 class CleanupUnusedDownloadMediaTask extends ScheduledTask

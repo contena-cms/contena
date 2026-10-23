@@ -10,7 +10,6 @@ use Contena\Administration\Snippet\AppAdministrationSnippetCollection;
 use Contena\Administration\Snippet\AppAdministrationSnippetEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\System\Service\SystemLanguageChangeEvent;
 use Contena\Core\System\Locale\LocaleCollection;

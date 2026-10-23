@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework\Subscriber;
 
 use Contena\Core\Framework\Api\Event\InvalidateExpiredCacheRequestEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\IndexManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

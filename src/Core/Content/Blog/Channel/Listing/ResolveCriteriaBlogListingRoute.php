@@ -2,11 +2,10 @@
 
 namespace Contena\Core\Content\Blog\Channel\Listing;
 
+use Contena\Core\Content\Blog\Channel\Search\ResolvedCriteriaBlogSearchRoute;
 use Contena\Core\Content\Blog\Events\BlogListingCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogListingResultEvent;
-use Contena\Core\Content\Blog\Channel\Search\ResolvedCriteriaBlogSearchRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -15,15 +14,6 @@ class ResolveCriteriaBlogListingRoute extends AbstractBlogListingRoute
 {
     public const STATE = 'listing-route-context';
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractBlogListingRoute $decorated,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly CompositeListingProcessor $processor
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogListingRoute
     {

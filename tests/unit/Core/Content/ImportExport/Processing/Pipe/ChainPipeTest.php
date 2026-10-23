@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\ImportExport\Processing\Pipe\AbstractPipe;
 use Contena\Core\Content\ImportExport\Processing\Pipe\ChainPipe;
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

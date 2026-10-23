@@ -4,51 +4,37 @@ namespace Contena\Core\System\User\Channel;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserEvents;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Event\UserLoginEvent;
-use Contena\Core\System\User\Event\UserRegisterEvent;
-use Contena\Core\System\User\Event\GuestUserRegisterEvent;
-use Contena\Core\System\User\Extension\RegisterRouteExtension;
-use Contena\Core\System\User\Service\DoubleOptInService;
-use Contena\Core\System\User\Service\EmailIdnConverter;
-use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
-use Contena\Core\System\User\Validation\Constraint\UserVatIdentification;
-use Contena\Core\System\User\Validation\Constraint\UserZipCode;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Event\DataMappingEvent;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
-use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
-use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
-use Contena\Core\System\Channel\Context\ChannelContextPersister;
-use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
-use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
-use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\Event\GuestUserRegisterEvent;
+use Contena\Core\System\User\Event\UserLoginEvent;
+use Contena\Core\System\User\Event\UserRegisterEvent;
+use Contena\Core\System\User\Extension\RegisterRouteExtension;
+use Contena\Core\System\User\Service\EmailIdnConverter;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserEvents;
+use Contena\Core\System\User\UserException;
+use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
+use Contena\Core\System\User\Validation\Constraint\UserVatIdentification;
+use Contena\Core\System\User\Validation\Constraint\UserZipCode;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\AtLeastOneOf;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -63,35 +49,8 @@ class RegisterRoute extends AbstractRegisterRoute
 {
     use UserAddressDataNormalizerTrait;
     use UserVatIdNormalizerTrait;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-    /**
-     * @internal
-     *
-     * @param EntityRepository<UserCollection> $userRepository
-     * @param ChannelRepository<CountryCollection> $countryRepository
-     * @param EntityRepository<SalutationCollection> $salutationRepository
-     */
-    public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly NumberRangeValueGeneratorInterface $numberRangeValueGenerator,
-        private readonly DataValidator $validator,
-        private readonly DataValidationFactoryInterface $accountValidationFactory,
-        private readonly DataValidationFactoryInterface $addressValidationFactory,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly EntityRepository $userRepository,
-        private readonly ChannelContextPersister $contextPersister,
-        private readonly ChannelRepository $countryRepository,
-        protected Connection $connection,
-        private readonly ChannelContextServiceInterface $contextService,
-        private readonly StoreApiCustomFieldMapper $customFieldMapper,
-        private readonly EntityRepository $salutationRepository,
-        private readonly DataValidationFactoryInterface $passwordValidationFactory,
-        private readonly DoubleOptInService $doubleOptInService,
-        private readonly UserNewsletterChannelsUpdater $userNewsletterChannelsUpdater,
-        private readonly ClockInterface $clock,
-        private readonly ExtensionDispatcher $extensions,
-    ) {
-    }
 
     public function getDecorated(): AbstractRegisterRoute
     {

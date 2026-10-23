@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Translation;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

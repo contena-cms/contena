@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Robots\Parser;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 
 class ParsedRobots

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\DataAbstractionLayer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\DataAbstractionLayer\UpdatedStates;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

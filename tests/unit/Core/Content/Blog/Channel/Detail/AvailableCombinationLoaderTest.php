@@ -12,7 +12,6 @@ use Contena\Core\Content\Blog\Stock\StockData;
 use Contena\Core\Content\Blog\Stock\StockDataCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;

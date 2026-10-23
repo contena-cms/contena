@@ -8,7 +8,6 @@ use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

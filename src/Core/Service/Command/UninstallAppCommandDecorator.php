@@ -6,7 +6,6 @@ use Contena\Core\Framework\App\AppStorage;
 use Contena\Core\Framework\App\Command\UninstallAppCommand;
 use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\LifecycleManager;
 use Contena\Core\Service\ServiceLifecycle;
 use Contena\Core\Service\ServiceStorage;

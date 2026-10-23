@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Mail\Service;
 
 use Contena\Core\Content\Mail\MailException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mime\Email;
 
 abstract class AbstractMailSender

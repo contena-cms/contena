@@ -3,11 +3,10 @@
 namespace Contena\Core\Content\Cms\Service;
 
 use Doctrine\DBAL\Connection;
+use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationEntity;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationEntity;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageTranslation\LandingPageTranslationEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 

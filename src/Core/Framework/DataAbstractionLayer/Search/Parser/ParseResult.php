@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search\Parser;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\ParameterType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

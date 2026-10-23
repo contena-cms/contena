@@ -9,7 +9,6 @@ use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
 use Contena\Core\Content\Media\Subscriber\CustomFieldsUnusedMediaSubscriber;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

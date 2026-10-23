@@ -13,7 +13,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements Rule<CallLike>

@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\PluginPostActivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUpdateEvent;

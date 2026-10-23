@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Store\Api;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Store\Services\AbstractExtensionStoreLicensesService;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;

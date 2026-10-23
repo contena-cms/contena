@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Rule;
 
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;
@@ -63,7 +62,6 @@ class BillingStateRule extends Rule
         $constraints = [
             'operator' => [
                 new NotBlank(),
-                new Choice(choices: [self::OPERATOR_EQ, self::OPERATOR_NEQ, self::OPERATOR_EMPTY]),
             ],
         ];
 

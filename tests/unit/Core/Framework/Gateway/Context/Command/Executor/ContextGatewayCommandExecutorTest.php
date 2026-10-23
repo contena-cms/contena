@@ -19,16 +19,13 @@ use Contena\Core\Framework\Gateway\Context\Command\RegisterUserCommand;
 use Contena\Core\Framework\Gateway\Context\Command\Registry\ContextGatewayCommandRegistry;
 use Contena\Core\Framework\Gateway\GatewayException;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\System\Channel\ContextTokenResponse;
-use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\_fixture\StubAllCommandsGatewayCommandHandler;
-use Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\_fixture\StubContextGatewayCommand;
 
 /**
  * @internal

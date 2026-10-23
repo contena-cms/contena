@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Flow\Event\Event;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

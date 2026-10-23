@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\RateLimiter\Policy;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\NoLock;
 use Symfony\Component\RateLimiter\LimiterInterface;

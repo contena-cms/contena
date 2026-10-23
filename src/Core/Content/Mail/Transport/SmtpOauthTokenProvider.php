@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Mail\Transport;
 
 use Contena\Core\Content\Mail\MailException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Cache\CacheInterface;

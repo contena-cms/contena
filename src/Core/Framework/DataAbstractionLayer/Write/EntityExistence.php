@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Defines the current state of an entity in relation to the parent-child inheritance and

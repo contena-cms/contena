@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\Robots\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Robots\Parser\ParsedRobots;
 
 /**

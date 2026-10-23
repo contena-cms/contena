@@ -11,7 +11,6 @@ use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlMapping;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 
 use function Symfony\Component\String\u;

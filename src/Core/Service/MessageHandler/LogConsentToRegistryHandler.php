@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\MessageHandler;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Message\LogPermissionToRegistryMessage;
 use Contena\Core\Service\ServiceRegistry\PermissionLogger;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

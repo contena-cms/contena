@@ -7,7 +7,6 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\NodeFinder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

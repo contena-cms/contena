@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\Core\Application\MediaPathUpdater;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
 use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Manifest\Xml\Permission\Permissions;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**

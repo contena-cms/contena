@@ -8,7 +8,6 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\Subscriber\PluginAclPrivilegesSubscriber;

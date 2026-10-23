@@ -2,28 +2,14 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Event\ChannelContextRestoredEvent;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Event\ChannelContextRestoredEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class CartRestorer
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractChannelContextFactory $factory,
-        private readonly ChannelContextPersister $contextPersister,
-        private readonly CartService $cartService,
-        private readonly CartCalculator $cartCalculator,
-        private readonly AbstractCartPersister $cartPersister,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly RequestStack $requestStack,
-    ) {
-    }
 
     /**
      * This function restores the context by the given token. If a context with this token doesn't exist, the context will
@@ -80,30 +66,6 @@ class CartRestorer
         return $this->enrichUserContext($userContext, $currentContext, $currentContext->getToken(), $userId);
     }
 
-    private function mergeCart(Cart $userCart, Cart $guestCart, ChannelContext $userContext): Cart
-    {
-        $mergeableLineItems = $guestCart->getLineItems()->filter(static fn (LineItem $item) => ($item->getQuantity() > 0 && $item->isStackable()) || !$userCart->has($item->getId()));
-
-        $this->eventDispatcher->dispatch(new BeforeCartMergeEvent(
-            $userCart,
-            $guestCart,
-            $mergeableLineItems,
-            $userContext
-        ));
-
-        $errors = $userCart->getErrors();
-        $userCart->setErrors(new ErrorCollection());
-
-        $userCartClone = clone $userCart;
-        $userCart->setErrors($errors);
-        $userCartClone->setErrors($errors);
-
-        $mergedCart = $this->cartService->add($userCart, $mergeableLineItems->getElements(), $userContext);
-
-        $this->eventDispatcher->dispatch(new CartMergedEvent($mergedCart, $userContext, $userCartClone));
-
-        return $mergedCart;
-    }
 
     private function replaceContextToken(?string $userId, ChannelContext $currentContext, ?string $newToken = null): ChannelContext
     {

@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationDefinition;
 

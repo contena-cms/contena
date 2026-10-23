@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Routing\Facade;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Facade\RequestFacadeFactory;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\Script;

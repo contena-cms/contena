@@ -4,9 +4,7 @@ namespace Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\Xml\Config\ConfigXmlElement;
-use Contena\Tests\Unit\Core\System\CustomEntity\Xml\Config\Fixture\TestElement;
 
 /**
  * @internal

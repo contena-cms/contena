@@ -2,9 +2,8 @@
 
 namespace Contena\Core\Framework\Api\Context\Exception;
 
-use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\Feature;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed in v6.8.0.0. Use `\Contena\Core\Framework\Store\StoreException::invalidContextSourceUser` instead.

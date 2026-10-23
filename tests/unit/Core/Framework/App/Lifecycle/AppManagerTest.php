@@ -33,7 +33,6 @@ use Contena\Core\Framework\App\Validation\AppRequirementsValidator;
 use Contena\Core\Framework\App\Validation\ConfigValidator;
 use Contena\Core\Framework\App\Validation\Requirements\UnmetRequirement;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\System\CustomEntity\CustomEntityLifecycleService;
 use Contena\Core\System\Integration\IntegrationCollection;
@@ -44,8 +43,6 @@ use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 use Symfony\Component\Clock\NativeClock;
 
 /**

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutRuleScope;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\DaysSinceRule;
 use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
 use Contena\Core\Framework\Rule\Rule;
@@ -15,7 +14,6 @@ use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleException;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Tests\Unit\Core\Framework\Rule\Fixture\DaysSinceRuleFixture;
 
 /**
  * @internal

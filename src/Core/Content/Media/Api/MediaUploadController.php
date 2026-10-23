@@ -11,7 +11,6 @@ use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

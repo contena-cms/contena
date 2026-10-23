@@ -6,7 +6,6 @@ use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Manifest\Xml\Administration\Module;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

@@ -6,7 +6,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidEntityUuidException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Symfony\Component\HttpFoundation\Response;
 

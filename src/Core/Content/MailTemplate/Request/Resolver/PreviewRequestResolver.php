@@ -7,7 +7,6 @@ use Contena\Core\Content\MailTemplate\Request\PreviewRequest;
 use Contena\Core\Content\MailTemplate\Service\MailTemplateService;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\ChannelProvider;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;

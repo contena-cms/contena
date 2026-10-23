@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

@@ -3,9 +3,7 @@
 namespace Contena\Core\Content\Property\Aggregate\PropertyGroupTranslation;
 
 use Contena\Core\Content\Property\PropertyGroupEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

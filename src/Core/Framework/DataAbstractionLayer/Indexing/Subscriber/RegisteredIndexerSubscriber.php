@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Indexing\Subscriber;
 
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\SynchronousPostUpdateIndexer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\PluginPostInstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUninstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUpdateEvent;
@@ -17,14 +15,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class RegisteredIndexerSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly IndexerQueuer $indexerQueuer,
-        private readonly EntityIndexerRegistry $indexerRegistry
-    ) {
-    }
 
     /**
      * @return array<string, string|array{0: string, 1: int}|list<array{0: string, 1?: int}>>

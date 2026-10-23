@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Twig\ConfigurableFilesystemCache;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
-use Contena\Core\Framework\Log\Package;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;
 use Twig\Error\LoaderError;

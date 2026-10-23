@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\ApiDefinition;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 
 /**

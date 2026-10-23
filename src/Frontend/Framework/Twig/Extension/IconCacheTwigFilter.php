@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Twig\Extension;
 
-use Contena\Core\Framework\Log\Package;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;
 use Twig\TwigFunction;

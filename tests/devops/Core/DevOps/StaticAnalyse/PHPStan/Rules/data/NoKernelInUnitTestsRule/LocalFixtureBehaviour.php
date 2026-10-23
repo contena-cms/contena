@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\NoKernelInUnitTestsRule;
 
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * A fixture trait that looks harmless but composes the kernel behaviour; loaded by the rule test so the

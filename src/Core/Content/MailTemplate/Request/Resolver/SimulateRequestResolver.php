@@ -6,7 +6,6 @@ use Contena\Core\Content\MailTemplate\MailTemplateException;
 use Contena\Core\Content\MailTemplate\Request\SimulateRequest;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\ChannelProvider;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;

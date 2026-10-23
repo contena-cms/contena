@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Metric;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * All objects instantiated from this class should map to a metric that's preconfigured in `config/packages/telemetry.yaml`.

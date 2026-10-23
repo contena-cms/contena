@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Exception\AppValidationException;
 use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 use Contena\Core\Framework\App\Validation\Error\MissingPermissionError;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

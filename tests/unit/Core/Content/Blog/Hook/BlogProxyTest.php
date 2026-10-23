@@ -10,12 +10,11 @@ use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\PriceCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
-use Contena\Core\Content\Blog\Hook\Pricing\PriceCollectionFacade;
-use Contena\Core\Content\Blog\Hook\Pricing\BlogProxy;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
+use Contena\Core\Content\Blog\Hook\Pricing\BlogProxy;
+use Contena\Core\Content\Blog\Hook\Pricing\PriceCollectionFacade;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

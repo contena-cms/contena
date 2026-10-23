@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\System\Service;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Language;
 
-use Contena\Core\Framework\Log\Package;
 
 class LanguageEvents
 {

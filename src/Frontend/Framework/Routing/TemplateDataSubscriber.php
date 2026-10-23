@@ -2,30 +2,20 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Content\Seo\HreflangLoaderInterface;
-use Contena\Core\Content\Seo\HreflangLoaderParameter;
-use Contena\Core\Framework\App\ActiveAppsLoader;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Content\Seo\HreflangLoaderParameter;
+use Contena\Core\PlatformRequest;
 use Contena\Frontend\Event\FrontendRenderEvent;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Page\Blog\BlogPage;
-use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 
 /**
  * @internal
  */
 class TemplateDataSubscriber implements EventSubscriberInterface
 {
-    public function __construct(
-        private readonly HreflangLoaderInterface $hreflangLoader,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly ActiveAppsLoader $activeAppsLoader,
-        private readonly ThemeRuntimeConfigService $runtimeConfigService,
-    ) {
-    }
 
     public static function getSubscribedEvents(): array
     {

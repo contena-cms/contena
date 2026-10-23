@@ -3,9 +3,6 @@
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineState;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionCollection;
 use Contena\Core\System\StateMachine\StateMachineEntity;
@@ -32,15 +29,10 @@ class StateMachineStateEntity extends Entity
 
     protected ?StateMachineStateTranslationCollection $translations = null;
 
-    protected ?OrderCollection $orders = null;
 
-    protected ?OrderTransactionCaptureCollection $orderTransactionCaptures = null;
 
-    protected ?OrderTransactionCaptureRefundCollection $orderTransactionCaptureRefunds = null;
 
-    protected ?OrderTransactionCollection $orderTransactions = null;
 
-    protected ?OrderDeliveryCollection $orderDeliveries = null;
 
     protected ?StateMachineHistoryCollection $fromStateMachineHistoryEntries = null;
 
@@ -136,53 +128,13 @@ class StateMachineStateEntity extends Entity
         $this->technicalName = $technicalName;
     }
 
-    public function getOrders(): ?OrderCollection
-    {
-        return $this->orders;
-    }
 
-    public function setOrders(OrderCollection $orders): void
-    {
-        $this->orders = $orders;
-    }
 
-    public function getOrderTransactionCaptures(): ?OrderTransactionCaptureCollection
-    {
-        return $this->orderTransactionCaptures;
-    }
 
-    public function setOrderTransactionCaptures(OrderTransactionCaptureCollection $orderTransactionCaptures): void
-    {
-        $this->orderTransactionCaptures = $orderTransactionCaptures;
-    }
 
-    public function getOrderTransactionCaptureRefunds(): ?OrderTransactionCaptureRefundCollection
-    {
-        return $this->orderTransactionCaptureRefunds;
-    }
 
-    public function setOrderTransactionCaptureRefunds(OrderTransactionCaptureRefundCollection $orderTransactionCaptureRefunds): void
-    {
-        $this->orderTransactionCaptureRefunds = $orderTransactionCaptureRefunds;
-    }
 
-    public function getOrderTransactions(): ?OrderTransactionCollection
-    {
-        return $this->orderTransactions;
-    }
 
-    public function setOrderTransactions(OrderTransactionCollection $orderTransactions): void
-    {
-        $this->orderTransactions = $orderTransactions;
-    }
 
-    public function getOrderDeliveries(): ?OrderDeliveryCollection
-    {
-        return $this->orderDeliveries;
-    }
 
-    public function setOrderDeliveries(OrderDeliveryCollection $orderDeliveries): void
-    {
-        $this->orderDeliveries = $orderDeliveries;
-    }
 }

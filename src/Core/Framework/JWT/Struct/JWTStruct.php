@@ -3,10 +3,7 @@
 namespace Contena\Core\Framework\JWT\Struct;
 
 use Contena\Core\Framework\JWT\JWTException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ExtendableInterface;
-use Contena\Core\Framework\Struct\ExtendableTrait;
-use Contena\Core\Framework\Struct\VariablesAccessTrait;
 
 class JWTStruct implements ExtendableInterface
 {

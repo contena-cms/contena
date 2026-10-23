@@ -10,7 +10,6 @@ use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\StreamInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpAllowedHostsProvider;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Currency;
 
-use Contena\Core\Framework\Log\Package;
 
 class CurrencyEvents
 {

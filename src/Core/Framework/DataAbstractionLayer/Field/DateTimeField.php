@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\DateTimeFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class DateTimeField extends Field implements StorageAware
 {

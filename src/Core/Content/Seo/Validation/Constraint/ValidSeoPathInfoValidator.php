@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo\Validation\Constraint;
 
 use Contena\Core\Content\Seo\SeoException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 

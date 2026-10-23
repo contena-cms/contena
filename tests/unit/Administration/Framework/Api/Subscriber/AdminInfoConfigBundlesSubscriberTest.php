@@ -10,7 +10,6 @@ use Contena\Administration\Framework\Api\Subscriber\AdminInfoConfigBundlesSubscr
 use Contena\Administration\Framework\App\ActiveAdminAppLoader;
 use Contena\Administration\Framework\Twig\ViteFileAccessorDecorator;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
 use Contena\Core\Test\Stub\Symfony\StubKernel;
 use Symfony\Component\Filesystem\Filesystem;

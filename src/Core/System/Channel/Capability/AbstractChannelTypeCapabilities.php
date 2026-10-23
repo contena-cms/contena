@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\Capability;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Register one implementation per sales channel type id with the tag `contena.channel.type_capabilities`.

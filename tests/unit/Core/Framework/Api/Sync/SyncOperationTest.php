@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

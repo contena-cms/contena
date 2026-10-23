@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Requirement;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Permission\PermissionsService;
 
 /**

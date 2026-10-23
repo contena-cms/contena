@@ -10,7 +10,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntityAggregatorInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\AbstractElasticsearchAggregationHydrator;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntityAggregator;

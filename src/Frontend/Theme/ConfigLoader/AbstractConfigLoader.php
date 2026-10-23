@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\ConfigLoader;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 
 abstract class AbstractConfigLoader

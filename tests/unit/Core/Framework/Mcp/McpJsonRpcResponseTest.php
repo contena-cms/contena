@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Mcp;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpJsonRpcResponse;
 use Contena\Core\Framework\Util\Json;
 

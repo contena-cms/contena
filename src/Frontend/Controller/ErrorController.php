@@ -2,10 +2,7 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Frontend\Framework\Twig\ErrorTemplateResolver;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,15 +15,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
  */
 class ErrorController extends FrontendController
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly ErrorTemplateResolver $errorTemplateResolver,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly ErrorPageLoaderInterface $errorPageLoader,
-    ) {
-    }
 
     public function error(\Throwable $exception, Request $request, ChannelContext $context): Response
     {

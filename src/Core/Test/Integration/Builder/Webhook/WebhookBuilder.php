@@ -4,7 +4,6 @@ namespace Contena\Core\Test\Integration\Builder\Webhook;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

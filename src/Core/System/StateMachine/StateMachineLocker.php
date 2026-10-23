@@ -3,7 +3,6 @@
 namespace Contena\Core\System\StateMachine;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Contracts\Service\ResetInterface;

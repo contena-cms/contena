@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Cms;
 
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Cms\Xml\Blocks;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

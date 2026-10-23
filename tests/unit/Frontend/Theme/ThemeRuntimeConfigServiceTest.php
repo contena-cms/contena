@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\File;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;

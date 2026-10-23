@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\CustomField\Api;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

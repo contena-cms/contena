@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskScheduler;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;

@@ -10,7 +10,6 @@ use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Seo\SeoUrlTwigFactory;
 use Contena\Core\Framework\Adapter\Twig\Extension\PhpSyntaxExtension;
 use Contena\Core\Framework\Adapter\Twig\SecurityExtension;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Twig\Cache\FilesystemCache;

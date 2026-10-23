@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\ChannelEntity;

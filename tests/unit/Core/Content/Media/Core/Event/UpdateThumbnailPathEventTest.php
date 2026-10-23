@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Media\Core\Event;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Core\Event\UpdateThumbnailPathEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

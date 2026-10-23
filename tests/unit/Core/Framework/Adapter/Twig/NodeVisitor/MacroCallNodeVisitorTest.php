@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Node\MacroCallExpression;
 use Contena\Core\Framework\Adapter\Twig\NodeVisitor\MacroCallNodeVisitor;
-use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Expression\MacroReferenceExpression;

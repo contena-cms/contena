@@ -6,7 +6,6 @@ use GuzzleHttp\ClientInterface;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
 use Contena\Core\System\Snippet\SnippetException;

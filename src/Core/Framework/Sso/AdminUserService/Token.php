@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Sso\AdminUserService;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoException;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;

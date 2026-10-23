@@ -3,10 +3,9 @@
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
+use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
 use Contena\Core\Content\Cms\DataResolver\Element\CmsElementResolverInterface;
 use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
-use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
@@ -21,18 +20,19 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldSerializerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\Routing\AbstractRouteScope;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInterface;
 use Contena\Core\Framework\Webhook\Hookable\HookableEntityInterface;
-use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\Tax\TaxRuleType\TaxRuleTypeFilterInterface;
+use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
 
 #[BecomesInternal(version: 'v6.8.0')]
 class AutoconfigureCompilerPass implements CompilerPassInterface
@@ -68,13 +68,7 @@ class AutoconfigureCompilerPass implements CompilerPassInterface
             ->registerForAutoconfiguration(BulkEntityExtension::class)
             ->addTag('contena.bulk.entity.extension');
 
-        $container
-            ->registerForAutoconfiguration(CartProcessorInterface::class)
-            ->addTag('contena.cart.processor');
 
-        $container
-            ->registerForAutoconfiguration(CartDataCollectorInterface::class)
-            ->addTag('contena.cart.collector');
 
         $container
             ->registerForAutoconfiguration(ScheduledTask::class)
@@ -84,21 +78,9 @@ class AutoconfigureCompilerPass implements CompilerPassInterface
             ->registerForAutoconfiguration(PeriodicMetricCollectorInterface::class)
             ->addTag('contena.telemetry.periodic_metric_collector');
 
-        $container
-            ->registerForAutoconfiguration(CartValidatorInterface::class)
-            ->addTag('contena.cart.validator');
 
-        $container
-            ->registerForAutoconfiguration(LineItemFactoryInterface::class)
-            ->addTag('contena.cart.line_item.factory');
 
-        $container
-            ->registerForAutoconfiguration(LineItemGroupPackagerInterface::class)
-            ->addTag('lineitem.group.packager');
 
-        $container
-            ->registerForAutoconfiguration(LineItemGroupSorterInterface::class)
-            ->addTag('lineitem.group.sorter');
 
         $container
             ->registerForAutoconfiguration(LegacyEncoderInterface::class)
@@ -112,29 +94,14 @@ class AutoconfigureCompilerPass implements CompilerPassInterface
             ->registerForAutoconfiguration(ExceptionHandlerInterface::class)
             ->addTag('contena.dal.exception_handler');
 
-        $container
-            ->registerForAutoconfiguration(AbstractDocumentRenderer::class)
-            ->addTag('document.renderer');
 
-        $container
-            ->registerForAutoconfiguration(AbstractPaymentHandler::class)
-            ->addTag('contena.payment.method');
 
-        $container
-            ->registerForAutoconfiguration(FilterSorterInterface::class)
-            ->addTag('promotion.filter.sorter');
 
-        $container
-            ->registerForAutoconfiguration(FilterPickerInterface::class)
-            ->addTag('promotion.filter.picker');
 
         $container
             ->registerForAutoconfiguration(Rule::class)
             ->addTag('contena.rule.definition');
 
-        $container
-            ->registerForAutoconfiguration(AbstractTaxProvider::class)
-            ->addTag('contena.tax.provider');
 
         $container
             ->registerForAutoconfiguration(CmsElementResolverInterface::class)

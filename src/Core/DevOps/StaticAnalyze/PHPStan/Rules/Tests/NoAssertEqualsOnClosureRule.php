@@ -14,7 +14,6 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\NeverType;
 use PHPStan\Type\ObjectType;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Flags `assertEquals()` comparisons where an operand is a Closure, for both call shapes:

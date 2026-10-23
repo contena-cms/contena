@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Aggregate\ChannelTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<ChannelTranslationEntity>

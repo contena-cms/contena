@@ -3,15 +3,11 @@
 namespace Contena\Core\Framework\App\Api;
 
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\ShopIdChangeResolver\Resolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,6 +15,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 
 /**
  * @internal
@@ -26,15 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class ShopIdController extends AbstractController
 {
-    /**
-     * @param EntityRepository<AppCollection> $appRepository
-     */
-    public function __construct(
-        private readonly Resolver $shopIdChangeResolver,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly EntityRepository $appRepository,
-    ) {
-    }
 
     #[Route(path: 'api/app-system/shop-id/change-strategies', name: 'api.app_system.shop_id.change_strategies', methods: ['GET'])]
     public function getAvailableStrategies(): JsonResponse

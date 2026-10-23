@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\AggregationParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
-use Contena\Core\Framework\Log\Package;
 
 class CriteriaArrayConverter
 {

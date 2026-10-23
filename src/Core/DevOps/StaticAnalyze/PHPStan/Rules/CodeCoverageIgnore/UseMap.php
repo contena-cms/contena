@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\CodeCoverageIgnore;
 
 use PhpParser\Node;
 use PhpParser\Node\Stmt;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Builds a file's `alias => FQCN` import map from already-parsed `use` statements,

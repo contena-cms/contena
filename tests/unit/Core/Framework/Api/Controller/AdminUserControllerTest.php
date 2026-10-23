@@ -13,7 +13,6 @@ use Contena\Core\Framework\Api\Controller\AdminUserController;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserCollection;

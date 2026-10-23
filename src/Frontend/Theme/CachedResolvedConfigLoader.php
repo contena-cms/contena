@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

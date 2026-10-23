@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Framework\Gateway\Context\Channel\AbstractContextGatewayRoute;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestSessionStorage;
 use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Core\Test\Generator;

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Installer\Controller;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Controller\RequirementsController;
 use Contena\Core\Installer\Requirements\RequirementsValidatorInterface;
 use Contena\Core\Installer\Requirements\Struct\PathCheck;

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\IgnoreDeprecations;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\ScriptResponseFactoryFacadeHookFactory;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
 use Contena\Core\Framework\Script\Execution\Hook;

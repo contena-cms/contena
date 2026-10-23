@@ -3,13 +3,8 @@
 namespace Contena\Frontend\Pagelet\Footer;
 
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 use Contena\Core\Content\Category\Tree\TreeItem;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Frontend\Event\RouteRequest\PaymentMethodRouteRequestEvent;
-use Contena\Frontend\Event\RouteRequest\ShippingMethodRouteRequestEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -18,16 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class FooterPageletLoader implements FooterPageletLoaderInterface
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly NavigationLoaderInterface $navigationLoader,
-        private readonly AbstractPaymentMethodRoute $paymentMethodRoute,
-        private readonly AbstractShippingMethodRoute $shippingMethodRoute,
-    ) {
-    }
 
     public function load(Request $request, ChannelContext $channelContext): FooterPagelet
     {
@@ -65,29 +50,5 @@ class FooterPageletLoader implements FooterPageletLoaderInterface
         return new CategoryCollection(array_map(static fn (TreeItem $treeItem) => $treeItem->getCategory(), $navigation->getTree()));
     }
 
-    private function loadPaymentMethods(Request $request, ChannelContext $channelContext): PaymentMethodCollection
-    {
-        $criteria = new Criteria();
-        $criteria->setTitle('footer-pagelet::payment-methods');
 
-        $event = new PaymentMethodRouteRequestEvent($request, $request->duplicate(), $channelContext, $criteria);
-        $this->eventDispatcher->dispatch($event);
-
-        return $this->paymentMethodRoute
-            ->load($event->getStoreApiRequest(), $channelContext, $event->getCriteria())
-            ->getPaymentMethods();
-    }
-
-    private function loadShippingMethods(Request $request, ChannelContext $channelContext): ShippingMethodCollection
-    {
-        $criteria = new Criteria();
-        $criteria->setTitle('footer-pagelet::shipping-methods');
-
-        $event = new ShippingMethodRouteRequestEvent($request, $request->duplicate(), $channelContext, $criteria);
-        $this->eventDispatcher->dispatch($event);
-
-        return $this->shippingMethodRoute
-            ->load($event->getStoreApiRequest(), $channelContext, $event->getCriteria())
-            ->getShippingMethods();
-    }
 }

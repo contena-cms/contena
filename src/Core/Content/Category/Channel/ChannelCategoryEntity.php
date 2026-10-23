@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Category\Channel;
 
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

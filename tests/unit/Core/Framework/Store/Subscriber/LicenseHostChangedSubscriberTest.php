@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Store\Subscriber;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Subscriber\LicenseHostChangedSubscriber;
 use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigChangedEvent;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;

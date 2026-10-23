@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Twig\Environment;
 use Twig\Extension\CoreExtension;

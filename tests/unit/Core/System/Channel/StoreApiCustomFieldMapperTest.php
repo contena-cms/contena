@@ -6,11 +6,10 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\CustomField\CustomFieldTypes;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;

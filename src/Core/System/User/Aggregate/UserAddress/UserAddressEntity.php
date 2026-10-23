@@ -2,13 +2,10 @@
 
 namespace Contena\Core\System\User\Aggregate\UserAddress;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\User\UserEntity;
 
 class UserAddressEntity extends Entity
 {
@@ -49,7 +46,6 @@ class UserAddressEntity extends Entity
 
     protected ?CountryStateEntity $countryState = null;
 
-    protected ?SalutationEntity $salutation = null;
 
     protected ?UserEntity $user = null;
 
@@ -229,15 +225,7 @@ class UserAddressEntity extends Entity
         $this->countryState = $countryState;
     }
 
-    public function getSalutation(): ?SalutationEntity
-    {
-        return $this->salutation;
-    }
 
-    public function setSalutation(SalutationEntity $salutation): void
-    {
-        $this->salutation = $salutation;
-    }
 
     public function getUser(): ?UserEntity
     {

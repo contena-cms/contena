@@ -4,7 +4,6 @@ namespace Contena\Core\Profiling;
 
 use Composer\InstalledVersions;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Compiler\RemoveDevServices;
 use Contena\Core\Profiling\DependencyInjection\CompilerPass\CartServiceCompilerPass;
 use Symfony\Component\Config\FileLocator;

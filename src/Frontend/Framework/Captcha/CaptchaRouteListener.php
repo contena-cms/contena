@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Captcha;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

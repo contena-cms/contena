@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Twig\NodeVisitor\CallbackOperatorSecurityNodeVisitor;
-use Contena\Core\Framework\Log\Package;
 use Twig\Extension\AbstractExtension;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFilter;

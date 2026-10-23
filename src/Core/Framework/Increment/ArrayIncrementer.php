@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Increment;
 
-use Contena\Core\Framework\Log\Package;
 
 class ArrayIncrementer extends AbstractIncrementer
 {

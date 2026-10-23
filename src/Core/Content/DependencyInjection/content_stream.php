@@ -13,6 +13,8 @@ use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Content\ContentStream\ScheduledTask\UpdateContentStreamMappingTask;
+use Contena\Core\Content\ContentStream\ScheduledTask\UpdateContentStreamMappingTaskHandler;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 

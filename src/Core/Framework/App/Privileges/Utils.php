@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Privileges;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Struct\PermissionCollection;
 use Contena\Core\Framework\Store\Struct\PermissionStruct;
 

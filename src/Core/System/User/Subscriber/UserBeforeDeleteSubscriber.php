@@ -2,9 +2,6 @@
 
 namespace Contena\Core\System\User\Subscriber;
 
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\Event\UserDeletedEvent;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
@@ -12,11 +9,13 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
+use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
-use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\User\Event\UserDeletedEvent;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Fixture;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

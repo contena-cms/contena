@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Channel;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
 
 /**

@@ -4,7 +4,6 @@ namespace Contena\Core\System\Channel\File;
 
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\File\Discovery\ChannelFile;
 use Contena\Core\System\Channel\File\Event\ChannelFileTemplateResolveEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Mcp\Resource;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Mcp\Capability\Attribute\McpResource;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 /**

@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionCo
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDefinition;
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

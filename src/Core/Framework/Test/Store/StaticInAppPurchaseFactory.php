@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Test\Store;
 
 use GuzzleHttp\Client;
 use Contena\Core\Framework\JWT\JWTDecoder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\InAppPurchase;
 use Contena\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseProvider;

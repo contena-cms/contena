@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook\Hookable;
 
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Describes the webhook events an area of the system offers to apps.

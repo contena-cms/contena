@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\ElapsedTimer;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;

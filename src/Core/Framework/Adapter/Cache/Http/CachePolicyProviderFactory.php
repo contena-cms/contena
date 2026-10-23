@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Factory to create CachePolicyProvider from configuration arrays

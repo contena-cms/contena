@@ -5,9 +5,6 @@ namespace Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 class MediaFolderConfigurationEntity extends Entity
 {

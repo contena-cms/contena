@@ -2,10 +2,9 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Adapter\Asset\FallbackUrlPackage;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Framework\Adapter\Asset\FallbackUrlPackage;
+use Contena\Core\PlatformRequest;
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

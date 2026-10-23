@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsA
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\ExtensionRemovalValidatorInterface;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\System\Channel\ChannelCollection;

@@ -10,7 +10,6 @@ use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ExtendsTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\IncludeTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ReturnNodeTokenParser;
-use Contena\Core\Framework\Log\Package;
 use Twig\TokenParser\TokenParserInterface;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Garan;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\System\Channel\StoreApiResponse;
 

@@ -18,7 +18,6 @@ use Contena\Core\Framework\Gateway\Context\Command\LoginUserCommand;
 use Contena\Core\Framework\Gateway\Context\Command\RegisterUserCommand;
 use Contena\Core\Framework\Gateway\GatewayException;
 use Contena\Core\Framework\Log\ExceptionLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

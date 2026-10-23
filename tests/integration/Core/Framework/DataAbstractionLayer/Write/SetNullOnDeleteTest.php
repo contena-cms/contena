@@ -19,14 +19,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\SetNullOnDelete\SetNullOnDeleteChildDefinition;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\SetNullOnDelete\SetNullOnDeleteManyToOneDefinition;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Write\Fixture\SetNullOnDelete\SetNullOnDeleteParentDefinition;
 
 /**
  * @internal

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache;
 
 use Contena\Core\Framework\Adapter\Cache\Event\AddCacheTagEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;

@@ -8,8 +8,6 @@ use Contena\Core\Framework\App\AppStorage;
 use Contena\Core\Framework\App\Command\DeactivateAppCommand;
 use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\JWT\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;

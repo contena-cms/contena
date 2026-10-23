@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Telemetry;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Maps a sales channel type id to a small, bounded label value, so the (plugin-extensible) set of

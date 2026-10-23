@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Route;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\Routing\RouterInterface;
 

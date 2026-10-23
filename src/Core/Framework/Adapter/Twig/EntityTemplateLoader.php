@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Twig;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\TwigLoaderConfigCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use Twig\Loader\LoaderInterface;

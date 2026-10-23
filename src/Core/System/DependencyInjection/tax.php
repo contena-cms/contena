@@ -12,6 +12,7 @@ use Contena\Core\System\Tax\TaxRuleType\IndividualStatesRuleTypeFilter;
 use Contena\Core\System\Tax\TaxRuleType\ZipCodeRangeRuleTypeFilter;
 use Contena\Core\System\Tax\TaxRuleType\ZipCodeRuleTypeFilter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleDefinition;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 

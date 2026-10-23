@@ -3,12 +3,11 @@
 namespace Contena\Core\System\User\Rule;
 
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleScope;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
@@ -56,7 +55,6 @@ class BillingCityRule extends Rule
         $constraints = [
             'operator' => [
                 new NotBlank(),
-                new Choice(choices: [Rule::OPERATOR_EQ, Rule::OPERATOR_NEQ, Rule::OPERATOR_EMPTY]),
             ],
         ];
 

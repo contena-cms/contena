@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Script\Execution\Awareness;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

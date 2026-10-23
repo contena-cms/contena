@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Frontend\Framework\Controller;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal

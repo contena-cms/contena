@@ -11,9 +11,9 @@ use Contena\Core\Content\ImportExport\Processing\Writer\CsvFileWriter;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class FileService extends AbstractFileService
 {

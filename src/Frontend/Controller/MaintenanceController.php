@@ -2,16 +2,15 @@
 
 namespace Contena\Frontend\Controller;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Adapter\Kernel\HttpCacheKernel;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Frontend\Framework\Routing\MaintenanceModeResolver;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
+use Contena\Frontend\Framework\Routing\MaintenanceModeResolver;
 use Contena\Frontend\Page\Maintenance\MaintenancePageLoadedHook;
 use Contena\Frontend\Page\Maintenance\MaintenancePageLoader;
 use Symfony\Component\HttpFoundation\Request;

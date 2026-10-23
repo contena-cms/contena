@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Lifecycle\Handler\AbstractLifecycleHandler;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Snapshots an app's frontend snippet files into the shared storage on install and update, so that a

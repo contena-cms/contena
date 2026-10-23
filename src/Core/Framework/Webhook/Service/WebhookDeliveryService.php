@@ -6,7 +6,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterRemoval;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 use Contena\Core\Framework\Webhook\Outbox\DeliveryResponse;
 use Contena\Core\Framework\Webhook\Outbox\OutboxEntry;

@@ -8,9 +8,7 @@ use Contena\Core\Content\Blog\Extension\BlogListingCriteriaExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Tests\Examples\BlogListingCriteriaExtensionExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

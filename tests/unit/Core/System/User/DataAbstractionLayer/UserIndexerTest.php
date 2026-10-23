@@ -4,17 +4,16 @@ namespace Contena\Tests\Unit\Core\System\User\DataAbstractionLayer;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\DataAbstractionLayer\UserIndexer;
-use Contena\Core\System\User\DataAbstractionLayer\UserIndexingMessage;
-use Contena\Core\System\User\Event\UserIndexerEvent;
 use Contena\Core\Content\Newsletter\DataAbstractionLayer\Indexing\UserNewsletterChannelsUpdater;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\DataAbstractionLayer\UserIndexer;
+use Contena\Core\System\User\DataAbstractionLayer\UserIndexingMessage;
+use Contena\Core\System\User\Event\UserIndexerEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

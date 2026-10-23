@@ -5,7 +5,6 @@ namespace Contena\Frontend\Framework\Seo;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldEnumProviderInterface;
-use Contena\Core\Framework\Log\Package;
 
 class SeoUrlRouteNameEnumProvider implements FieldEnumProviderInterface
 {

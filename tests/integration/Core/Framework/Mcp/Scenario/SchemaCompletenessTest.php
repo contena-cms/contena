@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\Mcp\Scenario;
 
 use PHPUnit\Framework\Attributes\DataProvider;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

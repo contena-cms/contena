@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Subscriber\UnusedMediaSubscriber;
 use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

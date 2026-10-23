@@ -3,37 +3,12 @@
 namespace Contena\Core\Service\DTO;
 
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal
  */
 readonly class Service
 {
-    /**
-     * @param list<string> $requestedPrivileges
-     * @param list<string> $privileges
-     * @param list<string> $domains
-     * @param list<string> $requirements
-     */
-    private function __construct(
-        public string $id,
-        public string $name,
-        public string $label,
-        public bool $active,
-        public ?string $icon,
-        public ?string $description,
-        public \DateTimeInterface $updatedAt,
-        public string $version,
-        public string $aclRoleId,
-        public array $requestedPrivileges,
-        public array $privileges,
-        public State $state,
-        public array $domains,
-        public array $requirements,
-        public AppEntity $app,
-    ) {
-    }
 
     public static function fromApp(AppEntity $app): self
     {

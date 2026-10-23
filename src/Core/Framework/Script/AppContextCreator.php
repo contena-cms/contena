@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Script;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\Script;
 use Contena\Core\Framework\Script\Execution\ScriptAppInformation;

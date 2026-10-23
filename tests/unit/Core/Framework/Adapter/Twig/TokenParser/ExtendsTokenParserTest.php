@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinderInterface;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ExtendsTokenParser;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Twig\Environment;
 use Twig\Error\SyntaxError;

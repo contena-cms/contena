@@ -9,7 +9,6 @@ use Lcobucci\JWT\Signer\Rsa\Sha256;
 use Lcobucci\JWT\Token\Builder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Sso\TokenService\IdTokenParser;

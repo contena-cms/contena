@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\NumberRange;
 
-use Contena\Core\Framework\Log\Package;
 
 class NumberRangeEvents
 {

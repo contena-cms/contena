@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Cache\CacheCompressor;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

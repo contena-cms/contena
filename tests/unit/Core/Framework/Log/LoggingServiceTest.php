@@ -13,7 +13,6 @@ use Contena\Core\Content\Test\Flow\TestFlowBusinessEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\FlowLogEvent;
 use Contena\Core\Framework\Log\LoggingService;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\Logging\Event\LogAwareTestFlowEvent;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
 

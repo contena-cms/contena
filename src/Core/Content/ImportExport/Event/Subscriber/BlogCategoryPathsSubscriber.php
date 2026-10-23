@@ -2,18 +2,15 @@
 
 namespace Contena\Core\Content\ImportExport\Event\Subscriber;
 
-use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRecordEvent;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\CategoryCollection;
+use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRecordEvent;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncServiceInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
@@ -134,12 +131,6 @@ class BlogCategoryPathsSubscriber implements EventSubscriberInterface, ResetInte
     private function createNewCategories(array $payload, Context $context): void
     {
         $this->syncService->sync([
-            new SyncOperation(
-                'write',
-                CategoryDefinition::ENTITY_NAME,
-                SyncOperation::ACTION_UPSERT,
-                $payload
-            ),
         ], $context, new SyncBehavior());
     }
 }

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Event;
 
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

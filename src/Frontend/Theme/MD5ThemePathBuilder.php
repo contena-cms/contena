@@ -2,7 +2,7 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Util\Hasher;
 
 /**

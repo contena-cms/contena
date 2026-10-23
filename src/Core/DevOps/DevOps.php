@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;

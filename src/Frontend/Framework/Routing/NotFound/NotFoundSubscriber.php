@@ -2,14 +2,13 @@
 
 namespace Contena\Frontend\Framework\Routing\NotFound;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
-use Contena\Core\System\Channel\Context\ChannelContextRequestRestorer;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextRequestRestorer;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -22,6 +21,7 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Frontend\Framework\Routing\Exception\ErrorRedirectRequestEvent;
 
 /**
  * @internal

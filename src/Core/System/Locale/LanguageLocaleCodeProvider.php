@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Locale;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageLoaderInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

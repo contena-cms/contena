@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Core\Params;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class UrlParams extends Struct

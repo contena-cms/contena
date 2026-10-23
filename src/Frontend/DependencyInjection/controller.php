@@ -2,15 +2,33 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
+use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
+use Contena\Core\Content\Blog\Channel\FindVariant\FindBlogVariantRoute;
+use Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute;
+use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
+use Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute;
+use Contena\Core\Content\Blog\Channel\Review\BlogReviewLoader;
+use Contena\Core\Content\Blog\Channel\Review\BlogReviewSaveRoute;
+use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
+use Contena\Core\Content\Category\Channel\CategoryRoute;
+use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
+use Contena\Core\Content\Cms\Channel\CmsRoute;
+use Contena\Core\Content\Cookie\Channel\CookieRoute;
+use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Contena\Core\Content\Sitemap\Channel\SitemapFileRoute;
+use Contena\Core\Framework\App\Api\AppJWTGenerateRoute;
+use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
+use Contena\Core\System\Channel\Channel\ContextSwitchRoute;
+use Contena\Core\System\Channel\Context\ChannelContextService;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\System\User\Channel\AddWishlistBlogRoute;
-use Contena\Core\System\User\Channel\ChangeUserProfileRoute;
 use Contena\Core\System\User\Channel\ChangeEmailRoute;
 use Contena\Core\System\User\Channel\ChangePasswordRoute;
+use Contena\Core\System\User\Channel\ChangeUserProfileRoute;
 use Contena\Core\System\User\Channel\ConvertGuestRoute;
 use Contena\Core\System\User\Channel\DeleteAddressRoute;
 use Contena\Core\System\User\Channel\DeleteUserRoute;
-use Contena\Core\System\User\Channel\DownloadRoute;
 use Contena\Core\System\User\Channel\ImitateUserRoute;
 use Contena\Core\System\User\Channel\ListAddressRoute;
 use Contena\Core\System\User\Channel\LoadWishlistRoute;
@@ -23,51 +41,21 @@ use Contena\Core\System\User\Channel\RemoveWishlistBlogRoute;
 use Contena\Core\System\User\Channel\ResetPasswordRoute;
 use Contena\Core\System\User\Channel\SendPasswordRecoveryMailRoute;
 use Contena\Core\System\User\Channel\UpsertAddressRoute;
-use Contena\Core\Content\Category\Channel\CategoryRoute;
-use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
-use Contena\Core\Content\Cms\Channel\CmsRoute;
-use Contena\Core\Content\Cookie\Channel\CookieRoute;
-use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
-use Contena\Core\Content\Blog\Channel\FindVariant\FindBlogVariantRoute;
-use Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
-use Contena\Core\Content\Blog\Channel\BlogListRoute;
-use Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewLoader;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewSaveRoute;
-use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
-use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Contena\Core\Content\Sitemap\Channel\SitemapFileRoute;
-use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
-use Contena\Core\Framework\App\Api\AppJWTGenerateRoute;
-use Contena\Core\Framework\Gateway\Context\Channel\ContextGatewayRoute;
-use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
-use Contena\Core\Framework\Util\HtmlSanitizer;
-use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\Channel\ContextSwitchRoute;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Controller\AccountProfileController;
 use Contena\Frontend\Controller\AddressController;
 use Contena\Frontend\Controller\Api\CaptchaController as ApiCaptchaController;
 use Contena\Frontend\Controller\AppController;
 use Contena\Frontend\Controller\AuthController;
+use Contena\Frontend\Controller\BlogController;
 use Contena\Frontend\Controller\CaptchaController;
-use Contena\Frontend\Controller\CartLineItemController;
-use Contena\Frontend\Controller\CheckoutController;
 use Contena\Frontend\Controller\CmsController;
 use Contena\Frontend\Controller\ContextController;
-use Contena\Frontend\Controller\ContextGatewayController;
 use Contena\Frontend\Controller\CookieController;
 use Contena\Frontend\Controller\CountryStateController;
-use Contena\Frontend\Controller\DocumentController;
-use Contena\Frontend\Controller\DownloadController;
 use Contena\Frontend\Controller\ErrorController;
-use Contena\Frontend\Controller\FormController;
 use Contena\Frontend\Controller\LandingPageController;
 use Contena\Frontend\Controller\MaintenanceController;
 use Contena\Frontend\Controller\NavigationController;
-use Contena\Frontend\Controller\NewsletterController;
-use Contena\Frontend\Controller\BlogController;
 use Contena\Frontend\Controller\RegisterController;
 use Contena\Frontend\Controller\RobotsController;
 use Contena\Frontend\Controller\ScriptController;
@@ -81,20 +69,18 @@ use Contena\Frontend\Framework\Captcha\BasicCaptcha;
 use Contena\Frontend\Framework\Guard\DoubleSubmitGuard;
 use Contena\Frontend\Framework\Routing\MaintenanceModeResolver;
 use Contena\Frontend\Framework\Twig\ErrorTemplateResolver;
-use Contena\Frontend\Page\Account\UserGroupRegistration\UserGroupRegistrationPageLoader;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
-use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoader;
 use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
+use Contena\Frontend\Page\Account\UserGroupRegistration\UserGroupRegistrationPageLoader;
 use Contena\Frontend\Page\Address\Detail\AddressDetailPageLoader;
 use Contena\Frontend\Page\Address\Listing\AddressListingPageLoader;
+use Contena\Frontend\Page\Blog\BlogPageLoader;
+use Contena\Frontend\Page\Blog\QuickView\MinimalQuickViewPageLoader;
 use Contena\Frontend\Page\GenericPageLoader;
 use Contena\Frontend\Page\LandingPage\LandingPageLoader;
 use Contena\Frontend\Page\Maintenance\MaintenancePageLoader;
 use Contena\Frontend\Page\Navigation\NavigationPageLoader;
-use Contena\Frontend\Page\Newsletter\Subscribe\NewsletterSubscribePageLoader;
-use Contena\Frontend\Page\Blog\BlogPageLoader;
-use Contena\Frontend\Page\Blog\QuickView\MinimalQuickViewPageLoader;
 use Contena\Frontend\Page\Robots\RobotsPageLoader;
 use Contena\Frontend\Page\Search\SearchPageLoader;
 use Contena\Frontend\Page\Sitemap\SitemapPageLoader;
@@ -106,10 +92,10 @@ use Contena\Frontend\Pagelet\Country\CountryStateDataPageletLoader;
 use Contena\Frontend\Pagelet\Footer\FooterPageletLoader;
 use Contena\Frontend\Pagelet\Header\HeaderPageletLoader;
 use Contena\Frontend\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoader;
-use Contena\Frontend\Pagelet\Newsletter\Account\NewsletterAccountPageletLoader;
 use Contena\Frontend\Pagelet\Wishlist\GuestWishlistPageletLoader;
 use Contena\Frontend\Storybook\StorybookService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Frontend\Page\Navigation\Error\ErrorPageLoader;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -128,28 +114,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
-    $services->set(AccountOrderController::class)
-        ->args([
-            service(AccountOrderPageLoader::class),
-            service(AccountEditOrderPageLoader::class),
-            service(ContextSwitchRoute::class),
-            service(CancelOrderRoute::class),
-            service(SetPaymentOrderRoute::class),
-            service(HandlePaymentMethodRoute::class),
-            service('event_dispatcher'),
-            service(AccountOrderDetailPageLoader::class)->nullOnInvalid(),
-            service(OrderRoute::class),
-            service(ChannelContextService::class),
-            service(SystemConfigService::class),
-            service(OrderService::class),
-            service(HeaderPageletLoader::class),
-            service(FooterPageletLoader::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
     $services->set(AccountProfileController::class)
         ->args([
-            service(AccountOverviewPageLoader::class),
             service(AccountProfilePageLoader::class),
             service(ChangeUserProfileRoute::class),
             service(ChangePasswordRoute::class),
@@ -180,7 +147,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(LoginRoute::class),
             service(LogoutRoute::class),
             service(ImitateUserRoute::class),
-            service(FrontendCartFacade::class),
             service(AccountRecoverPasswordPageLoader::class),
             service(ConvertGuestRoute::class),
             service(SystemConfigService::class),
@@ -193,39 +159,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(AppJWTGenerateRoute::class),
         ]);
 
-    $services->set(CartLineItemController::class)
-        ->args([
-            service(CartService::class),
-            service(BlogLineItemFactory::class),
-            service(HtmlSanitizer::class),
-            service(BlogListRoute::class),
-            service(LineItemFactoryRegistry::class),
-            service(CartReorderRoute::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
-    $services->set(CheckoutController::class)
-        ->args([
-            service(CartService::class),
-            service(CheckoutCartPageLoader::class),
-            service(CheckoutConfirmPageLoader::class),
-            service(CheckoutFinishPageLoader::class),
-            service(OrderService::class),
-            service(PaymentProcessor::class),
-            service(OffcanvasCartPageLoader::class),
-            service(LogoutRoute::class),
-            service(CartLoadRoute::class),
-            service(HeaderPageletLoader::class),
-            service(FooterPageletLoader::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
-    $services->set(ContextGatewayController::class)
-        ->args([
-            service(ContextGatewayRoute::class),
-            service(CartService::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
     $services->set(CookieController::class)
         ->args([
@@ -246,15 +181,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
-    $services->set(FormController::class)
-        ->args([
-            service(ContactFormRoute::class),
-            service(NewsletterSubscribeRoute::class),
-            service(NewsletterUnsubscribeRoute::class),
-            service(RevocationRequestRoute::class),
-            service(ConstraintViolationTranslator::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
     $services->set(ContextController::class)
         ->args([
@@ -293,13 +219,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
-    $services->set(NewsletterController::class)
-        ->args([
-            service(NewsletterSubscribePageLoader::class),
-            service(NewsletterConfirmRoute::class),
-            service(NewsletterAccountPageletLoader::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
     $services->set(BlogController::class)
         ->args([
@@ -325,8 +244,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(AccountLoginPageLoader::class),
             service(RegisterRoute::class),
             service(RegisterConfirmRoute::class),
-            service(CartService::class),
-            service(CheckoutRegisterPageLoader::class),
             service(SystemConfigService::class),
             service('user.repository'),
             service(UserGroupRegistrationPageLoader::class),
@@ -367,20 +284,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
-    $services->set(DocumentController::class)
-        ->public()
-        ->args([
-            service(DocumentRoute::class),
-            service(LogoutRoute::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
-    $services->set(DownloadController::class)
-        ->public()
-        ->args([
-            service(DownloadRoute::class),
-        ])
-        ->call('setContainer', [service('service_container')]);
 
     $services->set(WellKnownController::class)
         ->public()

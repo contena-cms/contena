@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPointer;
 use Contena\Core\Framework\Mcp\Result\McpToolResultPointerSigner;
 use Contena\Core\Framework\Uuid\Uuid;

@@ -21,6 +21,8 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\Clock\ClockInterface as SymfonyClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\Sso\SsoAdminUser\SsoAdminUserInvitationMailService;
+use Contena\Core\Framework\Sso\SsoAdminUser\SsoAdminUserService;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

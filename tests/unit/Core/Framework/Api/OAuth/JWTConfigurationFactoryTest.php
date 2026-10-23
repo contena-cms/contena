@@ -6,7 +6,6 @@ use Lcobucci\JWT\Signer\Hmac\Sha256 as Hmac256;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\JWTConfigurationFactory;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

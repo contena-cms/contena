@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<ContentStreamTranslationEntity>

@@ -5,9 +5,8 @@ namespace Contena\Tests\Unit\Core\Service\Requirement;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Service\Requirement\Gate;
 use Contena\Core\Service\Requirement\ContenaAccountRequirement;
+use Contena\Core\Service\Requirement\Gate;
 
 /**
  * @internal

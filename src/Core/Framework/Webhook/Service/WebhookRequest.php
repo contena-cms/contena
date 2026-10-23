@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook\Service;
 
 use Psr\Http\Message\RequestInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

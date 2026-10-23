@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Indexing;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 
 abstract class EntityIndexer
 {

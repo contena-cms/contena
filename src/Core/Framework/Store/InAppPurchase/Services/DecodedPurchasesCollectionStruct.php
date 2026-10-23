@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\InAppPurchase\Services;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Validation\ValidatorFactory;

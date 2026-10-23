@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Checkout\Cart\Channel\FrontendCartFacade;
 use Contena\Frontend\Controller\NavigationController;
 use Contena\Frontend\DependencyInjection\DisableTemplateCachePass;
@@ -12,8 +11,8 @@ use Contena\Frontend\DependencyInjection\FrontendMigrationReplacementCompilerPas
 use Contena\Frontend\DependencyInjection\TwigComponentBundlePass;
 use Contena\Frontend\Framework\Captcha\HoneypotCaptcha;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
-use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use Contena\Frontend\Frontend;
+use Contena\Frontend\Mcp\Tool\ThemeConfigTool;
 use Contena\Frontend\System\Channel\ChannelAnalyticsLoader;
 use Contena\Frontend\Theme\ThemeService;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

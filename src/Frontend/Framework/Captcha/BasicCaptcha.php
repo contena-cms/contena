@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Captcha;
 
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;

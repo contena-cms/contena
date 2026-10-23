@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Controller\ProfilerController;
 use Contena\Core\Profiling\Doctrine\BacktraceDebugDataHolder;
 use Contena\Core\Profiling\Doctrine\ConnectionProfiler;

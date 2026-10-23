@@ -6,7 +6,6 @@ use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
 use Contena\Core\Content\Seo\Validation\Constraint\ValidSeoPathInfo;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Validation\Constraint\RouteNotBlocked;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\System\Channel\ChannelDefinition;

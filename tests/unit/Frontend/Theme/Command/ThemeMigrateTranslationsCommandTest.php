@@ -4,13 +4,12 @@ namespace Contena\Tests\Unit\Frontend\Theme\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem as ThemeFilesystem;
 use Contena\Frontend\Theme\Command\ThemeMigrateTranslationsCommand;
-use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

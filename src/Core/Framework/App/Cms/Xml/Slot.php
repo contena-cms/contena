@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Cms\Xml;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

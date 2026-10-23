@@ -8,14 +8,10 @@ use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
-use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

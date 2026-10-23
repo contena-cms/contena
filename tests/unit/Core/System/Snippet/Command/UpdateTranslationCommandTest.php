@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\Snippet\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\UpdateTranslationCommand;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;

@@ -12,9 +12,8 @@ use Contena\Core\Content\Blog\Stock\LoadBlogStockSubscriber;
 use Contena\Core\Content\Blog\Stock\StockData;
 use Contena\Core\Content\Blog\Stock\StockDataCollection;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

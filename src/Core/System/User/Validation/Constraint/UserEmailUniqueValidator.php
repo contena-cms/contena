@@ -5,7 +5,6 @@ namespace Contena\Core\System\User\Validation\Constraint;
 use Contena\Core\System\User\UserException;
 use Contena\Core\System\User\Validation\UserEmailUniqueCheck;
 use Contena\Core\System\User\Validation\UserEmailUniqueChecker;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
 

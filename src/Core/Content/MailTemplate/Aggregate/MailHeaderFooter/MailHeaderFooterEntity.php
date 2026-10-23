@@ -4,8 +4,6 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter;
 
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooterTranslation\MailHeaderFooterTranslationCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelCollection;
 
 /**

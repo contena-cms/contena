@@ -4,13 +4,12 @@ namespace Contena\Tests\Unit\Core\System\User\Event;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Event\UserLoginEvent;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\ScalarValuesStorer;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Event\UserLoginEvent;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

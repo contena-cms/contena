@@ -8,7 +8,6 @@ use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CachedEntitySchemaGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
 use Contena\Core\Framework\Api\Command\DumpSchemaCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\Cache\CacheInterface;

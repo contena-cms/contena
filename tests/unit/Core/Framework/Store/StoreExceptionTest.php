@@ -6,7 +6,6 @@ use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Exception\ShopSecretInvalidException;
 use Contena\Core\Framework\Store\Exception\StoreInvalidCredentialsException;
 use Contena\Core\Framework\Store\StoreException;

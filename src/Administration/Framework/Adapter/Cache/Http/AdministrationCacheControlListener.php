@@ -6,7 +6,6 @@ use Contena\Administration\Controller\AdministrationController;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Core\Framework\Adapter\Cache\Http\Event\BeforeCacheControlEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 
 /**

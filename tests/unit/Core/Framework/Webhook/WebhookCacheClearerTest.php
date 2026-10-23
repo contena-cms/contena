@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Webhook;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEvents;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Service\WebhookManager;
 use Contena\Core\Framework\Webhook\WebhookCacheClearer;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\System\Consent;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentDefinition;
 
 /**

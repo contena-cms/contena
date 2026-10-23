@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Routing\ClearSiteDataListener;
 use Contena\Frontend\Theme\ConfigLoader\DatabaseAvailableThemeProvider;
 use Contena\Frontend\Theme\ConfigLoader\DatabaseConfigLoader;

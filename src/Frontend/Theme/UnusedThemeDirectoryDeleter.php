@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\FilesystemReader;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Deletes theme directories that are no longer referenced by any sales channel/theme mapping.

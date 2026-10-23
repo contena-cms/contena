@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Category\Tree;
 
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\CategoryException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class TreeItem extends Struct

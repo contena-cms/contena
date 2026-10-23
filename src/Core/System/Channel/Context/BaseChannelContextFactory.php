@@ -2,31 +2,24 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
-use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
-use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Country\CountryEntity;
-use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
-use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingEntity;
-use Contena\Core\System\Currency\CurrencyEntity;
-use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\BaseChannelContext;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
+use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Tax\TaxCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 
 /**
  * @phpstan-import-type BaseContextOptions from ContextFactory
@@ -188,120 +181,9 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
         return $this->taxRepository->search($criteria, $context)->getEntities();
     }
 
-    /**
-     * @param ContextOptions $options
-     */
-    private function getPaymentMethod(array $options, Context $context, ChannelEntity $channel): PaymentMethodEntity
-    {
-        $id = $options[ChannelContextService::PAYMENT_METHOD_ID] ?? $channel->getPaymentMethodId();
 
-        $criteria = new Criteria([$id]);
-        $criteria->addAssociation('media');
-        $criteria->addAssociation('appPaymentMethod');
-        $criteria->setTitle('base-context-factory::payment-method');
 
-        $paymentMethod = $this->paymentMethodRepository
-            ->search($criteria, $context)
-            ->getEntities()
-            ->get($id);
 
-        if (!$paymentMethod instanceof PaymentMethodEntity) {
-            throw ChannelException::unknownPaymentMethod($id);
-        }
-
-        return $paymentMethod;
-    }
-
-    /**
-     * @param ContextOptions $options
-     */
-    private function getShippingMethod(array $options, Context $context, ChannelEntity $channel): ShippingMethodEntity
-    {
-        $id = $options[ChannelContextService::SHIPPING_METHOD_ID] ?? $channel->getShippingMethodId();
-
-        $ids = \array_unique(array_filter([$id, $channel->getShippingMethodId()]));
-
-        $criteria = new Criteria($ids);
-        $criteria->addAssociation('media');
-        $criteria->setTitle('base-context-factory::shipping-method');
-
-        $shippingMethods = $this->shippingMethodRepository->search($criteria, $context)->getEntities();
-
-        $shippingMethod = $shippingMethods->get($id) ?? $shippingMethods->get($channel->getShippingMethodId());
-        if ($shippingMethod === null) {
-            throw ChannelException::shippingMethodNotFound($id);
-        }
-
-        return $shippingMethod;
-    }
-
-    /**
-     * @param ContextOptions $options
-     */
-    private function loadShippingLocation(array $options, Context $context, ChannelEntity $channel): ShippingLocation
-    {
-        // allows previewing cart calculation for a specify state for not logged in users
-        if (isset($options[ChannelContextService::COUNTRY_STATE_ID])) {
-            $countryStateId = $options[ChannelContextService::COUNTRY_STATE_ID];
-            if (!\is_string($countryStateId) || !Uuid::isValid($countryStateId)) {
-                throw ChannelException::invalidCountryStateId();
-            }
-
-            $criteria = new Criteria([$countryStateId]);
-            $criteria->addAssociation('country');
-
-            $criteria->setTitle('base-context-factory::country');
-
-            $state = $this->countryStateRepository->search($criteria, $context)->getEntities()->get($countryStateId);
-
-            if (!$state instanceof CountryStateEntity) {
-                throw ChannelException::countryStateNotFound($countryStateId);
-            }
-
-            $country = $state->getCountry();
-            if (!$country instanceof CountryEntity) {
-                throw ChannelException::countryNotFound($state->getCountryId());
-            }
-
-            return new ShippingLocation($country, $state, null);
-        }
-
-        $countryId = $options[ChannelContextService::COUNTRY_ID] ?? $channel->getCountryId();
-        if (!\is_string($countryId) || !Uuid::isValid($countryId)) {
-            throw ChannelException::invalidCountryId();
-        }
-
-        $criteria = new Criteria([$countryId]);
-        $criteria->setTitle('base-context-factory::country');
-
-        $country = $this->countryRepository->search($criteria, $context)->getEntities()->get($countryId);
-
-        if (!$country instanceof CountryEntity) {
-            throw ChannelException::countryNotFound($countryId);
-        }
-
-        return ShippingLocation::createFromCountry($country);
-    }
-
-    /**
-     * @return CashRoundingConfig[]
-     */
-    private function getCashRounding(CurrencyEntity $currency, ShippingLocation $shippingLocation, Context $context): array
-    {
-        $criteria = new Criteria();
-        $criteria->setTitle('base-context-factory::cash-rounding');
-        $criteria->setLimit(1);
-        $criteria->addFilter(new EqualsFilter('currencyId', $currency->getId()));
-        $criteria->addFilter(new EqualsFilter('countryId', $shippingLocation->getCountry()->getId()));
-
-        $countryConfig = $this->currencyCountryRepository->search($criteria, $context)->getEntities()->first();
-
-        if ($countryConfig instanceof CurrencyCountryRoundingEntity) {
-            return [$countryConfig->getItemRounding(), $countryConfig->getTotalRounding()];
-        }
-
-        return [$currency->getItemRounding(), $currency->getTotalRounding()];
-    }
 
     private function getLanguageInfo(Context $context): LanguageInfo
     {
@@ -342,17 +224,6 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
         );
     }
 
-    /**
-     * @description load active sales channel domain's measurement units, fallback to sales channel measurement units
-     */
-    private function getMeasurementSystemInfo(ChannelEntity $channelEntity, ?string $domainId): MeasurementUnits
-    {
-        if ($domainId && $channelEntity->getDomains()?->get($domainId) instanceof ChannelDomainEntity) {
-            return $channelEntity->getDomains()->get($domainId)->getMeasurementUnits();
-        }
-
-        return $channelEntity->getMeasurementUnits();
-    }
 
     /**
      * @param ContextOptions $options

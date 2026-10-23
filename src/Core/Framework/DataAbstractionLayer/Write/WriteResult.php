@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

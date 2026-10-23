@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Mcp\Capability\Registry\ReferenceHandler;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Result\McpToolResultParser;
 use Contena\Core\Framework\Mcp\Result\McpToolResultReferenceHandler;
 use Contena\Core\Framework\Mcp\Result\McpToolResultRenderer;

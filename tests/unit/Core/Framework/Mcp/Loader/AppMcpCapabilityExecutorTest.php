@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\AppSecretResolver;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;

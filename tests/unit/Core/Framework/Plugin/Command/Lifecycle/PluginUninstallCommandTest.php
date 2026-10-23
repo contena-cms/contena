@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Lifecycle\PluginUninstallCommand;
 use Contena\Core\Framework\Plugin\Context\UninstallContext;
 use Contena\Core\Framework\Plugin\PluginCollection;

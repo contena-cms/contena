@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Facade;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\AppContextCreator;
 use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Contena\Core\Framework\Script\Execution\Hook;

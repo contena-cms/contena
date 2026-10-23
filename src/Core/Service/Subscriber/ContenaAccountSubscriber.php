@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Event\ContenaAccountLoginEvent;
 use Contena\Core\Framework\Store\Event\ContenaAccountLogoutEvent;
 use Contena\Core\Service\ServiceLifecycle;

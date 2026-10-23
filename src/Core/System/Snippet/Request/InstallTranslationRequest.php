@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Request;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

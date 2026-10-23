@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Event\EventData;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
-use Contena\Core\Framework\Log\Package;
 
 #[BecomesFinal(version: 'v6.8.0')]
 class EventDataCollection

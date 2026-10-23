@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Webhook\Service;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Acl\AclRoleLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriberType;

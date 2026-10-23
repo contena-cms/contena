@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests;
 
 use PHPStan\Reflection\ClassReflection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

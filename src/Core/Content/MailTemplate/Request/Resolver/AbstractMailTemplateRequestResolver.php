@@ -4,7 +4,6 @@ namespace Contena\Core\Content\MailTemplate\Request\Resolver;
 
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\MailTemplateException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 
 /**

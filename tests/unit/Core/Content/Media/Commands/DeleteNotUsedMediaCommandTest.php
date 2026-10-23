@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Commands\DeleteNotUsedMediaCommand;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\UnusedMediaPurger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;

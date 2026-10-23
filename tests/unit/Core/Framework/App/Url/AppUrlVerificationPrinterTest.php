@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\App\Url\AppUrlVerificationPrinter;
 use Contena\Core\Framework\App\Url\VerificationState;
 use Contena\Core\Framework\App\Url\VerificationStatus;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;

@@ -4,7 +4,6 @@ namespace Contena\Core\System\SystemConfig\Service;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 
 /**

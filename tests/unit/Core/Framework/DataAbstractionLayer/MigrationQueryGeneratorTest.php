@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\MigrationQueryGenerator;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

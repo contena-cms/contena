@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Framework\Indexing\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 
 class ElasticsearchIndexConfigEvent implements ContenaEvent

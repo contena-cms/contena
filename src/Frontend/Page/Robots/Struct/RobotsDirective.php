@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Robots\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 class RobotsDirective
 {

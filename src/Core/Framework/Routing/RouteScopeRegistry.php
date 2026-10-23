@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Contains all registered RouteScopes in the system

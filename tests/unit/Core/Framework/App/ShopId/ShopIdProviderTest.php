@@ -14,7 +14,6 @@ use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdChangedEvent;
 use Contena\Core\Framework\App\ShopId\ShopIdDeletedEvent;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 

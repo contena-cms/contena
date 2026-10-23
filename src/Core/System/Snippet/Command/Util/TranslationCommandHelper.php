@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Command\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Output\OutputInterface;
 

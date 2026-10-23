@@ -8,7 +8,6 @@ use Monolog\Level;
 use Monolog\LogRecord;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 class DoctrineSQLHandler extends AbstractProcessingHandler

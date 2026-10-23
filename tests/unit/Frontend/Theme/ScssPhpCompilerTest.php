@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use ScssPhp\ScssPhp\OutputStyle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\CompilerConfiguration;
 use Contena\Frontend\Theme\ScssPhpCompiler;
 

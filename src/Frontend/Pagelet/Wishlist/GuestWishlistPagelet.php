@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Pagelet\Wishlist;
 
 use Contena\Core\Content\Blog\Channel\BlogListResponse;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Pagelet\Pagelet;
 
 class GuestWishlistPagelet extends Pagelet

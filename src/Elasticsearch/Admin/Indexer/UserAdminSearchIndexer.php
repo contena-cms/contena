@@ -4,10 +4,6 @@ namespace Contena\Elasticsearch\Admin\Indexer;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\Aggregate\UserTag\UserTagDefinition;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -15,8 +11,12 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\Aggregate\UserTag\UserTagDefinition;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
 

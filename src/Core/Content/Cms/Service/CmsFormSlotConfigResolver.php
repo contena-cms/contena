@@ -2,15 +2,14 @@
 
 namespace Contena\Core\Content\Cms\Service;
 
+use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
-use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

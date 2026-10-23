@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme;
 
 use League\Flysystem\FilesystemOperator;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\ChannelRequest;
 use Symfony\Component\HttpFoundation\RequestStack;
 

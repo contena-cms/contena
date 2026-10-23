@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\UserCollection;
 use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogCollection;
 use Contena\Core\Content\Media\MediaCollection;
@@ -14,14 +13,14 @@ use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Locale\LocaleEntity;
-use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
+use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKeyCollection;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigCollection;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryEntity;
-use Contena\Core\System\AdminUser\AdminUserDefinition;
-use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\System\Locale\LocaleEntity;
+use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
+use Contena\Core\System\User\UserCollection;
 
 /**
  * @internal

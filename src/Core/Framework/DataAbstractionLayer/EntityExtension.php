@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
-use Contena\Core\Framework\Log\Package;
 
 abstract class EntityExtension
 {

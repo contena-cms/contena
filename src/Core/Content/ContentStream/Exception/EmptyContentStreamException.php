@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ContentStream\Exception;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Thrown when a blog stream is valid but has no filters left (api_filter is []).

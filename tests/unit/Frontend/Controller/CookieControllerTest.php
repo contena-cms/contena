@@ -8,10 +8,8 @@ use Contena\Core\Content\Cookie\Channel\AbstractCookieRoute;
 use Contena\Core\Content\Cookie\Channel\CookieRouteResponse;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Controller\CookieController;
-use Contena\Tests\Unit\Frontend\Controller\Stub\CookieControllerStub;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

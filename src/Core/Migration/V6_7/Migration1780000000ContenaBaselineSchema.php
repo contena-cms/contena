@@ -3,6 +3,7 @@
 namespace Contena\Core\Migration\V6_7;
 
 use Doctrine\DBAL\Connection;
+use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * Contena baseline schema (merged). Generated from the upstream final schema;

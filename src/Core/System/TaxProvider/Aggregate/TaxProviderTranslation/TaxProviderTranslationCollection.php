@@ -3,7 +3,6 @@
 namespace Contena\Core\System\TaxProvider\Aggregate\TaxProviderTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<TaxProviderTranslationEntity>

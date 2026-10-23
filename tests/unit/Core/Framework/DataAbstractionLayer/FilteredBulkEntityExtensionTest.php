@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\BulkEntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\FilteredBulkEntityExtension;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

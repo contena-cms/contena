@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Twig\TokenParser\ReturnNodeTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\SwMacroFunctionTokenParser;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Facade\ArrayFacade;
 use Contena\Core\Framework\Util\Hasher;
 use Squirrel\TwigPhpSyntax\ExpressionParser\BinaryOperatorExpressionParser;

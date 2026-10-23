@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Rule;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 
 /**

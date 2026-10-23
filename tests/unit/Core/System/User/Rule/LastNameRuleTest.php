@@ -8,17 +8,16 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Rule\LastNameRule;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Rule\LastNameRule;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 
 /**
  * @internal

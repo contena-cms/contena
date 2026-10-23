@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Aggregate\AppTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

@@ -5,9 +5,8 @@ namespace Contena\Tests\Unit\Core\Framework\App\Manifest\Xml\Frontend;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\EntitySeoUrl;
-use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\Frontend;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\Validator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\ScssPhpCompiler;
 use Contena\Frontend\Theme\Validator\SCSSValidator;

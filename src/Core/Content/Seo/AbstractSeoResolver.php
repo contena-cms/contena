@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-type ResolvedSeoUrlArray = array{id?: string, pathInfo: string, isCanonical: bool|string, channelId?: string|null, canonicalPathInfo?: string, seoPathInfo?: string}

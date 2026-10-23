@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ReferenceVersionFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Version\VersionDefinition;
-use Contena\Core\Framework\Log\Package;
 
 class ReferenceVersionField extends FkField
 {

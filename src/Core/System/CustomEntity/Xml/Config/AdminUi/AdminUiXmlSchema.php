@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomEntity\Xml\Config\AdminUi;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\XmlElements\AdminUi;
 use Symfony\Component\Config\Util\XmlUtils;

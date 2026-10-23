@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Frontend\Theme\Snippet;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
 
 /**
  * @internal

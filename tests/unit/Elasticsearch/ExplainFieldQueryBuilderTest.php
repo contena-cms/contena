@@ -9,10 +9,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\AbstractFieldQueryBuilder;
-use Contena\Elasticsearch\ExplainFieldQueryBuilder;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
+use Contena\Elasticsearch\ExplainFieldQueryBuilder;
 use Contena\Elasticsearch\ResolvedField;
 
 /**

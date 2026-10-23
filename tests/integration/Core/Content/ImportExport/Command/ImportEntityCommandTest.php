@@ -6,8 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\ImportExport\Command\ImportEntityCommand;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;

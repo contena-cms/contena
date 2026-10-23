@@ -9,7 +9,6 @@ use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mailer\Envelope;
 use Symfony\Component\Mailer\SentMessage;
 use Symfony\Component\Mailer\Transport\TransportInterface;

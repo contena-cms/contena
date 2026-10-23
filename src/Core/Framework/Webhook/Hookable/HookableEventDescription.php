@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Hookable;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

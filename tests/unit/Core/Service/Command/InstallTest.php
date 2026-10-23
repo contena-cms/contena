@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Service\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Command\Install;
 use Contena\Core\Service\LifecycleManager;
 use Symfony\Component\Console\Tester\CommandTester;

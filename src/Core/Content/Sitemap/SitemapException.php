@@ -3,9 +3,9 @@
 namespace Contena\Core\Content\Sitemap;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 
 class SitemapException extends HttpException
 {

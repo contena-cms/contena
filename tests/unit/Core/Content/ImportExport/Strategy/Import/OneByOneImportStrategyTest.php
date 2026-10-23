@@ -13,7 +13,6 @@ use Contena\Core\Content\ImportExport\Struct\Progress;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

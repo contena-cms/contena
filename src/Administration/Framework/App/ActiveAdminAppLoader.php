@@ -3,7 +3,6 @@
 namespace Contena\Administration\Framework\App;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

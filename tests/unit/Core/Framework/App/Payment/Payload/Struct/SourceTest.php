@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App\Payment\Payload\Struct;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Payload\Source;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

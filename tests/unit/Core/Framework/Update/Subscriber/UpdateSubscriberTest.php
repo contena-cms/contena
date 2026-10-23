@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\Framework\Update\Subscriber\UpdateSubscriber;

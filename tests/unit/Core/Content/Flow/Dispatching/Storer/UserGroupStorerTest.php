@@ -5,16 +5,15 @@ namespace Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\Event\UserGroupRegistrationDeclined;
-use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\UserGroupStorer;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\UserGroupProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserGroupAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\Event\UserGroupRegistrationDeclined;
+use Contena\Core\System\User\Event\UserRegisterEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

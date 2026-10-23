@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\MakerCommand;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
 use Symfony\Component\DependencyInjection\ChildDefinition;

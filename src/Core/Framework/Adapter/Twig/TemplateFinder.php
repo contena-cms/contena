@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Contracts\Service\ResetInterface;
 use Twig\Cache\FilesystemCache;

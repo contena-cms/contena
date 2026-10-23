@@ -3,22 +3,19 @@
 namespace Contena\Tests\Integration\Core\Content\Blog\Channel\Listing;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\Twig\Extension\UrlEncodingTwigFilter;

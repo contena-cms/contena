@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\MessageQueue\Subscriber;
 use Psr\Cache\CacheItemPoolInterface;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Contena\Core\Framework\Plugin\Event\PluginPostActivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;

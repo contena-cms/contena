@@ -14,7 +14,6 @@ use Contena\Core\Content\Flow\Dispatching\Action\AddOrderAffiliateAndCampaignCod
 use Contena\Core\Content\Flow\Dispatching\Action\AddOrderTagAction;
 use Contena\Core\Content\Flow\Dispatching\Action\ChangeUserGroupAction;
 use Contena\Core\Content\Flow\Dispatching\Action\ChangeUserStatusAction;
-use Contena\Core\Content\Flow\Dispatching\Action\GenerateDocumentAction;
 use Contena\Core\Content\Flow\Dispatching\Action\GrantDownloadAccessAction;
 use Contena\Core\Content\Flow\Dispatching\Action\RemoveUserTagAction;
 use Contena\Core\Content\Flow\Dispatching\Action\RemoveOrderTagAction;
@@ -139,8 +138,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FlowRuleScopeBuilder::class)
         ->args([
-            service(OrderConverter::class),
-            service(DeliveryBuilder::class),
             tagged_iterator('contena.cart.collector'),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
@@ -150,7 +147,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('event_dispatcher'),
             service(AppFlowActionProvider::class),
-            service(RuleLoader::class),
             service(FlowRuleScopeBuilder::class),
             service(Connection::class),
             service(ExtensionDispatcher::class),
@@ -223,18 +219,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('flow.action', ['priority' => 500, 'key' => 'action.mail.send']);
 
-    $services->set(GenerateDocumentAction::class)
-        ->args([
-            service(DocumentGenerator::class),
-            service(DocumentV2Generator::class),
-            service('logger'),
-        ])
-        ->tag('flow.action', ['priority' => 620, 'key' => 'action.generate.document']);
 
     $services->set(SetOrderStateAction::class)
         ->args([
             service(Connection::class),
-            service(OrderService::class),
         ])
         ->tag('flow.action', ['priority' => 400, 'key' => 'action.set.order.state']);
 
@@ -351,7 +339,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('document.repository'),
             service('event_dispatcher'),
             service(DocumentResolver::class),
-            service(DocumentFileResolver::class),
         ])
         ->tag('flow.storer');
 

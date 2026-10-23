@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

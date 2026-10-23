@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test\Stub\Framework\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Util\UtilException;
 use Symfony\Component\Filesystem\Path;

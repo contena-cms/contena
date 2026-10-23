@@ -2,14 +2,28 @@
 
 namespace Contena\Core\System\User;
 
-use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraint;
+use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
+use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
+use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
+use Contena\Core\System\User\Exception\AddressNotFoundException;
+use Contena\Core\System\User\Exception\CannotDeleteDefaultAddressException;
+use Contena\Core\System\User\Exception\DuplicateWishlistBlogException;
+use Contena\Core\System\User\Exception\InvalidImitateUserTokenException;
+use Contena\Core\System\User\Exception\PasswordPoliciesUpdatedException;
+use Contena\Core\System\User\Exception\UserAlreadyConfirmedException;
+use Contena\Core\System\User\Exception\UserAuthThrottledException;
+use Contena\Core\System\User\Exception\UserNotFoundByHashException;
+use Contena\Core\System\User\Exception\UserNotFoundByIdException;
+use Contena\Core\System\User\Exception\UserOptinNotCompletedException;
+use Contena\Core\System\User\Exception\UserRecoveryHashExpiredException;
+use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
 
 class UserException extends HttpException
 {
@@ -156,10 +170,6 @@ class UserException extends HttpException
         );
     }
 
-    public static function badCredentials(): BadCredentialsException
-    {
-        return new BadCredentialsException();
-    }
 
     /**
      * @deprecated tag:v6.8.0 - Will be removed without replacement
@@ -206,10 +216,6 @@ class UserException extends HttpException
         return new UserNotFoundByIdException($id);
     }
 
-    public static function userNotFound(string $email): UserNotFoundException
-    {
-        return new UserNotFoundException($email);
-    }
 
     public static function userRecoveryHashExpired(string $hash): UserRecoveryHashExpiredException
     {
@@ -426,15 +432,7 @@ class UserException extends HttpException
         );
     }
 
-    public static function guestNotAuthenticated(): GuestNotAuthenticatedException
-    {
-        return new GuestNotAuthenticatedException();
-    }
 
-    public static function wrongGuestCredentials(): WrongGuestCredentialsException
-    {
-        return new WrongGuestCredentialsException();
-    }
 
     public static function unexpectedConstraintType(Constraint $constraint, string $expectedType): ValidatorException
     {

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ThemeCompiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

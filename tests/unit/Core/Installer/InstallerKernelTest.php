@@ -6,7 +6,6 @@ use Composer\InstalledVersions;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Installer;
 use Contena\Core\Installer\InstallerKernel;
 use Contena\Core\Test\Stub\Installer\InstallerKernelStub;

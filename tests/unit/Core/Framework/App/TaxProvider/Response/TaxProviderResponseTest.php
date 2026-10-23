@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Framework\App\TaxProvider\Response\TaxProviderResponse;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

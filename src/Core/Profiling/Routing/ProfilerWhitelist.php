@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Profiling\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RouteScopeWhitelistInterface;
 use Contena\Core\Profiling\Controller\ProfilerController;
 

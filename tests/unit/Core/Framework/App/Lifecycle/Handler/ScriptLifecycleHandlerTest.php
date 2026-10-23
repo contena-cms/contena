@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\ScriptFileReader;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;

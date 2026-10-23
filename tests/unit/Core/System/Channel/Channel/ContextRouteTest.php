@@ -5,12 +5,11 @@ namespace Contena\Tests\Unit\Core\System\Channel\Channel;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Extension\ContextRouteExtension;
 use Contena\Core\System\Channel\Channel\ContextLoadRouteResponse;
 use Contena\Core\System\Channel\Channel\ContextRoute;
+use Contena\Core\System\Channel\Extension\ContextRouteExtension;
 use Contena\Core\Test\Generator;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

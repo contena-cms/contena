@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Api\OAuth\Client\PublicClientRegistry;
 use Contena\Core\Framework\Api\OAuth\ClientRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 

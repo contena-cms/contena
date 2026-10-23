@@ -16,7 +16,6 @@ use Contena\Core\Content\Flow\Dispatching\FlowExecutor;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 

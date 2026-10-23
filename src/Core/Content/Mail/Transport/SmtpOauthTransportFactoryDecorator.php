@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Mail\Transport;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransportFactory;

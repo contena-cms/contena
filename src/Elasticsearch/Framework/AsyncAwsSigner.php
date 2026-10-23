@@ -10,7 +10,6 @@ use AsyncAws\Core\Signer\SignerV4;
 use AsyncAws\Core\Stream\StringStream;
 use Psr\Http\Message\RequestInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\ElasticsearchException;
 
 /**

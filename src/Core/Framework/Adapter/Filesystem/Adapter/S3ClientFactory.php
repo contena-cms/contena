@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Filesystem\Adapter;
 
 use AsyncAws\S3\S3Client;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

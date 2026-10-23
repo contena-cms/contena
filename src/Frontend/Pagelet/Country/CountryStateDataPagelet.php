@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Pagelet\Country;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Frontend\Pagelet\Pagelet;
 

@@ -9,11 +9,10 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\ScalarValuesStorer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\AdminUserAware;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryDefinition;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryEntity;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
-use Contena\Core\System\AdminUser\AdminUserEntity;
 
 /**
  * @internal

@@ -3,8 +3,6 @@
 namespace Contena\Core\System\User\Subscriber;
 
 use Cocur\Slugify\SlugifyInterface;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Defaults;
@@ -15,10 +13,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationCollection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

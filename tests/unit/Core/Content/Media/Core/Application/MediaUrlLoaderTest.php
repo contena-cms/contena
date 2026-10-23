@@ -12,7 +12,6 @@ use Contena\Core\Content\Media\Core\Application\RemoteThumbnailLoader;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

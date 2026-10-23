@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Migration;
 
-use Contena\Core\Framework\Log\Package;
 
 class Trigger
 {

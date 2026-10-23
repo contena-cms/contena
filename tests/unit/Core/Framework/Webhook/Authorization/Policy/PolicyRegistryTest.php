@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Acl\AclRoles;
 use Contena\Core\Framework\Api\Acl\ApiCallerType;
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\Authorization\Policy\Policy;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PolicyRegistry;

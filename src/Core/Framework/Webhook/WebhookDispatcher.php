@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventFactory;
 use Contena\Core\Framework\Webhook\Service\WebhookManager;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

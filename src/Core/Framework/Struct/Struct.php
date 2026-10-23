@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 abstract class Struct implements \JsonSerializable, ExtendableInterface, AssignArrayInterface
 {

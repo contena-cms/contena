@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField;
 
+use Contena\Core\Content\Blog\Exception\DuplicateBlogSearchConfigFieldException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 class BlogSearchConfigFieldExceptionHandler implements ExceptionHandlerInterface
 {

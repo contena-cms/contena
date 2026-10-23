@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Webhook\Authorization\Policy;
 use Contena\Core\Framework\Event\BusinessEventRegistry;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriberType;
 use Contena\Core\Framework\Webhook\Hookable;

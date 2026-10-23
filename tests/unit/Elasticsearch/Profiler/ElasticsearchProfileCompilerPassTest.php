@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Profiler;
 use OpenSearch\Client;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Profiler\DataCollector;
 use Contena\Elasticsearch\Profiler\ElasticsearchProfileCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

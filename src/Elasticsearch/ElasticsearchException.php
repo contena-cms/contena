@@ -5,8 +5,8 @@ namespace Contena\Elasticsearch;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Elasticsearch\Framework\Exception\EmptyQueryException;
 
 class ElasticsearchException extends HttpException
 {

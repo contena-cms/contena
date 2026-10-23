@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
 use Contena\Core\Framework\Increment\AbstractIncrementer;
 use Contena\Core\Framework\Increment\IncrementException;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueStatsSubscriber;
 use Contena\Core\Test\Annotation\DisabledFeatures;

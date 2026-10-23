@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Metadata\MetadataLoader;
 
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
-use Contena\Core\Framework\Log\Package;
 
 class ImageMetadataLoader implements MetadataLoaderInterface
 {

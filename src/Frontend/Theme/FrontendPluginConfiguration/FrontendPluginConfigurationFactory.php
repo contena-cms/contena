@@ -4,13 +4,13 @@ namespace Contena\Frontend\Theme\FrontendPluginConfiguration;
 
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Frontend\Framework\ThemeInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class FrontendPluginConfigurationFactory extends AbstractFrontendPluginConfigurationFactory
 {

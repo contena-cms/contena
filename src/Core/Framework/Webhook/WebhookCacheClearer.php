@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Webhook;
 
 use Contena\Core\Framework\App\AppEvents;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Service\WebhookManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;

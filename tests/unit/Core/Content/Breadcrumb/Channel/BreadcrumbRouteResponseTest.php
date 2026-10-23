@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Breadcrumb\Channel\BreadcrumbRouteResponse;
 use Contena\Core\Content\Breadcrumb\Struct\Breadcrumb;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

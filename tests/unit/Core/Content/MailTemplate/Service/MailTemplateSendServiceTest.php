@@ -14,7 +14,6 @@ use Contena\Core\Content\MailTemplate\Request\GetDataAndSendRequest;
 use Contena\Core\Content\MailTemplate\Service\MailDataProvider;
 use Contena\Core\Content\MailTemplate\Service\MailTemplateSendService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mime\Email;
 
 /**

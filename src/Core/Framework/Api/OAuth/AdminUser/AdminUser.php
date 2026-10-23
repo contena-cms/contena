@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\OAuth\AdminUser;
 
 use League\OAuth2\Server\Entities\UserEntityInterface;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * OAuth integrations should rely on {@see AdminUserEntityInterface} instead of this concrete Contena class.

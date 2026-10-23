@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Util\Backtrace;
 
-use Contena\Core\Framework\Log\Package;
 
 class BacktraceCollector
 {

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\AdminUser;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\AdminUserException;
 use Symfony\Component\HttpFoundation\Response;
 

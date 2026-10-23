@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Marks a flow event that must never be delivered to a webhook. Flow Builder keeps the event;

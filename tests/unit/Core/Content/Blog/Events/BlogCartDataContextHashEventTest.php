@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartBehavior;
 use Contena\Core\Checkout\Cart\LineItem\CartDataCollection;
 use Contena\Core\Content\Blog\Events\BlogCartDataContextHashEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 
 /**

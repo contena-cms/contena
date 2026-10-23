@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Struct;
 
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 
 trait CreateFromTrait
 {

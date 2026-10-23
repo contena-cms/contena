@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Core\System\User\Rule;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\Channel\ChannelContext;
 

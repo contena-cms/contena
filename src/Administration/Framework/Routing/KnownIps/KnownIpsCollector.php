@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Framework\Routing\KnownIps;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 
 class KnownIpsCollector implements KnownIpsCollectorInterface

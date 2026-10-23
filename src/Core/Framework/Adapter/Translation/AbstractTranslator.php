@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Translation;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Translation\TranslatorBagInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;

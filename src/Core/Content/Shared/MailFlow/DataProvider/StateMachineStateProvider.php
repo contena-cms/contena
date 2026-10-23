@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;

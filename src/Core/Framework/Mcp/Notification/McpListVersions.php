@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Mcp\Notification;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

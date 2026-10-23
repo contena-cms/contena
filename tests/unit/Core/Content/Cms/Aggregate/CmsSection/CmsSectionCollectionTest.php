@@ -8,7 +8,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,9 +2,7 @@
 
 namespace Contena\Core\System\Locale\Aggregate\LocaleTranslation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\LocaleEntity;
 
 /**

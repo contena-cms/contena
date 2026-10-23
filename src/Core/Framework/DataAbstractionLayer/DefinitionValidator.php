@@ -30,9 +30,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\String\Inflector\EnglishInflector;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
+use Contena\Core\Framework\Migration\InheritanceUpdaterTrait;
 
 /**
  * @final

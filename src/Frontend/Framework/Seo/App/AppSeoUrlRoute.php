@@ -6,7 +6,6 @@ use Contena\Core\Content\Seo\SeoUrlRoute\EntitySeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteConfig;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 
 /**

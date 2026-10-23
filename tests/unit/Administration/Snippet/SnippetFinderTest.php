@@ -17,7 +17,6 @@ use Psr\Log\NullLogger;
 use Contena\Administration\Administration;
 use Contena\Administration\Snippet\SnippetException;
 use Contena\Administration\Snippet\SnippetFinder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
@@ -36,7 +35,6 @@ use Contena\Core\System\Snippet\SnippetDefinition;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Frontend\Frontend;
-use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
 

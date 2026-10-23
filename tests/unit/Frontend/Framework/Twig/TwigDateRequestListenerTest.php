@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Framework\Twig\TwigDateRequestListener;

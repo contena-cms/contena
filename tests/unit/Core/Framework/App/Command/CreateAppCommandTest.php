@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Command\CreateAppCommand;
 use Contena\Core\Framework\App\Lifecycle\RefreshableAppDryRun;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;

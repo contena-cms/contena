@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 use Contena\Core\System\StateMachine\Api\StateMachineActionController;

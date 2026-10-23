@@ -3,7 +3,6 @@
 namespace Contena\Core\System\NumberRange\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\Log\Package;
 
 class NumberRangeField extends StringField
 {

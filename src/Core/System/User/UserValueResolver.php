@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;

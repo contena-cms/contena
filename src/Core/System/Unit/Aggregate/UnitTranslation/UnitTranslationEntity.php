@@ -2,9 +2,7 @@
 
 namespace Contena\Core\System\Unit\Aggregate\UnitTranslation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore
@@ -12,6 +10,7 @@ use Contena\Core\Framework\Log\Package;
 class UnitTranslationEntity extends TranslationEntity
 {
     use EntityCustomFieldsTrait;
+use Contena\Core\System\Unit\UnitEntity;
 
     protected string $unitId;
 

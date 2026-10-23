@@ -6,7 +6,6 @@ use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class NavigationPage extends Page

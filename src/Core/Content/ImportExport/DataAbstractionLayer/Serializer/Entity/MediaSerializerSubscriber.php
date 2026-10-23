@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Enti
 
 use Contena\Core\Content\Media\MediaEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

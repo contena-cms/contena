@@ -9,7 +9,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CachedEntitySchemaGenerator;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Cache\Adapter\AdapterInterface;

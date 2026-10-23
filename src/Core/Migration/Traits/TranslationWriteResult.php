@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Migration\Traits;
 
-use Contena\Core\Framework\Log\Package;
 
 class TranslationWriteResult
 {

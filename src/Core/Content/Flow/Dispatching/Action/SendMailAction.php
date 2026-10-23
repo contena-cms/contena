@@ -24,9 +24,9 @@ use Contena\Core\Framework\Event\LanguageAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException;
 
 /**
  * @internal

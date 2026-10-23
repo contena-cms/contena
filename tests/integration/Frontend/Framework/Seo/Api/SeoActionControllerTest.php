@@ -4,23 +4,19 @@ namespace Contena\Tests\Integration\Frontend\Framework\Seo\Api;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Seo\Exception\SeoUrlRouteNotFoundException;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Content\Seo\SeoUrlRoute\BlogStoreApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
-use Contena\Frontend\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
+use Contena\Frontend\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
 
 /**
  * @internal

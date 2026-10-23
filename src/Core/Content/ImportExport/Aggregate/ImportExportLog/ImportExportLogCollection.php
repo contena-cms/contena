@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ImportExport\Aggregate\ImportExportLog;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<ImportExportLogEntity>

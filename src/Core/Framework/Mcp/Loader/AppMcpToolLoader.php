@@ -10,7 +10,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 
 /**

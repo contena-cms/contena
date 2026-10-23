@@ -10,10 +10,8 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderCreatedByAdminRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Tests\Unit\Core\System\User\Rule\TestRuleScope;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
 

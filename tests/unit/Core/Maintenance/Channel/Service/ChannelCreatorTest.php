@@ -4,16 +4,15 @@ namespace Contena\Tests\Unit\Core\Maintenance\Channel\Service;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
-use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 
 /**

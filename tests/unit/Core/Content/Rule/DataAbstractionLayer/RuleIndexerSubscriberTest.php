@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Content\Rule\DataAbstractionLayer\RuleIndexerSubscriber;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\MockClock;
 
 /**

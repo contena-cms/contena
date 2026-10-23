@@ -2,9 +2,11 @@
 
 namespace Contena\Core\Content\ContentStream;
 
-use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Content\ContentStream\Exception\EmptyContentStreamException;
+use Contena\Core\Content\ContentStream\Exception\NoFilterException;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
+use Contena\Core\Framework\HttpException;
 
 class ContentStreamException extends HttpException
 {

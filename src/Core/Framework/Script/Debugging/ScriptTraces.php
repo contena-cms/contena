@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Script\Debugging;
 
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\Framework\Script\Execution\Script;

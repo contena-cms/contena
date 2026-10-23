@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataEntry;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
 use Contena\Core\System\Snippet\SnippetPatterns;

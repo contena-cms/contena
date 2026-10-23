@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

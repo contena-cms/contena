@@ -4,7 +4,6 @@ namespace Contena\Core\System\Snippet\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Dispatched after the translations for a locale have been downloaded and installed.

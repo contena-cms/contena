@@ -5,10 +5,8 @@ namespace Contena\Tests\Migration\Core\V6_7;
 use Doctrine\DBAL\ArrayParameterType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Content\MailTemplate\MailTemplateTypes;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Migration\Traits\MailUpdate;
 use Contena\Core\Migration\V6_7\Migration1779798444FixGuestOrderStatusMailTemplates;
-use Contena\Tests\Migration\MailTemplateMigrationTestCase;
 
 /**
  * @internal

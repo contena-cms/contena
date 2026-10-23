@@ -5,8 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Admin\Indexer;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -17,9 +15,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Elasticsearch\Admin\Indexer\UserGroupAdminSearchIndexer;
 
 /**

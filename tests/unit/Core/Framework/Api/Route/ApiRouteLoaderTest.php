@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Route\ApiRouteLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

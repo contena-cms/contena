@@ -7,10 +7,8 @@ use Doctrine\DBAL\Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\MailTemplate\MailTemplateTypes;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_6\Migration1701688920FixDownloadLinkMail;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

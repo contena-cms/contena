@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\RequestOptions;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\ResetInterface;
 

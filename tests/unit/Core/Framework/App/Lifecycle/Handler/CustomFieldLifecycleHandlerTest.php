@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Lifecycle\Handler\CustomFieldLifecycleHandler;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;

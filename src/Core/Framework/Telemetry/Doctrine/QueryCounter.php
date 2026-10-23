@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Doctrine;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Request-scoped holder for the number of SQL statements executed on a connection. A single instance

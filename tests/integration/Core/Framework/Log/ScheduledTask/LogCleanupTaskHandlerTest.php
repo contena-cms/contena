@@ -11,13 +11,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\LogEntryCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Log\ScheduledTask\LogCleanupTask;
 use Contena\Core\Framework\Log\ScheduledTask\LogCleanupTaskHandler;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**

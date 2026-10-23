@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Currency\Event;
 
 use Contena\Core\Framework\Adapter\Cache\StoreApiRouteCacheTagsEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

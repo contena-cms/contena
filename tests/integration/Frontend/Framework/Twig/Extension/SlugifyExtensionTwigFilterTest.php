@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Frontend\Framework\Twig\Extension;
 use Cocur\Slugify\Bridge\Twig\SlugifyExtension;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 

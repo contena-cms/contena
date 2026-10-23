@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Sitemap\Service;
 
 use Contena\Core\Content\Sitemap\Struct\Url;
-use Contena\Core\Framework\Log\Package;
 
 interface SitemapHandleInterface
 {

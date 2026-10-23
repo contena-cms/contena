@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\MessageQueue\Stats;
 
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsResponseEntity;
 use Symfony\Component\Messenger\Envelope;
 

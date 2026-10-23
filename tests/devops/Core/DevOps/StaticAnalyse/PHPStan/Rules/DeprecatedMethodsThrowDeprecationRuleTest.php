@@ -9,7 +9,6 @@ use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedExcept
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedFrameworkMethodPattern;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedMethodsThrowDeprecationRule;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedServiceDecoratorPattern;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**

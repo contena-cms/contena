@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Base64;
 
 /**

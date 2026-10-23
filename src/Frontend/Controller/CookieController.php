@@ -4,7 +4,6 @@ namespace Contena\Frontend\Controller;
 
 use Contena\Core\Content\Cookie\Channel\AbstractCookieRoute;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;

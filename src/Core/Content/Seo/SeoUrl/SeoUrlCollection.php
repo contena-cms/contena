@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo\SeoUrl;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<SeoUrlEntity>

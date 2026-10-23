@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Event\FirstRunWizardFinishedEvent;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Frontend\Theme\ThemeCollection;

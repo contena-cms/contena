@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Page;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Profiling\Profiler;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Profiling\Profiler;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

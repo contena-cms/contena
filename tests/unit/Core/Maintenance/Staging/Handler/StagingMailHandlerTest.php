@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Service\MailSender;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\Maintenance\Staging\Handler\StagingMailHandler;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;

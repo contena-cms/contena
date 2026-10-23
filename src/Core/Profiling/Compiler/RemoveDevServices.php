@@ -4,7 +4,6 @@ namespace Contena\Core\Profiling\Compiler;
 
 use Composer\InstalledVersions;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Controller\ProfilerController;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

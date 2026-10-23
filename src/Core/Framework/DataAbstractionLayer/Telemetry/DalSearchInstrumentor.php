@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Aggrega
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\ElapsedTimer;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfigProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;

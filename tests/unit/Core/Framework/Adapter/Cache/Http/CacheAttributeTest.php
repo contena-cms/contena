@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheAttribute;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-import-type CacheAttributeArray from \Contena\Core\Framework\Adapter\Cache\Http\CacheAttribute

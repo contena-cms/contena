@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\FrontendPluginConfiguration;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractFrontendPluginConfigurationFactory
 {

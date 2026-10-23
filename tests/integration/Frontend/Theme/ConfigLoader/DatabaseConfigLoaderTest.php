@@ -9,8 +9,6 @@ use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Theme\ConfigLoader\DatabaseConfigLoader;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;

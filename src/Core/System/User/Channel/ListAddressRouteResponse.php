@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 
 /**
  * @extends StoreApiResponse<EntitySearchResult<UserAddressCollection>>

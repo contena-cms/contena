@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Theme\Command;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\Snippet\ThemeConfigSnippetGenerator;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

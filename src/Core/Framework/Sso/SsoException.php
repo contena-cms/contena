@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Sso;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -62,10 +61,6 @@ class SsoException extends HttpException
         );
     }
 
-    public static function admin_userNotFound(string $email): SsoUserNotFoundException
-    {
-        return new SsoUserNotFoundException($email);
-    }
 
     /**
      * @param array<int, string> $missingFields

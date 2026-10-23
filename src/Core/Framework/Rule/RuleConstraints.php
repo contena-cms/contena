@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Rule;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfType;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfUuid;
 use Symfony\Component\Validator\Constraint;

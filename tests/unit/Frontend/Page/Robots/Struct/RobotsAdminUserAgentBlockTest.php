@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Page\Robots\Struct;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
 use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;

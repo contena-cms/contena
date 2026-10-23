@@ -6,7 +6,6 @@ use Mcp\Capability\RegistryInterface;
 use Mcp\Schema\Prompt;
 use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\Tool;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
 
 /**

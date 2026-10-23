@@ -39,7 +39,6 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\TwigLoaderConfigComp
 use Contena\Core\Framework\DependencyInjection\FrameworkExtension;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Framework\Increment\IncrementerGatewayCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageHandlerCompilerPass;
 use Contena\Core\Framework\Telemetry\Metrics\MeterProvider;
 use Contena\Core\Framework\Test\DependencyInjection\CompilerPass\ContainerVisibilityCompilerPass;

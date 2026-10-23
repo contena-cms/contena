@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @template TData of array = array<array-key, mixed>

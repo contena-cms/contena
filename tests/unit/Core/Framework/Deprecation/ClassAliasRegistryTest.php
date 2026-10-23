@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\ClassAliasMap;
 use Contena\Core\Framework\Deprecation\ClassAliasRegistry;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Process\Process;
 
 /**

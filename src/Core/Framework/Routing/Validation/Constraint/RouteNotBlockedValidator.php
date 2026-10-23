@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Validation\Constraint;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
 use Symfony\Component\Validator\Constraint;

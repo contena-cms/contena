@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Plugin\Subscriber;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

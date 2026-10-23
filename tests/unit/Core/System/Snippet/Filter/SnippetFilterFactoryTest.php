@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\Snippet\Filter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Filter\AddedFilter;
 use Contena\Core\System\Snippet\Filter\AuthorFilter;
 use Contena\Core\System\Snippet\Filter\EditedFilter;

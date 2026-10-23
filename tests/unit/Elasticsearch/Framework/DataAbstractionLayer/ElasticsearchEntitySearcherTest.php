@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
 use Contena\Elasticsearch\ElasticsearchException;

@@ -7,7 +7,6 @@ use OpenSearch\Client;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchAdminIndexingCommand;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;

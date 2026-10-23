@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Core\Event;
 
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The event is dispatched, when location for a media should be generated afterward and can be used

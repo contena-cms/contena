@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\CartException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Exception\ScriptExecutionFailedException;
 use Symfony\Component\HttpFoundation\Response;
 

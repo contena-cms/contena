@@ -4,7 +4,6 @@ namespace Contena\Core\System\Country\Aggregate\CountryState;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<CountryStateEntity>

@@ -7,7 +7,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CreatedByFieldSerializer;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterDefaultValueChange;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 
 class CreatedByField extends FkField

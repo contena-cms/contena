@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Review\MatrixElement;
 use Contena\Core\Content\Blog\Channel\Review\RatingMatrix;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\Bucket;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

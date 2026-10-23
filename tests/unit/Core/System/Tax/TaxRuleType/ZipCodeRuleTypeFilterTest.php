@@ -5,12 +5,11 @@ namespace Contena\Tests\Unit\Core\System\Tax\TaxRuleType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleEntity;
 use Contena\Core\System\Tax\Aggregate\TaxRuleType\TaxRuleTypeEntity;
 use Contena\Core\System\Tax\TaxRuleType\ZipCodeRuleTypeFilter;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 
 /**
  * @internal

@@ -14,12 +14,11 @@ use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Profiling\Subscriber\CartDataCollectorSubscriber;
-use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Currency\CurrencyEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

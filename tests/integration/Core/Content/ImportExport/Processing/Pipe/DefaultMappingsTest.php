@@ -3,6 +3,8 @@
 namespace Contena\Tests\Integration\Core\Content\ImportExport\Processing\Pipe;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingDefinition;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
 use Contena\Core\Content\ImportExport\Processing\Mapping\MappingCollection;
@@ -11,13 +13,9 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
 use Contena\Core\Content\Newsletter\Channel\NewsletterSubscribeRoute;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

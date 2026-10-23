@@ -9,7 +9,6 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceCo
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

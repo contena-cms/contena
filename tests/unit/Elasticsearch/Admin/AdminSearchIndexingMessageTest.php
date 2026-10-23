@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Elasticsearch\Admin;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Admin\AdminSearchIndexingMessage;
 
 /**

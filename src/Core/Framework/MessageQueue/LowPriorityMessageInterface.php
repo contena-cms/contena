@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue;
 
-use Contena\Core\Framework\Log\Package;
 
 interface LowPriorityMessageInterface
 {

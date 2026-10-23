@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Increment;
 
 use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Seo\Channel\SeoResolverData;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\Channel\Aggregate\ChannelAnalytics;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsEntity;
 use Contena\Core\System\Channel\ChannelEntity;
 

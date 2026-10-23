@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Script\Execution;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\Framework\Script\Execution\InterfaceHook;
 use Contena\Core\Framework\Script\Execution\ScriptEnvironmentFactory;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Category\Tree;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

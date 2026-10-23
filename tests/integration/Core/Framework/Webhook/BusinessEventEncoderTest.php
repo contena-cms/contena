@@ -7,8 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Event\BusinessEventRegistry;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\Webhook\_fixtures\BusinessEvents\ArrayBusinessEvent;
 use Contena\Core\Framework\Test\Webhook\_fixtures\BusinessEvents\CollectionBusinessEvent;
 use Contena\Core\Framework\Test\Webhook\_fixtures\BusinessEvents\EntityBusinessEvent;

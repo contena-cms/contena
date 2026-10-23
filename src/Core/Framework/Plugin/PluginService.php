@@ -17,6 +17,8 @@ use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
 use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\System\Language\LanguageCollection;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\Plugin\Exception\ExceptionCollection;
+use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;
 
 /**
  * @internal

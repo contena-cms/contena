@@ -4,14 +4,11 @@ namespace Contena\Tests\Unit\Frontend\Theme;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\PluginWithAdditionalBundles\PluginWithAdditionalBundles;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeAndPlugin\TestTheme\TestTheme;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**

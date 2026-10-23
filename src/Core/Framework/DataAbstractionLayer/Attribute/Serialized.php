@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Attribute;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldSerializerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\StringFieldSerializer;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Use `#[Serialized]` to configure a custom field serializer. Note: for the default serializer, you should use the proper fields instead.

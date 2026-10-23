@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\Context\Cleanup;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 
 class CleanupChannelContextTask extends ScheduledTask

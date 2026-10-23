@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig\Extension;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\InAppPurchase;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFunction;

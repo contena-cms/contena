@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
-use Contena\Core\Framework\Log\Package;
 
 class ChildrenAssociationField extends OneToManyAssociationField
 {

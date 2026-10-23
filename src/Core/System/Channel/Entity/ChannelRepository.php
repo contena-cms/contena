@@ -18,12 +18,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\DalSearchInstrumentor;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Profiling\Profiler;
-use Contena\Core\System\Channel\Event\ChannelProcessCriteriaEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\Event\ChannelProcessCriteriaEvent;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**

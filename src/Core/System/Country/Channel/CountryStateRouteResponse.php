@@ -3,9 +3,8 @@
 namespace Contena\Core\System\Country\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 
 /**
  * @extends StoreApiResponse<EntitySearchResult<CountryStateCollection>>

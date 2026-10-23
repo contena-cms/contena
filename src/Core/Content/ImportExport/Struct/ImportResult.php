@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ImportExport\Struct;
 
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

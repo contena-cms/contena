@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Thumbnail;
 
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Upload\MediaUploadService;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

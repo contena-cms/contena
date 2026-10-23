@@ -5,7 +5,6 @@ namespace Contena\Core\Test\Stub\Doctrine;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Types\Type;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * A real Connection that fails on delete(), to exercise error-handling paths without a partial mock.

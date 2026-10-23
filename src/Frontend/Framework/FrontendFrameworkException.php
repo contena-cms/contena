@@ -5,8 +5,9 @@ namespace Contena\Frontend\Framework;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Frontend\Framework\Media\Exception\MediaValidatorMissingException;
+use Contena\Frontend\Framework\Routing\Exception\ChannelMappingException;
 
 /**
  * @codeCoverageIgnore

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\Api\Acl\fixtures;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

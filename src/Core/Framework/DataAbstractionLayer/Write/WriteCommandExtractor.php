@@ -31,7 +31,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\DataStack;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\FieldException\WriteFieldException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Installer\Configuration;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Installer\Configuration\AdminConfigurationService;
 use Contena\Core\Test\Stub\Doctrine\FakeQueryBuilder;

@@ -6,10 +6,10 @@ use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class PagingListingProcessor extends AbstractListingProcessor
 {

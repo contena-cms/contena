@@ -3,7 +3,6 @@
 namespace Contena\Core\Test\PHPUnit\Extension\FeatureFlag;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

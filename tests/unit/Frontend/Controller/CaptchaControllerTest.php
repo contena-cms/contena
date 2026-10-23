@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Controller;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Controller\CaptchaController;
 use Contena\Frontend\Framework\Captcha\AbstractCaptcha;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha;

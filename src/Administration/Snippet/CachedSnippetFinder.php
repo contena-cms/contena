@@ -2,7 +2,6 @@
 
 namespace Contena\Administration\Snippet;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Files\FilesystemAdministrationSnippets;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Metrics\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\TelemetryException;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -4,14 +4,13 @@ namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\EntityCompilerPass;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 

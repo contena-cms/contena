@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\App\Event\CustomAppEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class BusinessEventCollector

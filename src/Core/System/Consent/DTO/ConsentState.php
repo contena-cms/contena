@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Consent\DTO;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentDefinition;
 use Contena\Core\System\Consent\ConsentStatus;
 use Symfony\Component\Clock\Clock;

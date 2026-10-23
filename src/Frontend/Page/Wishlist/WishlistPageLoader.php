@@ -2,20 +2,20 @@
 
 namespace Contena\Frontend\Page\Wishlist;
 
-use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Channel\AbstractLoadWishlistRoute;
-use Contena\Core\System\User\Channel\LoadWishlistRouteResponse;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
+use Contena\Core\System\User\Channel\AbstractLoadWishlistRoute;
+use Contena\Core\System\User\Channel\LoadWishlistRouteResponse;
+use Contena\Core\System\User\UserEntity;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
 
 /**
  * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.

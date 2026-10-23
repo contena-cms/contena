@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Cms\DataAbstractionLayer\Field;
 
 use Contena\Core\Content\Cms\DataAbstractionLayer\FieldSerializer\SlotConfigFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

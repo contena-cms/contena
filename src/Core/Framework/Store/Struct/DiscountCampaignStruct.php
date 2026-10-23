@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 class DiscountCampaignStruct extends StoreStruct
 {

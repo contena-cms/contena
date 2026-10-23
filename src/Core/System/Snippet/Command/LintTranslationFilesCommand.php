@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\Util\CountryAgnosticFileLinter;
 use Contena\Core\System\Snippet\Struct\LintedTranslationFileOptions;
 use Contena\Core\System\Snippet\Struct\LintedTranslationFileStruct;

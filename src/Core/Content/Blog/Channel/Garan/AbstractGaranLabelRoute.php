@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Garan;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 abstract class AbstractGaranLabelRoute

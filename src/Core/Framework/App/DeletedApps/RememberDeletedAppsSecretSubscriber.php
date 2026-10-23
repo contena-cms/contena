@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\ShopId\ShopIdChangedEvent;
 use Contena\Core\Framework\App\ShopId\ShopIdDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

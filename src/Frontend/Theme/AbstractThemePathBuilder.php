@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The AbstractThemePathBuilder handles access to the theme file paths

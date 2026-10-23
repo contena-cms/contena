@@ -4,14 +4,12 @@ namespace Contena\Core\Framework\App\Manifest;
 
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\App\Hmac\QuerySigner;
+use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
@@ -22,15 +20,6 @@ use Contena\Core\Framework\Log\Package;
  */
 class ModuleLoader
 {
-    /**
-     * @param EntityRepository<AppCollection> $appRepository
-     */
-    public function __construct(
-        private readonly EntityRepository $appRepository,
-        private readonly ShopIdProvider $shopIdProvider,
-        private readonly QuerySigner $querySigner
-    ) {
-    }
 
     /**
      * @return list<AppModule>

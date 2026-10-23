@@ -2,14 +2,13 @@
 
 namespace Contena\Frontend\Framework\Seo\SeoUrlRoute;
 
+use Contena\Core\Content\Blog\BlogEvents;
+use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Category\CategoryEvents;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
 use Contena\Core\Content\LandingPage\LandingPageEvents;
-use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
-use Contena\Core\Content\Blog\BlogEvents;
 use Contena\Core\Content\Seo\SeoUrlUpdater;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

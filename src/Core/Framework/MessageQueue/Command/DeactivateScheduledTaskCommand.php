@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\Command;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Symfony\Component\Console\Attribute\AsCommand;

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\StateMachine;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;

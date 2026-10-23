@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreStoreApiSchemaMigrationScopeProvider;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

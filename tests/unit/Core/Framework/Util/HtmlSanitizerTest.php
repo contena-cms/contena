@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Test\Stub\Framework\Util\NullRawDefinitionHtmlPurifierConfig;
 use Contena\Core\Test\Stub\Framework\Util\StaticHtmlPurifierConfigProvider;

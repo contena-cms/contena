@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook\Authorization\Policy;
 
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Hookable;
 use Contena\Core\Framework\Webhook\Webhook;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\File\Api;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\File;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;

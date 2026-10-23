@@ -18,7 +18,6 @@ use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

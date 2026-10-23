@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractToken
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\TokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tag\TagEntity;

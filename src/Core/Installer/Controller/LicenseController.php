@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\License\LicenseFetcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

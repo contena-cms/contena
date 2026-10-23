@@ -11,7 +11,6 @@ use Contena\Core\Framework\Increment\IncrementerGatewayCompilerPass;
 use Contena\Core\Framework\Increment\IncrementException;
 use Contena\Core\Framework\Increment\MySQLIncrementer;
 use Contena\Core\Framework\Increment\RedisIncrementer;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

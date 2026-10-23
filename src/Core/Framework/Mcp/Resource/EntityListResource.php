@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\Resource;
 
 use Mcp\Capability\Attribute\McpResource;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 
 /**

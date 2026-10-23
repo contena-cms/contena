@@ -7,7 +7,6 @@ use GuzzleHttp\Psr7\Uri;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\RequestInterface;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreClient;
 
 /**

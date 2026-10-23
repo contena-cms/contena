@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Feature\TranslatedString;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptConfig;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptFeatureDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 
 /**

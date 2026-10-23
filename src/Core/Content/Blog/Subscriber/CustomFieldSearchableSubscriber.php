@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Blog\Subscriber;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldDefinition;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;

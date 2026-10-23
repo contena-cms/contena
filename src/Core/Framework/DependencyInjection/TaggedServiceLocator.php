@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ServiceProviderInterface;
 
 /**

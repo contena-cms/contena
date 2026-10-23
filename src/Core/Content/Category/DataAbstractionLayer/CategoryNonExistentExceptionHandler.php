@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Category\DataAbstractionLayer;
 
 use Contena\Core\Content\Category\CategoryException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 class CategoryNonExistentExceptionHandler implements ExceptionHandlerInterface
 {

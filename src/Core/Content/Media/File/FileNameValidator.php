@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\File;
 use League\Flysystem\CorruptedPathDetected;
 use League\Flysystem\WhitespacePathNormalizer;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 
 class FileNameValidator
 {

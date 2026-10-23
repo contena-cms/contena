@@ -11,7 +11,6 @@ use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\Log\Package;
 
 class CategoryNavigationCmsElementResolver extends AbstractCmsElementResolver
 {

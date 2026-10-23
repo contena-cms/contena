@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 
 use Doctrine\DBAL\Query\QueryBuilder;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractCheapestPriceQuantitySelector
 {

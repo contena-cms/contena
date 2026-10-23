@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Snippet\DataTransfer\Metadata;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
 /**
  * @internal

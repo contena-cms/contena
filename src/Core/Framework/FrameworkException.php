@@ -3,8 +3,8 @@
 namespace Contena\Core\Framework;
 
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\AssociationNotFoundException;
 
 class FrameworkException extends HttpException
 {

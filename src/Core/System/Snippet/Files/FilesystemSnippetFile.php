@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Files;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * A frontend snippet file that lives in the private filesystem, see {@see FilesystemFrontendSnippets}.

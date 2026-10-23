@@ -10,7 +10,6 @@ use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Schema\Column as DbalColumn;
 use Doctrine\DBAL\Schema\Index as DbalIndex;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\UtilException;
 
 /**

@@ -3,9 +3,8 @@
 namespace Contena\Core\Content\ImportExport\Service;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**

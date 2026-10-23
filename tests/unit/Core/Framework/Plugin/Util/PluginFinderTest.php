@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Plugin\Util;
 use Composer\IO\NullIO;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Composer\PackageProvider;
 use Contena\Core\Framework\Plugin\Exception\ExceptionCollection;
 use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;

@@ -2,9 +2,10 @@
 
 namespace Contena\Core\Framework\App\Validation;
 
+use Contena\Core\Framework\App\Exception\AppValidationException;
 use Contena\Core\Framework\App\Manifest\Manifest;
+use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

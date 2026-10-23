@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\ShopId;
 
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

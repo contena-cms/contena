@@ -3,13 +3,12 @@
 namespace Contena\Core\Framework\Rule;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\ArrayComparator;
 use Contena\Core\Framework\Util\FloatComparator;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\MultiEntitySelectField;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\MultiSelectField;
-use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\Constraints\AtLeastOneOf;
 use Symfony\Component\Validator\Constraints\Choice;
@@ -37,17 +36,6 @@ class CustomFieldRule
             'renderedFieldValue' => self::getRenderedFieldValueConstraints($renderedField),
             'operator' => [
                 new NotBlank(),
-                new Choice(
-                    choices: [
-                        Rule::OPERATOR_BETWEEN,
-                        Rule::OPERATOR_NEQ,
-                        Rule::OPERATOR_GTE,
-                        Rule::OPERATOR_LTE,
-                        Rule::OPERATOR_EQ,
-                        Rule::OPERATOR_GT,
-                        Rule::OPERATOR_LT,
-                    ]
-                ),
             ],
         ];
     }

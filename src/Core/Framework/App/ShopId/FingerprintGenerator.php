@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\ShopId;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

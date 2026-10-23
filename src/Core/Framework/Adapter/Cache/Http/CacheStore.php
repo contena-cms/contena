@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheHitEvent;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheStoreEvent;
 use Contena\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessage;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;

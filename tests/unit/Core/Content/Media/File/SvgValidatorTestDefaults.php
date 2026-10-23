@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Core\Content\Media\File;
 
 use Contena\Core\Content\Media\File\SvgContentValidator;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

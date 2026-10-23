@@ -14,7 +14,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\ExpressionTypeResolverExtension;
 use PHPStan\Type\Type;
 use Contena\Core\Framework\Deprecation\BCChange\PropertyTypeWidening;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Applies the announced type widening to property reads.

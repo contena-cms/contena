@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\Aggregate;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<ThemeTranslationEntity>

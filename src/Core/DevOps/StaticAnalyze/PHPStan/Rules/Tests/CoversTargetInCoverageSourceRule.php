@@ -13,7 +13,6 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\CoversTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * PHPUnit 12 validates every CoversClass/CoversTrait target against the coverage

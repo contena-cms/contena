@@ -31,21 +31,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntity;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityCollection;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityInvalidEnum;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityUnionEnum;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityWithHydrator;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\DummyHydrator;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\StringEnum;
 
 /**
  * @internal

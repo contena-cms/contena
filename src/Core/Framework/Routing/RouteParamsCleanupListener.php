@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Routing;
 
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 

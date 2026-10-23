@@ -5,7 +5,6 @@ namespace Contena\Administration\Controller;
 use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Tag\Service\FilterTagIdsService;
 use Contena\Core\System\Tag\TagDefinition;

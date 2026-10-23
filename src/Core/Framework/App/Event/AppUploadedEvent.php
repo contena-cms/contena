@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

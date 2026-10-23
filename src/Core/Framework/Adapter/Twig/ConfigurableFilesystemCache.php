@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Twig\Cache\FilesystemCache;
 

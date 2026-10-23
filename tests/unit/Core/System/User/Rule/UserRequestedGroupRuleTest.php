@@ -7,17 +7,16 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Rule\UserRequestedGroupRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\Rule\UserRequestedGroupRule;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

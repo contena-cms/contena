@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Twig\TokenParser;
 
 use Contena\Core\Framework\Adapter\Twig\Node\SwInclude;
-use Contena\Core\Framework\Log\Package;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\ArrayExpression;
 use Twig\Node\Expression\ConstantExpression;

@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Flow\Dispatching;
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal not intended for decoration or replacement

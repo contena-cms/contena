@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Event\BusinessEventDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\WebhookException;
 use Symfony\Contracts\Service\ResetInterface;
 

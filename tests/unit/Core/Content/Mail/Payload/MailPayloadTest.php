@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Mail\Payload;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Payload\MailPayload;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

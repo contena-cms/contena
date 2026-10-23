@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\ScriptApiRoute;
 use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
 use Contena\Core\Framework\Script\Execution\Script;

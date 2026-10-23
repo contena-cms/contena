@@ -15,7 +15,6 @@ use OpenSearch\HttpClient\GuzzleHttpClientFactory;
 use OpenSearch\TransportFactory;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Profiler\ClientProfiler;
 

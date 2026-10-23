@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\OAuth\AuthCodeRepository;
 use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoService;
 use Symfony\Component\Routing\RouterInterface;

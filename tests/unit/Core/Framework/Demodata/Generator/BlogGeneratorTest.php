@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Demodata\DemodataContext;
 use Contena\Core\Framework\Demodata\Faker\Commerce;
 use Contena\Core\Framework\Demodata\Generator\BlogGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\Tax\TaxEntity;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Requirements\RequirementsValidatorInterface;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
 use Symfony\Component\HttpFoundation\Request;

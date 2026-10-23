@@ -9,7 +9,6 @@ use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\Thumbnail\Processor\GdImageThumbnailProcessor;
 use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

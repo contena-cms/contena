@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Rule;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\FlowRule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;
@@ -60,17 +59,4 @@ class OrderTagRule extends FlowRule
             ->entitySelectField('identifiers', TagDefinition::ENTITY_NAME, true);
     }
 
-    /**
-     * @return array<string>
-     */
-    private function extractTagIds(OrderEntity $order): array
-    {
-        $tags = $order->getTags();
-
-        if (!$tags) {
-            return [];
-        }
-
-        return $tags->getIds();
-    }
 }

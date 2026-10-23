@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\Channel\Mcp\Resource;
 use Mcp\Exception\ResourceNotFoundException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;

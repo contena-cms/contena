@@ -2,30 +2,10 @@
 
 namespace Contena\Core\System\Tax\TaxRuleType;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
 
 class EntireCountryRuleTypeFilter extends AbstractTaxRuleTypeFilter
 {
     final public const TECHNICAL_NAME = 'entire_country';
 
-    public function match(TaxRuleEntity $taxRuleEntity, ?UserEntity $user, ShippingLocation $shippingLocation): bool
-    {
-        if ($taxRuleEntity->getType()->getTechnicalName() !== self::TECHNICAL_NAME
-            || !$this->metPreconditions($taxRuleEntity, $shippingLocation)
-        ) {
-            return false;
-        }
 
-        if ($taxRuleEntity->getActiveFrom() !== null) {
-            return $this->isTaxActive($taxRuleEntity);
-        }
-
-        return true;
-    }
-
-    private function metPreconditions(TaxRuleEntity $taxRuleEntity, ShippingLocation $shippingLocation): bool
-    {
-        return $shippingLocation->getCountry()->getId() === $taxRuleEntity->getCountryId();
-    }
 }

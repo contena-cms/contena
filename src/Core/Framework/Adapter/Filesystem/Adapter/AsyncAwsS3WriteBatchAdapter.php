@@ -8,7 +8,6 @@ use League\Flysystem\AsyncAwsS3\AsyncAwsS3Adapter;
 use League\Flysystem\AsyncAwsS3\PortableVisibilityConverter;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInput;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\WriteBatchInterface;
-use Contena\Core\Framework\Log\Package;
 
 class AsyncAwsS3WriteBatchAdapter extends AsyncAwsS3Adapter implements WriteBatchInterface
 {

@@ -3,7 +3,6 @@
 namespace Contena\Core\Installer\License;
 
 use GuzzleHttp\Client;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Subscriber\InstallerLocaleListener;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Twig\Node;
 
-use Contena\Core\Framework\Log\Package;
 use Twig\Compiler;
 use Twig\Node\Expression\AbstractExpression;
 use Twig\Node\Expression\MacroReferenceExpression;

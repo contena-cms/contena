@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\IOStreamHelper;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Service\ResetInterface;

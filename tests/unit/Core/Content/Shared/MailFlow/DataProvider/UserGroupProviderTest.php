@@ -3,9 +3,8 @@
 namespace Contena\Tests\Unit\Core\Content\Shared\MailFlow\DataProvider;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\UserGroupProvider;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

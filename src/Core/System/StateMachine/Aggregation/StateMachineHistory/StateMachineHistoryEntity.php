@@ -3,11 +3,9 @@
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineHistory;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 use Contena\Core\System\StateMachine\StateMachineEntity;
-use Contena\Core\System\AdminUser\AdminUserEntity;
 
 /**
  * @codeCoverageIgnore
@@ -15,6 +13,7 @@ use Contena\Core\System\AdminUser\AdminUserEntity;
 class StateMachineHistoryEntity extends Entity
 {
     use EntityIdTrait;
+use Contena\Core\System\Integration\IntegrationEntity;
 
     protected string $stateMachineId;
 

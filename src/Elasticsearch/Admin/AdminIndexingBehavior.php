@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Admin;
 
-use Contena\Core\Framework\Log\Package;
 
 class AdminIndexingBehavior
 {

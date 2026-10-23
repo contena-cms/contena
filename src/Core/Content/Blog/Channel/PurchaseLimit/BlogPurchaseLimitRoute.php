@@ -2,33 +2,19 @@
 
 namespace Contena\Core\Content\Blog\Channel\PurchaseLimit;
 
-use Contena\Core\Content\Blog\Extension\BlogPurchaseLimitRouteExtension;
 use Contena\Core\Content\Blog\BlogException;
-use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
+use Contena\Core\Content\Blog\Extension\BlogPurchaseLimitRouteExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogPurchaseLimitRoute extends AbstractBlogPurchaseLimitRoute
 {
-    /**
-     * @internal
-     *
-     * @param ChannelRepository<ChannelBlogCollection> $blogRepository
-     */
-    public function __construct(
-        private readonly ChannelRepository $blogRepository,
-        private readonly AbstractBlogMaxPurchaseCalculator $maxPurchaseCalculator,
-        private readonly ExtensionDispatcher $extensions,
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogPurchaseLimitRoute
     {

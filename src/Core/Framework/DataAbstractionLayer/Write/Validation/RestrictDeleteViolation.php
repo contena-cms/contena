@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\Validation;
 
-use Contena\Core\Framework\Log\Package;
 
 class RestrictDeleteViolation
 {

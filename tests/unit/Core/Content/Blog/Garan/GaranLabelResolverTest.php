@@ -6,11 +6,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
+use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
 use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
 use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
-use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
 
 /**

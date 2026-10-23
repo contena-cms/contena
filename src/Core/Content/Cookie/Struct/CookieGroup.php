@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cookie\Struct;
 
 use Contena\Core\Content\Cookie\CookieException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write\Command;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

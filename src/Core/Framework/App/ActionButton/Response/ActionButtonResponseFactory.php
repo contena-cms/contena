@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\ActionButton\Response;
 use Contena\Core\Framework\App\ActionButton\AppAction;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

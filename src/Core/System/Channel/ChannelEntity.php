@@ -2,23 +2,22 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
-use Contena\Core\System\User\UserCollection;
+use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsEntity;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
+use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileCollection;
+use Contena\Core\System\Channel\Aggregate\ChannelTranslation\ChannelTranslationCollection;
+use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeEntity;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Currency\CurrencyCollection;
@@ -26,13 +25,11 @@ use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelAnalytics\ChannelAnalyticsEntity;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
-use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelTranslation\ChannelTranslationCollection;
-use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeEntity;
 use Contena\Core\System\SystemConfig\SystemConfigCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
+use Contena\Core\System\User\UserCollection;
 
 class ChannelEntity extends Entity
 {
@@ -125,21 +122,16 @@ class ChannelEntity extends Entity
 
     protected ?LanguageEntity $language = null;
 
-    protected ?PaymentMethodEntity $paymentMethod = null;
 
-    protected ?ShippingMethodEntity $shippingMethod = null;
 
     protected ?CountryEntity $country = null;
 
-    protected ?OrderCollection $orders = null;
 
     protected ?UserCollection $users = null;
 
     protected ?CountryCollection $countries = null;
 
-    protected ?PaymentMethodCollection $paymentMethods = null;
 
-    protected ?ShippingMethodCollection $shippingMethods = null;
 
     protected ?ChannelTranslationCollection $translations = null;
 
@@ -165,13 +157,9 @@ class ChannelEntity extends Entity
 
     protected ?UserGroupEntity $userGroup = null;
 
-    protected ?NewsletterRecipientCollection $newsletterRecipients = null;
 
-    protected ?PromotionChannelCollection $promotionChannels = null;
 
-    protected ?DocumentBaseConfigDefinition $documentBaseConfigChannels = null;
 
-    protected ?BlogReviewCollection $blogReviews = null;
 
     protected ?SeoUrlCollection $seoUrls = null;
 
@@ -184,7 +172,6 @@ class ChannelEntity extends Entity
      */
     protected ?array $paymentMethodIds = null;
 
-    protected ?BlogExportCollection $blogExports = null;
 
     protected ?ChannelFileCollection $channelFiles = null;
 
@@ -431,25 +418,9 @@ class ChannelEntity extends Entity
         $this->language = $language;
     }
 
-    public function getPaymentMethod(): ?PaymentMethodEntity
-    {
-        return $this->paymentMethod;
-    }
 
-    public function setPaymentMethod(PaymentMethodEntity $paymentMethod): void
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
-    public function getShippingMethod(): ?ShippingMethodEntity
-    {
-        return $this->shippingMethod;
-    }
 
-    public function setShippingMethod(ShippingMethodEntity $shippingMethod): void
-    {
-        $this->shippingMethod = $shippingMethod;
-    }
 
     public function getCountry(): ?CountryEntity
     {
@@ -461,15 +432,7 @@ class ChannelEntity extends Entity
         $this->country = $country;
     }
 
-    public function getOrders(): ?OrderCollection
-    {
-        return $this->orders;
-    }
 
-    public function setOrders(OrderCollection $orders): void
-    {
-        $this->orders = $orders;
-    }
 
     public function getUsers(): ?UserCollection
     {
@@ -521,25 +484,9 @@ class ChannelEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getPaymentMethods(): ?PaymentMethodCollection
-    {
-        return $this->paymentMethods;
-    }
 
-    public function setPaymentMethods(PaymentMethodCollection $paymentMethods): void
-    {
-        $this->paymentMethods = $paymentMethods;
-    }
 
-    public function getShippingMethods(): ?ShippingMethodCollection
-    {
-        return $this->shippingMethods;
-    }
 
-    public function setShippingMethods(ShippingMethodCollection $shippingMethods): void
-    {
-        $this->shippingMethods = $shippingMethods;
-    }
 
     public function getDomains(): ?ChannelDomainCollection
     {
@@ -697,25 +644,9 @@ class ChannelEntity extends Entity
         $this->userGroup = $userGroup;
     }
 
-    public function getNewsletterRecipients(): ?NewsletterRecipientCollection
-    {
-        return $this->newsletterRecipients;
-    }
 
-    public function setNewsletterRecipients(NewsletterRecipientCollection $newsletterRecipients): void
-    {
-        $this->newsletterRecipients = $newsletterRecipients;
-    }
 
-    public function getPromotionChannels(): ?PromotionChannelCollection
-    {
-        return $this->promotionChannels;
-    }
 
-    public function setPromotionChannels(PromotionChannelCollection $promotionChannels): void
-    {
-        $this->promotionChannels = $promotionChannels;
-    }
 
     public function getNumberRangeChannels(): ?NumberRangeChannelCollection
     {
@@ -767,25 +698,9 @@ class ChannelEntity extends Entity
         $this->serviceCategory = $serviceCategory;
     }
 
-    public function getDocumentBaseConfigChannels(): ?DocumentBaseConfigDefinition
-    {
-        return $this->documentBaseConfigChannels;
-    }
 
-    public function setDocumentBaseConfigChannels(DocumentBaseConfigDefinition $documentBaseConfigChannels): void
-    {
-        $this->documentBaseConfigChannels = $documentBaseConfigChannels;
-    }
 
-    public function getBlogReviews(): ?BlogReviewCollection
-    {
-        return $this->blogReviews;
-    }
 
-    public function setBlogReviews(BlogReviewCollection $blogReviews): void
-    {
-        $this->blogReviews = $blogReviews;
-    }
 
     public function getSeoUrls(): ?SeoUrlCollection
     {
@@ -833,15 +748,7 @@ class ChannelEntity extends Entity
         $this->paymentMethodIds = $paymentMethodIds;
     }
 
-    public function getBlogExports(): ?BlogExportCollection
-    {
-        return $this->blogExports;
-    }
 
-    public function setBlogExports(BlogExportCollection $blogExports): void
-    {
-        $this->blogExports = $blogExports;
-    }
 
     public function getChannelFiles(): ?ChannelFileCollection
     {
@@ -1003,15 +910,7 @@ class ChannelEntity extends Entity
         $this->serviceCategoryVersionId = $serviceCategoryVersionId;
     }
 
-    public function getMeasurementUnits(): MeasurementUnits
-    {
-        return $this->measurementUnits;
-    }
 
-    public function setMeasurementUnits(MeasurementUnits $measurementUnits): void
-    {
-        $this->measurementUnits = $measurementUnits;
-    }
 
     public function getBusinessTimeZone(): ?string
     {

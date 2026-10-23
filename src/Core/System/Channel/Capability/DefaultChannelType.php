@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Capability;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Misses the types extensions register; consumers go through `ChannelTypeCapabilityRegistry`.

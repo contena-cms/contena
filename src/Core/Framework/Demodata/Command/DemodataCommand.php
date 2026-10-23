@@ -4,25 +4,24 @@ namespace Contena\Core\Framework\Demodata\Command;
 
 use Bezhanov\Faker\Provider\Commerce;
 use Faker\Factory;
-use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Content\Flow\FlowDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Content\MailTemplate\MailTemplateDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Demodata\DemodataRequest;
 use Contena\Core\Framework\Demodata\DemodataService;
 use Contena\Core\Framework\Demodata\Event\DemodataRequestCreatedEvent;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
-use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
-use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainDefinition;
+use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
+use Contena\Core\System\Tag\TagDefinition;
+use Contena\Core\System\User\UserDefinition;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -101,12 +100,8 @@ class DemodataCommand extends Command
         $request->add(UserDefinition::class, $this->getCount($input, 'users'));
         $request->add(PropertyGroupDefinition::class, $this->getCount($input, 'properties'));
         $request->add(CategoryDefinition::class, $this->getCount($input, 'categories'));
-        $request->add(BlogManufacturerDefinition::class, $this->getCount($input, 'manufacturers'));
         $request->add(BlogDefinition::class, $this->getCount($input, 'blogs'));
         $request->add(ContentStreamDefinition::class, $this->getCount($input, 'blog-streams'));
-        $request->add(PromotionDefinition::class, $this->getCount($input, 'promotions'));
-        $request->add(OrderDefinition::class, $this->getCount($input, 'orders'));
-        $request->add(BlogReviewDefinition::class, $this->getCount($input, 'reviews'));
         $request->add(AdminUserDefinition::class, $this->getCount($input, 'users'));
         $request->add(FlowDefinition::class, $this->getCount($input, 'flows'));
 
@@ -119,7 +114,6 @@ class DemodataCommand extends Command
         $request->add(MailTemplateDefinition::class, $this->getCount($input, 'mail-template'));
         $request->add(MailHeaderFooterDefinition::class, $this->getCount($input, 'mail-header-footer'));
         $request->add(ChannelDomainDefinition::class, $this->getCount($input, 'sales-channel-domain'));
-        $request->add(NewsletterRecipientDefinition::class, $this->getCount($input, 'newsletter-recipients'));
 
         $this->eventDispatcher->dispatch(new DemodataRequestCreatedEvent($request, $context, $input));
 

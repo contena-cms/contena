@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 abstract class XmlReader

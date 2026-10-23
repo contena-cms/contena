@@ -2,20 +2,17 @@
 
 namespace Contena\Core\System\User;
 
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeWidening;
+use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeWidening;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Channel\ChannelEntity;
-use Contena\Core\System\Tag\TagCollection;
-use Contena\Core\System\AdminUser\AdminUserEntity;
 
 class UserEntity extends Entity implements \Stringable
 {
@@ -116,9 +113,7 @@ class UserEntity extends Entity implements \Stringable
 
     protected ?LanguageEntity $language = null;
 
-    protected ?PaymentMethodEntity $lastPaymentMethod = null;
 
-    protected ?SalutationEntity $salutation = null;
 
     protected ?UserAddressEntity $defaultBillingAddress = null;
 
@@ -130,7 +125,6 @@ class UserEntity extends Entity implements \Stringable
 
     protected ?UserAddressCollection $addresses = null;
 
-    protected ?OrderUserCollection $orderUsers = null;
 
     protected int $autoIncrement;
 
@@ -141,11 +135,9 @@ class UserEntity extends Entity implements \Stringable
      */
     protected ?array $tagIds = null;
 
-    protected ?PromotionCollection $promotions = null;
 
     protected ?UserRecoveryEntity $recoveryUser = null;
 
-    protected ?BlogReviewCollection $blogReviews = null;
 
     protected ?string $remoteAddress = null;
 
@@ -559,25 +551,9 @@ class UserEntity extends Entity implements \Stringable
         $this->language = $language;
     }
 
-    public function getLastPaymentMethod(): ?PaymentMethodEntity
-    {
-        return $this->lastPaymentMethod;
-    }
 
-    public function setLastPaymentMethod(PaymentMethodEntity $lastPaymentMethod): void
-    {
-        $this->lastPaymentMethod = $lastPaymentMethod;
-    }
 
-    public function getSalutation(): ?SalutationEntity
-    {
-        return $this->salutation;
-    }
 
-    public function setSalutation(SalutationEntity $salutation): void
-    {
-        $this->salutation = $salutation;
-    }
 
     public function getDefaultBillingAddress(): ?UserAddressEntity
     {
@@ -631,15 +607,7 @@ class UserEntity extends Entity implements \Stringable
         $this->addresses = $addresses;
     }
 
-    public function getOrderUsers(): ?OrderUserCollection
-    {
-        return $this->orderUsers;
-    }
 
-    public function setOrderUsers(OrderUserCollection $orderUsers): void
-    {
-        $this->orderUsers = $orderUsers;
-    }
 
     public function getAutoIncrement(): int
     {
@@ -677,33 +645,9 @@ class UserEntity extends Entity implements \Stringable
         $this->tagIds = $tagIds;
     }
 
-    /**
-     * Gets a list of all promotions where the user
-     * is assigned to within the "persona" conditions.
-     */
-    public function getPromotions(): ?PromotionCollection
-    {
-        return $this->promotions;
-    }
 
-    /**
-     * Sets a list of all promotions where the user
-     * should be assigned to within the "persona" conditions.
-     */
-    public function setPromotions(PromotionCollection $promotions): void
-    {
-        $this->promotions = $promotions;
-    }
 
-    public function getBlogReviews(): ?BlogReviewCollection
-    {
-        return $this->blogReviews;
-    }
 
-    public function setBlogReviews(BlogReviewCollection $blogReviews): void
-    {
-        $this->blogReviews = $blogReviews;
-    }
 
     public function getRecoveryUser(): ?UserRecoveryEntity
     {

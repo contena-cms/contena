@@ -6,10 +6,9 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\AdminUser\Command\AdminUserCreateCommand;
 use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
+use Contena\Core\Maintenance\MaintenanceException;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Console\Tester\CommandTester;
 

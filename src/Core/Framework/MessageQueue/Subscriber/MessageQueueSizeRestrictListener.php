@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\Service\MessageSizeCalculator;
 use Symfony\Component\Messenger\Event\SendMessageToTransportsEvent;

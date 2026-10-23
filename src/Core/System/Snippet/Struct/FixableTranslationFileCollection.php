@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Struct;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\System\Snippet\Command\Util\CountryAgnosticFileLinter;
 

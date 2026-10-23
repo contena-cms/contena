@@ -10,14 +10,13 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;
 use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
-use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 
 /**
  * @internal

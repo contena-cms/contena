@@ -3,7 +3,6 @@
 namespace Contena\Core\Test\Integration\EventDispatcher;
 
 use Psr\EventDispatcher\StoppableEventInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

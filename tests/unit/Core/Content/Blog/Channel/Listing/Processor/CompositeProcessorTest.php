@@ -4,11 +4,10 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Channel\Listing\Processor;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;

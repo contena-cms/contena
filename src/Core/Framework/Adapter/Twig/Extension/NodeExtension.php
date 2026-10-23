@@ -10,7 +10,6 @@ use Contena\Core\Framework\Adapter\Twig\TokenParser\IncludeTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\ReturnNodeTokenParser;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeWidening;
-use Contena\Core\Framework\Log\Package;
 use Twig\Extension\AbstractExtension;
 use Twig\TokenParser\TokenParserInterface;
 

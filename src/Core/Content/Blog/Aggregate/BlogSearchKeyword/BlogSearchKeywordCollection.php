@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<BlogSearchKeywordEntity>

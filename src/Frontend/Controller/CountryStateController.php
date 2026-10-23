@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Controller;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

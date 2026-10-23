@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Rule;
 
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Contena\Core\Framework\App\Event\Hooks\AppScriptConditionHook;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\Debug;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\Framework\Script\Execution\Hook;

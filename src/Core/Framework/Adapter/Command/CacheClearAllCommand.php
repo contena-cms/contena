@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Command;
 
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

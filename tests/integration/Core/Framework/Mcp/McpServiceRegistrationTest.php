@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Mcp;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Command\DebugMcpCommand;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Controller\McpServerController;
@@ -14,12 +13,12 @@ use Contena\Core\Framework\Mcp\Loader\AppMcpResourceLoader;
 use Contena\Core\Framework\Mcp\Loader\AppMcpToolLoader;
 use Contena\Core\Framework\Mcp\Prompt\ContenaContextPrompt;
 use Contena\Core\Framework\Mcp\Resource\BusinessEventsResource;
+use Contena\Core\Framework\Mcp\Resource\ChannelListResource;
 use Contena\Core\Framework\Mcp\Resource\CurrencyListResource;
 use Contena\Core\Framework\Mcp\Resource\EntityListResource;
 use Contena\Core\Framework\Mcp\Resource\ExtensionsResource;
 use Contena\Core\Framework\Mcp\Resource\FlowActionsResource;
 use Contena\Core\Framework\Mcp\Resource\LanguageListResource;
-use Contena\Core\Framework\Mcp\Resource\ChannelListResource;
 use Contena\Core\Framework\Mcp\Resource\StateMachineResource;
 use Contena\Core\Framework\Mcp\Tool\EntityAggregateTool;
 use Contena\Core\Framework\Mcp\Tool\EntityDeleteTool;
@@ -31,7 +30,6 @@ use Contena\Core\Framework\Mcp\Tool\MediaUploadTool;
 use Contena\Core\Framework\Mcp\Tool\OrderStateTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigReadTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigWriteTool;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

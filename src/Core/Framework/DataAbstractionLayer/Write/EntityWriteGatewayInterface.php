@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

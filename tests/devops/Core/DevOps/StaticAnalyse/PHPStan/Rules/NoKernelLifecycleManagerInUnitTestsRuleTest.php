@@ -6,7 +6,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\NoKernelLifecycleManagerInUnitTestsRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 require_once __DIR__ . '/data/NoKernelLifecycleManagerInUnitTestsRule/LifecycleFixtureBehaviour.php';

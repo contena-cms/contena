@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Flow\Exception;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Exception\CustomTriggerByNameNotFoundException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Response;
 

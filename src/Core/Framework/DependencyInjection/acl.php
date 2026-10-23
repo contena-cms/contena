@@ -12,6 +12,7 @@ use Contena\Core\Framework\Api\Controller\AclController;
 use Contena\Core\Framework\Api\EventListener\Acl\CreditOrderLineItemListener;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Framework\Api\Acl\Role\AclAdminUserRoleDefinition;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Message;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Symfony\Component\HttpFoundation\Request;
 

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Computed;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
-use Contena\Core\Framework\Log\Package;
 
 class LockedField extends BoolField
 {

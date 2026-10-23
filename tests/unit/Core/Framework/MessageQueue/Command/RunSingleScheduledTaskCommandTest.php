@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Command\RunSingleScheduledTaskCommand;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskRunner;
 use Symfony\Component\Console\Tester\CommandTester;

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Channel\Detail;
 
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Property\PropertyGroupCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\System\Channel\StoreApiResponse;
 

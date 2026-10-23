@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\MessengerMiddlewareCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Middleware\RoutingOverwriteMiddleware;
 use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

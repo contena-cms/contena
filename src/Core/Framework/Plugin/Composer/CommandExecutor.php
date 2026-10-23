@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Plugin\Composer;
 
 use Composer\Console\Application;
 use Composer\InstalledVersions;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;

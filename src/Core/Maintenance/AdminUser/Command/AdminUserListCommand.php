@@ -4,13 +4,11 @@ namespace Contena\Core\Maintenance\AdminUser\Command;
 
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
-use Contena\Core\Framework\Console\OutputFormatTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\AdminUserEntity;

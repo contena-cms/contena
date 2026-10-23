@@ -15,7 +15,6 @@ use Mcp\Server\Session\InMemorySessionStore;
 use Mcp\Server\Session\Session;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Result\McpToolResult;
 use Contena\Core\Framework\Mcp\Result\McpToolResultParser;
 use Contena\Core\Framework\Mcp\Result\McpToolResultReferenceHandler;

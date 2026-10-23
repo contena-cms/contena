@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Upload;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

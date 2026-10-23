@@ -6,7 +6,6 @@ use OpenSearch\Common\Exceptions\BadRequest400Exception;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class ElasticsearchBlogException extends HttpException

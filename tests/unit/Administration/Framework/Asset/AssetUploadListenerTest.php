@@ -7,7 +7,6 @@ namespace Contena\Tests\Unit\Administration\Framework\Asset;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Framework\Asset\AssetUploadListener;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\AssetUploadEvent;
 
 /**

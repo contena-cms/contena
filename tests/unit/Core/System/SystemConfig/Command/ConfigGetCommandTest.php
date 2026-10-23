@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\SystemConfig\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Command\ConfigGet;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Core\Test\TestDefaults;

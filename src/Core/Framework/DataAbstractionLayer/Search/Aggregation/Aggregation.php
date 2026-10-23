@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\CriteriaPartInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

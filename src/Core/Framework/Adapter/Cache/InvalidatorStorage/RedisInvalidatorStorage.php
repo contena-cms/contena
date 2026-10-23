@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Cache\InvalidatorStorage;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 
 class RedisInvalidatorStorage extends AbstractInvalidatorStorage
 {

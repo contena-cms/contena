@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch;
 
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\Log\Package;
 
 final readonly class TranslatedResolvedField extends ResolvedField
 {

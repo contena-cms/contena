@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\Framework\Webhook\WebhookEntity;

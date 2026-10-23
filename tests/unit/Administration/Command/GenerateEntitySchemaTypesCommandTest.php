@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Administration\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Command\GenerateEntitySchemaTypesCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

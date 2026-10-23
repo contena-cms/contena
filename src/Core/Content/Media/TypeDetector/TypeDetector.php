@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\TypeDetector;
 
 use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaType\MediaType;
-use Contena\Core\Framework\Log\Package;
 
 class TypeDetector implements TypeDetectorInterface
 {

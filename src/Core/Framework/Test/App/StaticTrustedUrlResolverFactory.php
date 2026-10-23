@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\App;
 
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

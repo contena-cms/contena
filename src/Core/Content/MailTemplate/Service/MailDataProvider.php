@@ -7,7 +7,6 @@ use Contena\Core\Content\MailTemplate\MailTemplateException;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\MailFlowDataProviderInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

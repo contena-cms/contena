@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

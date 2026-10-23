@@ -4,12 +4,11 @@ namespace Contena\Tests\Unit\Core\System\User\Aggregate\UserRecovery;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryDefinition;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

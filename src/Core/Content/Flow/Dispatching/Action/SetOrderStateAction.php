@@ -13,7 +13,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -30,14 +29,6 @@ class SetOrderStateAction extends FlowAction implements DelayableAction, Transac
 
     private const ORDER_TRANSACTION = 'order_transaction';
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly Connection $connection,
-        private readonly OrderService $orderService
-    ) {
-    }
 
     public static function getName(): string
     {

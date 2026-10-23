@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Page\Account\Profile;
 
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\PageLoadedHook;
 

@@ -11,16 +11,14 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Currency\CurrencyCollection;
-use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeEntity;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\Currency\CurrencyCollection;
+use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\Test\TestDefaults;
 
 /**

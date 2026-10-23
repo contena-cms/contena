@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Plugin\_fixtures;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 
 /**

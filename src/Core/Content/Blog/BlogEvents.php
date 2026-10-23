@@ -9,7 +9,6 @@ use Contena\Core\Content\Blog\Events\BlogSearchCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogSearchResultEvent;
 use Contena\Core\Content\Blog\Events\BlogSuggestCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogSuggestResultEvent;
-use Contena\Core\Framework\Log\Package;
 
 class BlogEvents
 {

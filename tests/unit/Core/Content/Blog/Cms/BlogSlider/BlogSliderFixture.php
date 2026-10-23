@@ -2,16 +2,15 @@
 
 namespace Contena\Tests\Unit\Core\Content\Blog\Cms\BlogSlider;
 
+use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingConfig;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingConfig;
-use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Request;
 

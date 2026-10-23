@@ -2,12 +2,11 @@
 
 namespace Contena\Core\Framework\Rule\Container;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleException;
 use Contena\Core\Framework\Util\FloatComparator;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 
 abstract class ZipCodeRule extends Rule
 {

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Service;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\DataTransfer\Metadata\MetadataCollection;
 use Contena\Core\System\Snippet\DataTransfer\TranslationUpdate\TranslationInstallPlan;
 use Contena\Core\System\Snippet\DataTransfer\TranslationUpdate\TranslationUpdateResult;

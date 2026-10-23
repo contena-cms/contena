@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\InAppPurchases\Payload\InAppPurchasesPayload;
 use Contena\Core\Framework\App\InAppPurchases\Payload\InAppPurchasesPayloadService;
 use Contena\Core\Framework\App\InAppPurchases\Response\InAppPurchasesResponse;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 

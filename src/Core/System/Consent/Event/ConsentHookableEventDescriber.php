@@ -4,7 +4,6 @@ namespace Contena\Core\System\Consent\Event;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;

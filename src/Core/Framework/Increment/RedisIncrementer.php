@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Increment;
 
 use Contena\Core\Framework\Adapter\Cache\RedisConnectionFactory;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

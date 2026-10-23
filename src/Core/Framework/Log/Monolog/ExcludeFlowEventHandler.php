@@ -6,7 +6,6 @@ use Monolog\Handler\AbstractHandler;
 use Monolog\Handler\HandlerInterface;
 use Monolog\LogRecord;
 use Monolog\ResettableInterface;
-use Contena\Core\Framework\Log\Package;
 
 class ExcludeFlowEventHandler extends AbstractHandler
 {

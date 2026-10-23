@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\JsonFieldAccessorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TaxFreeConfigFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class TaxFreeConfigField extends JsonField
 {

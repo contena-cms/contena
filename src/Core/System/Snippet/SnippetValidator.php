@@ -5,7 +5,6 @@ namespace Contena\Core\System\Snippet;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Files\AbstractSnippetFile;
 use Contena\Core\System\Snippet\Files\GenericSnippetFile;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;

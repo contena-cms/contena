@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Struct;
 
 use Contena\Core\Framework\JWT\Struct\JWTStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

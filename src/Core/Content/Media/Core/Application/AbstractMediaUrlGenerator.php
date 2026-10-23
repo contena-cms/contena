@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Core\Application;
 
 use Contena\Core\Content\Media\Core\Params\UrlParams;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Url generator for media and thumbnails

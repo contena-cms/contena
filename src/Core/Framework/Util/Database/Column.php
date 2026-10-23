@@ -6,7 +6,6 @@ namespace Contena\Core\Framework\Util\Database;
 
 use Doctrine\DBAL\Schema\Column as DbalColumn;
 use Doctrine\DBAL\Types\Type;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

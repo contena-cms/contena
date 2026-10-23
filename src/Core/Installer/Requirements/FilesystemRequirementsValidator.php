@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Requirements;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Requirements\Struct\PathCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;

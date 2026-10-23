@@ -9,9 +9,7 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderCustomFieldRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Tests\Unit\Core\System\User\Rule\TestRuleScope;
 
 /**
  * @internal

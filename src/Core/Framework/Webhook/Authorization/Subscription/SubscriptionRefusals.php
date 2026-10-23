@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Authorization\Subscription;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The refused subscriptions by reason, under the keys passed to SubscriptionValidator::validate().

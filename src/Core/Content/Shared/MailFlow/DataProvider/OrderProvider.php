@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

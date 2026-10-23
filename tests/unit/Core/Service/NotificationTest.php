@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Service;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationDefinition;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Uuid\Uuid;

@@ -12,7 +12,6 @@ use Contena\Core\DevOps\Docs\DocsException;
 use Contena\Core\DevOps\Docs\Script\HooksReferenceGenerator;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceDataCollector;
 use Contena\Core\DevOps\Docs\Script\ServiceReferenceGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Twig\Environment;

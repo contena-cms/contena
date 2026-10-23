@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Doctrine;
 
-use Contena\Core\Framework\Log\Package;
 
 class FetchModeHelper
 {

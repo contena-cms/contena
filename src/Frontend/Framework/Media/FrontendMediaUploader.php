@@ -7,7 +7,6 @@ use Contena\Core\Content\Media\File\MediaFile;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Framework\FrontendFrameworkException;

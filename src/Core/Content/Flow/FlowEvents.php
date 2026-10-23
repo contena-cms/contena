@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow;
 
 use Contena\Core\Content\Flow\Events\FlowIndexerEvent;
-use Contena\Core\Framework\Log\Package;
 
 class FlowEvents
 {

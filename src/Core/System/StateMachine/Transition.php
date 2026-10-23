@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\StateMachine;
 
-use Contena\Core\Framework\Log\Package;
 
 class Transition
 {

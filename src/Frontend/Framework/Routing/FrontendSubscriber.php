@@ -2,11 +2,10 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
 use Contena\Frontend\Event\MaintenanceRedirectEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;

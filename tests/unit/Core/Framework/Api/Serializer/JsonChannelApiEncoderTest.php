@@ -5,18 +5,17 @@ namespace Contena\Tests\Unit\Core\Framework\Api\Serializer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaTranslation\MediaTranslationDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Serializer\JsonApiEncoder;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\AssociationExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendableDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendedDefinition;
@@ -24,12 +23,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Scalar
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 use Contena\Core\Test\Assert\ArrayValues;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\SerializationFixture;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicStruct;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithExtension;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToManyExtension;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToOneRelationship;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestCollectionWithToOneRelationship;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

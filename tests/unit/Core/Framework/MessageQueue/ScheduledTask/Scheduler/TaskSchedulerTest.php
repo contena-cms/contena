@@ -16,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\MinResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;

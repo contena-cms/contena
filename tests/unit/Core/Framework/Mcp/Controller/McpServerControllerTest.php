@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistFilter;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;

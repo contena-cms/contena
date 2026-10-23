@@ -3,46 +3,29 @@
 namespace Contena\Core\Content\Blog\Channel\Listing;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\Extension\BlogListingCriteriaExtension;
-use Contena\Core\Content\Blog\Extension\BlogListingRouteExtension;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
-use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Content\Blog\Extension\BlogListingCriteriaExtension;
+use Contena\Core\Content\Blog\Extension\BlogListingRouteExtension;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Content\ContentStream\Exception\EmptyContentStreamException;
+use Contena\Core\Content\ContentStream\Exception\NoFilterException;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogListingRoute extends AbstractBlogListingRoute
 {
-    /**
-     * @internal
-     *
-     * @param EntityRepository<CategoryCollection> $categoryRepository
-     */
-    public function __construct(
-        private readonly BlogListingLoader $listingLoader,
-        private readonly EntityRepository $categoryRepository,
-        private readonly ContentStreamBuilderInterface|AbstractContentStreamBuilder $contentStreamBuilder,
-        private readonly CacheTagCollector $cacheTagCollector,
-        private readonly ExtensionDispatcher $extensions,
-        private readonly LoggerInterface $logger,
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogListingRoute
     {

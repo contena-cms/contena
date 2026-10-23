@@ -16,11 +16,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\UrlEncoder;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\Content\ImportExport\Exception\InvalidMediaUrlException;
+use Contena\Core\Content\ImportExport\Exception\MediaDownloadException;
 
 /**
  * @final

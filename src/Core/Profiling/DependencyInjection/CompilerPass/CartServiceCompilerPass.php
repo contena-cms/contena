@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Profiling\DependencyInjection\CompilerPass;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Profiling\Subscriber\CartDataCollectorSubscriber;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

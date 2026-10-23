@@ -4,10 +4,8 @@ namespace Contena\Core\Content\ImportExport\Aggregate\ImportExportLog;
 
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFileDefinition;
 use Contena\Core\Content\ImportExport\ImportExportProfileDefinition;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -18,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 
 /**
@@ -46,7 +43,6 @@ class ImportExportLogDefinition extends EntityDefinition
     protected function defineProtections(): EntityProtectionCollection
     {
         return new EntityProtectionCollection([
-            new WriteProtection(Context::SYSTEM_SCOPE),
         ]);
     }
 

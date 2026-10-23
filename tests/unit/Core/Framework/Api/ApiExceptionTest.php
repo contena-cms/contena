@@ -15,7 +15,6 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 use Contena\Core\Framework\Api\Exception\NoEntityClonedException;
 use Contena\Core\Framework\Api\Exception\ResourceNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingReverseAssociation;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Exception\ChannelNotFoundException;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Response;

@@ -8,14 +8,9 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\System\User\Rule\BillingZipCodeRule;
-use Contena\Core\System\User\Rule\UserCustomFieldRule;
-use Contena\Core\System\User\Rule\ShippingZipCodeRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\Container;
 use Contena\Core\Framework\Rule\Container\FilterRule;
-use Contena\Core\Framework\Rule\Container\MatchAllLineItemsRule;
 use Contena\Core\Framework\Rule\Container\NotRule;
 use Contena\Core\Framework\Rule\Container\OrRule;
 use Contena\Core\Framework\Rule\Container\XorRule;
@@ -25,6 +20,9 @@ use Contena\Core\Framework\Rule\Rule as ContenaRule;
 use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Rule\SimpleRule;
 use Contena\Core\Framework\Rule\TimeRangeRule;
+use Contena\Core\System\User\Rule\BillingZipCodeRule;
+use Contena\Core\System\User\Rule\ShippingZipCodeRule;
+use Contena\Core\System\User\Rule\UserCustomFieldRule;
 use Contena\Core\Test\Stub\Rule\FalseRule;
 use Contena\Core\Test\Stub\Rule\TrueRule;
 
@@ -46,7 +44,6 @@ class RuleConditionHasRuleConfigRule implements Rule
         NotRule::class,
         OrRule::class,
         XorRule::class,
-        MatchAllLineItemsRule::class,
         ScriptRule::class,
         DateRangeRule::class,
         SimpleRule::class,

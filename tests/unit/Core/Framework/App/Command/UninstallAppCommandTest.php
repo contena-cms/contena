@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\AppStorage;
 use Contena\Core\Framework\App\Command\UninstallAppCommand;
 use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

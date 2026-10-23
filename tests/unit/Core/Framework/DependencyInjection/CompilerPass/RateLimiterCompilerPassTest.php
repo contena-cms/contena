@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\RateLimiterCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

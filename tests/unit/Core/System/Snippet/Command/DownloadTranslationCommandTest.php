@@ -6,7 +6,6 @@ use GuzzleHttp\Psr7\Uri;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\DownloadTranslationCommand;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMappingCollection;

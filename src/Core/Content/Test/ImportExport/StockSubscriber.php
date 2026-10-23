@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Test\ImportExport;
 
 use Contena\Core\Content\ImportExport\Event\ImportExportBeforeExportRecordEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

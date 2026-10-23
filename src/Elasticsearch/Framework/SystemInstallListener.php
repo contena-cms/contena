@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework;
 
 use Contena\Core\Framework\Event\SystemInstallCompletedEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 

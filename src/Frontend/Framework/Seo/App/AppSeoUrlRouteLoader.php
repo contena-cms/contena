@@ -5,7 +5,6 @@ namespace Contena\Frontend\Framework\Seo\App;
 use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

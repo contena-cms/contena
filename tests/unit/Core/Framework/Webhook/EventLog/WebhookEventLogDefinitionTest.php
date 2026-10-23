@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Webhook\EventLog;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogCollection;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogDefinition;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogEntity;

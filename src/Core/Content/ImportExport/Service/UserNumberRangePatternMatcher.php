@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\Service;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -41,19 +41,14 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Checkout\DocumentV2\DocumentV2Trait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

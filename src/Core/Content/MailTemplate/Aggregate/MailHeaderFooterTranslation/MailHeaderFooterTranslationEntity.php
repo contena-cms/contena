@@ -4,7 +4,6 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooterTranslatio
 
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

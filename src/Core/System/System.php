@@ -3,10 +3,9 @@
 namespace Contena\Core\System;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityRegistrar;
-use Contena\Core\System\DependencyInjection\CompilerPass\NumberRangeIncrementerCompilerPass;
 use Contena\Core\System\DependencyInjection\CompilerPass\ChannelEntityCompilerPass;
+use Contena\Core\System\DependencyInjection\CompilerPass\NumberRangeIncrementerCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -38,7 +37,6 @@ class System extends Bundle
         $phpLoader->load('custom_entity.php');
         $phpLoader->load('locale.php');
         $phpLoader->load('snippet.php');
-        $phpLoader->load('salutation.php');
         $phpLoader->load('tax.php');
         $phpLoader->load('tax_provider.php');
         $phpLoader->load('unit.php');

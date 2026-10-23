@@ -2,17 +2,16 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Extension\DeleteAddressRouteExtension;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\System\User\Extension\DeleteAddressRouteExtension;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 
@@ -20,6 +19,7 @@ use Symfony\Component\Routing\Attribute\Route;
 class DeleteAddressRoute extends AbstractDeleteAddressRoute
 {
     use UserAddressValidationTrait;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @param EntityRepository<UserAddressCollection> $addressRepository

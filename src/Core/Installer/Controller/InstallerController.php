@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;

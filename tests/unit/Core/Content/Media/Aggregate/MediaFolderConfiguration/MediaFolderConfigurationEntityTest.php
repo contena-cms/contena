@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderCon
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeCollection;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Attribute;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 #[\Attribute(\Attribute::TARGET_PROPERTY)]
 final class State extends Field

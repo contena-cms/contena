@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\CustomFieldsSerializer as DalCustomFieldsSerializer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldService;
 
 class CustomFieldsSerializer extends FieldSerializer

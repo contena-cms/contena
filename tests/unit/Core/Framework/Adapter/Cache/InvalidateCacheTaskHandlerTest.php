@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Cache\InvalidateCacheTaskHandler;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

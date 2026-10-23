@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal not intended for decoration or replacement

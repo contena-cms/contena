@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Stats;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Messenger\Stamp\SentAtStamp;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsEntity;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsCollection;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsEntity;

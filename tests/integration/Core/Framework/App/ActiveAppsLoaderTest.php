@@ -4,9 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\App;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\ActiveAppsLoader;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

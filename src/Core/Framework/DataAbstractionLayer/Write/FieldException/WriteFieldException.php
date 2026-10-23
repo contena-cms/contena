@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\FieldException;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaException;
 
 interface WriteFieldException extends ContenaException

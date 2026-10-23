@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\RateLimiter;
 
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\Policy\SystemConfigLimiter;
 use Contena\Core\Framework\RateLimiter\Policy\TimeBackoff;
 use Contena\Core\Framework\RateLimiter\Policy\TimeBackoffLimiter;

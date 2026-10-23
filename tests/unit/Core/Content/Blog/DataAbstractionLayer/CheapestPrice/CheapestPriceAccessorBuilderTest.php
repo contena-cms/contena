@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceAc
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

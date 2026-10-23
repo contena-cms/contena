@@ -2,10 +2,9 @@
 
 namespace Contena\Core\System\Language\Exception;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

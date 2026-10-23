@@ -9,7 +9,6 @@ use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\TestDefaults;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Cms;
 
-use Contena\Core\Framework\Log\Package;
 
 class CmsPageEvents
 {

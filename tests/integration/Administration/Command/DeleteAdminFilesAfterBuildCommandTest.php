@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Administration\Command;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Command\DeleteAdminFilesAfterBuildCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;

@@ -8,7 +8,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Event\BusinessEventCollectorResponse;
 use Contena\Core\Framework\Event\BusinessEventDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Resource\BusinessEventsResource;
 

@@ -2,12 +2,11 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
-use Contena\Core\ChannelRequest;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

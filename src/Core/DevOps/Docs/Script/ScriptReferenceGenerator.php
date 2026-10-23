@@ -2,7 +2,6 @@
 
 namespace Contena\Core\DevOps\Docs\Script;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

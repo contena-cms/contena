@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

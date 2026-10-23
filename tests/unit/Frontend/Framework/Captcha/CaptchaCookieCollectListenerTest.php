@@ -10,7 +10,6 @@ use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Frontend\Framework\Captcha\CaptchaCookieCollectListener;

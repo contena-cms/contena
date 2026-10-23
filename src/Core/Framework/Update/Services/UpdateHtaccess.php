@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Update\Services;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

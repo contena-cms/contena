@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\DataResolver;
 
 use Contena\Core\Content\Cms\CmsException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class FieldConfig extends Struct

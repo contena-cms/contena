@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Deprecated;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ThemeDefinition;
 
 /**

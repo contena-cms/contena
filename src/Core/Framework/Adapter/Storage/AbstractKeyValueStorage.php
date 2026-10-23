@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Storage;
 
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractKeyValueStorage
 {

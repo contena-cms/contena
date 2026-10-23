@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding\Generator;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\PluginException;
 use Symfony\Component\Console\Helper\QuestionHelper;

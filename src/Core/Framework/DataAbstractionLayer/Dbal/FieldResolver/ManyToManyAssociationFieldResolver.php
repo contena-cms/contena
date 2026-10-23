@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Inherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ReverseInherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

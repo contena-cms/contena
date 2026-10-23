@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\VersionFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Version\VersionDefinition;
-use Contena\Core\Framework\Log\Package;
 
 class VersionField extends FkField
 {

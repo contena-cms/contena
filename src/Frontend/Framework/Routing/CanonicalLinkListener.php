@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Framework\Event\BeforeSendResponseEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Framework\Event\BeforeSendResponseEvent;
 
 /**
  * @internal

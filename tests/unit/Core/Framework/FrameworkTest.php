@@ -19,7 +19,6 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolResultCacheCo
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Framework\Framework;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\Api\Acl\fixtures\AclTestController;
 use Contena\Core\Framework\Test\DependencyInjection\CompilerPass\ContainerVisibilityCompilerPass;
 use Contena\Core\Framework\Test\RateLimiter\DisableRateLimiterCompilerPass;

@@ -8,6 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByAdminUserField;
 
 /**
  * @internal

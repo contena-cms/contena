@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\BusinessEventRegisterCompilerPass;
 use Contena\Core\Framework\Event\BusinessEventRegistry;
 use Contena\Core\Framework\Framework;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**

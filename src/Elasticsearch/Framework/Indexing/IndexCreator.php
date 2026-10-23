@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Framework\Indexing;
 
 use OpenSearch\Client;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\ElasticsearchException;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;

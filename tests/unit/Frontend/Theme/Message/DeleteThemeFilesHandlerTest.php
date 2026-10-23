@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\Message;
 use League\Flysystem\FilesystemOperator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Frontend\Theme\MD5ThemePathBuilder;
 use Contena\Frontend\Theme\Message\DeleteThemeFilesHandler;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Script\Api;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Controller\ScriptController;

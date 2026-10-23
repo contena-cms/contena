@@ -15,7 +15,6 @@ use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem as AppFilesystem;
 use Contena\Core\System\Snippet\Files\FrontendSnippetLifecycleHandler;
 use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;

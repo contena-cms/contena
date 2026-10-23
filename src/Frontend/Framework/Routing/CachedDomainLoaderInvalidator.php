@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Routing;
 
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Frontend\Theme\Aggregate\ThemeChannelDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

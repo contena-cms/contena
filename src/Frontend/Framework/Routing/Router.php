@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as SymfonyRouter;
 use Symfony\Component\HttpFoundation\Request;

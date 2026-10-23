@@ -13,7 +13,6 @@ use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\File\FileInfoHelper;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\S3ClientFactory;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 /**

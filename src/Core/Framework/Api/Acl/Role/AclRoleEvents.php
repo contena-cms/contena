@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Acl\Role;
 
-use Contena\Core\Framework\Log\Package;
 
 class AclRoleEvents
 {

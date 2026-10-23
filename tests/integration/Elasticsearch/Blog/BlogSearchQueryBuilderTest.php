@@ -14,22 +14,14 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\FilesystemBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\Event\ElasticsearchCustomFieldsMappingEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
-use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
-use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

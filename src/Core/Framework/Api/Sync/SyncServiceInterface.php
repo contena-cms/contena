@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\Sync;
 
 use Doctrine\DBAL\ConnectionException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 interface SyncServiceInterface
 {

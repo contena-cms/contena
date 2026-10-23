@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch\Blog;
 use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Blog\Events\BlogStockAlteredEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 

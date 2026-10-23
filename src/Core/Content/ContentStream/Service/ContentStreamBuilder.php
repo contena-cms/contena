@@ -9,11 +9,11 @@ use Contena\Core\Content\ContentStream\ContentStreamException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 class ContentStreamBuilder extends AbstractContentStreamBuilder implements ContentStreamBuilderInterface
 {

@@ -6,23 +6,12 @@ use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\PropertyNotFoundException;
 
 class BlogSearchKeywordAnalyzer implements BlogSearchKeywordAnalyzerInterface
 {
     private const MAXIMUM_KEYWORD_LENGTH = 500;
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly TokenizerInterface $tokenizer,
-        private readonly AbstractTokenFilter $tokenFilter,
-        private readonly SearchConfigLoader $configLoader,
-    ) {
-    }
 
     public function analyze(BlogEntity $blog, Context $context, array $configFields): AnalyzedKeywordCollection
     {

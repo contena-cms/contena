@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Robots\Parser;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore Simple DTO with no business logic

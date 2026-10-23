@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\ShippingMethod\ShippingMethod;
 use Contena\Core\Framework\App\Manifest\Xml\ShippingMethod\ShippingMethods;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

@@ -2,10 +2,9 @@
 
 namespace Contena\Core\Content\Blog\Channel\Review;
 
-use Contena\Core\System\User\Service\EmailIdnConverter;
-use Contena\Core\Content\Blog\Extension\BlogReviewSaveRouteExtension;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
+use Contena\Core\Content\Blog\Extension\BlogReviewSaveRouteExtension;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\BlogProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -16,16 +15,16 @@ use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityNotExists;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\Service\EmailIdnConverter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
@@ -33,6 +32,7 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\LessThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogReviewSaveRoute extends AbstractBlogReviewSaveRoute

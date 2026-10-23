@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\Installer;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

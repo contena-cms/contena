@@ -4,18 +4,14 @@ namespace Contena\Tests\Integration\Core\Content\Flow;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\System\User\Event\UserGroupRegistrationAccepted;
 use Contena\Core\Content\Flow\Dispatching\Action\SetUserGroupCustomFieldAction;
 use Contena\Core\Content\Flow\FlowCollection;
-use Contena\Core\Content\Test\Flow\OrderActionTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\System\User\Event\UserGroupRegistrationAccepted;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

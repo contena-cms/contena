@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Filesystem\Adapter;
 
 use League\Flysystem\FilesystemAdapter;
-use Contena\Core\Framework\Log\Package;
 
 interface AdapterFactoryInterface
 {

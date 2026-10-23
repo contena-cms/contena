@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Mcp\Tool;
 
 use Mcp\Capability\Attribute\McpTool;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\Tool\ToolsetsListTool;

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook\Authorization\Policy;
 
 use Contena\Core\Framework\Api\Acl\AclRoleLoader;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;
 use Contena\Core\Framework\Webhook\Hookable;

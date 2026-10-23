@@ -4,7 +4,6 @@ namespace Contena\Tests\Migration;
 
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

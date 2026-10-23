@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -17,6 +16,7 @@ use Contena\Frontend\Page\Robots\Struct\DomainRuleCollection;
 use Contena\Frontend\Page\Robots\Struct\DomainRuleStruct;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Frontend\Page\Robots\Struct\RobotsAdminUserAgentBlock;
 
 class RobotsPageLoader
 {

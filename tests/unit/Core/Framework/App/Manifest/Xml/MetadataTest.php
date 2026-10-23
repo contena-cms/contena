@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
 use Contena\Core\Framework\App\Validation\Error\MissingTranslationError;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

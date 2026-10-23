@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;

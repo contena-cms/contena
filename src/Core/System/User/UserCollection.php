@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User;
 
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\ChannelCollection;
 
 /**
  * @extends EntityCollection<UserEntity>
@@ -102,12 +101,6 @@ class UserCollection extends EntityCollection
         );
     }
 
-    public function getLastPaymentMethods(): PaymentMethodCollection
-    {
-        return new PaymentMethodCollection(
-            $this->fmap(static fn (UserEntity $user) => $user->getLastPaymentMethod())
-        );
-    }
 
     public function getDefaultBillingAddress(): UserAddressCollection
     {

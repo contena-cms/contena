@@ -14,7 +14,6 @@ use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
 use Contena\Core\Framework\App\Source\RemoteZip;
 use Contena\Core\Framework\App\Source\TemporaryDirectoryFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
 

@@ -4,7 +4,6 @@ namespace Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\Subscriber;
 
 use PHPUnit\Event\Test\BeforeTestMethodCalled;
 use PHPUnit\Event\Test\BeforeTestMethodCalledSubscriber as BeforeTestMethodCalledSubscriberInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\DatabaseDiff\DbState;
 
 /**

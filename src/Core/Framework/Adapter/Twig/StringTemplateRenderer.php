@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Twig;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\Filesystem\Path;
 use Twig\Cache\FilesystemCache;

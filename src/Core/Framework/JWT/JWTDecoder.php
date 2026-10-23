@@ -8,7 +8,6 @@ use Lcobucci\JWT\UnencryptedToken;
 use Lcobucci\JWT\Validation\Constraint;
 use Lcobucci\JWT\Validation\RequiredConstraintsViolated;
 use Lcobucci\JWT\Validation\Validator;
-use Contena\Core\Framework\Log\Package;
 
 final class JWTDecoder
 {

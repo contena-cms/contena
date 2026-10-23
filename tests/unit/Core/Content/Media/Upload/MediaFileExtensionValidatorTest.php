@@ -8,7 +8,6 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionValidator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Breadcrumbs are stored as JSON objects in the DB, but represented as plain array in the API, therefore we need a specific type

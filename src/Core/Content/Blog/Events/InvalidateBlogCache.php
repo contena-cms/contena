@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Events;
 
-use Contena\Core\Framework\Log\Package;
 
 class InvalidateBlogCache implements BlogChangedEventInterface
 {

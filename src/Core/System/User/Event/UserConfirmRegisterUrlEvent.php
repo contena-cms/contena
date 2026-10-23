@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User\Event;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

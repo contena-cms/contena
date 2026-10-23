@@ -4,16 +4,15 @@ namespace Contena\Tests\Unit\Core\System\User\Subscriber;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserEvents;
-use Contena\Core\System\User\Channel\ChannelUserAddressEntity;
-use Contena\Core\System\User\Subscriber\UserAddressSubscriber;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\System\User\Channel\ChannelUserAddressEntity;
+use Contena\Core\System\User\Subscriber\UserAddressSubscriber;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserEvents;
 use Contena\Core\Test\Generator;
 
 /**

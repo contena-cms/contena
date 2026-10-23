@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\Sync;
 
 use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class SyncOperation extends Struct

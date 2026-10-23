@@ -6,7 +6,6 @@ use Cron\CronExpression;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\CronInterval;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Database;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Connections\PrimaryReadReplicaConnection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

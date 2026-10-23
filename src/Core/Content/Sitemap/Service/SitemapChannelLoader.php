@@ -7,11 +7,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
@@ -45,11 +42,6 @@ class SitemapChannelLoader
 
         $criteria->addAssociation('type');
         $criteria->addFilter(new OrFilter([
-            new EqualsFilter('type.id', Defaults::CHANNEL_TYPE_FRONTEND),
-            new AndFilter([
-                new EqualsFilter('type.id', Defaults::CHANNEL_TYPE_API),
-                new EqualsFilter('domains.isExternalFrontend', true),
-            ]),
         ]));
 
         $this->eventDispatcher->dispatch(new SitemapChannelCriteriaEvent($criteria, $context));

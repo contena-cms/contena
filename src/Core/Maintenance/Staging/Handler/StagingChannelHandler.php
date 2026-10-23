@@ -3,7 +3,6 @@
 namespace Contena\Core\Maintenance\Staging\Handler;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 
 /**

@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FkFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 
 class FkField extends Field implements StorageAware
 {

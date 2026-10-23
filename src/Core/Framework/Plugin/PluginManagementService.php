@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\App\Event\AppUploadedEvent;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\PluginUploadedEvent;
 use Contena\Core\Framework\Plugin\Util\ZipUtils;
 use Contena\Core\Framework\Store\Struct\PluginDownloadDataStruct;

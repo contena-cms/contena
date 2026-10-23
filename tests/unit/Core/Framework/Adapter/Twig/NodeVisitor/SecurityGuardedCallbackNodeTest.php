@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\NodeVisitor\SecurityGuardedCallbackNode;
 use Contena\Core\Framework\Adapter\Twig\SecurityExtension;
-use Contena\Core\Framework\Log\Package;
 use Twig\Compiler;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;

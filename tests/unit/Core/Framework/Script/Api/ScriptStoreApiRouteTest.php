@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
 use Contena\Core\Framework\Script\Api\ScriptStoreApiRoute;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;

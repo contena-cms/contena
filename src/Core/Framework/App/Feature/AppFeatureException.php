@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Feature;
 
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

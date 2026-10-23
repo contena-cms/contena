@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Migration;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Query\QueryBuilder;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 
 class MigrationRuntime
 {

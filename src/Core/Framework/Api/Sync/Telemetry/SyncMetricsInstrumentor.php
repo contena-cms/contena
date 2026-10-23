@@ -6,7 +6,6 @@ use Contena\Core\Framework\Api\Sync\SyncBehavior;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncResult;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Instrumentation\OperationResult;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;

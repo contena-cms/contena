@@ -10,7 +10,6 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\Currency\CurrencyEntity;

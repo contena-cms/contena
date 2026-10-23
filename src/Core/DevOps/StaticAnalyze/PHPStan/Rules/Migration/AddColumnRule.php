@@ -14,7 +14,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements Rule<MethodCall>

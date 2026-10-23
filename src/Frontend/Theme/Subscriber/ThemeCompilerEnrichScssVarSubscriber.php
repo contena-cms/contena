@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Theme\Subscriber;
 
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\IOStreamHelper;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigElement;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;

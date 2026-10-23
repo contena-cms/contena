@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Implemented by {@see ScheduledTaskHandler}s that compute their own next execution time from domain data

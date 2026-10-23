@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\User\Command;
 
-use Contena\Core\System\User\DeleteUnusedGuestUserService;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\DeleteUnusedGuestUserService;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

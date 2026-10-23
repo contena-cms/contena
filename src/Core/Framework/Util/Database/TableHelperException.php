@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\Util\Database;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\UtilException;
 use Symfony\Component\HttpFoundation\Response;
 

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineTransition;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<StateMachineTransitionEntity>

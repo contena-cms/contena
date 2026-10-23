@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Adapter\Filesystem\Plugin;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Requirements\Struct\PathCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;

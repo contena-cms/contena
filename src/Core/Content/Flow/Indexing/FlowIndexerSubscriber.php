@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Event\AppDeletedEvent;
 use Contena\Core\Framework\App\Event\AppInstalledEvent;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\MessageQueue\IterateEntityIndexerMessage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Event\PluginPostActivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostDeactivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostInstallEvent;

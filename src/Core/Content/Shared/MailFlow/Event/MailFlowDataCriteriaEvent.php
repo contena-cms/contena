@@ -4,9 +4,8 @@ namespace Contena\Core\Content\Shared\MailFlow\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Event\GenericEvent;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

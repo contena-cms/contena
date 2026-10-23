@@ -4,7 +4,6 @@ namespace Contena\Core\System\Snippet;
 
 use Contena\Core\Framework\Deprecation\BCChange\NewRequiredParameter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\ValidateSnippetsCommand;
 use Contena\Core\System\Snippet\Struct\InvalidPluralizationCollection;
 use Contena\Core\System\Snippet\Struct\MissingSnippetCollection;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Sorting;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\CriteriaPartInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class FieldSorting extends Struct implements CriteriaPartInterface

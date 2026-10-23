@@ -2,10 +2,9 @@
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Contena\Core\Content\Media\File\DownloadResponseGenerator;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Media\File\DownloadResponseGenerator;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;

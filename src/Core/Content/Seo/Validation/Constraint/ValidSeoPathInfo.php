@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Seo\Validation\Constraint;
 
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Content\Seo\Validation\SeoUrlWriteValidator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;
 
 /**

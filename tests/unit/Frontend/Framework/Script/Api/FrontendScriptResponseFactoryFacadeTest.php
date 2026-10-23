@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Script\Api;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Controller\ScriptController;
 use Contena\Frontend\Framework\Script\Api\FrontendScriptResponseFactoryFacade;

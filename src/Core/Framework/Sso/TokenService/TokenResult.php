@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Sso\TokenService;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoException;
 use Symfony\Component\Clock\Clock;
 use Symfony\Component\Validator\Constraints\Collection;

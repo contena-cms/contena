@@ -72,8 +72,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(FormCmsElementResolver::class)
         ->args([
-            service(SalutationRoute::class),
-            service(AbstractSalutationsSorter::class),
         ])
         ->tag('contena.cms.data_resolver');
 

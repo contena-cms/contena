@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Cms\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 
 class UnexpectedFieldConfigValueType extends ContenaHttpException

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Detail;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 
 abstract class AbstractAvailableCombinationLoader

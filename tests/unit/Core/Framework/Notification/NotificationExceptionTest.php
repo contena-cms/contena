@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
 use Contena\Core\Framework\Api\Context\SystemSource;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationException;
 
 /**

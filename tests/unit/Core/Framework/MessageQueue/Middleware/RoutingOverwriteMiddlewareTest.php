@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Middleware;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Contena\Core\Framework\MessageQueue\LowPriorityMessageInterface;
 use Contena\Core\Framework\MessageQueue\Middleware\RoutingOverwriteMiddleware;

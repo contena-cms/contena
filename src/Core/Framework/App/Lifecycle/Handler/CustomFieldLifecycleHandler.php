@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Lifecycle\Handler;
 
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\CustomFieldXmlLoader;
 use Contena\Core\System\CustomField\Xml\CustomFields;

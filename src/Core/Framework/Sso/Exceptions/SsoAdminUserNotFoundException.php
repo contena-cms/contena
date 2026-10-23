@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Sso\Exceptions;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoException;
 use Symfony\Component\HttpFoundation\Response;
 

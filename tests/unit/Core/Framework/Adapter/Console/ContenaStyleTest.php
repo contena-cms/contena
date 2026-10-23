@@ -8,8 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Console\ContenaStyle;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;

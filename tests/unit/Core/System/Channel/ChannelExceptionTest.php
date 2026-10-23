@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\System\Channel;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\System\Channel\ChannelException;
 use Symfony\Component\HttpFoundation\Response;

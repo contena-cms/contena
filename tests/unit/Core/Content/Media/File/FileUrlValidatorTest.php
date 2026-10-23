@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\FileUrlValidator;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

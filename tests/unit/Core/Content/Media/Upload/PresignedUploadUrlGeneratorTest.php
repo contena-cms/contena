@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\Upload\PresignedUploadUrlGenerator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpClient\Response\MockResponse;

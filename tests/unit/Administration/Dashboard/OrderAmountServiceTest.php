@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Administration\Dashboard\OrderAmountService;
 use Contena\Core\Checkout\Cart\Price\CashRounding;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * This is basic coverage mainly about data mapping, not the queries.

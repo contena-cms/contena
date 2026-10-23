@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Webhook\Validation;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\Framework\Webhook\WebhookDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

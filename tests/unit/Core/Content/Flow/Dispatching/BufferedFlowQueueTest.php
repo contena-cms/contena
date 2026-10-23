@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlow;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowQueue;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

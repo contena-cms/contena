@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp\Controller;
 
 use Mcp\Server\Builder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Routing\ApiRouteScope;

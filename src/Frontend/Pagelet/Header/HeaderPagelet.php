@@ -4,7 +4,6 @@ namespace Contena\Frontend\Pagelet\Header;
 
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageCollection;

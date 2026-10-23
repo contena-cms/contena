@@ -6,7 +6,6 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Sync\AbstractFkResolver;
 use Contena\Core\Framework\Api\Sync\FkReference;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

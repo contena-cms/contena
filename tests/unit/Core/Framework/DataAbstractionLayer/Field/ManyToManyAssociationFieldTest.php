@@ -4,10 +4,9 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
+use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
 use Contena\Core\Framework\Adapter\Asset\PrefixVersionStrategy;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

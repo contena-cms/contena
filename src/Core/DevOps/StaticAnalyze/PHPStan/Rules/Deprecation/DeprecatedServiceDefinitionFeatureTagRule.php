@@ -14,7 +14,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\FeatureFlagCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ServicesConfigurator;
 
 /**

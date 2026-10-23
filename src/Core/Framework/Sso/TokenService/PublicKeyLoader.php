@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Sso\TokenService;
 
 use Lcobucci\JWT\Signer\Key\InMemory;
 use phpseclib3\Crypt\RSA\Formats\Keys\JWK;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfig;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoException;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Migration\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Symfony\Component\Console\Attribute\AsCommand;

@@ -15,7 +15,6 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * A unit test exercises its subject through the public API. Reflection lets it read or write private state,

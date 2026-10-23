@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryException;
 use Contena\Core\Content\Category\DataAbstractionLayer\CategoryNonExistentExceptionHandler;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -7,7 +7,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal
@@ -17,6 +16,7 @@ use Contena\Core\Framework\Log\Package;
 class AbstractClassUsageRule implements Rule
 {
     use InTestClassTrait;
+use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 
     private const SKIP = [
         CompositeListingProcessor::class,

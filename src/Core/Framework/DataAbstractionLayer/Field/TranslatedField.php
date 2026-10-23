@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldResolver\TranslationFieldResolver;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslatedFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageDefinition;
 
 class TranslatedField extends Field

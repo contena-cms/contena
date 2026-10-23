@@ -14,7 +14,6 @@ use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\Validation\Error\AppNameError;
 use Contena\Core\Framework\App\Validation\Requirements\UnmetRequirement;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Response;
 

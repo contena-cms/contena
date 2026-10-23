@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Kernel;
 
 use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpCache\AbstractSurrogate;

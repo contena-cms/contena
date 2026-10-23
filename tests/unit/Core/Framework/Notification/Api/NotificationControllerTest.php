@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\Api\NotificationController;
 use Contena\Core\Framework\Notification\NotificationException;
 use Contena\Core\Framework\Notification\NotificationService;

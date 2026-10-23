@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class BundleHierarchyBuilder implements TemplateNamespaceHierarchyBuilderInterface

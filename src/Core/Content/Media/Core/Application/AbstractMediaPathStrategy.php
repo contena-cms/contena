@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\Core\Application;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 
 /**

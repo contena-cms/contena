@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomEntity\Xml\Config;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchema;
 use Contena\Core\System\CustomEntity\Xml\Config\AdminUi\AdminUiXmlSchemaValidator;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Plugin\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\BundleConfigGenerator;
 use Contena\Core\Framework\Plugin\Command\BundleDumpCommand;
 use Symfony\Component\Console\Input\StringInput;

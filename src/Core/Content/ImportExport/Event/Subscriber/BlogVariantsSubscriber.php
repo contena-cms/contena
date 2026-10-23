@@ -4,13 +4,12 @@ namespace Contena\Core\Content\ImportExport\Event\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\ImportExport\Event\ImportExportAfterImportRecordEvent;
 use Contena\Core\Content\ImportExport\ImportExportException;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncServiceInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -18,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
@@ -132,18 +130,6 @@ class BlogVariantsSubscriber implements EventSubscriberInterface, ResetInterface
         );
 
         $this->syncService->sync([
-            new SyncOperation(
-                'write',
-                BlogDefinition::ENTITY_NAME,
-                SyncOperation::ACTION_UPSERT,
-                $payload
-            ),
-            new SyncOperation(
-                'write',
-                BlogConfiguratorSettingDefinition::ENTITY_NAME,
-                SyncOperation::ACTION_UPSERT,
-                $configuratorSettingPayload
-            ),
         ], $context, new SyncBehavior());
     }
 

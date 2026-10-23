@@ -11,16 +11,11 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskExecutor;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\DummyScheduledTaskHandler;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestRescheduleOnFailureTask;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
 use Symfony\Component\Clock\NativeClock;
 
 /**

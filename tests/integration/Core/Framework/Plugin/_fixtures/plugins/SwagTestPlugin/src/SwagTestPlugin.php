@@ -11,8 +11,6 @@ use Contena\Core\Framework\Plugin\Context\DeactivateContext;
 use Contena\Core\Framework\Plugin\Context\UninstallContext;
 use Contena\Core\Framework\Plugin\Context\UpdateContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Tests\Integration\Core\Framework\Plugin\_fixtures\bundles\FooBarBundle;
-use Contena\Tests\Integration\Core\Framework\Plugin\_fixtures\bundles\GizmoBundle;
 use Symfony\Contracts\Service\Attribute\Required;
 
 class SwagTestPlugin extends Plugin

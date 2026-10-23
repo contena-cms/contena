@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User\Subscriber;
 
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
+use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\UserEvents;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

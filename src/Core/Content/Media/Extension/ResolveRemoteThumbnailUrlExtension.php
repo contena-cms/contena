@@ -7,7 +7,6 @@ namespace Contena\Core\Content\Media\Extension;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends Extension<string|null>

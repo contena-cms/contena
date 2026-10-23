@@ -3,7 +3,6 @@
 namespace Contena\Core\System\SystemConfig\Extension;
 
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Channel\ShopSettingsRouteResponse;
 

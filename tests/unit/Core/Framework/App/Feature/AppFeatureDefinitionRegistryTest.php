@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Feature\AppFeatureConfig;
 use Contena\Core\Framework\App\Feature\AppFeatureDefinition;
 use Contena\Core\Framework\App\Feature\AppFeatureDefinitionRegistry;
 use Contena\Core\Framework\App\Feature\AppFeatureException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

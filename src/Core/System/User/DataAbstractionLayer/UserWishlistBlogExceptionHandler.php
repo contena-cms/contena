@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\User\DataAbstractionLayer;
 
-use Contena\Core\System\User\UserException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\UserException;
 
 class UserWishlistBlogExceptionHandler implements ExceptionHandlerInterface
 {

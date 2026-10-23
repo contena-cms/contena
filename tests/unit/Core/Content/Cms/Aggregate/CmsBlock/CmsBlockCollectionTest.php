@@ -8,7 +8,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

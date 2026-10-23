@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeEntity;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailSizeCalculator;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

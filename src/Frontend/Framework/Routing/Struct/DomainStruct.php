@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Routing\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 readonly class DomainStruct
 {

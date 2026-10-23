@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Cms\Xml\Block;
 use Contena\Core\Framework\App\Cms\Xml\Blocks;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

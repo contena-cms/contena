@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Mail\Message\SendMailHandler;
 use Contena\Core\Content\Mail\Message\SendMailMessage;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Email;
 

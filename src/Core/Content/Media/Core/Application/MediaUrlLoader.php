@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\Core\Params\UrlParams;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The media url loader is responsible for generating the urls for media and thumbnail entities.

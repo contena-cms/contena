@@ -72,7 +72,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CacheStateSubscriber::class)
         ->args([
-            service(CartService::class),
         ])
         ->tag('kernel.event_subscriber')
         ->tag('contena.inactiveFeature', ['flag' => 'v6.8.0.0']);
@@ -255,7 +254,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CacheResponseSubscriber::class)
         ->args([
-            service(CartService::class),
             param('contena.http.cache.default_ttl'),
             param('contena.http.cache.enabled'),
             service(MaintenanceModeResolver::class),

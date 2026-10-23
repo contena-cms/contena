@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Pagelet\Menu\Offcanvas;
 
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

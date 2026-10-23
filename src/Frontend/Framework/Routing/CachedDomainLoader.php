@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Routing;
 
 use Contena\Core\Framework\Adapter\Cache\CacheValueCompressor;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;

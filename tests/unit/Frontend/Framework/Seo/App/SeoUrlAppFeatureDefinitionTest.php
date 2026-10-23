@@ -10,14 +10,11 @@ use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\EntitySeoUrl;
 use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Validation\RouteBlocklistService;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlClaims;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlConfig;
 use Contena\Frontend\Framework\Seo\App\SeoUrlAppFeatureDefinition;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal

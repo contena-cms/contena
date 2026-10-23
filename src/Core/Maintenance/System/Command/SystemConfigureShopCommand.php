@@ -3,7 +3,6 @@
 namespace Contena\Core\Maintenance\System\Command;
 
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\System\Service\ShopConfigurator;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

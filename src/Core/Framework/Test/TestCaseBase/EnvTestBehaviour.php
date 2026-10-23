@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use PHPUnit\Framework\Attributes\After;
-use Contena\Core\Framework\Log\Package;
 
 trait EnvTestBehaviour
 {

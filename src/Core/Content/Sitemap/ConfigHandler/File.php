@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Sitemap\ConfigHandler;
 
 use Contena\Core\Content\Sitemap\Service\ConfigHandler;
-use Contena\Core\Framework\Log\Package;
 
 class File implements ConfigHandlerInterface
 {

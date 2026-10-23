@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Feature;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

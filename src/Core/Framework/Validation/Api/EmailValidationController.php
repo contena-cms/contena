@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Validation\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Validation\Email\EmailDto;
 use Contena\Core\PlatformRequest;

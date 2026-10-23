@@ -24,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Event\A11yRenderedDocumentAware;
 use Contena\Core\Framework\Event\OrderAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;

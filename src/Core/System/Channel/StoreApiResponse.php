@@ -2,9 +2,7 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\Framework\Struct\VariablesAccessTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

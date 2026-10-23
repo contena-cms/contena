@@ -3,7 +3,6 @@
 namespace Contena\Core\Installer\Controller;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Configuration\AdminConfigurationService;
 use Contena\Core\Installer\Configuration\EnvConfigWriter;
 use Contena\Core\Installer\Configuration\ShopConfigurationService;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Kernel;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\EnvVarProcessorInterface;
 
 /**

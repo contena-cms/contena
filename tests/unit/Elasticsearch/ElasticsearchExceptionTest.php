@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Elasticsearch;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Elasticsearch\ElasticsearchException;
 use Symfony\Component\HttpFoundation\Response;

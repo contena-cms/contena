@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Content\Blog\Channel\Review;
 
-use Contena\Core\Content\Blog\Extension\BlogReviewRouteExtension;
 use Contena\Core\Content\Blog\BlogException;
+use Contena\Core\Content\Blog\Extension\BlogReviewRouteExtension;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -13,13 +13,13 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogReviewRoute extends AbstractBlogReviewRoute
@@ -89,10 +89,6 @@ class BlogReviewRoute extends AbstractBlogReviewRoute
         $criteria->addFilter(
             new MultiFilter(MultiFilter::CONNECTION_AND, [
                 $active,
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('blog.id', $blogId),
-                    new EqualsFilter('blog.parentId', $blogId),
-                ]),
             ])
         );
 

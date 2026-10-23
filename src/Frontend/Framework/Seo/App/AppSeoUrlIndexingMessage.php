@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Seo\App;
 
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

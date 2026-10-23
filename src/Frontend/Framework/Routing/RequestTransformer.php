@@ -2,15 +2,14 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
+use Contena\Core\ChannelRequest;
 use Contena\Core\Content\Seo\AbstractSeoResolver;
 use Contena\Core\Content\Seo\ResolvedSeoUrl;
 use Contena\Core\Content\Seo\SeoUrlRequestContext;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
 use Contena\Core\PlatformRequest;
-use Contena\Core\ChannelRequest;
-use Contena\Frontend\Framework\Routing\Struct\DomainStruct;
 use Contena\Frontend\Framework\FrontendFrameworkException;
+use Contena\Frontend\Framework\Routing\Struct\DomainStruct;
 use Symfony\Component\HttpFoundation\Request;
 
 class RequestTransformer implements RequestTransformerInterface

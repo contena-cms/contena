@@ -2,14 +2,13 @@
 
 namespace Contena\Core\System\Channel;
 
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Mcp\McpException;
-use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\System\Channel\Exception\NoContextDataException;
+use Contena\Core\System\User\Exception\UserNotFoundByIdException;
 
 class ChannelException extends HttpException
 {
@@ -100,20 +99,6 @@ class ChannelException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function orderNotFound(string $orderId): self|OrderException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return OrderException::orderNotFound($orderId);
-        }
-
-        return new self(
-            Response::HTTP_NOT_FOUND,
-            self::ORDER_NOT_FOUND_CODE,
-            self::$couldNotFindMessage,
-            ['entity' => 'order', 'field' => 'id', 'value' => $orderId]
-        );
-    }
 
     public static function noContextData(string $channelId): self
     {
@@ -221,10 +206,6 @@ class ChannelException extends HttpException
         );
     }
 
-    public static function userNotLoggedIn(): CartException
-    {
-        return CartException::userNotLoggedIn();
-    }
 
     public static function contextPermissionsLocked(): self
     {
@@ -294,20 +275,6 @@ class ChannelException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function missingAssociation(string $association): self|OrderException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return OrderException::missingAssociation($association);
-        }
-
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::MISSING_ORDER_ASSOCIATION_CODE,
-            'The required association "{{ association }}" is missing .',
-            ['association' => $association]
-        );
-    }
 
     public static function invalidMappingOperation(string $message): self
     {
@@ -376,11 +343,4 @@ class ChannelException extends HttpException
         );
     }
 
-    /**
-     * The Store API MCP server reports a missing tool result like the Admin API server does.
-     */
-    public static function mcpToolResultNotFound(string $id): ResourceNotFoundException
-    {
-        return McpException::toolResultNotFound($id);
-    }
 }

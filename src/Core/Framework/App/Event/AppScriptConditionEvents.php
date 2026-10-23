@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Event;
 
-use Contena\Core\Framework\Log\Package;
 
 class AppScriptConditionEvents
 {

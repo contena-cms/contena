@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Demodata\DemodataRequest;
 use Contena\Core\Framework\Demodata\Event\DemodataRequestCreatedEvent;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Input\ArrayInput;
 
 /**

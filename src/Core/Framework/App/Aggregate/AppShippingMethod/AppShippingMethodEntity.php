@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\App\Aggregate\AppShippingMethod;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system
@@ -27,7 +25,6 @@ class AppShippingMethodEntity extends Entity
 
     protected string $shippingMethodId;
 
-    protected ?ShippingMethodEntity $shippingMethod = null;
 
     protected ?string $originalMediaId = null;
 
@@ -83,15 +80,7 @@ class AppShippingMethodEntity extends Entity
         $this->shippingMethodId = $shippingMethodId;
     }
 
-    public function getShippingMethod(): ?ShippingMethodEntity
-    {
-        return $this->shippingMethod;
-    }
 
-    public function setShippingMethod(?ShippingMethodEntity $shippingMethod): void
-    {
-        $this->shippingMethod = $shippingMethod;
-    }
 
     public function getOriginalMediaId(): ?string
     {

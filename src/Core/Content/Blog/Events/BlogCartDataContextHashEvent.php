@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Events;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
 
@@ -20,13 +19,6 @@ class BlogCartDataContextHashEvent extends Event implements ContenaChannelEvent
      */
     private array $parts = [];
 
-    public function __construct(
-        private readonly CartDataCollection $data,
-        private readonly Cart $original,
-        private readonly ChannelContext $channelContext,
-        private readonly CartBehavior $behavior,
-    ) {
-    }
 
     /**
      * @param string|int|float|bool|array<mixed>|null $value
@@ -47,20 +39,8 @@ class BlogCartDataContextHashEvent extends Event implements ContenaChannelEvent
         return $parts;
     }
 
-    public function getData(): CartDataCollection
-    {
-        return $this->data;
-    }
 
-    public function getOriginalCart(): Cart
-    {
-        return $this->original;
-    }
 
-    public function getBehavior(): CartBehavior
-    {
-        return $this->behavior;
-    }
 
     public function getContext(): Context
     {

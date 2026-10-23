@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

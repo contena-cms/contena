@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Telemetry\Doctrine;
 use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Driver\Connection as DriverConnection;
 use Doctrine\DBAL\Driver\Middleware\AbstractDriverMiddleware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

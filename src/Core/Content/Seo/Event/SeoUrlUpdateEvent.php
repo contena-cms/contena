@@ -6,7 +6,6 @@ use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class SeoUrlUpdateEvent extends Event implements ContenaEvent

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\SystemConfig\Validation;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigTab;

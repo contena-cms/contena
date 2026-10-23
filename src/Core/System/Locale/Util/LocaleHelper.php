@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Locale\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Intl\Countries;
 use Symfony\Component\Intl\Languages;
 

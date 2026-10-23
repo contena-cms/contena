@@ -10,18 +10,17 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Frontend\Theme\ThemeChannel;
+use Contena\Frontend\Theme\ThemeChannelCollection;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeLifecycleHandler;
 use Contena\Frontend\Theme\ThemeLifecycleService;
-use Contena\Frontend\Theme\ThemeChannel;
-use Contena\Frontend\Theme\ThemeChannelCollection;
 use Contena\Frontend\Theme\ThemeService;
 
 /**

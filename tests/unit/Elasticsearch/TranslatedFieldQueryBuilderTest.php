@@ -11,7 +11,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
 use Contena\Elasticsearch\AbstractFieldQueryBuilder;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Cors\CoreCorsHeaderProvider;
 use Contena\Core\Framework\Api\Cors\CorsHeaders;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 
 /**

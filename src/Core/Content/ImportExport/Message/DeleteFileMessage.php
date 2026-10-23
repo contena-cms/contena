@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\Message;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 
 class DeleteFileMessage implements AsyncMessageInterface

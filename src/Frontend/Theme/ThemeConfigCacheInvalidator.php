@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme;
 
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Translation\Translator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Routing\CachedDomainLoader;
 use Contena\Frontend\Theme\Event\ThemeAssignedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigChangedEvent;

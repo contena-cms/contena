@@ -5,7 +5,6 @@ namespace Contena\Frontend\Controller;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheAttribute;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheStore;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Api\ResponseFields;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\LandingPage;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

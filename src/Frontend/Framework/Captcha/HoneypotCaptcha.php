@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Captcha;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\ConstraintViolation;

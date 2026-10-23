@@ -3,9 +3,6 @@
 namespace Contena\Core\System\NumberRange\Aggregate\NumberRangeType;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelEntity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeTypeTranslation\NumberRangeTypeTranslationCollection;
 use Contena\Core\System\NumberRange\NumberRangeCollection;

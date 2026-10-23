@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\Common;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
-use Contena\Core\Framework\Log\Package;
 
 class LastIdQuery implements IterableQuery
 {

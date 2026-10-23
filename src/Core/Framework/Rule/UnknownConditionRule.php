@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Rule;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\NotRule;
 use Contena\Core\Framework\Rule\Container\OrRule;

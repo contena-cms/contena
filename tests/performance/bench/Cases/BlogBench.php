@@ -7,7 +7,6 @@ use PhpBench\Attributes as Bench;
 use PhpBench\Attributes\BeforeMethods;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Tests\Bench\AbstractBenchCase;
 
 /**
  * @internal - only for performance benchmarks

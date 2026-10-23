@@ -10,7 +10,6 @@ use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Service\AbstractCategoryUrlGenerator;
 use Contena\Core\Framework\Adapter\Twig\Extension\CategoryUrlExtension;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Symfony\Bridge\Twig\Extension\RoutingExtension;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

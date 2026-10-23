@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Source\NoDatabaseSourceResolver;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

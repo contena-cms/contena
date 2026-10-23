@@ -15,12 +15,12 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\HeaderUtils;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 
 class DownloadResponseGenerator
 {

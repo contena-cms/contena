@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Extensions;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 final readonly class ExtensionDispatcher

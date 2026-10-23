@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\Suggest;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class SuggestPage extends Page

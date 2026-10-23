@@ -9,7 +9,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Message\DeleteFileHandler;
 use Contena\Core\Content\Media\Message\DeleteFileMessage;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

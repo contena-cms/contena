@@ -12,7 +12,6 @@ use Contena\Core\DevOps\Docs\DocsException;
 use Contena\Core\DevOps\Docs\Script\ScriptReferenceDataCollector;
 use Contena\Core\DevOps\Docs\Script\ServiceReferenceGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacade;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Finder\Finder;
 use Twig\Environment;
 

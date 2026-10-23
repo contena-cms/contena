@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Gateway\Context\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Gateway\Context\Command\AddUserMessageCommand;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

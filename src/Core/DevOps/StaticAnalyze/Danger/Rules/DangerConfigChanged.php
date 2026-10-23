@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Danger always executes the config, rule classes and runner package of the target branch, so

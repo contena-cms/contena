@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Sso;
 
 use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ResponseInterface;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;

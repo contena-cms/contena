@@ -7,7 +7,6 @@ use League\OAuth2\Server\AuthorizationServer;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;

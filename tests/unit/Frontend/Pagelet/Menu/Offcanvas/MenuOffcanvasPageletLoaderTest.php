@@ -10,7 +10,6 @@ use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Content\Category\Tree\TreeItem;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoader;

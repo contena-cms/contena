@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * EntityDefinitions allow only regular EntityExtension, this class maps BulkyEntityExtensions to EntityExtensions

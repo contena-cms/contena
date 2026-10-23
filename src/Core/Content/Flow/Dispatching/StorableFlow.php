@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\Dispatching;
 
 use Contena\Core\Content\Flow\FlowException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

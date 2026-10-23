@@ -2,11 +2,10 @@
 
 namespace Contena\Core\System\User\Aggregate\UserAddress;
 
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @extends EntityCollection<UserAddressEntity>

@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Routing;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesAbstract;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
 
 /**

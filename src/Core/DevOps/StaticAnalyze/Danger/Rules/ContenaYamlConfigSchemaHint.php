@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\StaticAnalyze\Danger\Rules;
 
 use Danger\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The `config-schema.json` describes the `contena.yaml` structure and should follow its changes.

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Update\Steps;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;
 use Contena\Core\Framework\Update\Services\ExtensionCompatibility;
 use Contena\Core\Framework\Update\Struct\Version;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ImportExport\Processing\Pipe;
 
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

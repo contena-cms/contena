@@ -10,7 +10,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 
 /**

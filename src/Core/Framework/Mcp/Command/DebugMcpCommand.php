@@ -8,7 +8,6 @@ use Mcp\Schema\ResourceDefinition;
 use Mcp\Schema\Tool;
 use Mcp\Server\Builder;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpDebugCommandCompilerPass;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;

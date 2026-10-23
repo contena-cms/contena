@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\Service\Mail;
 use Contena\Core\Content\Mail\Service\MailFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\HappyPathValidator;
 use Symfony\Component\Validator\ConstraintViolationList;
 

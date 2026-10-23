@@ -4,9 +4,8 @@ namespace Contena\Core\System\Country\Extension;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\Channel\CountryRouteResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Country\Channel\CountryRouteResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

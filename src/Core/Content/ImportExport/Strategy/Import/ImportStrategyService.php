@@ -6,7 +6,6 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Content\ImportExport\Struct\ImportResult;
 use Contena\Core\Content\ImportExport\Struct\Progress;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

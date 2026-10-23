@@ -10,7 +10,6 @@ use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
 use Contena\Core\Content\Property\PropertyGroupEntity;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\LintTranslationFilesCommand;
 use Contena\Core\System\Snippet\Command\Util\CountryAgnosticFileLinter;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;

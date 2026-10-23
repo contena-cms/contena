@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomField;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Symfony\Component\Config\Util\XmlUtils;
 

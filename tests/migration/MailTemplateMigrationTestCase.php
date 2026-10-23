@@ -4,10 +4,6 @@ namespace Contena\Tests\Migration;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Migration\Traits\UpdateMailTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

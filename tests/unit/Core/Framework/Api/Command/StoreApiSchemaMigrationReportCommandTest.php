@@ -9,7 +9,6 @@ use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreStoreApiSchemaMigrati
 use Contena\Core\Framework\Api\ApiDefinition\Generator\StoreApiSchemaMigrationReport;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\StoreApiSchemaMigrationReporter;
 use Contena\Core\Framework\Api\Command\StoreApiSchemaMigrationReportCommand;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;

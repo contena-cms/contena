@@ -3,7 +3,6 @@
 namespace Contena\Core\Service\Subscriber;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\Service\LifecycleManager;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

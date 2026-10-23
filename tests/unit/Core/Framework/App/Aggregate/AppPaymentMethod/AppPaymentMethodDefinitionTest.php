@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodCollec
 use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodDefinition;
 use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

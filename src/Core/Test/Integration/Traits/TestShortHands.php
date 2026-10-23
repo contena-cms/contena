@@ -5,15 +5,10 @@ namespace Contena\Core\Test\Integration\Traits;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Flow\Events\FlowSendMailActionEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 
@@ -25,6 +20,8 @@ use Contena\Core\Test\TestDefaults;
 trait TestShortHands
 {
     use KernelTestBehaviour;
+use Contena\Core\Test\Integration\Builder\User\UserBuilder;
+use Contena\Core\Test\Integration\Helper\MailEventListener;
 
     /**
      * @param array<string, mixed> $options
@@ -37,75 +34,11 @@ trait TestShortHands
             ->create($token, $channelId, $options);
     }
 
-    protected function addBlogToCart(string $id, ChannelContext $context): Cart
-    {
-        $blog = static::getContainer()->get(BlogLineItemFactory::class)
-            ->create(['id' => $id, 'referencedId' => $id], $context);
 
-        $cart = static::getContainer()->get(CartService::class)
-            ->getCart($context->getToken(), $context);
 
-        return static::getContainer()->get(CartService::class)
-            ->add($cart, $blog, $context);
-    }
 
-    protected function order(Cart $cart, ChannelContext $context, ?RequestDataBag $data = null): string
-    {
-        return static::getContainer()->get(CartService::class)
-            ->order($cart, $context, $data ?? new RequestDataBag());
-    }
 
-    protected function assertBlogInOrder(string $orderId, string $blogId): OrderLineItemEntity
-    {
-        $criteria = new Criteria();
-        $criteria->setLimit(1);
 
-        $criteria->addFilter(new AndFilter([
-            new EqualsFilter('referencedId', $blogId),
-            new EqualsFilter('type', LineItem::BLOG_LINE_ITEM_TYPE),
-            new EqualsFilter('orderId', $orderId),
-        ]));
-
-        $exists = static::getContainer()->get('order_line_item.repository')
-            ->search($criteria, Context::createDefaultContext())->getEntities();
-
-        static::assertCount(1, $exists);
-
-        $item = $exists->first();
-
-        static::assertInstanceOf(OrderLineItemEntity::class, $item);
-
-        return $item;
-    }
-
-    protected function assertLineItemTotalPrice(Cart $cart, string $id, float $price): void
-    {
-        $item = $cart->get($id);
-
-        static::assertInstanceOf(LineItem::class, $item, \sprintf('Can not find line item with id %s', $id));
-
-        static::assertInstanceOf(CalculatedPrice::class, $item->getPrice(), \sprintf('Line item with id %s has no price', $id));
-
-        static::assertSame($price, $item->getPrice()->getTotalPrice(), \sprintf('Line item with id %s has wrong total price', $id));
-    }
-
-    protected function assertLineItemUnitPrice(Cart $cart, string $id, float $price): void
-    {
-        $item = $cart->get($id);
-
-        static::assertInstanceOf(LineItem::class, $item, \sprintf('Can not find line item with id %s', $id));
-
-        static::assertInstanceOf(CalculatedPrice::class, $item->getPrice(), \sprintf('Line item with id %s has no price', $id));
-
-        static::assertSame($price, $item->getPrice()->getUnitPrice(), \sprintf('Line item with id %s has wrong unit price', $id));
-    }
-
-    protected function assertLineItemInCart(Cart $cart, string $id): void
-    {
-        $item = $cart->get($id);
-
-        static::assertInstanceOf(LineItem::class, $item, \sprintf('Can not find line item with id %s', $id));
-    }
 
     protected function login(ChannelContext $context, ?string $userId = null): ChannelContext
     {

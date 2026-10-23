@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework\Indexing;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 
 class IndexMappingProvider

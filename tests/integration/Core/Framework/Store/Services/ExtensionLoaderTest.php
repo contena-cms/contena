@@ -10,7 +10,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Store\Services\ExtensionLoader;
@@ -20,8 +19,6 @@ use Contena\Core\Framework\Store\Struct\ImageCollection;
 use Contena\Core\Framework\Store\Struct\PermissionCollection;
 use Contena\Core\Framework\Store\Struct\PermissionStruct;
 use Contena\Core\Framework\Store\Struct\VariantCollection;
-use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

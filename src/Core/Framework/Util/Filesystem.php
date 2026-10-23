@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem as Io;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\System\Tax\Aggregate\TaxRule;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleEntity;
 use Contena\Core\System\Tax\Aggregate\TaxRuleType\TaxRuleTypeEntity;

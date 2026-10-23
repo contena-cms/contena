@@ -5,7 +5,6 @@ namespace Contena\Core\System\Consent\Log;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentStatus;
 
 /**

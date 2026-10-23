@@ -19,8 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\AutoIncrementField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BreadcrumbField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\CalculatedPriceField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\CartPriceField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CashRoundingConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildCountField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
@@ -83,15 +81,14 @@ use Contena\Core\Framework\Event\EventData\FormDataObjectType;
 use Contena\Core\Framework\Event\EventData\ObjectType;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\MailAware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
-use Contena\Core\System\Channel\ChannelDefinition;
-use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -454,36 +451,6 @@ class MailDataSimulator
             case $field instanceof ParentFkField:
                 return null;
 
-            case $field instanceof CalculatedPriceField:
-                return new CalculatedPrice(
-                    Random::getInteger(100, 1000000) / 100,
-                    Random::getInteger(100, 1000000) / 100,
-                    new CalculatedTaxCollection([new CalculatedTax(
-                        Random::getInteger(100, 100000) / 100,
-                        Random::getInteger(100, 1000000) / 100,
-                        19.0,
-                    )]),
-                    new TaxRuleCollection([new TaxRule(
-                        19.0,
-                    )]),
-                );
-
-            case $field instanceof CartPriceField:
-                return new CartPrice(
-                    Random::getInteger(100, 1000000) / 100,
-                    Random::getInteger(100, 1000000) / 100,
-                    Random::getInteger(100, 1000000) / 100,
-                    new CalculatedTaxCollection([new CalculatedTax(
-                        Random::getInteger(100, 100000) / 100,
-                        Random::getInteger(100, 1000000) / 100,
-                        19.0,
-                    )]),
-                    new TaxRuleCollection([new TaxRule(
-                        19.0,
-                    )]),
-                    CartPrice::TAX_STATE_GROSS,
-                );
-
             case $field instanceof CashRoundingConfigField:
                 return new CashRoundingConfig(
                     2,
@@ -500,9 +467,6 @@ class MailDataSimulator
             case $field instanceof ManyToOneAssociationField:
             case $field instanceof OneToOneAssociationField:
                 return $this->generateEntityData($field->getReferenceDefinition(), $entityCache, $context);
-
-            case $field instanceof MeasurementUnitsField:
-                return MeasurementUnits::createDefaultUnits();
 
             case $field instanceof ConfigJsonField:
             case $field instanceof CustomFields:

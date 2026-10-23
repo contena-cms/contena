@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Webhook\Hookable;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
 
 /**

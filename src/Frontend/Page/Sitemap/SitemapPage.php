@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Sitemap;
 
 use Contena\Core\Content\Sitemap\Struct\Sitemap;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class SitemapPage extends Struct

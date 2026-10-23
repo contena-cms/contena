@@ -2,9 +2,8 @@
 
 namespace Contena\Frontend\Page\Address;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Frontend\Page\Page;
 
 /**

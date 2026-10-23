@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Subscriber;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Event\SnippetsThemeResolveEvent;
 use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
 use Contena\Frontend\Theme\FrontendPluginRegistry;

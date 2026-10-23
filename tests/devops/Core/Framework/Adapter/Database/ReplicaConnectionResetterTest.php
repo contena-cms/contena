@@ -4,8 +4,6 @@ namespace Contena\Tests\DevOps\Core\Framework\Adapter\Database;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Database\ReplicaConnectionResetter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetterInterface;
 
 /**

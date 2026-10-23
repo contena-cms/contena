@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\Struct;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\FrameworkException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Struct\Struct;
 

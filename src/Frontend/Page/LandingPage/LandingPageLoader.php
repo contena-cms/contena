@@ -2,16 +2,16 @@
 
 namespace Contena\Frontend\Page\LandingPage;
 
-use Contena\Core\Content\LandingPage\LandingPageException;
 use Contena\Core\Content\LandingPage\Channel\AbstractLandingPageRoute;
+use Contena\Core\Content\LandingPage\LandingPageException;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\MetaInformation;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 
 /**
  * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.

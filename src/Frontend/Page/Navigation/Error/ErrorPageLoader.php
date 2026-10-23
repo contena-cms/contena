@@ -2,16 +2,16 @@
 
 namespace Contena\Frontend\Page\Navigation\Error;
 
-use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoaderInterface;
+use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 
 /**
  * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.

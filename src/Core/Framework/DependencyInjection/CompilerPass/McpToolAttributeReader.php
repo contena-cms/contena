@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

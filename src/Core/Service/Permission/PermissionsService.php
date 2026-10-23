@@ -5,7 +5,6 @@ namespace Contena\Core\Service\Permission;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Service\Event\PermissionsGrantedEvent;
 use Contena\Core\Service\Event\PermissionsRevokedEvent;

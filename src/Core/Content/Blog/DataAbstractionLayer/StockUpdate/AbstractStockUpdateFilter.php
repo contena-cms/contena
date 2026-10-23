@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractStockUpdateFilter
 {

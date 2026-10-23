@@ -4,7 +4,6 @@ namespace Contena\Core\Installer\Requirements;
 
 use Composer\Composer;
 use Composer\Repository\PlatformRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
 use Contena\Core\Installer\Requirements\Struct\SystemCheck;

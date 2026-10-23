@@ -11,10 +11,10 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\FlowLogEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ServiceSubscriberInterface;
+use Contena\Core\Content\Flow\Exception\ExecuteSequenceException;
 
 /**
  * @internal not intended for decoration or replacement

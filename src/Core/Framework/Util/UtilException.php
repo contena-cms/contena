@@ -2,12 +2,11 @@
 
 namespace Contena\Core\Framework\Util;
 
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Database\TableHelperException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Util\Exception\Base64DecodingException;
+use Contena\Core\Framework\Util\Exception\UtilXmlParsingException;
 
 /**
  * @codeCoverageIgnore
@@ -47,14 +46,6 @@ class UtilException extends HttpException
         );
     }
 
-    public static function invalidJsonNotArray(): JsonDecodingException
-    {
-        return new JsonDecodingException(
-            Response::HTTP_BAD_REQUEST,
-            self::INVALID_JSON_NOT_ARRAY,
-            'JSON cannot be decoded to an array'
-        );
-    }
 
     public static function xmlElementNotFound(string $element): self
     {
@@ -109,20 +100,6 @@ class UtilException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function operatorNotSupported(string $operator): self|ComparatorException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return ComparatorException::operatorNotSupported($operator);
-        }
-
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::OPERATOR_NOT_SUPPORTED,
-            'Operator "{{ operator }}" is not supported.',
-            ['operator' => $operator]
-        );
-    }
 
     public static function base64DecodingFailed(): Base64DecodingException
     {

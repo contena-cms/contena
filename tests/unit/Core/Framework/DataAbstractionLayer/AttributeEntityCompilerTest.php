@@ -60,13 +60,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\PriceFieldSerializer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntity;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityCollection;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityWithInheritance;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityWithSearchRanking;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\StringEnum;
 
 /**
  * @internal

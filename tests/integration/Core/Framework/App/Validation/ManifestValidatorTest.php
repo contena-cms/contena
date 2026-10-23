@@ -8,8 +8,6 @@ use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

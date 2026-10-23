@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Tracks the wall time a message spends between being received and reaching a terminal worker event (handled or failed).

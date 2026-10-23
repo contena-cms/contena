@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Subscriber;
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
 use Contena\Core\Framework\App\ShopId\ShopIdChangedEvent;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\Attribute\AsEventListener;
 
 /**

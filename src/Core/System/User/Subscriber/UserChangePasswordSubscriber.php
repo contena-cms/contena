@@ -3,10 +3,9 @@
 namespace Contena\Core\System\User\Subscriber;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\UserEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\UserEvents;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

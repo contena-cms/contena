@@ -5,15 +5,14 @@ namespace Contena\Tests\Unit\Core\System\Channel\File\Rendering;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
-use Contena\Core\System\Channel\File\Discovery\ChannelFile;
-use Contena\Core\System\Channel\File\Rendering\Extension\ChannelFileRenderParametersExtension;
-use Contena\Core\System\Channel\File\Rendering\ChannelFileStoreApiMcpSubscriber;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Channel\File\Discovery\ChannelFile;
+use Contena\Core\System\Channel\File\Rendering\ChannelFileStoreApiMcpSubscriber;
+use Contena\Core\System\Channel\File\Rendering\Extension\ChannelFileRenderParametersExtension;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 
 /**

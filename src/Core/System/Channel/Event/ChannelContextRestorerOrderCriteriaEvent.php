@@ -6,7 +6,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\NestedEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed together with `ChannelContextRestorer::restoreByOrder()`. Load the order with the associations you need and pass it to `OrderConverter::assembleChannelContext()` instead.

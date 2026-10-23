@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Aggregate\UserGroupTranslation;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
@@ -12,7 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 
 /**
  * @codeCoverageIgnore

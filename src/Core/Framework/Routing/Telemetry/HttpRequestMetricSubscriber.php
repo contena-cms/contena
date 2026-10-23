@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Routing\Telemetry;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Driver\Middleware as DriverMiddleware;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCounter;
 use Contena\Core\Framework\Telemetry\Doctrine\QueryCountMiddleware;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;

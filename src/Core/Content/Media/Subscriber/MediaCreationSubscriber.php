@@ -9,8 +9,8 @@ use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 
 /**
  * @internal

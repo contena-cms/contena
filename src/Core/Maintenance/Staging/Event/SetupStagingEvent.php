@@ -3,7 +3,6 @@
 namespace Contena\Core\Maintenance\Staging\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
 /**

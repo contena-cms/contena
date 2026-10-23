@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

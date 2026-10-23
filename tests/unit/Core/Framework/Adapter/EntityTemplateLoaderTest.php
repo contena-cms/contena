@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\EntityTemplateLoader;
-use Contena\Core\Framework\Log\Package;
 use Twig\Error\LoaderError;
 use Twig\Source;
 

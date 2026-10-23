@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\Url\AppUrlVerificationPrinter;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
 use Contena\Core\Framework\App\Url\VerificationState;
 use Contena\Core\Framework\App\Url\VerificationStatus;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

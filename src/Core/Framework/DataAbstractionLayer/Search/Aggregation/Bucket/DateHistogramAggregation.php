@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Aggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Service;
 
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Event\TranslationRemovedEvent;
 use Contena\Core\System\Snippet\SnippetException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

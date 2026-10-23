@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Api\Command;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CachedEntitySchemaGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;

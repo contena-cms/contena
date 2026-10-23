@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Maintenance\System\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Update\Api\UpdateController;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;

@@ -2,14 +2,8 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserException;
-use Contena\Core\System\User\Extension\ConvertGuestRouteExtension;
-use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
@@ -20,10 +14,16 @@ use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\SuccessResponse;
+use Contena\Core\System\User\Extension\ConvertGuestRouteExtension;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserException;
+use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(
     defaults: [

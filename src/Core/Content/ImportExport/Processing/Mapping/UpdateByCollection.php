@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\Processing\Mapping;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Telemetry;
 
 use Contena\Core\Framework\App\Event\AppInstalledEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

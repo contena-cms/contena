@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\Framework\Util;
 
-use Contena\Core\Framework\Log\Package;
 
 class Hasher
 {

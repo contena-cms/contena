@@ -2,15 +2,12 @@
 
 namespace Contena\Core\Framework\Script\Api;
 
+use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryWriterFacadeHookFactory;
-use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacadeHookFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Facade\RequestFacadeFactory;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
-use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;

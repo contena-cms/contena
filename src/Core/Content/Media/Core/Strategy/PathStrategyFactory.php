@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Core\Strategy;
 
 use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal Factory is only used for DI container construction to find configured strategy

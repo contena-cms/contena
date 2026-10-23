@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Mail;
 
 use Contena\Core\Content\Mail\Service\MailSender;
 use Contena\Core\Content\Mail\Transport\MailerTransportLoader;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;

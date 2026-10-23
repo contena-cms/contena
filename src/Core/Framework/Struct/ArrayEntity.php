@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Struct;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @implements \ArrayAccess<string, mixed>

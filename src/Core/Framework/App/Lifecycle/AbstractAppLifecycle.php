@@ -6,7 +6,6 @@ use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppUpdateParameters;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system

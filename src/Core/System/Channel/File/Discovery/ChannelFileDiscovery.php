@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\File\Discovery;
 
 use Contena\Core\Framework\Adapter\Twig\TemplatePathIteratorInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\File\ChannelFileCacheInvalidator;
 use Symfony\Component\Mime\MimeTypes;

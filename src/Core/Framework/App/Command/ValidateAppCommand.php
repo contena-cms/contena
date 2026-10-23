@@ -6,7 +6,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -14,6 +13,8 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Finder\Finder;
+use Contena\Core\Framework\App\Exception\AppValidationException;
+use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 
 /**
  * @internal only for use by the app-system

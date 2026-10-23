@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Event;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;

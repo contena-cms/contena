@@ -9,11 +9,9 @@ use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Frontend\Framework\FrontendFrameworkException;
 use Contena\Frontend\Framework\Media\FrontendMediaUploader;
 use Contena\Frontend\Framework\Media\FrontendMediaValidatorRegistry;
-use Contena\Frontend\Framework\FrontendFrameworkException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**

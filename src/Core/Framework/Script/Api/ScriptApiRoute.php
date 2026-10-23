@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Script\Api;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Script\Execution\ScriptAppInformation;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
@@ -15,6 +14,7 @@ use Contena\Core\System\Channel\Api\ResponseFields;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException;
 
 /**
  * @internal

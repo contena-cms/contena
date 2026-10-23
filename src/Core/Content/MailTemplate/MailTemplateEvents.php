@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\MailTemplate;
 
-use Contena\Core\Framework\Log\Package;
 
 class MailTemplateEvents
 {

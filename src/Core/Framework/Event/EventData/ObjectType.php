@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Event\EventData;
 
-use Contena\Core\Framework\Log\Package;
 
 class ObjectType implements EventDataType
 {

@@ -17,7 +17,6 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * The unit suite runs with every registered feature flag active (the FeatureFlagExtension rewrites the

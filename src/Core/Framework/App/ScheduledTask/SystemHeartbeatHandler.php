@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\ScheduledTask;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Event\SystemHeartbeatEvent;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

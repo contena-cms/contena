@@ -4,8 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool\Stub;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
 
 /**
  * Composes the trait the way a tool does and opens its private entry points to the test, so the test class

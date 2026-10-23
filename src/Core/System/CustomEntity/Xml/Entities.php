@@ -3,7 +3,6 @@
 namespace Contena\Core\System\CustomEntity\Xml;
 
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal only for use by the app-system, will be considered internal from v6.4.0 onward

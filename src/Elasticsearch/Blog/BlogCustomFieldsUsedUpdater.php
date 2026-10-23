@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 
 use Contena\Core\Framework\Api\EventListener\ErrorResponseFactory;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
 

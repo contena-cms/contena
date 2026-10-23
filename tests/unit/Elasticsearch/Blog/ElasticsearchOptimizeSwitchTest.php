@@ -6,11 +6,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
-use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexingFinishedEvent;
 use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
+use Contena\Elasticsearch\Framework\Indexing\Event\ElasticsearchIndexingFinishedEvent;
 
 /**
  * @internal

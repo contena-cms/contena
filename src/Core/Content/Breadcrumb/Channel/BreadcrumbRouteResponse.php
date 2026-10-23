@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Breadcrumb\Channel;
 
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
 
 /**

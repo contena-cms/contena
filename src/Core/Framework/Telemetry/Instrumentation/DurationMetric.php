@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Instrumentation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Labels may be a closure receiving the instrumented callback's outcome: its return result (null when it

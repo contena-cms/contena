@@ -12,7 +12,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoResolver;
 use Contena\Core\Content\Seo\SeoUrlRequestContext;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\Doctrine\FakeResultFactory;

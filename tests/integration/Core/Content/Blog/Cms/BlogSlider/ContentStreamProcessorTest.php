@@ -3,22 +3,19 @@
 namespace Contena\Tests\Integration\Core\Content\Blog\Cms\BlogSlider;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
+use Contena\Core\Content\Cms\Channel\Struct\BlogSliderStruct;
 use Contena\Core\Content\Cms\DataResolver\CmsSlotsDataResolver;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\BlogSliderStruct;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;

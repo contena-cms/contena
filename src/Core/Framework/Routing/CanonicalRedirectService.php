@@ -2,10 +2,9 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\Extension\CanonicalRedirectExtension;
 use Contena\Core\ChannelRequest;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Routing\Extension\CanonicalRedirectExtension;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;

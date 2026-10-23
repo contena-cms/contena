@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Mail\MailerConfigurationCompilerPass;
 use Contena\Core\Content\Mail\Service\MailSender;
 use Contena\Core\Content\Mail\Transport\MailerTransportLoader;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;

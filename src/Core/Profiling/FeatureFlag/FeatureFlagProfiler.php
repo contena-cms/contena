@@ -4,7 +4,6 @@ namespace Contena\Core\Profiling\FeatureFlag;
 
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bundle\FrameworkBundle\DataCollector\AbstractDataCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

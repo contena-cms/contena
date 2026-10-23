@@ -11,7 +11,6 @@ use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
 use Contena\Core\Checkout\Cart\Rule\LineItemInCategoryRule;
 use Contena\Core\Checkout\Cart\Rule\LineItemScope;
 use Contena\Core\Checkout\Cart\Rule\LineItemTagRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\MatchAllLineItemsRule;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleScope;

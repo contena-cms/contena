@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Captcha\BasicCaptcha;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class BasicCaptchaImage extends Struct

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Property;
 
-use Contena\Core\Framework\Log\Package;
 
 class PropertyEvents
 {

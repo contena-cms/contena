@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Flow\Event;
 
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Flow\Event\Xml\CustomEvents;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 /**

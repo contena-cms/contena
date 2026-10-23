@@ -6,10 +6,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\Command\DeleteUnusedGuestUsersCommand;
 use Contena\Core\System\User\DeleteUnusedGuestUserService;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 

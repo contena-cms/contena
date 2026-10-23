@@ -13,7 +13,6 @@ use Contena\Administration\Snippet\SnippetException;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleEntity;

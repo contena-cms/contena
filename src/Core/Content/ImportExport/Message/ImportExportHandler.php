@@ -10,7 +10,6 @@ use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\ImportExportFactory;
 use Contena\Core\Content\ImportExport\Struct\Progress;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;

@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\Subscriber\ChannelMaintenanceIpAllowlistSyncSubscriber;
 use Contena\Core\Test\Annotation\DisabledFeatures;

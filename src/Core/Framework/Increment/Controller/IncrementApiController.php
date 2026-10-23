@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Increment\Controller;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Increment\IncrementException;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\JsonResponse;

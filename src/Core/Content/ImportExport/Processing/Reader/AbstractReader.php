@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ImportExport\Processing\Reader;
 
 use Contena\Core\Content\ImportExport\Struct\Config;
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractReader
 {

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Script\Execution;
 
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Contracts\Service\ResetInterface;

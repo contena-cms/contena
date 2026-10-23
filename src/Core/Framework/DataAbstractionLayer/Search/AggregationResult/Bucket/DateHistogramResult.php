@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

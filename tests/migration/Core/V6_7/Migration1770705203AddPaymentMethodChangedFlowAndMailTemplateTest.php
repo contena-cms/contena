@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Order\Event\OrderPaymentMethodChangedEvent;
 use Contena\Core\Content\MailTemplate\MailTemplateTypes;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1770705203AddPaymentMethodChangedFlowAndMailTemplate;

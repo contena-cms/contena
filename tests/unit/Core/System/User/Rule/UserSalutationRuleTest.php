@@ -9,9 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
 use Contena\Core\Checkout\CheckoutRuleScope;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Rule\UserSalutationRule;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
@@ -19,6 +16,8 @@ use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Salutation\SalutationEntity;
+use Contena\Core\System\User\Rule\UserSalutationRule;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @internal

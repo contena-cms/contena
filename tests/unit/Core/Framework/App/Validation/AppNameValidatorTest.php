@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\AppNameValidator;
 use Contena\Core\Framework\App\Validation\Error\AppNameError;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

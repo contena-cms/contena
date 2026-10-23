@@ -5,6 +5,9 @@ namespace Contena\Core\Profiling\DependencyInjection;
 use Contena\Core\Framework\Adapter\Command\CacheWatchDelayedCommand;
 use Contena\Core\Profiling\Profiler;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Profiling\Integration\Datadog;
+use Contena\Core\Profiling\Integration\ServerTiming;
+use Contena\Core\Profiling\Integration\Tideways;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -13,11 +16,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(Stopwatch::class)
-        ->args([
-            service('debug.stopwatch')->nullOnInvalid(),
-        ])
-        ->tag('contena.profiler', ['integration' => 'Symfony']);
 
     $services->set(Tideways::class)
         ->tag('contena.profiler', ['integration' => 'Tideways']);

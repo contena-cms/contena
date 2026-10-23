@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy;
 
-use Contena\Core\Framework\Log\Package;
 
 interface TemplateNamespaceHierarchyBuilderInterface
 {

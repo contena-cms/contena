@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Core\Application;
 
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal Just for abstraction between domain and infrastructure. No public API!

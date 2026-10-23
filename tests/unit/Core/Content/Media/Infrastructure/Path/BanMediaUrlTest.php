@@ -11,7 +11,6 @@ use Contena\Core\Content\Media\Event\MediaPathChangedEvent;
 use Contena\Core\Content\Media\Infrastructure\Path\BanMediaUrl;
 use Contena\Core\Content\Media\Infrastructure\Path\MediaUrlGenerator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

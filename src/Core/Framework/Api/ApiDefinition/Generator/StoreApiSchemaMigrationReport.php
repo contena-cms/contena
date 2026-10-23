@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\ApiDefinition\Generator;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

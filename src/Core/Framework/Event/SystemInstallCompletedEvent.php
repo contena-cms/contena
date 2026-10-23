@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 class SystemInstallCompletedEvent extends Event implements ContenaEvent

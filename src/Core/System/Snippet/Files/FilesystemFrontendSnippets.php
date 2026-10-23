@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Files;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Frontend snippets stored in the private filesystem (`contena.filesystem.private`).

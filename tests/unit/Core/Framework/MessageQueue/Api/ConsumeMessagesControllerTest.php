@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Contena\Core\Framework\Increment\AbstractIncrementer;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Api\ConsumeMessagesController;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
 use Contena\Core\Framework\MessageQueue\Stats\AbstractStatsRepository;

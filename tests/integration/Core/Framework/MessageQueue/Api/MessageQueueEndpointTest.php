@@ -5,9 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\MessageQueue\Api;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @deprecated tag:v6.8.0 - Test class tests deprecated /api/_info/queue.json endpoint which will be removed

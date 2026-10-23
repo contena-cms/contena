@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\RateLimiter;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\NoLimitRateLimiterFactory;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
 use Contena\Core\Framework\Test\RateLimiter\DisableRateLimiterCompilerPass;

@@ -10,8 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\AggregationParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Util\Json;
 

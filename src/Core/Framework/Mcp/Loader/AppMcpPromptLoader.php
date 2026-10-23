@@ -7,7 +7,6 @@ use Mcp\Schema\Prompt;
 use Mcp\Server\RequestContext;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptConfig;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @experimental stableVersion:v6.8.0

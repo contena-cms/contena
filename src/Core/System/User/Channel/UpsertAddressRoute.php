@@ -2,18 +2,11 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\UserEvents;
-use Contena\Core\System\User\Extension\UpsertAddressRouteExtension;
-use Contena\Core\System\User\Validation\Constraint\UserZipCode;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\DataMappingEvent;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
@@ -23,10 +16,16 @@ use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\User\Extension\UpsertAddressRouteExtension;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\UserEvents;
+use Contena\Core\System\User\Validation\Constraint\UserZipCode;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -37,6 +36,7 @@ class UpsertAddressRoute extends AbstractUpsertAddressRoute
 {
     use UserAddressDataNormalizerTrait;
     use UserAddressValidationTrait;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed, use SnippetValidator directly instead

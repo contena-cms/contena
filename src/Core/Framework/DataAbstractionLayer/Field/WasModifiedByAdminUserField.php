@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
-use Contena\Core\Framework\Log\Package;
 
 class WasModifiedByAdminUserField extends BoolField
 {

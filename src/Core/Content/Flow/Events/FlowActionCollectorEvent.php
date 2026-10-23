@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Flow\Events;
 use Contena\Core\Content\Flow\Api\FlowActionCollectorResponse;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\NestedEvent;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

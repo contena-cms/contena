@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\Session;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;

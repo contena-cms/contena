@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Telemetry\Instrumentation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Shared vocabulary for the `result` label of instrumented operations, so every metric reports

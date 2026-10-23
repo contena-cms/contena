@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\MediaType\BinaryType;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\TypeDetector\DefaultTypeDetector;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

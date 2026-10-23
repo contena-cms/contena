@@ -6,7 +6,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Symfony\XmlServiceMapFactory;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\DeprecatedServiceFeatureTagRule;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

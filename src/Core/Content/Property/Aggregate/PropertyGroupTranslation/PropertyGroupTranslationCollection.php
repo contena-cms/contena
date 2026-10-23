@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Property\Aggregate\PropertyGroupTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @extends EntityCollection<PropertyGroupTranslationEntity>

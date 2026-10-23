@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Channel\Api;
 
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelException;
 use Symfony\Component\HttpFoundation\Request;
 

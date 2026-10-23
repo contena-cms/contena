@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Cookie;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed without replacement

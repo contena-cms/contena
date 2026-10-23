@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Doctrine;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Statement;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\MeterProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 

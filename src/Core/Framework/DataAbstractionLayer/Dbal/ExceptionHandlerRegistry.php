@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

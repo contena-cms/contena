@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Event\AppInstalledEvent;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

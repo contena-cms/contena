@@ -7,7 +7,6 @@ use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\ScalarValueType;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\LanguageAware;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

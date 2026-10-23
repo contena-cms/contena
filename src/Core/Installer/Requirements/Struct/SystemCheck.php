@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Requirements\Struct;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

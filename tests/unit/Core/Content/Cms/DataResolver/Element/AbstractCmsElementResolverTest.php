@@ -5,20 +5,18 @@ namespace Contena\Tests\Unit\Core\Content\Cms\DataResolver\Element;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
-use Contena\Core\Content\Cms\Channel\Struct\ImageSliderItemStruct;
-use Contena\Core\Content\Cms\Channel\Struct\ImageSliderStruct;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Cms\Channel\Struct\ImageSliderItemStruct;
+use Contena\Core\Content\Cms\Channel\Struct\ImageSliderStruct;
+use Contena\Core\Content\Cms\DataResolver\Element\AbstractCmsElementResolver;
+use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\PropertyNotFoundException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\Framework\DataAbstractionLayer\TestEntityDefinition;
-use Contena\Tests\Unit\Core\Content\Cms\DataResolver\Element\Fixtures\StubCmsElementResolver;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

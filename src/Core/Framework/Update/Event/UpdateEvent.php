@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Update\Event;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class UpdateEvent extends Event

@@ -8,11 +8,9 @@ use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\DTO\Service;
 use Contena\Core\Service\ServiceStorage;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

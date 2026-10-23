@@ -2,7 +2,6 @@
 
 namespace Contena\Core\DevOps\Docs;
 
-use Contena\Core\Framework\Log\Package;
 
 class ArrayWriter
 {

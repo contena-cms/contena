@@ -18,7 +18,6 @@ use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Deprecation\BCChange\ClassMoved;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Event\AssetUploadEvent;
@@ -32,6 +31,7 @@ use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\PluginNotFoundException;
 
 #[ClassMoved(version: 'v6.8.0', previousClassName: 'Contena\Core\Framework\Plugin\Util\AssetService')]
 #[BecomesInternal(version: 'v6.8.0')]

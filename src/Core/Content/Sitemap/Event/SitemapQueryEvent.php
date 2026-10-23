@@ -4,9 +4,8 @@ namespace Contena\Core\Content\Sitemap\Event;
 
 use Doctrine\DBAL\Query\QueryBuilder;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Event\GenericEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
 

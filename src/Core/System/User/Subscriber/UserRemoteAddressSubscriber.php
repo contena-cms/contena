@@ -3,10 +3,9 @@
 namespace Contena\Core\System\User\Subscriber;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\User\Event\UserLoginEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\Event\UserLoginEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\RequestStack;

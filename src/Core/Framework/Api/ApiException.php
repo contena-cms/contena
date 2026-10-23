@@ -4,14 +4,22 @@ namespace Contena\Core\Framework\Api;
 
 use Contena\Core\Framework\Api\ApiDefinition\ApiDefinitionGeneratorNotFoundException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
+use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
+use Contena\Core\Framework\Api\Exception\InvalidSyncOperationException;
+use Contena\Core\Framework\Api\Exception\InvalidVersionNameException;
+use Contena\Core\Framework\Api\Exception\LiveVersionDeleteException;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\Api\Exception\NoEntityClonedException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingReverseAssociation;
 
 class ApiException extends HttpException
 {
@@ -157,28 +165,9 @@ class ApiException extends HttpException
         );
     }
 
-    public static function unsupportedMediaType(string $contentType): SymfonyHttpException
-    {
-        return new UnsupportedMediaTypeHttpException(\sprintf('The Content-Type "%s" is unsupported.', $contentType));
-    }
 
-    public static function badRequest(string $message): SymfonyHttpException
-    {
-        return new BadRequestHttpException($message);
-    }
 
-    /**
-     * @param string[] $allow
-     */
-    public static function methodNotAllowed(array $allow, string $message): SymfonyHttpException
-    {
-        return new MethodNotAllowedHttpException($allow, $message);
-    }
 
-    public static function unauthorized(string $challenge, string $message): SymfonyHttpException
-    {
-        return new UnauthorizedHttpException($challenge, $message);
-    }
 
     public static function noEntityCloned(string $entity, string $id): ContenaHttpException
     {

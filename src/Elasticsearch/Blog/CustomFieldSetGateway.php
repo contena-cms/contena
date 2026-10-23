@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch\Blog;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

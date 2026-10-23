@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\AppExtractor;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Symfony\Component\Filesystem\Filesystem as Io;
 use Symfony\Component\Filesystem\Path;

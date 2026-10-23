@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Sync;
 
-use Contena\Core\Framework\Log\Package;
 
 class SyncBehavior
 {

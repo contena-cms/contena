@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
 use Contena\Core\Framework\Mcp\Tool\AbstractToolSearchTool;
 

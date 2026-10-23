@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Frontend\Framework\Twig;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

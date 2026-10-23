@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Migration;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Executes DDL, retrying once with `restrict_fk_on_non_standard_key` relaxed when MySQL 8.4

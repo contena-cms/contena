@@ -9,7 +9,6 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Requires raw DDL against {@see self::TABLES_WITH_KNOWN_DRIFT} to go through

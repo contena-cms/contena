@@ -16,7 +16,6 @@ use Contena\Core\Content\ImportExport\Message\ImportExportMessage;
 use Contena\Core\Content\ImportExport\Struct\Progress;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

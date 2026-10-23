@@ -42,6 +42,9 @@ use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\TraceableMessageBus;
+use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
+use Contena\Core\Test\Integration\App\TestAppServer;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -64,11 +67,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->defaults()
         ->public();
 
-    $services->set(TestPaymentHandler::class)
-        ->args([
-            service(OrderTransactionStateHandler::class),
-        ])
-        ->tag('contena.payment.method');
 
     $services->set(MemoryAdapterFactory::class)
         ->tag('contena.filesystem.factory');
@@ -276,7 +274,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->decorate(AppPaymentHandler::class)
         ->args([
             service(StateMachineRegistry::class),
-            service(PaymentPayloadService::class),
             service('order_transaction_capture_refund.repository'),
             service('order_transaction.repository'),
             service('app.repository'),

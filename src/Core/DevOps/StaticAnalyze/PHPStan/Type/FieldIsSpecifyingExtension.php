@@ -18,7 +18,6 @@ use PHPStan\Type\MethodTypeSpecifyingExtension;
 use PHPStan\Type\NullType;
 use PHPStan\Type\ObjectType;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

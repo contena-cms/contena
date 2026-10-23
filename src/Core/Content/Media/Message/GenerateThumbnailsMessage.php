@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Message;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 
 class GenerateThumbnailsMessage implements AsyncMessageInterface

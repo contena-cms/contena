@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Frontend\Theme\Subscriber;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Context\ActivateContext;
@@ -14,8 +13,6 @@ use Contena\Core\Framework\Plugin\Event\PluginPostUpdateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPreUpdateEvent;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
-use Contena\Core\Framework\Test\Plugin\PluginTestsHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;

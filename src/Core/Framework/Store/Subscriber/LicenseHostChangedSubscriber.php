@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Store\Subscriber;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseProvider;
 use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigChangedEvent;

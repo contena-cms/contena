@@ -2,35 +2,24 @@
 
 namespace Contena\Core\Content\Blog\Channel\Price;
 
+use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Content\Blog\Extension\BlogPriceCalculationExtension;
-use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Unit\UnitCollection;
 
 class BlogPriceCalculator extends AbstractBlogPriceCalculator
 {
     private ?UnitCollection $units = null;
 
-    /**
-     * @param EntityRepository<UnitCollection> $unitRepository
-     *
-     * @internal
-     */
-    public function __construct(
-        private readonly EntityRepository $unitRepository,
-        private readonly QuantityPriceCalculator $calculator,
-        private readonly ExtensionDispatcher $extensions,
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogPriceCalculator
     {
@@ -176,30 +165,6 @@ class BlogPriceCalculator extends AbstractBlogPriceCalculator
         $blog->assign(['calculatedCheapestPrice' => $calculated]);
     }
 
-    private function buildDefinition(
-        Entity $blog,
-        PriceCollection $prices,
-        ChannelContext $context,
-        UnitCollection $units,
-        ReferencePriceDto $reference,
-        int $quantity = 1
-    ): QuantityPriceDefinition {
-        $price = $this->getPriceValue($prices, $context);
-
-        $taxId = $blog->get('taxId');
-        $definition = new QuantityPriceDefinition($price, $context->buildTaxRules($taxId), $quantity);
-        $definition->setReferencePriceDefinition(
-            $this->buildReferencePriceDefinition($reference, $units)
-        );
-        $definition->setListPrice(
-            $this->getListPrice($prices, $context)
-        );
-        $definition->setRegulationPrice(
-            $this->getRegulationPrice($prices, $context)
-        );
-
-        return $definition;
-    }
 
     private function getPriceValue(PriceCollection $price, ChannelContext $context): float
     {
@@ -263,30 +228,6 @@ class BlogPriceCalculator extends AbstractBlogPriceCalculator
         return $value;
     }
 
-    private function buildReferencePriceDefinition(ReferencePriceDto $definition, UnitCollection $units): ?ReferencePriceDefinition
-    {
-        if (
-            $definition->getPurchase() === null
-            || $definition->getPurchase() <= 0
-            || $definition->getUnitId() === null
-            || $definition->getReference() === null
-            || $definition->getReference() <= 0
-            || $definition->getPurchase() === $definition->getReference()
-        ) {
-            return null;
-        }
-
-        $unit = $units->get($definition->getUnitId());
-        if ($unit === null) {
-            return null;
-        }
-
-        return new ReferencePriceDefinition(
-            $definition->getPurchase(),
-            $definition->getReference(),
-            $unit->getTranslation('name')
-        );
-    }
 
     /**
      * @param EntityCollection<BlogPriceEntity|PartialEntity> $rules

@@ -11,7 +11,6 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\FeatureFlagCompilerP
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Deprecation\ClassAliasRegistry;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 

@@ -30,7 +30,6 @@ use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionValidator;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\Response;
 
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
 

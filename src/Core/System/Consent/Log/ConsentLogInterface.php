@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Consent\Log;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Consent\ConsentStatus;
 
 interface ConsentLogInterface

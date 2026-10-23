@@ -2,7 +2,6 @@
 
 namespace Contena\Core\DevOps\Environment;
 
-use Contena\Core\Framework\Log\Package;
 
 class EnvironmentHelper
 {

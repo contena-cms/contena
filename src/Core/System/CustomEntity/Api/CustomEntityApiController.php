@@ -5,13 +5,13 @@ namespace Contena\Core\System\CustomEntity\Api;
 use Contena\Core\Framework\Api\Controller\ApiController;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\CustomEntity\CustomEntityException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 
 /**
  * @internal

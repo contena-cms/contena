@@ -8,8 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\SystemInstallCompletedEvent;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Installer\Finish\SystemLocker;
 use Contena\Core\Maintenance\System\Command\SystemInstallCommand;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;

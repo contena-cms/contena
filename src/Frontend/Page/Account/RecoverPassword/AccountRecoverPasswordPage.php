@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\Account\RecoverPassword;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class AccountRecoverPasswordPage extends Page

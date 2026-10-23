@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\DependencyInjection;
 use Contena\Core\Framework\Notification\NotificationBulkEntityExtension;
 use Contena\Core\Framework\Notification\NotificationService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Framework\Notification\Api\NotificationController;
+use Contena\Core\Framework\Notification\NotificationDefinition;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 

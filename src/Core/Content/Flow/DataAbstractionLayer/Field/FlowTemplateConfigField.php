@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\DataAbstractionLayer\Field;
 
 use Contena\Core\Content\Flow\DataAbstractionLayer\FieldSerializer\FlowTemplateConfigFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

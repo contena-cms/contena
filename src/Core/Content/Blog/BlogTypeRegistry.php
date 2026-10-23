@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog;
 
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldEnumProviderInterface;
-use Contena\Core\Framework\Log\Package;
 
 final class BlogTypeRegistry implements FieldEnumProviderInterface
 {

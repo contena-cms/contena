@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Demodata\Event;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Demodata\DemodataRequest;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Contracts\EventDispatcher\Event;
 

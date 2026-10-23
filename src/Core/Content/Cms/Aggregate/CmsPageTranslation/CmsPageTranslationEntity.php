@@ -3,9 +3,7 @@
 namespace Contena\Core\Content\Cms\Aggregate\CmsPageTranslation;
 
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

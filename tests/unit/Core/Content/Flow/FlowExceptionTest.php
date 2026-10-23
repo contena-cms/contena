@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\TransactionFailedException;
 use Contena\Core\Content\Flow\Exception\CustomTriggerByNameNotFoundException;
 use Contena\Core\Content\Flow\FlowException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Response;
 

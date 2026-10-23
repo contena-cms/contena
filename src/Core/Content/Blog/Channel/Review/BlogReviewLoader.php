@@ -13,11 +13,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class BlogReviewLoader extends AbstractBlogReviewLoader
 {
@@ -127,26 +127,6 @@ class BlogReviewLoader extends AbstractBlogReviewLoader
         return $criteria;
     }
 
-    private function getUserReview(string $blogId, ChannelContext $context): ?BlogReviewEntity
-    {
-        $user = $context->getUser();
-
-        if (!$user) {
-            return null;
-        }
-
-        $criteria = new Criteria();
-        $criteria->setLimit(1);
-        $criteria->setOffset(0);
-        $criteria->addFilter(new EqualsFilter('userId', $user->getId()));
-
-        $userReviews = $this->blogReviewRoute
-            ->load($blogId, new Request(), $context, $criteria)
-            ->getResult()
-            ->getEntities();
-
-        return $userReviews->first();
-    }
 
     private function handlePointsAggregation(Request $request, Criteria $criteria, ChannelContext $context): void
     {
@@ -175,7 +155,6 @@ class BlogReviewLoader extends AbstractBlogReviewLoader
                 'user-login-filter',
                 new TermsAggregation('ratingMatrix', 'points'),
                 [
-                    new MultiFilter(MultiFilter::CONNECTION_OR, $reviewFilters),
                 ]
             ),
             new FilterAggregation(
@@ -183,7 +162,6 @@ class BlogReviewLoader extends AbstractBlogReviewLoader
                 new TermsAggregation('languageMatrix', 'languageId'),
                 [
                     new EqualsFilter('languageId', $context->getLanguageId()),
-                    new MultiFilter(MultiFilter::CONNECTION_OR, $reviewFilters),
                 ]
             )
         );

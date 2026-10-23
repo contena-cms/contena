@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Controller\Exception;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

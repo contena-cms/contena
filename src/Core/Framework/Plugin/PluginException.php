@@ -5,9 +5,18 @@ namespace Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Plugin\Exception\KernelPluginLoaderException;
+use Contena\Core\Framework\Plugin\Exception\PluginBaseClassNotFoundException;
+use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;
+use Contena\Core\Framework\Plugin\Exception\PluginComposerRemoveException;
+use Contena\Core\Framework\Plugin\Exception\PluginComposerRequireException;
+use Contena\Core\Framework\Plugin\Exception\PluginExtractionException;
+use Contena\Core\Framework\Plugin\Exception\PluginHasActiveDependantsException;
+use Contena\Core\Framework\Plugin\Exception\PluginNotActivatedException;
+use Contena\Core\Framework\Plugin\Exception\PluginNotFoundException;
+use Contena\Core\Framework\Plugin\Exception\PluginNotInstalledException;
 
 class PluginException extends HttpException
 {

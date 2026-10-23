@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Cache\CacheItem;
 
 /**

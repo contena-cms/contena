@@ -25,7 +25,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Attribute\Serialized;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\State;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Translations;
 use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\PriceFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;

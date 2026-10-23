@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageLoader;
 
 /**

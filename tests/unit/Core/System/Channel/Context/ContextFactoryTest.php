@@ -6,10 +6,9 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Context\ContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
+use Contena\Core\System\Channel\Context\ContextFactory;
 use Contena\Core\System\Channel\Event\ContextCreatedEvent;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 

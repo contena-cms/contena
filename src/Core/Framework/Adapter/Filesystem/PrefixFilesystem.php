@@ -7,7 +7,6 @@ use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 class PrefixFilesystem implements FilesystemOperator
 {

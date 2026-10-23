@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class TaxFreeConfig extends Struct

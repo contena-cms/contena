@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Channel\File\Rendering;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore Simple value object without behavior.

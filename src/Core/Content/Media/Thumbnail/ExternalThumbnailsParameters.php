@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Thumbnail;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @final

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
@@ -13,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Contena\Core\Maintenance\System\Exception\DatabaseSetupException;
 
 /**
  * @internal

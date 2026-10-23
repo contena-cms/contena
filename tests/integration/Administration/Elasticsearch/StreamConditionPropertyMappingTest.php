@@ -3,15 +3,13 @@
 namespace Contena\Tests\Integration\Administration\Elasticsearch;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
+use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 
 /**
  * @internal

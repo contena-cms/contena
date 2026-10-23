@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Rule;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\Container;
 use Contena\Core\Framework\Struct\Collection;
 

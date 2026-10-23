@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cookie\Channel;
 
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\System\Channel\StoreApiResponse;
 

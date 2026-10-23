@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\LandingPage\LandingPage;
 
 /**

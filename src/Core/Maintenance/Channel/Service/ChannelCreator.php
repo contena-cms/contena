@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\Channel\Service;
 
-use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
@@ -12,10 +11,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\MaintenanceException;
-use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Snippet\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Command\Util\TranslationCommandHelper;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;

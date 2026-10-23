@@ -3,10 +3,9 @@
 namespace Contena\Core\Content\Blog\Extension;
 
 use Contena\Core\Framework\Extensions\Extension;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
 
 /**
  * @public

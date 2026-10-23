@@ -17,7 +17,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 use Contena\Core\Framework\Webhook\Outbox\DeliveryResponse;

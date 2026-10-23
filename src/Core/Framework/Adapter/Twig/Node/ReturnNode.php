@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig\Node;
 
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Twig\Attribute\YieldReady;
 use Twig\Compiler;
 use Twig\Node\Node;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\System\Command;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

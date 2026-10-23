@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
-use Contena\Core\Framework\Struct\StateAwareTrait;
 
 /**
  * @extends Collection<AggregationResult>

@@ -2,8 +2,8 @@
 
 namespace Contena\Core\Framework\App\Cms;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Finder\Finder;
+use Contena\Core\Framework\App\Exception\AppCmsExtensionException;
 
 /**
  * @internal

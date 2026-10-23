@@ -21,7 +21,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\QuerySigner;
 use Contena\Core\Framework\App\Payload\Source;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

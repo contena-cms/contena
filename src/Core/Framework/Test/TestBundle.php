@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;

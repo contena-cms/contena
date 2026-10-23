@@ -7,7 +7,6 @@ use PhpParser\Node\Stmt\Class_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Collectors\Collector;
 use PHPStan\Symfony\ServiceMap;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-type ServiceDefinitionCollectorData array{serviceId: string}

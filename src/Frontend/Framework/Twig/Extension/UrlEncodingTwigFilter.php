@@ -6,7 +6,6 @@ use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\UrlEncoder;
 use Twig\Extension\AbstractExtension;
 use Twig\TwigFilter;

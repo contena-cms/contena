@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Mcp\ScheduledTask;
 use Mcp\Server\Session\SessionStoreInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;

@@ -8,7 +8,6 @@ use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

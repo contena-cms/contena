@@ -8,7 +8,6 @@ use Contena\Core\Defaults;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Deprecation\BCChange\ExceptionChange;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Database\TableHelper;
 
 abstract class MigrationStep

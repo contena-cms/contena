@@ -4,17 +4,17 @@ namespace Contena\Core\Content\Cms\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigChangedEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 
 /**
  * @internal

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Url\VerificationState;
 use Contena\Core\Framework\App\Url\VerificationStatus;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Script\Api;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Api\ScriptResponseFactoryFacade;
 use Contena\Core\Framework\Script\Api\ScriptResponseFactoryFacadeHookFactory;
 use Contena\Core\Framework\Script\Execution\Hook;

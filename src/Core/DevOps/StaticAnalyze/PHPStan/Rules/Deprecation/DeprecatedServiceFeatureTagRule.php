@@ -13,7 +13,6 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Symfony\ServiceMap;
 use Contena\Core\Framework\Adapter\Twig\Extension\CompatTwigExtension;
-use Contena\Core\Framework\Log\Package;
 use Twig\TwigFunction;
 
 /**

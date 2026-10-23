@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEvents;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Framework\Seo\App\AppEntitySeoUrlConfig;
 use Contena\Frontend\Framework\Seo\App\AppSeoUrlRouteProvider;
 

@@ -8,7 +8,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
 use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\LockInterface;

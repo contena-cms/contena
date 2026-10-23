@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
@@ -10,9 +9,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Since;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
 
 class ChannelUserAddressDefinition extends UserAddressDefinition implements ChannelDefinitionInterface
 {

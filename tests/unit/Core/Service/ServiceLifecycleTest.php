@@ -23,7 +23,6 @@ use Contena\Core\Framework\App\Privileges\Privileges;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Service\AppInfo;
 use Contena\Core\Service\Event\ServiceInstalledEvent;
@@ -40,7 +39,6 @@ use Contena\Core\Service\ServiceSourceResolver;
 use Contena\Core\Service\ServiceStorage;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

@@ -6,7 +6,6 @@ use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator;
 use Contena\Core\Framework\Api\Route\ApiRouteInfoResolver;
 use Contena\Core\Framework\Api\Route\RouteInfo;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\Framework\Log\Package;
 
 trait UserAddressDataNormalizerTrait
 {

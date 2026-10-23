@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Gateway;
 
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 class GatewayException extends HttpException

@@ -8,7 +8,6 @@ use Doctrine\DBAL\Tools\DsnParser;
 use Pdo\Mysql;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Maintenance\MaintenanceException;
 use Symfony\Component\Console\Application;

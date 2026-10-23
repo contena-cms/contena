@@ -3,11 +3,8 @@
 namespace Contena\Core\Test\Integration\Builder\User;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestBuilderTrait;
 use Contena\Core\Test\TestDefaults;
 
 /**

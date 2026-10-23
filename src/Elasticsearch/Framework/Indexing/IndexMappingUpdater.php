@@ -5,11 +5,10 @@ namespace Contena\Elasticsearch\Framework\Indexing;
 use OpenSearch\Client;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
+use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
 use Contena\Elasticsearch\Framework\SystemUpdateListener;
-use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 
 class IndexMappingUpdater
 {

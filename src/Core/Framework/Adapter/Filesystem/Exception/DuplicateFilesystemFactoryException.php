@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Filesystem\Exception;
 
 use Contena\Core\Framework\Adapter\AdapterException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

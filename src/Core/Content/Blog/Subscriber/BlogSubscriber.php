@@ -4,23 +4,19 @@ namespace Contena\Core\Content\Blog\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Content\Blog\AbstractIsNewDetector;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceContainer;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\BlogEvents;
-use Contena\Core\Content\Blog\Channel\Price\AbstractBlogPriceCalculator;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceContainer;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 
@@ -29,22 +25,6 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class BlogSubscriber implements EventSubscriberInterface
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractBlogVariationBuilder $blogVariationBuilder,
-        private readonly AbstractBlogPriceCalculator $calculator,
-        private readonly AbstractPropertyGroupSorter $propertyGroupSorter,
-        private readonly AbstractBlogMaxPurchaseCalculator $maxPurchaseCalculator,
-        private readonly AbstractIsNewDetector $isNewDetector,
-        private readonly SystemConfigService $systemConfigService,
-        private readonly BlogMeasurementUnitBuilder $measurementUnitBuilder,
-        private readonly AbstractMeasurementUnitConverter $measurementUnitConverter,
-        private readonly RequestStack $requestStack,
-        private readonly Connection $connection
-    ) {
-    }
 
     public static function getSubscribedEvents(): array
     {

@@ -4,12 +4,11 @@ namespace Contena\Tests\Unit\Core\Framework\Adapter\Cache;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Event\CartChangedEvent;
 use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\System\User\Event\UserLoginEvent;
+use Contena\Core\Checkout\Cart\Event\CartChangedEvent;
 use Contena\Core\Framework\Adapter\Cache\CacheStateSubscriber;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Event\UserLoginEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\HttpKernelInterface;

@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Flow\Action;
 
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Flow\Action\Xml\Actions;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Config\Util\XmlUtils;
 
 class Action

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\Telemetry\WorkerMessageTimingHelper;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;

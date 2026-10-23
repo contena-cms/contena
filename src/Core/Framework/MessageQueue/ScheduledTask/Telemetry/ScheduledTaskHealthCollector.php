@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInterface;
 

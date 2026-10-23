@@ -5,20 +5,15 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search\Parser;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NandFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NorFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Clock\Clock;
 
 /**
@@ -48,169 +43,6 @@ use Symfony\Component\Clock\Clock;
  */
 class QueryStringParser
 {
-    /**
-     * @param array<string, mixed> $query
-     */
-    public static function fromArray(EntityDefinition $definition, array $query, SearchRequestException $exception, string $path = ''): Filter
-    {
-        $queryType = $query['type'] ?? '';
-        if (!\is_string($queryType) || $queryType === '') {
-            throw DataAbstractionLayerException::invalidFilterQuery('Value for filter type is required.');
-        }
-
-        switch ($queryType) {
-            case 'equals':
-                $queryField = $query['field'] ?? '';
-                if (!\is_string($queryField) || $queryField === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "field" for equals filter is missing.', $path . '/field');
-                }
-
-                if (!\array_key_exists('value', $query)) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for equals filter is missing.', $path . '/value');
-                }
-
-                if (!\is_scalar($query['value']) && $query['value'] !== null) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for equals filter must be scalar or null.', $path . '/value');
-                }
-
-                return new EqualsFilter(self::buildFieldName($definition, $queryField), $query['value']);
-            case 'nand':
-                return new NandFilter(
-                    self::parseQueries($definition, $path, $exception, $query['queries'] ?? [])
-                );
-            case 'nor':
-                return new NorFilter(
-                    self::parseQueries($definition, $path, $exception, $query['queries'] ?? [])
-                );
-            case 'not':
-                return new NotFilter(
-                    $query['operator'] ?? 'AND',
-                    self::parseQueries($definition, $path, $exception, $query['queries'] ?? [])
-                );
-            case 'and':
-                return new AndFilter(
-                    self::parseQueries($definition, $path, $exception, $query['queries'] ?? [])
-                );
-            case 'or':
-                return new OrFilter(
-                    self::parseQueries($definition, $path, $exception, $query['queries'] ?? [])
-                );
-            case 'multi':
-                $operator = MultiFilter::CONNECTION_AND;
-
-                if (isset($query['operator']) && mb_strtoupper((string) $query['operator']) === MultiFilter::CONNECTION_OR) {
-                    $operator = MultiFilter::CONNECTION_OR;
-                }
-
-                $queries = self::parseQueries($definition, $path, $exception, $query['queries'] ?? []);
-
-                return new MultiFilter($operator, $queries);
-            case 'contains':
-                $queryField = $query['field'] ?? '';
-                if (!\is_string($queryField) || $queryField === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "field" for contains filter is missing.', $path . '/field');
-                }
-
-                $queryValue = $query['value'] ?? '';
-                if (!\is_scalar($queryValue) || $queryValue === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for contains filter is missing.', $path . '/value');
-                }
-
-                return new ContainsFilter(self::buildFieldName($definition, $queryField), $queryValue);
-            case 'prefix':
-                $queryField = $query['field'] ?? '';
-                if (!\is_string($queryField) || $queryField === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "field" for prefix filter is missing.', $path . '/field');
-                }
-
-                if (!\array_key_exists('value', $query) || (!\is_scalar($query['value']) && $query['value'] !== null) || $query['value'] === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for prefix filter is missing.', $path . '/value');
-                }
-
-                return new PrefixFilter(self::buildFieldName($definition, $queryField), $query['value']);
-            case 'suffix':
-                $queryField = $query['field'] ?? '';
-                if (!\is_string($queryField) || $queryField === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "field" for suffix filter is missing.', $path . '/field');
-                }
-
-                if (!\array_key_exists('value', $query) || (!\is_scalar($query['value']) && $query['value'] !== null) || $query['value'] === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for suffix filter is missing.', $path . '/value');
-                }
-
-                return new SuffixFilter(self::buildFieldName($definition, $queryField), $query['value']);
-
-            case 'range':
-                $parameters = $query['parameters'] ?? [];
-                if (!\is_array($parameters) || $parameters === []) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "parameters" for range filter is missing.', $path . '/parameters');
-                }
-
-                try {
-                    return new RangeFilter(self::buildFieldName($definition, $query['field']), $parameters);
-                } catch (InvalidRangeFilterParamException $e) {
-                    throw DataAbstractionLayerException::invalidFilterQuery($e->getMessage(), $path . '/parameters');
-                }
-            case 'until':
-            case 'since':
-                return self::getFilterByRelativeTime(self::buildFieldName($definition, $query['field']), $queryType, $query, $path);
-            case 'equalsAll':
-                $queryField = $query['field'] ?? '';
-                if (!\is_string($queryField) || $queryField === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "field" for equalsAll filter is missing.', $path . '/field');
-                }
-
-                if (!\array_key_exists('value', $query) || (!\is_array($query['value']) && !\is_scalar($query['value']) && $query['value'] !== null)) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for equalsAll filter is missing.', $path . '/value');
-                }
-
-                $values = $query['value'];
-                if (\is_string($values)) {
-                    $values = array_filter(explode('|', $values));
-                }
-
-                if (!\is_array($values)) {
-                    $values = [$values];
-                }
-
-                if ($values === []) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for equalsAll filter does not contain any value.', $path . '/value');
-                }
-
-                $filters = [];
-                foreach ($values as $value) {
-                    $filters[] = new AndFilter([new EqualsFilter(self::buildFieldName($definition, $queryField), $value)]);
-                }
-
-                return new AndFilter($filters);
-            case 'equalsAny':
-                $queryField = $query['field'] ?? '';
-                if (!\is_string($queryField) || $queryField === '') {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "field" for equalsAny filter is missing.', $path . '/field');
-                }
-
-                if (!\array_key_exists('value', $query) || (!\is_array($query['value']) && !\is_scalar($query['value']) && $query['value'] !== null)) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for equalsAny filter is missing.', $path . '/value');
-                }
-
-                $values = $query['value'];
-                if (\is_string($values)) {
-                    $values = array_filter(explode('|', $values));
-                }
-
-                if (!\is_array($values)) {
-                    $values = [$values];
-                }
-
-                if ($values === []) {
-                    throw DataAbstractionLayerException::invalidFilterQuery('Parameter "value" for equalsAny filter does not contain any value.', $path . '/value');
-                }
-
-                return new EqualsAnyFilter(self::buildFieldName($definition, $queryField), $values);
-        }
-
-        throw DataAbstractionLayerException::invalidFilterQuery(\sprintf('Unsupported filter type: %s', $queryType), $path . '/type');
-    }
 
     /**
      * @return EqualsFilterType|NotFilterType|MultiFilterType|ContainsFilterType|PrefixFilterType|SuffixFilterType|RangeFilterType|EqualsAnyFilterType
@@ -262,25 +94,6 @@ class QueryStringParser
         };
     }
 
-    /**
-     * @param list<Query> $queries
-     *
-     * @return list<Filter>
-     */
-    private static function parseQueries(EntityDefinition $definition, string $path, SearchRequestException $exception, array $queries): array
-    {
-        $parsed = [];
-
-        foreach ($queries as $index => $subQuery) {
-            try {
-                $parsed[] = self::fromArray($definition, $subQuery, $exception, $path . '/queries/' . $index);
-            } catch (InvalidFilterQueryException $ex) {
-                $exception->add($ex, $ex->getParameters()['path']);
-            }
-        }
-
-        return $parsed;
-    }
 
     /**
      * @param array<string, mixed> $query

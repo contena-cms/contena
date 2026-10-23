@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\JWT\Struct;
 
 use Contena\Core\Framework\JWT\JWTException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Validation\ValidatorFactory;
 

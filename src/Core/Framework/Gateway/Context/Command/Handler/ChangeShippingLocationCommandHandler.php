@@ -9,10 +9,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeShippingLocationCommand;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Channel\ChannelContext;
 
 /**
  * @extends AbstractContextGatewayCommandHandler<ChangeShippingLocationCommand>

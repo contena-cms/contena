@@ -15,7 +15,6 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Source\SourceResolver;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem as AppFilesystem;
 use Contena\Core\System\Snippet\Files\FrontendSnippetStorage;
 use Symfony\Component\Filesystem\Exception\IOException;

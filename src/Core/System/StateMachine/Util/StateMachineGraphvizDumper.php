@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\StateMachine\Util;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\StateMachine\StateMachineEntity;
 

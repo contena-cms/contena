@@ -8,7 +8,6 @@ use Mcp\Schema\Enum\ProtocolVersion;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Result\McpToolError;
 use Contena\Core\Framework\Mcp\Result\McpToolResult;
 use Contena\Core\Framework\Mcp\Result\McpToolResultLink;

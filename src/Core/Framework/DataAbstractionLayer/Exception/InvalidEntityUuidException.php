@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\UuidException;
 use Symfony\Component\HttpFoundation\Response;
 

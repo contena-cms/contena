@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\User\UserEntity;
 
 /**
  * @extends StoreApiResponse<UserEntity>

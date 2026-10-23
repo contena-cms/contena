@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\InAppPurchases\Event;
 
 use Contena\Core\Framework\App\InAppPurchases\Gateway\InAppPurchasesGateway;
 use Contena\Core\Framework\App\InAppPurchases\Response\InAppPurchasesResponse;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**

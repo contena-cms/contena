@@ -2,9 +2,8 @@
 
 namespace Contena\Core\System\User\Subscriber;
 
-use Contena\Core\System\User\Event\UserLogoutEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
+use Contena\Core\System\User\Event\UserLogoutEvent;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 

@@ -7,7 +7,6 @@ use Contena\Core\Content\Category\CategoryEvents;
 use Contena\Core\Content\Category\Event\CategoryLevelLoaderCacheKeyEvent;
 use Contena\Core\Framework\Adapter\Cache\CacheValueCompressor;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

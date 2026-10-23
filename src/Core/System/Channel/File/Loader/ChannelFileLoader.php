@@ -3,12 +3,11 @@
 namespace Contena\Core\System\Channel\File\Loader;
 
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\File\ChannelFileCacheInvalidator;
 use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileRenderer;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileRenderResult;
-use Contena\Core\System\Channel\File\ChannelFileCacheInvalidator;
-use Contena\Core\System\Channel\ChannelContext;
 
 /**
  * @internal

@@ -4,6 +4,7 @@ namespace Contena\Tests\Integration\Core\Content\MailTemplate\Service;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
 use Contena\Core\Content\ContactForm\Event\ContactFormEvent;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowMailVariables;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeCollection;
@@ -15,13 +16,10 @@ use Contena\Core\Content\MailTemplate\Request\SimulateRequest;
 use Contena\Core\Content\MailTemplate\Service\MailDataSimulator;
 use Contena\Core\Content\MailTemplate\Service\MailTemplateService;
 use Contena\Core\Content\MailTemplate\Validation\MailTemplateRenderResult;
-use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
 use Contena\Core\Content\RevocationRequest\Event\RevocationRequestEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Finder\Finder;
 

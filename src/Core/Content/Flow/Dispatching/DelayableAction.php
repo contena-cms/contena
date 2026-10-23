@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching;
 
-use Contena\Core\Framework\Log\Package;
 
 interface DelayableAction
 {

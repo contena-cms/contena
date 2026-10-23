@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\MailTemplate\Request;
 
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 
 /**

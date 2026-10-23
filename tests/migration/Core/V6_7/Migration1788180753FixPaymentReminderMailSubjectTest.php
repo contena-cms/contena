@@ -5,10 +5,8 @@ namespace Contena\Tests\Migration\Core\V6_7;
 use PHPUnit\Framework\Attributes\CoversClass;
 use Contena\Core\Content\MailTemplate\MailTemplateTypes;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1788180753FixPaymentReminderMailSubject;
-use Contena\Tests\Migration\MailTemplateMigrationTestCase;
 
 /**
  * @internal

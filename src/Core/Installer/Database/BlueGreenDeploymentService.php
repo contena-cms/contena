@@ -3,7 +3,6 @@
 namespace Contena\Core\Installer\Database;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**

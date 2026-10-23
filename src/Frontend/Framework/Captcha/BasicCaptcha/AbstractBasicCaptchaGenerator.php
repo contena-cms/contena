@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Captcha\BasicCaptcha;
 
-use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractBasicCaptchaGenerator
 {

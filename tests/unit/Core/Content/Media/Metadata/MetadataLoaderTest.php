@@ -17,7 +17,6 @@ use Contena\Core\Content\Media\MediaType\SpatialObjectType;
 use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\Metadata\MetadataLoader;
 use Contena\Core\Content\Media\Metadata\MetadataLoader\ImageMetadataLoader;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 
 /**

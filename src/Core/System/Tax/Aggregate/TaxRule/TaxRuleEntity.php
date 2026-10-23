@@ -3,9 +3,7 @@
 namespace Contena\Core\System\Tax\Aggregate\TaxRule;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Tax\Aggregate\TaxRuleType\TaxRuleTypeEntity;
 use Contena\Core\System\Tax\TaxEntity;

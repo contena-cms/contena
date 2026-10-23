@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Mcp\AllowList;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\RequestStack;

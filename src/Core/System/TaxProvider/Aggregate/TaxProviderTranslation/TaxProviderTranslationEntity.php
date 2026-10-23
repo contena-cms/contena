@@ -2,9 +2,7 @@
 
 namespace Contena\Core\System\TaxProvider\Aggregate\TaxProviderTranslation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\TaxProvider\TaxProviderEntity;
 
 /**

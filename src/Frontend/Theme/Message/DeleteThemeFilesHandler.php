@@ -4,7 +4,6 @@ namespace Contena\Frontend\Theme\Message;
 
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\AbstractThemePathBuilder;
 use Contena\Frontend\Theme\ScheduledTask\DeleteThemeFilesTask;
 use Contena\Frontend\Theme\ScheduledTask\DeleteThemeFilesTaskHandler;

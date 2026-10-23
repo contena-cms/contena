@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\Event\AppInstalledEvent;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\App\Event\SystemHeartbeatEvent;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedHook;
 

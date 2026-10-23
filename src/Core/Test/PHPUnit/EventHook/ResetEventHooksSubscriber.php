@@ -6,7 +6,6 @@ use PHPUnit\Event\EventFacadeIsSealedException;
 use PHPUnit\Event\Facade;
 use PHPUnit\Event\Test\PreparationStarted;
 use PHPUnit\Event\Test\PreparationStartedSubscriber;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Clears the event hooks before each test, on PreparationStarted: Finished is not emitted for tests that skip or

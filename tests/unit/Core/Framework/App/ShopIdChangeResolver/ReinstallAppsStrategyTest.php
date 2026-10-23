@@ -14,9 +14,7 @@ use Contena\Core\Framework\App\Lifecycle\AppManager;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\App\ShopIdChangeResolver\ReinstallAppsStrategy;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

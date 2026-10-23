@@ -2,6 +2,13 @@
 
 namespace Contena\Core\Framework\Event;
 
+use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
+use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
+use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
+use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
+use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
+use Contena\Core\System\User\Event\DoubleOptInGuestOrderEvent;
+use Contena\Core\System\User\Event\GuestUserRegisterEvent;
 use Contena\Core\System\User\Event\UserAccountRecoverRequestEvent;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\System\User\Event\UserDeletedEvent;
@@ -12,14 +19,6 @@ use Contena\Core\System\User\Event\UserLoginEvent;
 use Contena\Core\System\User\Event\UserLogoutEvent;
 use Contena\Core\System\User\Event\UserPasswordChangedEvent;
 use Contena\Core\System\User\Event\UserRegisterEvent;
-use Contena\Core\System\User\Event\DoubleOptInGuestOrderEvent;
-use Contena\Core\System\User\Event\GuestUserRegisterEvent;
-use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
-use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
-use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
-use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
 
 class BusinessEventRegistry
 {

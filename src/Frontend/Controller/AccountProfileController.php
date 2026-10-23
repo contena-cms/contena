@@ -3,22 +3,15 @@
 namespace Contena\Frontend\Controller;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Channel\AbstractChangeUserProfileRoute;
-use Contena\Core\System\User\Channel\AbstractChangeEmailRoute;
-use Contena\Core\System\User\Channel\AbstractChangePasswordRoute;
-use Contena\Core\System\User\Channel\AbstractDeleteUserRoute;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\User\UserEntity;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoadedHook;
-use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoadedHook;
-use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -30,19 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class AccountProfileController extends FrontendController
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AccountOverviewPageLoader $overviewPageLoader,
-        private readonly AccountProfilePageLoader $profilePageLoader,
-        private readonly AbstractChangeUserProfileRoute $changeUserProfileRoute,
-        private readonly AbstractChangePasswordRoute $changePasswordRoute,
-        private readonly AbstractChangeEmailRoute $changeEmailRoute,
-        private readonly AbstractDeleteUserRoute $deleteUserRoute,
-        private readonly LoggerInterface $logger
-    ) {
-    }
 
     #[Route(
         path: '/account',

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;

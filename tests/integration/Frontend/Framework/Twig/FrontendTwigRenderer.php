@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Frontend\Framework\Twig;
 
 use PHPUnit\Framework\Assert;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\DependencyInjection\ContainerInterface;

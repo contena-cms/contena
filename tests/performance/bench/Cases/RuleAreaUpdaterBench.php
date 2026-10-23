@@ -5,7 +5,6 @@ namespace Contena\Tests\Bench\Cases;
 use PhpBench\Attributes as Bench;
 use Contena\Core\Content\Rule\DataAbstractionLayer\RuleAreaUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Contena\Tests\Bench\AbstractBenchCase;
 
 /**
  * @internal - only for performance benchmarks

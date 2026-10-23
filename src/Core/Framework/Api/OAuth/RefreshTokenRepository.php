@@ -8,7 +8,6 @@ use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

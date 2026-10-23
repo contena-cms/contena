@@ -2,18 +2,18 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserDefinition;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\UserProvider;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\Framework\Event\FlowEventAware;
+use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\System\User\UserEntity;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Content\Flow\Exception\UserDeletedException;
 
 class UserStorer extends FlowStorer
 {

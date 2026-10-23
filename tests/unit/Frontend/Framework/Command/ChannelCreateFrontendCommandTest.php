@@ -9,7 +9,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;

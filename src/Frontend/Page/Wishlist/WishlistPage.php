@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Wishlist;
 
 use Contena\Core\System\User\Channel\LoadWishlistRouteResponse;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 
 class WishlistPage extends Page

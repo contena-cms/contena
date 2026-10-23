@@ -2,19 +2,11 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryCollection;
-use Contena\Core\System\User\UserCollection;
-use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Extension\ChangeEmailRouteExtension;
-use Contena\Core\System\User\Service\EmailIdnConverter;
-use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
-use Contena\Core\System\User\Validation\Constraint\UserPasswordMatches;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -24,6 +16,13 @@ use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\SuccessResponse;
+use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryCollection;
+use Contena\Core\System\User\Extension\ChangeEmailRouteExtension;
+use Contena\Core\System\User\Service\EmailIdnConverter;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
+use Contena\Core\System\User\Validation\Constraint\UserPasswordMatches;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\Email;
@@ -31,6 +30,7 @@ use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(
     defaults: [

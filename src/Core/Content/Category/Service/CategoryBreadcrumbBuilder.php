@@ -4,6 +4,9 @@ namespace Contena\Core\Content\Category\Service;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
+use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
+use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Breadcrumb\BreadcrumbException;
 use Contena\Core\Content\Breadcrumb\Struct\Breadcrumb;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
@@ -11,9 +14,6 @@ use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Util\CategoryBreadcrumbHelper;
-use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
-use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Framework\Context;
@@ -26,11 +26,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
 
 class CategoryBreadcrumbBuilder
 {

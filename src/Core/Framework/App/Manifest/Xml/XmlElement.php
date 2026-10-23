@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Manifest\Xml;
 
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 

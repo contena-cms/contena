@@ -4,7 +4,6 @@ namespace Contena\Core\System\Snippet\Service;
 
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\ServiceRegistry;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\ServiceException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ChunkInterface;

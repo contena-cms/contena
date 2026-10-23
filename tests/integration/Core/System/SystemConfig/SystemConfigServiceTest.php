@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\Event\BeforeSystemConfigMultipleChangedEvent;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedHook;
 use Contena\Core\System\SystemConfig\Event\SystemConfigMultipleChangedEvent;

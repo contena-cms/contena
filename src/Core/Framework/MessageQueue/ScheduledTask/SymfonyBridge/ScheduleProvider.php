@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\SymfonyBridge;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Symfony\Component\Lock\LockFactory;

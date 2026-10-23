@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Validation\DataBag;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 class DataBag extends ParameterBag

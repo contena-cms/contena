@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Document\Renderer\ZugferdEmbeddedRenderer;
 use Contena\Core\Checkout\Document\Renderer\ZugferdRenderer;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_6\Migration1730790665ElectronicInvoice;
 

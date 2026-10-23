@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Upload;
 
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

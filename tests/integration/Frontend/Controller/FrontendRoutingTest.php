@@ -4,16 +4,10 @@ namespace Contena\Tests\Integration\Frontend\Controller;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Exception\InvalidRouteScopeException;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\RequestStackTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Frontend\Event\FrontendRenderEvent;
 use Contena\Frontend\Page\Navigation\NavigationPage;
-use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -9,10 +9,8 @@ use GuzzleHttp\Psr7\Request as Psr7Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\RequestInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\ShopSecretInvalidMiddleware;
 use Contena\Core\Framework\Store\StoreException;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**

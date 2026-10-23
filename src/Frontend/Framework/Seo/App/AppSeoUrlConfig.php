@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Framework\Seo\App;
 
 use Contena\Core\Framework\App\Feature\AppFeatureConfig;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @codeCoverageIgnore

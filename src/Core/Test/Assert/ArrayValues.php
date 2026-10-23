@@ -3,7 +3,6 @@
 namespace Contena\Core\Test\Assert;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

@@ -7,7 +7,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Message\LogPermissionToRegistryMessage;
 use Contena\Core\Service\Permission\ConsentState;
 use Contena\Core\Service\Permission\PermissionsConsent;

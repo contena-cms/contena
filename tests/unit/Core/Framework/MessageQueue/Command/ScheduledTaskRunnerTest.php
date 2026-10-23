@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\MessageQueue\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemPoolInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Command\ScheduledTaskRunner;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TaskScheduler;
 use Symfony\Component\Clock\NativeClock;

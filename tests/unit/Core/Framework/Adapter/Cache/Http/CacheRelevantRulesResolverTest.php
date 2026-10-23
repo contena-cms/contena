@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Cache\Http\CacheRelevantRulesResolver;
 use Contena\Core\Framework\Adapter\Cache\Http\Extension\ResolveCacheRelevantRuleIdsExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
 use Symfony\Component\HttpFoundation\Request;

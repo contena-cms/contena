@@ -9,7 +9,6 @@ use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 
 /**

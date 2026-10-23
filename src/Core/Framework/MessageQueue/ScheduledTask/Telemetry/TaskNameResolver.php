@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Passes a core scheduled-task name through as a metric label value; anything outside the allowlist

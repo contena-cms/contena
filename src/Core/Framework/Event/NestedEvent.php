@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\Event;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 use Symfony\Contracts\EventDispatcher\Event;
 
 abstract class NestedEvent extends Event implements ContenaEvent

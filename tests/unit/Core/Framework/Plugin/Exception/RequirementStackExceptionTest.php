@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Plugin\Exception;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Requirement\Exception\MissingRequirementException;
 use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementStackException;
 use Contena\Core\Framework\Plugin\Requirement\Exception\VersionMismatchException;

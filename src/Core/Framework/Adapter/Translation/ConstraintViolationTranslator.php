@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Translation;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 

@@ -5,8 +5,8 @@ namespace Contena\Core\Framework\Notification;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\HttpException;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
 
 class NotificationException extends HttpException
 {

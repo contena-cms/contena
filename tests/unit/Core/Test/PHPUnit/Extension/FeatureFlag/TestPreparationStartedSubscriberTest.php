@@ -11,7 +11,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox as TestDoxAttribute;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Metadata\MetadataCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\SavedConfig;
 use Contena\Core\Test\PHPUnit\Extension\FeatureFlag\Subscriber\TestPreparationStartedSubscriber;
 use Contena\Tests\Integration\Core\Test\PHPUnit\Extension\FeatureFlag\_fixtures\ClassLevelOffender;

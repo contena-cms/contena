@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Telemetry\Doctrine;
 use Doctrine\DBAL\Driver;
 use Doctrine\DBAL\Driver\Middleware;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Lightweight DBAL driver middleware that counts every executed SQL statement into a shared

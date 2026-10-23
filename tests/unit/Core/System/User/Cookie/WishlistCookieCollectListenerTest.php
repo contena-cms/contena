@@ -6,12 +6,11 @@ namespace Contena\Tests\Unit\Core\System\User\Cookie;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\System\User\Cookie\WishlistCookieCollectListener;
 use Contena\Core\Content\Cookie\Event\CookieGroupCollectEvent;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Cookie\WishlistCookieCollectListener;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Symfony\Component\HttpFoundation\Request;

@@ -4,7 +4,6 @@ namespace Contena\Core\System\SystemConfig\Api;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;

@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\Test\Environment\_fixtures;
 
 use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerData;
 use Contena\Core\DevOps\Environment\EnvironmentHelperTransformerInterface;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

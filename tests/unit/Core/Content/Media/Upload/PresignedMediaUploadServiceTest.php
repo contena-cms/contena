@@ -23,7 +23,6 @@ use Contena\Core\Content\Media\Upload\PresignedUploadPreparePayload;
 use Contena\Core\Content\Media\Upload\PresignedUrlGeneratorInterface;
 use Contena\Core\Content\Media\Upload\PresignedUrlResult;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

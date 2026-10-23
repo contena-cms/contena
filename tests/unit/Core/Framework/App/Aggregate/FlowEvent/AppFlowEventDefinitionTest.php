@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventCollection;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 

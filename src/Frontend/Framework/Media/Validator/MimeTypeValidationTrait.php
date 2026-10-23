@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\Media\Validator;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 trait MimeTypeValidationTrait

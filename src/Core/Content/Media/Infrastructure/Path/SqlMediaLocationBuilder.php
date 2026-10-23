@@ -9,7 +9,6 @@ use Contena\Core\Content\Media\Core\Event\MediaLocationEvent;
 use Contena\Core\Content\Media\Core\Event\ThumbnailLocationEvent;
 use Contena\Core\Content\Media\Core\Params\MediaLocationStruct;
 use Contena\Core\Content\Media\Core\Params\ThumbnailLocationStruct;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

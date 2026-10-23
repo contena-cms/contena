@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Filesystem\Plugin;
 
 use League\Flysystem\Visibility;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;

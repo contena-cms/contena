@@ -11,8 +11,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheInvalidationSubscriber;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\RedisInvalidatorStorage;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\AbstractReverseProxyGateway;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Util\Backtrace\BacktraceCollector;
 use Contena\Core\Framework\Util\Backtrace\Frame;
 use Contena\Core\PlatformRequest;

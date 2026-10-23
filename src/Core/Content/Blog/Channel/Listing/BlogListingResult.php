@@ -6,7 +6,6 @@ use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Deprecation\BCChange\ClassHierarchyChange;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

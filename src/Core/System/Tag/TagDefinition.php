@@ -2,16 +2,14 @@
 
 namespace Contena\Core\System\Tag;
 
-use Contena\Core\System\User\Aggregate\UserTag\UserTagDefinition;
-use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
+use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageTag\LandingPageTagDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaTag\MediaTagDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Rule\Aggregate\RuleTag\RuleTagDefinition;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -24,7 +22,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Aggregate\UserTag\UserTagDefinition;
+use Contena\Core\System\User\UserDefinition;
 
 /**
  * @codeCoverageIgnore

@@ -8,9 +8,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Gateway\Context\Command\AbstractContextGatewayCommand;
 use Contena\Core\Framework\Gateway\Context\Command\ChangeLanguageCommand;
 use Contena\Core\Framework\Gateway\GatewayException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Language\LanguageCollection;
 
 /**
  * @extends AbstractContextGatewayCommandHandler<ChangeLanguageCommand>

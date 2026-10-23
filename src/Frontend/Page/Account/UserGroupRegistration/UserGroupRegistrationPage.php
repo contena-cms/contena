@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Account\UserGroupRegistration;
 
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Account\Login\AccountLoginPage;
 
 class UserGroupRegistrationPage extends AccountLoginPage

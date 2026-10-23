@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Language;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\LocaleCollection;
 
 /**

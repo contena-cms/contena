@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal use entity repository to write data

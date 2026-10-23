@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**
@@ -14,12 +13,6 @@ use Contena\Core\Framework\Uuid\Uuid;
  */
 readonly class OrderAmountService
 {
-    public function __construct(
-        private Connection $connection,
-        private CashRounding $rounding,
-        private bool $timeZoneSupportEnabled,
-    ) {
-    }
 
     /**
      * @return list<array{date:string, amount:float, count:int}>

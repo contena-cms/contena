@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\SitemapException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Response;
 

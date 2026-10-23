@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Core\System\Channel\Validation;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

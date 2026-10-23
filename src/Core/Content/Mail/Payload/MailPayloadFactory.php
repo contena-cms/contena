@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Mail\Payload;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 
 /**

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SystemConfig\Exception;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigException;
 use Symfony\Component\HttpFoundation\Response;
 

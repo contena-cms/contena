@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Theme;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
@@ -18,14 +17,6 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\ThemeFileResolver;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\MockFrontend\MockFrontend;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\SimplePlugin\SimplePlugin;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeNotIncludingPluginJsAndCss\ThemeNotIncludingPluginJsAndCss;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithBundleRelativeFiles\ThemeWithBundleRelativeFiles;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithInvalidBundleReference\ThemeWithInvalidBundleReference;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithMultiInheritance\ThemeWithMultiInheritance;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithFrontendBootstrapScss\ThemeWithFrontendBootstrapScss;
-use Contena\Tests\Unit\Frontend\Theme\fixtures\ThemeWithFrontendSkinScss\ThemeWithFrontendSkinScss;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

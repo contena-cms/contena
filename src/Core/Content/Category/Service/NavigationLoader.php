@@ -4,13 +4,12 @@ namespace Contena\Core\Content\Category\Service;
 
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Category\Event\NavigationLoadedEvent;
 use Contena\Core\Content\Category\Channel\AbstractNavigationRoute;
+use Contena\Core\Content\Category\Event\NavigationLoadedEvent;
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Content\Category\Tree\TreeItem;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Util\AfterSort;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

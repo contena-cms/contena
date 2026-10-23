@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\DataStack;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

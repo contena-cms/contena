@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Frontend\Framework\Command;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Framework\Command\ChannelCreateFrontendCommand;
 use Symfony\Component\Console\Tester\CommandTester;

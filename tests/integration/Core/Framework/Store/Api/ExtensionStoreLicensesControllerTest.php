@@ -4,10 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\Store\Api;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Api\ExtensionStoreLicensesController;
 use Contena\Core\Framework\Store\Services\ExtensionStoreLicensesService;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 

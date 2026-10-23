@@ -2,12 +2,11 @@
 
 namespace Contena\Core\Content\Blog\Channel\Search;
 
+use Contena\Core\Content\Blog\BlogEvents;
 use Contena\Core\Content\Blog\Events\BlogSearchCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogSearchResultEvent;
-use Contena\Core\Content\Blog\BlogEvents;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -17,15 +16,6 @@ class ResolvedCriteriaBlogSearchRoute extends AbstractBlogSearchRoute
     final public const DEFAULT_SEARCH_SORT = 'score';
     final public const STATE = 'search-route-context';
 
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractBlogSearchRoute $decorated,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly CompositeListingProcessor $processor
-    ) {
-    }
 
     public function getDecorated(): AbstractBlogSearchRoute
     {

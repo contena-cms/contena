@@ -9,7 +9,6 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Forbids combining a `#[Depends*]` attribute with a `#[DataProvider*]` attribute on the same test method.

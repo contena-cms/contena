@@ -8,7 +8,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Manifest\Xml\Permission\Permissions;
 use Contena\Core\Framework\App\Privileges\Privileges;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

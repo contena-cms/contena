@@ -17,7 +17,6 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceCo
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
 use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Assert\Serialization;
 

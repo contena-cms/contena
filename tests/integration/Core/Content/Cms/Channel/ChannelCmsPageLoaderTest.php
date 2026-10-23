@@ -4,18 +4,16 @@ namespace Contena\Tests\Integration\Core\Content\Cms\Channel;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
-use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoader;
 use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoaderInterface;
+use Contena\Core\Content\Cms\DataResolver\FieldConfig;
+use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\Context\ChannelContextService;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

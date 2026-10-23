@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Routing\Event;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\Event;
 

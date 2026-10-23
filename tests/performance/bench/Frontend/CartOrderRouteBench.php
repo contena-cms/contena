@@ -6,15 +6,13 @@ use Doctrine\DBAL\Connection;
 use PhpBench\Attributes as Bench;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\Channel\CartOrderRoute;
+use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Content\Blog\Cart\BlogCartProcessor;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Tests\Bench\AbstractBenchCase;
-use Contena\Tests\Bench\Fixtures;
 
 /**
  * @internal - only for performance benchmarks

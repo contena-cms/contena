@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch;
 
 use Contena\Core\Framework\Bundle;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\DependencyInjection\ElasticsearchExtension;
 use Contena\Elasticsearch\DependencyInjection\ElasticsearchMigrationCompilerPass;
 use Contena\Elasticsearch\Profiler\ElasticsearchProfileCompilerPass;

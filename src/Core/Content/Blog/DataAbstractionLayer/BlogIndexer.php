@@ -5,28 +5,22 @@ namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Content\Blog\Events\InvalidateBlogCache;
-use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
-use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
+use Contena\Core\Content\Blog\Events\InvalidateBlogCache;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Profiling\Profiler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class BlogIndexer extends EntityIndexer
 {
@@ -47,31 +41,6 @@ class BlogIndexer extends EntityIndexer
     final public const STATES_UPDATER = 'blog.states';
     private const UPDATE_IDS_CHUNK_SIZE = 50;
 
-    /**
-     * @internal
-     *
-     * @param EntityRepository<BlogCollection> $repository
-     */
-    public function __construct(
-        private readonly IteratorFactory $iteratorFactory,
-        private readonly EntityRepository $repository,
-        private readonly Connection $connection,
-        private readonly VariantListingUpdater $variantListingUpdater,
-        private readonly BlogCategoryDenormalizer $categoryDenormalizer,
-        private readonly InheritanceUpdater $inheritanceUpdater,
-        private readonly RatingAverageUpdater $ratingAverageUpdater,
-        private readonly SearchKeywordUpdater $searchKeywordUpdater,
-        private readonly ChildCountUpdater $childCountUpdater,
-        private readonly ManyToManyIdFieldUpdater $manyToManyIdFieldUpdater,
-        private readonly AbstractStockStorage $stockStorage,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly CheapestPriceUpdater $cheapestPriceUpdater,
-        private readonly AbstractContentStreamUpdater $streamUpdater,
-        private readonly MessageBusInterface $messageBus,
-        private readonly ?StatesUpdater $statesUpdater,
-        private readonly ClockInterface $clock
-    ) {
-    }
 
     public function getName(): string
     {

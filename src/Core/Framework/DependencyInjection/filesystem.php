@@ -13,6 +13,7 @@ use Contena\Core\Framework\Adapter\Filesystem\FilesystemFactory;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Framework\Adapter\Asset\AssetService;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

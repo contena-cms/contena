@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Telemetry;
 
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Instrumentation\OperationResult;
 use Contena\Core\Framework\Telemetry\Telemetry;

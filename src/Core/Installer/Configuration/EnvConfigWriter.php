@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Installer\Configuration;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Maintenance\System\Command\SystemGenerateAppSecretCommand;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;

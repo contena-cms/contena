@@ -2,10 +2,9 @@
 
 namespace Contena\Core\Framework\Routing;
 
-use Contena\Core\Framework\Log\Package;
+use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Routing\Event\MaintenanceModeRequestEvent;
 use Contena\Core\Framework\Util\Json;
-use Contena\Core\ChannelRequest;
 use Symfony\Component\HttpFoundation\IpUtils;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Mail\Payload;
 
 use Contena\Core\Content\Mail\Service\AbstractMailFactory;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-import-type MailData from AbstractMailFactory

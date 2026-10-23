@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\SearchKeyword;
 
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 interface BlogSearchKeywordAnalyzerInterface
 {

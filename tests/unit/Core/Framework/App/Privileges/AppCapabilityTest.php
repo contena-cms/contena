@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Xml\Tax\Tax;
 use Contena\Core\Framework\App\Privileges\AppCapability;
 use Contena\Core\Framework\App\Privileges\Privileges;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

@@ -2,10 +2,8 @@
 
 namespace Contena\Frontend\Theme\Aggregate;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\ThemeEntity;
 
 class ThemeTranslationEntity extends TranslationEntity

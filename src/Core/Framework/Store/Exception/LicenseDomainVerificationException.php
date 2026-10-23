@@ -2,9 +2,8 @@
 
 namespace Contena\Core\Framework\Store\Exception;
 
-use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\Framework\Feature;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed with the next major as it is unused

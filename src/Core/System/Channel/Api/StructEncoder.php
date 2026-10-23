@@ -7,11 +7,10 @@ use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\System\Channel\Entity\DefinitionRegistryChain;
 use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\System\Channel\Entity\DefinitionRegistryChain;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

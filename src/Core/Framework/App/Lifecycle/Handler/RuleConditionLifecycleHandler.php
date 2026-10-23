@@ -13,7 +13,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfUuid;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\BoolField;

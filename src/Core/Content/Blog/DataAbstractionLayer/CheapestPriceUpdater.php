@@ -10,7 +10,6 @@ use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
 
@@ -111,32 +110,6 @@ class CheapestPriceUpdater
         }
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function buildAccessor(CheapestPriceContainer $container, string $variantId): array
-    {
-        $rules = $container->getRuleIds();
-        $rules[] = 'default';
-
-        $variantPrices = $container->getPricesForVariant($variantId);
-        $formattedPrices = [];
-        foreach ($rules as $ruleId) {
-            $cheapest = $this->getCheapest($ruleId, $variantPrices, $container->getDefault());
-
-            if ($cheapest === null) {
-                continue;
-            }
-            $mapped = [];
-            foreach ($cheapest['price'] as $price) {
-                $mapped['currency' . $price['currencyId']] = $this->mapPrice($price);
-            }
-
-            $formattedPrices['rule' . $ruleId] = $mapped;
-        }
-
-        return $formattedPrices;
-    }
 
     /**
      * @param array<string, mixed> $prices

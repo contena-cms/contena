@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Validation\Error;
 
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Collection;
 
 /**

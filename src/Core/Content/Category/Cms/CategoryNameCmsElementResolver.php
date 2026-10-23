@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Category\Cms;
 
 use Contena\Core\Content\Cms\DataResolver\Element\TextCmsElementResolver;
-use Contena\Core\Framework\Log\Package;
 
 class CategoryNameCmsElementResolver extends TextCmsElementResolver
 {

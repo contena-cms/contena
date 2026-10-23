@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Consent\Event;
 
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\Hookable;
 

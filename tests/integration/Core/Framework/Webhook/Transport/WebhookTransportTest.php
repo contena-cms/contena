@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Webhook\Transport;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 use Contena\Core\Framework\Webhook\Transport\WebhookTransport;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;

@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\Rule;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Rule\AlwaysValidRule;
-use Contena\Core\System\User\Rule\UserGroupRule;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionEntity;
 use Contena\Core\Content\Rule\RuleCollection;
@@ -14,9 +13,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\User\Rule\UserGroupRule;
 
 /**
  * @internal

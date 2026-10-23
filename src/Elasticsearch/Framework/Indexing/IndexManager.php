@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Framework\Indexing;
 
 use OpenSearch\Client;
-use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
 

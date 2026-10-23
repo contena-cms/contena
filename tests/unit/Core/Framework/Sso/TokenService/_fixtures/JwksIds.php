@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Core\Framework\Sso\TokenService\_fixtures;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

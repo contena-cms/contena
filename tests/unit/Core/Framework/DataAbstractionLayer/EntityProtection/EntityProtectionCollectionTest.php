@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\ReadProtection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

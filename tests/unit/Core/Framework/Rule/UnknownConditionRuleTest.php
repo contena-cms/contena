@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Rule;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\Framework\Rule\UnknownConditionRule;

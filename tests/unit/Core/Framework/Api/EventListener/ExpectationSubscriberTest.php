@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\EventListener\ExpectationSubscriber;
 use Contena\Core\Framework\Api\Exception\ExpectationFailedException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Kernel;
 use Contena\Core\PlatformRequest;

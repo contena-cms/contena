@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Storage;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ResetInterface;
 
 /**

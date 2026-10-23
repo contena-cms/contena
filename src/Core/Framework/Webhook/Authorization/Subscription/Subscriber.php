@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook\Authorization\Subscription;
 
 use Contena\Core\Framework\Api\Acl\ApiCallerType;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Identifies who is asking to subscribe a webhook to an event, so a policy can decide

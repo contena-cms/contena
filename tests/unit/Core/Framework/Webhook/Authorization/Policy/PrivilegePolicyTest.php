@@ -8,7 +8,6 @@ use Contena\Core\Framework\Api\Acl\AclRoleLoader;
 use Contena\Core\Framework\Api\Acl\AclRoles;
 use Contena\Core\Framework\Api\Acl\ApiCallerType;
 use Contena\Core\Framework\App\Event\AppPermissionsUpdated;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PrivilegePolicy;
 use Contena\Core\Framework\Webhook\Authorization\Subscription\Subscriber;

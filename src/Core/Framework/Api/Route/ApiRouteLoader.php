@@ -6,7 +6,6 @@ use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Controller\ApiController;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\Config\Loader\Loader;

@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Api\ResponseFields;
 use Contena\Core\System\Channel\Api\StructEncoder;
 use Symfony\Component\HttpFoundation\JsonResponse;

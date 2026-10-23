@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\ShopId;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;

@@ -4,9 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Api\EventListener;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiException;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;

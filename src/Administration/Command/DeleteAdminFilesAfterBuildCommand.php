@@ -3,7 +3,6 @@
 namespace Contena\Administration\Command;
 
 use Contena\Administration\Administration;
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\ProgressBar;

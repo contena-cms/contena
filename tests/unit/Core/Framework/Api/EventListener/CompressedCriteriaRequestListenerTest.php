@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\EventListener\CompressedCriteriaRequestListener;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;

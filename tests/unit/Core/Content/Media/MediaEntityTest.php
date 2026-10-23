@@ -10,7 +10,6 @@ use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\MediaType\SpatialMediaTypeInterface;
 use Contena\Core\Content\Media\MediaType\SpatialObjectType;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

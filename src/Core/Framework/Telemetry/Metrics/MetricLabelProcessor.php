@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Telemetry\Metrics;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Config\LabelPolicy;
 use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfig;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Type;

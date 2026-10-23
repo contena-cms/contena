@@ -6,9 +6,6 @@ use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceCollection;
 use Contena\Core\Framework\App\Aggregate\FlowActionTranslation\AppFlowActionTranslationCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
-use Contena\Core\Framework\Log\Package;
 
 class AppFlowActionEntity extends Entity
 {

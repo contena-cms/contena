@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media\Thumbnail;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareInterface;
 use Symfony\Component\Serializer\Normalizer\DenormalizerAwareTrait;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;

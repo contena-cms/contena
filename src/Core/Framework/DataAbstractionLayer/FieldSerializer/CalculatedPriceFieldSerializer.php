@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal
@@ -39,68 +38,4 @@ class CalculatedPriceFieldSerializer extends JsonFieldSerializer
         yield from parent::encode($field, $existence, $data, $parameters);
     }
 
-    public function decode(Field $field, mixed $value): ?CalculatedPrice
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $decoded = parent::decode($field, $value);
-        if (!\is_array($decoded)) {
-            return null;
-        }
-
-        $taxRules = array_map(
-            static fn (array $tax) => new TaxRule(
-                (float) $tax['taxRate'],
-                (float) $tax['percentage']
-            ),
-            $decoded['taxRules']
-        );
-
-        $calculatedTaxes = array_map(
-            static fn (array $tax) => new CalculatedTax(
-                (float) $tax['tax'],
-                (float) $tax['taxRate'],
-                (float) $tax['price'],
-                $tax['label'] ?? null,
-            ),
-            $decoded['calculatedTaxes']
-        );
-
-        $referencePriceDefinition = null;
-        if (isset($decoded['referencePrice'])) {
-            $refPrice = $decoded['referencePrice'];
-
-            $referencePriceDefinition = new ReferencePrice(
-                $refPrice['price'],
-                $refPrice['purchaseUnit'],
-                $refPrice['referenceUnit'],
-                $refPrice['unitName']
-            );
-        }
-
-        $listPrice = null;
-        $listPriceValue = (float) ($decoded['listPrice']['price'] ?? 0);
-        if ($listPriceValue > 0) {
-            $listPrice = ListPrice::createFromUnitPrice((float) $decoded['unitPrice'], $listPriceValue);
-        }
-
-        $regulationPrice = null;
-        $regulationPriceValue = (float) ($decoded['regulationPrice']['price'] ?? 0);
-        if ($regulationPriceValue > 0) {
-            $regulationPrice = RegulationPrice::createFromUnitPrice((float) $decoded['unitPrice'], $regulationPriceValue);
-        }
-
-        return new CalculatedPrice(
-            (float) $decoded['unitPrice'],
-            (float) $decoded['totalPrice'],
-            new CalculatedTaxCollection($calculatedTaxes),
-            new TaxRuleCollection($taxRules),
-            (int) $decoded['quantity'],
-            $referencePriceDefinition,
-            $listPrice,
-            $regulationPrice
-        );
-    }
 }

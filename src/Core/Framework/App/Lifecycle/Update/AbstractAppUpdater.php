@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Lifecycle\Update;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

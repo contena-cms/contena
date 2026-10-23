@@ -6,7 +6,6 @@ use Contena\Core\Framework\Adapter\Twig\NodeVisitor\FeatureCallOptimizerNodeVisi
 use Contena\Core\Framework\Adapter\Twig\TokenParser\FeatureFlagCallTokenParser;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Log\Package;
 use Twig\Extension\AbstractExtension;
 use Twig\NodeVisitor\NodeVisitorInterface;
 use Twig\TwigFunction;

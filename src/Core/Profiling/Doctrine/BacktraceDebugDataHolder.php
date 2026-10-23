@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Profiling\Doctrine;
 
-use Contena\Core\Framework\Log\Package;
 use Symfony\Bridge\Doctrine\Middleware\Debug\DebugDataHolder;
 use Symfony\Bridge\Doctrine\Middleware\Debug\Query;
 

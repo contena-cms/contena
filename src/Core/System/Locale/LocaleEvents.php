@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Locale;
 
-use Contena\Core\Framework\Log\Package;
 
 class LocaleEvents
 {

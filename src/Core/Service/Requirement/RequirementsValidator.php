@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\Requirement;
 
-use Contena\Core\Framework\Log\Package;
 
 /**
  * Evaluates a service's requirements for a given {@see Gate}: are all of that gate's requirements

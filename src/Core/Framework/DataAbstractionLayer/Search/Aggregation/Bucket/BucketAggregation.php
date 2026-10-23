@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Aggregation;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @phpstan-ignore-next-line cannot be final, as it is extended, also designed to be used directly

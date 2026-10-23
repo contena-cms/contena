@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\Update\Api;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;

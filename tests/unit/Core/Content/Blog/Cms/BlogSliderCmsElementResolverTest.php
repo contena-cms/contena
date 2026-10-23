@@ -6,16 +6,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Content\Blog\Cms\BlogSlider\AbstractBlogSliderProcessor;
+use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
-use Contena\Core\Content\Blog\Cms\BlogSlider\AbstractBlogSliderProcessor;
-use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Content\Blog\Cms\BlogSlider\BlogSliderFixture;
 
 /**
  * @internal

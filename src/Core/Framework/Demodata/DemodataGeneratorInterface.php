@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Demodata;
 
-use Contena\Core\Framework\Log\Package;
 
 interface DemodataGeneratorInterface
 {

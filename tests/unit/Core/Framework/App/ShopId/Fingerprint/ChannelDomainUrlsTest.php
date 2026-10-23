@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\ShopId\Fingerprint\ChannelDomainUrls;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

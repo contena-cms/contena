@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Deprecation\BCChange;
 
 use Contena\Core\Framework\Deprecation\ClassAliasRegistry;
-use Contena\Core\Framework\Log\Package;
 
 /**
  * @internal

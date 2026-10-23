@@ -6,13 +6,11 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelCollection;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelEntity;
 use Contena\Core\System\NumberRange\NumberRangeCollection;
-use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\Test\TestDefaults;
 
 /**
