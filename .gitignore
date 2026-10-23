@@ -50,6 +50,7 @@ yalc.lock
 
 # Composer
 /composer.phar
+/composer.lock
 /auth.json
 /vendor/*
 
