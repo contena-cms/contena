@@ -48,6 +48,7 @@ class NumberRangeTypeDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of number range\'s type.'),
+            (new StringField('technical_name', 'technicalName'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Name of the number range type.'),
             (new BoolField('global', 'global'))->addFlags(new Required())->setDescription('When set to `true`, the defined number range type is used across all sales channels.'),
             new TranslatedField('customFields'),
 

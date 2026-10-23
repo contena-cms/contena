@@ -53,6 +53,7 @@ class MailTemplateTypeDefinition extends EntityDefinition
         $fields = new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of mail template type.'),
 
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING)),
             (new StringField('technical_name', 'technicalName'))->addFlags(new ApiAware(), new Required())->setDescription('Technical name of mail template.'),
             (new JsonField('available_entities', 'availableEntities'))->setDescription('Defines  which entities are compatible with a given mail template type, ensuring that the right templates can be used for the appropriate purposes within the system'),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),

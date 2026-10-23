@@ -60,6 +60,7 @@ abstract class EntityTranslationDefinition extends EntityDefinition
 
         $baseFields = [
             (new FkField($entityName . '_id', $propertyBaseName . 'Id', $translatedDefinition->getEntityName(), 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
+            (new FkField('language_id', 'languageId', LanguageDefinition::ENTITY_NAME, 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             new ManyToOneAssociationField($propertyBaseName, $entityName . '_id', $translatedDefinition->getEntityName(), 'id', false),
         ];
 

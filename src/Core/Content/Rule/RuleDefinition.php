@@ -59,6 +59,9 @@ class RuleDefinition extends EntityDefinition
             (new StringField('name', 'name'))->addFlags(new ApiAware(), new Required())->setDescription('Name of the rule defined.'),
             (new IntField('priority', 'priority'))->addFlags(new Required())->setDescription('A numerical value to prioritize one of the rules from the list.'),
             (new LongTextField('description', 'description'))->addFlags(new ApiAware())->setDescription('Description of the rule.'),
+            (new BlobField('payload', 'payload'))->removeFlag(ApiAware::class)->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
+            (new BoolField('invalid', 'invalid'))->addFlags(new WriteProtected(Context::SYSTEM_SCOPE))->setDescription('When the boolean value is `true`, the rule is no more available for usage.'),
+            (new ListField('areas', 'areas'))->addFlags(new WriteProtected(Context::SYSTEM_SCOPE))->setDescription('Internal field.'),
             (new CustomFields())->addFlags(new ApiAware())->setDescription('Additional fields that offer a possibility to add own fields for the different program-areas.'),
             (new JsonField('module_types', 'moduleTypes'))->setDescription('It can be used in cart or shipping pricing.'),
 

@@ -48,6 +48,8 @@ class LocaleDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of locale.'),
+            (new StringField('code', 'code'))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Code given to the locale. For example: en-CA.'),
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('territory'))->addFlags(new ApiAware()),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             (new OneToManyAssociationField('languages', LanguageDefinition::class, 'locale_id', 'id'))->addFlags(new CascadeDelete()),

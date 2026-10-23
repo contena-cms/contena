@@ -83,6 +83,12 @@ class AdminUserDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of the admin_user.'),
             (new FkField('locale_id', 'localeId', LocaleDefinition::class))->addFlags(new Required())->setDescription('Unique identity of locale.'),
+            (new StringField('username', 'username'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Username of the admin_user.'),
+            (new PasswordField('password', 'password', \PASSWORD_DEFAULT, [], PasswordField::FOR_ADMIN))->removeFlag(ApiAware::class)->addFlags(new Required()),
+            (new StringField('name', 'name'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Full name of the admin_user.'),
+            (new StringField('phone', 'phone'))->addFlags(new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Phone number of the admin_user.'),
+            (new StringField('title', 'title'))->addFlags(new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Title of the admin_user.'),
+            (new EmailField('email', 'email'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Email of the admin_user.'),
             (new BoolField('active', 'active'))->setDescription('When boolean value is `true`, the admin_user is enabled.'),
             // The regular Admin API CRUD endpoint authorizes elevated admin changes in the controller; direct DAL writes remain write-protected.
             // @see \Contena\Core\Framework\Api\Controller\AdminUserController

@@ -50,6 +50,7 @@ class UserGroupDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the user\'s group.'),
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new BoolField('display_gross', 'displayGross'))->addFlags(new ApiAware())->setDescription('If boolean value is `true` gross value is displayed else, net value will be displayed to the user.'),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             // Merchant Registration

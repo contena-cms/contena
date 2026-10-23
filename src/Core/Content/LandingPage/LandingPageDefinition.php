@@ -59,6 +59,7 @@ class LandingPageDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             (new VersionField())->addFlags(new ApiAware()),
             (new BoolField('active', 'active'))->addFlags(new ApiAware()),
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             (new TranslatedField('slotConfig'))->addFlags(new ApiAware()),
             (new TranslatedField('metaTitle'))->addFlags(new ApiAware()),

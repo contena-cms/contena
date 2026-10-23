@@ -193,6 +193,7 @@ class BlogDefinition extends EntityDefinition
             (new IntField('sales', 'sales'))->addFlags(new ApiAware(), new WriteProtected())->setDescription('Frequency of the blog sales.'),
 
             (new TranslatedField('metaDescription'))->addFlags(new ApiAware(), new Inherited()),
+            (new TranslatedField('name', true))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('keywords'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('description'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('descriptionTeaser'))->addFlags(new ApiAware(), new Inherited())->setDescription('Read-only, HTML-stripped excerpt of the description, derived on write.'),

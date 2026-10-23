@@ -126,12 +126,18 @@ class CategoryDefinition extends EntityDefinition
             (new TreePathField('path', 'path'))->addFlags(new ApiAware())->setDescription('A relative URL to the category.'),
             (new ChildCountField())->addFlags(new ApiAware()),
 
+            (new StringField('type', 'type'))->addFlags(new ApiAware(), new Required(), new Choice([
+                self::TYPE_PAGE,
+                self::TYPE_LINK,
+                self::TYPE_FOLDER,
+            ]))->setDescription('Type of categories like `page`, `folder`, `link`.'),
             (new StringField('blog_assignment_type', 'blogAssignmentType'))->addFlags(new ApiAware(), new Required())->setDescription('Type of blog assignment: Dynamic blog group as or `content_stream` or Manual assignment as `blog`.'),
             (new BoolField('visible', 'visible'))->addFlags(new ApiAware())->setDescription('Displays categories on category page when true.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the category is listed for selection.'),
 
             (new IntField('visible_child_count', 'visibleChildCount'))->addFlags(new Runtime(), new ApiAware()),
 
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             new TranslatedField('slotConfig'),
             (new TranslatedField('linkType'))->addFlags(new ApiAware()),

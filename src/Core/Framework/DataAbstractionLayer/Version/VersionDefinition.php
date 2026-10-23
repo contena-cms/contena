@@ -55,6 +55,7 @@ class VersionDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
+            (new StringField('name', 'name'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new OneToManyAssociationField('commits', VersionCommitDefinition::class, 'version_id'),
         ]);
     }

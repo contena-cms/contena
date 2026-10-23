@@ -90,9 +90,12 @@ class CountryDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the country.'),
 
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
+            (new StringField('iso', 'iso'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Internationally recognized two-letter country codes. For example, DE, IN, NO, etc.'),
             (new IntField('position', 'position'))->addFlags(new ApiAware())->setDescription('Numerical value that indicates the order in which the defined countries must be displayed in the frontend.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the country is available for selection in the frontend.'),
             (new BoolField('shipping_available', 'shippingAvailable'))->addFlags(new ApiAware())->setDescription('The shipping availability for a country is enabled when boolean value is `true`.'),
+            (new StringField('iso3', 'iso3'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Internationally recognized three-letter country codes. For example, DEU, IND, NOR, etc.'),
             (new BoolField('display_state_in_registration', 'displayStateInRegistration'))->addFlags(new ApiAware())->setDescription('The country\'s state is displayed in the address when boolean value is `true`.'),
             (new BoolField('force_state_in_registration', 'forceStateInRegistration'))->addFlags(new ApiAware())->setDescription('State details in the address are force included when boolean value is `true`.'),
             (new BoolField('check_vat_id_pattern', 'checkVatIdPattern'))->addFlags(new ApiAware())->setDescription('Verify if VAT ID is valid or not.'),

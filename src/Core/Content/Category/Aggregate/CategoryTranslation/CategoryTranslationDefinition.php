@@ -55,6 +55,12 @@ class CategoryTranslationDefinition extends EntityTranslationDefinition
             (new StringField('name', 'name'))->addFlags(new ApiAware(), new Required()),
             (new BreadcrumbField())->addFlags(new ApiAware(), new WriteProtected()),
             new JsonField('slot_config', 'slotConfig'),
+            (new StringField('link_type', 'linkType'))->addFlags(new ApiAware(), new Choice([
+                CategoryDefinition::LINK_TYPE_CATEGORY,
+                CategoryDefinition::LINK_TYPE_BLOG,
+                CategoryDefinition::LINK_TYPE_EXTERNAL,
+                CategoryDefinition::LINK_TYPE_LANDING_PAGE,
+            ])),
             (new IdField('internal_link', 'internalLink'))->addFlags(new ApiAware()),
             (new StringField('external_link', 'externalLink'))->addFlags(new ApiAware()),
             (new BoolField('link_new_tab', 'linkNewTab'))->addFlags(new ApiAware()),

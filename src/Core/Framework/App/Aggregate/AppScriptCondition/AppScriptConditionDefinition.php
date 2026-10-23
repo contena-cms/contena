@@ -61,6 +61,7 @@ class AppScriptConditionDefinition extends EntityDefinition
             (new BoolField('active', 'active'))->addFlags(new Required())->setDescription('When boolean value is `true`, defined app script conditions are available for selection.'),
             (new StringField('group', 'group'))->setDescription('Categorizes script conditions within a specific group.'),
             (new LongTextField('script', 'script'))->addFlags(new AllowHtml(false))->setDescription('Internal field.'),
+            (new BlobField('constraints', 'constraints'))->removeFlag(ApiAware::class)->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
             (new JsonField('config', 'config'))->setDescription('Specifies detailed information about the component.'),
             (new FkField('app_id', 'appId', AppDefinition::class))->addFlags(new CascadeDelete(), new Required())->setDescription('Unique identity of app.'),
             new ManyToOneAssociationField('app', 'app_id', AppDefinition::class),

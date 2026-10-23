@@ -57,6 +57,8 @@ class CountryStateDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the country\'s state.'),
             (new FkField('country_id', 'countryId', CountryDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of the country.'),
+            (new StringField('short_code', 'shortCode'))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('An abbreviation for the country\'s state.'),
+            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new IntField('position', 'position'))->addFlags(new ApiAware())->setDescription('Numerical value that indicates the order in which the defined states must be displayed in the frontend.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the country\'s state is available for selection in the frontend.'),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),

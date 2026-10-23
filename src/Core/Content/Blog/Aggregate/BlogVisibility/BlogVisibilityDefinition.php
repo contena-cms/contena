@@ -65,6 +65,7 @@ class BlogVisibilityDefinition extends EntityDefinition
             (new ReferenceVersionField(BlogDefinition::class))->addFlags(new Required()),
 
             (new FkField('channel_id', 'channelId', ChannelDefinition::class))->addFlags(new Required())->setDescription('Unique identity of the sales channel.'),
+            (new IntField('visibility', 'visibility'))->addFlags(new Required(), new Choice([self::VISIBILITY_LINK, self::VISIBILITY_SEARCH, self::VISIBILITY_ALL], strict: true))->setDescription('An integer value to signify the blog\'s visibility in any sales channel. `10` indicates `Hide in listings and search`, `20` indicates `Hide in listings` and `30` indicates `Visible` everywhere.'),
             new ManyToOneAssociationField('channel', 'channel_id', ChannelDefinition::class, 'id', false),
             new ManyToOneAssociationField('blog', 'blog_id', BlogDefinition::class, 'id', false),
         ]);
