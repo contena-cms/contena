@@ -47,7 +47,7 @@ class UserBeforeDeleteSubscriberTest extends TestCase
                 'languageId' => Uuid::randomHex(),
                 'userNumber' => 'SW1000',
                 'email' => 'foo@bar.com',
-                'firstName' => 'foo',
+                'name' => 'foo',
                 'lastName' => 'bar',
             ]);
 
@@ -194,7 +194,7 @@ class UserBeforeDeleteSubscriberTest extends TestCase
                 'languageId' => $languageId,
                 'userNumber' => 'SW1001',
                 'email' => 'bar@baz.com',
-                'firstName' => 'bar',
+                'name' => 'bar',
                 'lastName' => 'baz',
             ]);
 
@@ -281,7 +281,7 @@ class UserBeforeDeleteSubscriberTest extends TestCase
                 'languageId' => $userLanguageId,
                 'userNumber' => 'SW1002',
                 'email' => 'nolang@test.com',
-                'firstName' => 'No',
+                'name' => 'No',
                 'lastName' => 'Lang',
             ]);
 

@@ -235,7 +235,7 @@ trait ChannelApiTestBehaviour
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -247,7 +247,7 @@ trait ChannelApiTestBehaviour
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => $email,
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'guest' => $guest,
             'salutationId' => $this->getValidSalutationId(),

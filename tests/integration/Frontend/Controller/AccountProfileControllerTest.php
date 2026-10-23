@@ -104,7 +104,7 @@ class AccountProfileControllerTest extends TestCase
             'accountType' => UserEntity::ACCOUNT_TYPE_PRIVATE, // Explicitly set as private
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'John',
+                'name' => 'John',
                 'lastName' => 'Doe',
                 'street' => 'Test Street 1',
                 'city' => 'Test City',
@@ -116,7 +116,7 @@ class AccountProfileControllerTest extends TestCase
             'groupId' => $userGroupId, // Assign to the group with company signup enabled
             'email' => 'private.user@test.com',
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'John',
+            'name' => 'John',
             'lastName' => 'Doe',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '54321',
@@ -156,7 +156,7 @@ class AccountProfileControllerTest extends TestCase
             $this->tokenize('frontend.account.profile.save', [
                 'accountType' => UserEntity::ACCOUNT_TYPE_PRIVATE,
                 'salutationId' => $this->getValidSalutationId(),
-                'firstName' => 'John',
+                'name' => 'John',
                 'lastName' => 'Doe',
                 'email' => 'private.user@test.com',
             ])
@@ -220,7 +220,7 @@ class AccountProfileControllerTest extends TestCase
 
         $browser->request('POST', $_SERVER['APP_URL'] . '/account/profile', [
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'accountType' => UserEntity::ACCOUNT_TYPE_BUSINESS,
             'company' => 'Contena',
@@ -259,10 +259,10 @@ class AccountProfileControllerTest extends TestCase
             'company' => 'Contena',
             'email' => $email,
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'billingAddress' => [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'countryId' => $this->getValidCountryId(),
                 'street' => 'Musterstraße 1',
@@ -315,7 +315,7 @@ class AccountProfileControllerTest extends TestCase
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -327,7 +327,7 @@ class AccountProfileControllerTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => 'test@example.com',
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',
@@ -357,7 +357,7 @@ class AccountProfileControllerTest extends TestCase
             'company' => 'Contena',
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -370,7 +370,7 @@ class AccountProfileControllerTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => 'business.user@test.com',
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',

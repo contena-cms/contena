@@ -34,6 +34,14 @@ use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryDefinition;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
+use Contena\Core\System\CustomEntity\Xml\Field\EmailField;
+use Contena\Core\System\CustomEntity\Xml\Field\JsonField;
+use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
+use Contena\Core\System\Tag\TagDefinition;
+use Contena\Core\System\User\Aggregate\UserTag\UserTagDefinition;
 
 class UserDefinition extends EntityDefinition
 {

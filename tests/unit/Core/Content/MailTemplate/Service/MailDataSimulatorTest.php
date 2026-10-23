@@ -296,7 +296,7 @@ class MailDataSimulatorTest extends TestCase
         $dispatcher->method('dispatch')->willReturnCallback(function (object $event) use (&$capturedData): object {
             if ($event instanceof MailDataSimulatorFormDataEvent && $event->variableName === FlowMailVariables::CONTACT_FORM_DATA) {
                 $capturedData = $event->getData();
-                $event->setData(['firstName' => 'Overridden']);
+                $event->setData(['name' => 'Overridden']);
             }
 
             return $event;
@@ -314,7 +314,7 @@ class MailDataSimulatorTest extends TestCase
 
         static::assertIsArray($capturedData);
         static::assertSame('Max', $capturedData['firstName']);
-        static::assertSame(['firstName' => 'Overridden'], $result[FlowMailVariables::CONTACT_FORM_DATA]);
+        static::assertSame(['name' => 'Overridden'], $result[FlowMailVariables::CONTACT_FORM_DATA]);
     }
 
     public function testGetTemplateDataUsesProviderCriteriaForEntityEventData(): void
@@ -497,7 +497,7 @@ class MailDataSimulatorTest extends TestCase
         yield 'contact form data' => [
             FlowMailVariables::CONTACT_FORM_DATA,
             [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'max.mustermann@example.com',
                 'phone' => '+49123456789',
@@ -521,7 +521,7 @@ class MailDataSimulatorTest extends TestCase
         yield 'revocation request form data' => [
             FlowMailVariables::REVOCATION_REQUEST_FORM_DATA,
             [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'max.mustermann@example.com',
                 'contractNumber' => '10000',

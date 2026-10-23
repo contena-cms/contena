@@ -145,7 +145,7 @@ class UserInsightsScenarioTest extends McpScenarioTestCase
                 ->add('orderUser', [
                     'id' => $orderIds->get('orderUser'),
                     'userId' => $ids->get('cust-us27-' . $i),
-                    'firstName' => 'Avg',
+                    'name' => 'Avg',
                     'lastName' => 'Test',
                     'email' => $email,
                 ])

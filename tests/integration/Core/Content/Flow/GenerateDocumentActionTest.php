@@ -432,7 +432,7 @@ class GenerateDocumentActionTest extends TestCase
                 'userId' => $userId,
                 'email' => 'test@example.com',
                 'salutationId' => $this->getValidSalutationId(),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
             ],
             'stateId' => $stateId,
@@ -445,7 +445,7 @@ class GenerateDocumentActionTest extends TestCase
                 [
                     'id' => $billingAddressId,
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'street' => 'Ebbinghoff 10',
                     'zipcode' => '48624',

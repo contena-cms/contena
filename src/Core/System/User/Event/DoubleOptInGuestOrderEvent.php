@@ -55,7 +55,7 @@ class DoubleOptInGuestOrderEvent extends Event implements ChannelContextAware, U
     {
         if (!$this->mailRecipientStruct instanceof MailRecipientStruct) {
             $this->mailRecipientStruct = new MailRecipientStruct([
-                $this->user->getEmail() => $this->user->getFirstName() . ' ' . $this->user->getLastName(),
+                $this->user->getEmail() => $this->user->getName() . ' ' . $this->user->getLastName(),
             ]);
         }
 

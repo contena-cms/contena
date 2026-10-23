@@ -586,7 +586,7 @@ class MailDataSimulator
     {
         return match ($name) {
             FlowMailVariables::CONTACT_FORM_DATA => [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'max.mustermann@example.com',
                 'phone' => '+49123456789',
@@ -602,7 +602,7 @@ class MailDataSimulator
                 'content' => 'Lorem ipsum dolor sit amet.',
             ],
             FlowMailVariables::REVOCATION_REQUEST_FORM_DATA => [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'max.mustermann@example.com',
                 'contractNumber' => '10000',

@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\Blog;
 
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
@@ -23,12 +22,6 @@ class BlogPage extends Page
 
     protected PropertyGroupOptionCollection $selectedOptions;
 
-    /**
-     * A small sample of approved reviews used exclusively for JSON-LD structured data output.
-     * This contains at most BlogPageLoader::MAX_REVIEWS_IN_JSON_LD items — it must NOT be
-     * used to display reviews in templates.
-     */
-    protected ?BlogReviewResult $structuredDataReviews = null;
 
     protected ?BreadcrumbCollection $breadcrumb = null;
 
@@ -82,15 +75,7 @@ class BlogPage extends Page
         $this->selectedOptions = $selectedOptions;
     }
 
-    public function getStructuredDataReviews(): ?BlogReviewResult
-    {
-        return $this->structuredDataReviews;
-    }
 
-    public function setStructuredDataReviews(BlogReviewResult $structuredDataReviews): void
-    {
-        $this->structuredDataReviews = $structuredDataReviews;
-    }
 
     public function getBreadcrumb(): ?BreadcrumbCollection
     {

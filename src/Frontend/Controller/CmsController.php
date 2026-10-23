@@ -2,18 +2,11 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
-use Contena\Core\Content\Blog\Channel\FindVariant\AbstractFindBlogVariantRoute;
-use Contena\Core\Content\Blog\Channel\Listing\AbstractBlogListingRoute;
-use Contena\Core\Content\Blog\Channel\Review\AbstractBlogReviewLoader;
-use Contena\Core\Content\Category\Channel\AbstractCategoryRoute;
-use Contena\Core\Content\Cms\Channel\AbstractCmsRoute;
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Event\SwitchBuyBoxVariantEvent;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Cms\CmsPageLoadedHook;
@@ -30,20 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class CmsController extends FrontendController
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly AbstractCmsRoute $cmsRoute,
-        private readonly AbstractCategoryRoute $categoryRoute,
-        private readonly AbstractBlogListingRoute $listingRoute,
-        private readonly AbstractBlogDetailRoute $blogRoute,
-        private readonly AbstractBlogReviewLoader $blogReviewLoader,
-        private readonly AbstractFindBlogVariantRoute $findVariantRoute,
-        private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly SystemConfigService $systemConfigService
-    ) {
-    }
 
     /**
      * Rendering a CMS layout as a widget, meaning that the layout is rendered standalone without the surrounding page template.

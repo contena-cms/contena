@@ -19,6 +19,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Country\Aggregate\CountryStateTranslation\CountryStateTranslationDefinition;
 use Contena\Core\System\Country\CountryDefinition;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
+use Contena\Core\System\CustomEntity\Xml\Field\StringField;
 
 /**
  * @codeCoverageIgnore

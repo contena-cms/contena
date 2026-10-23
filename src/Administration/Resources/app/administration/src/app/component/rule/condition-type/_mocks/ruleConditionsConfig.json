@@ -439,7 +439,7 @@
       }
     ]
   },
-  "userLastName": {
+  "userName": {
     "operatorSet": {
       "operators": [
         "=",

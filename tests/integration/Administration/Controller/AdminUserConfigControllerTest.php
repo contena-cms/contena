@@ -79,7 +79,7 @@ class AdminUserConfigControllerTest extends TestCase
         $admin_user = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',

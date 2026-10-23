@@ -1708,7 +1708,7 @@ class WebhookManagerTest extends TestCase
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -1720,7 +1720,7 @@ class WebhookManagerTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => 'test@gmail.com',
             'password' => 'contena',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',

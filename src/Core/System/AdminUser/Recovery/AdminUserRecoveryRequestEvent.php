@@ -72,7 +72,7 @@ class AdminUserRecoveryRequestEvent extends Event implements AdminUserAware, Mai
             $admin_user = $this->admin_userRecovery->getUser();
 
             $this->mailRecipientStruct = new MailRecipientStruct([
-                $admin_user->getEmail() => $admin_user->getFirstName() . ' ' . $admin_user->getLastName(),
+                $admin_user->getEmail() => $admin_user->getName(),
             ]);
         }
 

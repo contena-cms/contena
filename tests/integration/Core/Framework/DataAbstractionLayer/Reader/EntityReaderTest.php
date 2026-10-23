@@ -1083,14 +1083,14 @@ class EntityReaderTest extends TestCase
             'zipcode' => 'A',
             'city' => 'A',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'A',
+            'name' => 'A',
             'lastName' => 'a',
             'countryId' => $this->getValidCountryId(),
         ];
 
         $user = [
             'id' => $id,
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),
@@ -1133,14 +1133,14 @@ class EntityReaderTest extends TestCase
             'zipcode' => 'A',
             'city' => 'A',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'A',
+            'name' => 'A',
             'lastName' => 'a',
             'countryId' => $this->getValidCountryId(),
         ];
 
         $user = [
             'id' => $id,
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),
@@ -1190,12 +1190,12 @@ class EntityReaderTest extends TestCase
             'zipcode' => 'A',
             'city' => 'A',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'A',
+            'name' => 'A',
             'lastName' => 'a',
             'countryId' => $this->getValidCountryId(),
         ];
         $user = [
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),
@@ -1289,13 +1289,13 @@ class EntityReaderTest extends TestCase
             'zipcode' => 'A',
             'city' => 'A',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'A',
+            'name' => 'A',
             'lastName' => 'a',
             'countryId' => $this->getValidCountryId(),
         ];
         $user = [
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'password' => TestDefaults::HASHED_PASSWORD,
@@ -1413,14 +1413,14 @@ class EntityReaderTest extends TestCase
             'zipcode' => 'A',
             'city' => 'A',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'A',
+            'name' => 'A',
             'lastName' => 'a',
             'countryId' => $this->getValidCountryId(),
         ];
 
         $user = [
             'id' => $id,
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),
@@ -1480,7 +1480,7 @@ class EntityReaderTest extends TestCase
 
         $this->userRepository->upsert([[
             'id' => $userId,
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),
@@ -1497,7 +1497,7 @@ class EntityReaderTest extends TestCase
                     'zipcode' => 'A',
                     'city' => 'A',
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'A',
+                    'name' => 'A',
                     'lastName' => 'a',
                     'countryId' => $this->getValidCountryId(),
                 ],
@@ -1506,7 +1506,7 @@ class EntityReaderTest extends TestCase
                     'zipcode' => 'A',
                     'city' => 'A',
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'A',
+                    'name' => 'A',
                     'lastName' => 'a',
                     'countryId' => $this->getValidCountryId(),
                 ],
@@ -1515,7 +1515,7 @@ class EntityReaderTest extends TestCase
                     'zipcode' => 'A',
                     'city' => 'A',
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'A',
+                    'name' => 'A',
                     'lastName' => 'a',
                     'countryId' => $this->getValidCountryId(),
                 ],
@@ -1545,7 +1545,7 @@ class EntityReaderTest extends TestCase
 
         $this->userRepository->upsert([[
             'id' => $userId,
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),
@@ -1562,7 +1562,7 @@ class EntityReaderTest extends TestCase
                     'zipcode' => 'A',
                     'city' => 'A',
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'A',
+                    'name' => 'A',
                     'lastName' => 'a',
                     'countryId' => $this->getValidCountryId(),
                 ],
@@ -1571,7 +1571,7 @@ class EntityReaderTest extends TestCase
                     'zipcode' => 'A',
                     'city' => 'A',
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'A',
+                    'name' => 'A',
                     'lastName' => 'a',
                     'countryId' => $this->getValidCountryId(),
                 ],
@@ -1580,7 +1580,7 @@ class EntityReaderTest extends TestCase
                     'zipcode' => 'A',
                     'city' => 'A',
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'A',
+                    'name' => 'A',
                     'lastName' => 'a',
                     'countryId' => $this->getValidCountryId(),
                 ],
@@ -1612,14 +1612,14 @@ class EntityReaderTest extends TestCase
             'zipcode' => 'A',
             'city' => 'A',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'A',
+            'name' => 'A',
             'lastName' => 'a',
             'countryId' => $this->getValidCountryId(),
         ];
 
         $user = [
             'id' => $id,
-            'firstName' => 'Test',
+            'name' => 'Test',
             'lastName' => 'Test',
             'userNumber' => 'A',
             'salutationId' => $this->getValidSalutationId(),

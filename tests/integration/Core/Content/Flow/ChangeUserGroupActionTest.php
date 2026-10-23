@@ -145,7 +145,7 @@ class ChangeUserGroupActionTest extends TestCase
             'channelId' => $this->ids->get('sales-channel'),
             'defaultShippingAddress' => [
                 'id' => $this->ids->create('address'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -157,7 +157,7 @@ class ChangeUserGroupActionTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => $email,
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',

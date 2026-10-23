@@ -16,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleDefinition;
+use Contena\Core\System\CustomEntity\Xml\Field\StringField;
 
 /**
  * @codeCoverageIgnore

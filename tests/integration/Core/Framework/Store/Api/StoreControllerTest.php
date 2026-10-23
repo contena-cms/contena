@@ -161,12 +161,12 @@ class StoreControllerTest extends TestCase
         $this->admin_userRepository->update([[
             'id' => $adminUser->getId(),
             'storeToken' => 'store-token',
-            'firstName' => 'John',
+            'name' => 'John',
         ]], $this->defaultContext);
 
         $this->admin_userRepository->create([[
             'id' => Uuid::randomHex(),
-            'firstName' => 'Jane',
+            'name' => 'Jane',
             'lastName' => 'Doe',
             'storeToken' => 'store-token-two',
             'localeId' => $adminUser->getLocaleId(),

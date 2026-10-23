@@ -95,8 +95,7 @@ final readonly class AdminUserService
     private function isInvitedUser(AdminUserEntity $admin_user): bool
     {
         return $admin_user->getUsername() === $admin_user->getEmail()
-            && $admin_user->getFirstName() === $admin_user->getEmail()
-            && $admin_user->getLastName() === $admin_user->getEmail()
+            && $admin_user->getName() === $admin_user->getEmail()
             && $admin_user->getActive() === false;
     }
 
@@ -106,7 +105,7 @@ final readonly class AdminUserService
             $this->admin_userRepository->update([[
                 'id' => $admin_userEntity->getId(),
                 'active' => true,
-                'firstName' => $parsedIdToken->givenName,
+                'name' => $parsedIdToken->givenName,
                 'lastName' => $parsedIdToken->familyName,
                 'username' => $parsedIdToken->username,
             ]], $context);

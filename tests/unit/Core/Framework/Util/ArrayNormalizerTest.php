@@ -41,14 +41,14 @@ class ArrayNormalizerTest extends TestCase
         return [
             [
                 [ // nested
-                    'firstName' => 'Foo',
+                    'name' => 'Foo',
                     'lastName' => 'Bar',
                     'billingAddress' => [
                         'street' => 'Foostreet',
                     ],
                 ],
                 [ // flattened
-                    'firstName' => 'Foo',
+                    'name' => 'Foo',
                     'lastName' => 'Bar',
                     'billingAddress.street' => 'Foostreet',
                 ],

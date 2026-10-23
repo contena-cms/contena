@@ -34,7 +34,7 @@ class SsoUserServiceTest extends TestCase
         $admin_userEntity = new AdminUserEntity();
         $admin_userEntity->setUniqueIdentifier(Uuid::randomHex());
         $admin_userEntity->setEmail('test@example.foo');
-        $admin_userEntity->setFirstName('FirstName');
+        $admin_userEntity->setName('FirstName');
         $admin_userEntity->setLastName('LastName');
         $admin_userEntity->setUsername('AdminUserName');
 

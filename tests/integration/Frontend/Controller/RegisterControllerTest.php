@@ -629,11 +629,11 @@ class RegisterControllerTest extends TestCase
             'email' => $email,
             'emailConfirmation' => $email,
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'frontendUrl' => 'http://localhost',
             'billingAddress' => [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'countryId' => $this->getValidCountryId(),
                 'street' => 'Musterstrasse 13',

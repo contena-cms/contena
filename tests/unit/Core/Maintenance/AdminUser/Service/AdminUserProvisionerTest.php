@@ -45,7 +45,7 @@ class AdminUserProvisionerTest extends TestCase
         );
 
         $admin_user = [
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
             'admin' => false,
@@ -66,7 +66,7 @@ class AdminUserProvisionerTest extends TestCase
         );
 
         $admin_user = [
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
             'admin' => false,
@@ -90,7 +90,7 @@ class AdminUserProvisionerTest extends TestCase
         $connection->expects($this->once())->method('fetchOne')->willReturn(json_encode(['_value' => 8], \JSON_THROW_ON_ERROR));
 
         $admin_user = [
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
             'admin' => false,

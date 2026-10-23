@@ -98,7 +98,7 @@ class UserNumberRangeSubscriberTest extends TestCase
         );
         $subscriber->onAfterImport($this->createBatchEvent($context, new EntityWriteResult(
             'user-id',
-            ['firstName' => 'Updated'],
+            ['name' => 'Updated'],
             UserDefinition::ENTITY_NAME,
             EntityWriteResult::OPERATION_UPDATE,
         )));

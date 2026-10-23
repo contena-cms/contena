@@ -24,6 +24,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\TaxProvider\TaxProviderDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 
 /**
  * @codeCoverageIgnore

@@ -30,7 +30,7 @@ class AdminUserCrudTest extends TestCase
             'username' => 'dummy',
             'password' => 'i am safe',
             'email' => 'some-guy@contena.cn',
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'active' => true,
             'admin' => false,

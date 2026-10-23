@@ -35,7 +35,7 @@ class AdminOperationsScenarioTest extends McpScenarioTestCase
             ->add('orderUser', [
                 'id' => $ids->get('orderUser'),
                 'userId' => $ids->get('US5-cust'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'mcp-us5@example.com',
             ])
@@ -52,7 +52,7 @@ class AdminOperationsScenarioTest extends McpScenarioTestCase
                 'shippingDateEarliest' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
                 'shippingDateLatest' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
                 'shippingOrderAddress' => [
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'city' => 'Berlin',
                     'street' => 'Teststr. 1',
@@ -110,7 +110,7 @@ class AdminOperationsScenarioTest extends McpScenarioTestCase
             ->add('orderUser', [
                 'id' => $ids->get('orderUser'),
                 'userId' => $ids->get('US6-cust'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'mcp-us6@example.com',
             ])
@@ -127,7 +127,7 @@ class AdminOperationsScenarioTest extends McpScenarioTestCase
                 'shippingDateEarliest' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
                 'shippingDateLatest' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
                 'shippingOrderAddress' => [
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'city' => 'Berlin',
                     'street' => 'Teststr. 1',

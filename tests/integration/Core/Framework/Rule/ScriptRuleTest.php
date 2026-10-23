@@ -220,7 +220,7 @@ class ScriptRuleTest extends TestCase
             '/test/manifest_arbitraryRule_firstName.xml',
             [
                 'operator' => '=',
-                'firstName' => 'hello',
+                'name' => 'hello',
             ],
         ];
 

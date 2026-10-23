@@ -119,8 +119,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
         $addressData = [
             'salutationId' => $data->get('salutationId'),
-            'firstName' => $data->get('firstName'),
-            'lastName' => $data->get('lastName'),
+            'name' => $data->get('name'),
             'street' => $data->get('street'),
             'city' => $data->get('city'),
             'zipcode' => $data->get('zipcode'),

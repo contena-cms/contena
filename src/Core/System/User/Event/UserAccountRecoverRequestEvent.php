@@ -87,7 +87,7 @@ class UserAccountRecoverRequestEvent extends Event implements ChannelContextAwar
             \assert($user !== null);
 
             $this->mailRecipientStruct = new MailRecipientStruct([
-                $user->getEmail() => $user->getFirstName() . ' ' . $user->getLastName(),
+                $user->getEmail() => $user->getName(),
             ]);
         }
 

@@ -289,7 +289,7 @@ trait FrontendPageTestBehaviour
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -301,7 +301,7 @@ trait FrontendPageTestBehaviour
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => $userId . '@example.com',
             'password' => 'password',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => $userId,

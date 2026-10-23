@@ -47,7 +47,7 @@ class AdminConfigurationServiceTest extends TestCase
         $admin_user = [
             'username' => 'admin',
             'password' => 'contena',
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
         ];

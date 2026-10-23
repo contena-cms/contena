@@ -76,7 +76,7 @@ class AdminUserRecoveryRequestEventTest extends TestCase
     {
         $admin_user = new AdminUserEntity();
         $admin_user->setEmail('admin@example.com');
-        $admin_user->setFirstName('Max');
+        $admin_user->setName('Max');
         $admin_user->setLastName('Mustermann');
 
         $admin_userRecovery = new AdminUserRecoveryEntity();
@@ -94,7 +94,7 @@ class AdminUserRecoveryRequestEventTest extends TestCase
     {
         $admin_user = new AdminUserEntity();
         $admin_user->setEmail('admin@example.com');
-        $admin_user->setFirstName('Max');
+        $admin_user->setName('Max');
         $admin_user->setLastName('Mustermann');
 
         $admin_userRecovery = new AdminUserRecoveryEntity();

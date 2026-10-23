@@ -161,7 +161,7 @@ class UserEntity extends Entity implements \Stringable
 
     public function __toString(): string
     {
-        return $this->getFirstName() . ' ' . $this->getLastName();
+        return $this->getName();
     }
 
     public function getGroupId(): string

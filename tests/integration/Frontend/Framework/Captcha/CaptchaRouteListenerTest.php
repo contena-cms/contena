@@ -45,7 +45,7 @@ class CaptchaRouteListenerTest extends TestCase
         $data = [
             'salutationId' => $salutation->getId(),
             'email' => 'kyln@contena.cn',
-            'firstName' => 'Ky',
+            'name' => 'Ky',
             'lastName' => 'Le',
             'subject' => 'Captcha',
             'comment' => 'Basic Captcha',
@@ -197,7 +197,7 @@ class CaptchaRouteListenerTest extends TestCase
             $this->tokenize('frontend.account.register.save', [
                 'errorRoute' => 'frontend.account.register.page',
                 'salutationId' => $this->getValidSalutationId(),
-                'firstName' => 'Guest',
+                'name' => 'Guest',
                 'lastName' => 'Convert',
                 'email' => 'guest-convert@contena.cn',
                 'billingAddress' => [

@@ -114,7 +114,7 @@ class ChannelContextRestorerTest extends TestCase
         $ids = new IdsCollection();
         $shippingAddress = [
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'street' => 'Ebbinghoff 10',
             'zipcode' => '48624',
@@ -189,7 +189,7 @@ class ChannelContextRestorerTest extends TestCase
             'id' => $ids->get('user'),
             'salutationId' => $this->getValidSalutationId(),
             'email' => 'test',
-            'firstName' => 'test',
+            'name' => 'test',
             'lastName' => 'test',
         ];
 
@@ -222,7 +222,7 @@ class ChannelContextRestorerTest extends TestCase
                     'id' => $ids->create('billing-address'),
                     'countryId' => $this->getValidCountryId(),
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'asd',
+                    'name' => 'asd',
                     'lastName' => 'asd',
                     'street' => 'asd',
                     'zipcode' => 'asd',
@@ -232,7 +232,7 @@ class ChannelContextRestorerTest extends TestCase
                     'id' => $ids->create('shipping-address'),
                     'countryId' => $this->getValidCountryId(),
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'asd',
+                    'name' => 'asd',
                     'lastName' => 'asd',
                     'street' => 'asd',
                     'zipcode' => 'asd',
@@ -332,7 +332,7 @@ class ChannelContextRestorerTest extends TestCase
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -344,7 +344,7 @@ class ChannelContextRestorerTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => 'foo@bar.de',
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',

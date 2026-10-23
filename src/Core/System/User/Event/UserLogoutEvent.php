@@ -69,7 +69,7 @@ class UserLogoutEvent extends Event implements ChannelAware, ContenaChannelEvent
     {
         return new MailRecipientStruct(
             [
-                $this->user->getEmail() => $this->user->getFirstName() . ' ' . $this->user->getLastName(),
+                $this->user->getEmail() => $this->user->getName() . ' ' . $this->user->getLastName(),
             ]
         );
     }

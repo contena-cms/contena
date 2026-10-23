@@ -203,7 +203,7 @@ class AddressControllerTest extends TestCase
         $dataBag = new RequestDataBag([
             'address' => [
                 'userId' => $user->getId(),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -557,7 +557,7 @@ class AddressControllerTest extends TestCase
 
         $dataBag = new RequestDataBag([
             'address' => [
-                'firstName' => 'not',
+                'name' => 'not',
                 'company' => 'not',
                 'department' => 'not',
                 'street' => 'not',
@@ -718,7 +718,7 @@ class AddressControllerTest extends TestCase
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $this->addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -730,7 +730,7 @@ class AddressControllerTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => 'test@example.com',
             'password' => 'test12345',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',
@@ -768,7 +768,7 @@ class AddressControllerTest extends TestCase
                 'channelId' => TestDefaults::CHANNEL,
                 'defaultShippingAddress' => [
                     'id' => $id1,
-                    'firstName' => 'not',
+                    'name' => 'not',
                     'lastName' => 'not',
                     'city' => 'not',
                     'street' => 'not',
@@ -781,7 +781,7 @@ class AddressControllerTest extends TestCase
                 'email' => Uuid::randomHex() . '@example.com',
                 'password' => 'not12345',
                 'lastName' => 'not',
-                'firstName' => 'First name',
+                'name' => 'First name',
                 'salutationId' => $salutationId,
                 'userNumber' => 'not',
             ],
@@ -790,7 +790,7 @@ class AddressControllerTest extends TestCase
                 'channelId' => TestDefaults::CHANNEL,
                 'defaultShippingAddress' => [
                     'id' => $id2,
-                    'firstName' => 'not',
+                    'name' => 'not',
                     'lastName' => 'not',
                     'city' => 'not',
                     'street' => 'not',
@@ -803,7 +803,7 @@ class AddressControllerTest extends TestCase
                 'email' => Uuid::randomHex() . '@example.com',
                 'password' => 'not12345',
                 'lastName' => 'not',
-                'firstName' => 'First name',
+                'name' => 'First name',
                 'salutationId' => $salutationId,
                 'userNumber' => 'not',
             ],
@@ -822,7 +822,7 @@ class AddressControllerTest extends TestCase
             [
                 'id' => $newBillingAddressId,
                 'userId' => $userId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',

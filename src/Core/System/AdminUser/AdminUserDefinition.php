@@ -36,6 +36,8 @@ use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryD
 use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryDefinition;
 use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
+use Contena\Core\System\CustomEntity\Xml\Field\EmailField;
 
 /**
  * @codeCoverageIgnore

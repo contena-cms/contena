@@ -95,7 +95,7 @@ class ChangeUserProfileRouteTest extends TestCase
         $data = new RequestDataBag([
             'accountType' => UserEntity::ACCOUNT_TYPE_BUSINESS,
             'company' => 'Test Company',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => Uuid::randomHex(),
             'vatIds' => ['de 123456789'],
@@ -233,7 +233,7 @@ class ChangeUserProfileRouteTest extends TestCase
     public function testBusinessUserKeepsCompanyAndVatIdsWhenTheRequestOmitsThem(): void
     {
         [$written, $validation] = $this->changeProfile($this->createBusinessUser(), [
-            'firstName' => 'Jane',
+            'name' => 'Jane',
             'lastName' => 'Doe',
         ]);
 
@@ -248,7 +248,7 @@ class ChangeUserProfileRouteTest extends TestCase
     public function testBusinessUserChangesCompanyAndVatIdsSentWithoutAccountType(): void
     {
         [$written, $validation] = $this->changeProfile($this->createBusinessUser(), [
-            'firstName' => 'Jane',
+            'name' => 'Jane',
             'lastName' => 'Doe',
             'company' => 'New Company',
             'vatIds' => ['DE987654321'],
@@ -267,7 +267,7 @@ class ChangeUserProfileRouteTest extends TestCase
         $user->setAccountType(UserEntity::ACCOUNT_TYPE_PRIVATE);
 
         [$written] = $this->changeProfile($user, [
-            'firstName' => 'Jane',
+            'name' => 'Jane',
             'lastName' => 'Doe',
             'company' => 'New Company',
         ]);

@@ -4,10 +4,6 @@ namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
-use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoader;
-use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
-use Contena\Core\Content\Media\UnusedMediaPurger;
 use Contena\Core\Content\Blog\AbstractIsNewDetector;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
@@ -19,42 +15,17 @@ use Contena\Core\Content\Blog\Aggregate\BlogSearchConfig\BlogSearchConfigExcepti
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField\BlogSearchConfigFieldDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField\BlogSearchConfigFieldExceptionHandler;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordDefinition;
-use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
+use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
 use Contena\Core\Content\Blog\Api\BlogActionController;
 use Contena\Core\Content\Blog\Api\BlogNumberFkResolver;
-use Contena\Core\Content\Blog\Cleanup\CleanupBlogKeywordDictionaryTask;
-use Contena\Core\Content\Blog\Cleanup\CleanupBlogKeywordDictionaryTaskHandler;
-use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTask;
-use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTaskHandler;
-use Contena\Core\Content\Blog\Cms\BuyBoxCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\CrossSellingCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\ManufacturerLogoCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogBoxCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogDescriptionReviewsCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogListingCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogSlider\ContentStreamProcessor;
-use Contena\Core\Content\Blog\Cms\BlogSlider\StaticBlogProcessor;
-use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceQuantitySelector;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
-use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
-use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserIndexer;
-use Contena\Core\Content\Blog\DataAbstractionLayer\BlogExceptionHandler;
-use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
-use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\RatingAverageUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate\StockUpdateFilterProvider;
-use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingUpdater;
-use Contena\Core\Content\Blog\IsNewDetector;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogTypeRegistry;
+use Contena\Core\Content\Blog\Channel\BlogCloseoutFilterFactory;
+use Contena\Core\Content\Blog\Channel\BlogListRoute;
+use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\CrossSelling\BlogCrossSellingRoute;
 use Contena\Core\Content\Blog\Channel\Detail\AvailableCombinationLoader;
 use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
@@ -62,24 +33,18 @@ use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\FindVariant\FindBlogVariantRoute;
 use Contena\Core\Content\Blog\Channel\Garan\AbstractGaranLabelRoute;
 use Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute;
+use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
+use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\ManufacturerListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\PriceListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\PropertyListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\RatingListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\ShippingFreeListingFilterHandler;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
-use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Listing\ResolveCriteriaBlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Price\AppScriptBlogPriceCalculator;
 use Contena\Core\Content\Blog\Channel\Price\BlogPriceCalculator;
-use Contena\Core\Content\Blog\Channel\BlogCloseoutFilterFactory;
-use Contena\Core\Content\Blog\Channel\BlogListRoute;
 use Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewLoader;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewRoute;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewSaveRoute;
-use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
 use Contena\Core\Content\Blog\Channel\Search\ResolvedCriteriaBlogSearchRoute;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
@@ -87,16 +52,47 @@ use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingExceptionHandler;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingTranslationDefinition;
 use Contena\Core\Content\Blog\Channel\Suggest\BlogSuggestRoute;
 use Contena\Core\Content\Blog\Channel\Suggest\ResolvedCriteriaBlogSuggestRoute;
+use Contena\Core\Content\Blog\Cleanup\CleanupBlogKeywordDictionaryTask;
+use Contena\Core\Content\Blog\Cleanup\CleanupBlogKeywordDictionaryTaskHandler;
+use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTask;
+use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTaskHandler;
+use Contena\Core\Content\Blog\Cms\BlogBoxCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\BlogDescriptionReviewsCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\BlogListingCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\BlogSlider\ContentStreamProcessor;
+use Contena\Core\Content\Blog\Cms\BlogSlider\StaticBlogProcessor;
+use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\BuyBoxCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\CrossSellingCmsElementResolver;
+use Contena\Core\Content\Blog\Cms\ManufacturerLogoCmsElementResolver;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserIndexer;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogExceptionHandler;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceQuantitySelector;
+use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\RatingAverageUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate\StockUpdateFilterProvider;
+use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingUpdater;
+use Contena\Core\Content\Blog\IsNewDetector;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilder;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilderInterface;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchKeywordAnalyzer;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchTermInterpreter;
-use Contena\Core\Content\Blog\Subscriber\CustomFieldSearchableSubscriber;
 use Contena\Core\Content\Blog\Subscriber\BlogDescriptionTeaserSubscriber;
 use Contena\Core\Content\Blog\Subscriber\BlogSubscriber;
+use Contena\Core\Content\Blog\Subscriber\CustomFieldSearchableSubscriber;
 use Contena\Core\Content\Blog\Subscriber\RepairDigitalBlogStatesSubscriber;
+use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
+use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoader;
+use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
-use Contena\Core\Content\Shared\MailFlow\DataProvider\BlogProvider;
+use Contena\Core\Content\Media\UnusedMediaPurger;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -109,7 +105,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Util\HtmlSanitizer;
-use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Contena\Core\Content\Blog\Channel\Listing\Processor\AggregationListingProcessor;
@@ -343,7 +338,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(BlogDescriptionReviewsCmsElementResolver::class)
         ->args([
-            service(BlogReviewLoader::class),
             service(ScriptExecutor::class),
             service(SystemConfigService::class),
         ])
@@ -616,23 +610,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ExtensionDispatcher::class),
         ]);
 
-    $services->set(BlogReviewLoader::class)
-        ->args([
-            service(BlogReviewRoute::class),
-            service(SystemConfigService::class),
-            service('event_dispatcher'),
-        ]);
 
-    $services->set(BlogReviewRoute::class)
-        ->public()
-        ->args([
-            service('blog_review.repository'),
-            service(SystemConfigService::class),
-            service(CacheTagCollector::class),
-            service(ExtensionDispatcher::class),
-            param('contena.api.store.max_limit'),
-            service(CompressedCriteriaDecoder::class),
-        ]);
 
     $services->set(BlogConfiguratorLoader::class)
         ->args([
@@ -662,16 +640,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('logger'),
         ]);
 
-    $services->set(BlogReviewSaveRoute::class)
-        ->public()
-        ->args([
-            service('blog_review.repository'),
-            service(DataValidator::class),
-            service(SystemConfigService::class),
-            service('event_dispatcher'),
-            service(BlogProvider::class),
-            service(ExtensionDispatcher::class),
-        ]);
 
     $services->set(BlogListRoute::class)
         ->public()

@@ -300,7 +300,7 @@ class DefaultMappingsTest extends TestCase
             'salutation' => [
                 'salutationKey' => 'test',
             ],
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'zipCode' => '48624',
             'city' => 'Schöppingen',

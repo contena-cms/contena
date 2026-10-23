@@ -47,7 +47,7 @@ class UserDoubleOptInRegistrationEvent extends Event implements ChannelContextAw
     {
         if (!$this->mailRecipientStruct instanceof MailRecipientStruct) {
             $this->mailRecipientStruct = new MailRecipientStruct([
-                $this->user->getEmail() => $this->user->getFirstName() . ' ' . $this->user->getLastName(),
+                $this->user->getEmail() => $this->user->getName() . ' ' . $this->user->getLastName(),
             ]);
         }
 

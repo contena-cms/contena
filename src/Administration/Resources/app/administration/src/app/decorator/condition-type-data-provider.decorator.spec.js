@@ -24,7 +24,7 @@ const EXPECTED_CONDITION_TYPES = [
     'userCustomerNumber',
     'userDifferentAddresses',
     'userEmail',
-    'userLastName',
+    'userName',
     'userIsCompany',
     'userIsGuest',
     'userIsNewsletterRecipient',

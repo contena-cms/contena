@@ -229,7 +229,7 @@ class SendMailActionTest extends TestCase
                 static::assertNotNull($email);
                 static::assertSame(
                     $mailService->data['recipients'],
-                    [$email => $order->getOrderUser()?->getFirstName() . ' ' . $order->getOrderUser()?->getLastName()]
+                    [$email => $order->getOrderUser()?->getName() . ' ' . $order->getOrderUser()?->getLastName()]
                 );
         }
 
@@ -489,7 +489,7 @@ class SendMailActionTest extends TestCase
         $mailRecipientStruct = new MailRecipientStruct(['' => '']);
         $context = Generator::generateChannelContext();
         $dataBag = new DataBag([
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'email' => $email,
         ]);
@@ -954,7 +954,7 @@ class SendMailActionTest extends TestCase
             'id' => $userId,
             'number' => '1337',
             'salutationId' => $this->getValidSalutationId(),
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'userNumber' => '1337',
             'email' => Uuid::randomHex() . '@example.com',
@@ -969,7 +969,7 @@ class SendMailActionTest extends TestCase
                     'userId' => $userId,
                     'countryId' => $this->getValidCountryId(),
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'street' => 'Ebbinghoff 10',
                     'zipcode' => '48624',
@@ -1003,7 +1003,7 @@ class SendMailActionTest extends TestCase
                 'userId' => $userId,
                 'email' => 'test@example.com',
                 'salutationId' => $this->getValidSalutationId(),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
             ],
             'stateId' => $stateId,
@@ -1016,7 +1016,7 @@ class SendMailActionTest extends TestCase
                 [
                     'id' => $billingAddressId,
                     'salutationId' => $this->getValidSalutationId(),
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'street' => 'Ebbinghoff 10',
                     'zipcode' => '48624',

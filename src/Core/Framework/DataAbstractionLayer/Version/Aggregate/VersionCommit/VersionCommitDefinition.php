@@ -17,6 +17,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommitData\VersionCommitDataDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Version\VersionDefinition;
 use Symfony\Component\Clock\Clock;
+use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 
 /**
  * @codeCoverageIgnore

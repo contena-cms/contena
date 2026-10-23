@@ -13,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 
 /**
  * @codeCoverageIgnore

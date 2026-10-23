@@ -52,7 +52,7 @@ class UserGroupRegistrationAccepted extends Event implements ChannelAware, UserA
 
         return new MailRecipientStruct(
             [
-                $this->user->getEmail() => $this->user->getFirstName() . ' ' . $this->user->getLastName(),
+                $this->user->getEmail() => $this->user->getName() . ' ' . $this->user->getLastName(),
             ]
         );
     }

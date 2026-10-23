@@ -244,7 +244,7 @@ class ShopConfigurationControllerTest extends TestCase
         $expectedAdmin = [
             'email' => 'test@test.com',
             'username' => 'admin',
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'password' => 'contena',
             'localeId' => $localeId,

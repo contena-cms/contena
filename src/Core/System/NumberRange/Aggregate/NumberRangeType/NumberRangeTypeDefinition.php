@@ -16,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelDefinition;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeTypeTranslation\NumberRangeTypeTranslationDefinition;
 use Contena\Core\System\NumberRange\NumberRangeDefinition;
+use Contena\Core\System\CustomEntity\Xml\Field\StringField;
 
 /**
  * @codeCoverageIgnore

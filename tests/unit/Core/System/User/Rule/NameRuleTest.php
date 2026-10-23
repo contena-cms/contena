@@ -15,22 +15,22 @@ use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\User\Rule\LastNameRule;
+use Contena\Core\System\User\Rule\NameRule;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\UserException;
 
 /**
  * @internal
  */
-#[CoversClass(LastNameRule::class)]
+#[CoversClass(NameRule::class)]
 #[Group('rules')]
-class LastNameRuleTest extends TestCase
+class NameRuleTest extends TestCase
 {
-    private LastNameRule $rule;
+    private NameRule $rule;
 
     protected function setUp(): void
     {
-        $this->rule = new LastNameRule();
+        $this->rule = new NameRule();
     }
 
     public function testName(): void
@@ -42,15 +42,15 @@ class LastNameRuleTest extends TestCase
     {
         $constraints = $this->rule->getConstraints();
 
-        static::assertArrayHasKey('lastName', $constraints, 'LastName constraint not found');
+        static::assertArrayHasKey('name', $constraints, 'LastName constraint not found');
         static::assertArrayHasKey('operator', $constraints, 'operator constraints not found');
 
         static::assertEquals(RuleConstraints::stringOperators(), $constraints['operator']);
-        static::assertEquals(RuleConstraints::string(), $constraints['lastName']);
+        static::assertEquals(RuleConstraints::string(), $constraints['name']);
     }
 
     #[DataProvider('getMatchUserLastNameValues')]
-    public function testLastNameRuleMatching(bool $expected, ?string $userName, ?string $ruleNameValue, string $operator): void
+    public function testNameRuleMatching(bool $expected, ?string $userName, ?string $ruleNameValue, string $operator): void
     {
         $user = new UserEntity();
         $user->setLastName($userName ?? '');
@@ -60,7 +60,7 @@ class LastNameRuleTest extends TestCase
         $cart = new Cart('test');
         $scope = new CartRuleScope($cart, $context);
 
-        $this->rule->assign(['lastName' => $ruleNameValue, 'operator' => $operator]);
+        $this->rule->assign(['name' => $ruleNameValue, 'operator' => $operator]);
 
         $isMatching = $this->rule->match($scope);
 
@@ -69,7 +69,7 @@ class LastNameRuleTest extends TestCase
 
     public function testConfig(): void
     {
-        $config = (new LastNameRule())->getConfig();
+        $config = (new NameRule())->getConfig();
         $configData = $config->getData();
 
         static::assertArrayHasKey('operatorSet', $configData);
@@ -89,7 +89,7 @@ class LastNameRuleTest extends TestCase
             static::createStub(ChannelContext::class)
         );
 
-        $this->rule->assign(['lastName' => 'contena', 'operator' => Rule::OPERATOR_EQ]);
+        $this->rule->assign(['name' => 'contena', 'operator' => Rule::OPERATOR_EQ]);
         static::assertFalse($this->rule->match($scope));
     }
 
@@ -100,7 +100,7 @@ class LastNameRuleTest extends TestCase
             static::createStub(ChannelContext::class)
         );
 
-        $this->rule->assign(['lastName' => 'contena', 'operator' => Rule::OPERATOR_EMPTY]);
+        $this->rule->assign(['name' => 'contena', 'operator' => Rule::OPERATOR_EMPTY]);
         static::assertTrue($this->rule->match($scope));
     }
 
@@ -114,7 +114,7 @@ class LastNameRuleTest extends TestCase
         $cart = new Cart('test');
         $scope = new CartRuleScope($cart, $context);
 
-        $this->rule->assign(['lastName' => true, 'operator' => Rule::OPERATOR_EQ]);
+        $this->rule->assign(['name' => true, 'operator' => Rule::OPERATOR_EQ]);
 
         if (!Feature::isActive('v6.8.0.0')) {
             $this->expectException(UnsupportedValueException::class);
@@ -127,7 +127,7 @@ class LastNameRuleTest extends TestCase
     public function testInvalidScopeIsFalse(): void
     {
         $invalidScope = static::createStub(RuleScope::class);
-        $this->rule->assign(['lastName' => 'contena', 'operator' => Rule::OPERATOR_EQ]);
+        $this->rule->assign(['name' => 'contena', 'operator' => Rule::OPERATOR_EQ]);
         static::assertFalse($this->rule->match($invalidScope));
     }
 

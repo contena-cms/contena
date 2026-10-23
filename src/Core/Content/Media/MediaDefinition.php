@@ -38,6 +38,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\Content\Media\Aggregate\MediaTag\MediaTagDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Contena\Core\System\Tag\TagDefinition;
 
 /**
  * @codeCoverageIgnore

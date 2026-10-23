@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Extension;
 
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewRouteResponse;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\Extension;
 use Contena\Core\System\Channel\ChannelContext;

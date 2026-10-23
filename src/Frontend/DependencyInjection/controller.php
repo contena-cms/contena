@@ -7,8 +7,6 @@ use Contena\Core\Content\Blog\Channel\FindVariant\FindBlogVariantRoute;
 use Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewLoader;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewSaveRoute;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
 use Contena\Core\Content\Category\Channel\CategoryRoute;
 use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
@@ -174,7 +172,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(CategoryRoute::class),
             service(BlogListingRoute::class),
             service(BlogDetailRoute::class),
-            service(BlogReviewLoader::class),
             service(FindBlogVariantRoute::class),
             service('event_dispatcher'),
             service(SystemConfigService::class),
@@ -225,9 +222,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(BlogPageLoader::class),
             service(FindBlogVariantRoute::class),
             service(MinimalQuickViewPageLoader::class),
-            service(BlogReviewSaveRoute::class),
             service(SeoUrlPlaceholderHandlerInterface::class),
-            service(BlogReviewLoader::class),
             service(BlogPurchaseLimitRoute::class),
             service(GaranLabelRoute::class),
         ])

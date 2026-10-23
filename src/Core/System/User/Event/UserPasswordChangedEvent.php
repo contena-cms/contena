@@ -60,7 +60,7 @@ class UserPasswordChangedEvent extends Event implements ChannelAware, ContenaCha
     public function getMailStruct(): MailRecipientStruct
     {
         return new MailRecipientStruct([
-            $this->user->getEmail() => $this->user->getFirstName() . ' ' . $this->user->getLastName(),
+            $this->user->getEmail() => $this->user->getName() . ' ' . $this->user->getLastName(),
         ]);
     }
 

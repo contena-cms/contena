@@ -54,7 +54,7 @@ class MailStorerTest extends TestCase
     public function testRestoreHasStored(): void
     {
         $store = [
-            'recipients' => ['firstName' => 'test'],
+            'recipients' => ['name' => 'test'],
             'bcc' => 'bcc',
             'cc' => 'cc',
         ];
@@ -77,7 +77,7 @@ class MailStorerTest extends TestCase
         $flow = new StorableFlow('test', Context::createDefaultContext(), [OrderAware::ORDER_ID => Uuid::randomHex()]);
         $user = new OrderUserEntity();
         $user->setId(Uuid::randomHex());
-        $user->setFirstName('bar');
+        $user->setName('bar');
         $user->setLastName('foo');
         $user->setEmail('foo@bar.com');
         $order = new OrderEntity();
@@ -100,7 +100,7 @@ class MailStorerTest extends TestCase
         $flow = new StorableFlow('test', Context::createDefaultContext(), [OrderAware::ORDER_ID => Uuid::randomHex()]);
         $user = new UserEntity();
         $user->setId(Uuid::randomHex());
-        $user->setFirstName('bar');
+        $user->setName('bar');
         $user->setLastName('foo');
         $user->setEmail('foo@bar.com');
         $user->setChannelId(TestDefaults::CHANNEL);

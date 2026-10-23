@@ -36,7 +36,7 @@ class ContextGatewayCommandExecutorTest extends TestCase
     public function testExecuteWithRegisterCommand(): void
     {
         $commands = new ContextGatewayCommandCollection();
-        $commands->add(RegisterUserCommand::createFromPayload(['data' => ['firstName' => 'Foo', 'lastName' => 'bar']]));
+        $commands->add(RegisterUserCommand::createFromPayload(['data' => ['name' => 'Foo', 'lastName' => 'bar']]));
 
         $context = Generator::generateChannelContext();
         $newContext = Generator::generateChannelContext(token: 'hatoken');

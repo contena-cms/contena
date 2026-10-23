@@ -94,7 +94,7 @@ class BlogReviewSaveRouteTest extends TestCase
         $context = Context::createDefaultContext();
         $user = new UserEntity();
         $user->setId(Uuid::randomHex());
-        $user->setFirstName('Max');
+        $user->setName('Max');
         $user->setLastName('Mustermann');
         $user->setEmail('foo@example.com');
         $channel = new ChannelEntity();
@@ -123,7 +123,7 @@ class BlogReviewSaveRouteTest extends TestCase
                     'userId' => $user->getId(),
                     'channelId' => $channel->getId(),
                     'languageId' => $context->getLanguageId(),
-                    'externalUser' => $user->getFirstName(),
+                    'externalUser' => $user->getName(),
                     'externalEmail' => $user->getEmail(),
                     'title' => $data->get('title'),
                     'content' => $data->get('content'),
@@ -141,8 +141,7 @@ class BlogReviewSaveRouteTest extends TestCase
                 'title' => 'foo',
                 'content' => 'bar',
                 'points' => 3,
-                'name' => $user->getFirstName(),
-                'lastName' => $user->getLastName(),
+                'name' => $user->getName(),
                 'email' => $user->getEmail(),
                 'userId' => $user->getId(),
                 'blogId' => $blogId,

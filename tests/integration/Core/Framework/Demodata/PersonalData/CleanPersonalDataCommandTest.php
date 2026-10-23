@@ -226,7 +226,7 @@ class CleanPersonalDataCommandTest extends TestCase
                 'userId' => $userId,
                 'email' => 'test@example.com',
                 'salutationId' => $this->fetchFirstIdFromTable('salutation'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
             ],
             'stateId' => $this->fetchFirstIdFromTable('state_machine_state'),
@@ -239,7 +239,7 @@ class CleanPersonalDataCommandTest extends TestCase
                 [
                     'id' => $addressId,
                     'salutationId' => $this->fetchFirstIdFromTable('salutation'),
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'street' => 'Ebbinghoff 10',
                     'zipcode' => '48624',
@@ -267,7 +267,7 @@ class CleanPersonalDataCommandTest extends TestCase
         $salutation = $this->fetchFirstIdFromTable('salutation');
 
         $address = [
-            'firstName' => 'not',
+            'name' => 'not',
             'lastName' => 'not',
             'city' => 'not',
             'street' => 'not',
@@ -283,7 +283,7 @@ class CleanPersonalDataCommandTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => Uuid::randomHex() . '@example.com',
             'lastName' => 'not',
-            'firstName' => Random::getAlphanumericString(20),
+            'name' => Random::getAlphanumericString(20),
             'salutationId' => $salutation,
             'userNumber' => 'not',
             'guest' => $isGuest,

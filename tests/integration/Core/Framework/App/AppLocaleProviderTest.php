@@ -55,7 +55,7 @@ class AppLocaleProviderTest extends TestCase
         $this->admin_userRepository->create([[
             'id' => $admin_userId,
             'username' => 'testUser',
-            'firstName' => 'first',
+            'name' => 'first',
             'lastName' => 'last',
             'email' => 'first@last.de',
             'password' => 'contena',

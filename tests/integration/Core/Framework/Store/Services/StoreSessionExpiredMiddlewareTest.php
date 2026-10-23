@@ -131,7 +131,7 @@ class StoreSessionExpiredMiddlewareTest extends TestCase
                 'localeId' => $this->getLocaleIdOfSystemLanguage(),
                 'username' => Uuid::randomHex() . 'foobar',
                 'password' => 'asdasdasdasd',
-                'firstName' => 'Foo',
+                'name' => 'Foo',
                 'lastName' => 'Bar',
                 'email' => Uuid::randomHex() . '@bar.com',
                 'storeToken' => $storeToken,

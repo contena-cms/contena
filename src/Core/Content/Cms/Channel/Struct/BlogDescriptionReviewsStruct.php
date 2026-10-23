@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Cms\Channel\Struct;
 
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
@@ -15,7 +14,6 @@ class BlogDescriptionReviewsStruct extends Struct
 
     protected ?bool $ratingSuccess = null;
 
-    protected ?BlogReviewResult $reviews = null;
 
     protected ?ChannelBlogEntity $blog = null;
 
@@ -39,15 +37,7 @@ class BlogDescriptionReviewsStruct extends Struct
         $this->blogId = $blogId;
     }
 
-    public function getReviews(): ?BlogReviewResult
-    {
-        return $this->reviews;
-    }
 
-    public function setReviews(BlogReviewResult $result): void
-    {
-        $this->reviews = $result;
-    }
 
     public function getRatingSuccess(): ?bool
     {

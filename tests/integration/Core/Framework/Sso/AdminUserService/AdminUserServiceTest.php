@@ -84,7 +84,7 @@ class AdminUserServiceTest extends TestCase
         $admin_user = $this->getContainer()->get('admin_user.repository')->search(new Criteria([$externalAuthUser->admin_userId]), Context::createDefaultContext())->getEntities()->first();
         static::assertInstanceOf(AdminUserEntity::class, $admin_user);
         static::assertTrue($admin_user->getActive());
-        static::assertSame('given_name', $admin_user->getFirstName());
+        static::assertSame('given_name', $admin_user->getName());
         static::assertSame('family_name', $admin_user->getLastName());
         static::assertSame('preferred_username', $admin_user->getUsername());
     }

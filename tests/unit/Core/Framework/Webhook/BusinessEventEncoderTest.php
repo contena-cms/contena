@@ -34,13 +34,13 @@ class BusinessEventEncoderTest extends TestCase
             'tax' => $tax,
             'array' => ['test'],
             'string' => 'test',
-            'mail' => new MailRecipientStruct(['firstName' => 'name']),
+            'mail' => new MailRecipientStruct(['name' => 'name']),
             'notExistentInStored' => 'notExistentInStored',
         ];
 
         $stored = [
             'mail' => [
-                'recipients' => ['firstName' => 'name'],
+                'recipients' => ['name' => 'name'],
             ],
             'array' => ['test'],
             'string' => 'test',

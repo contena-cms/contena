@@ -149,7 +149,7 @@ class AdminUserListCommand extends Command
             'id' => $admin_user->getId(),
             'email' => $admin_user->getEmail(),
             'username' => $admin_user->getUsername(),
-            'name' => $admin_user->getFirstName() . ' ' . $admin_user->getLastName(),
+            'name' => $admin_user->getName(),
         ];
     }
 

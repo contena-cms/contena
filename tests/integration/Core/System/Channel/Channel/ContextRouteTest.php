@@ -92,7 +92,7 @@ class ContextRouteTest extends TestCase
             [
                 'id' => $newBillingAddressId,
                 'userId' => $userId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',

@@ -12,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
+use Contena\Core\System\CustomEntity\Xml\Field\StringField;
 
 /**
  * @codeCoverageIgnore

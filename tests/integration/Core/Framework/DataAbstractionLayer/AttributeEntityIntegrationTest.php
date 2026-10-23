@@ -1085,7 +1085,7 @@ class AttributeEntityIntegrationTest extends TestCase
             'billingAddressId' => $addressId,
             'addresses' => [
                 [
-                    'firstName' => 'John',
+                    'name' => 'John',
                     'lastName' => 'Doe',
                     'street' => 'Main Street',
                     'zipcode' => '59438-0403',

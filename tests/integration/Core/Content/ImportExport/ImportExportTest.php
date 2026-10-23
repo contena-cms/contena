@@ -372,7 +372,7 @@ class ImportExportTest extends AbstractImportExportTestCase
             ],
             'email' => 'foo.bar@example.test',
             'title' => 'dr.',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'zipCode' => '48599',
             'city' => 'Musterstadt',

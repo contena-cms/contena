@@ -12,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit\VersionCommitDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\VersionDataPayloadField;
 
 /**
  * @codeCoverageIgnore

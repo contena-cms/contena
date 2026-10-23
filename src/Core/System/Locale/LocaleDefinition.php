@@ -16,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Locale\Aggregate\LocaleTranslation\LocaleTranslationDefinition;
+use Contena\Core\System\CustomEntity\Xml\Field\StringField;
 
 /**
  * @codeCoverageIgnore

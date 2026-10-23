@@ -81,7 +81,7 @@ class ExtensionStoreLicensesServiceTest extends TestCase
                 'localeId' => $this->getLocaleIdOfSystemLanguage(),
                 'username' => 'foobar',
                 'password' => TestDefaults::HASHED_PASSWORD,
-                'firstName' => 'Foo',
+                'name' => 'Foo',
                 'lastName' => 'Bar',
                 'email' => 'foo@bar.com',
                 'storeToken' => Uuid::randomHex(),

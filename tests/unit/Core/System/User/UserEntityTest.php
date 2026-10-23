@@ -74,7 +74,7 @@ class UserEntityTest extends TestCase
         $user->setDefaultShippingAddressId('shipping-address-id');
         $user->setUserNumber('10001');
         $user->setSalutationId('salutation-id');
-        $user->setFirstName('Ada');
+        $user->setName('Ada');
         $user->setLastName('Lovelace');
         $user->setCompany('Analytical Engines');
         $user->setEmail('ada@example.com');
@@ -132,7 +132,7 @@ class UserEntityTest extends TestCase
         static::assertSame('shipping-address-id', $user->getDefaultShippingAddressId());
         static::assertSame('10001', $user->getUserNumber());
         static::assertSame('salutation-id', $user->getSalutationId());
-        static::assertSame('Ada', $user->getFirstName());
+        static::assertSame('Ada', $user->getName());
         static::assertSame('Lovelace', $user->getLastName());
         static::assertSame('Ada Lovelace', (string) $user);
         static::assertSame('Analytical Engines', $user->getCompany());

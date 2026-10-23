@@ -138,7 +138,7 @@ class AdminUserListCommandTest extends TestCase
         $admin_user->setEmail($email);
         $admin_user->setActive(true);
         $admin_user->setUsername($username);
-        $admin_user->setFirstName($firstName);
+        $admin_user->setName($firstName);
         $admin_user->setLastName($secondName);
         $admin_user->setAdmin($isAdmin);
         $admin_user->setCreatedAt(new \DateTime());

@@ -249,7 +249,7 @@ class SendMailActionTest extends TestCase
         $flow->setData(OrderAware::ORDER_ID, $orderId);
         $flow->setData(FlowMailVariables::CONTACT_FORM_DATA, [
             'email' => 'user@example.com',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
         ]);
 
@@ -278,7 +278,7 @@ class SendMailActionTest extends TestCase
                     'orderId' => $orderId,
                     'contactFormData' => [
                         'email' => 'user@example.com',
-                        'firstName' => 'Max',
+                        'name' => 'Max',
                         'lastName' => 'Mustermann',
                     ],
                 ],
@@ -409,7 +409,7 @@ class SendMailActionTest extends TestCase
         $flow->setData(MailAware::TIMEZONE, 'UTC');
         $flow->setData(FlowMailVariables::CONTACT_FORM_DATA, [
             'email' => 'user@example.com',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
         ]);
 
@@ -438,7 +438,7 @@ class SendMailActionTest extends TestCase
                     'orderId' => $orderId,
                     'contactFormData' => [
                         'email' => 'user@example.com',
-                        'firstName' => 'Max',
+                        'name' => 'Max',
                         'lastName' => 'Mustermann',
                     ],
                     'languageId' => $languageId,

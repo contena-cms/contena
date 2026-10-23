@@ -38,12 +38,12 @@ class UserAddressEntityTest extends TestCase
     public function testNameGettersAndSetters(): void
     {
         $address = new UserAddressEntity();
-        $address->setFirstName('Jane');
+        $address->setName('Jane');
         $address->setLastName('Doe');
         $address->setCity('Berlin');
         $address->setStreet('Main Street 1');
 
-        static::assertSame('Jane', $address->getFirstName());
+        static::assertSame('Jane', $address->getName());
         static::assertSame('Doe', $address->getLastName());
         static::assertSame('Berlin', $address->getCity());
         static::assertSame('Main Street 1', $address->getStreet());

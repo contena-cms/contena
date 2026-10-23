@@ -42,7 +42,7 @@ class SsoAdminUserService
         return [
             'username' => $email,
             'email' => $email,
-            'firstName' => $email,
+            'name' => $email,
             'lastName' => $email,
             'password' => Random::getAlphanumericString(32),
             'localeId' => $localeId,

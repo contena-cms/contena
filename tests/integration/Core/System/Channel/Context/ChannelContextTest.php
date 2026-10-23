@@ -620,7 +620,7 @@ class ChannelContextTest extends TestCase
         $salutationId = $this->getValidSalutationId();
 
         $billingAddress = [
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'street' => 'Musterstraße 1',
             'city' => 'Schöppingen',
@@ -630,7 +630,7 @@ class ChannelContextTest extends TestCase
         ];
 
         $shippingAddress = [
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'street' => 'Musterstraße 1',
             'city' => 'Schöppingen',
@@ -653,7 +653,7 @@ class ChannelContextTest extends TestCase
             'email' => Uuid::randomHex() . '@example.com',
             'guest' => $isGuest,
             'password' => '$password',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $salutationId,
             'userNumber' => '12345',

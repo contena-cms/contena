@@ -178,7 +178,7 @@ class UpsertAddressRouteTest extends TestCase
         $data = new RequestDataBag([
             'accountType' => UserEntity::ACCOUNT_TYPE_PRIVATE,
             'salutationId' => $salutationId,
-            'firstName' => "\nMax\t",
+            'name' => "\nMax\t",
             'lastName' => "\rMustermann ",
             'street' => "\t Main Street 1 \n",
             'zipcode' => "    12345\t",

@@ -125,7 +125,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 'format' => [],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                     ],
                 ],
@@ -156,7 +156,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 ],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                     ],
                 ],
@@ -178,7 +178,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 ],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                         'street' => '123 Strt',
                         'country' => [
@@ -207,7 +207,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 ],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                         'street' => '123 Strt',
                         'country' => [
@@ -238,7 +238,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 ],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                         'company' => 'Contena',
                         'department' => '',
@@ -266,7 +266,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 ],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                     ],
                 ],
@@ -320,7 +320,7 @@ class CustomSnippetFormatControllerTest extends TestCase
                 ],
                 'data' => [
                     'address' => [
-                        'firstName' => 'Vin',
+                        'name' => 'Vin',
                         'lastName' => 'Le',
                         'countryState' => null,
                     ],

@@ -369,7 +369,7 @@ class BlogFeatureBuilderTest extends TestCase
             content: self::FIRST_ENTITY_ID,
             type: CustomFieldTypes::SELECT,
             config: ['entity' => 'user', 'labelProperty' => ['firstName', 'lastName']],
-            referencedEntities: [self::FIRST_ENTITY_ID => ['firstName' => 'Max', 'lastName' => 'Mustermann']]
+            referencedEntities: [self::FIRST_ENTITY_ID => ['name' => 'Max', 'lastName' => 'Mustermann']]
         );
 
         static::assertSame(['Max Mustermann'], $features[0]['value']['display']);

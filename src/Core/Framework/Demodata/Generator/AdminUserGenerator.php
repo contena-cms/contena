@@ -53,7 +53,7 @@ class AdminUserGenerator implements DemodataGeneratorInterface
             $admin_user = [
                 'id' => $id,
                 'title' => $title,
-                'firstName' => $firstName,
+                'name' => $firstName,
                 'lastName' => $lastName,
                 'username' => $context->getFaker()->format('admin_userName'),
                 'email' => $id . $context->getFaker()->format('safeEmail'),

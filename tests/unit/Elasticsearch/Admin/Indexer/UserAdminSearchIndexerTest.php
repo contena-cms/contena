@@ -54,10 +54,10 @@ class UserAdminSearchIndexerTest extends TestCase
             Context::createDefaultContext(),
             new NestedEventCollection([
                 new EntityWrittenEvent('user', [
-                    new EntityWriteResult($userId, ['firstName' => 'Jane'], 'user', EntityWriteResult::OPERATION_UPDATE),
+                    new EntityWriteResult($userId, ['name' => 'Jane'], 'user', EntityWriteResult::OPERATION_UPDATE),
                 ], Context::createDefaultContext()),
                 new EntityWrittenEvent('user_address', [
-                    new EntityWriteResult(Uuid::randomHex(), ['firstName' => 'A'], 'user_address', EntityWriteResult::OPERATION_UPDATE),
+                    new EntityWriteResult(Uuid::randomHex(), ['name' => 'A'], 'user_address', EntityWriteResult::OPERATION_UPDATE),
                 ], Context::createDefaultContext()),
             ]),
             []

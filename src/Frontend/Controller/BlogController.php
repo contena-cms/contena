@@ -2,13 +2,7 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Content\Blog\Channel\FindVariant\AbstractFindBlogVariantRoute;
-use Contena\Core\Content\Blog\Channel\Garan\AbstractGaranLabelRoute;
-use Contena\Core\Content\Blog\Channel\PurchaseLimit\AbstractBlogPurchaseLimitRoute;
-use Contena\Core\Content\Blog\Channel\Review\AbstractBlogReviewLoader;
-use Contena\Core\Content\Blog\Channel\Review\AbstractBlogReviewSaveRoute;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewsWidgetLoadedHook;
-use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -18,9 +12,7 @@ use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Page\Blog\BlogPageLoadedHook;
-use Contena\Frontend\Page\Blog\BlogPageLoader;
 use Contena\Frontend\Page\Blog\QuickView\BlogQuickViewWidgetLoadedHook;
-use Contena\Frontend\Page\Blog\QuickView\MinimalQuickViewPageLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -36,20 +28,6 @@ use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class BlogController extends FrontendController
 {
-    /**
-     * @internal
-     */
-    public function __construct(
-        private readonly BlogPageLoader $blogPageLoader,
-        private readonly AbstractFindBlogVariantRoute $findVariantRoute,
-        private readonly MinimalQuickViewPageLoader $minimalQuickViewPageLoader,
-        private readonly AbstractBlogReviewSaveRoute $blogReviewSaveRoute,
-        private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
-        private readonly AbstractBlogReviewLoader $blogReviewLoader,
-        private readonly AbstractBlogPurchaseLimitRoute $blogPurchaseLimitRoute,
-        private readonly AbstractGaranLabelRoute $garanLabelRoute,
-    ) {
-    }
 
     #[Route(
         path: '/detail/{blogId}',

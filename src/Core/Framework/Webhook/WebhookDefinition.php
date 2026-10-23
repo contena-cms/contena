@@ -15,6 +15,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
+use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
+use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 
 /**
  * @codeCoverageIgnore

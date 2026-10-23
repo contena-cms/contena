@@ -50,7 +50,7 @@ class AdminUserValidationServiceTest extends TestCase
             [
                 'id' => $admin_userId,
                 'username' => 'some AdminUser',
-                'firstName' => 'first',
+                'name' => 'first',
                 'lastName' => 'last',
                 'localeId' => $firstLocale,
                 'email' => 'admin_user@contena.cn',
@@ -76,7 +76,7 @@ class AdminUserValidationServiceTest extends TestCase
             [
                 'id' => $admin_userId,
                 'username' => 'some AdminUser',
-                'firstName' => 'first',
+                'name' => 'first',
                 'lastName' => 'last',
                 'localeId' => $firstLocale,
                 'email' => 'admin_user@contena.cn',
@@ -100,7 +100,7 @@ class AdminUserValidationServiceTest extends TestCase
             [
                 'id' => $admin_userId,
                 'username' => 'some AdminUser',
-                'firstName' => 'first',
+                'name' => 'first',
                 'lastName' => 'last',
                 'localeId' => $firstLocale,
                 'email' => 'admin_user@contena.cn',
@@ -125,7 +125,7 @@ class AdminUserValidationServiceTest extends TestCase
             [
                 'id' => $admin_userId,
                 'username' => 'some AdminUser',
-                'firstName' => 'first',
+                'name' => 'first',
                 'lastName' => 'last',
                 'localeId' => $firstLocale,
                 'email' => 'admin_user@contena.cn',

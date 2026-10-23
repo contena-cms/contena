@@ -84,7 +84,7 @@ class StateMachineSateFieldSerializerTest extends TestCase
                 'id' => Uuid::randomHex(),
                 'email' => 'test@example.com',
                 'salutationId' => $this->fetchFirstIdFromTable('salutation'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
             ],
             'stateId' => $this->fetchOrderStateId(OrderStates::STATE_OPEN),
@@ -97,7 +97,7 @@ class StateMachineSateFieldSerializerTest extends TestCase
                 [
                     'id' => $addressId,
                     'salutationId' => $this->fetchFirstIdFromTable('salutation'),
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'street' => 'Ebbinghoff 10',
                     'zipcode' => '48624',

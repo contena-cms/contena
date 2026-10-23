@@ -13,16 +13,16 @@ use Contena\Core\System\User\UserException;
 /**
  * @final
  */
-class LastNameRule extends Rule
+class NameRule extends Rule
 {
-    final public const RULE_NAME = 'userLastName';
+    final public const RULE_NAME = 'userName';
 
     /**
      * @internal
      */
     public function __construct(
         protected string $operator = self::OPERATOR_EQ,
-        protected ?string $lastName = null
+        protected ?string $name = null
     ) {
         parent::__construct();
     }
@@ -37,11 +37,11 @@ class LastNameRule extends Rule
             return RuleComparison::isNegativeOperator($this->operator);
         }
 
-        if (!\is_string($this->lastName) && $this->operator !== self::OPERATOR_EMPTY) {
-            throw UserException::unsupportedValue(\gettype($this->lastName), self::class);
+        if (!\is_string($this->name) && $this->operator !== self::OPERATOR_EMPTY) {
+            throw UserException::unsupportedValue(\gettype($this->name), self::class);
         }
 
-        return RuleComparison::string($user->getLastName(), $this->lastName ?? '', $this->operator);
+        return RuleComparison::string($user->getName(), $this->name ?? '', $this->operator);
     }
 
     public function getConstraints(): array
@@ -54,7 +54,7 @@ class LastNameRule extends Rule
             return $constraints;
         }
 
-        $constraints['lastName'] = RuleConstraints::string();
+        $constraints['name'] = RuleConstraints::string();
 
         return $constraints;
     }
@@ -63,6 +63,6 @@ class LastNameRule extends Rule
     {
         return (new RuleConfig())
             ->operatorSet(RuleConfig::OPERATOR_SET_STRING, true)
-            ->stringField('lastName');
+            ->stringField('name');
     }
 }

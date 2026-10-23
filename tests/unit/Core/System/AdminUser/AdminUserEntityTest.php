@@ -56,7 +56,7 @@ class AdminUserEntityTest extends TestCase
         $admin_user->setLocaleId('locale-id');
         $admin_user->setAvatarId('avatar-id');
         $admin_user->setUsername('admin');
-        $admin_user->setFirstName('Ada');
+        $admin_user->setName('Ada');
         $admin_user->setLastName('Lovelace');
         $admin_user->setEmail('ada@example.com');
         $admin_user->setActive(true);
@@ -81,7 +81,7 @@ class AdminUserEntityTest extends TestCase
         static::assertSame('locale-id', $admin_user->getLocaleId());
         static::assertSame('avatar-id', $admin_user->getAvatarId());
         static::assertSame('admin', $admin_user->getUsername());
-        static::assertSame('Ada', $admin_user->getFirstName());
+        static::assertSame('Ada', $admin_user->getName());
         static::assertSame('Lovelace', $admin_user->getLastName());
         static::assertSame('ada@example.com', $admin_user->getEmail());
         static::assertTrue($admin_user->getActive());

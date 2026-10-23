@@ -24,8 +24,7 @@ class UserAddressDefinition extends EntityDefinition
     final public const ENTITY_NAME = 'user_address';
 
     public const MAX_LENGTH_PHONE_NUMBER = 40;
-    public const MAX_LENGTH_FIRST_NAME = 255;
-    public const MAX_LENGTH_LAST_NAME = 255;
+    public const MAX_LENGTH_NAME = 255;
     public const MAX_LENGTH_TITLE = 100;
     public const MAX_LENGTH_ZIPCODE = 50;
 

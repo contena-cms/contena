@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Event;
 
-use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
@@ -38,7 +37,6 @@ class BusinessEventRegistry
         UserRegisterEvent::class,
         DoubleOptInGuestOrderEvent::class,
         GuestUserRegisterEvent::class,
-        ReviewFormEvent::class,
         MailBeforeSentEvent::class,
         MailBeforeValidateEvent::class,
         MailSentEvent::class,

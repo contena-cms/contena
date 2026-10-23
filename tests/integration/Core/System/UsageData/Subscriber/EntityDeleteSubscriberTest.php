@@ -153,7 +153,7 @@ class EntityDeleteSubscriberTest extends TestCase
         $admin_userData = [
             'id' => $admin_userId,
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',

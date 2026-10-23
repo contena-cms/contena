@@ -349,7 +349,7 @@ class RateLimiterTest extends TestCase
                     '/store-api/contact-form',
                     [
                         'salutationId' => $this->getValidSalutationId(),
-                        'firstName' => 'John',
+                        'name' => 'John',
                         'lastName' => 'Doe',
                         'email' => 'test@example.com',
                         'phone' => '+49123456789',

@@ -459,7 +459,7 @@ SQL;
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schoöppingen',
@@ -471,7 +471,7 @@ SQL;
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => $userID . '@example.com',
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => $userID,

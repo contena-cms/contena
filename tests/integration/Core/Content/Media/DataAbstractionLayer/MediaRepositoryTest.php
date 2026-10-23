@@ -806,7 +806,7 @@ class MediaRepositoryTest extends TestCase
                     'shippingDateLatest' => date(\DATE_ATOM),
                     'shippingOrderAddress' => [
                         'salutationId' => $salutation,
-                        'firstName' => 'Floy',
+                        'name' => 'Floy',
                         'lastName' => 'Glover',
                         'zipcode' => '59438-0403',
                         'city' => 'Stellaberg',
@@ -840,14 +840,14 @@ class MediaRepositoryTest extends TestCase
             'deepLinkCode' => 'BwvdEInxOHBbwfRw6oHF1Q_orfYeo9RY',
             'orderUser' => [
                 'email' => 'test@example.com',
-                'firstName' => 'Noe',
+                'name' => 'Noe',
                 'lastName' => 'Hill',
                 'salutationId' => $salutation,
                 'title' => 'Doc',
                 'userNumber' => 'Test',
                 'user' => [
                     'email' => 'test@example.com',
-                    'firstName' => 'Noe',
+                    'name' => 'Noe',
                     'lastName' => 'Hill',
                     'salutationId' => $salutation,
                     'title' => 'Doc',
@@ -861,7 +861,7 @@ class MediaRepositoryTest extends TestCase
                         [
                             'id' => $addressId,
                             'salutationId' => $salutation,
-                            'firstName' => 'Floy',
+                            'name' => 'Floy',
                             'lastName' => 'Glover',
                             'zipcode' => '59438-0403',
                             'city' => 'Stellaberg',
@@ -886,7 +886,7 @@ class MediaRepositoryTest extends TestCase
             'addresses' => [
                 [
                     'salutationId' => $salutation,
-                    'firstName' => 'Floy',
+                    'name' => 'Floy',
                     'lastName' => 'Glover',
                     'zipcode' => '59438-0403',
                     'city' => 'Stellaberg',

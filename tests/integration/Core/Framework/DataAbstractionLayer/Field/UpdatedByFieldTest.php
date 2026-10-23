@@ -204,7 +204,7 @@ class UpdatedByFieldTest extends TestCase
                 'id' => Uuid::randomHex(),
                 'email' => 'test@example.com',
                 'salutationId' => $this->fetchFirstIdFromTable('salutation'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
             ],
             'stateId' => $this->fetchOrderStateId(OrderStates::STATE_OPEN),
@@ -217,7 +217,7 @@ class UpdatedByFieldTest extends TestCase
                 [
                     'id' => $addressId,
                     'salutationId' => $this->fetchFirstIdFromTable('salutation'),
-                    'firstName' => 'Max',
+                    'name' => 'Max',
                     'lastName' => 'Mustermann',
                     'street' => 'Ebbinghoff 10',
                     'zipcode' => '48624',
@@ -251,7 +251,7 @@ class UpdatedByFieldTest extends TestCase
             static::getContainer()->get('admin_user.repository')->create([[
                 'id' => $secondUserId,
                 'email' => \sprintf('second-admin-%s@example.com', $uniqueSuffix),
-                'firstName' => 'Second',
+                'name' => 'Second',
                 'lastName' => 'Admin',
                 'password' => TestDefaults::HASHED_PASSWORD,
                 'username' => \sprintf('second-admin-%s', $uniqueSuffix),

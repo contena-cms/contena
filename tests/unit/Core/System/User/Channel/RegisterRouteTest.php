@@ -661,7 +661,7 @@ class RegisterRouteTest extends TestCase
             'email' => 'test@test.de',
             'billingAddress' => [
                 'countryId' => $countryId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'salutationId' => $salutationId,
             ],
@@ -674,7 +674,7 @@ class RegisterRouteTest extends TestCase
             ],
             'salutationId' => $salutationId,
             'lastName' => 'Mustermann',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'vatIds' => ['123'],
             'frontendUrl' => 'foo',
         ];
@@ -822,7 +822,7 @@ class RegisterRouteTest extends TestCase
                 'salutationId' => $salutationId,
             ],
             'salutationId' => $salutationId,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
         ];
 
@@ -885,7 +885,7 @@ class RegisterRouteTest extends TestCase
         $data = [
             'email' => 'test@test.de',
             'billingAddress' => [
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'salutationId' => $salutationId,
             ],
@@ -897,7 +897,7 @@ class RegisterRouteTest extends TestCase
             ],
             'salutationId' => $salutationId,
             'lastName' => 'Mustermann',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'frontendUrl' => 'foo',
         ];
 
@@ -992,7 +992,7 @@ class RegisterRouteTest extends TestCase
             'accountType' => UserEntity::ACCOUNT_TYPE_BUSINESS,
             'salutationId' => $salutationId,
             'lastName' => 'Mustermann',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'vatIds' => ['123'],
             'frontendUrl' => 'foo',
         ];
@@ -1137,10 +1137,10 @@ class RegisterRouteTest extends TestCase
         $maxLengthLastName = str_repeat('L', UserDefinition::MAX_LENGTH_LAST_NAME);
 
         $data = $this->createRegistrationData([
-            'firstName' => $maxLengthFirstName,
+            'name' => $maxLengthFirstName,
             'lastName' => $maxLengthLastName,
             'billingAddress' => [
-                'firstName' => $maxLengthFirstName,
+                'name' => $maxLengthFirstName,
                 'lastName' => $maxLengthLastName,
                 'countryId' => Uuid::randomHex(),
             ],
@@ -1178,10 +1178,10 @@ class RegisterRouteTest extends TestCase
         $tooLongLastName = str_repeat('L', UserDefinition::MAX_LENGTH_LAST_NAME + 1);
 
         $data = $this->createRegistrationData([
-            'firstName' => $tooLongFirstName,
+            'name' => $tooLongFirstName,
             'lastName' => $tooLongLastName,
             'billingAddress' => [
-                'firstName' => $tooLongFirstName,
+                'name' => $tooLongFirstName,
                 'lastName' => $tooLongLastName,
                 'countryId' => Uuid::randomHex(),
             ],
@@ -1244,7 +1244,7 @@ class RegisterRouteTest extends TestCase
             new RequestDataBag($this->createRegistrationData([
                 'salutationId' => 'billing-salutation',
                 'shippingAddress' => [
-                    'firstName' => 'Jane',
+                    'name' => 'Jane',
                     'lastName' => 'Doe',
                     'countryId' => Uuid::randomHex(),
                     'salutationId' => 'shipping-salutation',
@@ -1343,7 +1343,7 @@ class RegisterRouteTest extends TestCase
             new RequestDataBag($this->createRegistrationData([
                 'guest' => true,
                 'title' => '  Dr.  ',
-                'firstName' => "\nMax\t",
+                'name' => "\nMax\t",
                 'lastName' => "\rMustermann ",
                 'billingAddress' => [
                     'countryId' => Uuid::randomHex(),
@@ -1361,7 +1361,7 @@ class RegisterRouteTest extends TestCase
                 ],
                 'shippingAddress' => [
                     'title' => "\nMs.\t",
-                    'firstName' => "\tJane ",
+                    'name' => "\tJane ",
                     'lastName' => "          Doe\n",
                     'countryId' => Uuid::randomHex(),
                     'street' => "\nSide Street 2           ",
@@ -1692,11 +1692,11 @@ class RegisterRouteTest extends TestCase
     {
         return array_merge([
             'email' => 'test@example.com',
-            'firstName' => 'John',
+            'name' => 'John',
             'lastName' => 'Doe',
             'salutationId' => Uuid::randomHex(),
             'billingAddress' => [
-                'firstName' => 'John',
+                'name' => 'John',
                 'lastName' => 'Doe',
                 'countryId' => Uuid::randomHex(),
             ],

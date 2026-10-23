@@ -137,7 +137,7 @@ class UserBuilder
     public function addAddress(string $key, array $customParams = []): self
     {
         $address = \array_replace([
-            'firstName' => $this->firstName,
+            'name' => $this->firstName,
             'lastName' => $this->lastName,
             'city' => 'Bielefeld',
             'salutation' => self::salutation($this->ids),

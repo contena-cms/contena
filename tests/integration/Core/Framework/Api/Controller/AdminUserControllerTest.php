@@ -46,7 +46,7 @@ class AdminUserControllerTest extends TestCase
         $client = $this->getBrowser();
         $data = [
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',
@@ -89,7 +89,7 @@ class AdminUserControllerTest extends TestCase
         $admin_user = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',
@@ -127,7 +127,7 @@ class AdminUserControllerTest extends TestCase
         $admin_user = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',
@@ -173,7 +173,7 @@ class AdminUserControllerTest extends TestCase
         $data = [
             'id' => $id,
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',
@@ -207,7 +207,7 @@ class AdminUserControllerTest extends TestCase
     public function testSetOwnProfileWithPermission(): void
     {
         $this->authorizeBrowser($this->getBrowser(), [AdminUserVerifiedScope::IDENTIFIER], ['admin_user_change_me']);
-        $this->getBrowser()->request('PATCH', '/api/_info/me', ['firstName' => 'newName']);
+        $this->getBrowser()->request('PATCH', '/api/_info/me', ['name' => 'newName']);
         $responsePatch = $this->getBrowser()->getResponse();
 
         static::assertSame(Response::HTTP_NO_CONTENT, $responsePatch->getStatusCode(), (string) $responsePatch->getContent());
@@ -355,7 +355,7 @@ class AdminUserControllerTest extends TestCase
         $admin_user = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'foobar',
@@ -368,7 +368,7 @@ class AdminUserControllerTest extends TestCase
 
         $this->authorizeBrowser($this->getBrowser(), [AdminUserVerifiedScope::IDENTIFIER], ['admin_user_change_me']);
 
-        $this->getBrowser()->request('PATCH', '/api/_info/me', ['firstName' => 'newName', 'id' => $ids->get('admin_user')]);
+        $this->getBrowser()->request('PATCH', '/api/_info/me', ['name' => 'newName', 'id' => $ids->get('admin_user')]);
         $response = $this->getBrowser()->getResponse();
 
         static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
@@ -381,7 +381,7 @@ class AdminUserControllerTest extends TestCase
 
         $data = [
             'email' => 'escalated@example.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'escalated',
@@ -402,7 +402,7 @@ class AdminUserControllerTest extends TestCase
         $admin_user = [
             'id' => $ids->get('admin_user'),
             'email' => 'target@example.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'target-admin_user',
@@ -433,7 +433,7 @@ class AdminUserControllerTest extends TestCase
         static::getContainer()->get('admin_user.repository')->create([[
             'id' => $ids->get('admin_user'),
             'email' => 'target@example.com',
-            'firstName' => 'Original',
+            'name' => 'Original',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'target-admin_user',
@@ -446,7 +446,7 @@ class AdminUserControllerTest extends TestCase
         $client->jsonRequest('POST', '/api/acl-role', [
             'name' => 'role',
             'privileges' => [],
-            'users' => [['id' => $ids->get('admin_user'), 'firstName' => 'Changed']],
+            'users' => [['id' => $ids->get('admin_user'), 'name' => 'Changed']],
         ]);
 
         static::assertSame(Response::HTTP_FORBIDDEN, $client->getResponse()->getStatusCode());
@@ -466,7 +466,7 @@ class AdminUserControllerTest extends TestCase
         $admin_user = [
             'id' => $ids->get('admin_user'),
             'email' => 'target@example.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'target-admin_user',
@@ -498,7 +498,7 @@ class AdminUserControllerTest extends TestCase
 
         $data = [
             'email' => 'new-admin@example.com',
-            'firstName' => 'Firstname',
+            'name' => 'Firstname',
             'lastName' => 'Lastname',
             'password' => TestDefaults::HASHED_PASSWORD,
             'username' => 'new-admin',

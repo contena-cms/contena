@@ -139,11 +139,11 @@ class AppContextGatewayTest extends TestCase
                     'data' => [
                         'id' => $this->ids->create('user'),
                         'channelId' => $this->ids->get('sales-channel'),
-                        'firstName' => 'Max',
+                        'name' => 'Max',
                         'lastName' => 'Mustermann',
                         'billingAddress' => [
                             'id' => $this->ids->create('address'),
-                            'firstName' => 'Max',
+                            'name' => 'Max',
                             'lastName' => 'Mustermann',
                             'street' => 'Musterstraße 1',
                             'city' => 'Schöppingen',
@@ -277,7 +277,7 @@ class AppContextGatewayTest extends TestCase
             'channelId' => $this->ids->get('sales-channel'),
             'defaultShippingAddress' => [
                 'id' => $this->ids->create('address'),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -289,7 +289,7 @@ class AppContextGatewayTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => $email,
             'password' => TestDefaults::HASHED_PASSWORD,
-            'firstName' => 'Max',
+            'name' => 'Max',
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',

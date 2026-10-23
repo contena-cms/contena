@@ -193,14 +193,14 @@ trait MediaFixtures
                             ],
                             'orderUser' => [
                                 'email' => 'test@example.com',
-                                'firstName' => 'Max',
+                                'name' => 'Max',
                                 'lastName' => 'Mustermann',
                                 'salutationId' => $this->getValidSalutationId(),
                                 'userNumber' => '1337',
                             ],
                             'billingAddress' => [
                                 'salutationId' => $this->getValidSalutationId(),
-                                'firstName' => 'Max',
+                                'name' => 'Max',
                                 'lastName' => 'Mustermann',
                                 'street' => 'Ebbinghoff 10',
                                 'zipcode' => '48624',

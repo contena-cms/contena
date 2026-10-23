@@ -71,7 +71,7 @@ class UserDeletedEvent extends Event implements ContenaChannelEvent, UserAware, 
     {
         if (!$this->mailRecipientStruct instanceof MailRecipientStruct) {
             $this->mailRecipientStruct = new MailRecipientStruct([
-                $this->user->getEmail() => $this->user->getFirstName() . ' ' . $this->user->getLastName(),
+                $this->user->getEmail() => $this->user->getName() . ' ' . $this->user->getLastName(),
             ]);
         }
 

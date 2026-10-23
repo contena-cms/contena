@@ -21,7 +21,7 @@ class TestBasicWithToOneRelationship extends SerializationFixture
     {
         $admin_user = new AdminUserEntity();
         $admin_user->setId(self::USER_ID);
-        $admin_user->setFirstName('Manufacturer');
+        $admin_user->setName('Manufacturer');
         $admin_user->setLastName('');
         $admin_user->setPassword('password');
         $admin_user->setUsername('admin_user1');
@@ -214,7 +214,7 @@ class TestBasicWithToOneRelationship extends SerializationFixture
                         'localeId' => self::LOCALE_ID,
                         'avatarId' => null,
                         'username' => 'admin_user1',
-                        'firstName' => 'Manufacturer',
+                        'name' => 'Manufacturer',
                         'lastName' => '',
                         'email' => 'admin_user1@shop.de',
                         'active' => true,
@@ -306,7 +306,7 @@ class TestBasicWithToOneRelationship extends SerializationFixture
                 'localeId' => self::LOCALE_ID,
                 'avatarId' => null,
                 'username' => 'admin_user1',
-                'firstName' => 'Manufacturer',
+                'name' => 'Manufacturer',
                 'lastName' => '',
                 'email' => 'admin_user1@shop.de',
                 'active' => true,

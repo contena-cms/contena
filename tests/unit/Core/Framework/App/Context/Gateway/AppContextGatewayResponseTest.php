@@ -15,7 +15,7 @@ class AppContextGatewayResponseTest extends TestCase
     public function testResponse(): void
     {
         $commands = [
-            ['command' => 'context_register-user', 'payload' => ['billingAddress' => ['salutationId' => 'salutationId', 'firstName' => 'firstName', 'lastName' => 'lastName', 'street' => 'street', 'zipcode' => 'zipcode', 'city' => 'city', 'countryId' => 'countryId']]],
+            ['command' => 'context_register-user', 'payload' => ['billingAddress' => ['salutationId' => 'salutationId', 'name' => 'firstName', 'lastName' => 'lastName', 'street' => 'street', 'zipcode' => 'zipcode', 'city' => 'city', 'countryId' => 'countryId']]],
             ['command' => 'context_change-currency', 'payload' => ['iso' => 'EUR']],
         ];
 
@@ -32,7 +32,7 @@ class AppContextGatewayResponseTest extends TestCase
         static::assertCount(4, $response->getCommands());
 
         static::assertSame([
-            ['command' => 'context_register-user', 'payload' => ['billingAddress' => ['salutationId' => 'salutationId', 'firstName' => 'firstName', 'lastName' => 'lastName', 'street' => 'street', 'zipcode' => 'zipcode', 'city' => 'city', 'countryId' => 'countryId']]],
+            ['command' => 'context_register-user', 'payload' => ['billingAddress' => ['salutationId' => 'salutationId', 'name' => 'firstName', 'lastName' => 'lastName', 'street' => 'street', 'zipcode' => 'zipcode', 'city' => 'city', 'countryId' => 'countryId']]],
             ['command' => 'context_change-currency', 'payload' => ['iso' => 'EUR']],
             ['command' => 'context_change-language', 'payload' => ['iso' => 'DE-BY']],
             ['command' => 'context_change-shipping-address', 'payload' => ['shippingAddressId' => 'shippingAddressId']],

@@ -20,6 +20,7 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 use Contena\Core\Framework\Api\Exception\NoEntityClonedException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingReverseAssociation;
+use Contena\Core\Framework\Routing\Exception\ChannelNotFoundException;
 
 class ApiException extends HttpException
 {

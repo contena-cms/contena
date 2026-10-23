@@ -11,6 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit\VersionCommitDefinition;
 use Symfony\Component\Clock\Clock;
+use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 
 /**
  * @codeCoverageIgnore

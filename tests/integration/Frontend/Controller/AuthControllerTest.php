@@ -817,7 +817,7 @@ class AuthControllerTest extends TestCase
                 'email' => 'test@example.com',
                 'emailConfirmation' => 'test@example.com',
                 'salutationId' => $this->getValidSalutationId(),
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'frontendUrl' => 'http://localhost',
 
@@ -843,7 +843,7 @@ class AuthControllerTest extends TestCase
             'channelId' => TestDefaults::CHANNEL,
             'defaultShippingAddress' => [
                 'id' => $addressId,
-                'firstName' => 'Max',
+                'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
@@ -856,7 +856,7 @@ class AuthControllerTest extends TestCase
             'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
             'email' => 'test@example.com',
             'password' => 'test12345',
-            'firstName' => 'Max',
+            'name' => 'Max',
             'active' => $active,
             'lastName' => 'Mustermann',
             'salutationId' => $this->getValidSalutationId(),
