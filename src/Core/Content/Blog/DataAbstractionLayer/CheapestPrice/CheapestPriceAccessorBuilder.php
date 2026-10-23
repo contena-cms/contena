@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\FieldAccessorBuilderInterface;

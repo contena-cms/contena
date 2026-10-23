@@ -4,7 +4,6 @@ namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration;
 
 use PHPStan\Analyser\Scope;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @internal

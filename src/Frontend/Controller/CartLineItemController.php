@@ -2,23 +2,12 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\CartException;
-use Contena\Core\Checkout\Cart\Error\Error;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\LineItemFactoryInterface;
-use Contena\Core\Checkout\Cart\LineItemFactoryRegistry;
-use Contena\Core\Checkout\Cart\Channel\CartReorderRoute;
-use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Promotion\Cart\PromotionCartAddedInformationError;
-use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Content\Blog\Channel\AbstractBlogListRoute;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -138,7 +127,6 @@ class CartLineItemController extends FrontendController
                 }
 
                 $lineItem = $this->lineItemFactoryRegistry->create([
-                    'type' => LineItem::PROMOTION_LINE_ITEM_TYPE,
                     'referencedId' => $code,
                 ], $context);
 

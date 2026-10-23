@@ -5,8 +5,6 @@ namespace Contena\Core\Service;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\AppAlreadyInstalledException;
-use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 use Contena\Core\Framework\App\Lifecycle\AppManager;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppUpdateParameters;

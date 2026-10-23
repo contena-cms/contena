@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Telemetry;
 
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Telemetry\Metrics\Exception\MetricNotSupportedException;
-use Contena\Core\Framework\Telemetry\Metrics\Exception\MissingMetricConfigurationException;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 use Symfony\Component\HttpFoundation\Response;

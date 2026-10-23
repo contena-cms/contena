@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel\Review;
 
 use Contena\Core\System\User\Service\EmailIdnConverter;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\Extension\BlogReviewSaveRouteExtension;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
@@ -18,13 +17,11 @@ use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\NoContentResponse;
 use Contena\Core\System\Channel\ChannelContext;

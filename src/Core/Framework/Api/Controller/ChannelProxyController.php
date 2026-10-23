@@ -2,13 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use Contena\Core\Checkout\Cart\ApiOrderCartService;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Processor;
-use Contena\Core\Checkout\Cart\Channel\AbstractCartOrderRoute;
-use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\System\User\ImitateUserTokenGenerator;
 use Contena\Core\System\User\Struct\ImitateUserToken;
@@ -17,10 +10,8 @@ use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
-use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
@@ -34,7 +25,6 @@ use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
@@ -70,8 +60,6 @@ class ChannelProxyController extends AbstractController
     private const ADMIN_ORDER_PERMISSIONS = [
         CheckoutPermissions::ALLOW_BLOG_PRICE_OVERWRITES => true,
     ];
-
-    protected Processor $processor;
 
     /**
      * @internal

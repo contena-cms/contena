@@ -2,13 +2,11 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\Event\UserLogoutEvent;
 use Contena\Core\System\User\Extension\LogoutRouteExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;

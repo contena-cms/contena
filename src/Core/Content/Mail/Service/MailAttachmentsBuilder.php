@@ -3,11 +3,6 @@
 namespace Contena\Core\Content\Mail\Service;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Document\Service\DocumentGenerator;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
-use Contena\Core\Checkout\DocumentV2\DocumentEntity;
-use Contena\Core\Checkout\DocumentV2\DocumentFormat;
-use Contena\Core\Checkout\DocumentV2\Service\DocumentMediaGuard;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Content\Media\MediaCollection;

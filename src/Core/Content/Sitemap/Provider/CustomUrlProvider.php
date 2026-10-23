@@ -6,7 +6,6 @@ use Contena\Core\Content\Sitemap\Service\ConfigHandler;
 use Contena\Core\Content\Sitemap\Struct\Url;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
 
 /**

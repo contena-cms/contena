@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Framework\Log\Package;
 
 class CalculatedCheapestPrice extends CalculatedPrice

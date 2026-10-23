@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PostWriteValida
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Channel\ChannelDefinition;
-use Contena\Tests\Integration\Core\Content\Category\Validation\EntryPointValidatorTest;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;

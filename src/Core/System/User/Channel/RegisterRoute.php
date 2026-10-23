@@ -19,8 +19,6 @@ use Contena\Core\System\User\Service\EmailIdnConverter;
 use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
 use Contena\Core\System\User\Validation\Constraint\UserVatIdentification;
 use Contena\Core\System\User\Validation\Constraint\UserZipCode;
-use Contena\Core\Checkout\Order\Channel\OrderService;
-use Contena\Core\Content\Newsletter\DataAbstractionLayer\Indexing\UserNewsletterChannelsUpdater;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
@@ -31,7 +29,6 @@ use Contena\Core\Framework\Event\DataMappingEvent;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
@@ -40,7 +37,6 @@ use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
 use Contena\Core\Framework\Validation\DataValidator;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
@@ -52,8 +48,6 @@ use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
-use Contena\Core\System\Salutation\SalutationCollection;
-use Contena\Core\System\Salutation\SalutationDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\AtLeastOneOf;
@@ -403,8 +397,6 @@ class RegisterRoute extends AbstractRegisterRoute
             'lastName' => $data->get('lastName'),
             'email' => $data->get('email'),
             'title' => $data->get('title'),
-            'affiliateCode' => $data->get(OrderService::AFFILIATE_CODE_KEY),
-            'campaignCode' => $data->get(OrderService::CAMPAIGN_CODE_KEY),
             'active' => true,
             'birthday' => $this->getBirthday($data),
             'guest' => $isGuest,

@@ -3,8 +3,6 @@
 namespace Contena\Elasticsearch\Blog;
 
 use OpenSearch\Client;
-use OpenSearch\Exception\BadRequestHttpException;
-use OpenSearch\Exception\NotFoundHttpException;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;

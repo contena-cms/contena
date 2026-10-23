@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Page\LandingPage;
 
-use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 use Contena\Core\Content\LandingPage\LandingPageException;
 use Contena\Core\Content\LandingPage\Channel\AbstractLandingPageRoute;
 use Contena\Core\Framework\Feature;

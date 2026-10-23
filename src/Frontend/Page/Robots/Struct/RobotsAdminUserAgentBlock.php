@@ -5,7 +5,7 @@ namespace Contena\Frontend\Page\Robots\Struct;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 
-class RobotsUserAgentBlock
+class RobotsAdminUserAgentBlock
 {
     /**
      * @param list<RobotsDirective> $directives

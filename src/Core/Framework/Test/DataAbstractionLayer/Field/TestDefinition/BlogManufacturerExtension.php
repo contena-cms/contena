@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition;
 
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;

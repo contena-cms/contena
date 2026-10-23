@@ -2,18 +2,14 @@
 
 namespace Contena\Frontend\Page\Blog;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
-use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Content\Blog\Channel\Review\RatingMatrix;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;

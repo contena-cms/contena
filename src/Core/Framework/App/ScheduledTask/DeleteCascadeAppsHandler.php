@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskHandler;
-use Contena\Core\System\Integration\IntegrationCollection;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 /**

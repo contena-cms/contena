@@ -4,9 +4,6 @@ namespace Contena\Frontend\Pagelet\Newsletter\Account;
 
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\Channel\AbstractAccountNewsletterRecipientRoute;
-use Contena\Core\Content\Newsletter\Channel\AbstractNewsletterSubscribeRoute;
-use Contena\Core\Content\Newsletter\Channel\AbstractNewsletterUnsubscribeRoute;
-use Contena\Core\Content\Newsletter\Channel\NewsletterSubscribeRoute;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

@@ -11,7 +11,7 @@ use Contena\Core\System\Consent\ConsentScope;
 /**
  * @internal
  */
-class AdminUser implements ConsentScope
+class AdminAdminUser implements ConsentScope
 {
     public const NAME = 'admin_user';
 

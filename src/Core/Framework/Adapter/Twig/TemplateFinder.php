@@ -8,7 +8,6 @@ use Contena\Core\Framework\Util\Hasher;
 use Symfony\Contracts\Service\ResetInterface;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;
-use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 
 class TemplateFinder implements TemplateFinderInterface, ResetInterface

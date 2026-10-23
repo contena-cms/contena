@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\Util;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Util\Exception\Base64DecodingException;
 
 /**
  * The standard base64 alphabet contains + and / which are not URL safe.

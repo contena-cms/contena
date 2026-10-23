@@ -2,14 +2,12 @@
 
 namespace Contena\Core\Content\Blog\Channel\PurchaseLimit;
 
-use Contena\Core\Content\Blog\AbstractBlogMaxPurchaseCalculator;
 use Contena\Core\Content\Blog\Extension\BlogPurchaseLimitRouteExtension;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Entity\ChannelRepository;

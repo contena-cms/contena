@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Account\Overview;
 
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Page;
 use Contena\Frontend\Pagelet\Newsletter\Account\NewsletterAccountPagelet;

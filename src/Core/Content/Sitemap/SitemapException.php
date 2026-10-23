@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap;
 
-use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\DataAbstractionLayer;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Content\ImportExport\Exception\DeleteDefaultProfileException;
 use Contena\Core\Content\ImportExport\ImportExportProfileDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\Log\Package;

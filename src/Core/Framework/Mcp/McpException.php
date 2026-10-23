@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp;
 
-use Mcp\Exception\ResourceNotFoundException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;

@@ -2,14 +2,6 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Checkout\Cart\AbstractCartPersister;
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\Error\ErrorCollection;
-use Contena\Core\Checkout\Cart\Event\BeforeCartMergeEvent;
-use Contena\Core\Checkout\Cart\Event\CartMergedEvent;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Event\ChannelContextRestoredEvent;

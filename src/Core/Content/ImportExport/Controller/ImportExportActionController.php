@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\Controller;
 
-use Contena\Core\Content\ImportExport\Exception\ProfileNotFoundException;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\ImportExportFactory;
 use Contena\Core\Content\ImportExport\ImportExportProfileEntity;

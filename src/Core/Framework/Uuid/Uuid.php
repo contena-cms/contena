@@ -7,8 +7,6 @@ use Ramsey\Uuid\Generator\RandomGeneratorFactory;
 use Ramsey\Uuid\Generator\UnixTimeGenerator;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
-use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
-use Contena\Core\Framework\Uuid\Exception\InvalidUuidLengthException;
 
 class Uuid
 {

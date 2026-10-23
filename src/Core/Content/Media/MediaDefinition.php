@@ -2,13 +2,6 @@
 
 namespace Contena\Core\Content\Media;
 
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentBaseConfig\DocumentBaseConfigDefinition;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentFile\DocumentFileDefinition;
-use Contena\Core\Checkout\DocumentV2\DocumentDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItemDownload\OrderLineItemDownloadDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionDefinition;
@@ -18,9 +11,6 @@ use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaTag\MediaTagDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaTranslation\MediaTranslationDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogDownload\BlogDownloadDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionDefinition;
@@ -127,29 +117,18 @@ class MediaDefinition extends EntityDefinition
             // reverse side of the associations, not available in store-api
             new ManyToOneAssociationField('admin_user', 'admin_user_id', AdminUserDefinition::class, 'id', false),
             (new OneToManyAssociationField('categories', CategoryDefinition::class, 'media_id', 'id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('blogManufacturers', BlogManufacturerDefinition::class, 'media_id', 'id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('blogMedia', BlogMediaDefinition::class, 'media_id', 'id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('blogDownloads', BlogDownloadDefinition::class, 'media_id', 'id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('orderLineItemDownloads', OrderLineItemDownloadDefinition::class, 'media_id', 'id'))->addFlags(new RestrictDelete()),
             (new OneToManyAssociationField('avatarUsers', AdminUserDefinition::class, 'avatar_id'))->addFlags(new SetNullOnDelete()),
             new ManyToOneAssociationField('mediaFolder', 'media_folder_id', MediaFolderDefinition::class, 'id', false),
             (new OneToManyAssociationField('propertyGroupOptions', PropertyGroupOptionDefinition::class, 'media_id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('mailTemplateMedia', MailTemplateMediaDefinition::class, 'media_id', 'id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('documentBaseConfigs', DocumentBaseConfigDefinition::class, 'logo_id', 'id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('shippingMethods', ShippingMethodDefinition::class, 'media_id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('paymentMethods', PaymentMethodDefinition::class, 'media_id', 'id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('blogConfiguratorSettings', BlogConfiguratorSettingDefinition::class, 'media_id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('blogOpenGraphImages', BlogDefinition::class, 'open_graph_media_id', 'id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('blogGuaranteeTerms', BlogDefinition::class, 'guarantee_terms_media_id', 'id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('orderLineItems', OrderLineItemDefinition::class, 'cover_id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('cmsBlocks', CmsBlockDefinition::class, 'background_media_id'))->addFlags(new RestrictDelete()),
             (new OneToManyAssociationField('cmsSections', CmsSectionDefinition::class, 'background_media_id'))->addFlags(new RestrictDelete()),
             (new OneToManyAssociationField('cmsPages', CmsPageDefinition::class, 'preview_media_id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('documents', DocumentDefinition::class, 'document_media_file_id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('a11yDocuments', DocumentDefinition::class, 'document_a11y_media_file_id'))->addFlags(new RestrictDelete()),
             (new OneToManyAssociationField('appPaymentMethods', AppPaymentMethodDefinition::class, 'original_media_id', 'id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('appShippingMethods', AppShippingMethodDefinition::class, 'original_media_id', 'id'))->addFlags(new SetNullOnDelete()),
-            (new OneToOneAssociationField('documentFile', 'id', 'media_id', DocumentFileDefinition::class, false))->addFlags(new RestrictDelete()),
             (new StringField('file_hash', 'fileHash'))->addFlags(new Computed()),
         ]);
     }

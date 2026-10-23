@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Category\Service;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Event\NavigationLoadedEvent;
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Category\Channel\AbstractNavigationRoute;
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Content\Category\Tree\TreeItem;

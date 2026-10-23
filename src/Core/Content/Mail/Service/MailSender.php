@@ -8,7 +8,6 @@ use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Message\SendMailMessage;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Subscriber\MessageQueueSizeRestrictListener;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;

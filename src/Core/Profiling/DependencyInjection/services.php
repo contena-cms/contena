@@ -3,10 +3,6 @@
 namespace Contena\Core\Profiling\DependencyInjection;
 
 use Contena\Core\Framework\Adapter\Command\CacheWatchDelayedCommand;
-use Contena\Core\Profiling\Integration\Datadog;
-use Contena\Core\Profiling\Integration\ServerTiming;
-use Contena\Core\Profiling\Integration\Stopwatch;
-use Contena\Core\Profiling\Integration\Tideways;
 use Contena\Core\Profiling\Profiler;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

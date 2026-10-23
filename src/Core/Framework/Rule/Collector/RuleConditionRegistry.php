@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Rule\Collector;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Rule\Exception\InvalidConditionException;
 use Contena\Core\Framework\Rule\FlowRule;
 use Contena\Core\Framework\Rule\Rule;
 

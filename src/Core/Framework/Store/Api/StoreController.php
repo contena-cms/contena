@@ -2,14 +2,12 @@
 
 namespace Contena\Core\Framework\Store\Api;
 
-use GuzzleHttp\Exception\ClientException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\StoreException;

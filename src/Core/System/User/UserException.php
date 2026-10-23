@@ -2,37 +2,14 @@
 
 namespace Contena\Core\System\User;
 
-use Contena\Core\System\User\Exception\AddressNotFoundException;
-use Contena\Core\System\User\Exception\BadCredentialsException;
-use Contena\Core\System\User\Exception\CannotDeleteDefaultAddressException;
-use Contena\Core\System\User\Exception\UserAlreadyConfirmedException;
-use Contena\Core\System\User\Exception\UserAuthThrottledException;
-use Contena\Core\System\User\Exception\UserNotFoundByHashException;
-use Contena\Core\System\User\Exception\UserNotFoundByIdException;
-use Contena\Core\System\User\Exception\UserNotFoundException;
-use Contena\Core\System\User\Exception\UserOptinNotCompletedException;
-use Contena\Core\System\User\Exception\UserRecoveryHashExpiredException;
-use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
-use Contena\Core\System\User\Exception\DuplicateWishlistBlogException;
-use Contena\Core\System\User\Exception\InvalidImitateUserTokenException;
-use Contena\Core\System\User\Exception\PasswordPoliciesUpdatedException;
 use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
-use Contena\Core\Checkout\Order\Exception\GuestNotAuthenticatedException;
-use Contena\Core\Checkout\Order\Exception\WrongGuestCredentialsException;
-use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
-use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\Constraint;
-use Symfony\Component\Validator\Exception\MissingOptionsException;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
-use Symfony\Component\Validator\Exception\UnexpectedValueException;
-use Symfony\Component\Validator\Exception\ValidatorException;
 
 class UserException extends HttpException
 {

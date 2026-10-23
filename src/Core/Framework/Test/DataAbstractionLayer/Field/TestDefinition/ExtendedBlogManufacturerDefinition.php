@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition;
 
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
@@ -36,11 +35,8 @@ class ExtendedBlogManufacturerDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new Required(), new PrimaryKey()),
             (new StringField('name', 'name'))->addFlags(new ApiAware()),
-            (new FkField('manufacturer_id', 'manufacturerId', BlogManufacturerDefinition::class))->addFlags(new ApiAware()),
             (new FkField('language_id', 'languageId', LanguageDefinition::class))->addFlags(new ApiAware()),
             (new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false))->addFlags(new ApiAware()),
-            (new OneToOneAssociationField('toOne', 'manufacturer_id', 'id', BlogManufacturerDefinition::class))->addFlags(new ApiAware()),
-            (new ManyToOneAssociationField('manyToOne', 'manufacturer_id', BlogManufacturerDefinition::class, 'id'))->addFlags(new ApiAware()),
         ]);
     }
 }

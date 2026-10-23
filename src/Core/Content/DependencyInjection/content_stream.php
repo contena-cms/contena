@@ -9,8 +9,6 @@ use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\Conten
 use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamFilterChangeSetSubscriber;
 use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamIndexer;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
-use Contena\Core\Content\ContentStream\ScheduledTask\UpdateBlogStreamMappingTask;
-use Contena\Core\Content\ContentStream\ScheduledTask\UpdateBlogStreamMappingTaskHandler;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -39,7 +37,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(ContentStreamBuilderInterface::class, ContentStreamBuilder::class)
-        ->deprecate('contena/core', '6.8.0', 'The %alias_id% service is deprecated and will be removed in 6.8.0. Use Contena\Core\Content\ContentStream\Service\AbstractBlogStreamBuilder instead');
+        ->deprecate('contena/core', '6.8.0', 'The %alias_id% service is deprecated and will be removed in 6.8.0. Use Contena\Core\Content\ContentStream\Service\AbstractContentStreamBuilder instead');
 
     $services->set(ContentStreamIndexer::class)
         ->args([
@@ -56,10 +54,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ContentStreamFilterChangeSetSubscriber::class)
         ->tag('kernel.event_subscriber');
 
-    $services->set(UpdateBlogStreamMappingTask::class)
+    $services->set(UpdateContentStreamMappingTask::class)
         ->tag('contena.scheduled.task');
 
-    $services->set(UpdateBlogStreamMappingTaskHandler::class)
+    $services->set(UpdateContentStreamMappingTaskHandler::class)
         ->args([
             service('scheduled_task.repository'),
             service('logger'),

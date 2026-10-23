@@ -2,13 +2,11 @@
 
 namespace Contena\Core\Framework\Gateway\Context\Channel;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\App\Context\Gateway\AppContextGateway;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
 use Contena\Core\Framework\Gateway\Context\Extension\ContextGatewayRouteExtension;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;

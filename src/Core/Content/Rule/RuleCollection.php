@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Rule;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use Contena\Core\Framework\Log\Package;

@@ -15,7 +15,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGeneratorTest;
 
 /**
  * This PHPStan rule prevents the manual creation of a `ChannelContext`.

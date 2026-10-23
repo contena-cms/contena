@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Framework\Adapter\Cache\CacheStateSubscriber;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Feature;

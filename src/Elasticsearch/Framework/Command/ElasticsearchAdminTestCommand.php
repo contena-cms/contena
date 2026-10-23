@@ -4,14 +4,9 @@ namespace Contena\Elasticsearch\Framework\Command;
 
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\UserDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Promotion\PromotionDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
 use Contena\Core\Framework\Context;

@@ -10,12 +10,9 @@ use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStre
 use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamWriteResultHelper;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\UnmappedFieldException as DeprecatedUnmappedFieldException;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\UnmappedFieldException;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
@@ -24,13 +21,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Symfony\Component\Messenger\MessageBusInterface;
 
-class ContentStreamUpdater extends AbstractBlogStreamUpdater
+class ContentStreamUpdater extends AbstractContentStreamUpdater
 {
     public const INDEXER_NAME = 'content_stream_mapping.indexer';
 

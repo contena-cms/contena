@@ -3,11 +3,9 @@
 namespace Contena\Core\Framework\App\Flow\Action;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\InvalidAppFlowActionVariableException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;

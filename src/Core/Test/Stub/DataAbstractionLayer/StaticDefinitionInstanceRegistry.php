@@ -32,7 +32,6 @@ use Contena\Core\Test\Stub\Doctrine\FakeConnection;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @final

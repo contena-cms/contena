@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\DeletedApps\DeletedAppsGateway;
-use Contena\Core\Framework\App\Exception\AppRegistrationException;
 use Contena\Core\Framework\App\Lifecycle\Registration\AppRegistrationService;
 use Contena\Core\Framework\App\Manifest\ManifestFactory;
 use Contena\Core\Framework\App\Message\RotateAppSecretMessage;
@@ -18,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Integration\IntegrationCollection;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**

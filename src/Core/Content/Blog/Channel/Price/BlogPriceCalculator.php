@@ -2,12 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Price;
 
-use Contena\Core\Checkout\Cart\Price\QuantityPriceCalculator;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceCollection as CalculatedPriceCollection;
-use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
-use Contena\Core\Checkout\Cart\Price\Struct\ReferencePriceDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Content\Blog\Extension\BlogPriceCalculationExtension;
@@ -17,13 +11,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Unit\UnitCollection;
 
 class BlogPriceCalculator extends AbstractBlogPriceCalculator
 {

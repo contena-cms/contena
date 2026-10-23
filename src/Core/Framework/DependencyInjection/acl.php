@@ -8,7 +8,6 @@ use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\Acl\AclRoleLoader;
 use Contena\Core\Framework\Api\Acl\AclWriteValidator;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
-use Contena\Core\Framework\Api\Acl\Role\AclUserRoleDefinition;
 use Contena\Core\Framework\Api\Controller\AclController;
 use Contena\Core\Framework\Api\EventListener\Acl\CreditOrderLineItemListener;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -22,7 +21,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AclRoleDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(AclUserRoleDefinition::class)
+    $services->set(AclAdminUserRoleDefinition::class)
         ->tag('contena.entity.definition');
 
     $services->set(AclWriteValidator::class)

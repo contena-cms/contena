@@ -2,17 +2,10 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 
-use Contena\Core\Checkout\Cart\Price\Struct\AbsolutePriceDefinition;
-use Contena\Core\Checkout\Cart\Price\Struct\CurrencyPriceDefinition;
-use Contena\Core\Checkout\Cart\Price\Struct\PercentagePriceDefinition;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceDefinitionInterface;
-use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
@@ -25,7 +18,6 @@ use Contena\Core\Framework\Rule\UnknownConditionRule;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal

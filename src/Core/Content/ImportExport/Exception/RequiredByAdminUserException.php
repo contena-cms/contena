@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 /**
  * @codeCoverageIgnore
  */
-class RequiredByUserException extends ContenaHttpException
+class RequiredByAdminUserException extends ContenaHttpException
 {
     public function __construct(string $column)
     {

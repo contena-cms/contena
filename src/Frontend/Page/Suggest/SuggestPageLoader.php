@@ -2,9 +2,7 @@
 
 namespace Contena\Frontend\Page\Suggest;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Blog\Channel\Suggest\AbstractBlogSuggestRoute;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;

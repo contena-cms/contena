@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Api;
 
-use GuzzleHttp\Exception\ClientException;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

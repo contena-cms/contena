@@ -2,16 +2,9 @@
 
 namespace Contena\Core\Content\Blog\Hook\Pricing;
 
-use Contena\Core\Checkout\Cart\Facade\PriceFacade;
-use Contena\Core\Checkout\Cart\Facade\ScriptPriceStubs;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceCollection as CalculatedPriceCollection;
-use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 

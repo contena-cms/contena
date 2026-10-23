@@ -2,7 +2,6 @@
 
 namespace Contena\Elasticsearch\Framework;
 
-use Doctrine\DBAL\Exception;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;

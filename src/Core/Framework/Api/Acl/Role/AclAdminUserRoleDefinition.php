@@ -16,7 +16,7 @@ use Contena\Core\System\AdminUser\AdminUserDefinition;
 /**
  * @codeCoverageIgnore
  */
-class AclUserRoleDefinition extends MappingEntityDefinition
+class AclAdminUserRoleDefinition extends MappingEntityDefinition
 {
     final public const ENTITY_NAME = 'acl_user_role';
 

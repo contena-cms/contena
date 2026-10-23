@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Pagelet\Footer;
 
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\Tree\Tree;
 use Contena\Core\Framework\Log\Package;

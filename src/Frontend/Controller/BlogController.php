@@ -2,9 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
-use Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption;
-use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
 use Contena\Core\Content\Blog\Channel\FindVariant\AbstractFindBlogVariantRoute;
 use Contena\Core\Content\Blog\Channel\Garan\AbstractGaranLabelRoute;
 use Contena\Core\Content\Blog\Channel\PurchaseLimit\AbstractBlogPurchaseLimitRoute;
@@ -16,10 +13,8 @@ use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Frontend\Controller\Exception\FrontendException;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;

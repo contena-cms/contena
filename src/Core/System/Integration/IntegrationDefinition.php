@@ -26,7 +26,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\WebhookDefinition;
-use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryDefinition;
 
 /**

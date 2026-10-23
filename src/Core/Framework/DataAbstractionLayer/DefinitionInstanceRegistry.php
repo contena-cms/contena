@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer;
 
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\FieldAccessorBuilderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldResolver\AbstractFieldResolver;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityRepositoryNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\FieldSerializerInterface;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\ContainerInterface;

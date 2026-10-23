@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\App\Hmac\Guzzle;
 
-use GuzzleHttp\Exception\InvalidArgumentException;
-use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;

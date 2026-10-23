@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Category;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
-use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;

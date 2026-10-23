@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\AffiliateTracking;
 
-use Contena\Core\Checkout\Order\Channel\OrderService;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;

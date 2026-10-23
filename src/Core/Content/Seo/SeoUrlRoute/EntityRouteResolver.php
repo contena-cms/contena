@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\SeoUrlRoute;
 
-use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;

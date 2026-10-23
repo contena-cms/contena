@@ -16,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntitySearcher;
-use Contena\Elasticsearch\Framework\Exception\EmptyQueryException;
 
 class AdminElasticsearchEntitySearcher implements EntitySearcherInterface
 {

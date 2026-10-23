@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Test\TestCaseBase;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\After;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;

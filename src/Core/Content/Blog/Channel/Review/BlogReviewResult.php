@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Review;
 
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesReadonly;
 use Contena\Core\Framework\Deprecation\BCChange\ClassHierarchyChange;

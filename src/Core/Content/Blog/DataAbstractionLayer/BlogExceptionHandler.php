@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\DataAbstractionLayer;
 
-use Contena\Core\Content\Blog\Exception\DuplicateBlogNumberException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
 use Contena\Core\Framework\Log\Package;
 

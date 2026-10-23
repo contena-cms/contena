@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Demodata\Generator;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\System\User\Service\BlogReviewCountService;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;

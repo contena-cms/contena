@@ -4,7 +4,6 @@ namespace Contena\Elasticsearch\Framework;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Event\ElasticsearchCustomFieldsMappingEvent;

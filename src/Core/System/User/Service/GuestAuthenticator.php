@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Service;
 
 use Contena\Core\System\User\UserException;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;

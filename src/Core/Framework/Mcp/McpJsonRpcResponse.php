@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp;
 
-use Mcp\Exception\InvalidArgumentException;
 use Mcp\Schema\Enum\ProtocolVersion;
 use Mcp\Schema\Implementation;
 use Mcp\Schema\JsonRpc\ResultInterface;

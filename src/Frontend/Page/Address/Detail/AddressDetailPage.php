@@ -5,14 +5,11 @@ namespace Contena\Frontend\Page\Address\Detail;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Frontend\Page\Page;
 
 class AddressDetailPage extends Page
 {
     protected ?UserAddressEntity $address = null;
-
-    protected SalutationCollection $salutations;
 
     protected CountryCollection $countries;
 

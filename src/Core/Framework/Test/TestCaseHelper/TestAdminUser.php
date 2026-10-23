@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 /**
  * @internal
  */
-class TestUser
+class TestAdminUser
 {
     private function __construct(
         private readonly string $password,
@@ -21,15 +21,15 @@ class TestUser
     ) {
     }
 
-    public static function getAdmin(): TestUser
+    public static function getAdmin(): TestAdminUser
     {
-        return new TestUser('contena', 'admin', Uuid::randomHex());
+        return new TestAdminUser('contena', 'admin', Uuid::randomHex());
     }
 
     /**
      * @param list<string> $permissions
      */
-    public static function createNewTestUser(Connection $connection, array $permissions = []): TestUser
+    public static function createNewTestUser(Connection $connection, array $permissions = []): TestAdminUser
     {
         $username = Uuid::randomHex();
         $email = Uuid::randomHex();
@@ -71,10 +71,10 @@ class TestUser
             );
         }
 
-        return new TestUser('contena', $username, Uuid::fromBytesToHex($admin_userId), $roleId === null ? null : Uuid::fromBytesToHex($roleId));
+        return new TestAdminUser('contena', $username, Uuid::fromBytesToHex($admin_userId), $roleId === null ? null : Uuid::fromBytesToHex($roleId));
     }
 
-    public static function createNewAdminTestUser(Connection $connection): TestUser
+    public static function createNewAdminTestUser(Connection $connection): TestAdminUser
     {
         $admin_user = self::createNewTestUser($connection);
 

@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationCollection;
 
 /**
  * @codeCoverageIgnore

@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\App\Validation\Requirements;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\RequestOptions;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\App\Manifest\Manifest;

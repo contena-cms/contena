@@ -3,11 +3,6 @@
 namespace Contena\Core\Framework\Migration\Command;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\Exception\UnknownMigrationSourceException;
-use Contena\Core\Framework\Migration\MigrationCollection;
-use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Framework\Migration\MigrationException;
-use Contena\Core\Framework\Migration\MigrationStep;
 use Symfony\Component\Cache\Adapter\TagAwareAdapterInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

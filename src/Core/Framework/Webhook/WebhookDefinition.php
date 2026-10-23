@@ -20,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 
 /**

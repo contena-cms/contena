@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Sitemap\ScheduledTask;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;

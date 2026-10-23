@@ -3,8 +3,6 @@
 namespace Contena\Frontend\Controller;
 
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Content\Newsletter\NewsletterException;
-use Contena\Core\Content\Newsletter\Channel\AbstractNewsletterConfirmRoute;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\QueryDataBag;

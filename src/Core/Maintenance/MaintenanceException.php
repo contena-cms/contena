@@ -6,8 +6,6 @@ namespace Contena\Core\Maintenance;
 
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Maintenance\System\Exception\DatabaseSetupException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

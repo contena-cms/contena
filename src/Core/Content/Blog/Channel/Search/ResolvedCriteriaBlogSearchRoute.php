@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Blog\Channel\Search;
 use Contena\Core\Content\Blog\Events\BlogSearchCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogSearchResultEvent;
 use Contena\Core\Content\Blog\BlogEvents;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;

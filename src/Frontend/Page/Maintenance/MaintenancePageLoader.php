@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Page\Maintenance;
 
 use Contena\Core\Content\Cms\CmsException;
-use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;

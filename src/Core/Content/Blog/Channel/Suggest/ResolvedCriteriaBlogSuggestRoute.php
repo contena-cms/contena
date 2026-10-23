@@ -7,7 +7,6 @@ use Contena\Core\Content\Blog\Events\BlogSuggestCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogSuggestResultEvent;
 use Contena\Core\Content\Blog\BlogEvents;
 use Contena\Core\Content\Blog\BlogException;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilderInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;

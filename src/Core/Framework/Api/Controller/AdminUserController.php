@@ -3,12 +3,10 @@
 namespace Contena\Core\Framework\Api\Controller;
 
 use Doctrine\DBAL\Connection;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
-use Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException;
 use Contena\Core\Framework\Api\OAuth\Scope\AdminUserVerifiedScope;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;

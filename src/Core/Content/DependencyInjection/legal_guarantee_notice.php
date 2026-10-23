@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Content\DependencyInjection;
 
-use Contena\Core\Content\LegalGuaranteeNotice\LegalGuaranteeNoticeRenderer;
-use Contena\Core\Content\LegalGuaranteeNotice\LegalGuaranteeNoticeTwigFilter;
-use Contena\Core\Content\LegalGuaranteeNotice\Channel\AbstractLegalGuaranteeNoticeRoute;
-use Contena\Core\Content\LegalGuaranteeNotice\Channel\LegalGuaranteeNoticeRoute;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;

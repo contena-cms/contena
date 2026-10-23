@@ -2,11 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Rule;
 
-use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\CartDataCollectorInterface;
-use Contena\Core\Checkout\Cart\Delivery\DeliveryBuilder;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\Service\ResetInterface;

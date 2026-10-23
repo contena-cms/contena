@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Lifecycle\AppLifecycle;
 use Contena\Core\Framework\App\Lifecycle\AppManager;
 use Contena\Core\Framework\App\Manifest\ManifestFactory;
 use Contena\Core\Framework\App\Privileges\Privileges;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\FirstRunWizardService;

@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Migration\Exception;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

@@ -4,12 +4,6 @@ namespace Contena\Frontend\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\CartFactory;
-use Contena\Core\Checkout\Cart\CartPersister;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\Order\OrderRestorer;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\System\User\Channel\AccountNewsletterRecipientRoute;
 use Contena\Core\System\User\Channel\UserGroupRegistrationSettingsRoute;
 use Contena\Core\System\User\Channel\UserRecoveryIsExpiredRoute;
@@ -17,11 +11,6 @@ use Contena\Core\System\User\Channel\UserRoute;
 use Contena\Core\System\User\Channel\ListAddressRoute;
 use Contena\Core\System\User\Channel\LoadWishlistRoute;
 use Contena\Core\System\User\Validation\AddressValidationFactory;
-use Contena\Core\Checkout\Gateway\Channel\CheckoutGatewayRoute;
-use Contena\Core\Checkout\Order\Channel\OrderRoute;
-use Contena\Core\Checkout\Order\Channel\OrderService;
-use Contena\Core\Checkout\Payment\Channel\PaymentMethodRoute;
-use Contena\Core\Checkout\Shipping\Channel\ShippingMethodRoute;
 use Contena\Core\Content\Category\Channel\CategoryRoute;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Category\Service\NavigationLoader;
@@ -30,8 +19,6 @@ use Contena\Core\Content\LandingPage\Channel\LandingPageRoute;
 use Contena\Core\Content\Media\Cms\DefaultMediaResolver as CoreDefaultMediaResolver;
 use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Content\Media\MediaService;
-use Contena\Core\Content\Newsletter\Channel\NewsletterSubscribeRoute;
-use Contena\Core\Content\Newsletter\Channel\NewsletterUnsubscribeRoute;
 use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\BlogCloseoutFilterFactory;
@@ -48,7 +35,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\App\ActiveAppsLoader;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\App\Template\TemplateLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
@@ -64,14 +50,7 @@ use Contena\Core\System\Language\Channel\LanguageRoute;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextRequestRestorer;
 use Contena\Core\System\Channel\Channel\ContextSwitchRoute;
-use Contena\Core\System\Salutation\AbstractSalutationsSorter;
-use Contena\Core\System\Salutation\Channel\SalutationRoute;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Frontend\Checkout\Cart\Channel\FrontendCartFacade;
-use Contena\Frontend\Checkout\User\UserGroupSubscriber;
-use Contena\Frontend\Checkout\Order\OrderBlogAvailabilityResolver;
-use Contena\Frontend\Checkout\Payment\BlockedPaymentMethodSwitcher;
-use Contena\Frontend\Checkout\Shipping\BlockedShippingMethodSwitcher;
 use Contena\Frontend\Controller\ScriptController;
 use Contena\Frontend\Event\CartMergedSubscriber;
 use Contena\Frontend\Framework\AffiliateTracking\AffiliateTrackingListener;
@@ -110,7 +89,6 @@ use Contena\Frontend\Framework\Store\Subscriber\ExtensionThemeDetectionSubscribe
 use Contena\Frontend\Framework\Store\ThemeExtensionRemovalValidator;
 use Contena\Frontend\Framework\SystemCheck\BlogDetailReadinessCheck;
 use Contena\Frontend\Framework\SystemCheck\BlogListingReadinessCheck;
-use Contena\Frontend\Framework\SystemCheck\ChannelsReadinessCheck;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainContextFactory;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainProvider;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
@@ -127,24 +105,15 @@ use Contena\Frontend\Framework\Twig\TwigAppVariable;
 use Contena\Frontend\Framework\Twig\TwigDateRequestListener;
 use Contena\Frontend\Page\Account\UserGroupRegistration\UserGroupRegistrationPageLoader;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
-use Contena\Frontend\Page\Account\Order\AccountEditOrderPageLoader;
-use Contena\Frontend\Page\Account\Order\AccountOrderDetailPageLoader;
-use Contena\Frontend\Page\Account\Order\AccountOrderPageLoader;
 use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoader;
 use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
 use Contena\Frontend\Page\Address\Detail\AddressDetailPageLoader;
 use Contena\Frontend\Page\Address\Listing\AddressListingPageLoader;
-use Contena\Frontend\Page\Checkout\Cart\CheckoutCartPageLoader;
-use Contena\Frontend\Page\Checkout\Confirm\CheckoutConfirmPageLoader;
-use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPageLoader;
-use Contena\Frontend\Page\Checkout\Offcanvas\OffcanvasCartPageLoader;
-use Contena\Frontend\Page\Checkout\Register\CheckoutRegisterPageLoader;
 use Contena\Frontend\Page\Cms\DefaultMediaResolver;
 use Contena\Frontend\Page\GenericPageLoader;
 use Contena\Frontend\Page\LandingPage\LandingPageLoader;
 use Contena\Frontend\Page\Maintenance\MaintenancePageLoader;
-use Contena\Frontend\Page\Navigation\Error\ErrorPageLoader;
 use Contena\Frontend\Page\Navigation\NavigationPageLoader;
 use Contena\Frontend\Page\Newsletter\Subscribe\NewsletterSubscribePageLoader;
 use Contena\Frontend\Page\Blog\Configurator\BlogPageConfiguratorLoader;
@@ -835,7 +804,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ClockInterface::class),
         ]);
 
-    $services->set(ChannelsReadinessCheck::class)
+    $services->set(ChannelReadinessCheck::class)
         ->args([
             service(ChannelDomainUtil::class),
             service(ChannelDomainProvider::class),

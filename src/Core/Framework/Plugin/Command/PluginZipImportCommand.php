@@ -6,7 +6,6 @@ use Composer\IO\ConsoleIO;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\NoPluginFoundInZipException;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Plugin\PluginService;
 use Symfony\Component\Console\Attribute\AsCommand;

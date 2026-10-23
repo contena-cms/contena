@@ -3,22 +3,10 @@
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Checkout\Cart\CartDataCollectorInterface;
-use Contena\Core\Checkout\Cart\CartProcessorInterface;
-use Contena\Core\Checkout\Cart\CartValidatorInterface;
-use Contena\Core\Checkout\Cart\LineItem\Group\LineItemGroupPackagerInterface;
-use Contena\Core\Checkout\Cart\LineItem\Group\LineItemGroupSorterInterface;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\LineItemFactoryInterface;
-use Contena\Core\Checkout\Cart\TaxProvider\AbstractTaxProvider;
 use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
-use Contena\Core\Checkout\Document\Renderer\AbstractDocumentRenderer;
-use Contena\Core\Checkout\Payment\Cart\PaymentHandler\AbstractPaymentHandler;
-use Contena\Core\Checkout\Promotion\Cart\Discount\Filter\FilterPickerInterface;
-use Contena\Core\Checkout\Promotion\Cart\Discount\Filter\FilterSorterInterface;
 use Contena\Core\Content\Cms\DataResolver\Element\CmsElementResolverInterface;
 use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;

@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
 
@@ -56,7 +55,7 @@ class MailTemplateDefinition extends EntityDefinition
 
             (new FkField('mail_template_type_id', 'mailTemplateTypeId', MailTemplateTypeDefinition::class))->addFlags(new Required()),
             (new BoolField('system_default', 'systemDefault'))->addFlags(new ApiAware()),
-            new WasModifiedByUserField(),
+            new WasModifiedByAdminUserField(),
 
             // translatable fields
             (new TranslatedField('senderName'))->addFlags(new ApiAware()),

@@ -10,7 +10,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
-use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\TestRuleHelper;
 use Contena\Core\Framework\Log\Package;
 
 /**

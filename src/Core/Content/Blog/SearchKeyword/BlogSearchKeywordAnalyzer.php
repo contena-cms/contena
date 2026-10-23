@@ -6,8 +6,6 @@ use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\PropertyNotFoundException;
-use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\TokenizerInterface;
 use Contena\Core\Framework\Log\Package;

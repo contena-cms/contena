@@ -20,7 +20,6 @@ use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaType\ImageType;
 use Contena\Core\Content\Media\Subscriber\MediaDeletionSubscriber;
-use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
 use Contena\Core\Content\Media\Upload\MediaUploadService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;

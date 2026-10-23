@@ -2,15 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\System\User\Exception\BadCredentialsException;
-use Contena\Core\System\User\Exception\UserAuthThrottledException;
-use Contena\Core\System\User\Exception\UserNotFoundByHashException;
-use Contena\Core\System\User\Exception\UserNotFoundByIdException;
-use Contena\Core\System\User\Exception\UserNotFoundException;
-use Contena\Core\System\User\Exception\UserOptinNotCompletedException;
-use Contena\Core\System\User\Exception\UserRecoveryHashExpiredException;
-use Contena\Core\System\User\Exception\InvalidImitateUserTokenException;
-use Contena\Core\System\User\Exception\PasswordPoliciesUpdatedException;
 use Contena\Core\System\User\Channel\AbstractConvertGuestRoute;
 use Contena\Core\System\User\Channel\AbstractImitateUserRoute;
 use Contena\Core\System\User\Channel\AbstractLoginRoute;
@@ -18,19 +9,15 @@ use Contena\Core\System\User\Channel\AbstractLogoutRoute;
 use Contena\Core\System\User\Channel\AbstractResetPasswordRoute;
 use Contena\Core\System\User\Channel\AbstractSendPasswordRecoveryMailRoute;
 use Contena\Core\System\User\Validation\Constraint\UserEmailUnique;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Frontend\Checkout\Cart\Channel\FrontendCartFacade;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Account\Login\AccountGuestLoginPageLoadedHook;
@@ -41,9 +28,6 @@ use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoad
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Symfony\Component\Routing\Exception\InvalidParameterException;
-use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\NotBlank;
 

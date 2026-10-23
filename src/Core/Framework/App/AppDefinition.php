@@ -39,7 +39,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptDefinition;
 use Contena\Core\Framework\Webhook\WebhookDefinition;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
-use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\TaxProvider\TaxProviderDefinition;
 
 /**

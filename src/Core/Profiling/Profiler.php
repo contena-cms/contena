@@ -3,7 +3,6 @@
 namespace Contena\Core\Profiling;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Profiling\Integration\ProfilerInterface;
 
 /**
  * @internal experimental atm

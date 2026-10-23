@@ -9,7 +9,7 @@ use Contena\Core\Framework\ContenaHttpException;
 /**
  * @deprecated tag:v6.8.0 - Will be removed in v6.8.0.0. Use `\Contena\Core\Framework\Store\StoreException::invalidContextSourceUser` instead.
  */
-class InvalidContextSourceUserException extends ContenaHttpException
+class InvalidContextSourceAdminUserException extends ContenaHttpException
 {
     public function __construct(string $contextSource)
     {

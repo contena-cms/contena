@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\Struct;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Store\Exception\InvalidExtensionRatingValueException;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReviewStruct extends StoreStruct

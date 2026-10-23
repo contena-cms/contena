@@ -2,11 +2,8 @@
 
 namespace Contena\Frontend\Page\Navigation\Error;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Cms\CmsException;
-use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoaderInterface;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Events;
 
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\ContenaChannelEvent;

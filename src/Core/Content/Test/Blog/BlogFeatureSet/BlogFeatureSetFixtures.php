@@ -3,10 +3,7 @@
 namespace Contena\Core\Content\Test\Blog\BlogFeatureSet;
 
 use PHPUnit\Framework\Attributes\Before;
-use Contena\Core\Content\Blog\Aggregate\BlogFeatureSet\BlogFeatureSetDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogFeatureSet\BlogFeatureSetEntity;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Integration\Traits\EntityFixturesBase;
 
 /**
  * @internal
@@ -36,13 +33,11 @@ trait BlogFeatureSetFixtures
                 'description' => 'This template contains features',
                 'features' => [
                     [
-                        'type' => BlogFeatureSetDefinition::TYPE_BLOG_REFERENCE_PRICE,
                         'id' => null,
                         'name' => null,
                         'position' => 1,
                     ],
                     [
-                        'type' => BlogFeatureSetDefinition::TYPE_BLOG_ATTRIBUTE,
                         'id' => null,
                         'name' => 'description',
                         'position' => 2,

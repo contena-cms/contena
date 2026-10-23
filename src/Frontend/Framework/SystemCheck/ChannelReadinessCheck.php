@@ -20,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @see \Contena\Tests\Integration\Frontend\Framework\HealthCheck\ChannelsReadinessCheckTest
  */
-class ChannelsReadinessCheck extends BaseCheck
+class ChannelReadinessCheck extends BaseCheck
 {
     private const INDEX_PAGE = 'frontend.home.page';
 

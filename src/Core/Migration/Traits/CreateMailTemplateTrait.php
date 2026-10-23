@@ -5,9 +5,6 @@ namespace Contena\Core\Migration\Traits;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Migration\Structs\MailCreationState;
-use Contena\Core\Migration\Structs\MailTemplateCreateStruct;
-use Contena\Core\Migration\Structs\MailTemplateTypeCreateStruct;
 
 trait CreateMailTemplateTrait
 {

@@ -10,7 +10,6 @@ use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Contena\Core\System\Channel\File\Loader\ChannelFileConfigurationLoader;
 use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Twig\Environment;
-use Twig\Error\LoaderError;
 
 /**
  * @internal

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\StoreApiResponse;

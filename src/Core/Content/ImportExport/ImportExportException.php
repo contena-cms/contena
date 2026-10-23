@@ -2,15 +2,8 @@
 
 namespace Contena\Core\Content\ImportExport;
 
-use Contena\Core\Content\ImportExport\Exception\FileNotFoundException;
-use Contena\Core\Content\ImportExport\Exception\InvalidFileAccessTokenException;
-use Contena\Core\Content\ImportExport\Exception\InvalidIdentifierException;
-use Contena\Core\Content\ImportExport\Exception\ProcessingException;
-use Contena\Core\Content\ImportExport\Exception\ProfileNotFoundException;
-use Contena\Core\Content\ImportExport\Exception\RequiredByUserException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -87,7 +80,7 @@ class ImportExportException extends HttpException
 
     public static function requiredByUser(string $column): ContenaHttpException
     {
-        return new RequiredByUserException($column);
+        return new RequiredByAdminUserException($column);
     }
 
     public static function invalidIdentifier(string $id): ContenaHttpException

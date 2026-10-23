@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Plugin;
 
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;

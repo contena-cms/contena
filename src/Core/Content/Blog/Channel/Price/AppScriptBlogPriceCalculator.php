@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Price;
 
-use Contena\Core\Checkout\Cart\Facade\ScriptPriceStubs;
 use Contena\Core\Content\Blog\Hook\Pricing\BlogPricingHook;
 use Contena\Core\Content\Blog\Hook\Pricing\BlogProxy;
 use Contena\Core\Framework\Log\Package;

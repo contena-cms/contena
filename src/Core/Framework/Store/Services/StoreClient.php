@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Store\Services;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\ClientException;
 use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
@@ -12,7 +11,6 @@ use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Event\ContenaAccountLoginEvent;
 use Contena\Core\Framework\Store\Event\ContenaAccountLogoutEvent;
-use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\AccessTokenStruct;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;
@@ -20,7 +18,6 @@ use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Store\Struct\LicenseStruct;
 use Contena\Core\Framework\Store\Struct\PluginDownloadDataStruct;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
-use Contena\Core\Framework\Store\Struct\ShopUserTokenStruct;
 use Contena\Core\Framework\Store\Struct\StoreActionStruct;
 use Contena\Core\Framework\Store\Struct\StoreLicenseViolationStruct;
 use Contena\Core\Framework\Store\Struct\StoreLicenseViolationTypeStruct;

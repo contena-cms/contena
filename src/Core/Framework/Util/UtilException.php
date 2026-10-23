@@ -7,10 +7,6 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Database\TableHelperException;
-use Contena\Core\Framework\Util\Exception\Base64DecodingException;
-use Contena\Core\Framework\Util\Exception\ComparatorException;
-use Contena\Core\Framework\Util\Exception\JsonDecodingException;
-use Contena\Core\Framework\Util\Exception\UtilXmlParsingException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

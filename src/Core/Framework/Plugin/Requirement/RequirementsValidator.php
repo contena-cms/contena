@@ -19,11 +19,6 @@ use Contena\Core\Framework\Plugin\Composer\Factory;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
-use Contena\Core\Framework\Plugin\Requirement\Exception\ComposerNameMissingException;
-use Contena\Core\Framework\Plugin\Requirement\Exception\ConflictingPackageException;
-use Contena\Core\Framework\Plugin\Requirement\Exception\MissingRequirementException;
-use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementStackException;
-use Contena\Core\Framework\Plugin\Requirement\Exception\VersionMismatchException;
 use Contena\Core\Framework\Plugin\Util\PluginFinder;
 
 class RequirementsValidator

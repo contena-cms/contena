@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Command;
 use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
 use Contena\Core\Framework\App\ShopId\FingerprintGenerator;
 use Contena\Core\Framework\App\ShopId\ShopId;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Console\Attribute\AsCommand;

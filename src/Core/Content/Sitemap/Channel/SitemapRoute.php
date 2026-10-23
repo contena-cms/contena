@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Channel;
 
-use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\Extension\SitemapRouteExtension;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Content\Sitemap\Service\SitemapListerInterface;
@@ -10,7 +9,6 @@ use Contena\Core\Content\Sitemap\Struct\SitemapCollection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Gateway\Context\Channel;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Core\System\Channel\ChannelContext;

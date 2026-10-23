@@ -3,7 +3,6 @@
 namespace Contena\Core\System\AdminUser;
 
 use Contena\Core\System\User\UserCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogCollection;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Defaults;
@@ -26,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Uuid\Uuid;
 

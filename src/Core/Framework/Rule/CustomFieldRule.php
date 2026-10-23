@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Framework\Rule;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\ArrayComparator;
 use Contena\Core\Framework\Util\FloatComparator;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Sync;
 
-use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
 use Contena\Core\Framework\Log\Package;
 
 abstract class AbstractFkResolver

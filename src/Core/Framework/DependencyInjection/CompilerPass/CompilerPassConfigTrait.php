@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DependencyInjection\CompilerPass;
 
 use Symfony\Bundle\FrameworkBundle\DependencyInjection\Configuration;
-use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 trait CompilerPassConfigTrait

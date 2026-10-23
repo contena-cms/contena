@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\Api;
 
 use Contena\Core\Content\Blog\BlogTypeRegistry;
-use Contena\Core\Content\Blog\Util\VariantCombinationLoader;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;

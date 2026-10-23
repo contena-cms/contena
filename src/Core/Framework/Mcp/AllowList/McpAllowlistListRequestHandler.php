@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Mcp\AllowList;
 
 use Mcp\Capability\RegistryInterface;
-use Mcp\Exception\InvalidCursorException;
 use Mcp\Schema\JsonRpc\Request;
 use Mcp\Schema\JsonRpc\Response;
 use Mcp\Schema\Prompt;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Rule;
 
-use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeDefinition;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\FlowRule;

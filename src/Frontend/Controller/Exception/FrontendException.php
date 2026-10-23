@@ -2,15 +2,12 @@
 
 namespace Contena\Frontend\Controller\Exception;
 
-use Contena\Core\Content\Newsletter\Exception\ChannelDomainNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
-use Twig\Error\Error as TwigError;
 
 class FrontendException extends HttpException
 {

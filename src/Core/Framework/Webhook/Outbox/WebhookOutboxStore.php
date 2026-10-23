@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Webhook\Outbox;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Doctrine\DBAL\Types\Types;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;

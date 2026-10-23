@@ -10,7 +10,6 @@ use Psr\Http\Message\StreamInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\Core\Application\AbstractMediaUrlGenerator;
 use Contena\Core\Content\Media\Core\Params\UrlParams;
-use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Content\Media\MediaService;

@@ -6,7 +6,6 @@ use Contena\Administration\Framework\Routing\AdministrationRouteScope;
 use Contena\Administration\Framework\Search\CriteriaCollection;
 use Contena\Administration\Service\AdminSearcher;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
-use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;

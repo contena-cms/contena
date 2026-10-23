@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\File;
 
 use Contena\Core\Content\Media\MediaException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Contracts\Service\ResetInterface;

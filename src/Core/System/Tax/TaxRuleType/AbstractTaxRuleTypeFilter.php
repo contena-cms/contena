@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\System\Tax\TaxRuleType;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleEntity;
 use Symfony\Component\Clock\Clock;
 
 abstract class AbstractTaxRuleTypeFilter implements TaxRuleTypeFilterInterface

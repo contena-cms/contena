@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Flow\Rule;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\CustomFieldRule;
-use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
 use Contena\Core\Framework\Rule\FlowRule;
 use Contena\Core\Framework\Rule\RuleScope;
 

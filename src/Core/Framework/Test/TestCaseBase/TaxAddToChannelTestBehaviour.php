@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 use Contena\Core\System\Tax\TaxEntity;
 
 trait TaxAddToChannelTestBehaviour

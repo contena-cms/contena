@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Country\Aggregate\CountryState;
 
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
@@ -70,7 +69,6 @@ class CountryStateDefinition extends EntityDefinition
             (new TranslationsAssociationField(CountryStateTranslationDefinition::class, 'country_state_id'))->addFlags(new Required()),
             // Reverse Associations, not available in sales-channel-api
             (new OneToManyAssociationField('userAddresses', UserAddressDefinition::class, 'country_state_id', 'id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('orderAddresses', OrderAddressDefinition::class, 'country_state_id', 'id'))->addFlags(new SetNullOnDelete()),
         ]);
     }
 }

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationDefinition;
-use Contena\Core\System\Unit\UnitDefinition;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

@@ -4,15 +4,12 @@ namespace Contena\Core\Content\Flow\Dispatching;
 
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Cart\AbstractRuleLoader;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
 use Contena\Core\Content\Flow\Dispatching\Struct\ActionSequence;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
 use Contena\Core\Content\Flow\Dispatching\Struct\IfSequence;
 use Contena\Core\Content\Flow\Dispatching\Struct\Sequence;
-use Contena\Core\Content\Flow\Exception\ExecuteSequenceException;
 use Contena\Core\Content\Flow\Extension\FlowExecutorExtension;
 use Contena\Core\Content\Flow\FlowException;
 use Contena\Core\Content\Flow\Rule\UserRuleScope;

@@ -3,9 +3,7 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class TokenFilter extends AbstractTokenFilter
 {

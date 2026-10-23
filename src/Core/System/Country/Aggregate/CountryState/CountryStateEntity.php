@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Country\Aggregate\CountryState;
 
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;

@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Mcp\Feature\McpPromptFeatureDefinition;
 use Contena\Core\Framework\App\Mcp\Feature\McpResourceFeatureDefinition;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolFeatureDefinition;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\McpToolDiscoveryCompilerPass;
 use Contena\Core\Framework\Event\BusinessEventCollector;

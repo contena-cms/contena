@@ -9,7 +9,6 @@ use Contena\Core\Content\Blog\Events\InvalidateBlogCache;
 use Contena\Core\Content\Blog\Events\BlogIndexerEvent;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\Stock\AbstractStockStorage;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -24,7 +23,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Profiling\Profiler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -68,7 +66,7 @@ class BlogIndexer extends EntityIndexer
         private readonly AbstractStockStorage $stockStorage,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly CheapestPriceUpdater $cheapestPriceUpdater,
-        private readonly AbstractBlogStreamUpdater $streamUpdater,
+        private readonly AbstractContentStreamUpdater $streamUpdater,
         private readonly MessageBusInterface $messageBus,
         private readonly ?StatesUpdater $statesUpdater,
         private readonly ClockInterface $clock

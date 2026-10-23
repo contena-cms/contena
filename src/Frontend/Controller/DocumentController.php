@@ -2,13 +2,7 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Checkout\Cart\Exception\UserNotLoggedInException;
-use Contena\Core\System\User\Exception\UserAuthThrottledException;
 use Contena\Core\System\User\Channel\AbstractLogoutRoute;
-use Contena\Core\Checkout\Document\Service\PdfRenderer;
-use Contena\Core\Checkout\DocumentV2\Channel\AbstractDocumentRoute;
-use Contena\Core\Checkout\Order\Exception\GuestNotAuthenticatedException;
-use Contena\Core\Checkout\Order\Exception\WrongGuestCredentialsException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
@@ -72,7 +66,6 @@ class DocumentController extends FrontendController
                         'documentId' => $documentId,
                         'fileType' => $fileType,
                     ],
-                    'loginError' => ($exception instanceof WrongGuestCredentialsException),
                     'waitTime' => ($exception instanceof UserAuthThrottledException) ? $exception->getWaitTime() : '',
                 ]
             );

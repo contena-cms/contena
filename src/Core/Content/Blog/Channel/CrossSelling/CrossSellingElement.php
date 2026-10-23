@@ -2,14 +2,12 @@
 
 namespace Contena\Core\Content\Blog\Channel\CrossSelling;
 
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingEntity;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
 class CrossSellingElement extends Struct
 {
-    protected BlogCrossSellingEntity $crossSelling;
 
     protected BlogCollection $blogs;
 

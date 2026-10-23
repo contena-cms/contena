@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Blog\Events\BlogStatesBeforeChangeEvent;
 use Contena\Core\Content\Blog\Events\BlogStatesChangedEvent;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\State;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\Feature;
@@ -95,7 +94,6 @@ class StatesUpdater
         foreach ($event->getUpdatedStates() as $updatedStates) {
             $query->execute([
                 'states' => json_encode($updatedStates->getNewStates(), \JSON_THROW_ON_ERROR),
-                'type' => \in_array(State::IS_DOWNLOAD, $updatedStates->getNewStates(), true) ? BlogDefinition::TYPE_DIGITAL : BlogDefinition::TYPE_PHYSICAL,
                 'id' => Uuid::fromHexToBytes($updatedStates->getId()),
                 'version' => Uuid::fromHexToBytes($context->getVersionId()),
             ]);

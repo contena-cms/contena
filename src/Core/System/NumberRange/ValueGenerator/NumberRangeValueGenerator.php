@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\NumberRangeEvents;
 use Contena\Core\System\NumberRange\NumberRangeException;

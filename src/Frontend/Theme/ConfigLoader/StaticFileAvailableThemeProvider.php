@@ -6,7 +6,6 @@ namespace Contena\Frontend\Theme\ConfigLoader;
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class StaticFileAvailableThemeProvider extends AbstractAvailableThemeProvider
 {

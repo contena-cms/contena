@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\App\Url;
 
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Terminal;

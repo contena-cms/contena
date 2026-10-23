@@ -16,7 +16,6 @@ use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigCard;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigElement;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigTab;
-use Contena\Core\System\SystemConfig\Exception\BundleConfigNotFoundException;
 use Contena\Core\System\SystemConfig\SystemConfigException;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;

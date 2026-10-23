@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Service;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\GuzzleException;
 use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Psr\Http\Message\ResponseInterface;

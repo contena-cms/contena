@@ -3,12 +3,6 @@
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeCollection;
-use Contena\Core\Checkout\Order\OrderStates;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -19,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
 use Contena\Core\System\Tax\TaxCollection;

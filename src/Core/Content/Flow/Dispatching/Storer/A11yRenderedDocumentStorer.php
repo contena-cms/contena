@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
-use Contena\Core\Checkout\DocumentV2\DocumentDefinition;
-use Contena\Core\Checkout\DocumentV2\DocumentFormat;
-use Contena\Core\Checkout\DocumentV2\Service\DocumentFileResolver;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
 use Contena\Core\Content\Shared\MailFlow\DocumentResolver;

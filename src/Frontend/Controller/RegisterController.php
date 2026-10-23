@@ -2,11 +2,8 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Exception\UserAlreadyConfirmedException;
-use Contena\Core\System\User\Exception\UserNotFoundByHashException;
 use Contena\Core\System\User\Channel\AbstractRegisterConfirmRoute;
 use Contena\Core\System\User\Channel\AbstractRegisterRoute;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
@@ -20,12 +17,10 @@ use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\QueryDataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Frontend\Controller\Exception\FrontendException;
 use Contena\Frontend\Framework\AffiliateTracking\AffiliateTrackingListener;
 use Contena\Frontend\Framework\Guard\DoubleSubmitGuard;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
@@ -34,8 +29,6 @@ use Contena\Frontend\Page\Account\UserGroupRegistration\AbstractUserGroupRegistr
 use Contena\Frontend\Page\Account\UserGroupRegistration\UserGroupRegistrationPageLoadedHook;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Frontend\Page\Account\Register\AccountRegisterPageLoadedHook;
-use Contena\Frontend\Page\Checkout\Register\CheckoutRegisterPageLoadedHook;
-use Contena\Frontend\Page\Checkout\Register\CheckoutRegisterPageLoader;
 use Contena\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
 use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
 use Symfony\Component\HttpFoundation\Request;

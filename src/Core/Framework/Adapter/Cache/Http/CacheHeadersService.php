@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\Extension\CacheHashRequiredExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;

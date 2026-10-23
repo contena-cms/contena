@@ -2,13 +2,7 @@
 
 namespace Contena\Core\Framework\Deprecation;
 
-use Contena\Core\Framework\Adapter\Asset\AssetService;
-use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Notification\Api\NotificationController;
-use Contena\Core\Framework\Notification\NotificationCollection;
-use Contena\Core\Framework\Notification\NotificationDefinition;
-use Contena\Core\Framework\Notification\NotificationEntity;
 
 /**
  * @internal
@@ -21,12 +15,6 @@ final class ClassAliasRegistry
      * @var array<non-empty-string, class-string>
      */
     public const ALIASES = [
-        'Contena\Core\Framework\Plugin\Util\AssetService' => AssetService::class,
-        'Contena\Administration\Controller\NotificationController' => NotificationController::class,
-        'Contena\Administration\Notification\NotificationCollection' => NotificationCollection::class,
-        'Contena\Administration\Notification\NotificationDefinition' => NotificationDefinition::class,
-        'Contena\Administration\Notification\NotificationEntity' => NotificationEntity::class,
-        'Contena\Elasticsearch\Blog\SearchConfigLoader' => SearchConfigLoader::class,
     ];
 
     /**

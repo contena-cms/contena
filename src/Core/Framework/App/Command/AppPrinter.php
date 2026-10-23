@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\Command;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\AdminUserAbortedCommandException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Permission\Permissions;
 use Contena\Core\Framework\Context;

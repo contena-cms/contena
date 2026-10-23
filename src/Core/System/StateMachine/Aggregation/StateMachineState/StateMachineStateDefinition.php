@@ -2,11 +2,6 @@
 
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineState;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCapture\OrderTransactionCaptureDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCaptureRefund\OrderTransactionCaptureRefundDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;

@@ -4,7 +4,6 @@ namespace Contena\Core\Service\DTO;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Service\State;
 
 /**
  * @internal

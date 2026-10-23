@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Twig\TokenParser\ImportTokenParser;
 use Contena\Core\Framework\Adapter\Twig\TokenParser\UseTokenParser;
 use Contena\Core\Framework\Log\Package;
 use Twig\Environment;
-use Twig\Error\LoaderError;
 use Twig\Extension\AbstractExtension;
 use Twig\Extension\CoreExtension;
 use Twig\Markup;

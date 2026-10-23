@@ -2,10 +2,6 @@
 
 namespace Contena\Frontend\Pagelet\Footer;
 
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\Channel\AbstractPaymentMethodRoute;
-use Contena\Core\Checkout\Shipping\Channel\AbstractShippingMethodRoute;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 use Contena\Core\Content\Category\Tree\TreeItem;

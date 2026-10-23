@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Event;
 
-use Contena\Core\Checkout\Cart\Event\CartMergedEvent;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -26,7 +25,6 @@ class CartMergedSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            CartMergedEvent::class => 'addCartMergedNoticeFlash',
         ];
     }
 

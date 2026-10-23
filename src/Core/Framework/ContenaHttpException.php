@@ -4,7 +4,6 @@ namespace Contena\Core\Framework;
 
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @phpstan-type ErrorData array{

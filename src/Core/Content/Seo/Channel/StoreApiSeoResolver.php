@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\Channel;
 
-use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface as SeoUrlRouteConfigRoute;

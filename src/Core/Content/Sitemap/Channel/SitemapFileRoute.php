@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Sitemap\Channel;
 
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Content\Sitemap\Extension\SitemapFileExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;

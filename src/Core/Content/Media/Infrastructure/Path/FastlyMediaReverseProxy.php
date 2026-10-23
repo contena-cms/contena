@@ -3,8 +3,6 @@
 namespace Contena\Core\Content\Media\Infrastructure\Path;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ServerException;
-use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;

@@ -5,9 +5,7 @@ namespace Contena\Core\Framework\App\Lifecycle\Registration;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Manifest\Manifest;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreClient;
 

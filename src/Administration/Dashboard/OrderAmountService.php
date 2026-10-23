@@ -3,8 +3,6 @@
 namespace Contena\Administration\Dashboard;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\Price\CashRounding;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
@@ -61,8 +59,6 @@ readonly class OrderAmountService
                 INNER JOIN state_machine ON state.state_machine_id = state_machine.id
                 WHERE state_machine.technical_name = :state_machine AND state.technical_name = :state
             ', [
-                'state_machine' => OrderTransactionStates::STATE_MACHINE,
-                'state' => OrderTransactionStates::STATE_PAID,
             ]);
 
             $query->innerJoin('`order`', 'order_transaction', 'transactions', 'transactions.order_id = `order`.id AND transactions.version_id = `order`.version_id AND transactions.state_id = :paidId');

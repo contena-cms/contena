@@ -8,7 +8,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Theme\AbstractScssCompiler;
-use Contena\Frontend\Theme\Exception\ThemeConfigException;
 use Contena\Frontend\Theme\ThemeService;
 use Contena\Frontend\Theme\Validator\SCSSValidator;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;

@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Lifecycle\Parameters\AppUpdateParameters;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
  * @internal

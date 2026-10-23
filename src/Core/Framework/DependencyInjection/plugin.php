@@ -4,13 +4,11 @@ namespace Contena\Core\Framework\DependencyInjection;
 
 use Composer\Autoload\ClassLoader;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Framework\Adapter\Asset\AssetService;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationDefinition;
 use Contena\Core\Framework\Plugin\BundleConfigGenerator;
 use Contena\Core\Framework\Plugin\Command\BundleDumpCommand;
@@ -287,7 +285,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(
         'Contena\Core\Framework\Plugin\Util\AssetService',
-        AssetService::class,
     )->deprecate('contena/core', '6.7.15.0', 'The "%alias_id%" service alias is deprecated and will be removed in v6.8.0. Use Contena\Core\Framework\Adapter\Asset\AssetService instead.');
 
     // Requirement

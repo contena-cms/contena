@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write\Command;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\ImpossibleWriteOrderException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\NoConstraint;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;

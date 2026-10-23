@@ -12,6 +12,6 @@ use Contena\Core\Framework\Log\Package;
  *
  * @codeCoverageIgnore
  */
-class EmptyBlogStreamException extends NoFilterException
+class EmptyContentStreamException extends NoFilterException
 {
 }

@@ -20,7 +20,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntitySearcherSearchedEvent;
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntitySearcherSearchEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
-use Contena\Elasticsearch\Framework\Exception\EmptyQueryException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ElasticsearchEntitySearcher implements EntitySearcherInterface

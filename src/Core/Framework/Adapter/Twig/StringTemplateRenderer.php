@@ -10,8 +10,6 @@ use Contena\Core\Framework\Util\Hasher;
 use Symfony\Component\Filesystem\Path;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;
-use Twig\Error\Error;
-use Twig\Error\SyntaxError;
 use Twig\Extension\CoreExtension;
 use Twig\Extension\EscaperExtension;
 use Twig\Loader\ArrayLoader;

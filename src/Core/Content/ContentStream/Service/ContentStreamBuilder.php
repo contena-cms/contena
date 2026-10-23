@@ -9,14 +9,13 @@ use Contena\Core\Content\ContentStream\ContentStreamException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 
-class ContentStreamBuilder extends AbstractBlogStreamBuilder implements ContentStreamBuilderInterface
+class ContentStreamBuilder extends AbstractContentStreamBuilder implements ContentStreamBuilderInterface
 {
     /**
      * @internal
@@ -40,13 +39,13 @@ class ContentStreamBuilder extends AbstractBlogStreamBuilder implements ContentS
     }
 
     /**
-     * @deprecated tag:v6.8.0 - Will be removed, use AbstractBlogStreamBuilder::enrichCriteria instead.
+     * @deprecated tag:v6.8.0 - Will be removed, use AbstractContentStreamBuilder::enrichCriteria instead.
      */
     public function buildFilters(string $id, Context $context): array
     {
         Feature::triggerDeprecationOrThrow(
             'v6.8.0.0',
-            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0', 'AbstractBlogStreamBuilder::enrichCriteria')
+            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0', 'AbstractContentStreamBuilder::enrichCriteria')
         );
 
         return $this->parseFilters($this->loadStream($id, $context), $id);

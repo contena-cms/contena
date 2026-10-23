@@ -3,15 +3,12 @@
 namespace Contena\Core\Framework\App\Context\Payload;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use GuzzleHttp\Exception\RequestException;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Context\Gateway\AppContextGatewayResponse;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Util\Exception\JsonDecodingException;
 use Contena\Core\Framework\Util\Json;
 
 /**

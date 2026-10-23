@@ -3,10 +3,8 @@
 namespace Contena\Core\Content\ContentStream;
 
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinition;
 use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\BlogExport\BlogExportDefinition;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\ContentStreamTranslationDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -82,7 +80,6 @@ class ContentStreamDefinition extends EntityDefinition
             (new TranslationsAssociationField(ContentStreamTranslationDefinition::class, 'content_stream_id'))->addFlags(new Required()),
             (new OneToManyAssociationField('filters', ContentStreamFilterDefinition::class, 'content_stream_id'))->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('blogCrossSellings', BlogCrossSellingDefinition::class, 'content_stream_id'),
-            (new OneToManyAssociationField('blogExports', BlogExportDefinition::class, 'content_stream_id', 'id'))->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('categories', CategoryDefinition::class, 'content_stream_id'),
 
             (new ManyToManyAssociationField('blogs', BlogDefinition::class, ContentStreamMappingDefinition::class, 'content_stream_id', 'blog_id'))->addFlags(new CascadeDelete())->setDescription('Blogs this blog stream includes'),

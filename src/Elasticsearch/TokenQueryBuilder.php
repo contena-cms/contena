@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 

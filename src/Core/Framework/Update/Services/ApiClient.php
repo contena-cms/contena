@@ -6,7 +6,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Update\Struct\Version;
-use Symfony\Component\HttpClient\Exception\ClientException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 

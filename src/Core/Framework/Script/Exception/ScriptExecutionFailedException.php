@@ -6,7 +6,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptException;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 
 class ScriptExecutionFailedException extends ScriptException
 {

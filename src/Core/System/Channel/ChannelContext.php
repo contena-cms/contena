@@ -2,17 +2,9 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnitTypeEnum;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Adapter\Twig\SwTwigFunction;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
@@ -22,7 +14,6 @@ use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Tax\TaxCollection;
-use Symfony\Component\Lock\LockInterface;
 
 class ChannelContext extends Struct
 {
@@ -42,13 +33,6 @@ class ChannelContext extends Struct
 
     protected ?string $imitatingUserId = null;
 
-    protected MeasurementUnits $measurementSystem;
-
-    /**
-     * @internal
-     */
-    protected ?LockInterface $cartLock = null;
-
     /**
      * @internal
      *
@@ -62,23 +46,12 @@ class ChannelContext extends Struct
         protected CurrencyEntity $currency,
         protected UserGroupEntity $currentUserGroup,
         protected TaxCollection $taxRules,
-        protected PaymentMethodEntity $paymentMethod,
-        protected ShippingMethodEntity $shippingMethod,
-        protected ShippingLocation $shippingLocation,
         protected ?UserEntity $user,
         protected CashRoundingConfig $itemRounding,
         protected CashRoundingConfig $totalRounding,
         protected LanguageInfo $languageInfo,
         protected array $areaRuleIds = [],
-        ?MeasurementUnits $measurementSystem = null,
     ) {
-        $this->measurementSystem = $measurementSystem ?? new MeasurementUnits(
-            MeasurementUnits::DEFAULT_MEASUREMENT_SYSTEM,
-            [
-                MeasurementUnitTypeEnum::LENGTH->value => MeasurementUnits::DEFAULT_LENGTH_UNIT,
-                MeasurementUnitTypeEnum::WEIGHT->value => MeasurementUnits::DEFAULT_WEIGHT_UNIT,
-            ]
-        );
     }
 
     public function getCurrentUserGroup(): UserGroupEntity
@@ -101,51 +74,9 @@ class ChannelContext extends Struct
         return $this->taxRules;
     }
 
-    /**
-     * Get the tax rules depend on the user billing address
-     * respectively the shippingLocation if there is no user
-     */
-    public function buildTaxRules(string $taxId): TaxRuleCollection
-    {
-        $tax = $this->taxRules->get($taxId);
-
-        if ($tax?->getRules() === null) {
-            throw ChannelException::taxNotFound($taxId);
-        }
-
-        $firstTaxRule = $tax->getRules()->first();
-
-        if ($firstTaxRule) {
-            // @codeCoverageIgnoreStart - This is covered randomly
-            return new TaxRuleCollection([
-                new TaxRule($firstTaxRule->getTaxRate(), 100),
-            ]);
-            // @codeCoverageIgnoreEnd
-        }
-
-        return new TaxRuleCollection([
-            new TaxRule($tax->getTaxRate(), 100),
-        ]);
-    }
-
     public function getUser(): ?UserEntity
     {
         return $this->user;
-    }
-
-    public function getPaymentMethod(): PaymentMethodEntity
-    {
-        return $this->paymentMethod;
-    }
-
-    public function getShippingMethod(): ShippingMethodEntity
-    {
-        return $this->shippingMethod;
-    }
-
-    public function getShippingLocation(): ShippingLocation
-    {
-        return $this->shippingLocation;
     }
 
     public function getContext(): Context
@@ -460,7 +391,8 @@ class ChannelContext extends Struct
 
     public function getCountryId(): string
     {
-        return $this->shippingLocation->getCountry()->getId();
+        // Contact address country of the current user, falling back to the system default.
+        return $this->user?->getActiveBillingAddress()?->getCountryId() ?? Defaults::COUNTRY;
     }
 
     public function getUserGroupId(): string
@@ -476,31 +408,5 @@ class ChannelContext extends Struct
     public function setLanguageInfo(LanguageInfo $languageInfo): void
     {
         $this->languageInfo = $languageInfo;
-    }
-
-    public function getMeasurementSystem(): MeasurementUnits
-    {
-        return $this->measurementSystem;
-    }
-
-    public function setMeasurementSystem(MeasurementUnits $measurementSystem): void
-    {
-        $this->measurementSystem = $measurementSystem;
-    }
-
-    /**
-     * @internal
-     */
-    public function getCartLock(): ?LockInterface
-    {
-        return $this->cartLock;
-    }
-
-    /**
-     * @internal
-     */
-    public function setCartLock(?LockInterface $cartLock): void
-    {
-        $this->cartLock = $cartLock;
     }
 }

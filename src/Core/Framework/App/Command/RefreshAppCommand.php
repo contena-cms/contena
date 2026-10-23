@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\App\Command;
 
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\AppService;
-use Contena\Core\Framework\App\Exception\AppValidationException;
-use Contena\Core\Framework\App\Exception\AdminUserAbortedCommandException;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
 use Contena\Core\Framework\App\Lifecycle\RefreshableAppDryRun;
 use Contena\Core\Framework\App\Manifest\Manifest;

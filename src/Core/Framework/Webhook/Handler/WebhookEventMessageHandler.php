@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Handler;
 
-use GuzzleHttp\Exception\BadResponseException;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;

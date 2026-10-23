@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Services;
 
-use GuzzleHttp\Exception\ClientException;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToWriteFile;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
@@ -19,7 +18,6 @@ use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Event\FirstRunWizardFinishedEvent;
 use Contena\Core\Framework\Store\Event\FirstRunWizardStartedEvent;
 use Contena\Core\Framework\Store\Event\ContenaAccountLoginEvent;
-use Contena\Core\Framework\Store\Exception\StoreLicenseDomainMissingException;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\AccessTokenStruct;
 use Contena\Core\Framework\Store\Struct\DomainVerificationRequestStruct;
@@ -31,7 +29,6 @@ use Contena\Core\Framework\Store\Struct\PluginCategoryStruct;
 use Contena\Core\Framework\Store\Struct\PluginRecommendationCollection;
 use Contena\Core\Framework\Store\Struct\PluginRegionCollection;
 use Contena\Core\Framework\Store\Struct\PluginRegionStruct;
-use Contena\Core\Framework\Store\Struct\ShopUserTokenStruct;
 use Contena\Core\Framework\Store\Struct\StorePluginStruct;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigCollection;

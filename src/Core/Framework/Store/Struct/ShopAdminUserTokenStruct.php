@@ -8,7 +8,7 @@ use Contena\Core\Framework\Struct\Struct;
 /**
  * @codeCoverageIgnore
  */
-class ShopUserTokenStruct extends Struct
+class ShopAdminUserTokenStruct extends Struct
 {
     public function __construct(
         protected string $token,

@@ -7,7 +7,6 @@ use Contena\Core\Framework\Api\Context\ContextSource;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Symfony\Component\HttpClient\Exception\JsonException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 

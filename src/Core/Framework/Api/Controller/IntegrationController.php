@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Api\Controller;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
-use Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException;
 use Contena\Core\Framework\Api\Response\ResponseFactoryInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -12,7 +11,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Integration\IntegrationCollection;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;

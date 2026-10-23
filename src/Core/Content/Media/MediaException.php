@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Media;
 
-use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;

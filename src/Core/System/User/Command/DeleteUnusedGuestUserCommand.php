@@ -15,7 +15,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     name: 'user:delete-unused-guests',
     description: 'Delete unused guest users',
 )]
-class DeleteUnusedGuestUsersCommand extends Command
+class DeleteUnusedGuestUserCommand extends Command
 {
     /**
      * @internal

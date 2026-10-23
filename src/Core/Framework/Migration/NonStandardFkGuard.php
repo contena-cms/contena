@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Migration;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\DriverException;
 use Contena\Core\Framework\Log\Package;
 
 /**

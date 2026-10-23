@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
@@ -13,7 +12,6 @@ use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Util\Hasher;
-use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\TestDefaults;

@@ -6,8 +6,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\ServiceException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ChunkInterface;
-use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 use Symfony\Contracts\Service\ResetInterface;

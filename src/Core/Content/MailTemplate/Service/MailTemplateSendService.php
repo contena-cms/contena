@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\MailTemplate\Service;
 
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Mail\Payload\MailPayload;
 use Contena\Core\Content\Mail\Service\AbstractMailService;
 use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;

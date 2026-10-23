@@ -3,8 +3,6 @@
 namespace Contena\Core\Content\Property\Aggregate\PropertyGroupOption;
 
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingEntity;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOptionTranslation\PropertyGroupOptionTranslationCollection;
 use Contena\Core\Content\Property\PropertyGroupEntity;

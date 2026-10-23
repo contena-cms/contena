@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\ParameterType;
 use Doctrine\DBAL\Query\QueryBuilder as DbalQueryBuilderAlias;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;

@@ -3,15 +3,8 @@
 namespace Contena\Core\System\Channel\Context;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
-use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;

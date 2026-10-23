@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\ContentStream;
 
-use Contena\Core\Content\ContentStream\Exception\EmptyBlogStreamException;
-use Contena\Core\Content\ContentStream\Exception\NoFilterException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
@@ -21,8 +18,8 @@ class ContentStreamException extends HttpException
         return new NoFilterException($id);
     }
 
-    public static function emptyBlogStream(string $id): EmptyBlogStreamException
+    public static function emptyBlogStream(string $id): EmptyContentStreamException
     {
-        return new EmptyBlogStreamException($id);
+        return new EmptyContentStreamException($id);
     }
 }

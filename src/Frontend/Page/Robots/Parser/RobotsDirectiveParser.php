@@ -9,7 +9,6 @@ use Contena\Frontend\Page\Robots\Event\RobotsDirectiveParsingEvent;
 use Contena\Frontend\Page\Robots\Event\RobotsUnknownDirectiveEvent;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
-use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class RobotsDirectiveParser
@@ -94,7 +93,7 @@ class RobotsDirectiveParser
                 // If we have a current block with directives, save it
                 if ($currentUserAgents !== [] && $currentDirectives !== []) {
                     foreach ($currentUserAgents as $admin_userAgent) {
-                        $admin_userAgentBlocks[] = new RobotsUserAgentBlock($admin_userAgent, $currentDirectives);
+                        $admin_userAgentBlocks[] = new RobotsAdminUserAgentBlock($admin_userAgent, $currentDirectives);
                     }
                     // Reset for new block
                     $currentUserAgents = [];
@@ -131,7 +130,7 @@ class RobotsDirectiveParser
         // Save last block if any
         if ($currentUserAgents !== [] && $currentDirectives !== []) {
             foreach ($currentUserAgents as $admin_userAgent) {
-                $admin_userAgentBlocks[] = new RobotsUserAgentBlock($admin_userAgent, $currentDirectives);
+                $admin_userAgentBlocks[] = new RobotsAdminUserAgentBlock($admin_userAgent, $currentDirectives);
             }
         }
 

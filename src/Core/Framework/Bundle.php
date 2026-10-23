@@ -6,7 +6,6 @@ use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\BusinessEventRegisterCompilerPass;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Kernel;
 use Symfony\Component\Config\FileLocator;

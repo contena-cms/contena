@@ -3,7 +3,6 @@
 namespace Contena\Core\System\CustomEntity;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;

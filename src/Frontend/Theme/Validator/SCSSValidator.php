@@ -7,7 +7,6 @@ use ScssPhp\ScssPhp\OutputStyle;
 use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Theme\AbstractScssCompiler;
 use Contena\Frontend\Theme\CompilerConfiguration;
-use Contena\Frontend\Theme\Exception\ThemeException;
 
 class SCSSValidator
 {

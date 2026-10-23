@@ -3,24 +3,13 @@
 namespace Contena\Core\Content\Blog;
 
 use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSellingAssignedBlogs\BlogCrossSellingAssignedBlogsDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCustomFieldSet\BlogCustomFieldSetDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogDownload\BlogDownloadDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogFeatureSet\BlogFeatureSetDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogOption\BlogOptionDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogProperty\BlogPropertyDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordDefinition;
 use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
@@ -73,11 +62,9 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
-use Contena\Core\System\DeliveryTime\DeliveryTimeDefinition;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\Tax\TaxDefinition;
-use Contena\Core\System\Unit\UnitDefinition;
 
 class BlogDefinition extends EntityDefinition
 {
@@ -154,14 +141,10 @@ class BlogDefinition extends EntityDefinition
             (new ParentFkField(self::class))->addFlags(new ApiAware()),
             (new ReferenceVersionField(self::class, 'parent_version_id'))->addFlags(new ApiAware(), new Required()),
 
-            (new FkField('blog_manufacturer_id', 'manufacturerId', BlogManufacturerDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of the manufacturer.'),
-            (new ReferenceVersionField(BlogManufacturerDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required()),
             (new FkField('unit_id', 'unitId', UnitDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of the unit.'),
             (new FkField('tax_id', 'taxId', TaxDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required())->setDescription('Unique identity of tax.'),
             (new FkField('blog_media_id', 'coverId', BlogMediaDefinition::class))->addFlags(new ApiAware(), new Inherited(), new NoConstraint())->setDescription('Unique identity of a BlogMedia item used as blog cover.'),
             (new ReferenceVersionField(BlogMediaDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required()),
-            (new FkField('delivery_time_id', 'deliveryTimeId', DeliveryTimeDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of delivery time.'),
-            (new FkField('blog_feature_set_id', 'featureSetId', BlogFeatureSetDefinition::class))->addFlags(new Inherited())->setDescription('Unique identity of feature set.'),
             (new FkField('canonical_product_id', 'canonicalBlogId', self::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of canonical blog.'),
             (new ReferenceVersionField(self::class, 'canonical_product_version_id'))->addFlags(new ApiAware(), new Inherited(), new Required()),
             (new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of CMS page.'),
@@ -212,7 +195,6 @@ class BlogDefinition extends EntityDefinition
             (new ChildCountField())->addFlags(new ApiAware()),
             (new BoolField('custom_field_set_selection_active', 'customFieldSetSelectionActive'))->addFlags(new Inherited())->setDescription('When boolean value is `true`, the customFieldSetSelection for blogs gets enabled.'),
             (new IntField('sales', 'sales'))->addFlags(new ApiAware(), new WriteProtected())->setDescription('Frequency of the blog sales.'),
-            (new OneToManyAssociationField('downloads', BlogDownloadDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Downloadable files associated with the blog (e.g., manuals, digital content)'),
 
             (new TranslatedField('metaDescription'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('name', true))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
@@ -232,11 +214,7 @@ class BlogDefinition extends EntityDefinition
             (new ParentAssociationField(self::class, 'id'))->addFlags(new ApiAware())->setDescription('Unique identity of the blog.'),
             (new ChildrenAssociationField(self::class))->addFlags(new ApiAware())->setDescription('Blog variants that inherit from this parent blog'),
 
-            (new ManyToOneAssociationField('deliveryTime', 'delivery_time_id', DeliveryTimeDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Estimated delivery time for the blog'),
-
             (new ManyToOneAssociationField('tax', 'tax_id', TaxDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Tax configuration (rate and calculation rules)'),
-
-            (new ManyToOneAssociationField('manufacturer', 'blog_manufacturer_id', BlogManufacturerDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Blog manufacturer or brand information'),
 
             (new ManyToOneAssociationField('unit', 'unit_id', UnitDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Blog unit of measure (e.g., piece, liter, kg)'),
 
@@ -246,39 +224,21 @@ class BlogDefinition extends EntityDefinition
 
             (new ManyToOneAssociationField('guaranteeTermsMedia', 'guarantee_terms_media_id', MediaDefinition::class, 'id', false))->addFlags(new ApiAware(), new Inherited())->setDescription('Document with the producer commercial durability guarantee terms'),
 
-            (new ManyToOneAssociationField('featureSet', 'blog_feature_set_id', BlogFeatureSetDefinition::class, 'id'))->addFlags(new Inherited()),
-
             (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new ApiAware(), new Inherited())->setDescription('Custom CMS page layout for the blog detail page'),
 
             (new ManyToOneAssociationField('canonicalBlog', 'canonical_product_id', BlogDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Canonical blog reference for variant consolidation and SEO purposes'),
 
-            (new OneToManyAssociationField('prices', BlogPriceDefinition::class, 'blog_id'))->addFlags(new CascadeDelete(), new Inherited()),
-
             (new OneToManyAssociationField('media', BlogMediaDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Blog images and media gallery'),
-
-            (new OneToManyAssociationField('crossSellings', BlogCrossSellingDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Cross-selling configurations (related blogs, accessories, similar items)'),
-
-            (new OneToManyAssociationField('crossSellingAssignedBlogs', BlogCrossSellingAssignedBlogsDefinition::class, 'blog_id'))->addFlags(new CascadeDelete()),
-
-            (new OneToManyAssociationField('configuratorSettings', BlogConfiguratorSettingDefinition::class, 'blog_id', 'id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Variant configurator settings defining available options for blog variants'),
 
             (new OneToManyAssociationField('visibilities', BlogVisibilityDefinition::class, 'blog_id'))->addFlags(new CascadeDelete(), new Inherited()),
 
             (new OneToManyAssociationField('searchKeywords', BlogSearchKeywordDefinition::class, 'blog_id'))->addFlags(new CascadeDelete(false)),
 
-            (new OneToManyAssociationField('blogReviews', BlogReviewDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete(false))->setDescription('User reviews and ratings for the blog'),
-
             (new OneToManyAssociationField('mainCategories', MainCategoryDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Primary category assignments per sales channel for SEO and navigation'),
 
             (new OneToManyAssociationField('seoUrls', SeoUrlDefinition::class, 'foreign_key'))->addFlags(new ApiAware())->setDescription('SEO-friendly URLs for the blog across different sales channels'),
 
-            (new OneToManyAssociationField('orderLineItems', OrderLineItemDefinition::class, 'blog_id'))->addFlags(new SetNullOnDelete()),
-
             (new OneToManyAssociationField('wishlists', UserWishlistBlogDefinition::class, 'blog_id'))->addFlags(new CascadeDelete()),
-
-            (new ManyToManyAssociationField('options', PropertyGroupOptionDefinition::class, BlogOptionDefinition::class, 'blog_id', 'property_group_option_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Blog variant options (e.g., size, color) that define different variants'),
-
-            (new ManyToManyAssociationField('properties', PropertyGroupOptionDefinition::class, BlogPropertyDefinition::class, 'blog_id', 'property_group_option_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Blog properties and characteristics for filtering'),
 
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, BlogCategoryDefinition::class, 'blog_id', 'category_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Categories this blog is assigned to'),
 

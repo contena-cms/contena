@@ -25,8 +25,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Util\HtmlSanitizer;
-use Contena\Core\System\Salutation\AbstractSalutationsSorter;
-use Contena\Core\System\Salutation\Channel\SalutationRoute;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 

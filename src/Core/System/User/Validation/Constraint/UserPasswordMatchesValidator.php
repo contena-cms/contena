@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Validation\Constraint;
 
-use Contena\Core\System\User\Exception\BadCredentialsException;
 use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Validator\Constraint;

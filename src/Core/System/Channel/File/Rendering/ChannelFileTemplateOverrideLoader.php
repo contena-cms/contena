@@ -5,7 +5,6 @@ namespace Contena\Core\System\Channel\File\Rendering;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
 use Symfony\Contracts\Service\ResetInterface;
-use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
 

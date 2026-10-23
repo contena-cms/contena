@@ -6,8 +6,6 @@ use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\NumberRange\Exception\IncrementStorageNotFoundException;
-use Contena\Core\System\NumberRange\Exception\NoConfigurationException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

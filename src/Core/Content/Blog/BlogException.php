@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Blog;
 
-use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
-use Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption;
-use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;

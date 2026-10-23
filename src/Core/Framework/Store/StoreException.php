@@ -2,20 +2,11 @@
 
 namespace Contena\Core\Framework\Store;
 
-use GuzzleHttp\Exception\ClientException;
-use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceUserException;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\PluginNotAZipFileException;
-use Contena\Core\Framework\Store\Exception\ExtensionNotFoundException;
-use Contena\Core\Framework\Store\Exception\ExtensionUpdateRequiresConsentAffirmationException;
-use Contena\Core\Framework\Store\Exception\ShopSecretInvalidException;
-use Contena\Core\Framework\Store\Exception\StoreApiException;
-use Contena\Core\Framework\Store\Exception\StoreInvalidCredentialsException;
-use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
 use Symfony\Component\HttpFoundation\Response;
 
 class StoreException extends HttpException
@@ -197,10 +188,10 @@ class StoreException extends HttpException
     }
 
     #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function invalidContextSourceUser(string $contextSource): self|InvalidContextSourceUserException
+    public static function invalidContextSourceUser(string $contextSource): self|InvalidContextSourceAdminUserException
     {
         if (!Feature::isActive('v6.8.0.0')) {
-            return new InvalidContextSourceUserException($contextSource);
+            return new InvalidContextSourceAdminUserException($contextSource);
         }
 
         return new self(

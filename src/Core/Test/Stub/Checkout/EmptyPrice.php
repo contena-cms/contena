@@ -2,13 +2,6 @@
 
 namespace Contena\Core\Test\Stub\Checkout;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\ListPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\ReferencePrice;
-use Contena\Core\Checkout\Cart\Price\Struct\RegulationPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-
 class EmptyPrice extends CalculatedPrice
 {
     public function __construct(

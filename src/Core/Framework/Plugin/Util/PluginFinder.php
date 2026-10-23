@@ -8,10 +8,7 @@ use Composer\Package\CompletePackageInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Composer\Factory;
 use Contena\Core\Framework\Plugin\Composer\PackageProvider;
-use Contena\Core\Framework\Plugin\Exception\ExceptionCollection;
-use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;
 use Contena\Core\Framework\Plugin\Struct\PluginFromFileSystemStruct;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 
 class PluginFinder

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Update\Services;
 
-use GuzzleHttp\Exception\ClientException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

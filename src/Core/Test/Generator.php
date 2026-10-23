@@ -3,26 +3,9 @@
 namespace Contena\Core\Test;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Delivery\Struct\Delivery;
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryCollection;
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryDate;
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryInformation;
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryPosition;
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryPositionCollection;
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Payment\Cart\PaymentHandler\DefaultPayment;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
@@ -70,9 +53,6 @@ class Generator extends TestCase
         ?CurrencyEntity $currency = null,
         ?UserGroupEntity $currentUserGroup = null,
         ?TaxCollection $taxRules = null,
-        ?PaymentMethodEntity $paymentMethod = null,
-        ?ShippingMethodEntity $shippingMethod = null,
-        ?ShippingLocation $shippingLocation = null,
         ?UserEntity $user = null,
         ?CashRoundingConfig $itemRounding = null,
         ?CashRoundingConfig $totalRounding = null,
@@ -118,54 +98,6 @@ class Generator extends TestCase
             $taxRules = new TaxCollection([$tax]);
         }
 
-        if (!$paymentMethod) {
-            $paymentMethod = new PaymentMethodEntity();
-            $paymentMethod->setId(self::PAYMENT_METHOD);
-            $paymentMethod->setHandlerIdentifier(DefaultPayment::class);
-            $paymentMethod->setName('Generated Payment');
-            $paymentMethod->setActive(true);
-        }
-
-        $channel->setPaymentMethodIds([$paymentMethod->getId()]);
-        $channel->setPaymentMethodId($paymentMethod->getId());
-        $channel->setPaymentMethod($paymentMethod);
-
-        if (!$shippingMethod) {
-            $shippingMethod = new ShippingMethodEntity();
-            $shippingMethod->setId(self::SHIPPING_METHOD);
-            $shippingMethod->setName('Generated Shipping');
-            $shippingMethod->setActive(true);
-        }
-
-        $channel->setShippingMethodId($shippingMethod->getId());
-        $channel->setShippingMethod($shippingMethod);
-
-        if (!$shippingLocation) {
-            if (!$country) {
-                $country = new CountryEntity();
-                $country->setId(self::COUNTRY);
-            }
-
-            if (!$countryState) {
-                $countryState = new CountryStateEntity();
-                $countryState->setId(self::COUNTRY_STATE);
-                $countryState->setCountryId($country->getId());
-                $countryState->setCountry($country);
-            }
-
-            if (!$userAddress) {
-                $userAddress = new UserAddressEntity();
-                $userAddress->setId(self::CUSTOMER_ADDRESS);
-            }
-
-            $userAddress->setCountryId($country->getId());
-            $userAddress->setCountry($country);
-            $userAddress->setCountryStateId($countryState->getId());
-            $userAddress->setCountryState($countryState);
-
-            $shippingLocation = ShippingLocation::createFromAddress($userAddress);
-        }
-
         if (!$user) {
             $user = new UserEntity();
             $user->setId(self::CUSTOMER);
@@ -192,9 +124,6 @@ class Generator extends TestCase
             $currency,
             $currentUserGroup,
             $taxRules,
-            $paymentMethod,
-            $shippingMethod,
-            $shippingLocation,
             $user,
             $itemRounding,
             $totalRounding,
@@ -207,68 +136,6 @@ class Generator extends TestCase
         }
 
         return $channelContext;
-    }
-
-    public static function createCart(): Cart
-    {
-        $cart = new Cart('test');
-        $cart->setLineItems(
-            new LineItemCollection([
-                (new LineItem('A', 'blog', 'A', 27))
-                    ->setPrice(new CalculatedPrice(10, 270, new CalculatedTaxCollection(), new TaxRuleCollection(), 27)),
-                (new LineItem('B', 'test', 'B', 5))
-                    ->setGood(false)
-                    ->setPrice(new CalculatedPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection())),
-            ])
-        );
-        $cart->setPrice(
-            new CartPrice(
-                275.0,
-                275.0,
-                0,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-                CartPrice::TAX_STATE_GROSS
-            )
-        );
-
-        return $cart;
-    }
-
-    public static function createCartWithDelivery(): Cart
-    {
-        $cart = static::createCart();
-
-        $shippingMethod = new ShippingMethodEntity();
-        $calculatedPrice = new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection());
-        $deliveryDate = new DeliveryDate(new \DateTime(), new \DateTime());
-
-        $deliveryPositionCollection = new DeliveryPositionCollection();
-        foreach ($cart->getLineItems() as $lineItem) {
-            $deliveryPosition = new DeliveryPosition(
-                'anyIdentifier',
-                $lineItem,
-                $lineItem->getQuantity(),
-                $calculatedPrice,
-                $deliveryDate
-            );
-
-            $lineItem->setDeliveryInformation(new DeliveryInformation(1000, 10.0, false, 2, null, 10.0, 10.0, 10.0));
-
-            $deliveryPositionCollection->add($deliveryPosition);
-        }
-
-        $delivery = new Delivery(
-            $deliveryPositionCollection,
-            $deliveryDate,
-            $shippingMethod,
-            new ShippingLocation(new CountryEntity(), null, null),
-            $calculatedPrice
-        );
-
-        $cart->addDeliveries(new DeliveryCollection([$delivery]));
-
-        return $cart;
     }
 
     public static function createLanguageInfo(

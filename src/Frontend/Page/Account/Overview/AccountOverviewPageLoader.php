@@ -2,21 +2,15 @@
 
 namespace Contena\Frontend\Page\Account\Overview;
 
-use Contena\Core\Checkout\Cart\Exception\UserNotLoggedInException;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\Channel\AbstractUserRoute;
-use Contena\Core\Checkout\Order\OrderEntity;
-use Contena\Core\Checkout\Order\Channel\AbstractOrderRoute;
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Frontend\Checkout\Order\OrderBlogAvailabilityResolver;
 use Contena\Frontend\Event\RouteRequest\OrderRouteRequestEvent;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\MetaInformation;

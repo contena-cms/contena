@@ -5,7 +5,6 @@ namespace Contena\Core\Service;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\AppExtractor;
-use Contena\Core\Framework\App\Exception\AppArchiveValidationFailure;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Source\Source;
 use Contena\Core\Framework\App\Source\TemporaryDirectoryFactory;

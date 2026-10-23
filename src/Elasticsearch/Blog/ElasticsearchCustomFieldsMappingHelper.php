@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Blog;
 
 use OpenSearch\Client;
-use OpenSearch\Exception\BadRequestHttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;

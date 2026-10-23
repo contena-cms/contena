@@ -2,13 +2,6 @@
 
 namespace Contena\Core\Test\Integration\Traits;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
-use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -64,9 +57,6 @@ trait OrderFixture
             [
                 'id' => $orderId,
                 'orderNumber' => $orderNumber,
-                'price' => new CartPrice(10, 10, 10, new CalculatedTaxCollection(), new TaxRuleCollection(), CartPrice::TAX_STATE_NET),
-                'shippingCosts' => new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                'stateId' => static::getContainer()->get(InitialStateIdLoader::class)->get(OrderStates::STATE_MACHINE),
                 'versionId' => Defaults::LIVE_VERSION,
                 'paymentMethodId' => $paymentMethodId,
                 'currencyId' => Defaults::CURRENCY,
@@ -78,9 +68,7 @@ trait OrderFixture
                 'deliveries' => [
                     [
                         'id' => $deliveryId,
-                        'stateId' => static::getContainer()->get(InitialStateIdLoader::class)->get(OrderDeliveryStates::STATE_MACHINE),
                         'shippingMethodId' => $shippingMethodId,
-                        'shippingCosts' => new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
                         'shippingDateEarliest' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_FORMAT),
                         'shippingDateLatest' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_FORMAT),
                         'shippingOrderAddress' => [
@@ -101,7 +89,6 @@ trait OrderFixture
                         ],
                         'positions' => [
                             [
-                                'price' => new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
                                 'orderLineItemId' => $orderLineItemId,
                             ],
                         ],
@@ -114,8 +101,6 @@ trait OrderFixture
                         'quantity' => 1,
                         'type' => 'test',
                         'label' => 'test',
-                        'price' => new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                        'priceDefinition' => new QuantityPriceDefinition(10, new TaxRuleCollection()),
                         'priority' => 100,
                         'good' => true,
                     ],

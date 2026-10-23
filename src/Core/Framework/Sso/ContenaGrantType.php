@@ -12,7 +12,6 @@ use Psr\Clock\ClockInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
-use Contena\Core\Framework\Sso\AdminUserService\ExternalAuthUser;
 use Contena\Core\Framework\Sso\AdminUserService\AdminUserService;
 
 /**

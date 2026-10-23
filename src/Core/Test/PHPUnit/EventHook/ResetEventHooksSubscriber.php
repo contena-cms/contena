@@ -7,7 +7,6 @@ use PHPUnit\Event\Facade;
 use PHPUnit\Event\Test\PreparationStarted;
 use PHPUnit\Event\Test\PreparationStartedSubscriber;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
 /**
  * Clears the event hooks before each test, on PreparationStarted: Finished is not emitted for tests that skip or

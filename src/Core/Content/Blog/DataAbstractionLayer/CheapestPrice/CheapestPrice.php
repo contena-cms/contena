@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice;
 
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 
@@ -22,8 +21,6 @@ class CheapestPrice extends Struct
     protected ?float $reference = null;
 
     protected ?string $unitId = null;
-
-    protected PriceCollection $price;
 
     public function getCurrencyPrice(string $currencyId): ?Price
     {

@@ -16,9 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Content\Media\DataAbstractionLayer\Indexing\MediaFolderIndexerTest;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

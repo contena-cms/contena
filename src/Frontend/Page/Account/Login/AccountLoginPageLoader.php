@@ -2,9 +2,7 @@
 
 namespace Contena\Frontend\Page\Account\Login;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
@@ -12,9 +10,6 @@ use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Country\Channel\AbstractCountryRoute;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Salutation\AbstractSalutationsSorter;
-use Contena\Core\System\Salutation\Channel\AbstractSalutationRoute;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\MetaInformation;
 use Symfony\Component\HttpFoundation\Request;

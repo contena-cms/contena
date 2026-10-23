@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Framework\App\TaxProvider\Response;
 
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\TaxProvider\Struct\TaxProviderResult;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\Log\Package;
 

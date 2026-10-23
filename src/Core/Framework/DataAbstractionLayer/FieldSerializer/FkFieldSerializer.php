@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\UnableToLoadPathException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\DoNotUseContext;

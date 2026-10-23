@@ -3,17 +3,11 @@
 namespace Contena\Core\System\User\Channel;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartException;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\UserException;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\System\User\Event\UserLoginEvent;
-use Contena\Core\System\User\Exception\AddressNotFoundException;
-use Contena\Core\System\User\Exception\BadCredentialsException;
-use Contena\Core\System\User\Exception\UserNotFoundByIdException;
-use Contena\Core\System\User\Exception\UserNotFoundException;
-use Contena\Core\System\User\Exception\UserOptinNotCompletedException;
 use Contena\Core\System\User\Extension\LoginByCredentialsExtension;
 use Contena\Core\System\User\Password\LegacyPasswordVerifier;
 use Contena\Core\System\User\Service\DoubleOptInService;
@@ -24,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Channel\Context\CartRestorer;

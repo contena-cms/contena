@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Framework\Gateway\Context\Channel\AbstractContextGatewayRoute;
 use Contena\Core\Framework\Gateway\GatewayException;
 use Contena\Core\Framework\Log\Package;

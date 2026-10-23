@@ -82,7 +82,6 @@ use Contena\Core\Framework\Api\Serializer\JsonApiDecoder;
 use Contena\Core\Framework\Api\Serializer\JsonApiEncoder;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\Api\Sync\SyncService;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
@@ -90,7 +89,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
-use Contena\Core\Framework\Migration\MigrationInfo;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Framework\Routing\RequestTransformer;

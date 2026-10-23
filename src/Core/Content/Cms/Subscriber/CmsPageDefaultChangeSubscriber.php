@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\CmsException;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;

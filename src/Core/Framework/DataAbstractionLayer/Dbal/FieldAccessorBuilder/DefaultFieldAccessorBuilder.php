@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\FieldNotStorageAwareException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\Log\Package;

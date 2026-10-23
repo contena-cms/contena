@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\DependencyInjection;
 
-use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
-use Contena\Core\System\Integration\IntegrationDefinition;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {

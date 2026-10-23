@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\OrderProvider;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask\Registry;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;

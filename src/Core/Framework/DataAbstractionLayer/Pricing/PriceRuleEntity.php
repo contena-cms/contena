@@ -16,8 +16,6 @@ class PriceRuleEntity extends Entity implements IdAware
 
     protected string $ruleId;
 
-    protected PriceCollection $price;
-
     public function getRuleId(): string
     {
         return $this->ruleId;

@@ -4,9 +4,7 @@ namespace Contena\Elasticsearch\Admin;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use OpenSearch\Client;
-use OpenSearch\Exception\OpenSearchExceptionInterface;
 use Psr\Clock\ClockInterface;
 use Psr\Http\Client\ClientExceptionInterface;
 use Psr\Log\LoggerInterface;

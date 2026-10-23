@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Sso;
 
 use League\OAuth2\Server\Entities\AccessTokenEntityInterface;
 use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
-use League\OAuth2\Server\Exception\OAuthServerException;
-use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 use League\OAuth2\Server\Grant\RefreshTokenGrant;
 use League\OAuth2\Server\ResponseTypes\ResponseTypeInterface;
 use Psr\Clock\ClockInterface;
@@ -14,7 +12,6 @@ use Contena\Core\Framework\Api\OAuth\RefreshToken;
 use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
-use Contena\Core\Framework\Sso\AdminUserService\ExternalAuthUser;
 use Contena\Core\Framework\Sso\AdminUserService\Token;
 use Contena\Core\Framework\Sso\AdminUserService\AdminUserService;
 

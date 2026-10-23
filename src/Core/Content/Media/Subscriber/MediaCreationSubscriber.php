@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Subscriber;
 
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailDefinition;
-use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;

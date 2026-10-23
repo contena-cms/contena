@@ -3,12 +3,9 @@
 namespace Contena\Core\System\Tag;
 
 use Contena\Core\System\User\UserCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;

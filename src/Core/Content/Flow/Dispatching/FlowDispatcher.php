@@ -7,7 +7,6 @@ namespace Contena\Core\Content\Flow\Dispatching;
 use Doctrine\DBAL\Connection;
 use Psr\Container\ContainerInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
-use Contena\Core\Content\Flow\Exception\ExecuteSequenceException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\FlowLogEvent;

@@ -6,7 +6,6 @@ use Danger\Context;
 use Danger\Struct\File;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 
 /**

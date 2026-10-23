@@ -6,9 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\After;
 use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Migration\MigrationCollection;
-use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Framework\Migration\MigrationSource;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 trait MigrationTestBehaviour

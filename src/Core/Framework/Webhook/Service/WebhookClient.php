@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\Webhook\Service;
 
 use GuzzleHttp\ClientInterface;
-use GuzzleHttp\Exception\RequestException;
-use GuzzleHttp\Exception\TransferException;
 use GuzzleHttp\Pool;
 use GuzzleHttp\Promise\PromiseInterface;
 use Psr\Clock\ClockInterface;

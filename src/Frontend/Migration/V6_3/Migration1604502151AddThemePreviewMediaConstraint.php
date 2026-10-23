@@ -5,7 +5,6 @@ namespace Contena\Frontend\Migration\V6_3;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @internal

@@ -3,12 +3,6 @@
 namespace Contena\Core\Content\Test\Flow;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Defaults;
@@ -180,8 +174,6 @@ trait OrderActionTrait
                 'itemRounding' => json_decode(json_encode(new CashRoundingConfig(2, 0.01, true), \JSON_THROW_ON_ERROR), true, 512, \JSON_THROW_ON_ERROR),
                 'totalRounding' => json_decode(json_encode(new CashRoundingConfig(2, 0.01, true), \JSON_THROW_ON_ERROR), true, 512, \JSON_THROW_ON_ERROR),
                 'orderDateTime' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                'price' => new CartPrice(10, 10, 10, new CalculatedTaxCollection(), new TaxRuleCollection(), CartPrice::TAX_STATE_NET),
-                'shippingCosts' => new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
                 'orderUser' => [
                     'userId' => $userId,
                     'email' => 'test@example.com',
@@ -224,9 +216,6 @@ trait OrderActionTrait
                         'identifier' => $this->ids->create('line-item'),
                         'quantity' => 1,
                         'label' => 'label',
-                        'type' => LineItem::CUSTOM_LINE_ITEM_TYPE,
-                        'price' => new CalculatedPrice(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                        'priceDefinition' => new QuantityPriceDefinition(200, new TaxRuleCollection(), 2),
                     ],
                 ],
                 'deliveries' => [
@@ -238,12 +227,10 @@ trait OrderActionTrait
                         'trackingCodes' => [],
                         'shippingDateEarliest' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
                         'shippingDateLatest' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                        'shippingCosts' => new CalculatedPrice(0, 0, new CalculatedTaxCollection(), new TaxRuleCollection()),
                         'positions' => [
                             [
                                 'id' => $this->ids->create('position'),
                                 'orderLineItemId' => $this->ids->create('line-item'),
-                                'price' => new CalculatedPrice(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
                             ],
                         ],
                     ],

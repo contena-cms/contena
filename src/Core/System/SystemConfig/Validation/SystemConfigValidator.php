@@ -6,7 +6,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigTab;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\System\SystemConfig\SystemConfigException;

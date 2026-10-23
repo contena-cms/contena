@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Store\Services;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Plugin\PluginService;

@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Content\Flow\Dispatching\Aware\OrderTransactionAware;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;

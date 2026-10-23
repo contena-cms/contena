@@ -8,15 +8,6 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Checkout\Cart\Rule\AlwaysValidRule;
-use Contena\Core\Checkout\Cart\Rule\GoodsCountRule;
-use Contena\Core\Checkout\Cart\Rule\GoodsPriceRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemCustomFieldRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemGoodsTotalRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemGroupRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemWithQuantityRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemWrapperRule;
 use Contena\Core\System\User\Rule\BillingZipCodeRule;
 use Contena\Core\System\User\Rule\UserCustomFieldRule;
 use Contena\Core\System\User\Rule\ShippingZipCodeRule;
@@ -60,18 +51,9 @@ class RuleConditionHasRuleConfigRule implements Rule
         DateRangeRule::class,
         SimpleRule::class,
         TimeRangeRule::class,
-        GoodsCountRule::class,
-        GoodsPriceRule::class,
-        LineItemRule::class,
-        LineItemWithQuantityRule::class,
-        LineItemWrapperRule::class,
         BillingZipCodeRule::class,
         ShippingZipCodeRule::class,
-        AlwaysValidRule::class,
-        LineItemCustomFieldRule::class,
-        LineItemGoodsTotalRule::class,
         UserCustomFieldRule::class,
-        LineItemGroupRule::class,
         FalseRule::class,
         TrueRule::class,
     ];

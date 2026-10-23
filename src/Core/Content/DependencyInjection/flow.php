@@ -3,13 +3,6 @@
 namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\Delivery\DeliveryBuilder;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Cart\RuleLoader;
-use Contena\Core\Checkout\Document\Service\DocumentGenerator;
-use Contena\Core\Checkout\DocumentV2\Generation\DocumentGenerator as DocumentV2Generator;
-use Contena\Core\Checkout\DocumentV2\Service\DocumentFileResolver;
-use Contena\Core\Checkout\Order\Channel\OrderService;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceDefinition;
 use Contena\Core\Content\Flow\Aggregate\FlowTemplate\FlowTemplateDefinition;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;

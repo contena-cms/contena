@@ -3,7 +3,6 @@
 namespace Contena\Core\System\User\Subscriber;
 
 use Contena\Core\System\User\Service\BlogReviewCountService;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;

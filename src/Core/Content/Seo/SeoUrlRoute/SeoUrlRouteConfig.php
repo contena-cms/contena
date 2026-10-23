@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Seo\SeoUrlRoute;
 
-use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Log\Package;
 

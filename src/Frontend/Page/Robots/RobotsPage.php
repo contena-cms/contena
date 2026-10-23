@@ -5,7 +5,6 @@ namespace Contena\Frontend\Page\Robots;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Frontend\Page\Robots\Struct\DomainRuleCollection;
-use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 
 /**
  * @codeCoverageIgnore Simple DTO with no business logic, tested indirectly through RobotsPageLoaderTest
@@ -20,7 +19,7 @@ class RobotsPage extends Struct
     protected array $sitemaps;
 
     /**
-     * @var list<RobotsUserAgentBlock>
+     * @var list<RobotsAdminUserAgentBlock>
      */
     protected array $globalUserAgentBlocks = [];
 
@@ -51,7 +50,7 @@ class RobotsPage extends Struct
     }
 
     /**
-     * @return list<RobotsUserAgentBlock>
+     * @return list<RobotsAdminUserAgentBlock>
      */
     public function getGlobalUserAgentBlocks(): array
     {
@@ -59,7 +58,7 @@ class RobotsPage extends Struct
     }
 
     /**
-     * @param list<RobotsUserAgentBlock> $blocks
+     * @param list<RobotsAdminUserAgentBlock> $blocks
      */
     public function setGlobalUserAgentBlocks(array $blocks): void
     {

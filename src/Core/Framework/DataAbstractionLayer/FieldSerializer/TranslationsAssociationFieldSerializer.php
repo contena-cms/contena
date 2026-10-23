@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingSystemTranslationException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingTranslationLanguageException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;

@@ -3,8 +3,6 @@
 namespace Contena\Elasticsearch\Framework\Indexing;
 
 use OpenSearch\Client;
-use OpenSearch\Exception\BadRequestHttpException;
-use OpenSearch\Exception\NotFoundHttpException;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;

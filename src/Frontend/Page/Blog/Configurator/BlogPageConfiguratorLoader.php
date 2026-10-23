@@ -6,7 +6,6 @@ use Contena\Core\Content\Blog\Channel\Detail\AvailableCombinationResult;
 use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Property\PropertyGroupCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 

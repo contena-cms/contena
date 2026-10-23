@@ -4,7 +4,6 @@ namespace Contena\Core;
 
 use Composer\Autoload\ClassLoader;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Api\Controller\FallbackController;

@@ -6,7 +6,6 @@ use GuzzleHttp\Client;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\AppSecretResolver;
 use Contena\Core\Framework\App\Hmac\RequestSigner;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\PlatformRequest;

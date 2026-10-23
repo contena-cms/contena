@@ -4,12 +4,10 @@ namespace Contena\Core\Framework\Api\Controller;
 
 use Doctrine\DBAL\Connection;
 use League\OAuth2\Server\AuthorizationServer;
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;

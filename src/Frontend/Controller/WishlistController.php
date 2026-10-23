@@ -3,8 +3,6 @@
 namespace Contena\Frontend\Controller;
 
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
-use Contena\Core\System\User\Exception\DuplicateWishlistBlogException;
 use Contena\Core\System\User\Channel\AbstractAddWishlistBlogRoute;
 use Contena\Core\System\User\Channel\AbstractLoadWishlistRoute;
 use Contena\Core\System\User\Channel\AbstractMergeWishlistBlogRoute;
@@ -27,7 +25,6 @@ use Contena\Frontend\Pagelet\Wishlist\GuestWishlistPageletLoader;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

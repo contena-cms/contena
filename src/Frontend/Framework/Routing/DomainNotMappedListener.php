@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Routing;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Framework\Routing\Exception\ChannelMappingException;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;

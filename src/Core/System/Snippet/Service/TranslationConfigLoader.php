@@ -2,17 +2,14 @@
 
 namespace Contena\Core\System\Snippet\Service;
 
-use GuzzleHttp\Psr7\Exception\MalformedUriException;
 use GuzzleHttp\Psr7\Uri;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Snippet\DataTransfer\Language\Language;
 use Contena\Core\System\Snippet\DataTransfer\Language\LanguageCollection;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMapping;
 use Contena\Core\System\Snippet\DataTransfer\PluginMapping\PluginMappingCollection;
 use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Yaml\Yaml;

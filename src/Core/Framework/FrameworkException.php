@@ -2,11 +2,9 @@
 
 namespace Contena\Core\Framework;
 
-use Contena\Core\Framework\DataAbstractionLayer\Exception\AssociationNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class FrameworkException extends HttpException
 {

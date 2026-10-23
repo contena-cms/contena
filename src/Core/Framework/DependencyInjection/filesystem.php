@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DependencyInjection;
 
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Adapter\Asset\AssetInstallCommand;
-use Contena\Core\Framework\Adapter\Asset\AssetService;
 use Contena\Core\Framework\Adapter\Asset\FallbackUrlPackage;
 use Contena\Core\Framework\Adapter\Asset\FlysystemLastModifiedVersionStrategy;
 use Contena\Core\Framework\Adapter\Filesystem\Adapter\AwsS3v3Factory;

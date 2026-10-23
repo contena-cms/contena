@@ -8,11 +8,8 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\TrustedOriginUrlGenerator;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
-use Contena\Core\Framework\Sso\Exceptions\SsoUserNotFoundException;
 use Contena\Core\Framework\Sso\LoginResponseService;
 use Contena\Core\Framework\Sso\SsoService;
-use Contena\Core\Framework\Sso\SsoUser\SsoUserInvitationMailService;
-use Contena\Core\Framework\Sso\SsoUser\SsoUserService;
 use Contena\Core\Framework\Sso\StateValidator;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
@@ -37,8 +34,8 @@ class SsoController extends AbstractController
         private readonly LoginConfigService $loginConfigService,
         private readonly LoginResponseService $loginResponseService,
         private readonly StateValidator $stateValidator,
-        private readonly SsoUserService $ssoUserService,
-        private readonly SsoUserInvitationMailService $ssoUserInvitationMailService,
+        private readonly SsoAdminUserService $ssoUserService,
+        private readonly SsoAdminUserInvitationMailService $ssoUserInvitationMailService,
         private readonly SsoService $ssoService,
         private readonly RouterInterface $router,
     ) {

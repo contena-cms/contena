@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\TaxProvider\Payload;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\App\Payload\Source;
 use Contena\Core\Framework\App\Payload\SourcedPayloadInterface;
 use Contena\Core\Framework\Log\Package;

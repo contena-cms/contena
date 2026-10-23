@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;

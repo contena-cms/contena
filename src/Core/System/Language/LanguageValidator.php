@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidat
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
-use Contena\Tests\Integration\Core\Framework\Language\LanguageValidatorTest;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;

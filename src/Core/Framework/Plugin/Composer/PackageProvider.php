@@ -7,7 +7,6 @@ use Composer\Package\CompletePackageInterface;
 use Composer\Package\Loader\ValidatingArrayLoader;
 use Composer\Util\ConfigValidator;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\PluginComposerJsonInvalidException;
 use Contena\Core\Framework\Plugin\PluginException;
 
 class PackageProvider

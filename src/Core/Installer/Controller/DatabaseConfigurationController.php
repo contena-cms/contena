@@ -2,11 +2,9 @@
 
 namespace Contena\Core\Installer\Controller;
 
-use Doctrine\DBAL\Exception\DriverException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Maintenance\MaintenanceException;
-use Contena\Core\Maintenance\System\Exception\DatabaseSetupException;
 use Contena\Core\Maintenance\System\Service\DatabaseConnectionFactory;
 use Contena\Core\Maintenance\System\Service\SetupDatabaseAdapter;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;

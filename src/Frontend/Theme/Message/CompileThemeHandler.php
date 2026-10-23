@@ -14,7 +14,6 @@ use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Theme\ConfigLoader\AbstractConfigLoader;
 use Contena\Frontend\Theme\Event\ThemeAssignedEvent;
-use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCompilerInterface;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;

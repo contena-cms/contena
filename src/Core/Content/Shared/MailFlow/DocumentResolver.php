@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Shared\MailFlow;
 
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

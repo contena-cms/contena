@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Rule;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;
 

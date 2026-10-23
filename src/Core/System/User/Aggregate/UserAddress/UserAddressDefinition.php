@@ -20,7 +20,6 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateDefinition;
 use Contena\Core\System\Country\CountryDefinition;
-use Contena\Core\System\Salutation\SalutationDefinition;
 
 class UserAddressDefinition extends EntityDefinition
 {
@@ -67,7 +66,6 @@ class UserAddressDefinition extends EntityDefinition
             (new FkField('country_id', 'countryId', CountryDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of country.'),
             (new FkField('country_state_id', 'countryStateId', CountryStateDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of country\'s state.'),
 
-            (new FkField('salutation_id', 'salutationId', SalutationDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of salutation.'),
             (new StringField('first_name', 'firstName', self::MAX_LENGTH_FIRST_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('First name of the user.'),
             (new StringField('last_name', 'lastName', self::MAX_LENGTH_LAST_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Last name of the user.'),
             (new StringField('zipcode', 'zipcode', self::MAX_LENGTH_ZIPCODE))->addFlags(new ApiAware())->setDescription('Postal or zip code of user\'s address.'),
@@ -84,7 +82,6 @@ class UserAddressDefinition extends EntityDefinition
             new ManyToOneAssociationField('user', 'user_id', UserDefinition::class, 'id', false),
             (new ManyToOneAssociationField('country', 'country_id', CountryDefinition::class, 'id', false))->addFlags(new ApiAware()),
             (new ManyToOneAssociationField('countryState', 'country_state_id', CountryStateDefinition::class, 'id', false))->addFlags(new ApiAware()),
-            (new ManyToOneAssociationField('salutation', 'salutation_id', SalutationDefinition::class, 'id', false))->addFlags(new ApiAware()),
         ]);
 
         if (Feature::isActive('v6.8.0.0')) {

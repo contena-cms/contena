@@ -4,7 +4,6 @@ namespace Contena\Core\System\User\Event;
 
 use Contena\Core\Content\Flow\Dispatching\Action\FlowMailVariables;
 use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
-use Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;

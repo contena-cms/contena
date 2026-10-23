@@ -2,11 +2,6 @@
 
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineState;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCapture\OrderTransactionCaptureCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCaptureRefund\OrderTransactionCaptureRefundCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;

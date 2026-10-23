@@ -3,11 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Doctrine;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\DeadlockException;
-use Doctrine\DBAL\Exception\DriverException;
-use Doctrine\DBAL\Exception\LockWaitTimeoutException;
-use Doctrine\DBAL\Exception\RetryableException;
-use Doctrine\DBAL\Exception\TransactionRolledBack;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\MeterProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;

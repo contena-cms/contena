@@ -11,7 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
  *
  * @codeCoverageIgnore
  */
-class SsoUserNotFoundException extends SsoException
+class SsoAdminUserNotFoundException extends SsoException
 {
     public const SSO_LOGIN_USER_NOT_FOUND = 'SSO_LOGIN__USER_NOT_FOUND';
 

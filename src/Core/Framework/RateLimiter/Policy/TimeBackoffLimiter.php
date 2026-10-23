@@ -6,7 +6,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\NoLock;
-use Symfony\Component\RateLimiter\Exception\ReserveNotSupportedException;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\Policy\ResetLimiterTrait;
 use Symfony\Component\RateLimiter\RateLimit;

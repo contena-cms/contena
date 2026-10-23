@@ -5,7 +5,6 @@ namespace Contena\Elasticsearch\Framework\Command;
 use Doctrine\DBAL\Connection;
 use OpenSearch\Client;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Increment\Exception\IncrementGatewayNotFoundException;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Log\Package;
 use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;

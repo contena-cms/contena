@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Profiling\Subscriber;
 
-use Contena\Core\Checkout\Cart\AbstractCartPersister;
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Event\ChannelContextResolvedEvent;
 use Contena\Core\System\Channel\ChannelContext;

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Sitemap\Service;
 
 use League\Flysystem\FilesystemOperator;
 use Psr\Cache\CacheItemPoolInterface;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Content\Sitemap\Event\SitemapGeneratedEvent;
 use Contena\Core\Content\Sitemap\Event\SitemapGenerationStartEvent;
 use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;

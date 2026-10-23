@@ -3,20 +3,11 @@
 namespace Contena\Core\Content\MailTemplate\Service;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\DocumentV2\DocumentFormat;
 use Contena\Core\Content\Cms\DataAbstractionLayer\Field\SlotConfigField;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowMailVariables;
 use Contena\Core\Content\MailTemplate\MailTemplateException;
 use Contena\Core\Content\MailTemplate\Service\Event\MailDataSimulatorFieldEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailDataSimulatorFormDataEvent;
-use Contena\Core\Content\MeasurementSystem\Field\MeasurementUnitsField;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\MailFlowDataProviderInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
@@ -173,7 +164,6 @@ class MailDataSimulator
             $templateData[A11yRenderedDocumentAware::A11Y_DOCUMENTS] ??= [[
                 'documentId' => Uuid::randomHex(),
                 'deepLinkCode' => Random::getAlphanumericString(32),
-                'fileExtension' => DocumentFormat::HTML->fileExtension(),
             ]];
         }
 

@@ -3,12 +3,6 @@
 namespace Contena\Core\Test\Integration\Traits;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Contena\Core\Content\Flow\Events\FlowSendMailActionEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -20,9 +14,6 @@ use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\Test\Integration\Builder\User\UserBuilder;
-use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Core\Test\Integration\Helper\MailEventListener;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 

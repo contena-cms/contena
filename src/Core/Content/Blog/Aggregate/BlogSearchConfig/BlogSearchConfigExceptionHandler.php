@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Aggregate\BlogSearchConfig;
 
-use Contena\Core\Content\Blog\Exception\DuplicateBlogSearchConfigLanguageException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
 use Contena\Core\Framework\Log\Package;
 

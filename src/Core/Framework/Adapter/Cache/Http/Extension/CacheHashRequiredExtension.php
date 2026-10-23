@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http\Extension;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Extensions\Extension;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelContext;

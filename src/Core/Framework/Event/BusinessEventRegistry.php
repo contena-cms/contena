@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Event;
 
-use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Contena\Core\System\User\Event\UserAccountRecoverRequestEvent;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\System\User\Event\UserDeletedEvent;
@@ -15,19 +14,10 @@ use Contena\Core\System\User\Event\UserPasswordChangedEvent;
 use Contena\Core\System\User\Event\UserRegisterEvent;
 use Contena\Core\System\User\Event\DoubleOptInGuestOrderEvent;
 use Contena\Core\System\User\Event\GuestUserRegisterEvent;
-use Contena\Core\Checkout\DocumentV2\Event\DocumentDeletedEvent;
-use Contena\Core\Checkout\DocumentV2\Event\DocumentGeneratedEvent;
-use Contena\Core\Checkout\Order\Event\OrderPaymentMethodChangedEvent;
-use Contena\Core\Content\ContactForm\Event\ContactFormEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
-use Contena\Core\Content\Newsletter\Event\NewsletterConfirmEvent;
-use Contena\Core\Content\Newsletter\Event\NewsletterRegisterEvent;
-use Contena\Core\Content\Newsletter\Event\NewsletterUnsubscribeEvent;
 use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
-use Contena\Core\Content\BlogExport\Event\BlogExportLoggingEvent;
-use Contena\Core\Content\RevocationRequest\Event\RevocationRequestEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
 
@@ -42,10 +32,6 @@ class BusinessEventRegistry
         UserLogoutEvent::class,
         UserDeletedEvent::class,
         AdminUserRecoveryRequestEvent::class,
-        CheckoutOrderPlacedEvent::class,
-        OrderPaymentMethodChangedEvent::class,
-        DocumentGeneratedEvent::class,
-        DocumentDeletedEvent::class,
         UserAccountRecoverRequestEvent::class,
         UserDoubleOptInRegistrationEvent::class,
         UserGroupRegistrationAccepted::class,
@@ -53,17 +39,11 @@ class BusinessEventRegistry
         UserRegisterEvent::class,
         DoubleOptInGuestOrderEvent::class,
         GuestUserRegisterEvent::class,
-        ContactFormEvent::class,
         ReviewFormEvent::class,
         MailBeforeSentEvent::class,
         MailBeforeValidateEvent::class,
         MailSentEvent::class,
-        NewsletterConfirmEvent::class,
-        NewsletterRegisterEvent::class,
-        NewsletterUnsubscribeEvent::class,
-        BlogExportLoggingEvent::class,
         UserPasswordChangedEvent::class,
-        RevocationRequestEvent::class,
     ];
 
     /**

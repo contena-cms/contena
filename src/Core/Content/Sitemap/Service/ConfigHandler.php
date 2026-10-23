@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Sitemap\Service;
 
 use Contena\Core\Content\Sitemap\ConfigHandler\ConfigHandlerInterface;
-use Contena\Core\Content\Sitemap\Exception\InvalidSitemapKey;
 use Contena\Core\Framework\Log\Package;
 
 /**

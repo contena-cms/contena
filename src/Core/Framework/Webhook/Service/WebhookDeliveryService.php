@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Service;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterRemoval;

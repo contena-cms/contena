@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\UnmappedFieldException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldResolver\FieldResolverContext;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;

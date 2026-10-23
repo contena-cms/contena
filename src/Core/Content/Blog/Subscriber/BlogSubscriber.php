@@ -4,15 +4,7 @@ namespace Contena\Core\Content\Blog\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnitTypeEnum;
-use Contena\Core\Content\MeasurementSystem\BlogMeasurement\BlogMeasurementEnum;
-use Contena\Core\Content\MeasurementSystem\BlogMeasurement\BlogMeasurementUnitBuilder;
-use Contena\Core\Content\MeasurementSystem\Unit\AbstractMeasurementUnitConverter;
 use Contena\Core\Content\Blog\AbstractIsNewDetector;
-use Contena\Core\Content\Blog\AbstractBlogMaxPurchaseCalculator;
-use Contena\Core\Content\Blog\AbstractBlogVariationBuilder;
-use Contena\Core\Content\Blog\AbstractPropertyGroupSorter;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceContainer;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;

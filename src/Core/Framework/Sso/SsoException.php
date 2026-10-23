@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Sso;
 
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Sso\Exceptions\SsoUserNotFoundException;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

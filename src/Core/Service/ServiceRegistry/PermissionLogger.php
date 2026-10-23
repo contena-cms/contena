@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Service\ServiceRegistry;
 
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\Message\LogPermissionToRegistryMessage;
 use Contena\Core\Service\Permission\ConsentState;

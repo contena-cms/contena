@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
 use Contena\Elasticsearch\Blog\SearchFieldConfig;
 use Contena\Elasticsearch\Query\MatchBoolPrefixQuery;

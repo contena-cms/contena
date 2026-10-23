@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Api;
 
-use Doctrine\DBAL\Exception;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;

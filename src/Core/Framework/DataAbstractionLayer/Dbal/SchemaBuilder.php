@@ -8,7 +8,6 @@ use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
 use Contena\Core\Content\Cms\DataAbstractionLayer\Field\SlotConfigField;
 use Contena\Core\Content\Flow\DataAbstractionLayer\Field\FlowTemplateConfigField;
-use Contena\Core\Content\MeasurementSystem\Field\MeasurementUnitsField;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -73,7 +72,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedByField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VariantListingConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionDataPayloadField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 
@@ -120,7 +118,6 @@ class SchemaBuilder
         SlotConfigField::class => Types::JSON,
         FlowTemplateConfigField::class => Types::JSON,
         CheapestPriceField::class => Types::JSON,
-        MeasurementUnitsField::class => Types::JSON,
 
         ChildCountField::class => Types::INTEGER,
         IntField::class => Types::INTEGER,
@@ -129,7 +126,6 @@ class SchemaBuilder
 
         BoolField::class => Types::BOOLEAN,
         LockedField::class => Types::BOOLEAN,
-        WasModifiedByUserField::class => Types::BOOLEAN,
 
         PasswordField::class => Types::STRING,
         StringField::class => Types::STRING,

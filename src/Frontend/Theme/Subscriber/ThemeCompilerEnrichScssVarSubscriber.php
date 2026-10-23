@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Subscriber;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\IOStreamHelper;

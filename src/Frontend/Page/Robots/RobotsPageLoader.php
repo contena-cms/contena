@@ -15,7 +15,6 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Page\Robots\Parser\RobotsDirectiveParser;
 use Contena\Frontend\Page\Robots\Struct\DomainRuleCollection;
 use Contena\Frontend\Page\Robots\Struct\DomainRuleStruct;
-use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -81,7 +80,7 @@ class RobotsPageLoader
      *
      * @param non-empty-string $hostname
      *
-     * @return array{0: list<RobotsUserAgentBlock>, 1: DomainRuleCollection}
+     * @return array{0: list<RobotsAdminUserAgentBlock>, 1: DomainRuleCollection}
      */
     private function collectRules(string $hostname, ChannelDomainCollection $domains, Context $context): array
     {
@@ -130,7 +129,7 @@ class RobotsPageLoader
             // Merge non-path directives with collected path directives
             $allDirectives = array_merge($block->getNonPathDirectives(), $pathDirectives);
 
-            $globalBlocks[] = new RobotsUserAgentBlock($block->admin_userAgent, $allDirectives);
+            $globalBlocks[] = new RobotsAdminUserAgentBlock($block->admin_userAgent, $allDirectives);
         }
 
         return [$globalBlocks, $domainRuleCollection];

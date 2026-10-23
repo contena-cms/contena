@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Snippet\Files;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\StorageAttributes;
 use Contena\Core\Framework\App\ActiveAppsLoader;

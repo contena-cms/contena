@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEventFactory;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\MappingEntityClassesException;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntityAggregatorInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;

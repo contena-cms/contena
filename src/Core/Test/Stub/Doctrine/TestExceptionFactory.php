@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test\Stub\Doctrine;
 
-use Doctrine\DBAL\Exception;
 use Contena\Core\Framework\Log\Package;
 
 /**

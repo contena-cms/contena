@@ -3,15 +3,11 @@
 namespace Contena\Core\Framework\App\ActionButton;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ConnectException;
-use GuzzleHttp\Exception\ServerException;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\ActionButton\Response\ActionButtonResponseFactory;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;

@@ -3,7 +3,6 @@
 namespace Contena\Core\System\SystemConfig\Facade;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\ScriptAppInformation;
 use Contena\Core\Framework\Uuid\Uuid;

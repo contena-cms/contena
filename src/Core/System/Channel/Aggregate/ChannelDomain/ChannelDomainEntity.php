@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Channel\Aggregate\ChannelDomain;
 
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
-use Contena\Core\Content\BlogExport\BlogExportCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
@@ -38,8 +36,6 @@ class ChannelDomainEntity extends Entity
     protected string $languageId;
 
     protected ?LanguageEntity $language = null;
-
-    protected MeasurementUnits $measurementUnits;
 
     protected ?BlogExportCollection $blogExports = null;
 

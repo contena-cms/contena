@@ -2,10 +2,9 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
-use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\WasModifiedByUserFieldSerializer;
 use Contena\Core\Framework\Log\Package;
 
-class WasModifiedByUserField extends BoolField
+class WasModifiedByAdminUserField extends BoolField
 {
     public function __construct(string $storageName = 'was_modified_by_user', string $propertyName = 'wasModifiedByUser')
     {

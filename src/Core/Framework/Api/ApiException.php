@@ -4,31 +4,14 @@ namespace Contena\Core\Framework\Api;
 
 use Contena\Core\Framework\Api\ApiDefinition\ApiDefinitionGeneratorNotFoundException;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
-use Contena\Core\Framework\Api\Context\Exception\InvalidContextSourceException;
-use Contena\Core\Framework\Api\Exception\ExpectationFailedException;
-use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
-use Contena\Core\Framework\Api\Exception\InvalidSyncOperationException;
-use Contena\Core\Framework\Api\Exception\InvalidVersionNameException;
-use Contena\Core\Framework\Api\Exception\LiveVersionDeleteException;
-use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
-use Contena\Core\Framework\Api\Exception\NoEntityClonedException;
-use Contena\Core\Framework\Api\Exception\ResourceNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingReverseAssociation;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\Exception\ChannelNotFoundException;
 use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
-use Symfony\Component\HttpKernel\Exception\HttpException as SymfonyHttpException;
-use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
-use Symfony\Component\HttpKernel\Exception\UnsupportedMediaTypeHttpException;
 
 class ApiException extends HttpException
 {

@@ -2,12 +2,10 @@
 
 namespace Contena\Core\Framework\Api\EventListener;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * @phpstan-import-type ErrorData from ContenaHttpException

@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Content\Mail\Transport;
 
-use Doctrine\DBAL\Exception\DriverException;
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Content\Mail\MailException;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

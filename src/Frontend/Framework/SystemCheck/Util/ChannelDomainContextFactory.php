@@ -2,9 +2,6 @@
 
 namespace Contena\Frontend\Framework\SystemCheck\Util;
 
-use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\CartFactory;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;

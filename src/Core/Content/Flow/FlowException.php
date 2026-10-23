@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Content\Flow;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\Content\Flow\Dispatching\TransactionFailedException;
-use Contena\Core\Content\Flow\Exception\CustomTriggerByNameNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;

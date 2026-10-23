@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Aggregate\AppShippingMethod;
 
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;

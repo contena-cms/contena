@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Flow\Rule;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\FlowRule;

@@ -2,10 +2,7 @@
 
 namespace Contena\Core\Content\Blog\Channel;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceCollection;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\MeasurementSystem\Unit\ConvertedUnitSet;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceContainer;
@@ -18,9 +15,6 @@ use Contena\Core\Framework\Log\Package;
  */
 class ChannelBlogEntity extends BlogEntity
 {
-    protected PriceCollection $calculatedPrices;
-
-    protected CalculatedPrice $calculatedPrice;
 
     protected ?PropertyGroupCollection $sortedProperties = null;
 

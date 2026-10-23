@@ -28,8 +28,6 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
-use Twig\Error\Error;
-use Twig\Error\SyntaxError;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
 

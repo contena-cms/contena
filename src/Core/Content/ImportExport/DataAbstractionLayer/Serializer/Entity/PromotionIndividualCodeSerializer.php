@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionIndividualCode\PromotionIndividualCodeCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionIndividualCode\PromotionIndividualCodeDefinition;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;

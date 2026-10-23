@@ -27,7 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Attribute\Required as RequiredAt
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\ReverseInherited as ReverseInheritedAttr;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\SearchRanking as SearchRankingAttr;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Serialized;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\State;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Translations;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Version;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
@@ -74,7 +73,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
@@ -103,7 +101,6 @@ class AttributeEntityCompiler
         Version::class,
         Password::class,
         Field::class,
-        State::class,
         ReferenceVersion::class,
         ListFieldAttr::class,
         CustomFieldsAttr::class,
@@ -427,7 +424,7 @@ class AttributeEntityCompiler
         if ($field->type === CustomFieldsAttr::TYPE) {
             unset($flags[Required::class]);
         }
-        if (is_a($field->type, WasModifiedByUserField::class, true)) {
+        if (is_a($field->type, WasModifiedByAdminUserField::class, true)) {
             unset($flags[Required::class]);
         }
 

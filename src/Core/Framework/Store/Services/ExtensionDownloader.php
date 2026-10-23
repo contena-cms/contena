@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Store\Services;
 
-use GuzzleHttp\Exception\ClientException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

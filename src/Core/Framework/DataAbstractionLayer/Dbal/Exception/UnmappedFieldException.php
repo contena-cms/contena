@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\UnmappedFieldException as DalUnmappedFieldException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;

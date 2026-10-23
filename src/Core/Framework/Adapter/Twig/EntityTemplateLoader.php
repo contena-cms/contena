@@ -8,7 +8,6 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\TwigLoaderConfigComp
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
-use Twig\Error\LoaderError;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
 

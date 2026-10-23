@@ -11,9 +11,6 @@ use Contena\Core\Content\Blog\Extension\BlogListingRouteExtension;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
-use Contena\Core\Content\ContentStream\Exception\EmptyBlogStreamException;
-use Contena\Core\Content\ContentStream\Exception\NoFilterException;
-use Contena\Core\Content\ContentStream\Service\AbstractBlogStreamBuilder;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
@@ -23,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -41,7 +37,7 @@ class BlogListingRoute extends AbstractBlogListingRoute
     public function __construct(
         private readonly BlogListingLoader $listingLoader,
         private readonly EntityRepository $categoryRepository,
-        private readonly ContentStreamBuilderInterface|AbstractBlogStreamBuilder $contentStreamBuilder,
+        private readonly ContentStreamBuilderInterface|AbstractContentStreamBuilder $contentStreamBuilder,
         private readonly CacheTagCollector $cacheTagCollector,
         private readonly ExtensionDispatcher $extensions,
         private readonly LoggerInterface $logger,
@@ -126,12 +122,12 @@ class BlogListingRoute extends AbstractBlogListingRoute
             $contentStreamBuilder = $this->contentStreamBuilder;
 
             try {
-                if ($contentStreamBuilder instanceof AbstractBlogStreamBuilder) {
+                if ($contentStreamBuilder instanceof AbstractContentStreamBuilder) {
                     $contentStreamBuilder->enrichCriteria($criteria, $contentStreamId, $channelContext->getContext());
                 } else {
                     $criteria->addFilter(...$contentStreamBuilder->buildFilters($contentStreamId, $channelContext->getContext()));
                 }
-            } catch (EmptyBlogStreamException) {
+            } catch (EmptyContentStreamException) {
                 // An empty group selects all blogs, as in the blog export
             } catch (NoFilterException $exception) {
                 $this->logger->warning(

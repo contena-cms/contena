@@ -11,7 +11,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Composer\Factory;
-use Contena\Core\Framework\Plugin\Exception\PluginNotInstalledException;
 use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginException;

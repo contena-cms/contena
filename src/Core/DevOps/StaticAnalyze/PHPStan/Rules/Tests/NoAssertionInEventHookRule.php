@@ -22,7 +22,6 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
 /**
  * An event hook runs inside dispatch(), so the code under test can catch the failed assertion and keep the test

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Channel\Listing;
 
 use Contena\Core\Content\Blog\Events\BlogListingCriteriaEvent;
 use Contena\Core\Content\Blog\Events\BlogListingResultEvent;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 use Contena\Core\Content\Blog\Channel\Search\ResolvedCriteriaBlogSearchRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;

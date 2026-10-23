@@ -4,9 +4,6 @@ namespace Contena\Core\Framework\Demodata\Generator;
 
 use Doctrine\DBAL\Connection;
 use Faker\Generator;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
-use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceCollection;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceEntity;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;

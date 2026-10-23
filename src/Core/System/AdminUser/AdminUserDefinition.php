@@ -3,11 +3,9 @@
 namespace Contena\Core\System\AdminUser;
 
 use Contena\Core\System\User\UserDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
-use Contena\Core\Framework\Api\Acl\Role\AclUserRoleDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\CloneProtection;
@@ -119,7 +117,7 @@ class AdminUserDefinition extends EntityDefinition
             (new OneToManyAssociationField('webhooks', WebhookDefinition::class, 'owner_user_id', 'id'))->removeFlag(ApiAware::class)->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('stateMachineHistoryEntries', StateMachineHistoryDefinition::class, 'admin_user_id', 'id'),
             (new OneToManyAssociationField('importExportLogEntries', ImportExportLogDefinition::class, 'admin_user_id', 'id'))->addFlags(new SetNullOnDelete()),
-            new ManyToManyAssociationField('aclRoles', AclRoleDefinition::class, AclUserRoleDefinition::class, 'admin_user_id', 'acl_role_id'),
+            new ManyToManyAssociationField('aclRoles', AclRoleDefinition::class, AclAdminUserRoleDefinition::class, 'admin_user_id', 'acl_role_id'),
             new OneToOneAssociationField('recoveryUser', 'id', 'admin_user_id', AdminUserRecoveryDefinition::class, false),
             (new StringField('store_token', 'storeToken'))->removeFlag(ApiAware::class),
             new OneToManyAssociationField('createdOrders', OrderDefinition::class, 'created_by_id', 'id'),

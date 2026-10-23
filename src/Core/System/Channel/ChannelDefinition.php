@@ -6,21 +6,12 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\Aggregate\UserGroupRegistrationChannel\UserGroupRegistrationChannelDefinition;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistDefinition;
 use Contena\Core\System\User\UserDefinition;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentBaseConfigChannel\DocumentBaseConfigChannelDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionChannel\PromotionChannelDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageChannel\LandingPageChannelDefinition;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
-use Contena\Core\Content\MeasurementSystem\Field\MeasurementUnitsField;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\BlogExport\BlogExportDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateDefinition;
@@ -111,8 +102,6 @@ class ChannelDefinition extends EntityDefinition
             (new FkField('language_id', 'languageId', LanguageDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of language used.'),
             (new FkField('user_group_id', 'userGroupId', UserGroupDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of user group.'),
             (new FkField('currency_id', 'currencyId', CurrencyDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of currency used.'),
-            (new FkField('payment_method_id', 'paymentMethodId', PaymentMethodDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of payment method used.'),
-            (new FkField('shipping_method_id', 'shippingMethodId', ShippingMethodDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of shipping method.'),
             (new FkField('country_id', 'countryId', CountryDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of country.'),
             (new FkField('analytics_id', 'analyticsId', ChannelAnalyticsDefinition::class))->setDescription('Unique identity of country.'),
 
@@ -125,7 +114,6 @@ class ChannelDefinition extends EntityDefinition
             (new ReferenceVersionField(CategoryDefinition::class, 'service_category_version_id'))->addFlags(new ApiAware(), new Required()),
             (new FkField('mail_header_footer_id', 'mailHeaderFooterId', MailHeaderFooterDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of mail header and footer.'),
             (new FkField('hreflang_default_domain_id', 'hreflangDefaultDomainId', ChannelDomainDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of hreflangDefaultDomain.'),
-            (new MeasurementUnitsField('measurement_units', 'measurementUnits'))->addFlags(new ApiAware(), new Since('6.7.1.0')),
             (new TimeZoneField('business_time_zone', 'businessTimeZone'))->addFlags(new ApiAware(), new Since('6.7.13.0'))->setDescription('Business timezone used for sales-channel-specific rendering.'),
             (new TranslatedField('name'))->addFlags(new ApiAware()),
             (new StringField('short_name', 'shortName'))->addFlags(new ApiAware())->setDescription('A short name for sales channel.'),
@@ -150,8 +138,6 @@ class ChannelDefinition extends EntityDefinition
             (new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default language for the sales channel'),
             new ManyToOneAssociationField('userGroup', 'user_group_id', UserGroupDefinition::class, 'id', false),
             (new ManyToOneAssociationField('currency', 'currency_id', CurrencyDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default currency for the sales channel'),
-            (new ManyToOneAssociationField('paymentMethod', 'payment_method_id', PaymentMethodDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default payment method for the sales channel'),
-            (new ManyToOneAssociationField('shippingMethod', 'shipping_method_id', ShippingMethodDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default shipping method for the sales channel'),
             (new ManyToOneAssociationField('country', 'country_id', CountryDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default country for the sales channel'),
             new OneToManyAssociationField('orders', OrderDefinition::class, 'channel_id', 'id'),
 
@@ -178,8 +164,6 @@ class ChannelDefinition extends EntityDefinition
             new ManyToOneAssociationField('mailHeaderFooter', 'mail_header_footer_id', MailHeaderFooterDefinition::class, 'id', false),
             new OneToManyAssociationField('newsletterRecipients', NewsletterRecipientDefinition::class, 'channel_id', 'id'),
             (new OneToManyAssociationField('numberRangeChannels', NumberRangeChannelDefinition::class, 'channel_id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('promotionChannels', PromotionChannelDefinition::class, 'channel_id', 'id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('documentBaseConfigChannels', DocumentBaseConfigChannelDefinition::class, 'channel_id', 'id'))->addFlags(new CascadeDelete()),
             new OneToManyAssociationField('blogReviews', BlogReviewDefinition::class, 'channel_id', 'id'),
             (new OneToManyAssociationField('seoUrls', SeoUrlDefinition::class, 'channel_id', 'id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('seoUrlTemplates', SeoUrlTemplateDefinition::class, 'channel_id'))->addFlags(new CascadeDelete()),

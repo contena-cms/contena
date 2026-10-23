@@ -30,7 +30,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
@@ -380,7 +379,7 @@ class VersionManager
 
             // wasModifiedByUser is derived from the write scope and rejects explicit values;
             // a clone is a fresh, system-created record, so let the serializer set it to false.
-            if ($field instanceof WasModifiedByUserField) {
+            if ($field instanceof WasModifiedByAdminUserField) {
                 continue;
             }
 

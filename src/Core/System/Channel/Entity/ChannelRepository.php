@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityAggregationResultLoadedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEventFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntitySearchResultLoadedEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;

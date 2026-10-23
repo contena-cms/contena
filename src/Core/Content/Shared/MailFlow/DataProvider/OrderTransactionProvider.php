@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 

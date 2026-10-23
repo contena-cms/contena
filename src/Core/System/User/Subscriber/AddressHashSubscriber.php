@@ -4,8 +4,6 @@ namespace Contena\Core\System\User\Subscriber;
 
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\UserEvents;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
-use Contena\Core\Checkout\Order\OrderEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;

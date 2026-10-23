@@ -5,10 +5,7 @@ namespace Contena\Administration\Migration\V6_7;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationException;
-use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Uuid\Uuid;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

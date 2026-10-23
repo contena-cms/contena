@@ -2,11 +2,7 @@
 
 namespace Contena\Core\System\Channel;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\Log\Package;

@@ -6,22 +6,11 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
 use Contena\Core\System\User\UserCollection;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentBaseConfig\DocumentBaseConfigDefinition;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionChannel\PromotionChannelCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterEntity;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
-use Contena\Core\Content\BlogExport\BlogExportCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
@@ -216,8 +205,6 @@ class ChannelEntity extends Entity
     protected ?UserWishlistCollection $wishlists = null;
 
     protected ?LandingPageCollection $landingPages = null;
-
-    protected MeasurementUnits $measurementUnits;
 
     protected ?string $businessTimeZone = null;
 

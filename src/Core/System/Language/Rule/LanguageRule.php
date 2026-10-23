@@ -4,8 +4,6 @@ namespace Contena\Core\System\Language\Rule;
 
 use Contena\Core\System\User\UserException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Rule\Exception\UnsupportedOperatorException;
-use Contena\Core\Framework\Rule\Exception\UnsupportedValueException;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;

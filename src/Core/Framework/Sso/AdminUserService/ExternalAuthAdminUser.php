@@ -16,7 +16,7 @@ use Symfony\Component\Validator\Validation;
 /**
  * @internal
  */
-final readonly class ExternalAuthUser implements AdminUserEntityInterface
+final readonly class ExternalAuthAdminUser implements AdminUserEntityInterface
 {
     /**
      * @param non-empty-string $admin_userId

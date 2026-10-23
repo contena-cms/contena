@@ -4,7 +4,6 @@ namespace Contena\Core\Maintenance\System\Service;
 
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\RequestOptions;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Log\Package;

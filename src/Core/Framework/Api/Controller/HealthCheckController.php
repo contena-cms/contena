@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Api\Controller;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
 use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\HealthCheck\Event\HealthCheckEvent;
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;

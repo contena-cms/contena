@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Garan;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;

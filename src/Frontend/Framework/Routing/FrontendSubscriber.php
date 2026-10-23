@@ -2,9 +2,7 @@
 
 namespace Contena\Frontend\Framework\Routing;
 
-use Contena\Core\Checkout\Cart\Exception\UserNotLoggedInException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\Exception\UserNotLoggedInRoutingException;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;

@@ -20,8 +20,8 @@ use Symfony\Component\Messenger\MessageBusInterface;
 /**
  * @internal
  */
-#[AsMessageHandler(handles: UpdateBlogStreamMappingTask::class)]
-final class UpdateBlogStreamMappingTaskHandler extends ScheduledTaskHandler
+#[AsMessageHandler(handles: UpdateContentStreamMappingTask::class)]
+final class UpdateContentStreamMappingTaskHandler extends ScheduledTaskHandler
 {
     /**
      * @internal

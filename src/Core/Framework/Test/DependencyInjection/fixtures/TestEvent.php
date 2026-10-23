@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Test\DependencyInjection\fixtures;
 
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\EventData\EntityType;
 use Contena\Core\Framework\Event\EventData\EventDataCollection;

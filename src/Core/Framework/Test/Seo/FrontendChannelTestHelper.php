@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\Seo;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Defaults;

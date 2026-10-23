@@ -7,7 +7,6 @@ use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\Index\IndexType;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
@@ -32,7 +31,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationFie
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\InheritanceUpdaterTrait;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\String\Inflector\EnglishInflector;
 

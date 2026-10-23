@@ -28,7 +28,6 @@ use Contena\Core\Framework\Store\Services\FirstRunWizardService;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Language\LanguageCollection;

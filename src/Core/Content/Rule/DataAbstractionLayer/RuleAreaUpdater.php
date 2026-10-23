@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Rule\DataAbstractionLayer;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CachedRuleLoader;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;

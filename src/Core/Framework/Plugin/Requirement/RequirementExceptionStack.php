@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\Plugin\Requirement;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementException;
-use Contena\Core\Framework\Plugin\Requirement\Exception\RequirementStackException;
 
 class RequirementExceptionStack
 {

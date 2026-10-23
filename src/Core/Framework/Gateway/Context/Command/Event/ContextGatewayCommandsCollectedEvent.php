@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Gateway\Context\Command\Event;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Hook\CartAware;
 use Contena\Core\Framework\App\Context\Gateway\AppContextGateway;
 use Contena\Core\Framework\Gateway\Context\Command\ContextGatewayCommandCollection;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;

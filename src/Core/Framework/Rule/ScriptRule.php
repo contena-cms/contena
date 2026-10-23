@@ -13,9 +13,6 @@ use Contena\Core\Framework\Script\Execution\ScriptEnvironmentFactory;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Validator\Constraint;
 use Twig\Cache\FilesystemCache;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 /**
  * @final

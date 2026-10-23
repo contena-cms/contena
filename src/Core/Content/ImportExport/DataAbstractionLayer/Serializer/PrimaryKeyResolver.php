@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer;
 
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field\AbstractFieldSerializer;
-use Contena\Core\Content\ImportExport\Exception\UpdatedByValueNotFoundException;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;

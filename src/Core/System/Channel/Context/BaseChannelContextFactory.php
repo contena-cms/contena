@@ -2,14 +2,7 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
-use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

@@ -9,7 +9,6 @@ use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionCo
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\UnsupportedCommandTypeException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
@@ -19,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidat
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
-use Contena\Core\Framework\Rule\Exception\InvalidConditionException;
 use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
@@ -28,7 +26,6 @@ use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal

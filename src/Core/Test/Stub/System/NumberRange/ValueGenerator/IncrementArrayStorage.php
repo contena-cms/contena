@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Test\Stub\System\NumberRange\ValueGenerator;
 
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
 
 /**

@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Events;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\LineItem\CartDataCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaChannelEvent;
 use Contena\Core\Framework\Log\Package;

@@ -7,7 +7,6 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\CompositeListingProcessor;
 use Contena\Core\Framework\Log\Package;
 
 /**

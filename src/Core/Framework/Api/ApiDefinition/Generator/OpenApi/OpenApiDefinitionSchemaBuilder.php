@@ -6,7 +6,6 @@ use OpenApi\Annotations\OpenApi;
 use OpenApi\Annotations\Property;
 use OpenApi\Annotations\Schema;
 use OpenApi\Context as OpenApiContext;
-use Contena\Core\Content\MeasurementSystem\Field\MeasurementUnitsField;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;

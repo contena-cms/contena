@@ -4,7 +4,6 @@ namespace Contena\Core\System\User;
 
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Channel\ChannelCollection;

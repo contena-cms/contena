@@ -6,27 +6,9 @@
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider as FrameworkShopIdProvider;
 use Contena\Core\Framework\Store\Services\InstanceService;
 use Contena\Core\System\Consent\Service\ConsentService;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\UsageData\Client\GatewayClient;
-use Contena\Core\System\UsageData\Consent\ConsentReporter;
-use Contena\Core\System\UsageData\EntitySync\CollectEntityDataMessageHandler;
-use Contena\Core\System\UsageData\EntitySync\DispatchEntityMessageHandler;
-use Contena\Core\System\UsageData\EntitySync\EntityDispatcher;
-use Contena\Core\System\UsageData\EntitySync\IterateEntitiesQueryBuilder;
-use Contena\Core\System\UsageData\EntitySync\IterateEntityMessageHandler;
-use Contena\Core\System\UsageData\ScheduledTask\CollectEntityDataTask;
-use Contena\Core\System\UsageData\ScheduledTask\CollectEntityDataTaskHandler;
-use Contena\Core\System\UsageData\Services\EntityDefinitionService;
-use Contena\Core\System\UsageData\Services\EntityDispatchService;
-use Contena\Core\System\UsageData\Services\GatewayStatusService;
-use Contena\Core\System\UsageData\Services\ManyToManyAssociationService;
-use Contena\Core\System\UsageData\Services\ShopIdProvider;
-use Contena\Core\System\UsageData\Services\UsageDataAllowListService;
-use Contena\Core\System\UsageData\Subscriber\ConsentStateChangedSubscriber;
-use Contena\Core\System\UsageData\Subscriber\EntityDeleteSubscriber;
 use Symfony\Component\DependencyInjection\Argument\TaggedIteratorArgument;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;

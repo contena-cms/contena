@@ -4,12 +4,9 @@ namespace Contena\Core\Content\Mail\Service;
 
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\ConstraintBuilder;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @phpstan-import-type MailNameCombination from AbstractMailFactory

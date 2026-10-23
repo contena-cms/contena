@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Currency;
 
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\Locale\Util\BackwardCompatibleNumberFormatter;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\System\Exception;
+namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 

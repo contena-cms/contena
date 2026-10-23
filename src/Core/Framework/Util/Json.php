@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Util;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Util\Exception\JsonDecodingException;
 
 final class Json
 {

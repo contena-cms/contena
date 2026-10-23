@@ -4,7 +4,6 @@ namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Enti
 
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;

@@ -4,12 +4,10 @@ namespace Contena\Core\Framework\Migration\Command;
 
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationException;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 #[AsCommand(

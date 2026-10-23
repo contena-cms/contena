@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Blog\Cleanup;
 
 use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\UnusedMediaPurger;
-use Contena\Core\Content\Blog\Aggregate\BlogDownload\BlogDownloadDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;

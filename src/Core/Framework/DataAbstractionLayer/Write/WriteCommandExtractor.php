@@ -24,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedByField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
@@ -333,7 +332,7 @@ class WriteCommandExtractor
         $create = !$existence->exists() || $existence->childChangedToParent();
 
         if (
-            (!$field instanceof UpdatedAtField && !$field instanceof CreatedByField && !$field instanceof UpdatedByField && !$field instanceof WasModifiedByUserField)
+            (!$field instanceof UpdatedAtField && !$field instanceof CreatedByField && !$field instanceof UpdatedByField && !$field instanceof WasModifiedByAdminUserField)
             && (!$create || !$field->is(Required::class))
         ) {
             return true;

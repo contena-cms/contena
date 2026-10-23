@@ -3,12 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Document\FileGenerator\FileTypes;
-use Contena\Core\Checkout\Document\Renderer\InvoiceRenderer;
-use Contena\Core\Checkout\Document\Service\DocumentGenerator;
-use Contena\Core\Checkout\Document\Struct\DocumentGenerateOperation;
-use Contena\Core\Checkout\DocumentV2\Generation\DocumentGenerationRequest;
-use Contena\Core\Checkout\DocumentV2\Generation\DocumentGenerator as DocumentV2Generator;
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;

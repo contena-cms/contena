@@ -2,23 +2,17 @@
 
 namespace Contena\Frontend\Page\Address\Listing;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Frontend\Page\Page;
 
 class AddressListingPage extends Page
 {
     protected UserAddressCollection $addresses;
 
-    protected SalutationCollection $salutations;
-
     protected CountryCollection $countries;
-
-    protected Cart $cart;
 
     protected ?UserAddressEntity $address = null;
 

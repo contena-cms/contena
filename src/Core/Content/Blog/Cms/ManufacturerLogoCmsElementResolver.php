@@ -11,8 +11,6 @@ use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\Channel\Struct\ManufacturerLogoStruct;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

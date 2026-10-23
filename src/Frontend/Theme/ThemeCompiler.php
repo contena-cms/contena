@@ -18,7 +18,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Event\ThemeCompilerConcatenatedStylesEvent;
 use Contena\Frontend\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
-use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\File;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
@@ -26,7 +25,6 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\Validator\SCSSValidator;
 use Symfony\Component\Asset\Package as AssetPackage;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 use Symfony\Component\Finder\Finder;
 
 class ThemeCompiler implements ThemeCompilerInterface

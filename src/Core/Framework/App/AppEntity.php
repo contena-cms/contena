@@ -20,7 +20,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
-use Contena\Core\System\Integration\IntegrationEntity;
 use Contena\Core\System\TaxProvider\TaxProviderCollection;
 
 /**

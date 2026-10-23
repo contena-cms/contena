@@ -3,9 +3,7 @@
 namespace Contena\Core\Content\ContentStream;
 
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingCollection;
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\BlogExport\BlogExportCollection;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterCollection;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\ContentStreamTranslationCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;

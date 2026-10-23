@@ -2,11 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Checkout\Cart\Address\Error\AddressErrorInterface;
-use Contena\Core\Checkout\Cart\Address\Error\VatIdMissingError;
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Error\ErrorRoute;
-use Contena\Core\Checkout\Promotion\Cart\Error\PromotionNotEligibleError;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
@@ -19,7 +14,6 @@ use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Frontend\Controller\Exception\FrontendException;
 use Contena\Frontend\Event\FrontendRedirectEvent;
 use Contena\Frontend\Event\FrontendRenderEvent;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
@@ -30,13 +24,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 abstract class FrontendController extends AbstractController
 {

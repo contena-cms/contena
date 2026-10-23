@@ -3,16 +3,13 @@
 namespace Contena\Frontend\Controller;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Twig\ErrorTemplateResolver;
-use Contena\Frontend\Page\Navigation\Error\ErrorPageLoaderInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 /**

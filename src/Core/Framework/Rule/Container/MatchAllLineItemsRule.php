@@ -2,10 +2,6 @@
 
 namespace Contena\Core\Framework\Rule\Container;
 
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
-use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
-use Contena\Core\Checkout\Cart\Rule\LineItemScope;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleScope;

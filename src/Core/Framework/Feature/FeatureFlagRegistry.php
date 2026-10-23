@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Feature;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\Event\BeforeFeatureFlagToggleEvent;

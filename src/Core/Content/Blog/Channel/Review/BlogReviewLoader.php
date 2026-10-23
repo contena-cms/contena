@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Channel\Review;
 
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewEntity;
 use Contena\Core\Content\Blog\Channel\Review\Event\BlogReviewsLoadedEvent;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
@@ -16,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

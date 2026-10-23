@@ -6,7 +6,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Deprecation\BCChange\ClassMoved;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Integration\IntegrationEntity;
 use Contena\Core\System\AdminUser\AdminUserEntity;
 
 /**

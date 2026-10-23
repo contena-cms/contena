@@ -11,8 +11,6 @@ use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\Controller\SsoController;
 use Contena\Core\Framework\Sso\LoginResponseService;
 use Contena\Core\Framework\Sso\SsoService;
-use Contena\Core\Framework\Sso\SsoUser\SsoUserInvitationMailService;
-use Contena\Core\Framework\Sso\SsoUser\SsoUserService;
 use Contena\Core\Framework\Sso\StateValidator;
 use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
 use Contena\Core\Framework\Sso\TokenService\IdTokenParser;
@@ -38,8 +36,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(LoginConfigService::class),
             service(LoginResponseService::class),
             service(StateValidator::class),
-            service(SsoUserService::class),
-            service(SsoUserInvitationMailService::class),
+            service(SsoAdminUserService::class),
+            service(SsoAdminUserInvitationMailService::class),
             service(SsoService::class),
             service(RouterInterface::class),
         ])
@@ -81,7 +79,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ClockInterface::class),
         ]);
 
-    $services->set(SsoUserService::class)
+    $services->set(SsoAdminUserService::class)
         ->args([
             service('admin_user.repository'),
         ]);
@@ -101,7 +99,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(StateValidator::class);
 
-    $services->set(SsoUserInvitationMailService::class)
+    $services->set(SsoAdminUserInvitationMailService::class)
         ->args([
             service(MailService::class),
             service(SystemConfigService::class),

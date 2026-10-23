@@ -3,7 +3,6 @@
 namespace Contena\Core\Installer\Controller;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\TransferException;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Finish\SystemLocker;

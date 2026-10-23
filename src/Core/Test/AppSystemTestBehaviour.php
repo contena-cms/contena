@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Lifecycle\AppLifecycle;
 use Contena\Core\Framework\App\Lifecycle\AppLifecycleIterator;
 use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;

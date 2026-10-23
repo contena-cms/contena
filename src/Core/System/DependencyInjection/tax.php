@@ -3,7 +3,6 @@
 namespace Contena\Core\System\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleDefinition;
 use Contena\Core\System\Tax\Aggregate\TaxRuleType\TaxRuleTypeDefinition;
 use Contena\Core\System\Tax\Aggregate\TaxRuleTypeTranslation\TaxRuleTypeTranslationDefinition;
 use Contena\Core\System\Tax\Api\TaxRateFkResolver;

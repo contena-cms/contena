@@ -7,8 +7,6 @@ use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Salutation\AbstractSalutationsSorter;
-use Contena\Core\System\Salutation\Channel\AbstractSalutationRoute;
 use Symfony\Component\HttpFoundation\Request;
 
 class FormCmsElementResolver extends AbstractCmsElementResolver

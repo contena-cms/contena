@@ -9,10 +9,9 @@
 
 // intentional: namespace must match upstream to override Doctrine's class via autoload.files (excluded from classmap in composer.json)
 
-namespace Doctrine\DBAL\Schema;
+namespace Contena\Core\Framework\Adapter\Doctrine\Patch;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Schema\Exception\NotImplemented;
 use Doctrine\DBAL\Schema\Name\GenericName;
 use Doctrine\DBAL\Schema\Name\Identifier;
 use Doctrine\DBAL\Schema\Name\OptionallyQualifiedName;

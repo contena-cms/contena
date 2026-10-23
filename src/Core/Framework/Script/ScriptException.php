@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Script;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\Exception\ScriptExecutionFailedException;
 use Contena\Core\Framework\Script\Execution\Awareness\HookServiceFactory;
 use Symfony\Component\HttpFoundation\Response;
 

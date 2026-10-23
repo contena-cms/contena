@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Source;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;

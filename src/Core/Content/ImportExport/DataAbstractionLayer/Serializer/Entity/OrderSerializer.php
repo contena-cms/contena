@@ -2,11 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;

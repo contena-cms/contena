@@ -2,15 +2,11 @@
 
 namespace Contena\Frontend\Page\Wishlist;
 
-use Contena\Core\Checkout\Cart\Exception\UserNotLoggedInException;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
 use Contena\Core\System\User\Channel\AbstractLoadWishlistRoute;
 use Contena\Core\System\User\Channel\LoadWishlistRouteResponse;
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;

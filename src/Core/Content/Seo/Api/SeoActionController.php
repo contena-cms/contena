@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Seo\Api;
 
 use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
-use Contena\Core\Content\Seo\Exception\NoEntitiesForPreviewException;
 use Contena\Core\Content\Seo\SeoException;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlEntity;
 use Contena\Core\Content\Seo\SeoUrlGenerator;

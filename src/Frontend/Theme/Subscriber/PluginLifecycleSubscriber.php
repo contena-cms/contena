@@ -15,8 +15,6 @@ use Contena\Core\Framework\Plugin\Event\PluginPreDeactivateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPreUninstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPreUpdateEvent;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
-use Contena\Frontend\Theme\Exception\InvalidThemeBundleException;
-use Contena\Frontend\Theme\Exception\ThemeCompileException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;

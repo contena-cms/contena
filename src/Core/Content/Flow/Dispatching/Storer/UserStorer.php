@@ -7,7 +7,6 @@ use Contena\Core\System\User\UserDefinition;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
-use Contena\Core\Content\Flow\Exception\UserDeletedException;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\UserProvider;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\UserAware;

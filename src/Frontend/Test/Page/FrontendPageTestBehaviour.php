@@ -3,9 +3,6 @@
 namespace Contena\Frontend\Test\Page;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
@@ -25,11 +22,9 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Page\PageLoadedEvent;
 use Contena\Frontend\Pagelet\PageletLoadedEvent;
-use Contena\Tests\Integration\Frontend\Page\FrontendPageTestConstants;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\Event;
@@ -116,7 +111,6 @@ trait FrontendPageTestBehaviour
             'id' => $id,
             'blogNumber' => $blogNumber,
             'stock' => $stock,
-            'name' => FrontendPageTestConstants::BLOG_NAME,
             'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 15, 'net' => 10, 'linked' => false]],
             'manufacturer' => ['name' => 'test'],
             'tax' => ['id' => Uuid::randomHex(), 'name' => 'test', 'taxRate' => 15],

@@ -5,8 +5,6 @@ declare(strict_types=1);
 namespace Contena\Core\Framework\Demodata\Generator;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
-use Contena\Core\Content\Newsletter\Channel\NewsletterSubscribeRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Demodata\DemodataContext;
@@ -54,7 +52,6 @@ class NewsletterRecipientGenerator implements DemodataGeneratorInterface
                 'email' => $id . $faker->format('safeEmail'),
                 'firstName' => $faker->format('firstName'),
                 'lastName' => $faker->format('lastName'),
-                'status' => NewsletterSubscribeRoute::STATUS_DIRECT,
                 'hash' => Uuid::randomHex(),
                 'channelId' => $channelIds[array_rand($channelIds)],
                 'customFields' => [DemodataService::DEMODATA_CUSTOM_FIELDS_KEY => true],

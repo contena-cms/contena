@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;

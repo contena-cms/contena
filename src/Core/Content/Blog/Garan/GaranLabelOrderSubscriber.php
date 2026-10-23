@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Garan;
 
-use Contena\Core\Checkout\Cart\Order\CartConvertedEvent;
 use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\Context;
@@ -31,7 +30,6 @@ class GaranLabelOrderSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            CartConvertedEvent::class => 'storeLabels',
         ];
     }
 

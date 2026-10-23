@@ -4,8 +4,6 @@ namespace Contena\Core\System\User\Subscriber;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
@@ -91,7 +89,6 @@ class UserMetaFieldSubscriber implements EventSubscriberInterface
         $parameters = [
             'userIds' => Uuid::fromHexToBytesList($userIds),
             'version' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
-            'state' => OrderStates::STATE_COMPLETED,
         ];
         $types = [
             'userIds' => ArrayParameterType::BINARY,

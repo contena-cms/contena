@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\IpUtils;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal

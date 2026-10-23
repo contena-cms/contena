@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Demodata\Generator;
 
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Demodata\DemodataContext;

@@ -9,7 +9,6 @@ use Contena\Core\Framework\Rule\RuleComparison;
 use Contena\Core\Framework\Rule\RuleConfig;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleScope;
-use Contena\Core\System\Salutation\SalutationDefinition;
 
 /**
  * @final

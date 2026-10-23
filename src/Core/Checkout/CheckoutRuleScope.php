@@ -2,11 +2,9 @@
 
 namespace Contena\Core\Checkout;
 
-use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\RuleScope;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 
 #[Package('checkout')]
 class CheckoutRuleScope extends RuleScope

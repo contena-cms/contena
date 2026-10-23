@@ -3,10 +3,8 @@
 namespace Contena\Core\Framework\Validation;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
-use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class DataValidator
 {

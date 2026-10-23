@@ -6,10 +6,7 @@ use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\Exception\UserNotLoggedInRoutingException;
-use Contena\Core\Framework\Routing\Exception\InvalidRouteScopeException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class RoutingException extends HttpException
 {

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Transport;
 
-use Doctrine\DBAL\Exception as DBALException;
-use Doctrine\DBAL\Exception\RetryableException;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
@@ -16,7 +14,6 @@ use Contena\Core\Framework\Webhook\Outbox\StreamLease;
 use Contena\Core\Framework\Webhook\Outbox\StreamLockService;
 use Contena\Core\Framework\Webhook\Outbox\WebhookOutboxStore;
 use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
 use Symfony\Component\Messenger\Transport\Receiver\KeepaliveReceiverInterface;
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;

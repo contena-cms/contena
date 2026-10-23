@@ -3,8 +3,6 @@
 namespace Contena\Core\Maintenance\Channel\Service;
 
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;

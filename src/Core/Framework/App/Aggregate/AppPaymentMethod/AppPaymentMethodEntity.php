@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Aggregate\AppPaymentMethod;
 
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;

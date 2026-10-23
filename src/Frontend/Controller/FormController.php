@@ -2,15 +2,9 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Content\ContactForm\Channel\AbstractContactFormRoute;
-use Contena\Core\Content\Newsletter\Channel\AbstractNewsletterSubscribeRoute;
-use Contena\Core\Content\Newsletter\Channel\AbstractNewsletterUnsubscribeRoute;
-use Contena\Core\Content\RevocationRequest\Channel\AbstractRevocationRequestRoute;
 use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\RequestTransformer;

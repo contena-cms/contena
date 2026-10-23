@@ -6,7 +6,6 @@ use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Serializer
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Contracts\Service\ResetInterface;
 

@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Page\Newsletter\Subscribe;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;

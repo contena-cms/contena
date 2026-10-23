@@ -2,15 +2,10 @@
 
 namespace Contena\Core\Content\Seo;
 
-use Contena\Core\Content\Seo\Exception\InvalidTemplateException;
-use Contena\Core\Content\Seo\Exception\NoEntitiesForPreviewException;
-use Contena\Core\Content\Seo\Exception\SeoUrlRouteNotFoundException;
-use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class SeoException extends HttpException
 {

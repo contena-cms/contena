@@ -3,9 +3,6 @@
 namespace Contena\Core\Framework\App\Lifecycle\Handler;
 
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\App\Aggregate\AppShippingMethod\AppShippingMethodEntity;

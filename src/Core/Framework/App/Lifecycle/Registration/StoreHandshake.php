@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Lifecycle\Registration;
 
-use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Uri;
 use Psr\Clock\ClockInterface;

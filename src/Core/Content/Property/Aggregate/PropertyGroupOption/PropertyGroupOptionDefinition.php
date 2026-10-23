@@ -3,9 +3,6 @@
 namespace Contena\Core\Content\Property\Aggregate\PropertyGroupOption;
 
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogOption\BlogOptionDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogProperty\BlogPropertyDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOptionTranslation\PropertyGroupOptionTranslationDefinition;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
@@ -81,9 +78,6 @@ class PropertyGroupOptionDefinition extends EntityDefinition
             (new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id'))->addFlags(new ApiAware()),
             (new ManyToOneAssociationField('group', 'property_group_id', PropertyGroupDefinition::class, 'id'))->addFlags(new ApiAware()),
             (new TranslationsAssociationField(PropertyGroupOptionTranslationDefinition::class, 'property_group_option_id'))->addFlags(new Required()),
-            (new OneToManyAssociationField('blogConfiguratorSettings', BlogConfiguratorSettingDefinition::class, 'property_group_option_id', 'id'))->addFlags(new RestrictDelete()),
-            (new ManyToManyAssociationField('blogProperties', BlogDefinition::class, BlogPropertyDefinition::class, 'property_group_option_id', 'blog_id'))->addFlags(new CascadeDelete(), new ReverseInherited('properties')),
-            (new ManyToManyAssociationField('blogOptions', BlogDefinition::class, BlogOptionDefinition::class, 'property_group_option_id', 'blog_id'))->addFlags(new RestrictDelete()),
         ]);
     }
 }

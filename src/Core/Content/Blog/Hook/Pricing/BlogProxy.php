@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Hook\Pricing;
 
-use Contena\Core\Checkout\Cart\Facade\PriceFacade;
-use Contena\Core\Checkout\Cart\Facade\ScriptPriceStubs;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;

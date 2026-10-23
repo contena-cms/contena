@@ -3,13 +3,10 @@
 namespace Contena\Core\Framework\Adapter\Translation;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\ConnectionException;
-use Doctrine\DBAL\Exception\DriverException;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;

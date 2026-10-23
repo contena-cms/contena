@@ -4,7 +4,6 @@ namespace Contena\Frontend\Framework\Twig;
 
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 use Twig\Environment;
 
 class ErrorTemplateResolver

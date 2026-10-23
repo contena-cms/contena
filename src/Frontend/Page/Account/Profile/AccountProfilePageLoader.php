@@ -2,18 +2,11 @@
 
 namespace Contena\Frontend\Page\Account\Profile;
 
-use Contena\Core\Checkout\Cart\CartException;
-use Contena\Core\Checkout\Cart\Exception\UserNotLoggedInException;
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Salutation\AbstractSalutationsSorter;
-use Contena\Core\System\Salutation\Channel\AbstractSalutationRoute;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Frontend\Event\RouteRequest\SalutationRouteRequestEvent;
 use Contena\Frontend\Page\GenericPageLoaderInterface;
 use Contena\Frontend\Page\MetaInformation;

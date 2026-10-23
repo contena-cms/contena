@@ -3,8 +3,6 @@
 namespace Contena\Core\System\Channel\Api;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\Error\Error;
-use Contena\Core\Checkout\Cart\Error\ErrorCollection;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;

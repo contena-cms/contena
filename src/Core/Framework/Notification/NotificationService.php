@@ -67,7 +67,6 @@ class NotificationService
 
         if ($notifications->count() === 0) {
             return [
-                'notifications' => new NotificationCollection(),
                 'timestamp' => null,
             ];
         }

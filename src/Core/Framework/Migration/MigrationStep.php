@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\Migration;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\ConnectionException;
-use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Exception\TableNotFoundException;
 use Contena\Core\Defaults;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Deprecation\BCChange\ExceptionChange;

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Aggregate\AppShippingMethod;
 
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -50,7 +49,6 @@ class AppShippingMethodDefinition extends EntityDefinition
             new FkField('app_id', 'appId', AppDefinition::class),
             new ManyToOneAssociationField('app', 'app_id', AppDefinition::class),
 
-            (new FkField('shipping_method_id', 'shippingMethodId', ShippingMethodDefinition::class))->addFlags(new Required()),
             new OneToOneAssociationField('shippingMethod', 'shipping_method_id', 'id', ShippingMethodDefinition::class, false),
 
             new FkField('original_media_id', 'originalMediaId', MediaDefinition::class),

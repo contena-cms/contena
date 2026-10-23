@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByUserField;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
@@ -17,12 +16,12 @@ use Symfony\Component\Validator\ConstraintViolationList;
 /**
  * @internal
  */
-class WasModifiedByUserFieldSerializer extends BoolFieldSerializer
+class WasModifiedByAdminUserFieldSerializer extends BoolFieldSerializer
 {
     public function encode(Field $field, EntityExistence $existence, KeyValuePair $data, WriteParameterBag $parameters): \Generator
     {
-        if (!$field instanceof WasModifiedByUserField) {
-            throw DataAbstractionLayerException::invalidSerializerField(WasModifiedByUserField::class, $field);
+        if (!$field instanceof WasModifiedByAdminUserField) {
+            throw DataAbstractionLayerException::invalidSerializerField(WasModifiedByAdminUserField::class, $field);
         }
 
         // reject explicit writes from any scope

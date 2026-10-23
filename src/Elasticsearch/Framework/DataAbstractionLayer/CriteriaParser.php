@@ -23,7 +23,6 @@ use OpenSearchDSL\Query\TermLevel\TermsQuery;
 use OpenSearchDSL\Query\TermLevel\WildcardQuery;
 use OpenSearchDSL\Sort\FieldSort;
 use OpenSearchDSL\Sort\NestedSort;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;

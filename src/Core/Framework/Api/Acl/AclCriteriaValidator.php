@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Framework\Log\Package;
-use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
 class AclCriteriaValidator
 {

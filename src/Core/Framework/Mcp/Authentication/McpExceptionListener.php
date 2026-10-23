@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Mcp\Authentication;
 
-use League\OAuth2\Server\Exception\OAuthServerException;
-use Mcp\Schema\JsonRpc\Error;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;

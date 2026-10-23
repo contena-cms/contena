@@ -7,7 +7,6 @@ use Contena\Core\System\User\UserEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Salutation\SalutationDefinition;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

@@ -15,17 +15,12 @@ use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\Channel\AbstractBlogCloseoutFilterFactory;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
-use Contena\Core\Content\ContentStream\Exception\EmptyBlogStreamException;
-use Contena\Core\Content\ContentStream\Exception\NoFilterException;
-use Contena\Core\Content\ContentStream\Service\AbstractBlogStreamBuilder;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -41,7 +36,7 @@ class ContentStreamProcessor extends AbstractBlogSliderProcessor
      * @param ChannelRepository<BlogCollection> $blogRepository
      */
     public function __construct(
-        private readonly ContentStreamBuilderInterface|AbstractBlogStreamBuilder $contentStreamBuilder,
+        private readonly ContentStreamBuilderInterface|AbstractContentStreamBuilder $contentStreamBuilder,
         private readonly ChannelRepository $blogRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly LoggerInterface $logger,
@@ -130,7 +125,7 @@ class ContentStreamProcessor extends AbstractBlogSliderProcessor
 
         try {
             $contentStreamBuilder = $this->contentStreamBuilder;
-            if ($contentStreamBuilder instanceof AbstractBlogStreamBuilder) {
+            if ($contentStreamBuilder instanceof AbstractContentStreamBuilder) {
                 $contentStreamBuilder->enrichCriteria(
                     $criteria,
                     $config->getStringValue(),
@@ -152,7 +147,7 @@ class ContentStreamProcessor extends AbstractBlogSliderProcessor
             );
 
             return null;
-        } catch (EmptyBlogStreamException) {
+        } catch (EmptyContentStreamException) {
             // An empty group selects all blogs, as in the blog export
         } catch (NoFilterException $exception) {
             $this->logger->warning(

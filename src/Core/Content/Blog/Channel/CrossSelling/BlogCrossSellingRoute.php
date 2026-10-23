@@ -4,9 +4,6 @@ namespace Contena\Core\Content\Blog\Channel\CrossSelling;
 
 use Doctrine\DBAL\Connection;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\Events\BlogCrossSellingCriteriaLoadEvent;
 use Contena\Core\Content\Blog\Events\BlogCrossSellingIdsCriteriaEvent;
@@ -19,9 +16,6 @@ use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\AbstractBlogCloseoutFilterFactory;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
-use Contena\Core\Content\ContentStream\Exception\EmptyBlogStreamException;
-use Contena\Core\Content\ContentStream\Exception\NoFilterException;
-use Contena\Core\Content\ContentStream\Service\AbstractBlogStreamBuilder;
 use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
@@ -37,7 +31,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
@@ -60,7 +53,7 @@ class BlogCrossSellingRoute extends AbstractBlogCrossSellingRoute
     public function __construct(
         private readonly EntityRepository $crossSellingRepository,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly ContentStreamBuilderInterface|AbstractBlogStreamBuilder $contentStreamBuilder,
+        private readonly ContentStreamBuilderInterface|AbstractContentStreamBuilder $contentStreamBuilder,
         private readonly ChannelRepository $blogRepository,
         private readonly SystemConfigService $systemConfigService,
         private readonly BlogListingLoader $listingLoader,
@@ -192,12 +185,12 @@ class BlogCrossSellingRoute extends AbstractBlogCrossSellingRoute
         $contentStreamBuilder = $this->contentStreamBuilder;
 
         try {
-            if ($contentStreamBuilder instanceof AbstractBlogStreamBuilder) {
+            if ($contentStreamBuilder instanceof AbstractContentStreamBuilder) {
                 $contentStreamBuilder->enrichCriteria($criteria, $contentStreamId, $context->getContext());
             } else {
                 $criteria->addFilter(...$contentStreamBuilder->buildFilters($contentStreamId, $context->getContext()));
             }
-        } catch (EmptyBlogStreamException) {
+        } catch (EmptyContentStreamException) {
             // An empty group selects all blogs, as in the blog export
         } catch (NoFilterException $exception) {
             $this->logger->warning(

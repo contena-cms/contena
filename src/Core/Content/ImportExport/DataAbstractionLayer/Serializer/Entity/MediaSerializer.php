@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
-use Contena\Core\Content\ImportExport\Exception\InvalidMediaUrlException;
-use Contena\Core\Content\ImportExport\Exception\MediaDownloadException;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;

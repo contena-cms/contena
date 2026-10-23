@@ -2,22 +2,12 @@
 
 namespace Contena\Core\Content\Blog;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryDate;
 use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSellingAssignedBlogs\BlogCrossSellingAssignedBlogsCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogDownload\BlogDownloadCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogFeatureSet\BlogFeatureSetEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
@@ -30,14 +20,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
-use Contena\Core\System\DeliveryTime\DeliveryTimeEntity;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tax\TaxEntity;
-use Contena\Core\System\Unit\UnitEntity;
 use Symfony\Component\Clock\Clock;
 
 class BlogEntity extends Entity implements \Stringable
@@ -180,8 +167,6 @@ class BlogEntity extends Entity implements \Stringable
     protected ?BlogManufacturerEntity $manufacturer = null;
 
     protected ?UnitEntity $unit = null;
-
-    protected BlogPriceCollection $prices;
 
     protected ?BlogMediaEntity $cover = null;
 

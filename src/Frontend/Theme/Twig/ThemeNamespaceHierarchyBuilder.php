@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Theme\Twig;
 
-use Contena\Core\Checkout\Document\Event\DocumentTemplateRendererParameterEvent;
 use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\TemplateNamespaceHierarchyBuilderInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\ChannelRequest;
@@ -42,7 +41,6 @@ class ThemeNamespaceHierarchyBuilder implements TemplateNamespaceHierarchyBuilde
         return [
             KernelEvents::REQUEST => 'requestEvent',
             KernelEvents::EXCEPTION => 'requestEvent',
-            DocumentTemplateRendererParameterEvent::class => 'onDocumentRendering',
             ChannelFileTemplateResolveEvent::class => 'onChannelFileTemplateResolve',
         ];
     }

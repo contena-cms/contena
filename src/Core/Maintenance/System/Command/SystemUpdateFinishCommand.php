@@ -5,7 +5,6 @@ namespace Contena\Core\Maintenance\System\Command;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Update\Api\UpdateController;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;

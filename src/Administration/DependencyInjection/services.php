@@ -11,7 +11,6 @@ use Contena\Administration\Command\GenerateEntitySchemaTypesCommand;
 use Contena\Administration\Command\SetupExtensionToolingCommand;
 use Contena\Administration\Controller\AdminExtensionApiController;
 use Contena\Administration\Controller\AdministrationController;
-use Contena\Administration\Controller\AdminBlogStreamController;
 use Contena\Administration\Controller\AdminSearchController;
 use Contena\Administration\Controller\AdminTagController;
 use Contena\Administration\Controller\DashboardController;
@@ -26,8 +25,6 @@ use Contena\Administration\Snippet\AppAdministrationSnippetPersister;
 use Contena\Administration\Snippet\AppLifecycleSubscriber;
 use Contena\Administration\Snippet\CachedSnippetFinder;
 use Contena\Administration\Snippet\SnippetFinder;
-use Contena\Administration\System\Channel\Subscriber\ChannelUserConfigSubscriber;
-use Contena\Core\Checkout\Cart\Price\CashRounding;
 use Contena\Core\System\User\Validation\UserEmailUniqueChecker;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
@@ -42,8 +39,6 @@ use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Notification\Api\NotificationController;
-use Contena\Core\Framework\Notification\NotificationDefinition;
 use Contena\Core\Framework\Store\Services\FirstRunWizardService;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\System\Channel\Context\ChannelContextService;
@@ -148,7 +143,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
-    $services->set(AdminBlogStreamController::class)
+    $services->set(AdminContentStreamController::class)
         ->public()
         ->args([
             service(BlogDefinition::class),
@@ -168,7 +163,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(
         'Contena\Administration\Controller\NotificationController',
-        NotificationController::class,
     )
         ->public()
         ->deprecate('contena/administration', '6.7.15.0', 'The "%alias_id%" service alias is deprecated and will be removed in v6.8.0. Use Contena\Core\Framework\Notification\Api\NotificationController instead.');
@@ -225,10 +219,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(
         'Contena\Administration\Notification\NotificationDefinition',
-        NotificationDefinition::class,
     )->deprecate('contena/administration', '6.7.15.0', 'The "%alias_id%" service alias is deprecated and will be removed in v6.8.0. Use Contena\Core\Framework\Notification\NotificationDefinition instead.');
 
-    $services->set(ChannelUserConfigSubscriber::class)
+    $services->set(ChannelAdminUserConfigSubscriber::class)
         ->args([
             service('admin_user_config.repository'),
         ])

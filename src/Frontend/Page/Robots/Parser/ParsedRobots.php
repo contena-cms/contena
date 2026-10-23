@@ -4,12 +4,11 @@ namespace Contena\Frontend\Page\Robots\Parser;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
-use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 
 class ParsedRobots
 {
     /**
-     * @param list<RobotsUserAgentBlock> $admin_userAgentBlocks
+     * @param list<RobotsAdminUserAgentBlock> $admin_userAgentBlocks
      * @param list<RobotsDirective> $orphanedPathDirectives
      * @param list<ParseIssue> $issues
      */

@@ -11,7 +11,7 @@ use Contena\Core\Framework\Log\Package;
 /**
  * Enriches a criteria with a blog stream's filters and grouping state.
  */
-abstract class AbstractBlogStreamBuilder implements ContentStreamBuilderInterface
+abstract class AbstractContentStreamBuilder implements ContentStreamBuilderInterface
 {
     abstract public function enrichCriteria(Criteria $criteria, string $id, Context $context): void;
 

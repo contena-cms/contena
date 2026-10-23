@@ -3,7 +3,6 @@
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
 
 class ValueGeneratorPatternIncrement extends AbstractValueGenerator

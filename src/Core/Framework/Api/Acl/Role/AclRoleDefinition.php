@@ -19,8 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Integration\Aggregate\IntegrationRole\IntegrationRoleDefinition;
-use Contena\Core\System\Integration\IntegrationDefinition;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 
 /**
@@ -84,7 +82,7 @@ class AclRoleDefinition extends EntityDefinition
             (new LongTextField('description', 'description'))->setDescription('A short description of the ACL role.'),
             (new ListField('privileges', 'privileges', StringField::class))->addFlags(new Required())->setDescription('Privileges like read, write, delete, etc.'),
             (new DateTimeField('deleted_at', 'deletedAt'))->setDescription('Time and date when the ACL role was deleted.'),
-            new ManyToManyAssociationField('users', AdminUserDefinition::class, AclUserRoleDefinition::class, 'acl_role_id', 'admin_user_id'),
+            new ManyToManyAssociationField('users', AdminUserDefinition::class, AclAdminUserRoleDefinition::class, 'acl_role_id', 'admin_user_id'),
             (new OneToOneAssociationField('app', 'id', 'acl_role_id', AppDefinition::class, false))->addFlags(new RestrictDelete()),
             new ManyToManyAssociationField('integrations', IntegrationDefinition::class, IntegrationRoleDefinition::class, 'acl_role_id', 'integration_id'),
         ]);

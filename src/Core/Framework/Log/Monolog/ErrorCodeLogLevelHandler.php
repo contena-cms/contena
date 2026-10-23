@@ -10,7 +10,6 @@ use Monolog\ResettableInterface;
 use Psr\Log\LogLevel;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
-use Symfony\Component\Messenger\Exception\HandlerFailedException;
 
 class ErrorCodeLogLevelHandler extends AbstractHandler
 {

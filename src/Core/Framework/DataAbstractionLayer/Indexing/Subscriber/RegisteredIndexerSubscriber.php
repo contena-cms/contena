@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Indexing\Subscriber;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\SynchronousPostUpdateIndexer;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\IndexerQueuer;
 use Contena\Core\Framework\Plugin\Event\PluginPostInstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUninstallEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostUpdateEvent;

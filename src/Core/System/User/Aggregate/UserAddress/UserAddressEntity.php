@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\System\Country\CountryEntity;
-use Contena\Core\System\Salutation\SalutationEntity;
 
 class UserAddressEntity extends Entity
 {

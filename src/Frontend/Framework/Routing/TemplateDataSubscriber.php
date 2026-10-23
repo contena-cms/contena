@@ -5,8 +5,6 @@ namespace Contena\Frontend\Framework\Routing;
 use Contena\Core\Content\Seo\HreflangLoaderInterface;
 use Contena\Core\Content\Seo\HreflangLoaderParameter;
 use Contena\Core\Framework\App\ActiveAppsLoader;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\PlatformRequest;
 use Contena\Core\ChannelRequest;

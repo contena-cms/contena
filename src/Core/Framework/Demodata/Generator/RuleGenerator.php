@@ -4,11 +4,8 @@ namespace Contena\Core\Framework\Demodata\Generator;
 
 use Faker\Generator;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\Rule\GoodsPriceRule;
 use Contena\Core\System\User\Rule\UserGroupRule;
 use Contena\Core\System\User\Rule\DaysSinceFirstLoginRule;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Defaults;
@@ -94,7 +91,6 @@ class RuleGenerator implements DemodataGeneratorInterface
                 'name' => 'Next two days',
             ],
             [
-                'rule' => (new GoodsPriceRule())->assign(['amount' => 5000, 'operator' => GoodsPriceRule::OPERATOR_GTE]),
                 'name' => 'Cart >= 5000',
             ],
             [

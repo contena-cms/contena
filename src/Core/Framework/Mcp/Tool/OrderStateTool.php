@@ -4,12 +4,6 @@ namespace Contena\Core\Framework\Mcp\Tool;
 
 use Doctrine\DBAL\Connection;
 use Mcp\Capability\Attribute\McpTool;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

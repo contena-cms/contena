@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\App\Command;
 
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\AppValidationException;
-use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\ManifestValidator;
 use Contena\Core\Framework\Context;

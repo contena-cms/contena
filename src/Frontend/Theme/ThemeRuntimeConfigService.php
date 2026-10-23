@@ -6,7 +6,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Frontend\Theme\Exception\ThemeCompileException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 

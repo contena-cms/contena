@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
-use Contena\Core\Checkout\Payment\PaymentException;
-use Contena\Core\Checkout\Shipping\ShippingException;
 use Contena\Core\Content\ImportExport\ImportExportException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\ExceptionHandlerInterface;
 use Contena\Core\Framework\Log\Package;

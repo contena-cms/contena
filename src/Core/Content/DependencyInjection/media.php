@@ -73,8 +73,6 @@ use Contena\Core\Content\Media\Subscriber\VideoCoverCleanupSubscriber;
 use Contena\Core\Content\Media\Subscriber\VideoCoverLoadedSubscriber;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailCollectionNormalizer;
 use Contena\Core\Content\Media\Thumbnail\ExternalThumbnailDataNormalizer;
-use Contena\Core\Content\Media\Thumbnail\Processor\GdImageThumbnailProcessor;
-use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Content\Media\Thumbnail\ThumbnailSizeCalculator;
 use Contena\Core\Content\Media\TypeDetector\AudioTypeDetector;

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\DevOps\StaticAnalyze\PHPStan;
+namespace Contena\Core\DevOps\StaticAnalyze;
 
 use Contena\Core\DevOps\StaticAnalyze\StaticAnalyzeKernel;
 use Contena\Core\Framework\Adapter\Kernel\KernelFactory;

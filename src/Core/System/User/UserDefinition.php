@@ -7,11 +7,6 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryDefinition;
 use Contena\Core\System\User\Aggregate\UserTag\UserTagDefinition;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderUser\OrderUserDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionPersonaUser\PromotionPersonaUserDefinition;
-use Contena\Core\Checkout\Promotion\PromotionDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AutoIncrementField;
@@ -52,7 +47,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 use Contena\Core\System\Channel\ChannelDefinition;
-use Contena\Core\System\Salutation\SalutationDefinition;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
 
@@ -113,12 +107,10 @@ class UserDefinition extends EntityDefinition
             (new FkField('user_group_id', 'groupId', UserGroupDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of user group.'),
             (new FkField('channel_id', 'channelId', ChannelDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of sales channel.'),
             (new FkField('language_id', 'languageId', LanguageDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of language.'),
-            (new FkField('last_payment_method_id', 'lastPaymentMethodId', PaymentMethodDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of previous payment method.'),
             (new FkField('default_billing_address_id', 'defaultBillingAddressId', UserAddressDefinition::class))->addFlags(new ApiAware(), new Required(), new NoConstraint())->setDescription('Unique identity of default billing address.'),
             (new FkField('default_shipping_address_id', 'defaultShippingAddressId', UserAddressDefinition::class))->addFlags(new ApiAware(), new Required(), new NoConstraint())->setDescription('Unique identity of default shipping address.'),
             new AutoIncrementField(),
             (new NumberRangeField('user_number', 'userNumber', 255))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Unique  number assigned to identity a user.'),
-            (new FkField('salutation_id', 'salutationId', SalutationDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of salutation.'),
             (new StringField('first_name', 'firstName', self::MAX_LENGTH_FIRST_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('First name of the user.'),
             (new StringField('last_name', 'lastName', self::MAX_LENGTH_LAST_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Last name of the user.'),
             (new StringField('company', 'company'))->addFlags(new ApiAware(), new IgnoreInOpenapiSchema(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Company name of the user.'),
@@ -148,14 +140,11 @@ class UserDefinition extends EntityDefinition
             (new ManyToOneAssociationField('group', 'user_group_id', UserGroupDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('User group determining pricing and permissions'),
             new ManyToOneAssociationField('channel', 'channel_id', ChannelDefinition::class, 'id', false),
             (new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Preferred language for user communication'),
-            (new ManyToOneAssociationField('lastPaymentMethod', 'last_payment_method_id', PaymentMethodDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Last used payment method by the user'),
             $defaultBillingAddressAssociation,
             (new ManyToOneAssociationField('activeBillingAddress', 'active_billing_address_id', UserAddressDefinition::class, 'id', false))->addFlags(new ApiAware(), new Runtime())->setDescription('Currently active billing address in the session'),
             $defaultShippingAddressAssociation,
             (new ManyToOneAssociationField('activeShippingAddress', 'active_shipping_address_id', UserAddressDefinition::class, 'id', false))->addFlags(new ApiAware(), new Runtime())->setDescription('Currently active shipping address in the session'),
-            (new ManyToOneAssociationField('salutation', 'salutation_id', SalutationDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('User salutation (e.g., Mr., Mrs., Ms.)'),
             (new OneToManyAssociationField('addresses', UserAddressDefinition::class, 'user_id', 'id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('All addresses saved for the user'),
-            (new OneToManyAssociationField('orderUsers', OrderUserDefinition::class, 'user_id', 'id'))->addFlags(new SetNullOnDelete()),
             (new ManyToManyAssociationField('tags', TagDefinition::class, UserTagDefinition::class, 'user_id', 'tag_id'))->addFlags(new SearchRanking(SearchRanking::ASSOCIATION_SEARCH_RANKING), new ApiAware())->setDescription('Tags assigned to the user for organization and segmentation'),
             new ManyToManyAssociationField('promotions', PromotionDefinition::class, PromotionPersonaUserDefinition::class, 'user_id', 'promotion_id'),
             new OneToManyAssociationField('blogReviews', BlogReviewDefinition::class, 'user_id'),

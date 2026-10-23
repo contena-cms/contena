@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\App\Manifest;
 
 use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 use Contena\Core\Framework\App\Manifest\Xml\Administration\Admin;
 use Contena\Core\Framework\App\Manifest\Xml\AllowedHost\AllowedHosts;
 use Contena\Core\Framework\App\Manifest\Xml\Cookie\Cookies;

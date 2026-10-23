@@ -9,7 +9,6 @@ use Contena\Core\Framework\Validation\Constraint\NoHtml;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Salutation\SalutationDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;

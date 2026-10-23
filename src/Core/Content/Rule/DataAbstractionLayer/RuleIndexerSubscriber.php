@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Rule\DataAbstractionLayer;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Content\Rule\RuleEvents;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;

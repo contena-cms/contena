@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\Framework\Sso\SsoUser;
+namespace Contena\Core\Framework\Sso\SsoAdminUser;
 
 use Contena\Core\Content\Mail\Service\AbstractMailService;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeCollection;
@@ -26,7 +26,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 /**
  * @internal
  */
-class SsoUserInvitationMailService
+class SsoAdminUserInvitationMailService
 {
     private const ADMIN_ROUTE_NAME = 'administration.index';
 

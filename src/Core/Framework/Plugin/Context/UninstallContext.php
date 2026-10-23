@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Plugin\Context;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Plugin;
 
 class UninstallContext extends InstallContext

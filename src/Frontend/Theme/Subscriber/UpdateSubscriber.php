@@ -9,7 +9,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
 use Contena\Core\System\Channel\ChannelCollection;
-use Contena\Frontend\Theme\Exception\ThemeCompileException;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeService;

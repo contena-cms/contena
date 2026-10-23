@@ -3,7 +3,6 @@
 namespace Contena\Core\Test\Stub\Framework\Util;
 
 use Contena\Core\Framework\Log\Package;
-use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

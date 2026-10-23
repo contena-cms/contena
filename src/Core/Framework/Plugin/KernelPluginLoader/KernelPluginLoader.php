@@ -6,7 +6,6 @@ use Composer\Autoload\ClassLoader;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Plugin\Exception\KernelPluginLoaderException;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\PluginException;
 use Symfony\Component\DependencyInjection\ContainerBuilder;

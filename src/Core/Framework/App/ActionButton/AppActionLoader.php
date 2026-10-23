@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\App\ActionButton;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonCollection;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Framework\Adapter\Cache;
 
-use Contena\Core\Checkout\Cart\Event\CartChangedEvent;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\System\User\Event\UserLoginEvent;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
@@ -53,7 +51,6 @@ class CacheStateSubscriber implements EventSubscriberInterface
                 ['setStates', KernelListenerPriorities::KERNEL_CONTROLLER_EVENT_SCOPE_VALIDATE_POST],
             ],
             UserLoginEvent::class => 'login',
-            CartChangedEvent::class => 'cartChanged',
         ];
     }
 

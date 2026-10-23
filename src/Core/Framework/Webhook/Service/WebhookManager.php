@@ -7,7 +7,6 @@ use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Event\AppChangedEvent;
 use Contena\Core\Framework\App\Event\AppFlowActionEvent;
 use Contena\Core\Framework\App\Event\AppLifecycleEvent;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;

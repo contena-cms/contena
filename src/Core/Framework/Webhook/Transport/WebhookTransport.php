@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Webhook\Transport;
 
-use Doctrine\DBAL\Exception as DBALException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
@@ -10,7 +9,6 @@ use Contena\Core\Framework\Webhook\Outbox\OutboxInsert;
 use Contena\Core\Framework\Webhook\Outbox\WebhookOutboxStore;
 use Contena\Core\Framework\Webhook\WebhookException;
 use Symfony\Component\Messenger\Envelope;
-use Symfony\Component\Messenger\Exception\TransportException;
 use Symfony\Component\Messenger\Transport\Receiver\KeepaliveReceiverInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
 

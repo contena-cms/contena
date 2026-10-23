@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Adapter\Twig;
 
 use Contena\Core\Framework\Log\Package;
-use Twig\Error\LoaderError;
 
 interface TemplateFinderInterface
 {

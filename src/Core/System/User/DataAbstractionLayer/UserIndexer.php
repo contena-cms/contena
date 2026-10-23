@@ -5,7 +5,6 @@ namespace Contena\Core\System\User\DataAbstractionLayer;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\System\User\Event\UserIndexerEvent;
-use Contena\Core\Content\Newsletter\DataAbstractionLayer\Indexing\UserNewsletterChannelsUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -13,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class UserIndexer extends EntityIndexer

@@ -1,22 +1,7 @@
 <?php declare(strict_types=1);
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use Contena\Core\Checkout\Cart\CartDataCollectorInterface;
-use Contena\Core\Checkout\Cart\CartProcessorInterface;
-use Contena\Core\Checkout\Cart\CartValidatorInterface;
-use Contena\Core\Checkout\Cart\LineItem\Group\LineItemGroupPackagerInterface;
-use Contena\Core\Checkout\Cart\LineItem\Group\LineItemGroupSorterInterface;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\LineItemFactoryInterface;
-use Contena\Core\Checkout\Cart\TaxProvider\AbstractTaxProvider;
 use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
-use Contena\Core\Checkout\Document\Renderer\AbstractDocumentRenderer;
-use Contena\Core\Checkout\Document\Service\AbstractDocumentTypeRenderer;
-use Contena\Core\Checkout\DocumentV2\Provider\AbstractDocumentDataProvider;
-use Contena\Core\Checkout\DocumentV2\Type\AbstractDocumentType;
-use Contena\Core\Checkout\Gateway\Command\Handler\AbstractCheckoutGatewayCommandHandler;
-use Contena\Core\Checkout\Payment\Cart\PaymentHandler\AbstractPaymentHandler;
-use Contena\Core\Checkout\Promotion\Cart\Discount\Filter\FilterPickerInterface;
-use Contena\Core\Checkout\Promotion\Cart\Discount\Filter\FilterSorterInterface;
 use Contena\Core\Content\Cms\DataResolver\Element\CmsElementResolverInterface;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
 use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
@@ -31,9 +16,6 @@ use Contena\Core\Content\Media\TypeDetector\TypeDetectorInterface;
 use Contena\Core\Content\Blog\Cms\BlogSlider\AbstractBlogSliderProcessor;
 use Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate\AbstractStockUpdateFilter;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
-use Contena\Core\Content\Blog\Channel\Listing\Processor\AbstractListingProcessor;
-use Contena\Core\Content\BlogExport\Provider\AbstractAgenticCommerceBlogExportProvider;
-use Contena\Core\Content\BlogExport\Validator\ValidatorInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntitySeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
@@ -74,30 +56,16 @@ return [
     'parameters' => [
         // Changing a mapped contract class is a backward compatibility break and must not be done in a minor release.
         'contenaTaggedServiceContractTagContracts' => [
-            'document.renderer' => AbstractDocumentRenderer::class,
-            'document_type.renderer' => AbstractDocumentTypeRenderer::class,
             'flow.action' => FlowAction::class,
             'flow.storer' => FlowStorer::class,
-            'lineitem.group.packager' => LineItemGroupPackagerInterface::class,
-            'lineitem.group.sorter' => LineItemGroupSorterInterface::class,
             'messenger.receiver' => ReceiverInterface::class,
-            'promotion.filter.picker' => FilterPickerInterface::class,
-            'promotion.filter.sorter' => FilterSorterInterface::class,
             'contena.api.cors_header_provider' => CorsHeaderProviderInterface::class,
             'contena.api.enum_provider' => FieldEnumProviderInterface::class,
             'contena.app_script.twig.extension' => ExtensionInterface::class,
-            'contena.cart.collector' => CartDataCollectorInterface::class,
-            'contena.cart.line_item.factory' => LineItemFactoryInterface::class,
-            'contena.cart.processor' => CartProcessorInterface::class,
-            'contena.cart.validator' => CartValidatorInterface::class,
-            'contena.checkout.gateway.command' => AbstractCheckoutGatewayCommandHandler::class,
             'contena.cms.data_resolver' => CmsElementResolverInterface::class,
             'contena.cms.blog_slider.processor' => AbstractBlogSliderProcessor::class,
             'contena.dal.exception_handler' => ExceptionHandlerInterface::class,
             'contena.cnmodata_generator' => DemodataGeneratorInterface::class,
-            'contena.document_v2.provider' => AbstractDocumentDataProvider::class,
-            'contena.document_v2.renderer' => Contena\Core\Checkout\DocumentV2\Renderer\AbstractDocumentRenderer::class,
-            'contena.document_v2.type' => AbstractDocumentType::class,
             'contena.elastic.admin-searcher-index' => AbstractAdminIndexer::class,
             'contena.entity.definition' => EntityDefinition::class,
             'contena.entity.hookable' => [EntityDefinition::class, Entity::class],
@@ -120,10 +88,7 @@ return [
             'contena.metric_transport_factory' => MetricTransportInterface::class,
             'contena.oauth.scope' => ScopeEntityInterface::class,
             'contena.path.strategy' => AbstractMediaPathStrategy::class,
-            'contena.payment.method' => AbstractPaymentHandler::class,
             'contena.blog.stock_filter' => AbstractStockUpdateFilter::class,
-            'contena.blog_export.provider' => AbstractAgenticCommerceBlogExportProvider::class,
-            'contena.blog_export.validator' => ValidatorInterface::class,
             'contena.route_scope' => AbstractRouteScope::class,
             'contena.route_scope_whitelist' => RouteScopeWhitelistInterface::class,
             'contena.rule.definition' => Rule::class,
@@ -137,7 +102,6 @@ return [
             'contena.frontend.captcha' => AbstractCaptcha::class,
             'contena.sync.fk_resolver' => AbstractFkResolver::class,
             'contena.system_check' => BaseCheck::class,
-            'contena.tax.provider' => AbstractTaxProvider::class,
             'contena.telemetry.periodic_metric_collector' => PeriodicMetricCollectorInterface::class,
             'contena.twig.hierarchy_builder' => TemplateNamespaceHierarchyBuilderInterface::class,
             'contena.value_generator_connector' => AbstractIncrementStorage::class,

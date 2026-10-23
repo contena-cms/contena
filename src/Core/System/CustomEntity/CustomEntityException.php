@@ -4,7 +4,6 @@ namespace Contena\Core\System\CustomEntity;
 
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\CustomEntity\Exception\CustomEntityXmlParsingException;
 use Symfony\Component\HttpFoundation\Response;
 
 class CustomEntityException extends HttpException

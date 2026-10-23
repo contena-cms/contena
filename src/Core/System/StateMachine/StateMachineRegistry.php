@@ -13,8 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -28,8 +26,6 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineS
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionEntity;
 use Contena\Core\System\StateMachine\Event\StateMachineStateChangeEvent;
 use Contena\Core\System\StateMachine\Event\StateMachineTransitionEvent;
-use Contena\Core\System\StateMachine\Exception\IllegalTransitionException;
-use Contena\Core\System\StateMachine\Exception\UnnecessaryTransitionException;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

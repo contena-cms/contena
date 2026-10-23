@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Sitemap\Provider;
 use Contena\Core\Content\Sitemap\Struct\Url;
 use Contena\Core\Content\Sitemap\Struct\UrlResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\Clock\Clock;
 

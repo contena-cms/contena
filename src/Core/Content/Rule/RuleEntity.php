@@ -2,14 +2,7 @@
 
 namespace Contena\Core\Content\Rule;
 
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionSetGroup\PromotionSetGroupCollection;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
-use Contena\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethodPriceCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;

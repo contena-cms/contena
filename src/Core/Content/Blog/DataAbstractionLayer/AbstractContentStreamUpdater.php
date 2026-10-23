@@ -6,7 +6,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
 use Contena\Core\Framework\Log\Package;
 
-abstract class AbstractBlogStreamUpdater extends EntityIndexer
+abstract class AbstractContentStreamUpdater extends EntityIndexer
 {
     /**
      * @param array<string> $ids

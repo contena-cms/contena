@@ -3,13 +3,11 @@
 namespace Contena\Frontend\Theme;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception\ConnectionException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
@@ -21,9 +19,6 @@ use Contena\Frontend\Theme\ConfigLoader\StaticFileConfigLoader;
 use Contena\Frontend\Theme\Event\ThemeAssignedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigChangedEvent;
 use Contena\Frontend\Theme\Event\ThemeConfigResetEvent;
-use Contena\Frontend\Theme\Exception\InvalidThemeConfigException;
-use Contena\Frontend\Theme\Exception\ThemeConfigException;
-use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\Message\CompileThemeMessage;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\Validator\SCSSValidator;

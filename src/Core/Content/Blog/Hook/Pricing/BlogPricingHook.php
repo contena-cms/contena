@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Blog\Hook\Pricing;
 
-use Contena\Core\Checkout\Cart\Facade\PriceFactoryFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Facade\ChannelRepositoryFacadeHookFactory;
 use Contena\Core\Framework\Log\Package;
@@ -48,7 +47,6 @@ class BlogPricingHook extends Hook implements ChannelContextAware
     {
         return [
             RepositoryFacadeHookFactory::class,
-            PriceFactoryFactory::class,
             SystemConfigFacadeHookFactory::class,
             ChannelRepositoryFacadeHookFactory::class,
         ];

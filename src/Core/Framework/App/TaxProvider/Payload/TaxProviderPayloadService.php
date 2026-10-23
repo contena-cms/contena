@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\App\TaxProvider\Payload;
 
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-use Contena\Core\Checkout\Cart\TaxProvider\Struct\TaxProviderResult;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
@@ -12,7 +10,6 @@ use Contena\Core\Framework\App\TaxProvider\Response\TaxProviderResponse;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\ExceptionLogger;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Util\Exception\JsonDecodingException;
 use Contena\Core\Framework\Util\Json;
 
 /**

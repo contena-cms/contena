@@ -2,9 +2,6 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Checkout\Cart\AbstractCartPersister;
-use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;

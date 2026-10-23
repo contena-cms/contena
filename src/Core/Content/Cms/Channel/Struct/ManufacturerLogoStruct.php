@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Cms\Channel\Struct;
 
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Framework\Log\Package;
 
 /**

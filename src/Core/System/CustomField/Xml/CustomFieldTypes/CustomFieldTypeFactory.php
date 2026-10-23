@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\CustomField\Xml\CustomFieldTypes;
 
-use Contena\Core\Framework\App\Exception\CustomFieldTypeNotFoundException;
 use Contena\Core\Framework\Log\Package;
 
 /**

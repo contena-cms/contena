@@ -2,16 +2,11 @@
 
 namespace Contena\Core\System\Channel\Context;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\AbstractTaxDetector;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -20,13 +15,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
 use Contena\Core\System\Channel\BaseChannelContext;
 use Contena\Core\System\Channel\Event\ChannelContextPermissionsChangedEvent;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleEntity;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\Tax\TaxRuleType\TaxRuleTypeFilterInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

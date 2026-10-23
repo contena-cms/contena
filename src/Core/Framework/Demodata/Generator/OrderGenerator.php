@@ -4,14 +4,6 @@ namespace Contena\Core\Framework\Demodata\Generator;
 
 use Doctrine\DBAL\Connection;
 use Faker\Generator;
-use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\Order\OrderConversionContext;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Cart\Price\Struct\PercentagePriceDefinition;
-use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Promotion\Cart\PromotionItemBuilder;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriterInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;

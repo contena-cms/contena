@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Manifest\Xml\ShippingMethod;
 
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Framework\App\Manifest\Xml\XmlElement;
 use Contena\Core\Framework\App\Manifest\XmlParserUtils;
 use Contena\Core\Framework\Log\Package;
@@ -47,8 +46,6 @@ class ShippingMethod extends XmlElement
      * @var array<string, string>
      */
     protected array $trackingUrl = [];
-
-    protected DeliveryTime $deliveryTime;
 
     public function toArray(string $defaultLocale): array
     {

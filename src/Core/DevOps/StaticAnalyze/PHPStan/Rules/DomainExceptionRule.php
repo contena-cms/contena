@@ -12,8 +12,6 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\IdentifierRuleError;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Checkout\Document\DocumentException;
-use Contena\Core\Checkout\DocumentV2\Channel\DocumentRoute;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Configuration;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\FastlyReverseProxyGateway;
 use Contena\Core\Framework\Adapter\Cache\ReverseProxy\ReverseProxyException;
@@ -22,11 +20,7 @@ use Contena\Core\Framework\Framework;
 use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Kernel;
-use Contena\Core\Migration\Traits\StateMachineMigrationImporter;
-use Contena\Core\Migration\V6_4\Migration1632721037OrderDocumentMailTemplate;
-use Contena\Core\Migration\V6_5\Migration1672931011ReviewFormMailTemplate;
 use Symfony\Component\Console\Command\Command;
 
 /**
@@ -62,11 +56,8 @@ class DomainExceptionRule implements Rule
         Framework::class => FrameworkException::class,
         VarnishReverseProxyGateway::class => ReverseProxyException::class,
         FastlyReverseProxyGateway::class => ReverseProxyException::class,
-        Migration1672931011ReviewFormMailTemplate::class => MigrationException::class,
-        Migration1632721037OrderDocumentMailTemplate::class => MigrationException::class,
         StateMachineMigrationImporter::class => MigrationException::class,
         /** @deprecated tag:v6.9.0 - DocumentRoute keeps the v1 exception because its error codes are the Store api contract. Remove with document generation v1. */
-        DocumentRoute::class => DocumentException::class,
     ];
 
     /**

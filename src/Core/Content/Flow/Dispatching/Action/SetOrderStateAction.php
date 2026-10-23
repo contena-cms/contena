@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Order\Channel\OrderService;
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\TransactionalAction;
@@ -16,7 +15,6 @@ use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\StateMachine\Exception\IllegalTransitionException;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
 /**

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Contena\Core\Framework\Sso\SsoUser;
+namespace Contena\Core\Framework\Sso\SsoAdminUser;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -14,7 +14,7 @@ use Contena\Core\System\AdminUser\AdminUserEntity;
 /**
  * @internal
  */
-class SsoUserService
+class SsoAdminUserService
 {
     /**
      * @param EntityRepository<AdminUserCollection> $admin_userRepository

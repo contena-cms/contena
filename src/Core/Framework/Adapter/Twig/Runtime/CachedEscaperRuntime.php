@@ -6,7 +6,6 @@ namespace Contena\Core\Framework\Adapter\Twig\Runtime;
 
 use Contena\Core\Framework\Adapter\Twig\TwigEnvironment;
 use Contena\Core\Framework\Log\Package;
-use Twig\Error\RuntimeError;
 use Twig\Markup;
 use Twig\Runtime\EscaperRuntime;
 

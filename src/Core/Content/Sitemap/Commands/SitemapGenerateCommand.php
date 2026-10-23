@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Sitemap\Commands;
 
-use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
 use Contena\Core\Content\Sitemap\Service\SitemapChannelLoader;
 use Contena\Core\Framework\Context;

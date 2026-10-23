@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\Adapter\Twig\Filter;
 use Contena\Core\Framework\Adapter\AdapterException;
 use Contena\Core\Framework\Adapter\Twig\TwigContextHelper;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Currency\CurrencyFormatter;

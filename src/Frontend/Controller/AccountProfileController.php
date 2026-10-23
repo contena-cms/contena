@@ -12,7 +12,6 @@ use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
-use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;

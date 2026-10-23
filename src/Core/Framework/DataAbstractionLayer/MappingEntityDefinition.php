@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer;
 
-use Contena\Core\Framework\DataAbstractionLayer\Exception\MappingEntityClassesException;
 use Contena\Core\Framework\Log\Package;
 
 abstract class MappingEntityDefinition extends EntityDefinition

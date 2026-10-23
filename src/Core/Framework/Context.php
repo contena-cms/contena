@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;

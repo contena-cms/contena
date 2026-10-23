@@ -35,7 +35,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\SumResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Elasticsearch\ElasticsearchException;
 
 class ElasticsearchEntityAggregatorHydrator extends AbstractElasticsearchAggregationHydrator

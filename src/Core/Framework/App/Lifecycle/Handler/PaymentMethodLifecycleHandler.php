@@ -3,9 +3,6 @@
 namespace Contena\Core\Framework\App\Lifecycle\Handler;
 
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodEntity;

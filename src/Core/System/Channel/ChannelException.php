@@ -2,11 +2,6 @@
 
 namespace Contena\Core\System\Channel;
 
-use Mcp\Exception\ResourceNotFoundException;
-use Contena\Core\Checkout\Cart\CartException;
-use Contena\Core\System\User\Exception\UserNotFoundByIdException;
-use Contena\Core\Checkout\Order\OrderException;
-use Contena\Core\Checkout\Payment\PaymentException;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
@@ -14,7 +9,6 @@ use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
 use Contena\Core\Framework\ContenaHttpException;
-use Contena\Core\System\Channel\Exception\NoContextDataException;
 use Symfony\Component\HttpFoundation\Response;
 
 class ChannelException extends HttpException

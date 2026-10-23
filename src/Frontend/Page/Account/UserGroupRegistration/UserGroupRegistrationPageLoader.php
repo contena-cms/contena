@@ -4,7 +4,6 @@ namespace Contena\Frontend\Page\Account\UserGroupRegistration;
 
 use Contena\Core\System\User\Channel\AbstractUserGroupRegistrationSettingsRoute;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
 use Symfony\Component\HttpFoundation\Request;

@@ -4,12 +4,6 @@ namespace Contena\Core\System\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\CartPersister;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Cart\Tax\TaxDetector;
 use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\System\User\Channel\RegisterRoute;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;

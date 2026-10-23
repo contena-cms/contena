@@ -4,7 +4,6 @@ namespace Contena\Core\Service;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\ServiceRegistry\ServiceEntry;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 

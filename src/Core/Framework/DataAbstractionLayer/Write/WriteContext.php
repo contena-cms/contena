@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\UnableToLoadPathException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\StateAwareTrait;

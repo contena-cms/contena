@@ -5,13 +5,6 @@ namespace Contena\Core\System\DependencyInjection;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\System\Salutation\AbstractSalutationsSorter;
-use Contena\Core\System\Salutation\Aggregate\SalutationTranslation\SalutationTranslationDefinition;
-use Contena\Core\System\Salutation\Api\SalutationKeyFkResolver;
-use Contena\Core\System\Salutation\Channel\ChannelSalutationDefinition;
-use Contena\Core\System\Salutation\Channel\SalutationRoute;
-use Contena\Core\System\Salutation\SalutationDefinition;
-use Contena\Core\System\Salutation\SalutationSorter;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;

@@ -7,7 +7,6 @@ use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\Channel\Struct\BuyBoxStruct;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

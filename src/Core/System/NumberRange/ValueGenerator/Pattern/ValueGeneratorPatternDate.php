@@ -3,7 +3,6 @@
 namespace Contena\Core\System\NumberRange\ValueGenerator\Pattern;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ValueGeneratorPatternDate extends AbstractValueGenerator
 {

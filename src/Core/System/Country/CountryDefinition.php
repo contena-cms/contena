@@ -3,7 +3,6 @@
 namespace Contena\Core\System\Country;
 
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
@@ -122,9 +121,6 @@ class CountryDefinition extends EntityDefinition
                 ->addFlags(new ApiAware(), new Required()),
 
             (new OneToManyAssociationField('userAddresses', UserAddressDefinition::class, 'country_id', 'id'))
-                ->addFlags(new RestrictDelete()),
-
-            (new OneToManyAssociationField('orderAddresses', OrderAddressDefinition::class, 'country_id', 'id'))
                 ->addFlags(new RestrictDelete()),
 
             (new OneToManyAssociationField('channelDefaultAssignments', ChannelDefinition::class, 'country_id', 'id'))

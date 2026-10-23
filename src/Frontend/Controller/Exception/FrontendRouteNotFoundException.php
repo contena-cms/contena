@@ -3,7 +3,6 @@
 namespace Contena\Frontend\Controller\Exception;
 
 use Contena\Core\Framework\Log\Package;
-use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @codeCoverageIgnore

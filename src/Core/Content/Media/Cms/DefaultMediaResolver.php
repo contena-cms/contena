@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Media\Cms;
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class DefaultMediaResolver extends AbstractDefaultMediaResolver
 {

@@ -3,7 +3,6 @@
 namespace Contena\Elasticsearch\Blog;
 
 use OpenSearch\Common\Exceptions\BadRequest400Exception;
-use OpenSearch\Exception\BadRequestHttpException;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;

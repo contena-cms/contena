@@ -5,7 +5,6 @@ namespace Contena\Administration\Migration\V6_4;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelTranslation\ChannelTranslationDefinition;
@@ -14,7 +13,7 @@ use Contena\Core\System\AdminUser\AdminUserDefinition;
 /**
  * @internal
  */
-class Migration1636121186CopyChannelIdsIntoUserConfig extends MigrationStep
+class Migration1636121186CopyChannelIdsIntoAdminUserConfig extends MigrationStep
 {
     private const CONFIG_KEY = 'sales-channel-favorites';
     private const MAX_RESULTS = 7;

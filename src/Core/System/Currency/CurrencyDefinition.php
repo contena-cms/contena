@@ -2,9 +2,6 @@
 
 namespace Contena\Core\System\Currency;
 
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscountPrice\PromotionDiscountPriceDefinition;
-use Contena\Core\Content\BlogExport\BlogExportDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CashRoundingConfigField;
@@ -73,11 +70,8 @@ class CurrencyDefinition extends EntityDefinition
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             (new TranslationsAssociationField(CurrencyTranslationDefinition::class, 'currency_id'))->addFlags(new Required()),
             (new OneToManyAssociationField('channelDefaultAssignments', ChannelDefinition::class, 'currency_id', 'id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('orders', OrderDefinition::class, 'currency_id', 'id'))->addFlags(new RestrictDelete()),
             new ManyToManyAssociationField('channels', ChannelDefinition::class, ChannelCurrencyDefinition::class, 'currency_id', 'channel_id'),
             (new OneToManyAssociationField('channelDomains', ChannelDomainDefinition::class, 'currency_id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('promotionDiscountPrices', PromotionDiscountPriceDefinition::class, 'currency_id', 'id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('blogExports', BlogExportDefinition::class, 'currency_id', 'id'))->addFlags(new RestrictDelete()),
             (new CashRoundingConfigField('item_rounding', 'itemRounding'))->addFlags(new ApiAware(), new Required())->setDescription('The cash rounding applied on net prices.'),
             (new CashRoundingConfigField('total_rounding', 'totalRounding'))->addFlags(new ApiAware(), new Required())->setDescription('The cash rounding applied on cart’s total net prices.'),
             (new OneToManyAssociationField('countryRoundings', CurrencyCountryRoundingDefinition::class, 'currency_id'))->addFlags(new CascadeDelete()),
