@@ -7,7 +7,6 @@ use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\System\Tag\TagCollection;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
@@ -52,10 +51,6 @@ class RuleEntity extends Entity
     protected ?FlowSequenceCollection $flowSequences = null;
 
     protected ?TagCollection $tags = null;
-
-
-
-    protected ?TaxProviderCollection $taxProviders = null;
 
     public function getName(): string
     {
@@ -196,16 +191,4 @@ class RuleEntity extends Entity
     }
 
 
-
-
-
-    public function getTaxProviders(): ?TaxProviderCollection
-    {
-        return $this->taxProviders;
-    }
-
-    public function setTaxProviders(TaxProviderCollection $taxProviders): void
-    {
-        $this->taxProviders = $taxProviders;
-    }
 }

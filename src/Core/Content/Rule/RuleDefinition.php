@@ -23,7 +23,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\System\Tag\TagDefinition;
-use Contena\Core\System\TaxProvider\TaxProviderDefinition;
 
 /**
  * @codeCoverageIgnore
@@ -66,7 +65,6 @@ class RuleDefinition extends EntityDefinition
 
             // Reverse Associations not available in sales-channel-api
             (new OneToManyAssociationField('flowSequences', FlowSequenceDefinition::class, 'rule_id', 'id'))->addFlags(new RestrictDelete(), new RuleAreas(RuleAreas::FLOW_AREA)),
-            (new OneToManyAssociationField('taxProviders', TaxProviderDefinition::class, 'availability_rule_id', 'id'))->addFlags(new RestrictDelete(), new Since('6.5.0.0')),
 
             new ManyToManyAssociationField('tags', TagDefinition::class, RuleTagDefinition::class, 'rule_id', 'tag_id'),
 

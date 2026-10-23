@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 use Contena\Core\System\Integration\IntegrationEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
@@ -132,8 +131,6 @@ class AppEntity extends Entity
     protected ?WebhookCollection $webhooks = null;
 
     protected ?AppPaymentMethodCollection $paymentMethods = null;
-
-    protected ?TaxProviderCollection $taxProviders = null;
 
     /**
      * @internal
@@ -581,16 +578,6 @@ class AppEntity extends Entity
     public function setPaymentMethods(AppPaymentMethodCollection $paymentMethods): void
     {
         $this->paymentMethods = $paymentMethods;
-    }
-
-    public function getTaxProviders(): ?TaxProviderCollection
-    {
-        return $this->taxProviders;
-    }
-
-    public function setTaxProviders(TaxProviderCollection $taxProviders): void
-    {
-        $this->taxProviders = $taxProviders;
     }
 
     /**

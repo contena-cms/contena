@@ -38,7 +38,6 @@ use Contena\Core\Framework\Script\ScriptDefinition;
 use Contena\Core\Framework\Webhook\WebhookDefinition;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Contena\Core\System\Integration\IntegrationDefinition;
-use Contena\Core\System\TaxProvider\TaxProviderDefinition;
 
 /**
  * @internal
@@ -133,7 +132,6 @@ class AppDefinition extends EntityDefinition
             (new OneToManyAssociationField('scripts', ScriptDefinition::class, 'app_id'))->addFlags(new CascadeDelete())->removeFlag(ApiAware::class),
             (new OneToManyAssociationField('webhooks', WebhookDefinition::class, 'app_id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('paymentMethods', AppPaymentMethodDefinition::class, 'app_id'))->addFlags(new SetNullOnDelete()),
-            (new OneToManyAssociationField('taxProviders', TaxProviderDefinition::class, 'app_id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('scriptConditions', AppScriptConditionDefinition::class, 'app_id'))->addFlags(new CascadeDelete())->removeFlag(ApiAware::class),
             (new OneToManyAssociationField('cmsBlocks', AppCmsBlockDefinition::class, 'app_id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('flowActions', AppFlowActionDefinition::class, 'app_id'))->addFlags(new CascadeDelete()),
