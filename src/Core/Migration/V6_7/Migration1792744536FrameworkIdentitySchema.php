@@ -309,9 +309,9 @@ SQL);
 CREATE TABLE IF NOT EXISTS `user` (
   `id` binary(16) NOT NULL,
   `auto_increment` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `customer_group_id` binary(16) NOT NULL,
-  `requested_customer_group_id` binary(16) DEFAULT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
+  `user_group_id` binary(16) NOT NULL,
+  `requested_user_group_id` binary(16) DEFAULT NULL,
+  `channel_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `last_payment_method_id` binary(16) DEFAULT NULL,
   `first_name` varchar(255) NOT NULL,
@@ -327,7 +327,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `double_opt_in_email_sent_date` datetime(3) DEFAULT NULL,
   `guest` tinyint(1) NOT NULL DEFAULT 0,
   `first_login` datetime(3) DEFAULT NULL,
-  `newsletter_sales_channel_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`newsletter_sales_channel_ids`)),
+  `newsletter_channel_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`newsletter_channel_ids`)),
   `last_order_date` datetime(3) DEFAULT NULL,
   `order_count` int(5) NOT NULL DEFAULT 0,
   `order_total_amount` double DEFAULT 0,
@@ -336,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `updated_at` datetime(3) DEFAULT NULL,
   `remote_address` varchar(255) DEFAULT NULL,
   `tag_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`tag_ids`)),
-  `bound_sales_channel_id` binary(16) DEFAULT NULL,
+  `bound_channel_id` binary(16) DEFAULT NULL,
   `created_by_id` binary(16) DEFAULT NULL,
   `updated_by_id` binary(16) DEFAULT NULL,
   `account_type` varchar(255) NOT NULL DEFAULT 'private',
@@ -344,18 +344,18 @@ CREATE TABLE IF NOT EXISTS `user` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uniq.auto_increment` (`auto_increment`),
   KEY `idx.firstlogin` (`first_login`),
-  KEY `fk.user.customer_group_id` (`customer_group_id`),
+  KEY `fk.user.user_group_id` (`user_group_id`),
   KEY `fk.user.last_payment_method_id` (`last_payment_method_id`),
-  KEY `fk.user.sales_channel_id` (`sales_channel_id`),
-  KEY `fk.user.requested_customer_group_id` (`requested_customer_group_id`),
-  KEY `fk.user.bound_sales_channel_id` (`bound_sales_channel_id`),
+  KEY `fk.user.channel_id` (`channel_id`),
+  KEY `fk.user.requested_user_group_id` (`requested_user_group_id`),
+  KEY `fk.user.bound_channel_id` (`bound_channel_id`),
   KEY `idx.email` (`email`),
   KEY `fk.user.created_by_id` (`created_by_id`),
   KEY `fk.user.updated_by_id` (`updated_by_id`),
-  CONSTRAINT `fk.user.bound_sales_channel_id` FOREIGN KEY (`bound_sales_channel_id`) REFERENCES `channel` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.user.bound_channel_id` FOREIGN KEY (`bound_channel_id`) REFERENCES `channel` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.user.created_by_id` FOREIGN KEY (`created_by_id`) REFERENCES `admin_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `fk.user.customer_group_id` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.user.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.user.user_group_id` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.user.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.user.updated_by_id` FOREIGN KEY (`updated_by_id`) REFERENCES `admin_user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `json.user.custom_fields` CHECK (json_valid(`custom_fields`)),
   CONSTRAINT `json.user.tag_ids` CHECK (json_valid(`tag_ids`))
@@ -382,11 +382,11 @@ CREATE TABLE IF NOT EXISTS `user_address` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk.customer_address.country_id` (`country_id`),
-  KEY `fk.customer_address.country_state_id` (`country_state_id`),
-  CONSTRAINT `fk.customer_address.country_id` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.customer_address.country_state_id` FOREIGN KEY (`country_state_id`) REFERENCES `country_state` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `json.customer_address.custom_fields` CHECK (json_valid(`custom_fields`))
+  KEY `fk.user_address.country_id` (`country_id`),
+  KEY `fk.user_address.country_state_id` (`country_state_id`),
+  CONSTRAINT `fk.user_address.country_id` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.user_address.country_state_id` FOREIGN KEY (`country_state_id`) REFERENCES `country_state` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `json.user_address.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -403,7 +403,7 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `user_group_translation` (
-  `customer_group_id` binary(16) NOT NULL,
+  `user_group_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `custom_fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_fields`)),
@@ -413,35 +413,35 @@ CREATE TABLE IF NOT EXISTS `user_group_translation` (
   `registration_seo_meta_description` longtext DEFAULT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`customer_group_id`,`language_id`),
-  KEY `fk.customer_group_translation.language_id` (`language_id`),
-  CONSTRAINT `fk.customer_group_translation.customer_group_id` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.customer_group_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.customer_group_translation.custom_fields` CHECK (json_valid(`custom_fields`))
+  PRIMARY KEY (`user_group_id`,`language_id`),
+  KEY `fk.user_group_translation.language_id` (`language_id`),
+  CONSTRAINT `fk.user_group_translation.user_group_id` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.user_group_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.user_group_translation.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `user_recovery` (
   `id` binary(16) NOT NULL,
-  `customer_id` binary(16) NOT NULL,
+  `user_id` binary(16) NOT NULL,
   `hash` varchar(255) NOT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.customer_recovery.customer_id` (`customer_id`),
-  CONSTRAINT `fk.customer_recovery.customer_id` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE KEY `uniq.user_recovery.user_id` (`user_id`),
+  CONSTRAINT `fk.user_recovery.user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `user_tag` (
-  `customer_id` binary(16) NOT NULL,
+  `user_id` binary(16) NOT NULL,
   `tag_id` binary(16) NOT NULL,
-  PRIMARY KEY (`customer_id`,`tag_id`),
-  KEY `fk.customer_tag.tag_id` (`tag_id`),
-  CONSTRAINT `fk.customer_tag.customer_id` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.customer_tag.tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`user_id`,`tag_id`),
+  KEY `fk.user_tag.tag_id` (`tag_id`),
+  CONSTRAINT `fk.user_tag.user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.user_tag.tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 

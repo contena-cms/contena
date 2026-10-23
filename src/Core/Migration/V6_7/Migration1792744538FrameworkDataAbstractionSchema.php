@@ -32,7 +32,7 @@ CREATE TABLE IF NOT EXISTS `custom_field` (
   `set_id` binary(16) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
-  `allow_customer_write` tinyint(4) NOT NULL DEFAULT 0,
+  `allow_user_write` tinyint(4) NOT NULL DEFAULT 0,
   `allow_cart_expose` tinyint(1) NOT NULL DEFAULT 0,
   `store_api_aware` tinyint(1) NOT NULL DEFAULT 1,
   `include_in_search` tinyint(1) NOT NULL DEFAULT 0,

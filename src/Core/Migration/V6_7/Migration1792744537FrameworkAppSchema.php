@@ -449,11 +449,11 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `theme_channel` (
   `theme_id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
-  PRIMARY KEY (`sales_channel_id`),
-  KEY `fk.theme_sales_channel.theme_id` (`theme_id`),
-  CONSTRAINT `fk.theme_sales_channel.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.theme_sales_channel.theme_id` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `channel_id` binary(16) NOT NULL,
+  PRIMARY KEY (`channel_id`),
+  KEY `fk.theme_channel.theme_id` (`theme_id`),
+  CONSTRAINT `fk.theme_channel.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.theme_channel.theme_id` FOREIGN KEY (`theme_id`) REFERENCES `theme` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 

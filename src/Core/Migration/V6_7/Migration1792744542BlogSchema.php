@@ -27,15 +27,15 @@ CREATE TABLE IF NOT EXISTS `blog` (
   `id` binary(16) NOT NULL,
   `version_id` binary(16) NOT NULL,
   `auto_increment` int(11) NOT NULL AUTO_INCREMENT,
-  `product_number` varchar(64) DEFAULT NULL,
+  `blog_number` varchar(64) DEFAULT NULL,
   `active` tinyint(3) unsigned DEFAULT NULL,
-  `product_manufacturer_version_id` binary(16) DEFAULT NULL,
+  `blog_manufacturer_version_id` binary(16) DEFAULT NULL,
   `deliveryTime` binary(16) DEFAULT NULL,
-  `product_media_version_id` binary(16) DEFAULT NULL,
+  `blog_media_version_id` binary(16) DEFAULT NULL,
   `cms_page_id` binary(16) DEFAULT NULL,
   `cms_page_version_id` binary(16) NOT NULL DEFAULT x'0fa91ce3e96a4bc2be4bd9ce752c3425',
   `unit_id` binary(16) DEFAULT NULL,
-  `product_feature_set_id` binary(16) DEFAULT NULL,
+  `blog_feature_set_id` binary(16) DEFAULT NULL,
   `category_tree` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`category_tree`)),
   `category_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`category_ids`)),
   `stream_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`stream_ids`)),
@@ -61,8 +61,8 @@ CREATE TABLE IF NOT EXISTS `blog` (
   `featureSet` binary(16) DEFAULT NULL,
   `customFieldSets` binary(16) DEFAULT NULL,
   `custom_field_set_selection_active` tinyint(1) DEFAULT NULL,
-  `canonical_product_id` binary(16) DEFAULT NULL,
-  `canonical_product_version_id` binary(16) DEFAULT NULL,
+  `canonical_blog_id` binary(16) DEFAULT NULL,
+  `canonical_blog_version_id` binary(16) DEFAULT NULL,
   `canonicalProduct` binary(16) DEFAULT NULL,
   `cmsPage` binary(16) DEFAULT NULL,
   `cheapest_price` longtext DEFAULT NULL,
@@ -79,16 +79,16 @@ CREATE TABLE IF NOT EXISTS `blog` (
   `guaranteeTermsMedia` binary(16) DEFAULT NULL,
   PRIMARY KEY (`id`,`version_id`),
   UNIQUE KEY `auto_increment` (`auto_increment`),
-  UNIQUE KEY `uniq.blog.product_number__version_id` (`product_number`,`version_id`),
+  UNIQUE KEY `uniq.blog.blog_number__version_id` (`blog_number`,`version_id`),
   KEY `fk.blog.unit_id` (`unit_id`),
-  KEY `fk.blog.feature_set_id` (`product_feature_set_id`),
+  KEY `fk.blog.feature_set_id` (`blog_feature_set_id`),
   KEY `fk.blog.cms_page_id` (`cms_page_id`,`cms_page_version_id`),
-  KEY `fk.blog.canonical_product_id` (`canonical_product_id`,`canonical_product_version_id`),
+  KEY `fk.blog.canonical_blog_id` (`canonical_blog_id`,`canonical_blog_version_id`),
   KEY `idx.blog.categories` (`categories`),
   KEY `idx.blog.type` (`type`),
   KEY `fk.blog.open_graph_media_id` (`open_graph_media_id`),
   KEY `fk.blog.guarantee_terms_media_id` (`guarantee_terms_media_id`),
-  CONSTRAINT `fk.blog.canonical_product_id` FOREIGN KEY (`canonical_product_id`, `canonical_product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE SET NULL,
+  CONSTRAINT `fk.blog.canonical_blog_id` FOREIGN KEY (`canonical_blog_id`, `canonical_blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE SET NULL,
   CONSTRAINT `fk.blog.cms_page_id` FOREIGN KEY (`cms_page_id`, `cms_page_version_id`) REFERENCES `cms_page` (`id`, `version_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.blog.guarantee_terms_media_id` FOREIGN KEY (`guarantee_terms_media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk.blog.open_graph_media_id` FOREIGN KEY (`open_graph_media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -104,39 +104,39 @@ SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_category` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `category_id` binary(16) NOT NULL,
   `category_version_id` binary(16) NOT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`category_id`,`category_version_id`),
-  KEY `fk.product_category.category_id` (`category_id`,`category_version_id`),
-  CONSTRAINT `fk.product_category.category_id` FOREIGN KEY (`category_id`, `category_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_category.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`category_id`,`category_version_id`),
+  KEY `fk.blog_category.category_id` (`category_id`,`category_version_id`),
+  CONSTRAINT `fk.blog_category.category_id` FOREIGN KEY (`category_id`, `category_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_category.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_category_tree` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `category_id` binary(16) NOT NULL,
   `category_version_id` binary(16) NOT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`category_id`,`category_version_id`),
-  KEY `fk.product_category_tree.category_id` (`category_id`,`category_version_id`),
-  CONSTRAINT `fk.product_category_tree.category_id` FOREIGN KEY (`category_id`, `category_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_category_tree.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`category_id`,`category_version_id`),
+  KEY `fk.blog_category_tree.category_id` (`category_id`,`category_version_id`),
+  CONSTRAINT `fk.blog_category_tree.category_id` FOREIGN KEY (`category_id`, `category_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_category_tree.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_custom_field_set` (
   `custom_field_set_id` binary(16) NOT NULL,
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
-  PRIMARY KEY (`custom_field_set_id`,`product_id`,`product_version_id`),
-  KEY `fk.product_custom_field_set.product_id` (`product_id`,`product_version_id`),
-  CONSTRAINT `fk.product_custom_field_set.custom_field_set_id` FOREIGN KEY (`custom_field_set_id`) REFERENCES `custom_field_set` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk.product_custom_field_set.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
+  PRIMARY KEY (`custom_field_set_id`,`blog_id`,`blog_version_id`),
+  KEY `fk.blog_custom_field_set.blog_id` (`blog_id`,`blog_version_id`),
+  CONSTRAINT `fk.blog_custom_field_set.custom_field_set_id` FOREIGN KEY (`custom_field_set_id`) REFERENCES `custom_field_set` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk.blog_custom_field_set.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -148,8 +148,8 @@ CREATE TABLE IF NOT EXISTS `blog_keyword_dictionary` (
   `reversed` varchar(500) GENERATED ALWAYS AS (reverse(`keyword`)) STORED,
   PRIMARY KEY (`id`,`language_id`),
   UNIQUE KEY `uniq.language_id_keyword` (`language_id`,`keyword`),
-  KEY `idx.product_keyword_dictionary.language_id` (`language_id`),
-  CONSTRAINT `fk.product_keyword_dictionary.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idx.blog_keyword_dictionary.language_id` (`language_id`),
+  CONSTRAINT `fk.blog_keyword_dictionary.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -158,42 +158,42 @@ CREATE TABLE IF NOT EXISTS `blog_media` (
   `id` binary(16) NOT NULL,
   `version_id` binary(16) NOT NULL,
   `position` int(11) NOT NULL DEFAULT 1,
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `media_id` binary(16) NOT NULL,
   `custom_fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_fields`)),
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`,`version_id`),
-  KEY `fk.product_media.media_id` (`media_id`),
-  KEY `fk.product_media.product_id` (`product_id`,`product_version_id`),
-  CONSTRAINT `fk.product_media.media_id` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_media.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.product_media.custom_fields` CHECK (json_valid(`custom_fields`))
+  KEY `fk.blog_media.media_id` (`media_id`),
+  KEY `fk.blog_media.blog_id` (`blog_id`,`blog_version_id`),
+  CONSTRAINT `fk.blog_media.media_id` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_media.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.blog_media.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_option` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `property_group_option_id` binary(16) NOT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`property_group_option_id`),
-  KEY `fk.product_option.property_group_option_id` (`property_group_option_id`),
-  CONSTRAINT `fk.product_option.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_option.property_group_option_id` FOREIGN KEY (`property_group_option_id`) REFERENCES `property_group_option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`property_group_option_id`),
+  KEY `fk.blog_option.property_group_option_id` (`property_group_option_id`),
+  CONSTRAINT `fk.blog_option.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_option.property_group_option_id` FOREIGN KEY (`property_group_option_id`) REFERENCES `property_group_option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_property` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `property_group_option_id` binary(16) NOT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`property_group_option_id`),
-  KEY `fk.product_property.configuration_option_id` (`property_group_option_id`),
-  CONSTRAINT `fk.product_property.configuration_option_id` FOREIGN KEY (`property_group_option_id`) REFERENCES `property_group_option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_property.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`property_group_option_id`),
+  KEY `fk.blog_property.configuration_option_id` (`property_group_option_id`),
+  CONSTRAINT `fk.blog_property.configuration_option_id` FOREIGN KEY (`property_group_option_id`) REFERENCES `property_group_option` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_property.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -207,16 +207,16 @@ CREATE TABLE IF NOT EXISTS `blog_search_config` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.product_search_config.language_id` (`language_id`),
-  CONSTRAINT `fk.product_search_config.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.product_search_config.excluded_terms` CHECK (json_valid(`excluded_terms`))
+  UNIQUE KEY `uniq.blog_search_config.language_id` (`language_id`),
+  CONSTRAINT `fk.blog_search_config.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.blog_search_config.excluded_terms` CHECK (json_valid(`excluded_terms`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_search_config_field` (
   `id` binary(16) NOT NULL,
-  `product_search_config_id` binary(16) NOT NULL,
+  `blog_search_config_id` binary(16) NOT NULL,
   `custom_field_id` binary(16) DEFAULT NULL,
   `field` varchar(255) NOT NULL,
   `tokenize` tinyint(1) NOT NULL DEFAULT 0,
@@ -226,11 +226,11 @@ CREATE TABLE IF NOT EXISTS `blog_search_config_field` (
   `updated_at` datetime(3) DEFAULT NULL,
   `use_exact_subfield` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.search_config_field.field__config_id` (`field`,`product_search_config_id`),
-  KEY `fk.search_config_field.product_search_config_id` (`product_search_config_id`),
+  UNIQUE KEY `uniq.search_config_field.field__config_id` (`field`,`blog_search_config_id`),
+  KEY `fk.search_config_field.blog_search_config_id` (`blog_search_config_id`),
   KEY `fk.search_config_field.custom_field_id` (`custom_field_id`),
   CONSTRAINT `fk.search_config_field.custom_field_id` FOREIGN KEY (`custom_field_id`) REFERENCES `custom_field` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.search_config_field.product_search_config_id` FOREIGN KEY (`product_search_config_id`) REFERENCES `product_search_config` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk.search_config_field.blog_search_config_id` FOREIGN KEY (`blog_search_config_id`) REFERENCES `blog_search_config` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -239,18 +239,18 @@ CREATE TABLE IF NOT EXISTS `blog_search_keyword` (
   `id` binary(16) NOT NULL,
   `version_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `keyword` varchar(255) NOT NULL,
   `ranking` double NOT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`,`version_id`,`language_id`),
-  KEY `idx.product_search_keyword.product_id` (`product_id`,`product_version_id`),
-  KEY `idx.product_search_keyword.language_id` (`language_id`),
-  KEY `idx.product_search_keyword.keyword_language` (`keyword`,`language_id`),
-  CONSTRAINT `fk.product_search_keyword.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_search_keyword.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `idx.blog_search_keyword.blog_id` (`blog_id`,`blog_version_id`),
+  KEY `idx.blog_search_keyword.language_id` (`language_id`),
+  KEY `idx.blog_search_keyword.keyword_language` (`keyword`,`language_id`),
+  CONSTRAINT `fk.blog_search_keyword.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_search_keyword.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -265,22 +265,22 @@ CREATE TABLE IF NOT EXISTS `blog_sorting` (
   `locked` tinyint(1) NOT NULL DEFAULT 0,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.product_sorting.url_key` (`url_key`),
-  CONSTRAINT `json.product_sorting.fields` CHECK (json_valid(`fields`))
+  UNIQUE KEY `uniq.blog_sorting.url_key` (`url_key`),
+  CONSTRAINT `json.blog_sorting.fields` CHECK (json_valid(`fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_sorting_translation` (
-  `product_sorting_id` binary(16) NOT NULL,
+  `blog_sorting_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `label` varchar(255) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`product_sorting_id`,`language_id`),
-  KEY `fk.product_sorting_translation.language_id` (`language_id`),
-  CONSTRAINT `fk.product_sorting_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_sorting_translation.product_sorting_id` FOREIGN KEY (`product_sorting_id`) REFERENCES `product_sorting` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`blog_sorting_id`,`language_id`),
+  KEY `fk.blog_sorting_translation.language_id` (`language_id`),
+  CONSTRAINT `fk.blog_sorting_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_sorting_translation.blog_sorting_id` FOREIGN KEY (`blog_sorting_id`) REFERENCES `blog_sorting` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -294,14 +294,14 @@ CREATE TABLE IF NOT EXISTS `blog_stream` (
   `internal` tinyint(1) NOT NULL DEFAULT 0,
   `display_as_group` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`),
-  CONSTRAINT `json.product_stream.api_filter` CHECK (json_valid(`api_filter`))
+  CONSTRAINT `json.blog_stream.api_filter` CHECK (json_valid(`api_filter`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_stream_filter` (
   `id` binary(16) NOT NULL,
-  `product_stream_id` binary(16) NOT NULL,
+  `blog_stream_id` binary(16) NOT NULL,
   `parent_id` binary(16) DEFAULT NULL,
   `type` varchar(255) NOT NULL,
   `field` varchar(255) DEFAULT NULL,
@@ -313,60 +313,60 @@ CREATE TABLE IF NOT EXISTS `blog_stream_filter` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  KEY `fk.product_stream_filter.product_stream_id` (`product_stream_id`),
-  KEY `fk.product_stream_filter.parent_id` (`parent_id`),
-  CONSTRAINT `fk.product_stream_filter.parent_id` FOREIGN KEY (`parent_id`) REFERENCES `product_stream_filter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_stream_filter.product_stream_id` FOREIGN KEY (`product_stream_id`) REFERENCES `product_stream` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.product_stream_filter.parameters` CHECK (json_valid(`parameters`)),
-  CONSTRAINT `json.product_stream_filter.custom_fields` CHECK (json_valid(`custom_fields`))
+  KEY `fk.blog_stream_filter.blog_stream_id` (`blog_stream_id`),
+  KEY `fk.blog_stream_filter.parent_id` (`parent_id`),
+  CONSTRAINT `fk.blog_stream_filter.parent_id` FOREIGN KEY (`parent_id`) REFERENCES `blog_stream_filter` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_stream_filter.blog_stream_id` FOREIGN KEY (`blog_stream_id`) REFERENCES `blog_stream` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.blog_stream_filter.parameters` CHECK (json_valid(`parameters`)),
+  CONSTRAINT `json.blog_stream_filter.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_stream_mapping` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
-  `product_stream_id` binary(16) NOT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`product_stream_id`),
-  KEY `fk.product_stream_mapping.product_stream_id` (`product_stream_id`),
-  CONSTRAINT `fk.product_stream_mapping.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_stream_mapping.product_stream_id` FOREIGN KEY (`product_stream_id`) REFERENCES `product_stream` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
+  `blog_stream_id` binary(16) NOT NULL,
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`blog_stream_id`),
+  KEY `fk.blog_stream_mapping.blog_stream_id` (`blog_stream_id`),
+  CONSTRAINT `fk.blog_stream_mapping.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_stream_mapping.blog_stream_id` FOREIGN KEY (`blog_stream_id`) REFERENCES `blog_stream` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_stream_translation` (
-  `product_stream_id` binary(16) NOT NULL,
+  `blog_stream_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `description` mediumtext DEFAULT NULL,
   `custom_fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_fields`)),
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`product_stream_id`,`language_id`),
-  KEY `fk.product_stream_translation.language_id` (`language_id`),
-  CONSTRAINT `fk.product_stream_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_stream_translation.product_stream_id` FOREIGN KEY (`product_stream_id`) REFERENCES `product_stream` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.product_stream_translation.custom_fields` CHECK (json_valid(`custom_fields`))
+  PRIMARY KEY (`blog_stream_id`,`language_id`),
+  KEY `fk.blog_stream_translation.language_id` (`language_id`),
+  CONSTRAINT `fk.blog_stream_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_stream_translation.blog_stream_id` FOREIGN KEY (`blog_stream_id`) REFERENCES `blog_stream` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.blog_stream_translation.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_tag` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `tag_id` binary(16) NOT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`tag_id`),
-  KEY `fk.product_tag.tag_id` (`tag_id`),
-  CONSTRAINT `fk.product_tag.product_version_id__product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_tag.tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`tag_id`),
+  KEY `fk.blog_tag.tag_id` (`tag_id`),
+  CONSTRAINT `fk.blog_tag.blog_version_id__blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_tag.tag_id` FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_translation` (
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `meta_description` varchar(255) DEFAULT NULL,
   `name` varchar(255) DEFAULT NULL,
@@ -382,31 +382,31 @@ CREATE TABLE IF NOT EXISTS `blog_translation` (
   `og_title` varchar(255) DEFAULT NULL,
   `og_description` varchar(255) DEFAULT NULL,
   `description_teaser` varchar(512) DEFAULT NULL,
-  PRIMARY KEY (`product_id`,`product_version_id`,`language_id`),
-  KEY `fk.product_translation.language_id` (`language_id`),
-  CONSTRAINT `fk.product_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_translation.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.product_translation.custom_fields` CHECK (json_valid(`custom_fields`)),
-  CONSTRAINT `json.product_translation.custom_search_keywords` CHECK (json_valid(`custom_search_keywords`)),
-  CONSTRAINT `json.product_translation.slot_config` CHECK (json_valid(`slot_config`))
+  PRIMARY KEY (`blog_id`,`blog_version_id`,`language_id`),
+  KEY `fk.blog_translation.language_id` (`language_id`),
+  CONSTRAINT `fk.blog_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_translation.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.blog_translation.custom_fields` CHECK (json_valid(`custom_fields`)),
+  CONSTRAINT `json.blog_translation.custom_search_keywords` CHECK (json_valid(`custom_search_keywords`)),
+  CONSTRAINT `json.blog_translation.slot_config` CHECK (json_valid(`slot_config`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `blog_visibility` (
   `id` binary(16) NOT NULL,
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `visibility` int(11) NOT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.product_id__sales_channel_id` (`product_id`,`product_version_id`,`sales_channel_id`),
-  KEY `idx.product_visibility.product_id` (`product_id`,`product_version_id`),
-  KEY `idx.product_visibility.sales_channel_id` (`sales_channel_id`),
-  CONSTRAINT `fk.product_visibility.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.product_visibility.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE KEY `uniq.blog_id__channel_id` (`blog_id`,`blog_version_id`,`channel_id`),
+  KEY `idx.blog_visibility.blog_id` (`blog_id`,`blog_version_id`),
+  KEY `idx.blog_visibility.channel_id` (`channel_id`),
+  CONSTRAINT `fk.blog_visibility.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.blog_visibility.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -418,7 +418,7 @@ CREATE TABLE IF NOT EXISTS `property_group` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   `filterable` tinyint(1) NOT NULL DEFAULT 1,
-  `visible_on_product_detail_page` tinyint(1) DEFAULT 1,
+  `visible_on_blog_detail_page` tinyint(1) DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);

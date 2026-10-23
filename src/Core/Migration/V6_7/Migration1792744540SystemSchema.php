@@ -46,7 +46,7 @@ CREATE TABLE IF NOT EXISTS `channel` (
   `active` tinyint(1) NOT NULL DEFAULT 1,
   `maintenance` tinyint(1) NOT NULL DEFAULT 0,
   `maintenance_ip_whitelist` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`maintenance_ip_whitelist`)),
-  `customer_group_id` binary(16) NOT NULL,
+  `user_group_id` binary(16) NOT NULL,
   `mail_header_footer_id` binary(16) DEFAULT NULL,
   `payment_method_ids` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`payment_method_ids`)),
   `analytics_id` binary(16) DEFAULT NULL,
@@ -68,23 +68,23 @@ CREATE TABLE IF NOT EXISTS `channel` (
   KEY `fk.channel.navigation_category_id` (`navigation_category_id`,`navigation_category_version_id`),
   KEY `fk.channel.footer_category_id` (`footer_category_id`,`footer_category_version_id`),
   KEY `fk.channel.service_category_id` (`service_category_id`,`service_category_version_id`),
-  KEY `fk.channel.customer_group_id` (`customer_group_id`),
+  KEY `fk.channel.user_group_id` (`user_group_id`),
   KEY `fk.channel.hreflang_default_domain_id` (`hreflang_default_domain_id`),
   KEY `fk.channel.header_footer_id` (`mail_header_footer_id`),
   KEY `fk.channel.home_cms_page` (`home_cms_page_id`,`home_cms_page_version_id`),
   KEY `fk.channel.analytics_id` (`analytics_id`),
-  CONSTRAINT `fk.channel.analytics_id` FOREIGN KEY (`analytics_id`) REFERENCES `sales_channel_analytics` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel.analytics_id` FOREIGN KEY (`analytics_id`) REFERENCES `channel_analytics` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.country_id` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.channel.customer_group_id` FOREIGN KEY (`customer_group_id`) REFERENCES `customer_group` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel.user_group_id` FOREIGN KEY (`user_group_id`) REFERENCES `user_group` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.footer_category_id` FOREIGN KEY (`footer_category_id`, `footer_category_version_id`) REFERENCES `category` (`id`, `version_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.header_footer_id` FOREIGN KEY (`mail_header_footer_id`) REFERENCES `mail_header_footer` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.home_cms_page` FOREIGN KEY (`home_cms_page_id`, `home_cms_page_version_id`) REFERENCES `cms_page` (`id`, `version_id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.channel.hreflang_default_domain_id` FOREIGN KEY (`hreflang_default_domain_id`) REFERENCES `sales_channel_domain` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel.hreflang_default_domain_id` FOREIGN KEY (`hreflang_default_domain_id`) REFERENCES `channel_domain` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.navigation_category_id` FOREIGN KEY (`navigation_category_id`, `navigation_category_version_id`) REFERENCES `category` (`id`, `version_id`) ON UPDATE CASCADE,
   CONSTRAINT `fk.channel.service_category_id` FOREIGN KEY (`service_category_id`, `service_category_version_id`) REFERENCES `category` (`id`, `version_id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.channel.type_id` FOREIGN KEY (`type_id`) REFERENCES `sales_channel_type` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel.type_id` FOREIGN KEY (`type_id`) REFERENCES `channel_type` (`id`) ON UPDATE CASCADE,
   CONSTRAINT `json.channel.configuration` CHECK (json_valid(`configuration`)),
   CONSTRAINT `json.channel.payment_method_ids` CHECK (json_valid(`payment_method_ids`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
@@ -109,43 +109,43 @@ SQL);
 CREATE TABLE IF NOT EXISTS `channel_api_context` (
   `token` varchar(255) NOT NULL,
   `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`payload`)),
-  `sales_channel_id` binary(16) DEFAULT NULL,
-  `customer_id` binary(16) DEFAULT NULL,
+  `channel_id` binary(16) DEFAULT NULL,
+  `user_id` binary(16) DEFAULT NULL,
   `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
   PRIMARY KEY (`token`),
-  UNIQUE KEY `uniq.sales_channel_api_context.sales_channel_id_customer_id` (`sales_channel_id`,`customer_id`),
-  KEY `fk.sales_channel_api_context.customer_id` (`customer_id`),
-  CONSTRAINT `fk.sales_channel_api_context.customer_id` FOREIGN KEY (`customer_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `fk.sales_channel_api_context.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE
+  UNIQUE KEY `uniq.channel_api_context.channel_id_user_id` (`channel_id`,`user_id`),
+  KEY `fk.channel_api_context.user_id` (`user_id`),
+  CONSTRAINT `fk.channel_api_context.user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
+  CONSTRAINT `fk.channel_api_context.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_country` (
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `country_id` binary(16) NOT NULL,
-  PRIMARY KEY (`sales_channel_id`,`country_id`),
-  KEY `fk.sales_channel_country.country_id` (`country_id`),
-  CONSTRAINT `fk.sales_channel_country.country_id` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_country.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`channel_id`,`country_id`),
+  KEY `fk.channel_country.country_id` (`country_id`),
+  CONSTRAINT `fk.channel_country.country_id` FOREIGN KEY (`country_id`) REFERENCES `country` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_country.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_currency` (
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `currency_id` binary(16) NOT NULL,
-  PRIMARY KEY (`sales_channel_id`,`currency_id`),
-  KEY `fk.sales_channel_currency.currency_id` (`currency_id`),
-  CONSTRAINT `fk.sales_channel_currency.currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_currency.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`channel_id`,`currency_id`),
+  KEY `fk.channel_currency.currency_id` (`currency_id`),
+  CONSTRAINT `fk.channel_currency.currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_currency.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_domain` (
   `id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `url` varchar(255) NOT NULL,
   `currency_id` binary(16) NOT NULL,
@@ -158,24 +158,24 @@ CREATE TABLE IF NOT EXISTS `channel_domain` (
   `is_external_storefront` tinyint(1) NOT NULL DEFAULT 0,
   `external_storefront_language_id` binary(16) GENERATED ALWAYS AS (if(`is_external_storefront` = 1,`language_id`,NULL)) VIRTUAL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.sales_channel_domain.url` (`url`),
-  UNIQUE KEY `uniq.sales_channel_domain.external_storefront` (`external_storefront_language_id`,`sales_channel_id`),
-  KEY `fk.sales_channel_domain.currency_id` (`currency_id`),
-  KEY `fk.sales_channel_domain.snippet_set_id` (`snippet_set_id`),
-  KEY `fk.sales_channel_domain.language_id` (`language_id`),
-  KEY `fk.sales_channel_domain.sales_channel_id` (`sales_channel_id`),
-  CONSTRAINT `fk.sales_channel_domain.currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_domain.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_domain.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_domain.snippet_set_id` FOREIGN KEY (`snippet_set_id`) REFERENCES `snippet_set` (`id`) ON UPDATE CASCADE,
-  CONSTRAINT `json.sales_channel_domain.custom_fields` CHECK (json_valid(`custom_fields`))
+  UNIQUE KEY `uniq.channel_domain.url` (`url`),
+  UNIQUE KEY `uniq.channel_domain.external_storefront` (`external_storefront_language_id`,`channel_id`),
+  KEY `fk.channel_domain.currency_id` (`currency_id`),
+  KEY `fk.channel_domain.snippet_set_id` (`snippet_set_id`),
+  KEY `fk.channel_domain.language_id` (`language_id`),
+  KEY `fk.channel_domain.channel_id` (`channel_id`),
+  CONSTRAINT `fk.channel_domain.currency_id` FOREIGN KEY (`currency_id`) REFERENCES `currency` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_domain.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_domain.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_domain.snippet_set_id` FOREIGN KEY (`snippet_set_id`) REFERENCES `snippet_set` (`id`) ON UPDATE CASCADE,
+  CONSTRAINT `json.channel_domain.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_file` (
   `id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `file_family` varchar(64) NOT NULL,
   `file_name` varchar(512) NOT NULL,
   `enabled` tinyint(1) NOT NULL DEFAULT 0,
@@ -183,36 +183,36 @@ CREATE TABLE IF NOT EXISTS `channel_file` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.sales_channel_file.sc_id_family_file_name` (`sales_channel_id`,`file_family`,`file_name`),
-  CONSTRAINT `fk.sales_channel_file.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.sales_channel_file.template_overrides` CHECK (json_valid(`template_overrides`))
+  UNIQUE KEY `uniq.channel_file.sc_id_family_file_name` (`channel_id`,`file_family`,`file_name`),
+  CONSTRAINT `fk.channel_file.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.channel_file.template_overrides` CHECK (json_valid(`template_overrides`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_language` (
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
-  PRIMARY KEY (`sales_channel_id`,`language_id`),
-  KEY `fk.sales_channel_language.language_id` (`language_id`),
-  CONSTRAINT `fk.sales_channel_language.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_language.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`channel_id`,`language_id`),
+  KEY `fk.channel_language.language_id` (`language_id`),
+  CONSTRAINT `fk.channel_language.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_language.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_payment_method` (
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `payment_method_id` binary(16) NOT NULL,
-  PRIMARY KEY (`sales_channel_id`,`payment_method_id`),
-  KEY `fk.sales_channel_payment_method.payment_method_id` (`payment_method_id`),
-  CONSTRAINT `fk.sales_channel_payment_method.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`channel_id`,`payment_method_id`),
+  KEY `fk.channel_payment_method.payment_method_id` (`payment_method_id`),
+  CONSTRAINT `fk.channel_payment_method.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_translation` (
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `home_keywords` varchar(255) DEFAULT NULL,
@@ -224,12 +224,12 @@ CREATE TABLE IF NOT EXISTS `channel_translation` (
   `custom_fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_fields`)),
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`sales_channel_id`,`language_id`),
-  KEY `fk.sales_channel_translation.language_id` (`language_id`),
-  CONSTRAINT `fk.sales_channel_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_translation.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.sales_channel_translation.custom_fields` CHECK (json_valid(`custom_fields`)),
-  CONSTRAINT `json.sales_channel_translation.home_slot_config` CHECK (json_valid(`home_slot_config`))
+  PRIMARY KEY (`channel_id`,`language_id`),
+  KEY `fk.channel_translation.language_id` (`language_id`),
+  CONSTRAINT `fk.channel_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_translation.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.channel_translation.custom_fields` CHECK (json_valid(`custom_fields`)),
+  CONSTRAINT `json.channel_translation.home_slot_config` CHECK (json_valid(`home_slot_config`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -242,13 +242,13 @@ CREATE TABLE IF NOT EXISTS `channel_type` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  CONSTRAINT `json.sales_channel_type.screenshot_urls` CHECK (json_valid(`screenshot_urls`))
+  CONSTRAINT `json.channel_type.screenshot_urls` CHECK (json_valid(`screenshot_urls`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `channel_type_translation` (
-  `sales_channel_type_id` binary(16) NOT NULL,
+  `channel_type_id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
   `name` varchar(255) DEFAULT NULL,
   `manufacturer` varchar(255) DEFAULT NULL,
@@ -257,11 +257,11 @@ CREATE TABLE IF NOT EXISTS `channel_type_translation` (
   `custom_fields` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL CHECK (json_valid(`custom_fields`)),
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
-  PRIMARY KEY (`sales_channel_type_id`,`language_id`),
-  KEY `fk.sales_channel_type_translation.language_id` (`language_id`),
-  CONSTRAINT `fk.sales_channel_type_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.sales_channel_type_translation.sales_channel_type_id` FOREIGN KEY (`sales_channel_type_id`) REFERENCES `sales_channel_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `json.sales_channel_type_translation.custom_fields` CHECK (json_valid(`custom_fields`))
+  PRIMARY KEY (`channel_type_id`,`language_id`),
+  KEY `fk.channel_type_translation.language_id` (`language_id`),
+  CONSTRAINT `fk.channel_type_translation.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.channel_type_translation.channel_type_id` FOREIGN KEY (`channel_type_id`) REFERENCES `channel_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `json.channel_type_translation.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -476,13 +476,13 @@ CREATE TABLE IF NOT EXISTS `system_config` (
   `id` binary(16) NOT NULL,
   `configuration_key` varchar(255) NOT NULL,
   `configuration_value` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL CHECK (json_valid(`configuration_value`)),
-  `sales_channel_id` binary(16) DEFAULT NULL,
+  `channel_id` binary(16) DEFAULT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.system_config.configuration_key__sales_channel_id` (`configuration_key`,`sales_channel_id`),
-  KEY `fk.system_config.sales_channel_id` (`sales_channel_id`),
-  CONSTRAINT `fk.system_config.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE KEY `uniq.system_config.configuration_key__channel_id` (`configuration_key`,`channel_id`),
+  KEY `fk.system_config.channel_id` (`channel_id`),
+  CONSTRAINT `fk.system_config.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `json.system_config.configuration_value` CHECK (json_valid(`configuration_value`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);

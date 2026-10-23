@@ -207,17 +207,17 @@ SQL);
 CREATE TABLE IF NOT EXISTS `number_range_channel` (
   `id` binary(16) NOT NULL,
   `number_range_id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) DEFAULT NULL,
+  `channel_id` binary(16) DEFAULT NULL,
   `number_range_type_id` binary(16) NOT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.numer_range_id__sales_channel_id` (`number_range_id`,`sales_channel_id`),
-  KEY `fk.number_range_sales_channel.sales_channel_id` (`sales_channel_id`),
-  KEY `fk.number_range_sales_channel.number_range_type_id` (`number_range_type_id`),
-  CONSTRAINT `fk.number_range_sales_channel.number_range_id` FOREIGN KEY (`number_range_id`) REFERENCES `number_range` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.number_range_sales_channel.number_range_type_id` FOREIGN KEY (`number_range_type_id`) REFERENCES `number_range_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.number_range_sales_channel.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE KEY `uniq.numer_range_id__channel_id` (`number_range_id`,`channel_id`),
+  KEY `fk.number_range_channel.channel_id` (`channel_id`),
+  KEY `fk.number_range_channel.number_range_type_id` (`number_range_type_id`),
+  CONSTRAINT `fk.number_range_channel.number_range_id` FOREIGN KEY (`number_range_id`) REFERENCES `number_range` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.number_range_channel.number_range_type_id` FOREIGN KEY (`number_range_type_id`) REFERENCES `number_range_type` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.number_range_channel.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -355,7 +355,7 @@ SQL);
 CREATE TABLE IF NOT EXISTS `seo_url` (
   `id` binary(16) NOT NULL,
   `language_id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) DEFAULT NULL,
+  `channel_id` binary(16) DEFAULT NULL,
   `foreign_key` binary(16) NOT NULL,
   `route_name` varchar(255) NOT NULL,
   `path_info` varchar(750) NOT NULL,
@@ -367,15 +367,15 @@ CREATE TABLE IF NOT EXISTS `seo_url` (
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.seo_url.seo_path_info` (`language_id`,`sales_channel_id`,`seo_path_info`),
-  UNIQUE KEY `uniq.seo_url.foreign_key` (`language_id`,`sales_channel_id`,`foreign_key`,`route_name`,`is_canonical`),
-  KEY `fk.seo_url.sales_channel_id` (`sales_channel_id`),
-  KEY `idx.foreign_key` (`language_id`,`foreign_key`,`sales_channel_id`,`is_canonical`),
-  KEY `idx.path_info` (`language_id`,`sales_channel_id`,`is_canonical`,`path_info`),
-  KEY `idx.delete_query` (`foreign_key`,`sales_channel_id`),
+  UNIQUE KEY `uniq.seo_url.seo_path_info` (`language_id`,`channel_id`,`seo_path_info`),
+  UNIQUE KEY `uniq.seo_url.foreign_key` (`language_id`,`channel_id`,`foreign_key`,`route_name`,`is_canonical`),
+  KEY `fk.seo_url.channel_id` (`channel_id`),
+  KEY `idx.foreign_key` (`language_id`,`foreign_key`,`channel_id`,`is_canonical`),
+  KEY `idx.path_info` (`language_id`,`channel_id`,`is_canonical`,`path_info`),
+  KEY `idx.delete_query` (`foreign_key`,`channel_id`),
   KEY `idx.seo_url.language_path` (`language_id`,`seo_path_info`),
   CONSTRAINT `fk.seo_url.language_id` FOREIGN KEY (`language_id`) REFERENCES `language` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.seo_url.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.seo_url.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `json.seo_url.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
@@ -383,7 +383,7 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `seo_url_template` (
   `id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) DEFAULT NULL,
+  `channel_id` binary(16) DEFAULT NULL,
   `route_name` varchar(255) NOT NULL,
   `entity_name` varchar(64) NOT NULL,
   `template` varchar(750) DEFAULT NULL,
@@ -393,8 +393,8 @@ CREATE TABLE IF NOT EXISTS `seo_url_template` (
   `updated_at` datetime(3) DEFAULT NULL,
   `is_headless` tinyint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.seo_url_template.route_name` (`sales_channel_id`,`route_name`),
-  CONSTRAINT `fk.seo_url_template.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  UNIQUE KEY `uniq.seo_url_template.route_name` (`channel_id`,`route_name`),
+  CONSTRAINT `fk.seo_url_template.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `json.seo_url_template.custom_fields` CHECK (json_valid(`custom_fields`))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci
 SQL);

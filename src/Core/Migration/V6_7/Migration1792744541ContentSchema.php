@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS `category` (
   `media_id` binary(16) DEFAULT NULL,
   `cms_page_id` binary(16) DEFAULT NULL,
   `cms_page_version_id` binary(16) NOT NULL DEFAULT x'0fa91ce3e96a4bc2be4bd9ce752c3425',
-  `product_stream_id` binary(16) DEFAULT NULL,
-  `product_assignment_type` varchar(32) NOT NULL DEFAULT 'blog',
+  `blog_stream_id` binary(16) DEFAULT NULL,
+  `blog_assignment_type` varchar(32) NOT NULL DEFAULT 'blog',
   `path` longtext DEFAULT NULL,
   `after_category_id` binary(16) DEFAULT NULL,
   `after_category_version_id` binary(16) DEFAULT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   KEY `fk.category.media_id` (`media_id`),
   KEY `fk.category.parent_id` (`parent_id`,`parent_version_id`),
   KEY `fk.category.after_category_id` (`after_category_id`,`after_category_version_id`),
-  KEY `fk.category.product_stream_id` (`product_stream_id`),
+  KEY `fk.category.blog_stream_id` (`blog_stream_id`),
   KEY `fk.category.cms_page_id` (`cms_page_id`,`cms_page_version_id`),
   KEY `fk.category.custom_entity_type_id` (`custom_entity_type_id`),
   CONSTRAINT `fk.category.after_category_id` FOREIGN KEY (`after_category_id`, `after_category_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE SET NULL ON UPDATE CASCADE,
@@ -60,7 +60,7 @@ CREATE TABLE IF NOT EXISTS `category` (
   CONSTRAINT `fk.category.custom_entity_type_id` FOREIGN KEY (`custom_entity_type_id`) REFERENCES `custom_entity` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk.category.media_id` FOREIGN KEY (`media_id`) REFERENCES `media` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `fk.category.parent_id` FOREIGN KEY (`parent_id`, `parent_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.category.product_stream_id` FOREIGN KEY (`product_stream_id`) REFERENCES `product_stream` (`id`) ON UPDATE CASCADE
+  CONSTRAINT `fk.category.blog_stream_id` FOREIGN KEY (`blog_stream_id`) REFERENCES `blog_stream` (`id`) ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -256,11 +256,11 @@ SQL);
 CREATE TABLE IF NOT EXISTS `landing_page_channel` (
   `landing_page_id` binary(16) NOT NULL,
   `landing_page_version_id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
-  PRIMARY KEY (`landing_page_id`,`landing_page_version_id`,`sales_channel_id`),
-  KEY `fk.landing_page_sales_channel.sales_channel_id` (`sales_channel_id`),
-  CONSTRAINT `fk.landing_page_sales_channel.product_id` FOREIGN KEY (`landing_page_id`, `landing_page_version_id`) REFERENCES `landing_page` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.landing_page_sales_channel.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  `channel_id` binary(16) NOT NULL,
+  PRIMARY KEY (`landing_page_id`,`landing_page_version_id`,`channel_id`),
+  KEY `fk.landing_page_channel.channel_id` (`channel_id`),
+  CONSTRAINT `fk.landing_page_channel.blog_id` FOREIGN KEY (`landing_page_id`, `landing_page_version_id`) REFERENCES `landing_page` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.landing_page_channel.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
@@ -412,20 +412,20 @@ SQL);
         $connection->executeStatement(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `main_category` (
   `id` binary(16) NOT NULL,
-  `product_id` binary(16) NOT NULL,
-  `product_version_id` binary(16) NOT NULL,
+  `blog_id` binary(16) NOT NULL,
+  `blog_version_id` binary(16) NOT NULL,
   `category_id` binary(16) NOT NULL,
   `category_version_id` binary(16) NOT NULL,
-  `sales_channel_id` binary(16) NOT NULL,
+  `channel_id` binary(16) NOT NULL,
   `created_at` datetime(3) NOT NULL,
   `updated_at` datetime(3) DEFAULT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uniq.main_category.sales_channel_product` (`product_id`,`product_version_id`,`sales_channel_id`),
-  KEY `fk.main_category.sales_channel_id` (`sales_channel_id`),
+  UNIQUE KEY `uniq.main_category.channel_product` (`blog_id`,`blog_version_id`,`channel_id`),
+  KEY `fk.main_category.channel_id` (`channel_id`),
   KEY `fk.main_category.category_id` (`category_id`,`category_version_id`),
   CONSTRAINT `fk.main_category.category_id` FOREIGN KEY (`category_id`, `category_version_id`) REFERENCES `category` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.main_category.product_id` FOREIGN KEY (`product_id`, `product_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `fk.main_category.sales_channel_id` FOREIGN KEY (`sales_channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `fk.main_category.blog_id` FOREIGN KEY (`blog_id`, `blog_version_id`) REFERENCES `blog` (`id`, `version_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk.main_category.channel_id` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
 SQL);
 
