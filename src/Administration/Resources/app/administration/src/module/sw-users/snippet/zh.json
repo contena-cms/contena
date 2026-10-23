@@ -1,5 +1,8 @@
 {
   "sw-user": {
+    "notification": {
+      "requiredFields": "请填写所有必填字段。"
+    },
     "general": {
       "mainMenuItemGeneral": "用户",
       "mainMenuItemList": "概览"
@@ -16,15 +19,20 @@
       "labelLastName": "姓氏",
       "labelCompany": "公司",
       "labelEmail": "电子邮件",
-      "labelTags": "标签"
+      "labelTags": "标签",
+      "labelGuest": "访客账号"
     },
     "list": {
       "textCustomers": "用户",
       "columnCompany": "公司",
+      "columnCustomerNumber": "用户编号",
       "columnName": "名称",
+      "columnGroup": "用户组",
+      "columnNameGuestLabel": "访客账号",
       "columnFirstName": "名字",
       "columnLastName": "姓氏",
       "columnStreet": "街道",
+      "columnZip": "邮政编码",
       "columnCity": "城市",
       "columnEmail": "电子邮件地址",
       "columnBoundSalesChannel": "渠道",
@@ -40,15 +48,21 @@
       "labelFirstName": "名字",
       "labelLastName": "姓氏",
       "labelEmail": "电子邮件地址",
+      "labelPhoneNumber": "电话号码",
       "labelCompany": "公司",
+      "labelCustomerGroup": "用户组",
       "labelSalesChannel": "渠道",
+      "labelCustomerNumber": "用户编号",
       "labelBirthday": "出生日期",
       "labelPassword": "密码",
+      "placeholderEmail": "输入电子邮件地址…",
       "labelLanguage": "语言",
       "labelTags": "标签"
     },
     "baseInfo": {
       "contactEmail": "电子邮件地址",
+      "labelCustomerNumber": "用户编号",
+      "labelCustomerGroup": "用户组",
       "labelBirthday": "出生日期",
       "labelLanguage": "语言",
       "labelCompany": "公司",
@@ -69,6 +83,7 @@
       "columnFirstName": "名字",
       "columnLastName": "姓氏",
       "columnStreet": "街道",
+      "columnZipCode": "邮政编码",
       "columnCity": "城市",
       "columnActions": "操作"
     },
@@ -81,23 +96,32 @@
       "labelTitle": "标题",
       "labelFirstName": "名字",
       "labelLastName": "姓氏",
+      "labelZipcode": "邮政编码",
       "labelStreet": "街道",
       "labelCity": "城市",
       "labelCountry": "国家",
       "labelState": "州/省",
       "labelAdditionalAddressLine1": "地址补充行 1",
-      "labelAdditionalAddressLine2": "地址补充行 2"
+      "labelAdditionalAddressLine2": "地址补充行 2",
+      "labelPhoneNumber": "电话号码",
+      "placeholderPhoneNumber": "输入电话号码…"
     },
     "detail": {
       "tabGeneral": "常规",
       "tabAddresses": "地址"
     },
     "filter": {
+      "userNumber": {
+        "label": "用户编号"
+      },
       "salutation": {
         "label": "称呼"
       },
       "status": {
         "label": "状态"
+      },
+      "userGroup": {
+        "label": "用户组"
       },
       "tags": {
         "label": "标签"

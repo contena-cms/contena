@@ -18,6 +18,7 @@
       "labelActive": "启用",
       "labelPosition": "位置",
       "labelDescription": "描述",
+      "placeholderTrackingUrl": "输入 URL…",
       "tax": {
         "labelTaxType": "类型"
       }

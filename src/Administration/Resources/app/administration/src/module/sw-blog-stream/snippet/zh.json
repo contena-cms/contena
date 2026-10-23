@@ -1,6 +1,10 @@
 {
   "sw-blog-stream": {
+    "general": {
+      "mainMenuItemGeneral": "动态博客组"
+    },
     "list": {
+      "textProductStreamOverview": "动态博客组",
       "columnName": "名称",
       "columnDescription": "描述",
       "columnDateUpdated": "最后更新",
@@ -8,6 +12,15 @@
       "titleSidebarItemRefresh": "刷新"
     },
     "filter": {
+      "type": {
+        "equals": "等于",
+        "greaterThan": "大于",
+        "lessThan": "小于",
+        "notEquals": "不等于"
+      },
+      "timeUnits": {
+        "days": "天"
+      },
       "values": {
         "active": "启用",
         "customFields": "自定义字段",
@@ -16,9 +29,11 @@
         "categoriesRo": "分类",
         "cheapestPrice": "价格",
         "description": "描述",
+        "gross": "含税",
         "group": "属性",
         "height": "高度",
         "name": "名称",
+        "net": "不含税",
         "price": "价格",
         "blog": "文章",
         "channel": "渠道",
@@ -38,7 +53,15 @@
       "buttonOpenPreview": "预览"
     },
     "previewModal": {
-      "title": "预览"
+      "title": "预览",
+      "empty": "未找到博客"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "blog_stream": {
+        "label": "动态博客组"
+      }
     }
   }
 }

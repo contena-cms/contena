@@ -1,10 +1,14 @@
 {
   "sw-settings-user-group": {
     "list": {
-      "columnName": "名称"
+      "columnName": "名称",
+      "columnDisplayGross": "税额显示"
     },
     "detail": {
-      "fieldNameLabel": "名称"
+      "cardTitle": "用户组",
+      "fieldNameLabel": "名称",
+      "fieldDisplayGrossLabel": "税额显示",
+      "fieldDisplayGrossValues": "含税 | 不含税"
     },
     "registration": {
       "title": "标题"

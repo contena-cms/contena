@@ -19,6 +19,13 @@
             }
           }
         },
+        "typography": {
+          "default": {
+            "sw-text-color": {
+              "label": "文字颜色"
+            }
+          }
+        },
         "eCommerce": {
           "default": {
             "sw-color-price": {
@@ -56,6 +63,7 @@
       "label": {
         "media": "媒体",
         "links": "链接",
+        "textcolor": "文字颜色",
         "text": "文本"
       }
     }

@@ -20,6 +20,7 @@
       "labelShippingAvailable": "配送",
       "editAction": "编辑",
       "columnStateNameLabel": "名称",
+      "labelAddressFormatPlain": "格式",
       "previewTitle": "预览",
       "labelCustomer": "用户"
     }
@@ -40,11 +41,13 @@
       "countryState": "州/省",
       "salutation": "称呼",
       "country": "国家",
+      "zipcode": "邮政编码",
       "lastName": "姓氏",
       "firstName": "名字",
       "street": "街道",
       "city": "城市",
       "company": "公司",
+      "phoneNumber": "电话号码",
       "title": "标题"
     }
   }

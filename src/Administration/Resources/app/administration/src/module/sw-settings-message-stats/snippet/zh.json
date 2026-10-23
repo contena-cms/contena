@@ -2,7 +2,8 @@
   "sw-settings-message-stats": {
     "general": {
       "statsCardTitle": "概览",
-      "type": "类型"
+      "type": "类型",
+      "count": "数量"
     }
   }
 }

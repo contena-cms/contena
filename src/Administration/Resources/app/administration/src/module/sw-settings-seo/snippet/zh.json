@@ -2,9 +2,14 @@
   "sw-seo-url-template-card": {
     "general": {
       "labelSalesChannelSelect": "渠道"
+    },
+    "routeNames": {
+      "frontend-landing-page": "落地页",
+      "channel-api-landing-page-detail": "落地页"
     }
   },
   "sw-seo-url": {
+    "titleCard": "SEO URL",
     "labelSalesChannelSelect": "渠道"
   }
 }

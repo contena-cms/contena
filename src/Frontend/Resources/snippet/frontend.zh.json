@@ -13,14 +13,19 @@
   },
   "general": {
     "menuLink": "菜单",
+    "offcanvasCloseMenu": "关闭菜单",
     "readMore": "了解更多",
+    "closeMenu": "关闭菜单",
     "back": "返回",
     "expand": "展开",
     "collapse": "收起",
     "categories": "分类",
+    "404ErrorPageHeader": "页面未找到",
+    "stagingModeDescription": "站点当前处于暂存模式。",
     "sortingLabel": "排序",
     "next": "下一步",
     "previous": "上一步",
+    "formSubmit": "提交",
     "pagination": {
       "prev": "上一页",
       "next": "下一页",
@@ -29,10 +34,14 @@
     }
   },
   "header": {
-    "searchButton": "搜索"
+    "searchButton": "搜索",
+    "searchNoResult": "未找到结果。",
+    "navigationAriaLabel": "主导航"
   },
   "account": {
+    "loginMailPlaceholder": "输入电子邮件地址…",
     "loginSubmit": "登录",
+    "personalTypePlaceholder": "请选择…",
     "personalTypePrivate": "私有",
     "personalSalutationLabel": "称呼",
     "personalTitleLabel": "标题",
@@ -66,6 +75,7 @@
     "editOrderCancelOrderModalFooterButtonBack": "返回",
     "orderItemColumnActions": "操作",
     "orderItemColumnName": "文章",
+    "orderItemColumnQuantity": "数量",
     "downloadFileButton": "下载",
     "downloadItemColumnTitle": "文件",
     "downloadItemColumnDate": "日期",
@@ -76,15 +86,19 @@
     "streetLabel": "街道地址",
     "additionalField1Label": "地址补充行 1",
     "additionalField2Label": "地址补充行 2",
+    "zipcodeLabel": "邮政编码",
     "cityLabel": "城市",
     "countryLabel": "国家",
     "countryStateLabel": "州/省",
+    "phoneNumberLabel": "电话号码",
+    "phoneNumberPlaceholder": "输入电话号码…",
     "companyNameLabel": "公司"
   },
   "checkout": {
     "registerSubmit": "继续",
     "summaryHeader": "摘要",
     "cartHeaderInfo": "文章",
+    "cartHeaderQuantity": "数量",
     "summaryPositionPrice": "合计",
     "collapseTriggerMore": "显示更多",
     "collapseTriggerLess": "收起"
@@ -92,17 +106,20 @@
   "listing": {
     "boxLabelNew": "新建",
     "listingTextSite": "页",
+    "listingTextFrom": "从",
     "boxProductDetails": "详情",
     "filterPriceDisplayName": "价格",
     "filterSubmitText": "筛选"
   },
   "newsletter": {
+    "labelActionSelect": "操作",
     "labelMail": "电子邮件地址",
     "labelFirstName": "名字",
     "labelLastName": "姓氏"
   },
   "contact": {
-    "commentLabel": "评论"
+    "commentLabel": "评论",
+    "formSubmit": "提交"
   },
   "revocationRequest": {
     "firstNameLabel": "名字",
@@ -112,8 +129,12 @@
   },
   "detail": {
     "tabsDescription": "描述",
+    "priceDataInfoUntil": "至",
+    "priceDataInfoFrom": "从",
+    "dataColumnQuantity": "数量",
     "tabsReview": "评论",
     "commentFormTitleLabel": "标题",
+    "commentFormSubmitText": "提交",
     "commentSortLabel": "排序方式",
     "commentCountBefore": "共",
     "commentLoginHeader": "登录"
@@ -122,7 +143,9 @@
     "newsletterInput": "电子邮件地址"
   },
   "cookie": {
-    "configuration": "设置"
+    "configure": "配置",
+    "configuration": "设置",
+    "groupMarketing": "营销"
   },
   "component": {
     "blog": {
@@ -131,6 +154,9 @@
           "true": "是",
           "false": "否"
         }
+      },
+      "quantitySelect": {
+        "label": "数量"
       }
     }
   }

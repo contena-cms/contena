@@ -5,12 +5,14 @@
       "labelFirstNameField": "名字",
       "labelLastNameField": "姓氏",
       "labelUsernameField": "用户名",
-      "labelEmailField": "电子邮件地址"
+      "labelEmailField": "电子邮件地址",
+      "notificationInvalidEmailErrorMessage": "请输入有效的电子邮件地址。"
     },
     "tabGeneral": {
       "title": "常规"
     },
     "tabSearchPreferences": {
+      "title": "搜索偏好",
       "cardSearchContent": {
         "buttonSelect": "全选",
         "buttonDeselect": "取消全选"
@@ -21,12 +23,15 @@
           "city": "城市",
           "street": "街道",
           "company": "公司",
+          "zipcode": "邮政编码",
           "lastName": "姓氏",
           "firstName": "名字",
+          "phoneNumber": "电话号码",
           "additionalAddressLine1": "地址补充行 1",
           "additionalAddressLine2": "地址补充行 2",
           "email": "电子邮件地址",
-          "tagsName": "标签"
+          "tagsName": "标签",
+          "userNumber": "用户编号"
         },
         "user": {
           "tagsName": "标签",
@@ -34,9 +39,12 @@
           "company": "公司",
           "firstName": "名字",
           "lastName": "姓氏",
+          "userNumber": "用户编号",
           "countryName": "国家",
           "city": "城市",
           "street": "街道",
+          "zipcode": "邮政编码",
+          "phoneNumber": "电话号码",
           "additionalAddressLine1": "地址补充行 1",
           "additionalAddressLine2": "地址补充行 2"
         },

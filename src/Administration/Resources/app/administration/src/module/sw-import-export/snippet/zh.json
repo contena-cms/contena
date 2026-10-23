@@ -12,6 +12,7 @@
       },
       "logInfo": {
         "labelType": "类型",
+        "labelUser": "管理员",
         "labelState": "状态",
         "labelProfile": "个人资料",
         "exportLabel": "导出",
@@ -26,6 +27,7 @@
         "logInfo": {
           "labelType": "类型",
           "labelState": "状态",
+          "labelUser": "管理员",
           "labelProfile": "个人资料"
         }
       },

@@ -4,6 +4,8 @@
       "mainMenuItemList": "概览"
     },
     "list": {
+      "tabMailTemplates": "模板",
+      "titleMailTemplateList": "模板",
       "titleMailFooterList": "页脚",
       "columnMailType": "类型",
       "columnDescription": "描述",
@@ -15,6 +17,10 @@
         "labelMailType": "类型",
         "labelDescription": "描述",
         "labelSalesChannels": "渠道"
+      },
+      "sidebar": {
+        "placeholderTestMail": "输入电子邮件地址…",
+        "copyTooltip": "复制到剪贴板。"
       },
       "previewModalTitle": "预览"
     }

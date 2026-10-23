@@ -23,6 +23,7 @@
     "detail": {
       "cardTitleReviewProperties": "属性",
       "labelTitle": "标题",
+      "labelUser": "管理员",
       "labelSalesChannel": "渠道",
       "labelCreatedAt": "创建时间",
       "labelProduct": "文章",

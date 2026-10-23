@@ -1,14 +1,21 @@
 {
   "sw-settings-blog-feature-sets": {
     "list": {
+      "columnValues": "值",
+      "columnTemplate": "模板",
       "columnDescription": "描述",
       "buttonAddEssentialCharacteristics": "新建"
     },
     "detail": {
+      "textHeadline": "新模板",
+      "titleCardValues": "值",
       "labelName": "名称",
-      "labelDescription": "描述"
+      "labelDescription": "描述",
+      "labelValues": "值"
     },
     "valuesCard": {
+      "cardTitle": "值",
+      "labelValue": "值",
       "labelType": "类型",
       "labelPosition": "位置"
     },

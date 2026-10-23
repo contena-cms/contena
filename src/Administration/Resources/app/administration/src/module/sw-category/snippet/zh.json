@@ -5,7 +5,8 @@
       "mainMenuItemList": "概览",
       "headlineCategories": "分类",
       "descriptionLabel": "描述",
-      "treeHeadline": "分类"
+      "treeHeadline": "分类",
+      "treeHeadSelected": "已选择 {count} 项"
     },
     "view": {
       "general": "常规",
@@ -23,7 +24,10 @@
         }
       },
       "entry-point-card": {
-        "cardTitle": "导航"
+        "cardTitle": "导航",
+        "types": {
+          "labelMainNavigation": "主导航"
+        }
       },
       "entry-point-modal": {
         "channelSelection": "渠道",
@@ -42,6 +46,7 @@
         }
       },
       "link": {
+        "mainTypeLabel": "链接类型",
         "linkNewTabLabel": "在新标签页打开",
         "type": {
           "internal": "内部"
@@ -50,14 +55,22 @@
       "blogs": {
         "blogAssignmentLabel": "文章",
         "columnNameLabel": "名称",
-        "blogAssignmentTypeLabel": "类型"
+        "blogAssignmentTypeLabel": "类型",
+        "blogAssignmentTypeStreamLabel": "动态博客组"
       }
+    },
+    "modal": {
+      "textDeleteChildrenConfirm": "所有子分类也将一并删除。"
     }
   },
   "sw-landing-page": {
     "view": {
       "general": "常规",
       "cms": "布局"
+    },
+    "general": {
+      "treeHeadSelected": "已选择 {count} 项",
+      "treeHeadline": "落地页"
     },
     "base": {
       "general": {
@@ -69,7 +82,12 @@
       "seo": {
         "labelSalesChannel": "渠道",
         "labelSocialMediaTitle": "标题",
-        "labelSocialMediaDescription": "描述"
+        "labelSocialMediaDescription": "描述",
+        "labelUrl": "SEO URL",
+        "placeholderUrl": "输入 URL…"
+      },
+      "cms": {
+        "cmsLayoutModalHeadline": "落地页"
       }
     }
   },
@@ -77,6 +95,9 @@
     "permissions": {
       "category": {
         "label": "分类"
+      },
+      "landing_page": {
+        "label": "落地页"
       }
     }
   }

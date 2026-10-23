@@ -1,7 +1,8 @@
 {
   "sw-privilege-error": {
     "general": {
-      "mainMenuItemGeneral": "拒绝访问"
+      "mainMenuItemGeneral": "拒绝访问",
+      "goBack": "返回"
     }
   }
 }

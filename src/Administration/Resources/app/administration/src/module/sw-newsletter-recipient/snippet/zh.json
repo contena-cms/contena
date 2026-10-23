@@ -15,6 +15,7 @@
       "firstName": "名字",
       "lastName": "姓氏",
       "channel": "渠道",
+      "zipCode": "邮政编码",
       "city": "城市",
       "street": "街道",
       "createdAt": "创建时间",

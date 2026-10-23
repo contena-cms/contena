@@ -3,6 +3,9 @@
     "general": {
       "greeting": "布局"
     },
+    "inherit": {
+      "unlinkFieldTitle": "恢复继承"
+    },
     "sorting": {
       "labelSortByAllPages": "所有类型"
     },
@@ -23,6 +26,9 @@
     },
     "detail": {
       "label": {
+        "pageType": {
+          "landingpage": "落地页"
+        },
         "blockCategoryText": "文本",
         "blockCategorySidebar": "侧边栏",
         "blockCategoryImage": "图片",
@@ -46,7 +52,15 @@
         }
       },
       "image": {
-        "label": "图片"
+        "label": "图片",
+        "config": {
+          "label": {
+            "linkNewTab": "在新标签页中打开链接"
+          },
+          "placeholder": {
+            "enterUrl": "输入 URL…"
+          }
+        }
       },
       "imageSlider": {
         "config": {
@@ -65,6 +79,9 @@
         "config": {
           "label": {
             "selection": "文章"
+          },
+          "placeholder": {
+            "selection": "选择博客…"
           }
         }
       },
@@ -90,7 +107,11 @@
             "selection": "文章",
             "navigation": "导航",
             "navigationPositionNone": "无",
-            "blogStreamSorting": "排序"
+            "blogStreamSorting": "排序",
+            "blogStreamChoice": "动态博客组"
+          },
+          "blogAssignmentTypeOptions": {
+            "blogStream": "动态博客组"
           }
         }
       },
@@ -192,6 +213,7 @@
         "labelCategories": "分类",
         "labelSalesChannel": "渠道",
         "tabCategories": "分类",
+        "tabLandingPages": "落地页",
         "blogs": {
           "blogAssignmentLabel": "文章",
           "columnNameLabel": "名称"
@@ -199,6 +221,7 @@
       },
       "cmsListItem": {
         "rename": "重命名",
+        "view": "查看",
         "modal": {
           "buttonRename": "重命名"
         }

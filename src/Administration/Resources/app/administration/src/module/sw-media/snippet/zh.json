@@ -6,10 +6,13 @@
     "sidebar": {
       "actions": {
         "delete": "删除",
+        "dissolve": "解散",
         "download": "下载",
         "move": "移动",
         "replace": "替换",
-        "settings": "设置"
+        "settings": "设置",
+        "setCover": "设置封面图",
+        "removeCover": "移除封面"
       },
       "sections": {
         "actions": "操作",
@@ -25,6 +28,12 @@
     },
     "index": {
       "rootFolderName": "媒体"
+    },
+    "sw-media-modal": {
+      "labelTabItemUpload": "上传文件"
+    },
+    "sw-media-modal-v2": {
+      "labelTabItemUpload": "上传文件"
     }
   },
   "sw-privileges": {

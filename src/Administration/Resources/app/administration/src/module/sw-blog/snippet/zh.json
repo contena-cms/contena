@@ -37,6 +37,7 @@
       "labelTitle": "标题"
     },
     "prices": {
+      "placeholderRule": "请选择…",
       "toolbarLabel": "规则"
     },
     "list": {
@@ -66,6 +67,7 @@
     },
     "variations": {
       "generatedListColumnDownload": "文件",
+      "emptyStatePropertyTitle": "暂无属性",
       "nextModalButton": "下一步",
       "progressTypeOf": "共",
       "generatedListColumnVariation": "名称",
@@ -75,6 +77,11 @@
       "overview": {
         "filterReset": "重置",
         "filter": "筛选"
+      },
+      "configuratorModal": {
+        "priceOptions": "值",
+        "singleRestrictionSeperation": "并且",
+        "searchPlaceholder": "搜索值…"
       }
     },
     "crossselling": {
@@ -83,7 +90,13 @@
       "inputCrossSellingType": "类型",
       "inputCrossSellingPosition": "位置",
       "inputCrossSellingSorting": "排序",
-      "nameSortingType": "名称"
+      "nameSortingType": "名称",
+      "blogStreamType": "动态博客组",
+      "buttonRestoreCrossSellingInheritance": "恢复继承",
+      "restoreInheritanceButtonRestore": "恢复继承"
+    },
+    "featureSets": {
+      "templateSelectFieldLabel": "模板"
     },
     "filters": {
       "activeFilter": {

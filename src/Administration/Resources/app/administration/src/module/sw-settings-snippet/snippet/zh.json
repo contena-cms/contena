@@ -11,6 +11,7 @@
     "list": {
       "buttonDelete": "删除",
       "columnKey": "名称",
+      "columnValue": "值",
       "contextMenuDelete": "删除 | 重置",
       "titleSidebarItemRefresh": "刷新",
       "titleSidebarItemFilter": "筛选"

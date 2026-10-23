@@ -10,13 +10,15 @@
       },
       "detail": {
         "labelTechnicalName": "技术名称",
-        "labelPosition": "位置"
+        "labelPosition": "位置",
+        "textHeadline": "自定义字段集"
       }
     },
     "customField": {
       "detail": {
         "buttonEditApply": "应用更改",
         "labelCustomFieldType": "类型",
+        "placeholderCustomFieldType": "请选择…",
         "labelTechnicalName": "技术名称",
         "labelLabel": "标签",
         "labelDeleteOption": "删除",
@@ -37,7 +39,8 @@
         "category": "分类",
         "country": "国家",
         "user": "用户",
-        "channel": "渠道"
+        "channel": "渠道",
+        "dynamicProductGroup": "动态博客组"
       }
     }
   },

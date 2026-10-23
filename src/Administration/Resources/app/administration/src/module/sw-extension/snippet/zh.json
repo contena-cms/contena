@@ -45,6 +45,12 @@
     "mainMenu": {
       "mainMenuItemExtensionStore": "扩展",
       "support": "支持"
+    },
+    "sw-extension-app-module-error-page": {
+      "error": {
+        "heading": "页面未找到",
+        "description": "找不到你要访问的页面，它可能已被移动或已不存在。"
+      }
     }
   },
   "sw-extension-store": {
@@ -69,12 +75,23 @@
           "labelPrice": "价格"
         }
       },
+      "sw-extension-ratings": {
+        "sw-extension-review-creation": {
+          "submitBtn": "提交"
+        }
+      },
       "sw-extension-permissions-details-modal": {
+        "operationRead": "查看",
         "operationCreate": "创建"
       }
     }
   },
   "entityCategories": {
+    "admin_user": {
+      "entities": {
+        "admin_user": "管理员"
+      }
+    },
     "app": {
       "title": "应用",
       "entities": {
@@ -93,13 +110,15 @@
       "entities": {
         "user": "用户",
         "user_address": "地址",
+        "user_group": "用户组",
         "user_tag": "标签"
       }
     },
     "custom_fields": {
       "title": "自定义字段",
       "entities": {
-        "custom_field": "自定义字段"
+        "custom_field": "自定义字段",
+        "custom_field_set": "自定义字段集"
       }
     },
     "documents": {
@@ -131,7 +150,8 @@
       "title": "媒体",
       "entities": {
         "media_folder": "文件夹",
-        "media_tag": "标签"
+        "media_tag": "标签",
+        "media_thumbnail_size": "缩略图尺寸"
       }
     },
     "order": {
@@ -161,7 +181,8 @@
         "blog_price": "价格",
         "blog_stream": "文章分组",
         "blog_tag": "标签",
-        "blog_sorting": "排序"
+        "blog_sorting": "排序",
+        "blog_custom_field_set": "自定义字段集"
       }
     },
     "promotion": {
@@ -181,7 +202,8 @@
         "channel": "渠道",
         "channel_country": "国家",
         "channel_currency": "货币",
-        "channel_language": "语言"
+        "channel_language": "语言",
+        "channel_type": "渠道类型"
       }
     },
     "settings": {
@@ -191,6 +213,7 @@
         "currency": "货币",
         "language": "语言",
         "salutation": "称呼",
+        "seo_url": "SEO URL",
         "tax": "税费",
         "version": "版本"
       }

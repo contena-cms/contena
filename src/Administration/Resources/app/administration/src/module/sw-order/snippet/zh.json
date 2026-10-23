@@ -20,6 +20,9 @@
     },
     "createBase": {
       "labelEmail": "电子邮件地址",
+      "labelPhoneNumber": "电话号码",
+      "placeholderEmail": "输入电子邮件地址…",
+      "placeholderPhoneNumber": "输入电话号码…",
       "labelSalesChannel": "渠道",
       "labelCurrency": "货币",
       "detailsTab": {
@@ -32,11 +35,17 @@
         "textCustomer": "用户"
       },
       "detailsBody": {
-        "labelEmail": "电子邮件"
+        "labelEmail": "电子邮件",
+        "labelPhoneNumber": "电话号码",
+        "placeholderEmail": "输入电子邮件地址…",
+        "placeholderPhoneNumber": "输入电话号码…"
       },
       "detailsFooter": {
         "labelCurrency": "货币"
       },
+      "columnQuantity": "数量",
+      "columnPriceNet": "价格（不含税）",
+      "columnPriceGross": "价格（含税）",
       "columnTotalPriceNet": "合计",
       "columnPrice": "价格",
       "columnTotalPrice": "合计"
@@ -44,20 +53,27 @@
     "detailBase": {
       "cardTitleDetails": "详情",
       "columnProductName": "名称",
+      "columnQuantity": "数量",
+      "columnPriceNet": "价格（不含税）",
+      "columnPriceGross": "价格（含税）",
       "columnTotalPriceNet": "合计",
       "columnPrice": "价格",
       "columnTotalPrice": "合计",
       "columnType": "类型",
       "labelSalesChannel": "渠道",
+      "labelCustomerPhoneNumber": "电话号码",
       "labelCustomerEmail": "电子邮件地址",
-      "labelNoDeliveryTrackingCodeYet": "无"
+      "labelNoDeliveryTrackingCodeYet": "无",
+      "placeholderTagSelect": "搜索标签…"
     },
     "lineItemType": {
       "blog": "文章",
       "custom": "自定义"
     },
     "nestedLineItemsModal": {
-      "headerLabel": "名称"
+      "headerLabel": "名称",
+      "headerUnitPrice": "价格（含税）",
+      "headerQuantity": "数量"
     },
     "addressSelection": {
       "modalTitleEditAddress": "地址"
@@ -115,16 +131,15 @@
       }
     },
     "newCustomerModal": {
-      "labelDetails": "详情"
-    },
-    "invalidPromotionModal": {
-      "buttonConfirm": "确定"
+      "labelDetails": "详情",
+      "labelGuest": "访客账号"
     },
     "initialModal": {
       "tabCustomer": "用户",
       "tabProducts": "文章",
       "userGrid": {
         "columnCustomerName": "名称",
+        "columnCustomerNumber": "用户编号",
         "columnSalesChannel": "渠道",
         "columnEmailAddress": "电子邮件地址",
         "buttonSelectSalesChannel": "选择"
@@ -145,6 +160,12 @@
       "channelFilter": {
         "label": "渠道"
       },
+      "userNumberFilter": {
+        "label": "用户编号"
+      },
+      "userGroupFilter": {
+        "label": "用户组"
+      },
       "tagFilter": {
         "label": "标签"
       },
@@ -154,8 +175,12 @@
     },
     "components": {
       "uploadDocumentModal": {
+        "buttonUploadFile": "上传文件",
         "upload": "上传"
       }
+    },
+    "invalidPromotionModal": {
+      "buttonConfirm": "确定"
     }
   },
   "sw-privileges": {

@@ -14,9 +14,13 @@
       "labelCompanyCity": "城市",
       "labelCompanyCountry": "国家",
       "labelCompanyEmail": "电子邮件地址",
+      "labelCompanyPhone": "电话号码",
       "labelCompanyStreet": "街道",
+      "labelCompanyZipcode": "邮政编码",
       "labelSalesChannel": "渠道",
-      "labelDisplayFooter": "页脚"
+      "labelDisplayFooter": "页脚",
+      "placeholderCompanyEmail": "输入电子邮件地址…",
+      "placeholderCompanyPhone": "输入电话号码…"
     }
   }
 }

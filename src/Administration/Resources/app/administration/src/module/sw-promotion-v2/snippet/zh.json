@@ -31,12 +31,17 @@
         },
         "setgroups": {
           "titleName": "分组",
-          "labelSorting": "排序"
+          "labelValue": "值",
+          "labelSorting": "排序",
+          "packager": {
+            "COUNT": "数量"
+          }
         }
       },
       "discounts": {
         "pricesModal": {
-          "labelCurrency": "货币"
+          "labelCurrency": "货币",
+          "labelPrice": "值"
         }
       }
     }
@@ -45,10 +50,12 @@
     "detail": {
       "main": {
         "discounts": {
+          "labelValue": "值",
           "labelType": "类型",
           "labelSorting": "排序方式",
           "pricesModal": {
-            "labelCurrency": "货币"
+            "labelCurrency": "货币",
+            "labelPrice": "值"
           }
         }
       }

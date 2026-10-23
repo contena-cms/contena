@@ -7,6 +7,7 @@
       "assignmentFilter": {
         "label": "分配",
         "values": {
+          "flowSequences": "流程",
           "paymentMethods": "支付方式"
         }
       },
@@ -39,7 +40,8 @@
           "description": "描述",
           "active": "启用",
           "extension": "扩展",
-          "position": "位置"
+          "position": "位置",
+          "flow": "流程"
         }
       },
       "types": {

@@ -1,13 +1,16 @@
 {
   "sw-settings-tag": {
     "general": {
-      "mainMenuItemGeneral": "标签"
+      "mainMenuItemGeneral": "标签",
+      "placeholderSearchBar": "搜索标签…"
     },
     "list": {
       "textHeadline": "标签",
       "columnName": "标签",
       "columnConnections": "分配",
+      "searchPlaceholder": "搜索标签…",
       "filter": "筛选",
+      "resetFilters": "重置筛选条件",
       "bulkMergeMessageAnd": "和",
       "bulkMergeNoUndoNotice": "此操作无法撤销。",
       "assignments": {
@@ -17,6 +20,7 @@
           "categories": "分类",
           "users": "用户",
           "orders": "排序",
+          "landingPages": "落地页",
           "rules": "规则"
         }
       }
@@ -30,6 +34,7 @@
         "categories": "分类",
         "users": "用户",
         "orders": "订单",
+        "landingPages": "落地页",
         "rules": "规则"
       }
     }

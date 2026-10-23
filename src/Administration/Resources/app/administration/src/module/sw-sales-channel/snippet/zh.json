@@ -17,7 +17,9 @@
     "detail": {
       "tabBase": "常规",
       "tabTheme": "主题",
+      "tabProductComparison": "模板",
       "tabProducts": "文章",
+      "titleProductComparisonTemplate": "模板",
       "titleProductComparisonPreview": "预览",
       "labelInputName": "名称",
       "labelInputActive": "启用",
@@ -28,9 +30,11 @@
       "labelInputCurrency": "货币",
       "labelInputLanguage": "语言",
       "labelInputSnippet": "文案片段",
+      "userGroup": "用户组",
       "navigation": "导航",
       "titleStatus": "状态",
       "titleAccount": "账户",
+      "titleTemplate": "模板",
       "columnDomainLanguage": "语言",
       "labelMaintenanceActive": "维护",
       "columnDomainCurrency": "货币",
@@ -38,12 +42,16 @@
         "columnActive": "启用"
       },
       "blogComparison": {
+        "blogStream": "动态博客组",
         "frontend": "渠道",
         "frontendDomainLanguage": {
           "label": "语言"
         },
         "frontendDomainCurrency": {
           "label": "货币"
+        },
+        "templates": {
+          "label": "模板"
         }
       },
       "agenticFiles": {
@@ -56,6 +64,7 @@
         },
         "detail": {
           "actionPreviewPublicPath": "预览",
+          "columnTemplate": "模板",
           "columnSourceRole": "角色",
           "overrideModalFieldLabel": "内容",
           "roleExtension": "扩展"
@@ -70,6 +79,9 @@
         }
       },
       "blogAssignmentModal": {
+        "categories": {
+          "emptySearchResults": "未找到分类"
+        },
         "dynamicProductGroups": {
           "columnName": "名称"
         }

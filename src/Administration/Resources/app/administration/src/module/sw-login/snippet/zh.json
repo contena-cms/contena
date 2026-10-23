@@ -11,10 +11,18 @@
       "forgottenPasswordLink": "忘记密码？"
     },
     "recovery": {
+      "info": {
+        "headline": "邮件已发送"
+      },
       "headline": "忘记密码？",
       "email": {
         "label": "电子邮件地址"
       }
+    }
+  },
+  "global": {
+    "sw-admin-menu": {
+      "textContenaAdmin": "Contena 管理后台"
     }
   }
 }

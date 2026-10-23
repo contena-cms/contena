@@ -3,6 +3,9 @@
     "labelDescription": {
       "labelTag": "标签"
     },
+    "general": {
+      "tabFlowTemplates": "流程模板"
+    },
     "list": {
       "labelColumnActive": "启用",
       "labelColumnName": "名称",
@@ -15,11 +18,13 @@
       "labelGeneralInformationPriority": "优先级",
       "labelGeneralInformationActive": "启用",
       "sequence": {
-        "conditionTitle": "条件"
+        "conditionTitle": "条件",
+        "actionTitle": "操作"
       }
     },
     "page": {
-      "tabGeneral": "常规"
+      "tabGeneral": "常规",
+      "tabFlow": "流程"
     },
     "flowNotification": {
       "messageError": "发生错误。"
@@ -42,25 +47,38 @@
         "labelType": "类型"
       },
       "tag": {
+        "placeholderToField": "选择实体…",
         "labelTagsField": "标签"
+      },
+      "userGroup": {
+        "labelCustomerGroup": "用户组"
       },
       "userStatus": {
         "active": "启用",
         "inactive": "停用"
       },
       "mail": {
+        "placeholderRecipientEmailAddress": "输入电子邮件地址…",
+        "labelEmailTemplate": "模板",
         "tabGeneral": "常规",
         "labelMailType": "类型",
         "labelDescription": "描述",
         "labelDefault": "默认",
         "labelCustomer": "用户",
-        "labelCustom": "自定义"
+        "labelCustom": "自定义",
+        "placeholderReplyTo": "输入电子邮件地址…"
       },
       "setEntityCustomField": {
+        "placeholderToField": "选择实体…",
+        "customFieldSet": "自定义字段集",
         "customField": "自定义字段",
+        "customFieldPlaceHolder": "选择自定义字段…",
         "options": {
           "clear": "清除"
         }
+      },
+      "affiliateAndCampaignCode": {
+        "placeholderEntity": "选择实体…"
       }
     },
     "triggers": {
@@ -70,6 +88,7 @@
       "mail": "电子邮件",
       "create": "创建",
       "state": "州/省",
+      "admin_user": "管理员",
       "login": "登录",
       "logout": "退出登录",
       "message": "消息",
