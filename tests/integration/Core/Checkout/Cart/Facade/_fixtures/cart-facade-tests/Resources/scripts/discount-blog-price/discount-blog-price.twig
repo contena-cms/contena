@@ -1,8 +1,0 @@
-{# @var services \Contena\Core\Framework\Script\ServiceStubs #}
-{% do services.cart.blogs.add(hook.ids.get('p1')) %}
-
-{% do services.cart.calculate %}
-
-{% set blog = services.cart.get(hook.ids.get('p1')) %}
-
-{% do blog.price.discount(10) %}

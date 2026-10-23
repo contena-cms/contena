@@ -54,8 +54,7 @@ class UserDefinition extends EntityDefinition
 {
     public const ENTITY_NAME = 'user';
 
-    public const MAX_LENGTH_FIRST_NAME = 255;
-    public const MAX_LENGTH_LAST_NAME = 255;
+    public const MAX_LENGTH_NAME = 255;
     public const MAX_LENGTH_TITLE = 100;
 
     public function getEntityName(): string
@@ -111,11 +110,11 @@ class UserDefinition extends EntityDefinition
             (new FkField('default_shipping_address_id', 'defaultShippingAddressId', UserAddressDefinition::class))->addFlags(new ApiAware(), new Required(), new NoConstraint())->setDescription('Unique identity of default shipping address.'),
             new AutoIncrementField(),
             (new NumberRangeField('user_number', 'userNumber', 255))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Unique  number assigned to identity a user.'),
-            (new StringField('first_name', 'firstName', self::MAX_LENGTH_FIRST_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('First name of the user.'),
-            (new StringField('last_name', 'lastName', self::MAX_LENGTH_LAST_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Last name of the user.'),
             (new StringField('company', 'company'))->addFlags(new ApiAware(), new IgnoreInOpenapiSchema(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Company name of the user.'),
             (new PasswordField('password', 'password', \PASSWORD_DEFAULT, [], PasswordField::FOR_CUSTOMER))->removeFlag(ApiAware::class),
             (new EmailField('email', 'email'))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Email ID of the user.'),
+            (new StringField('name', 'name', self::MAX_LENGTH_NAME))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Full name of the user.'),
+            (new StringField('phone', 'phone'))->addFlags(new ApiAware())->setDescription('Phone number of the user.'),
             (new StringField('title', 'title', self::MAX_LENGTH_TITLE))->addFlags(new ApiAware())->setDescription('Titles or honorifics like Mr, Mrs, etc.'),
             (new ListField('vat_ids', 'vatIds', StringField::class))->addFlags(new ApiAware(), new IgnoreInOpenapiSchema())->setDescription('Unique identity of VAT.'),
             (new StringField('affiliate_code', 'affiliateCode'))->addFlags(new ApiAware())->setDescription('An affiliate code is an identification option with which website operators can mark outgoing links.'),

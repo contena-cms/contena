@@ -34,9 +34,9 @@ class AdminUserEntity extends Entity
      */
     protected string $password;
 
-    protected string $firstName;
+    protected string $name;
 
-    protected string $lastName;
+    protected ?string $phone = null;
 
     protected ?string $title = null;
 
@@ -78,9 +78,7 @@ class AdminUserEntity extends Entity
 
     protected ?\DateTimeInterface $lastUpdatedPasswordAt = null;
 
-    protected ?OrderCollection $createdOrders = null;
 
-    protected ?OrderCollection $updatedOrders = null;
 
     protected ?UserCollection $createdUsers = null;
 
@@ -156,24 +154,24 @@ class AdminUserEntity extends Entity
         $this->password = $password;
     }
 
-    public function getFirstName(): string
+    public function getName(): string
     {
-        return $this->firstName;
+        return $this->name;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setName(string $name): void
     {
-        $this->firstName = $firstName;
+        $this->name = $name;
     }
 
-    public function getLastName(): string
+    public function getPhone(): ?string
     {
-        return $this->lastName;
+        return $this->phone;
     }
 
-    public function setLastName(string $lastName): void
+    public function setPhone(?string $phone): void
     {
-        $this->lastName = $lastName;
+        $this->phone = $phone;
     }
 
     public function getEmail(): string
@@ -318,26 +316,6 @@ class AdminUserEntity extends Entity
     public function setTitle(?string $title): void
     {
         $this->title = $title;
-    }
-
-    public function getCreatedOrders(): ?OrderCollection
-    {
-        return $this->createdOrders;
-    }
-
-    public function setCreatedOrders(OrderCollection $createdOrders): void
-    {
-        $this->createdOrders = $createdOrders;
-    }
-
-    public function getUpdatedOrders(): ?OrderCollection
-    {
-        return $this->updatedOrders;
-    }
-
-    public function setUpdatedOrders(OrderCollection $updatedOrders): void
-    {
-        $this->updatedOrders = $updatedOrders;
     }
 
     public function getCreatedUsers(): ?UserCollection

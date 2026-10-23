@@ -41,9 +41,9 @@ class UserEntity extends Entity implements \Stringable
 
     protected ?string $salutationId = null;
 
-    protected string $firstName;
+    protected string $name;
 
-    protected string $lastName;
+    protected ?string $phone = null;
 
     protected ?string $company = null;
 
@@ -252,24 +252,24 @@ class UserEntity extends Entity implements \Stringable
         $this->salutationId = $salutationId;
     }
 
-    public function getFirstName(): string
+    public function getName(): string
     {
-        return $this->firstName;
+        return $this->name;
     }
 
-    public function setFirstName(string $firstName): void
+    public function setName(string $name): void
     {
-        $this->firstName = $firstName;
+        $this->name = $name;
     }
 
-    public function getLastName(): string
+    public function getPhone(): ?string
     {
-        return $this->lastName;
+        return $this->phone;
     }
 
-    public function setLastName(string $lastName): void
+    public function setPhone(?string $phone): void
     {
-        $this->lastName = $lastName;
+        $this->phone = $phone;
     }
 
     public function getCompany(): ?string

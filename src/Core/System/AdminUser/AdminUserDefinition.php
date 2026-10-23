@@ -73,7 +73,7 @@ class AdminUserDefinition extends EntityDefinition
     {
         return [
             'admin' => false,
-            'timeZone' => 'UTC',
+            'timeZone' => 'Asia/Shanghai',
         ];
     }
 
@@ -92,8 +92,8 @@ class AdminUserDefinition extends EntityDefinition
             (new FkField('locale_id', 'localeId', LocaleDefinition::class))->addFlags(new Required())->setDescription('Unique identity of locale.'),
             (new StringField('username', 'username'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Username of the admin_user.'),
             (new PasswordField('password', 'password', \PASSWORD_DEFAULT, [], PasswordField::FOR_ADMIN))->removeFlag(ApiAware::class)->addFlags(new Required()),
-            (new StringField('first_name', 'firstName'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('First name of the admin_user.'),
-            (new StringField('last_name', 'lastName'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Last name of the admin_user.'),
+            (new StringField('name', 'name'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Full name of the admin_user.'),
+            (new StringField('phone', 'phone'))->addFlags(new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Phone number of the admin_user.'),
             (new StringField('title', 'title'))->addFlags(new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Title of the admin_user.'),
             (new EmailField('email', 'email'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Email of the admin_user.'),
             (new BoolField('active', 'active'))->setDescription('When boolean value is `true`, the admin_user is enabled.'),
@@ -120,8 +120,6 @@ class AdminUserDefinition extends EntityDefinition
             new ManyToManyAssociationField('aclRoles', AclRoleDefinition::class, AclAdminUserRoleDefinition::class, 'admin_user_id', 'acl_role_id'),
             new OneToOneAssociationField('recoveryUser', 'id', 'admin_user_id', AdminUserRecoveryDefinition::class, false),
             (new StringField('store_token', 'storeToken'))->removeFlag(ApiAware::class),
-            new OneToManyAssociationField('createdOrders', OrderDefinition::class, 'created_by_id', 'id'),
-            new OneToManyAssociationField('updatedOrders', OrderDefinition::class, 'updated_by_id', 'id'),
             new OneToManyAssociationField('createdUsers', UserDefinition::class, 'created_by_id', 'id'),
             new OneToManyAssociationField('updatedUsers', UserDefinition::class, 'updated_by_id', 'id'),
         ]);
