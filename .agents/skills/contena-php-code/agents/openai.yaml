@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena PHP Code"
+  short_description: "Apply Contena PHP architecture and BC rules."
+  default_prompt: "Implement this Contena PHP change."

@@ -1,0 +1,6 @@
+interface:
+  display_name: "Contena Bugfixer"
+  short_description: "Explicitly fix a Contena GitHub issue"
+  default_prompt: "Use $sw-bugfixer to fix the specified Contena issue."
+policy:
+  allow_implicit_invocation: false

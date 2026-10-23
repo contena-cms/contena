@@ -1,0 +1,6 @@
+interface:
+  display_name: "Contena Issue Triage"
+  short_description: "Explicitly triage a Contena issue"
+  default_prompt: "Use $sw-triage to triage the specified Contena issue."
+policy:
+  allow_implicit_invocation: false
