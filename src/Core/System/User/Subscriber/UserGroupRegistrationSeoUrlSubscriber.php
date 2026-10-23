@@ -34,7 +34,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class UserGroupRegistrationSeoUrlSubscriber implements EventSubscriberInterface
 {
-    private const ROUTE_NAME = 'store-api.user-group-registration.config';
+    private const ROUTE_NAME = 'channel-api.user-group-registration.config';
 
     /**
      * @param EntityRepository<UserGroupCollection> $userGroupRepository
@@ -201,7 +201,7 @@ class UserGroupRegistrationSeoUrlSubscriber implements EventSubscriberInterface
                         'channelId' => $registrationChannel->getId(),
                         'foreignKey' => $group->getId(),
                         'routeName' => self::ROUTE_NAME,
-                        'pathInfo' => '/store-api/user-group-registration/config/' . $group->getId(),
+                        'pathInfo' => '/channel-api/user-group-registration/config/' . $group->getId(),
                         'isCanonical' => true,
                         'isDeleted' => false,
                         'seoPathInfo' => '/' . $this->slugify->slugify($title),

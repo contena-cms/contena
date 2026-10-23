@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\LandingPage\Channel;
 
 use Contena\Core\Content\LandingPage\LandingPageEntity;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<LandingPageEntity>
+ * @extends ChannelApiResponse<LandingPageEntity>
  */
-class LandingPageRouteResponse extends StoreApiResponse
+class LandingPageRouteResponse extends ChannelApiResponse
 {
     public function getLandingPage(): LandingPageEntity
     {

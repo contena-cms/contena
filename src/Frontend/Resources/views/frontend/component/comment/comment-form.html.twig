@@ -1,139 +1,98 @@
-{% block component_review_form %}
+{% block component_comment_form %}
 
-    {% if data is not defined and reviews.userReview is defined %}
-        {% set data = reviews.userReview %}
+    {% if data is not defined and comments.userComment is defined %}
+        {% set data = comments.userComment %}
     {% endif %}
 
     {% set formAjaxSubmitOptions = {
-        replaceSelectors: '.js-review-container'
+        replaceSelectors: '.js-comment-container'
     } %}
 
-    {% block component_review_form_form %}
-        <form class="review-form"
-              action="{{ path('frontend.detail.review.save', { blogId: reviews.blogId }) }}"
+    {% block component_comment_form_form %}
+        <form class="comment-form"
+              action="{{ path('frontend.detail.comment.save', { blogId: comments.blogId }) }}"
               method="post"
               data-form-handler="true"
               data-form-ajax-submit="true"
               data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
-            {% block component_review_form_forward %}
+            {% block component_comment_form_forward %}
                 <input type="hidden"
                        name="forwardTo"
-                       value="frontend.blog.reviews">
+                       value="frontend.blog.comments">
 
                 <input type="hidden"
                        name="parentId"
-                       value="{{ reviews.parentId }}">
+                       value="{{ comments.parentId }}">
 
                 <input type="hidden"
                        name="forwardParameters"
-                       value="{{ {blogId: reviews.blogId}|json_encode }}">
+                       value="{{ {blogId: comments.blogId}|json_encode }}">
             {% endblock %}
 
-            {% if reviews.userReview %}
-                <input type="hidden" name="id" value="{{ reviews.userReview.id }}">
+            {% if comments.userComment %}
+                <input type="hidden" name="id" value="{{ comments.userComment.id }}">
             {% endif %}
 
-            {% block component_review_form_details %}
+            {% block component_comment_form_details %}
                 <div class="row g-2">
-                    {% block component_review_form_rating %}
-                        <div class="form-group col-md-4 blog-detail-review-form-rating">
-                            <label for="#review-form-rating">
-                                {{ 'detail.reviewFormRatingLabel'|trans|sw_sanitize }}{{ 'general.required'|trans|sw_sanitize }}
-                            </label>
 
-                            <div id="review-form-rating"
-                                 class="blog-detail-review-form-rating-input"
-                                 data-rating-system="true">
-                                {% if data.get('points') is not empty %}
-                                    {% set currentPoints = data.get('points')|number_format %}
-                                {% else %}
-                                    {% set currentPoints = reviews.matrix.maxPoints %}
-                                {% endif %}
-
-                                {% set maxPoints = reviews.matrix.maxPoints %}
-
-                                {% for point in 1..maxPoints %}
-                                    <label data-review-form-point="{{ point }}"
-                                           class="blog-detail-review-form-star{% if currentPoints >= point %} is-active{% endif %}">
-                                        <input class="blog-detail-review-form-radio"
-                                               type="radio"
-                                               name="points"
-                                               value="{{ point }}"
-                                               aria-label="{{ "detail.review#{point}PointRatingText"|trans|sw_sanitize }}"
-                                            {% if currentPoints >= point %} checked="checked"{% endif %}>
-
-                                        {% sw_include '@Frontend/frontend/component/review/point.html.twig' with {
-                                            type: 'blank'
-                                        } %}
-                                    </label>
-                                {% endfor %}
-                                {% for matrix in reviews.matrix.matrix %}
-                                    <p class="h6 blog-detail-review-form-rating-text {% if currentPoints != matrix.points %} d-none{% endif %}"
-                                       data-rating-text="{{ matrix.points }}">
-                                        {{ "detail.review#{matrix.points}PointRatingText"|trans|sw_sanitize }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    {% endblock %}
-
-                    {% block component_review_form_title %}
+                    {% block component_comment_form_title %}
                         {% sw_include '@Frontend/frontend/component/form/form-input.html.twig' with {
-                            label: 'detail.reviewFormTitleLabel'|trans|sw_sanitize,
-                            id: 'reviewTitle',
+                            label: 'detail.commentFormTitleLabel'|trans|sw_sanitize,
+                            id: 'commentTitle',
                             name: 'title',
                             value: data.get('title'),
                             violationPath: '/title',
                             validationRules: 'required,minLength',
                             minlength: '5',
                             maxlength: '255',
-                            additionalClass: 'col-12 blog-detail-review-form-title',
-                            description: 'detail.reviewTitleMinLengthHint'|trans|sw_sanitize
+                            additionalClass: 'col-12 blog-detail-comment-form-title',
+                            description: 'detail.commentTitleMinLengthHint'|trans|sw_sanitize
                         } %}
                     {% endblock %}
                 </div>
             {% endblock %}
 
-            {% block component_review_form_content %}
+            {% block component_comment_form_content %}
                 <div class="row g-2">
                     {% sw_include '@Frontend/frontend/component/form/form-textarea.html.twig' with {
-                        label: 'detail.reviewFormContentLabel'|trans|sw_sanitize,
-                        id: 'reviewContent',
+                        label: 'detail.commentFormContentLabel'|trans|sw_sanitize,
+                        id: 'commentContent',
                         name: 'content',
                         value: data.get('content'),
                         violationPath: '/content',
                         validationRules: 'required,minLength',
                         minlength: '40',
-                        additionalClass: 'col-12 blog-detail-review-form-content',
-                        description: 'detail.reviewTextMinLengthHint'|trans|sw_sanitize
+                        additionalClass: 'col-12 blog-detail-comment-form-content',
+                        description: 'detail.commentTextMinLengthHint'|trans|sw_sanitize
                     } %}
                 </div>
             {% endblock %}
 
-            {% block component_review_form_footer %}
-                <div class="blog-detail-review-form-footer">
-                    {% block component_review_form_required %}
+            {% block component_comment_form_footer %}
+                <div class="blog-detail-comment-form-footer">
+                    {% block component_comment_form_required %}
                         <p class="required-fields">
                             {{ 'global.default.noteRequiredFields'|trans|sw_sanitize }}
                         </p>
                     {% endblock %}
 
-                    <div class="blog-detail-review-form-actions">
-                        {% block component_review_form_cancel %}
+                    <div class="blog-detail-comment-form-actions">
+                        {% block component_comment_form_cancel %}
                             <a href="#"
-                               class="btn btn-outline-secondary blog-detail-review-cancel"
+                               class="btn btn-outline-secondary blog-detail-comment-cancel"
                                data-bs-toggle="collapse"
                                data-bs-target=".multi-collapse"
                                aria-expanded="false"
-                               aria-controls="review-form review-list">
+                               aria-controls="comment-form comment-list">
                                 {{ 'global.default.cancel'|trans|sw_sanitize }}
                             </a>
                         {% endblock %}
 
-                        {% block component_review_form_submit %}
+                        {% block component_comment_form_submit %}
                             <button type="submit"
-                                    class="btn btn-primary btn-review-submit">
-                                {{ 'detail.reviewFormSubmitText'|trans|sw_sanitize }}
+                                    class="btn btn-primary btn-comment-submit">
+                                {{ 'detail.commentFormSubmitText'|trans|sw_sanitize }}
                             </button>
                         {% endblock %}
                     </div>

@@ -14,9 +14,9 @@ class FrontendException extends HttpException
     final public const CLASS_DONT_HAVE_TWIG_INJECTED = 'FRONTEND__CLASS_DONT_HAVE_TWIG_INJECTED';
     final public const NO_REQUEST_PROVIDED = 'FRONTEND__NO_REQUEST_PROVIDED';
     /**
-     * @deprecated tag:v6.8.0 - Will be replaced by `BlogException::BLOG_REVIEW_NOT_ACTIVE`
+     * @deprecated tag:v6.8.0 - Will be replaced by `BlogException::BLOG_COMMENT_NOT_ACTIVE`
      */
-    final public const BLOG_REVIEW_NOT_ACTIVE = 'FRONTEND__REVIEW_NOT_ACTIVE';
+    final public const BLOG_COMMENT_NOT_ACTIVE = 'FRONTEND__COMMENT_NOT_ACTIVE';
     final public const CHANNEL_DOMAIN_NOT_FOUND = 'FRONTEND__CHANNEL_DOMAIN_NOT_FOUND';
 
     private const CUSTOM_APP_PATH = 'custom/apps/';
@@ -59,18 +59,18 @@ class FrontendException extends HttpException
     }
 
     /**
-     * @deprecated tag:v6.8.0 - Will be replaced by `BlogException::reviewNotActive`
+     * @deprecated tag:v6.8.0 - Will be replaced by `BlogException::commentNotActive`
      */
-    public static function reviewNotActive(): self
+    public static function commentNotActive(): self
     {
         Feature::triggerDeprecationOrThrow(
             'v6.8.0.0',
-            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0', 'BlogException::reviewNotActive')
+            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0', 'BlogException::commentNotActive')
         );
 
         return new self(
             Response::HTTP_FORBIDDEN,
-            self::BLOG_REVIEW_NOT_ACTIVE,
+            self::BLOG_COMMENT_NOT_ACTIVE,
             'Reviews not activated'
         );
     }

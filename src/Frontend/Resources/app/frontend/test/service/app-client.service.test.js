@@ -29,7 +29,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: 0,
                 }),
             }))
@@ -58,7 +58,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: expires.toISOString(),
                 }),
             }))
@@ -99,7 +99,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: 0,
                 }),
             }))
@@ -110,7 +110,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: 0,
                 }),
             }))
@@ -132,7 +132,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: 0,
                 }),
             }))
@@ -156,7 +156,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: 0,
                 }),
             }))
@@ -181,7 +181,7 @@ describe('App Client Service', () => {
                 ok: true,
                 json: () => Promise.resolve({
                     token: 'test-token',
-                    shopId: 'foo',
+                    installationId: 'foo',
                     expires: 0,
                 }),
             }))

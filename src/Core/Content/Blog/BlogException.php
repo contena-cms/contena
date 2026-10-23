@@ -9,7 +9,7 @@ use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
-use Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption;
+use Contena\Core\Content\Blog\Exception\CommentNotActiveException;
 use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
 
 class BlogException extends HttpException
@@ -24,7 +24,7 @@ class BlogException extends HttpException
     public const LISTING_PAGE_OUT_OF_RANGE = 'BLOG__LISTING_PAGE_OUT_OF_RANGE';
     public const BLOG_CONFIGURATION_OPTION_ALREADY_EXISTS = 'BLOG_CONFIGURATION_OPTION_EXISTS_ALREADY';
     public const BLOG_INVALID_OPTIONS_PARAMETER = 'BLOG_INVALID_OPTIONS_PARAMETER';
-    final public const BLOG_REVIEW_NOT_ACTIVE = 'BLOG__REVIEW_NOT_ACTIVE';
+    final public const BLOG_COMMENT_NOT_ACTIVE = 'BLOG__COMMENT_NOT_ACTIVE';
     final public const BLOG_ORIGINAL_ID_NOT_FOUND = 'BLOG__ORIGINAL_ID_NOT_FOUND';
     public const MISSING_REQUEST_PARAMETER_CODE = 'BLOG__MISSING_REQUEST_PARAMETER_CODE';
 
@@ -106,16 +106,16 @@ class BlogException extends HttpException
     }
 
     #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function reviewNotActive(): self|ReviewNotActiveExeption
+    public static function commentNotActive(): self|CommentNotActiveException
     {
         if (!Feature::isActive('v6.8.0.0')) {
-            return new ReviewNotActiveExeption();
+            return new CommentNotActiveException();
         }
 
         return new self(
             Response::HTTP_FORBIDDEN,
-            self::BLOG_REVIEW_NOT_ACTIVE,
-            'Reviews not activated'
+            self::BLOG_COMMENT_NOT_ACTIVE,
+            'Comments not activated'
         );
     }
 

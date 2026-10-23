@@ -69,11 +69,11 @@ export default {
                     ],
                 },
                 {
-                    type: 'blog-description-reviews',
+                    type: 'blog-description-comments',
                     elements: [
                         {
                             slot: 'content',
-                            type: 'blog-description-reviews',
+                            type: 'blog-description-comments',
                             config: {},
                         },
                     ],
@@ -1091,9 +1091,9 @@ export default {
                     ...defaultConfig,
                     marginLeft: '0',
                     marginRight: '0',
-                    marginTop: blockType === 'gallery-buybox' || blockType === 'blog-description-reviews' ? '20px' : '0',
+                    marginTop: blockType === 'gallery-buybox' || blockType === 'blog-description-comments' ? '20px' : '0',
                     marginBottom:
-                        blockType === 'blog-heading' || blockType === 'blog-description-reviews' ? '20px' : '0',
+                        blockType === 'blog-heading' || blockType === 'blog-description-comments' ? '20px' : '0',
                 };
             }
 

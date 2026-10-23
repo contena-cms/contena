@@ -69,13 +69,13 @@
         />
         {% endblock %}
 
-        {% block sw_custom_field_detail_modal_store_api_aware %}
+        {% block sw_custom_field_detail_modal_channel_api_aware %}
         <mt-switch
-            v-model="currentCustomField.storeApiAware"
+            v-model="currentCustomField.channelApiAware"
             bordered
-            :help-text="$t('sw-settings-custom-field.customField.detail.tooltipStoreApiAware')"
-            class="sw-custom-field-detail__store-api-aware"
-            :label="$t('sw-settings-custom-field.customField.detail.labelStoreApiAware')"
+            :help-text="$t('sw-settings-custom-field.customField.detail.tooltipChannelApiAware')"
+            class="sw-custom-field-detail__channel-api-aware"
+            :label="$t('sw-settings-custom-field.customField.detail.labelChannelApiAware')"
             :disabled="!acl.can('custom_field.editor') || undefined"
         />
         {% endblock %}

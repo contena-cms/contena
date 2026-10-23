@@ -27,6 +27,7 @@ use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
 use Symfony\Component\Validator\Exception\MissingOptionsException;
 use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 use Symfony\Component\Validator\Exception\UnexpectedValueException;
+use Symfony\Component\Validator\Exception\ValidatorException;
 
 class UserException extends HttpException
 {

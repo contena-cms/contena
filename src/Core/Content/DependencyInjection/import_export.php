@@ -249,20 +249,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.import_export.entity_serializer', ['priority' => -400])
         ->tag('kernel.reset', ['method' => 'reset']);
 
-    $services->set(PromotionIndividualCodeSerializer::class)
-        ->args([
-            service('promotion_individual_code.repository'),
-            service('promotion.repository'),
-        ])
-        ->tag('contena.import_export.entity_serializer', ['priority' => -400])
-        ->tag('kernel.reset', ['method' => 'reset']);
-
-    $services->set(BlogSerializer::class)
+        $services->set(BlogSerializer::class)
         ->args([
             service('blog_visibility.repository'),
             service('channel.repository'),
             service('blog_media.repository'),
-            service('blog_configurator_setting.repository'),
         ])
         ->tag('contena.import_export.entity_serializer', ['priority' => -400]);
 
@@ -305,7 +296,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('messenger.default_bus'),
             service(ImportExportFactory::class),
             service('event_dispatcher'),
-            service(BlogTypeRegistry::class),
         ])
         ->tag('messenger.message_handler');
 

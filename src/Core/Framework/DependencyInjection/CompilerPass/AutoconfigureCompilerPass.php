@@ -27,7 +27,6 @@ use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInter
 use Contena\Core\Framework\Webhook\Hookable\HookableEntityInterface;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
-use Contena\Core\System\Tax\TaxRuleType\TaxRuleTypeFilterInterface;
 use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -126,10 +125,6 @@ class AutoconfigureCompilerPass implements CompilerPassInterface
         $container
             ->registerForAutoconfiguration(AbstractValueGenerator::class)
             ->addTag('contena.value_generator_pattern');
-
-        $container
-            ->registerForAutoconfiguration(TaxRuleTypeFilterInterface::class)
-            ->addTag('tax.rule_type_filter');
 
         $container
             ->registerForAutoconfiguration(SeoUrlRouteInterface::class)

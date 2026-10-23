@@ -7,7 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
@@ -29,7 +29,7 @@ use Symfony\Component\Validator\Constraints\IsTrue;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class RegisterConfirmRoute extends AbstractRegisterConfirmRoute
 {
     /**
@@ -53,7 +53,7 @@ class RegisterConfirmRoute extends AbstractRegisterConfirmRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/account/register-confirm', name: 'store-api.account.register.confirm', methods: ['POST'])]
+    #[Route(path: '/channel-api/account/register-confirm', name: 'channel-api.account.register.confirm', methods: ['POST'])]
     public function confirm(RequestDataBag $dataBag, ChannelContext $context): UserResponse
     {
         return $this->extensions->publish(

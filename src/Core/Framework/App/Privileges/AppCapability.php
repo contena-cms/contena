@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\App\Privileges;
 
 /**
  * Answers whether an app is allowed to perform a capability action, i.e. whether Contena may
- * push checkout data to the app's tax provider, payment or checkout gateway handler. Reads the
+ * push data to the app's payment or checkout gateway handler. Reads the
  * granted privileges (acl_role.privileges); permissions that are only requested (pending
  * consent) do not count.
  *

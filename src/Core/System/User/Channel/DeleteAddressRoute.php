@@ -4,7 +4,7 @@ namespace Contena\Core\System\User\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\NoContentResponse;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\User\Channel\UserAddressValidationTrait;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class DeleteAddressRoute extends AbstractDeleteAddressRoute
 {
     use UserAddressValidationTrait;
@@ -37,8 +37,8 @@ class DeleteAddressRoute extends AbstractDeleteAddressRoute
     }
 
     #[Route(
-        path: '/store-api/account/address/{addressId}',
-        name: 'store-api.account.address.delete',
+        path: '/channel-api/account/address/{addressId}',
+        name: 'channel-api.account.address.delete',
         defaults: [
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,

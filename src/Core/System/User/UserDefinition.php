@@ -99,7 +99,7 @@ class UserDefinition extends EntityDefinition
             (new StringField('affiliate_code', 'affiliateCode'))->addFlags(new ApiAware())->setDescription('An affiliate code is an identification option with which website operators can mark outgoing links.'),
             (new StringField('campaign_code', 'campaignCode'))->addFlags(new ApiAware())->setDescription('A campaign code is the globally unique identifier for a campaign.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('To keep the status of the user active, the boolean value is set to `true`.'),
-            (new BoolField('double_opt_in_registration', 'doubleOptInRegistration'))->addFlags(new ApiAware())->setDescription('Set to `true` to allow admin_user subscriptions to an email marketing list.'),
+            (new BoolField('double_opt_in_registration', 'doubleOptInRegistration'))->addFlags(new ApiAware())->setDescription('Set to `true` to allow admin user subscriptions to an email marketing list.'),
             (new DateTimeField('double_opt_in_email_sent_date', 'doubleOptInEmailSentDate'))->addFlags(new ApiAware())->setDescription('Date and time when the double opt-in email was sent.'),
             (new DateTimeField('double_opt_in_confirm_date', 'doubleOptInConfirmDate'))->addFlags(new ApiAware())->setDescription('Date and time when the double opt-in email was confirmed.'),
             (new StringField('hash', 'hash'))->setDescription('User registration double opt-in hash for confirming the user account.'),

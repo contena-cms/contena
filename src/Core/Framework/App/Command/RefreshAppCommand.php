@@ -149,7 +149,7 @@ class RefreshAppCommand extends Command
             ),
             $default
         )) {
-            throw AppException::admin_userAborted();
+            throw AppException::adminUserAborted();
         }
 
         foreach ($refreshableApps->getToBeInstalled() as $app) {
@@ -174,7 +174,7 @@ class RefreshAppCommand extends Command
                 \sprintf('Do you want to grant these permissions for app "%s"?', $app->getMetadata()->getName()),
                 false
             )) {
-                throw AppException::admin_userAborted();
+                throw AppException::adminUserAborted();
             }
         }
     }

@@ -44,7 +44,7 @@ class MailGroupResolver
         'admin_user.recovery.request' => 'user_recovery',
 
         'contact_form.send' => 'contact_form',
-        'review_form.send' => 'contact_form',
+        'comment_form.send' => 'contact_form',
     ];
 
     /**

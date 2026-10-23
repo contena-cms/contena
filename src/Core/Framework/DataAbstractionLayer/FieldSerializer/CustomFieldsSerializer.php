@@ -13,6 +13,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\System\CustomField\CustomFieldService;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal

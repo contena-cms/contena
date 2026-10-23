@@ -25,7 +25,7 @@ class System implements ConsentScope
     }
 
     /**
-     * This consent is scoped to the system, but a particular admin admin_user performed the action
+     * This consent is scoped to the system, but a particular admin admin user performed the action
      */
     public function resolveActorIdentifier(Context $context): string
     {

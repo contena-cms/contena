@@ -2,29 +2,29 @@
  * @private
  * @sw-package discovery
  */
-Contena.Component.register('sw-cms-el-preview-blog-description-reviews', () => import('./preview'));
+Contena.Component.register('sw-cms-el-preview-blog-description-comments', () => import('./preview'));
 /**
  * @private
  * @sw-package discovery
  */
-Contena.Component.register('sw-cms-el-config-blog-description-reviews', () => import('./config'));
+Contena.Component.register('sw-cms-el-config-blog-description-comments', () => import('./config'));
 /**
  * @private
  * @sw-package discovery
  */
-Contena.Component.register('sw-cms-el-blog-description-reviews', () => import('./component'));
+Contena.Component.register('sw-cms-el-blog-description-comments', () => import('./component'));
 
 /**
  * @private
  * @sw-package discovery
  */
 Contena.Service('cmsService').registerCmsElement({
-    name: 'blog-description-reviews',
-    label: 'sw-cms.elements.blogDescriptionReviews.label',
-    component: 'sw-cms-el-blog-description-reviews',
-    configComponent: 'sw-cms-el-config-blog-description-reviews',
-    previewComponent: 'sw-cms-el-preview-blog-description-reviews',
-    disabledConfigInfoTextKey: 'sw-cms.elements.blogDescriptionReviews.infoText.descriptionAndReviewsElement',
+    name: 'blog-description-comments',
+    label: 'sw-cms.elements.blogDescriptionComments.label',
+    component: 'sw-cms-el-blog-description-comments',
+    configComponent: 'sw-cms-el-config-blog-description-comments',
+    previewComponent: 'sw-cms-el-preview-blog-description-comments',
+    disabledConfigInfoTextKey: 'sw-cms.elements.blogDescriptionComments.infoText.descriptionAndReviewsElement',
     defaultConfig: {
         blog: {
             source: 'static',

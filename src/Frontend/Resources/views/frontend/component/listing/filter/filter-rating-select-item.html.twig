@@ -14,7 +14,7 @@
     {% block component_filter_rating_select_list_item_label %}
         <label class="filter-rating-select-item-label" for="rating-{{ points }}">
             {% block component_filter_rating_select_list_item_label_rating %}
-                {% sw_include '@Frontend/frontend/component/review/rating.html.twig' with {
+                {% sw_include '@Frontend/frontend/component/comment/rating.html.twig' with {
                     points: points,
                     style: 'text-primary',
                     altText: 'listing.filterRatingMinAltText'|trans({ '%points%': points, '%maxPoints%': maxPoints })|sw_sanitize,

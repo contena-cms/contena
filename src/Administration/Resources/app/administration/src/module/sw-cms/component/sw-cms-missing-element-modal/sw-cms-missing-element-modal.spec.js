@@ -101,13 +101,13 @@ describe('module/sw-cms/component/sw-cms-missing-element-modal', () => {
         const wrapper = await createWrapper();
 
         await wrapper.setProps({
-            missingElements: ['buyBox', 'blogDescriptionReviews'],
+            missingElements: ['buyBox', 'blogDescriptionComments'],
         });
 
         const title = await wrapper.find('.sw-cms-missing-element-modal__title');
 
         expect(title.text()).toBe(
-            'sw-cms.components.cmsMissingElementModal.title{"element":"sw-cms.elements.buyBox.label, sw-cms.elements.blogDescriptionReviews.label"}',
+            'sw-cms.components.cmsMissingElementModal.title{"element":"sw-cms.elements.buyBox.label, sw-cms.elements.blogDescriptionComments.label"}',
         );
     });
 
@@ -115,13 +115,13 @@ describe('module/sw-cms/component/sw-cms-missing-element-modal', () => {
         const wrapper = await createWrapper();
 
         await wrapper.setProps({
-            missingElements: ['buyBox', 'blogDescriptionReviews', 'crossSelling'],
+            missingElements: ['buyBox', 'blogDescriptionComments', 'crossSelling'],
         });
 
         const title = wrapper.find('.sw-cms-missing-element-modal__title');
 
         expect(title.text()).toBe(
-            'sw-cms.components.cmsMissingElementModal.title{"element":"sw-cms.elements.buyBox.label, sw-cms.elements.blogDescriptionReviews.label, sw-cms.elements.crossSelling.label"}',
+            'sw-cms.components.cmsMissingElementModal.title{"element":"sw-cms.elements.buyBox.label, sw-cms.elements.blogDescriptionComments.label, sw-cms.elements.crossSelling.label"}',
         );
     });
 });

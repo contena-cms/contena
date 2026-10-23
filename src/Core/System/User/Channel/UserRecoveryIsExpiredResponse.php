@@ -3,12 +3,12 @@
 namespace Contena\Core\System\User\Channel;
 
 use Contena\Core\Framework\Struct\ArrayStruct;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{isExpired: bool}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{isExpired: bool}>>
  */
-class UserRecoveryIsExpiredResponse extends StoreApiResponse
+class UserRecoveryIsExpiredResponse extends ChannelApiResponse
 {
     public function __construct(bool $expired)
     {

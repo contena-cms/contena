@@ -372,7 +372,7 @@ class AttributeEntityCompiler
                 if (isset($field->api['admin-api']) && $field->api['admin-api'] === true) {
                     $aware[] = AdminApiSource::class;
                 }
-                if (isset($field->api['store-api']) && $field->api['store-api'] === true) {
+                if (isset($field->api['channel-api']) && $field->api['channel-api'] === true) {
                     $aware[] = ChannelApiSource::class;
                 }
             }

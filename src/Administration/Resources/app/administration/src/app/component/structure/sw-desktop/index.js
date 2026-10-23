@@ -12,7 +12,7 @@ const { hasOwnProperty } = Contena.Utils.object;
 export default {
     template,
 
-    inject: ['shopIdChangeService', 'admin_userActivityApiService', 'snackbarService'],
+    inject: ['installationIdChangeService', 'admin_userActivityApiService', 'snackbarService'],
 
     shortcuts: {
         CT: 'onCycleTheme',
@@ -21,8 +21,8 @@ export default {
     data() {
         return {
             noNavigation: false,
-            shopIdCheck: null,
-            isShopIdCheckPending: true,
+            installationIdCheck: null,
+            isInstallationIdCheckPending: true,
         };
     },
 
@@ -43,7 +43,7 @@ export default {
         },
 
         showUsageDataConsentModalDataProvider() {
-            return !this.isShopIdCheckPending && this.shopIdCheck === null;
+            return !this.isInstallationIdCheckPending && this.installationIdCheck === null;
         },
     },
 
@@ -71,7 +71,7 @@ export default {
     methods: {
         createdComponent() {
             this.checkRouteSettings();
-            this.updateShopIdChangeModal();
+            this.updateInstallationIdChangeModal();
         },
 
         checkRouteSettings() {
@@ -82,24 +82,24 @@ export default {
             }
         },
 
-        async updateShopIdChangeModal() {
+        async updateInstallationIdChangeModal() {
             if (!Contena.Store.get('context').app.config.settings?.appsRequireAppUrl) {
-                this.shopIdCheck = null;
-                this.isShopIdCheckPending = false;
+                this.installationIdCheck = null;
+                this.isInstallationIdCheckPending = false;
                 return;
             }
 
-            this.isShopIdCheckPending = true;
+            this.isInstallationIdCheckPending = true;
 
             try {
-                this.shopIdCheck = await this.shopIdChangeService.checkShopId();
+                this.installationIdCheck = await this.installationIdChangeService.checkInstallationId();
             } finally {
-                this.isShopIdCheckPending = false;
+                this.isInstallationIdCheckPending = false;
             }
         },
 
         closeModal() {
-            this.shopIdCheck = null;
+            this.installationIdCheck = null;
         },
 
         async onCycleTheme() {

@@ -73,7 +73,7 @@ EOD,
     'blog_export.log' => <<<'EOD'
 __EMPTY__
 EOD,
-    'review_form.send' => <<<'EOD'
+    'comment_form.send' => <<<'EOD'
 Triggers when a blog review form is send
 EOD,
     'state_enter.order.state.cancelled' => <<<'EOD'

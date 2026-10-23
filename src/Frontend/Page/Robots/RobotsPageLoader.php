@@ -16,7 +16,7 @@ use Contena\Frontend\Page\Robots\Struct\DomainRuleCollection;
 use Contena\Frontend\Page\Robots\Struct\DomainRuleStruct;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
-use Contena\Frontend\Page\Robots\Struct\RobotsAdminUserAgentBlock;
+use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 
 class RobotsPageLoader
 {
@@ -80,7 +80,7 @@ class RobotsPageLoader
      *
      * @param non-empty-string $hostname
      *
-     * @return array{0: list<RobotsAdminUserAgentBlock>, 1: DomainRuleCollection}
+     * @return array{0: list<RobotsUserAgentBlock>, 1: DomainRuleCollection}
      */
     private function collectRules(string $hostname, ChannelDomainCollection $domains, Context $context): array
     {
@@ -101,7 +101,7 @@ class RobotsPageLoader
             $parsed = $this->parser->parse($domainRules, $context, $domain->getChannelId());
 
             // Collect global AdminUser-agent blocks (deduplicate by hash)
-            foreach ($parsed->admin_userAgentBlocks as $block) {
+            foreach ($parsed->userAgentBlocks as $block) {
                 $hash = $block->getHash();
                 if (!isset($globalBlocksByHash[$hash])) {
                     $globalBlocksByHash[$hash] = [
@@ -129,7 +129,7 @@ class RobotsPageLoader
             // Merge non-path directives with collected path directives
             $allDirectives = array_merge($block->getNonPathDirectives(), $pathDirectives);
 
-            $globalBlocks[] = new RobotsAdminUserAgentBlock($block->admin_userAgent, $allDirectives);
+            $globalBlocks[] = new RobotsUserAgentBlock($block->userAgent, $allDirectives);
         }
 
         return [$globalBlocks, $domainRuleCollection];

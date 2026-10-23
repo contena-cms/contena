@@ -33,7 +33,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             param('kernel.contena_version'),
             param('contena.auto_update.enabled'),
             param('contena.auto_update.hide_module'),
-            param('contena.cnployment.cluster_setup'),
+            param('contena.deployment.cluster_setup'),
         ])
         ->call('setContainer', [
             service('service_container'),

@@ -4,12 +4,12 @@ namespace Contena\Core\Content\Seo\Channel;
 
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<EntitySearchResult<SeoUrlCollection>>
+ * @extends ChannelApiResponse<EntitySearchResult<SeoUrlCollection>>
  */
-class SeoUrlRouteResponse extends StoreApiResponse
+class SeoUrlRouteResponse extends ChannelApiResponse
 {
     public function getSeoUrls(): SeoUrlCollection
     {

@@ -9,7 +9,7 @@ use Contena\Core\Content\Cookie\Struct\CookieEntry;
 use Contena\Core\Content\Cookie\Struct\CookieGroup;
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\PlatformRequest;
@@ -21,7 +21,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 /**
  * @experimental stableVersion:v6.8.0 feature:COOKIE_GROUPS_STORE_API
  */
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class CookieRoute extends AbstractCookieRoute
 {
     /**
@@ -38,7 +38,7 @@ class CookieRoute extends AbstractCookieRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/cookie-groups', name: 'store-api.cookie.groups', methods: [Request::METHOD_GET])]
+    #[Route(path: '/channel-api/cookie-groups', name: 'channel-api.cookie.groups', methods: [Request::METHOD_GET])]
     public function getCookieGroups(Request $request, ChannelContext $channelContext): CookieRouteResponse
     {
         return $this->extensions->publish(

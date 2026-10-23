@@ -1,0 +1,33 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\Exception;
+
+use Contena\Core\Framework\ContenaHttpException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @codeCoverageIgnore
+ */
+class LanguageOfBlogCommentDeleteException extends ContenaHttpException
+{
+    public function __construct(
+        string $language,
+        ?\Throwable $e = null
+    ) {
+        parent::__construct(
+            'The language "{{ language }}" cannot be deleted because blog reviews with this language exist.',
+            ['language' => $language],
+            $e
+        );
+    }
+
+    public function getErrorCode(): string
+    {
+        return 'CONTENT__LANGUAGE_OF_BLOG_REVIEW_DELETE';
+    }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_BAD_REQUEST;
+    }
+}

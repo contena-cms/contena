@@ -6,7 +6,7 @@ use League\Flysystem\FilesystemOperator;
 use Contena\Core\Content\Media\Util\PathHelper;
 use Contena\Core\Content\Sitemap\Extension\SitemapFileExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\HeaderUtils;
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Content\Media\Exception\IllegalFileNameException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class SitemapFileRoute
 {
     /**
@@ -29,7 +29,7 @@ class SitemapFileRoute
     ) {
     }
 
-    #[Route(path: '/store-api/sitemap/{filePath}', name: 'store-api.sitemap.file', requirements: ['filePath' => '.+\.xml\.gz'], methods: ['GET', 'POST'])]
+    #[Route(path: '/channel-api/sitemap/{filePath}', name: 'channel-api.sitemap.file', requirements: ['filePath' => '.+\.xml\.gz'], methods: ['GET', 'POST'])]
     public function getSitemapFile(Request $request, ChannelContext $context, string $filePath): Response
     {
         return $this->extensions->publish(

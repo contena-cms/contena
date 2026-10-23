@@ -11,7 +11,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 
 /**
- * Handles a deferred theme compile that Messenger finally gave up on: notifies the admin_user once and
+ * Handles a deferred theme compile that Messenger finally gave up on: notifies the admin user once and
  * clears the pending marker. Doing this in the handler would repeat on every retry.
  *
  * @internal

@@ -68,7 +68,7 @@ class VersionCommitDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             (new FkField('version_id', 'versionId', VersionDefinition::class))->addFlags(new Required()),
-            new IdField('admin_user_id', 'admin_userId'),
+            new IdField('admin_user_id', 'adminUserId'),
             new IdField('integration_id', 'integrationId'),
             new AutoIncrementField(),
             new BoolField('is_merge', 'isMerge'),

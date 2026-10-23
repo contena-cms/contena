@@ -4,25 +4,25 @@
 import createLoginService from 'src/core/service/login.service';
 import createHTTPClient from 'src/core/factory/http.factory';
 import MockAdapter from 'axios-mock-adapter';
-import ShopIdChangeService from './shop-id-change.service';
+import InstallationIdChangeService from './shop-id-change.service';
 
-function createShopIdChangeService() {
+function createInstallationIdChangeService() {
     const client = createHTTPClient();
     const clientMock = new MockAdapter(client);
     const loginService = createLoginService(client, Contena.Context.api);
-    const shopIdChangeService = new ShopIdChangeService(client, loginService);
-    return { shopIdChangeService: shopIdChangeService, clientMock };
+    const installationIdChangeService = new InstallationIdChangeService(client, loginService);
+    return { installationIdChangeService: installationIdChangeService, clientMock };
 }
 
-describe('shopIdChangeService', () => {
+describe('installationIdChangeService', () => {
     it('is registered correctly', async () => {
-        const { shopIdChangeService } = createShopIdChangeService();
+        const { installationIdChangeService } = createInstallationIdChangeService();
 
-        expect(shopIdChangeService).toBeInstanceOf(ShopIdChangeService);
+        expect(installationIdChangeService).toBeInstanceOf(InstallationIdChangeService);
     });
 
     it('fetches strategies correctly', async () => {
-        const { shopIdChangeService, clientMock } = createShopIdChangeService();
+        const { installationIdChangeService, clientMock } = createInstallationIdChangeService();
 
         clientMock.onGet('/app-system/shop-id/change-strategies').reply(200, {
             first: 'a',
@@ -30,7 +30,7 @@ describe('shopIdChangeService', () => {
             third: 'c',
         });
 
-        const strategies = await shopIdChangeService.getChangeStrategies();
+        const strategies = await installationIdChangeService.getChangeStrategies();
 
         expect(strategies).toEqual([
             {
@@ -49,7 +49,7 @@ describe('shopIdChangeService', () => {
     });
 
     it('sends name of selected strategy', async () => {
-        const { shopIdChangeService, clientMock } = createShopIdChangeService();
+        const { installationIdChangeService, clientMock } = createInstallationIdChangeService();
 
         clientMock
             .onPost('app-system/shop-id/change', {
@@ -57,7 +57,7 @@ describe('shopIdChangeService', () => {
             })
             .reply(204);
 
-        await shopIdChangeService.changeShopId({
+        await installationIdChangeService.changeInstallationId({
             name: 'selectedStrategy',
         });
 
@@ -67,7 +67,7 @@ describe('shopIdChangeService', () => {
     });
 
     it('returns shop ID check', async () => {
-        const { shopIdChangeService, clientMock } = createShopIdChangeService();
+        const { installationIdChangeService, clientMock } = createInstallationIdChangeService();
 
         const response = {
             fingerprints: {
@@ -94,17 +94,17 @@ describe('shopIdChangeService', () => {
 
         clientMock.onPost('app-system/shop-id/check').reply(200, response);
 
-        const fingerprints = await shopIdChangeService.checkShopId();
+        const fingerprints = await installationIdChangeService.checkInstallationId();
 
         expect(fingerprints).toEqual(response);
     });
 
     it('returns null if shop id fingerprints have not changed', async () => {
-        const { shopIdChangeService, clientMock } = createShopIdChangeService();
+        const { installationIdChangeService, clientMock } = createInstallationIdChangeService();
 
         clientMock.onPost('app-system/shop-id/check').reply(204);
 
-        const urlDiff = await shopIdChangeService.checkShopId();
+        const urlDiff = await installationIdChangeService.checkInstallationId();
 
         expect(urlDiff).toBeNull();
     });

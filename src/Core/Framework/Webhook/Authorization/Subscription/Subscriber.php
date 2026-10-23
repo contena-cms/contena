@@ -28,7 +28,7 @@ final class Subscriber
     }
 
     /**
-     * A admin_user or integration creating a webhook through the Admin API.
+     * An admin user or integration creating a webhook through the Admin API.
      */
     public static function api(ApiCallerType $caller): self
     {

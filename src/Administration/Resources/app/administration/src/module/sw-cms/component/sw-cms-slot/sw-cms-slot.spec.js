@@ -172,7 +172,7 @@ describe('module/sw-cms/component/sw-cms-slot', () => {
         expect(customComponent.attributes().disabled).toBeUndefined();
     });
 
-    it.each(['buy-box', 'blog-description-reviews'])(
+    it.each(['buy-box', 'blog-description-comments'])(
         'should lock %s on blog detail pages without changing the slot',
         async (type) => {
             Contena.Store.get('cmsPage').currentPage = { type: 'blog_detail' };

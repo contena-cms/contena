@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\Store\Services;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Store\Exception\StoreApiException;
+use Contena\Core\Framework\Store\Exception\ChannelApiException;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 
@@ -22,7 +22,7 @@ readonly class ExtensionListingLoader
     {
         $source = $context->getSource();
 
-        // We can only add store information, when we have a admin_user that can communicate with the store
+        // We can only add store information, when we have an admin user that can communicate with the store
         if ($source instanceof SystemSource || ($source instanceof AdminApiSource && $source->getUserId())) {
             $this->addUpdateInformation($localCollection, $context);
             $this->addStoreInformation($localCollection, $context);
@@ -106,7 +106,7 @@ readonly class ExtensionListingLoader
     {
         try {
             $updates = $this->client->getExtensionUpdateList($localCollection, $context);
-        } catch (StoreApiException|ClientException) {
+        } catch (ChannelApiException|ClientException) {
             return;
         }
 

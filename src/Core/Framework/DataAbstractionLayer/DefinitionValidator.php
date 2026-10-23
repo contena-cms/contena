@@ -81,7 +81,6 @@ class DefinitionValidator
     private const CUSTOM_PREFIXED_NAMED = [
         'username',
         'userNumber',
-        'taxRate',
         'orderNumber',
         'orderDate',
         'blogNumber',
@@ -175,8 +174,6 @@ class DefinitionValidator
         'media_folder',
         'number_range_type',
         'newsletter_recipient',
-        'tax_rule',
-        'tax_rule_type',
         'snippet_set',
         'document_type',
         'app_payment_method',

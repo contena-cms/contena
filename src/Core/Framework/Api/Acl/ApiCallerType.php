@@ -14,7 +14,7 @@ enum ApiCallerType
     case Integration;
 
     /**
-     * An integration always acts as itself, never as the admin_user it names in the `sw-app-admin_user-id` header.
+     * An integration always acts as itself, never as the admin user it names in the `sw-app-admin-user-id` header.
      * Returns null when the source is not an Admin API caller.
      *
      * @return ($source is AdminApiSource ? self : null)

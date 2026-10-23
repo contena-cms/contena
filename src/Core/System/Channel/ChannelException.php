@@ -17,7 +17,6 @@ class ChannelException extends HttpException
     final public const COUNTRY_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__COUNTRY_DOES_NOT_EXISTS_EXCEPTION';
     final public const CURRENCY_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__CURRENCY_DOES_NOT_EXISTS_EXCEPTION';
     final public const COUNTRY_STATE_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__COUNTRY_STATE_DOES_NOT_EXISTS_EXCEPTION';
-    final public const TAX_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__TAX_DOES_NOT_EXISTS_EXCEPTION';
     final public const CUSTOMER_GROUP_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__CUSTOMER_GROUP_DOES_NOT_EXISTS_EXCEPTION';
     final public const SHIPPING_METHOD_DOES_NOT_EXISTS_EXCEPTION = 'SYSTEM__SHIPPING_METHOD_DOES_NOT_EXISTS_EXCEPTION';
     final public const CHANNEL_LANGUAGE_NOT_AVAILABLE_EXCEPTION = 'SYSTEM__CHANNEL_LANGUAGE_NOT_AVAILABLE_EXCEPTION';
@@ -213,16 +212,6 @@ class ChannelException extends HttpException
             Response::HTTP_BAD_REQUEST,
             self::CHANNEL_CONTEXT_PERMISSIONS_LOCKED,
             'Context permission in Channel context already locked.'
-        );
-    }
-
-    public static function taxNotFound(string $taxId): self
-    {
-        return new self(
-            Response::HTTP_PRECONDITION_FAILED,
-            self::TAX_DOES_NOT_EXISTS_EXCEPTION,
-            self::$couldNotFindMessage,
-            ['entity' => 'tax', 'field' => 'id', 'value' => $taxId]
         );
     }
 

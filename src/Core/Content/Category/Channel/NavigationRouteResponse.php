@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\Category\Channel;
 
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<CategoryCollection>
+ * @extends ChannelApiResponse<CategoryCollection>
  */
-class NavigationRouteResponse extends StoreApiResponse
+class NavigationRouteResponse extends ChannelApiResponse
 {
     public function getCategories(): CategoryCollection
     {

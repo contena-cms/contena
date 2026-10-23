@@ -170,7 +170,7 @@ Contena uses **Streamable HTTP** at `/api/_mcp` via `symfony/mcp-bundle`. Sessio
 
 **Future roadmap (needs PM ownership)**
 
-- **Store API MCP server** — **foundation implemented** (`StoreApiMcpServerController` at `/store-api/_mcp`, `sw-access-key` + `sw-context-token` auth, own capability registry, dedicated `mcp_store_api` rate-limit bucket, `contena-store-api-context` tool; see [store-api-mcp.md](store-api-mcp.md)). Remaining PM-driven scope: the full buyer-journey tool set (browse, cart, checkout, account), user-tier access control, and frontend discovery/session bridging so agents can act *as the shopper*.
+- **Store API MCP server** — **foundation implemented** (`ChannelApiMcpServerController` at `/channel-api/_mcp`, `sw-access-key` + `sw-context-token` auth, own capability registry, dedicated `mcp_channel_api` rate-limit bucket, `contena-channel-api-context` tool; see [channel-api-mcp.md](channel-api-mcp.md)). Remaining PM-driven scope: the full buyer-journey tool set (browse, cart, checkout, account), user-tier access control, and frontend discovery/session bridging so agents can act *as the shopper*.
 - **WebMCP (browser-native, Frontend)** — W3C WebMachinelearning CG proposal (Aug 2025, Microsoft) for browser-native JS tools exposed to in-browser agents. Human-in-loop frontend workflows only; explicitly **not** for autonomous agents (that use case = Store API MCP). No browser ships it yet. See: https://github.com/webmachinelearning/webmcp
 
 ---

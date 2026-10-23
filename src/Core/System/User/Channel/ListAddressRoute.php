@@ -4,7 +4,7 @@ namespace Contena\Core\System\User\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
@@ -18,7 +18,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class ListAddressRoute extends AbstractListAddressRoute
 {
     /**
@@ -39,8 +39,8 @@ class ListAddressRoute extends AbstractListAddressRoute
     }
 
     #[Route(
-        path: '/store-api/account/list-address',
-        name: 'store-api.account.address.list.get',
+        path: '/channel-api/account/list-address',
+        name: 'channel-api.account.address.list.get',
         defaults: [
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,

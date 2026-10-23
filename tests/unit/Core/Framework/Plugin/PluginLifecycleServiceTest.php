@@ -108,7 +108,7 @@ class PluginLifecycleServiceTest extends TestCase
         $this->pluginServiceMock = static::createStub(PluginService::class);
         $this->commandExecutor = static::createStub(CommandExecutor::class);
 
-        $this->container->setParameter('contena.cnployment.cluster_setup', false);
+        $this->container->setParameter('contena.deployment.cluster_setup', false);
 
         $this->pluginMock = $this->createMock(Plugin::class);
 
@@ -128,7 +128,7 @@ class PluginLifecycleServiceTest extends TestCase
         // it serialize-restores every loaded class's statics, which desyncs Doctrine's global
         // Type registry (spl_object_id-keyed reverse index) and breaks Type::lookupName() worker-wide.
         // onResponse() clears it; cluster mode turns the composer removal it would trigger into a no-op.
-        $this->container->setParameter('contena.cnployment.cluster_setup', true);
+        $this->container->setParameter('contena.deployment.cluster_setup', true);
         $this->createService()->onResponse();
     }
 
@@ -153,7 +153,7 @@ class PluginLifecycleServiceTest extends TestCase
         $pluginEntityMock = $this->getPluginEntityMock();
         $pluginEntityMock->setComposerName('MockPlugin');
 
-        $this->container->setParameter('contena.cnployment.cluster_setup', true);
+        $this->container->setParameter('contena.deployment.cluster_setup', true);
 
         $commandExecutor = $this->createMock(CommandExecutor::class);
         $commandExecutor->expects($this->never())->method('require');
@@ -275,7 +275,7 @@ class PluginLifecycleServiceTest extends TestCase
         $pluginEntityMock->setManagedByComposer(true);
         $pluginEntityMock->setComposerName('MockPlugin');
 
-        $this->container->setParameter('contena.cnployment.cluster_setup', true);
+        $this->container->setParameter('contena.deployment.cluster_setup', true);
 
         $this->pluginMock->expects($this->once())->method('executeComposerCommands')->willReturn(true);
 

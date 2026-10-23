@@ -35,14 +35,28 @@ use Contena\Core\System\User\Exception\UserNotFoundException;
 use Symfony\Component\Routing\Exception\InvalidParameterException;
 use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
+use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class AuthController extends FrontendController
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly AccountLoginPageLoader $loginPageLoader,
+        private readonly AccountRecoverPasswordPageLoader $recoverPasswordPageLoader,
+        private readonly SystemConfigService $systemConfigService
+    ) {
+    }
+
+
 
     #[Route(
         path: '/account/login',
@@ -116,7 +130,7 @@ class AuthController extends FrontendController
 
         // The template builds the form action via `path(redirectTo, redirectParameters)`. If the redirect target
         // cannot be generated (e.g. the page was called directly without the required `redirectParameters`),
-        // rendering would fail with a 500. Behave like a direct call and send the admin_user to the login page instead.
+        // rendering would fail with a 500. Behave like a direct call and send the admin user to the login page instead.
         try {
             $this->generateUrl($redirect, $redirectParameters);
         } catch (RouteNotFoundException|MissingMandatoryParametersException|InvalidParameterException) {

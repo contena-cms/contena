@@ -1,6 +1,6 @@
 import createHttpClient from 'src/core/factory/http.factory';
 import createLoginService from 'src/core/service/login.service';
-import StoreApiService from 'src/core/service/api/store.api.service';
+import ChannelApiService from 'src/core/service/api/store.api.service';
 import ContenaExtensionService from 'src/module/sw-extension/service/contena-extension.service';
 import ExtensionStoreActionService from 'src/module/sw-extension/service/extension-store-action.service';
 import AppModulesService from 'src/core/service/api/app-modules.service';
@@ -18,7 +18,7 @@ Contena.Service().register('loginService', () => {
 });
 
 Contena.Service().register('storeService', () => {
-    return new StoreApiService(httpClient, Contena.Service('loginService'));
+    return new ChannelApiService(httpClient, Contena.Service('loginService'));
 });
 
 Contena.Service().register('contenaDiscountCampaignService', () => {

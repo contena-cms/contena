@@ -24,7 +24,7 @@ final class PlatformRequest
     public const HEADER_INCLUDE_SEARCH_INFO = 'sw-include-search-info';
     public const HEADER_SKIP_TRIGGER_FLOW = 'sw-skip-trigger-flow';
     public const HEADER_APP_INTEGRATION_ID = 'sw-app-integration-id';
-    public const HEADER_APP_USER_ID = 'sw-app-admin_user-id';
+    public const HEADER_APP_USER_ID = 'sw-app-admin-user-id';
     public const HEADER_INDEXING_BEHAVIOR = 'indexing-behavior';
     public const HEADER_INDEXING_SKIP = 'indexing-skip';
     public const HEADER_INDEXING_ONLY = 'indexing-only';
@@ -46,11 +46,11 @@ final class PlatformRequest
     public const HEADER_EXPECT_PACKAGES = 'sw-expect-packages';
 
     /**
-     * Context hash header used for cache differentiation on admin_user-independent routes
+     * Context hash header used for cache differentiation on user-independent routes
      *
      * The hash is used to differentiate cache entries for the same route when the context
      * changes (e.g., different language, currency, or rules). This ensures that
-     * admin_user-independent routes like blog listings, category pages, and search results
+     * user-independent routes like blog listings, category pages, and search results
      * are properly cached per context variation while maintaining cache efficiency.
      *
      * The header is automatically added to Store API responses and included in the Vary
@@ -69,7 +69,7 @@ final class PlatformRequest
     public const ATTRIBUTE_CONTEXT_OBJECT = 'sw-context';
     public const ATTRIBUTE_CHANNEL_CONTEXT_OBJECT = 'sw-sales-channel-context';
     public const ATTRIBUTE_CHANNEL_ID = 'sw-sales-channel-id';
-    public const ATTRIBUTE_IMITATING_USER_ID = 'sw-imitating-admin_user-id';
+    public const ATTRIBUTE_IMITATING_USER_ID = 'sw-imitating-admin-user-id';
     public const ATTRIBUTE_CRITERIA = 'sw-criteria';
 
     /**

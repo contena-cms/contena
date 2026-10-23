@@ -65,7 +65,7 @@ class Migration1744203319MailTemplate extends MigrationStep
             $translations[] = [
                 'mail_template_type_id' => $mailTemplateTypeId,
                 'language_id' => $languages[self::ENGLISH_KEY],
-                'name' => 'Sso admin_user invitation',
+                'name' => 'Sso admin user invitation',
                 'created_at' => $createdAt,
             ];
         }

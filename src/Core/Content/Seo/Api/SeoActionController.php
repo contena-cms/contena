@@ -128,7 +128,7 @@ class SeoActionController extends AbstractController
             throw SeoException::seoUrlRouteNotFound((string) $routeName);
         }
 
-        // Headless store-api routes only implement EntitySeoUrlRouteInterface and do not provide the mapping
+        // Headless channel-api routes only implement EntitySeoUrlRouteInterface and do not provide the mapping
         // themselves; wrapping the resolved route in a ConfiguredSeoUrlRoute exposes a generic mapping (entity
         // by name) while delegating to the real mapping for registered frontend routes.
         $route = new ConfiguredEntitySeoUrlRoute($seoUrlRoute);
@@ -180,7 +180,7 @@ class SeoActionController extends AbstractController
         }
 
         // when updating a canonical url for a headless sales channel with the route of the frontend
-        // the route name should be corrected to use the equivalent store-api route using the entity name to match
+        // the route name should be corrected to use the equivalent channel-api route using the entity name to match
         $seoUrlData = [
             ...$seoUrlData,
             ...$this->entityRouteResolver->getSeoUrlRouteNameAndPathInfo(
@@ -311,7 +311,7 @@ class SeoActionController extends AbstractController
     {
         $routeName = $seoUrlTemplate['routeName'];
 
-        // Registered frontend routes resolve directly; store-api routes (headless) resolve via the tagged
+        // Registered frontend routes resolve directly; channel-api routes (headless) resolve via the tagged
         // entity routes. Either way they are wrapped in ConfiguredSeoUrlRoute so the generator can render them.
         $seoUrlRoute = $this->getEntitySeoUrlRoute($routeName);
 

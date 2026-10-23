@@ -16,6 +16,7 @@ use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
+use Contena\Core\Framework\Context;
 
 /**
  * @internal
@@ -105,7 +106,7 @@ class CustomFieldRule
                     return null;
                 }
 
-                if ($context?->getTaxState() === CartPrice::TAX_STATE_NET) {
+                if ($context?->getTaxState() === Context::TAX_STATE_NET) {
                     return $price->getNet();
                 }
 

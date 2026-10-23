@@ -93,8 +93,8 @@ class StoreSessionExpiredMiddleware implements MiddlewareInterface
         }
 
         $this->connection->executeStatement(
-            'UPDATE admin_user SET store_token = NULL WHERE id = :admin_userId',
-            ['admin_userId' => Uuid::fromHexToBytes($adminUserId)]
+            'UPDATE admin_user SET store_token = NULL WHERE id = :adminUserId',
+            ['adminUserId' => Uuid::fromHexToBytes($adminUserId)]
         );
     }
 }

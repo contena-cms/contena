@@ -24,7 +24,7 @@ use Symfony\Component\Routing\Attribute\Route;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class SearchController extends FrontendController

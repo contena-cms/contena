@@ -5,7 +5,7 @@ namespace Contena\Core\System\Language\Channel;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class LanguageRoute extends AbstractLanguageRoute
 {
     final public const ALL_TAG = 'language-route';
@@ -44,8 +44,8 @@ class LanguageRoute extends AbstractLanguageRoute
     }
 
     #[Route(
-        path: '/store-api/language',
-        name: 'store-api.language',
+        path: '/channel-api/language',
+        name: 'channel-api.language',
         methods: [Request::METHOD_GET, Request::METHOD_POST],
         defaults: [PlatformRequest::ATTRIBUTE_ENTITY => LanguageDefinition::ENTITY_NAME, PlatformRequest::ATTRIBUTE_HTTP_CACHE => true],
     )]

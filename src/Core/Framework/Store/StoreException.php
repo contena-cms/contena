@@ -12,9 +12,10 @@ use Contena\Core\Framework\Plugin\Exception\PluginNotAZipFileException;
 use Contena\Core\Framework\Store\Exception\ExtensionNotFoundException;
 use Contena\Core\Framework\Store\Exception\ExtensionUpdateRequiresConsentAffirmationException;
 use Contena\Core\Framework\Store\Exception\ShopSecretInvalidException;
-use Contena\Core\Framework\Store\Exception\StoreApiException;
+use Contena\Core\Framework\Store\Exception\ChannelApiException;
 use Contena\Core\Framework\Store\Exception\StoreInvalidCredentialsException;
 use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
+use GuzzleHttp\Exception\ClientException;
 
 class StoreException extends HttpException
 {
@@ -176,7 +177,7 @@ class StoreException extends HttpException
 
     public static function storeError(ClientException $exception): self
     {
-        return new StoreApiException($exception);
+        return new ChannelApiException($exception);
     }
 
     #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
@@ -204,7 +205,7 @@ class StoreException extends HttpException
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
             self::INVALID_CONTEXT_SOURCE_USER,
-            '{{ contextSource }} does not have a valid admin_user ID',
+            '{{ contextSource }} does not have a valid admin user ID',
             ['contextSource' => $contextSource]
         );
     }

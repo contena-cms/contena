@@ -18,6 +18,15 @@ class ChannelContextPersister
 {
     private readonly string $lifetimeInterval;
 
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly ClockInterface $clock,
+        ?string $lifetimeInterval = 'P1D'
+    ) {
+        $this->lifetimeInterval = $lifetimeInterval ?? 'P1D';
+    }
+
 
     /**
      * @codeCoverageIgnore

@@ -75,7 +75,7 @@ readonly class SymfonyBearerTokenValidator
 
         $adminUserId = $claims->get('sub');
 
-        // for integrations we get the access key as "sub", we only want to set it when it is the real admin_user id
+        // for integrations we get the access key as "sub", we only want to set it when it is the real admin user id
         if ($adminUserId && Uuid::isValid($adminUserId)) {
             $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $adminUserId);
             $this->validateAccessTokenIssuedAt($token->claims()->get('iat', 0), $adminUserId);
@@ -87,8 +87,8 @@ readonly class SymfonyBearerTokenValidator
         $adminUser = $this->connection->createQueryBuilder()
             ->select('last_updated_password_at', 'active')
             ->from('admin_user')
-            ->where('id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
+            ->where('id = :adminUserId')
+            ->setParameter('adminUserId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchAssociative();
 

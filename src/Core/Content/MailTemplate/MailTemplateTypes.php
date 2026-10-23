@@ -89,7 +89,7 @@ class MailTemplateTypes
 
     final public const MAILTYPE_CONTACT_FORM = 'contact_form';
 
-    final public const MAILTYPE_REVIEW_FORM = 'review_form';
+    final public const MAILTYPE_COMMENT_FORM = 'comment_form';
 
     final public const MAILTYPE_DOCUMENT_A11Y = 'a11y_mail';
 

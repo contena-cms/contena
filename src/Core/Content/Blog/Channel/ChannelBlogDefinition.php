@@ -23,7 +23,7 @@ use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 
 class ChannelBlogDefinition extends BlogDefinition implements ChannelDefinitionInterface
 {
-    private const PRICE_BASELINE = ['taxId', 'unitId', 'referenceUnit', 'purchaseUnit'];
+    private const PRICE_BASELINE = ['unitId', 'referenceUnit', 'purchaseUnit'];
 
     public function getEntityClass(): string
     {
@@ -64,7 +64,6 @@ class ChannelBlogDefinition extends BlogDefinition implements ChannelDefinitionI
                 ->addAssociation('unit')
                 ->addAssociation('deliveryTime')
                 ->addAssociation('cover.media')
-                ->addAssociation('tax')
             ;
         }
     }

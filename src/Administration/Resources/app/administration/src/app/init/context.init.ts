@@ -204,7 +204,7 @@ export default function initializeContext(): void {
         return contextStore.app.windowId;
     });
 
-    Contena.ExtensionAPI.handle('contextShopId', () => {
-        return contextStore.app.config.shopId;
+    Contena.ExtensionAPI.handle('contextInstallationId', () => {
+        return contextStore.app.config.installationId;
     });
 }

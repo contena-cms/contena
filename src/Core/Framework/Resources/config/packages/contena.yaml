@@ -147,7 +147,7 @@ contena:
                         max_age: 0
                         s_maxage: 0
 
-            store_api.cacheable:
+            channel_api.cacheable:
                 headers:
                     cache_control:
                         public: true
@@ -171,15 +171,15 @@ contena:
                         max_age: 0
                         must_revalidate: true
                         s_maxage: 7200
-                    # See `store_api.cacheable` above for why `key-order` is safe for every area.
+                    # See `channel_api.cacheable` above for why `key-order` is safe for every area.
                     no_vary_search: 'key-order'
 
         default_policies:
             frontend:
                 cacheable: frontend.cacheable
                 uncacheable: no_cache_private
-            store_api:
-                cacheable: store_api.cacheable
+            channel_api:
+                cacheable: channel_api.cacheable
                 uncacheable: no_cache_private
 
     profiler:
@@ -250,7 +250,7 @@ contena:
             auth_required: true
         admin_user_recovery:
             enabled: true # Administration "forgot password" flow; set to false to disable it, e.g. when passwords are managed via SSO
-        store:
+        channel:
             context_lifetime: 'P1D' # 1 day interval, see also https://www.php.net/manual/en/dateinterval.construct.php#refsect1-dateinterval.construct-parameters
             max_limit: 100
         static_token: # Optionally used for 'Authorization: Static ...' header in addition to normal bearer authorization for specific HTTP endpoints
@@ -393,7 +393,7 @@ contena:
                 policy: 'sliding_window'
                 limit: 300
                 interval: '60 seconds'
-            mcp_store_api:
+            mcp_channel_api:
                 # Tighter than the Admin API: this endpoint is user/sales-channel facing and
                 # the rate-limit key (sales-channel context token) is cheap to rotate, so the
                 # effective protection is closer to per-IP. Still generous enough for an AI agent

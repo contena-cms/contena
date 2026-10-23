@@ -3,17 +3,19 @@
 namespace Contena\Core\Content\Cms\Channel\Struct;
 
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
+use Contena\Core\Content\Blog\Channel\Comment\BlogCommentResult;
 use Contena\Core\Framework\Struct\Struct;
 
 /**
  * @codeCoverageIgnore
  */
-class BlogDescriptionReviewsStruct extends Struct
+class BlogDescriptionCommentsStruct extends Struct
 {
     protected ?string $blogId = null;
 
-    protected ?bool $ratingSuccess = null;
+    protected ?bool $commentSuccess = null;
 
+    protected ?BlogCommentResult $comments = null;
 
     protected ?ChannelBlogEntity $blog = null;
 
@@ -37,20 +39,28 @@ class BlogDescriptionReviewsStruct extends Struct
         $this->blogId = $blogId;
     }
 
-
-
-    public function getRatingSuccess(): ?bool
+    public function getComments(): ?BlogCommentResult
     {
-        return $this->ratingSuccess;
+        return $this->comments;
     }
 
-    public function setRatingSuccess(bool $rateSuccess): void
+    public function setComments(BlogCommentResult $comments): void
     {
-        $this->ratingSuccess = $rateSuccess;
+        $this->comments = $comments;
+    }
+
+    public function getCommentSuccess(): ?bool
+    {
+        return $this->commentSuccess;
+    }
+
+    public function setCommentSuccess(bool $commentSuccess): void
+    {
+        $this->commentSuccess = $commentSuccess;
     }
 
     public function getApiAlias(): string
     {
-        return 'cms_product_description_reviews';
+        return 'cms_blog_description_comments';
     }
 }

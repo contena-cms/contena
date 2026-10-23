@@ -2,7 +2,7 @@
  * @sw-package framework
  */
 
-import type { ShopIdCheck, Strategy } from 'src/core/service/api/shop-id-change.service';
+import type { InstallationIdCheck, Strategy } from 'src/core/service/api/shop-id-change.service';
 import template from './sw-app-shop-id-change-modal.html.twig';
 import './sw-app-shop-id-change-modal.scss';
 
@@ -12,15 +12,15 @@ import './sw-app-shop-id-change-modal.scss';
 export default Contena.Component.wrapComponentConfig({
     template,
 
-    inject: ['shopIdChangeService'],
+    inject: ['installationIdChangeService'],
 
     emits: ['modal-close'],
 
     mixins: [Contena.Mixin.getByName('notification')],
 
     props: {
-        shopIdCheck: {
-            type: Object as PropType<ShopIdCheck>,
+        installationIdCheck: {
+            type: Object as PropType<InstallationIdCheck>,
             required: true,
         },
     },
@@ -39,7 +39,7 @@ export default Contena.Component.wrapComponentConfig({
 
     methods: {
         async fetchStrategies() {
-            const strategies = await this.shopIdChangeService.getChangeStrategies();
+            const strategies = await this.installationIdChangeService.getChangeStrategies();
 
             this.strategies = strategies;
             this.selectedStrategy = strategies[0];
@@ -82,7 +82,7 @@ export default Contena.Component.wrapComponentConfig({
             }
 
             try {
-                await this.shopIdChangeService.changeShopId(this.selectedStrategy);
+                await this.installationIdChangeService.changeInstallationId(this.selectedStrategy);
 
                 this.createNotificationSuccess({
                     message: this.$t('sw-app.component.sw-app-shop-id-change-modal.success.shop-id-change-succeeded'),

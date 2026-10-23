@@ -8,7 +8,7 @@ use Contena\Core\Content\Sitemap\Service\SitemapListerInterface;
 use Contena\Core\Content\Sitemap\Struct\SitemapCollection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Content\Sitemap\Exception\AlreadyLockedException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class SitemapRoute extends AbstractSitemapRoute
 {
     /**
@@ -41,7 +41,7 @@ class SitemapRoute extends AbstractSitemapRoute
      * Though this is a GET route, caching was not added as the system may use the SitemapExporterInterface::STRATEGY_LIVE
      * refresh strategy and caching may interfere with it. This route is also not normally called often.
      */
-    #[Route(path: '/store-api/sitemap', name: 'store-api.sitemap', methods: ['GET', 'POST'])]
+    #[Route(path: '/channel-api/sitemap', name: 'channel-api.sitemap', methods: ['GET', 'POST'])]
     public function load(Request $request, ChannelContext $context): SitemapRouteResponse
     {
         return $this->extensions->publish(

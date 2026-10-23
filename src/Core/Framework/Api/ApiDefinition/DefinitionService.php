@@ -17,7 +17,7 @@ use Contena\Core\System\Channel\Entity\ChannelDefinitionInterface;
 class DefinitionService
 {
     final public const API = 'api';
-    final public const STORE_API = 'store-api';
+    final public const STORE_API = 'channel-api';
 
     final public const TYPE_JSON_API = 'jsonapi';
 
@@ -38,6 +38,8 @@ class DefinitionService
     ) {
         $this->generators = $generators;
     }
+
+
 
     /**
      * @param Api $type

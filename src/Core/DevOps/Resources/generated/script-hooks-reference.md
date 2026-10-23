@@ -572,11 +572,11 @@ All available hooks within the Store-API and API
 | **Available Services** | [acl](./miscellaneous-script-services-reference#AclFacade)<br> |
 | **Stoppable**          | `false`                  |
 
-### store-api-{hook}
+### channel-api-{hook}
 
 **Interface Hook**
 
-Triggered when the api endpoint /store-api/script/{hook} is called. Used to execute your logic and provide a response to the request.<br>
+Triggered when the api endpoint /channel-api/script/{hook} is called. Used to execute your logic and provide a response to the request.<br>
 
 #### Function: `cache_key`
 
@@ -585,8 +585,8 @@ Triggered when the api endpoint /store-api/script/{hook} is called. Used to exec
 | **Name**               | cache_key                              |
 | **Since**              | 6.4.9.0                        |
 | **Optional**           | `true`                   |
-| **Class**              | `Contena\Core\Framework\Script\Api\StoreApiCacheKeyHook`                      |
-| **Description**        | Triggered when the api endpoint /store-api/script/{hook} is called. Used to provide a cache-key based on the request.<br>Needs to be implemented when your store-api route should be cached.                  |
+| **Class**              | `Contena\Core\Framework\Script\Api\ChannelApiCacheKeyHook`                      |
+| **Description**        | Triggered when the api endpoint /channel-api/script/{hook} is called. Used to provide a cache-key based on the request.<br>Needs to be implemented when your channel-api route should be cached.                  |
 | **Available Data**     | cacheKey: `string`<br>context: [`Contena\Core\Framework\Context`](https://github.com/contena-cms/contena/blob/trunk/src/Core/Framework/Context.php)<br>isPropagationStopped: `bool`<br>name: `string`<br>query: `array`<br>request: `array`<br>channelContext: [`Contena\Core\System\Channel\ChannelContext`](https://github.com/contena-cms/contena/blob/trunk/src/Core/System/Channel/ChannelContext.php)<br>        |
 | **Available Services** | [acl](./miscellaneous-script-services-reference#AclFacade)<br> |
 | **Stoppable**          | `true`                  |
@@ -598,8 +598,8 @@ Triggered when the api endpoint /store-api/script/{hook} is called. Used to exec
 | **Name**               | response                              |
 | **Since**              | 6.4.9.0                        |
 | **Optional**           | `false`                   |
-| **Class**              | `Contena\Core\Framework\Script\Api\StoreApiResponseHook`                      |
-| **Description**        | Triggered when the api endpoint /store-api/script/{hook} is called. Used to provide the HTTP-Response.<br>This function is only called when no response for the provided cache key is cached, or no `cache_key` function implemented.                  |
+| **Class**              | `Contena\Core\Framework\Script\Api\ChannelApiResponseHook`                      |
+| **Description**        | Triggered when the api endpoint /channel-api/script/{hook} is called. Used to provide the HTTP-Response.<br>This function is only called when no response for the provided cache key is cached, or no `cache_key` function implemented.                  |
 | **Available Data**     | context: [`Contena\Core\Framework\Context`](https://github.com/contena-cms/contena/blob/trunk/src/Core/Framework/Context.php)<br>isPropagationStopped: `bool`<br>name: `string`<br>query: `array`<br>request: `array`<br>channelContext: [`Contena\Core\System\Channel\ChannelContext`](https://github.com/contena-cms/contena/blob/trunk/src/Core/System/Channel/ChannelContext.php)<br>scriptResponse: [`Contena\Core\Framework\Script\Api\ScriptResponse`](https://github.com/contena-cms/contena/blob/trunk/src/Core/Framework/Script/Api/ScriptResponse.php)<br>        |
 | **Available Services** | [repository](./data-loading-script-services-reference#RepositoryFacade)<br>[config](./miscellaneous-script-services-reference#SystemConfigFacade)<br>[store](./data-loading-script-services-reference#ChannelRepositoryFacade)<br>[writer](./custom-endpoint-script-services-reference#RepositoryWriterFacade)<br>[response](./custom-endpoint-script-services-reference#ScriptResponseFactoryFacade)<br>[request](./miscellaneous-script-services-reference#RequestFacade)<br>[acl](./miscellaneous-script-services-reference#AclFacade)<br> |
 | **Stoppable**          | `true`                  |

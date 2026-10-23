@@ -111,7 +111,7 @@ class ShopConfigurationController extends InstallerController
             try {
                 $this->envConfigWriter->writeConfig($connectionInfo, $shop);
 
-                // create admin admin_user first, if there is a validation error we don't need to update shop
+                // create admin admin user first, if there is a validation error we don't need to update shop
                 // and create sales channel
                 $this->adminConfigurationService->createAdmin($adminUser, $connection);
                 $this->shopConfigurationService->updateShop($shop, $connection);
@@ -119,7 +119,7 @@ class ShopConfigurationController extends InstallerController
                 $session->set('ADMIN_USER', $adminUser);
                 $session->set('SELECTED_LANGUAGES', $selectedLanguages);
 
-                // Check if admin_user selected any languages
+                // Check if admin user selected any languages
                 if ($selectedLanguages === []) {
                     // No languages selected, go directly to finish page
                     $session->remove(DatabaseConnectionInformation::class);

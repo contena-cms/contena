@@ -334,7 +334,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
             service(Connection::class),
             service(StreamLockService::class),
-            service(SymfonyClockInterface::class),
             service(ClockInterface::class),
         ]);
 

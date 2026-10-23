@@ -8,7 +8,7 @@ use Contena\Core\System\Channel\ContextTokenResponse;
 use Contena\Core\System\User\UserEntity;
 
 /**
- * This route is used to change the password of a logged-in admin_user
+ * This route is used to change the password of a logged-in admin user
  * The required fields are: "password", "newPassword" and "newPasswordConfirm"
  */
 abstract class AbstractChangePasswordRoute

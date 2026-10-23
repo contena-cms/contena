@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @public This class is used as type-hint for all event listeners, so the class string is "public consumable" API
  *
- * @title Loads the blog search result for the store-api search route
+ * @title Loads the blog search result for the channel-api search route
  *
- * @description Wraps the whole `/store-api/search` loading. A listener on the `.pre` event may resolve the search itself — e.g. against an external search service or with an enriched result — by assigning `$extension->result` and stopping propagation, short-circuiting the core. `.post` may adjust the loaded result.
+ * @description Wraps the whole `/channel-api/search` loading. A listener on the `.pre` event may resolve the search itself — e.g. against an external search service or with an enriched result — by assigning `$extension->result` and stopping propagation, short-circuiting the core. `.post` may adjust the loaded result.
  *
  * @codeCoverageIgnore
  *
@@ -30,7 +30,7 @@ final class BlogSearchRouteExtension extends Extension
         /**
          * @public
          *
-         * @description The current store-api request
+         * @description The current channel-api request
          */
         public readonly Request $request,
         /**

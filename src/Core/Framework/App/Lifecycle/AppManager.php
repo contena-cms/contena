@@ -35,12 +35,54 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\App\Exception\AppRegistrationException;
+use Contena\Core\Framework\App\ActiveAppsLoader;
+use Contena\Core\Framework\App\Lifecycle\Registration\AppRegistrationService;
+use Contena\Core\Framework\App\Validation\AppRequirementsValidator;
+use Contena\Core\Framework\Adapter\Asset\AssetService;
+use Contena\Core\System\SystemConfig\Util\ConfigReader;
+use Contena\Core\Framework\App\Validation\ConfigValidator;
+use Contena\Core\System\CustomEntity\CustomEntityLifecycleService;
+use Contena\Core\Framework\App\DeletedApps\DeletedAppsGateway;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\App\Manifest\ManifestFactory;
+use Contena\Core\Framework\Script\Execution\ScriptExecutor;
+use Contena\Core\Framework\App\Source\SourceResolver;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
  */
 class AppManager
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly iterable $lifecycleHandlers,
+        private readonly EntityRepository $appRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly AppRegistrationService $registrationService,
+        private readonly ManifestFactory $manifestFactory,
+        private readonly ActiveAppsLoader $activeAppsLoader,
+        private readonly EntityRepository $languageRepository,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly ConfigValidator $configValidator,
+        private readonly EntityRepository $integrationRepository,
+        private readonly EntityRepository $aclRoleRepository,
+        private readonly AssetService $assetService,
+        private readonly ScriptExecutor $scriptExecutor,
+        private readonly string $projectDir,
+        private readonly CustomEntityLifecycleService $customEntityLifecycleService,
+        private readonly string $shopwareVersion,
+        private readonly SourceResolver $sourceResolver,
+        private readonly ConfigReader $configReader,
+        private readonly DeletedAppsGateway $deletedAppsGateway,
+        private readonly AppRequirementsValidator $requirementsValidator,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
 
     public function install(Manifest $manifest, AppInstallParameters $parameters, Context $context): void
     {

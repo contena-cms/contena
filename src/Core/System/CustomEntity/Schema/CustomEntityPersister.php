@@ -52,7 +52,7 @@ class CustomEntityPersister
                 ['id' => Uuid::fromHexToBytes($extensionId)]
             );
         } else {
-            // custom entity without any app or plugin id --> created by the admin_user and not by any extension
+            // custom entity without any app or plugin id --> created by the admin user and not by any extension
             $this->connection->executeStatement('DELETE FROM custom_entity WHERE app_id IS NULL AND plugin_id IS NULL');
         }
 

@@ -2,18 +2,18 @@
 
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
-use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Event\ContenaEvent;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\MailAware;
-use Contena\Core\Framework\Event\ContenaEvent;
-use Contena\Core\System\Channel\ChannelContext;
-use Symfony\Contracts\EventDispatcher\Event;
 use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use PHPUnit\Framework\TestCase;
+use Symfony\Contracts\EventDispatcher\Event;
 
 trait MailTemplateTestBehaviour
 {
     use EventDispatcherBehaviour;
-use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
     /**
      * @param class-string<object> $expectedClass

@@ -18,7 +18,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 class AdminUserRepository implements UserRepositoryInterface
 {
     /**
-     * Bcrypt hash for a static placeholder password used to equalize timing when no admin_user is found.
+     * Bcrypt hash for a static placeholder password used to equalize timing when no admin user is found.
      */
     private const PLACEHOLDER_PASSWORD_HASH = '$2y$12$PVcA5R6ri9kS.7FnFUBRIOLwqU//bCicx5RFxwecAAccbmZ7V7PKu';
 
@@ -51,7 +51,7 @@ class AdminUserRepository implements UserRepositoryInterface
             ->fetchAssociative();
 
         if (!$adminUser) {
-            // Prevent admin_user enumeration via timing attacks by always running password_verify().
+            // Prevent admin user enumeration via timing attacks by always running password_verify().
             $adminUser = ['password' => self::PLACEHOLDER_PASSWORD_HASH];
             $password = 'invalid-password-will-always-fail';
         }

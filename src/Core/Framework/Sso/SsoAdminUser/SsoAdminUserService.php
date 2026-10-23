@@ -29,7 +29,7 @@ class SsoAdminUserService
 
         if ($adminUser === null) {
             $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($email, $localeId): void {
-                $this->admin_userRepository->create([$this->createInitialUserData($email, $localeId)], $context);
+                $this->adminUserRepository->create([$this->createInitialUserData($email, $localeId)], $context);
             });
         }
     }
@@ -54,6 +54,6 @@ class SsoAdminUserService
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('email', $email));
 
-        return $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        return $this->adminUserRepository->search($criteria, $context)->getEntities()->first();
     }
 }

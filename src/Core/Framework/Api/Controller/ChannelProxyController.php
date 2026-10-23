@@ -39,10 +39,27 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\GreaterThanOrEqual;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
+use Contena\Core\Checkout\CheckoutPermissions;
+use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class ChannelProxyController extends AbstractController
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly KernelInterface $kernel,
+        private readonly EntityRepository $salesChannelRepository,
+        protected DataValidator $validator,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly RequestStack $requestStack
+    ) {
+    }
+
+
     private const CUSTOMER_ID = ChannelContextService::CUSTOMER_ID;
 
     private const CHANNEL_ID = 'channelId';
@@ -51,8 +68,8 @@ class ChannelProxyController extends AbstractController
 
 
     #[Route(
-        path: '/api/_proxy/store-api/{channelId}/{_path}',
-        name: 'api.proxy.store-api',
+        path: '/api/_proxy/channel-api/{channelId}/{_path}',
+        name: 'api.proxy.channel-api',
         requirements: ['_path' => '.*']
     )]
     public function proxy(string $_path, string $channelId, Request $request, Context $context): Response
@@ -141,7 +158,7 @@ class ChannelProxyController extends AbstractController
 
         $adminUserId = $source->getUserId();
         if (!$adminUserId) {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
 
         $channelId = $data->getString(self::CHANNEL_ID);
@@ -254,7 +271,7 @@ class ChannelProxyController extends AbstractController
     ): Request {
         $contextToken = $this->getContextToken($request);
 
-        $server = array_merge($request->server->all(), ['REQUEST_URI' => '/store-api/' . $path]);
+        $server = array_merge($request->server->all(), ['REQUEST_URI' => '/channel-api/' . $path]);
         $subrequest = $request->duplicate(null, null, [], null, null, $server);
 
         $subrequest->headers->set(PlatformRequest::HEADER_ACCESS_KEY, $channel->getAccessKey());

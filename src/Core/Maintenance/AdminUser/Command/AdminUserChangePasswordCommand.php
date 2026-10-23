@@ -62,19 +62,19 @@ class AdminUserChangePasswordCommand extends Command
 
         $adminUserId = $this->getUserId($username, $context);
         if ($adminUserId === null) {
-            $io->error(\sprintf('The admin_user "%s" does not exist.', $username));
+            $io->error(\sprintf('The admin user "%s" does not exist.', $username));
 
             return self::FAILURE;
         }
 
-        $this->admin_userRepository->update([
+        $this->adminUserRepository->update([
             [
                 'id' => $adminUserId,
                 'password' => $password,
             ],
         ], $context);
 
-        $io->success(\sprintf('The password of admin_user "%s" has been changed successfully.', $username));
+        $io->success(\sprintf('The password of admin user "%s" has been changed successfully.', $username));
 
         return self::SUCCESS;
     }
@@ -84,6 +84,6 @@ class AdminUserChangePasswordCommand extends Command
         $criteria = (new Criteria())
             ->addFilter(new EqualsFilter('username', $username));
 
-        return $this->admin_userRepository->searchIds($criteria, $context)->firstId();
+        return $this->adminUserRepository->searchIds($criteria, $context)->firstId();
     }
 }

@@ -8,7 +8,7 @@
  * - 'selected': AdminUser-selected cookies from the offCanvas form
  *
  * API-driven approach:
- * Uses the `/store-api/cookie-groups` endpoint (see CookieRoute.php) to fetch
+ * Uses the `/channel-api/cookie-groups` endpoint (see CookieRoute.php) to fetch
  * cookie configuration including cookie-config-hash and cookie-preference values.
  * The endpoint provides both cookie metadata and values, ensuring consistency
  * between backend configuration and frontend cookie handling.

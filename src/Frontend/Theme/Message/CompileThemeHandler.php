@@ -53,7 +53,7 @@ final readonly class CompileThemeHandler
             return;
         }
 
-        // On failure the exception propagates for Messenger to retry/dead-letter; the admin_user is
+        // On failure the exception propagates for Messenger to retry/dead-letter; the admin user is
         // notified once by CompileThemeFailedSubscriber, not per attempt.
         $themeConfig = $this->configLoader->load($message->getThemeId(), $message->getContext());
         $this->themeCompiler->compileTheme(

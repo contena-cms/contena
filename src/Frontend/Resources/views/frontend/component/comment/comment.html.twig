@@ -1,90 +1,86 @@
 {% sw_extends '@Frontend/frontend/utilities/offcanvas.html.twig' %}
 
 {% block utilities_offcanvas_content %}
-	{% block component_review_container %}
+	{% block component_comment_container %}
 
-		{% set reviewsPerListPage = config('core.listing.reviewsPerPage') %}
-		{% if reviewsPerListPage <= 0 %}
-			{% set reviewsPerListPage = 10 %}
+		{% set commentsPerListPage = config('core.listing.commentsPerPage') %}
+		{% if commentsPerListPage <= 0 %}
+			{% set commentsPerListPage = 10 %}
 		{% endif %}
 
-		{% set currentListPage = reviews.page %}
+		{% set currentListPage = comments.page %}
 
-		{% set blogReviewCount = reviews.total %}
-        {% set totalReviewCount = reviews.matrix.totalReviewCount %}
+		{% set blogCommentCount = comments.total %}
+        {% set totalCommentCount = comments.total %}
 
-		{% if totalReviewCount > 0 %}
-            {% set blogAvgRating = reviews.matrix.averageRating|round(2, 'common') %}
-		{% endif %}
+		{% set totalCommentsInCurrentLanguage = comments.totalCommentsInCurrentLanguage ?: blogCommentCount %}
+		{% set numberOfCommentsNotInCurrentLanguage = blogCommentCount - totalCommentsInCurrentLanguage %}
 
-		{% set totalReviewsInCurrentLanguage = reviews.totalReviewsInCurrentLanguage ?: blogReviewCount %}
-		{% set numberOfReviewsNotInCurrentLanguage = blogReviewCount - totalReviewsInCurrentLanguage %}
-
-		<div class="blog-detail-review tab-pane-container">
-			{% block component_review_tab_pane %}
-                <div class="row blog-detail-review-content js-review-container">
-					{% block component_review_aside %}
+		<div class="blog-detail-comment tab-pane-container">
+			{% block component_comment_tab_pane %}
+                <div class="row blog-detail-comment-content js-comment-container">
+					{% block component_comment_aside %}
 						<div class="col-sm-4">
-							{% block component_review_widget_container %}
-								{% sw_include '@Frontend/frontend/component/review/review-widget.html.twig' %}
+							{% block component_comment_widget_container %}
+								{% sw_include '@Frontend/frontend/component/comment/comment-widget.html.twig' %}
 							{% endblock %}
 						</div>
 					{% endblock %}
 
-					{% block component_review_main %}
-						<div class="col blog-detail-review-main js-review-content">
-							{% block component_review_alert %}
+					{% block component_comment_main %}
+						<div class="col blog-detail-comment-main js-comment-content">
+							{% block component_comment_alert %}
 								{% if ratingSuccess == 1 %}
 									{% sw_include '@Frontend/frontend/utilities/alert.html.twig' with {
 										type: 'success',
-										content: 'detail.reviewFormSuccessAlert'|trans|sw_sanitize
+										content: 'detail.commentFormSuccessAlert'|trans|sw_sanitize
 									} %}
                                 {% elseif ratingSuccess == 2 %}
                                     {% sw_include '@Frontend/frontend/utilities/alert.html.twig' with {
                                         type: 'success',
-                                        content: 'detail.reviewFormSuccessUpdateAlert'|trans|sw_sanitize
+                                        content: 'detail.commentFormSuccessUpdateAlert'|trans|sw_sanitize
                                     } %}
 								{% elseif ratingSuccess == -1 %}
 									{% sw_include '@Frontend/frontend/utilities/alert.html.twig' with {
 										type: 'danger',
-										content: 'detail.reviewFormErrorAlert'|trans|sw_sanitize
+										content: 'detail.commentFormErrorAlert'|trans|sw_sanitize
 									} %}
 								{% endif %}
 							{% endblock %}
 
-							{% block component_review_form_container %}
+							{% block component_comment_form_container %}
 								<div class="collapse multi-collapse{% if ratingSuccess == -1 %} show{% endif %}"
-									 id="review-form">
+									 id="comment-form">
 
                                     {% if context.user and not context.user.guest %}
-										<div class="blog-detail-review-form">
-											{% sw_include '@Frontend/frontend/component/review/review-form.html.twig' %}
+										<div class="blog-detail-comment-form">
+											{% sw_include '@Frontend/frontend/component/comment/comment-form.html.twig' %}
 										</div>
 									{% else %}
-										<div class="blog-detail-review-login">
-											{% sw_include '@Frontend/frontend/component/review/review-login.html.twig' %}
+										<div class="blog-detail-comment-login">
+											{% sw_include '@Frontend/frontend/component/comment/comment-login.html.twig' %}
 										</div>
 									{% endif %}
 								</div>
 							{% endblock %}
 
-							{% block component_review_list_container %}
-								<div id="review-list"
-									 class="collapse multi-collapse blog-detail-review-list{% if ratingSuccess != -1 %} show{% endif %}">
-                                    {% block component_review_list %}
+							{% block component_comment_list_container %}
+								<div id="comment-list"
+									 class="collapse multi-collapse blog-detail-comment-list{% if ratingSuccess != -1 %} show{% endif %}">
+                                    {% block component_comment_list %}
                                         {% set formAjaxSubmitOptions = {
-                                            replaceSelectors: ['.js-review-container'],
+                                            replaceSelectors: ['.js-comment-container'],
                                             submitOnChange: true
                                         } %}
 
-                                        {% block component_review_list_actions %}
-                                            {% block component_review_list_action_filters %}
-                                                <div class="row align-items-center blog-detail-review-actions">
-                                                    {% block component_review_list_action_language %}
-                                                        <div class="col blog-detail-review-language">
-                                                            {% block component_review_list_action_language_form %}
-                                                                <form class="blog-detail-review-language-form"
-                                                                    action="{{ path('frontend.blog.reviews', { blogId: reviews.blogId, parentId: reviews.parentId }) }}"
+                                        {% block component_comment_list_actions %}
+                                            {% block component_comment_list_action_filters %}
+                                                <div class="row align-items-center blog-detail-comment-actions">
+                                                    {% block component_comment_list_action_language %}
+                                                        <div class="col blog-detail-comment-language">
+                                                            {% block component_comment_list_action_language_form %}
+                                                                <form class="blog-detail-comment-language-form"
+                                                                    action="{{ path('frontend.blog.comments', { blogId: comments.blogId, parentId: comments.parentId }) }}"
                                                                     method="post"
                                                                     data-form-ajax-submit="true"
                                                                     data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
@@ -95,24 +91,21 @@
                                                                     <input type="hidden" name="sort" value="{{ app.request.get('sort') }}">
                                                                 {% endif %}
 
-                                                                    {% if app.request.get('points') %}
-                                                                        {% for points in app.request.get('points') %}
-                                                                            <input type="hidden" name="points[]" value="{{ points }}">
                                                                         {% endfor %}
                                                                     {% endif %}
 
-                                                                    {% block component_review_list_action_language_switch %}
+                                                                    {% block component_comment_list_action_language_switch %}
                                                                         <div class="form-check form-switch">
                                                                             <input type="checkbox"
                                                                                 class="form-check-input"
-                                                                                id="showForeignReviews"
+                                                                                id="showForeignComments"
                                                                                 value="filter-language"
                                                                                 name="language"
                                                                                 {% if app.request.get('language') %}checked="checked"{% endif %}
-                                                                                {% if numberOfReviewsNotInCurrentLanguage is same as(0) and not app.request.get('language') %}disabled="disabled"{% endif %}>
+                                                                                {% if numberOfCommentsNotInCurrentLanguage is same as(0) and not app.request.get('language') %}disabled="disabled"{% endif %}>
                                                                             <label class="custom-control-label form-label"
-                                                                                for="showForeignReviews">
-                                                                                <small>{{ 'detail.reviewLanguageFilterLabel'|trans|sw_sanitize }}</small>
+                                                                                for="showForeignComments">
+                                                                                <small>{{ 'detail.commentLanguageFilterLabel'|trans|sw_sanitize }}</small>
                                                                             </label>
                                                                         </div>
                                                                     {% endblock %}
@@ -121,12 +114,12 @@
                                                         </div>
                                                     {% endblock %}
 
-                                                    {% block component_review_list_action_sortby %}
-                                                        {% if blogReviewCount > 0 %}
-                                                            <div class="col-12 col-md-auto blog-detail-review-sortby">
-                                                                {% block component_review_list_action_sortby_form %}
-                                                                    <form class="form-inline blog-detail-review-sortby-form"
-                                                                        action="{{ path('frontend.blog.reviews', { blogId: reviews.blogId, parentId: reviews.parentId }) }}"
+                                                    {% block component_comment_list_action_sortby %}
+                                                        {% if blogCommentCount > 0 %}
+                                                            <div class="col-12 col-md-auto blog-detail-comment-sortby">
+                                                                {% block component_comment_list_action_sortby_form %}
+                                                                    <form class="form-inline blog-detail-comment-sortby-form"
+                                                                        action="{{ path('frontend.blog.comments', { blogId: comments.blogId, parentId: comments.parentId }) }}"
                                                                         method="post"
                                                                         data-form-ajax-submit="true"
                                                                         data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}">
@@ -137,28 +130,24 @@
                                                                         <input type="hidden" name="language" value="{{ app.request.get('language') }}">
                                                                     {% endif %}
 
-                                                                        {% if app.request.get('points') %}
-                                                                            {% for points in app.request.get('points') %}
-                                                                                <input type="hidden" name="points[]" value="{{ points }}">
                                                                             {% endfor %}
                                                                         {% endif %}
 
-                                                                        {% block component_review_list_action_sortby_label %}
-                                                                            <label class="form-label blog-detail-review-sortby-label"
-                                                                                for="reviewsSortby">
-                                                                                <small>{{ 'detail.reviewSortLabel'|trans|sw_sanitize }}</small>
+                                                                        {% block component_comment_list_action_sortby_label %}
+                                                                            <label class="form-label blog-detail-comment-sortby-label"
+                                                                                for="commentsSortby">
+                                                                                <small>{{ 'detail.commentSortLabel'|trans|sw_sanitize }}</small>
                                                                             </label>
                                                                         {% endblock %}
 
-                                                                        {% block component_review_list_action_sortby_select %}
+                                                                        {% block component_comment_list_action_sortby_select %}
                                                                             <select class="form-select form-select-sm"
                                                                                     name="sort"
-                                                                                    id="reviewsSortby">
-                                                                                <option value="createdAt"{% if reviews.criteria.sorting.0.field == 'createdAt' %} selected{% endif %}>
-                                                                                    {{ 'detail.reviewSortNewLabel'|trans|sw_sanitize }}
+                                                                                    id="commentsSortby">
+                                                                                <option value="createdAt"{% if comments.criteria.sorting.0.field == 'createdAt' %} selected{% endif %}>
+                                                                                    {{ 'detail.commentSortNewLabel'|trans|sw_sanitize }}
                                                                                 </option>
-                                                                                <option value="points"{% if reviews.criteria.sorting.0.field == 'points' %} selected{% endif %}>
-                                                                                    {{ 'detail.reviewSortTopRatedLabel'|trans|sw_sanitize }}
+                                                                                    {{ 'detail.commentSortTopRatedLabel'|trans|sw_sanitize }}
                                                                                 </option>
                                                                             </select>
                                                                         {% endblock %}
@@ -170,35 +159,35 @@
                                                 </div>
                                             {% endblock %}
 
-                                            {% block component_review_list_counter %}
+                                            {% block component_comment_list_counter %}
                                                 <hr/>
-                                                <p class="text-right blog-detail-review-counter">
-                                                    {% if (blogReviewCount > 1 and blogReviewCount > reviewsPerListPage) %}
-                                                        <small><strong>{{ currentListPage }}</strong> - <strong>{{ reviewsPerListPage }}</strong> {{ 'detail.reviewCountBefore'|trans|sw_sanitize }} <strong>{{ blogReviewCount }}</strong> {{ 'detail.reviewCountAfter'|trans({'%count%': blogReviewCount })|sw_sanitize }}</small>
-                                                    {% elseif blogReviewCount > 0 %}
-                                                        <small><strong>{{ blogReviewCount }}</strong> {{ 'detail.reviewCountAfter'|trans({'%count%': blogReviewCount })|sw_sanitize }}</small>
+                                                <p class="text-right blog-detail-comment-counter">
+                                                    {% if (blogCommentCount > 1 and blogCommentCount > commentsPerListPage) %}
+                                                        <small><strong>{{ currentListPage }}</strong> - <strong>{{ commentsPerListPage }}</strong> {{ 'detail.commentCountBefore'|trans|sw_sanitize }} <strong>{{ blogCommentCount }}</strong> {{ 'detail.commentCountAfter'|trans({'%count%': blogCommentCount })|sw_sanitize }}</small>
+                                                    {% elseif blogCommentCount > 0 %}
+                                                        <small><strong>{{ blogCommentCount }}</strong> {{ 'detail.commentCountAfter'|trans({'%count%': blogCommentCount })|sw_sanitize }}</small>
                                                     {% endif %}
                                                 </p>
                                             {% endblock %}
                                         {% endblock %}
 
-                                        {% block component_review_list_content %}
-                                            {% for review in reviews.entities %}
-                                                <div class="blog-detail-review-list-content">
-                                                    {% sw_include '@Frontend/frontend/component/review/review-item.html.twig' %}
+                                        {% block component_comment_list_content %}
+                                            {% for comment in comments.entities %}
+                                                <div class="blog-detail-comment-list-content">
+                                                    {% sw_include '@Frontend/frontend/component/comment/comment-item.html.twig' %}
                                                 </div>
                                             {% endfor %}
                                         {% endblock %}
 
-                                        {% block component_review_list_paging %}
+                                        {% block component_comment_list_paging %}
 
-                                            {% set totalPages = (blogReviewCount/reviewsPerListPage)|round(0,'ceil') %}
+                                            {% set totalPages = (blogCommentCount/commentsPerListPage)|round(0,'ceil') %}
 
                                             {% if totalPages > 1 %}
-                                                {% block component_review_list_paging_form %}
-                                                    <div class="blog-detail-review-pagination">
-                                                        <form class="blog-detail-review-pagination-form"
-                                                              action="{{ path('frontend.blog.reviews', { blogId: reviews.blogId, parentId: reviews.parentId }) }}"
+                                                {% block component_comment_list_paging_form %}
+                                                    <div class="blog-detail-comment-pagination">
+                                                        <form class="blog-detail-comment-pagination-form"
+                                                              action="{{ path('frontend.blog.comments', { blogId: comments.blogId, parentId: comments.parentId }) }}"
                                                               method="post"
                                                               data-form-ajax-submit="true"
                                                               data-form-ajax-submit-options="{{ formAjaxSubmitOptions|json_encode }}"
@@ -216,13 +205,10 @@
                                                                 <input type="hidden" name="sort" value="{{ app.request.get('sort') }}">
                                                             {% endif %}
 
-                                                            {% if app.request.get('points') %}
-                                                                {% for points in app.request.get('points') %}
-                                                                    <input type="hidden" name="points[]" value="{{ points }}">
                                                                 {% endfor %}
                                                             {% endif %}
 
-                                                            {% sw_include '@Frontend/frontend/component/pagination.html.twig' with {entities: reviews}  %}
+                                                            {% sw_include '@Frontend/frontend/component/pagination.html.twig' with {entities: comments}  %}
                                                         </form>
                                                     </div>
                                                 {% endblock %}
@@ -230,11 +216,11 @@
                                         {% endblock %}
                                     {% endblock %}
 
-                                    {% if blogReviewCount <= 0 %}
-                                        {% block component_review_list_empty %}
+                                    {% if blogCommentCount <= 0 %}
+                                        {% block component_comment_list_empty %}
                                             {% sw_include '@Frontend/frontend/utilities/alert.html.twig' with {
                                                 type: 'info',
-                                                content: 'detail.reviewListEmpty'|trans|sw_sanitize
+                                                content: 'detail.commentListEmpty'|trans|sw_sanitize
                                             } %}
                                         {% endblock %}
                                     {% endif %}

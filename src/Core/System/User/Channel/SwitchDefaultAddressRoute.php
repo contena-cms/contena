@@ -4,7 +4,7 @@ namespace Contena\Core\System\User\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\NoContentResponse;
@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\User\Channel\UserAddressValidationTrait;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class SwitchDefaultAddressRoute extends AbstractSwitchDefaultAddressRoute
 {
     use UserAddressValidationTrait;
@@ -45,8 +45,8 @@ class SwitchDefaultAddressRoute extends AbstractSwitchDefaultAddressRoute
     }
 
     #[Route(
-        path: '/store-api/account/address/default-shipping/{addressId}',
-        name: 'store-api.account.address.change.default.shipping',
+        path: '/channel-api/account/address/default-shipping/{addressId}',
+        name: 'channel-api.account.address.change.default.shipping',
         defaults: [
             'type' => 'shipping',
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
@@ -55,8 +55,8 @@ class SwitchDefaultAddressRoute extends AbstractSwitchDefaultAddressRoute
         methods: [Request::METHOD_PATCH]
     )]
     #[Route(
-        path: '/store-api/account/address/default-billing/{addressId}',
-        name: 'store-api.account.address.change.default.billing',
+        path: '/channel-api/account/address/default-billing/{addressId}',
+        name: 'channel-api.account.address.change.default.billing',
         defaults: [
             'type' => 'billing',
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,

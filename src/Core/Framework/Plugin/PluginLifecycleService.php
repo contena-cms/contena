@@ -41,12 +41,48 @@ use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Messenger\EventListener\StopWorkerOnRestartSignalListener;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationSource;
+use Contena\Core\Framework\Adapter\Asset\AssetService;
+use Contena\Core\Framework\Plugin\Composer\CommandExecutor;
+use Contena\Core\System\CustomEntity\Schema\CustomEntityPersister;
+use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
+use Contena\Core\System\CustomField\CustomFieldSetPersister;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
+use Contena\Core\Framework\Plugin\Requirement\RequirementsValidator;
 
 /**
  * @internal
  */
 class PluginLifecycleService
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EntityRepository $pluginRepo,
+        private EventDispatcherInterface $eventDispatcher,
+        private ContainerInterface $container,
+        private readonly MigrationCollectionLoader $migrationLoader,
+        private readonly AssetService $assetInstaller,
+        private readonly CommandExecutor $executor,
+        private readonly RequirementsValidator $requirementValidator,
+        private readonly CacheItemPoolInterface $restartSignalCachePool,
+        private readonly string $shopwareVersion,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly CustomEntityPersister $customEntityPersister,
+        private readonly CustomEntitySchemaUpdater $customEntitySchemaUpdater,
+        private readonly VersionSanitizer $versionSanitizer,
+        private readonly DefinitionInstanceRegistry $definitionRegistry,
+        private readonly RequestStack $requestStack,
+        private readonly CustomFieldSetPersister $customFieldSetPersister,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
     final public const STATE_SKIP_ASSET_BUILDING = 'skip-asset-building';
     final public const PLUGIN_LIFECYCLE_METHOD_ACTIVATE = 'activate';
 
@@ -130,7 +166,7 @@ class PluginLifecycleService
             $this->eventDispatcher->dispatch(new PluginPostInstallEvent($plugin, $installContext));
         } catch (\Throwable $e) {
             try {
-                if ($didRunComposerRequire && $plugin->getComposerName() && !$this->container->getParameter('contena.cnployment.cluster_setup')) {
+                if ($didRunComposerRequire && $plugin->getComposerName() && !$this->container->getParameter('contena.deployment.cluster_setup')) {
                     $this->executor->remove($plugin->getComposerName(), $plugin->getName());
                 }
             } finally {
@@ -481,7 +517,7 @@ class PluginLifecycleService
      * Only run composer remove as last thing in the request context,
      * as there might be some other event listeners that will break after the composer dependency is removed.
      *
-     * This is not run on Kernel Terminate as this way we can give feedback to the admin_user by letting the request fail,
+     * This is not run on Kernel Terminate as this way we can give feedback to the admin user by letting the request fail,
      * if there is an issue with removing the composer dependency.
      */
     public function onResponse(): void
@@ -507,7 +543,7 @@ class PluginLifecycleService
 
     private function removePluginComposerDependency(PluginEntity $plugin, Context $context): void
     {
-        if ($this->container->getParameter('contena.cnployment.cluster_setup')) {
+        if ($this->container->getParameter('contena.deployment.cluster_setup')) {
             return;
         }
 
@@ -717,7 +753,7 @@ class PluginLifecycleService
 
     private function executeComposerRequireWhenNeeded(PluginEntity $plugin, Plugin $pluginBaseClass, string $pluginVersion, Context $contenaContext): bool
     {
-        if ($this->container->getParameter('contena.cnployment.cluster_setup')) {
+        if ($this->container->getParameter('contena.deployment.cluster_setup')) {
             return false;
         }
 

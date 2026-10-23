@@ -2,18 +2,19 @@
 
 namespace Contena\Core\Test\Integration\Traits;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Flow\Events\FlowSendMailActionEvent;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
+use Contena\Core\Test\Integration\Builder\User\UserBuilder;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Test\Integration\Helper\MailEventListener;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
-use Contena\Core\Test\Integration\Builder\User\UserBuilder;
-use Contena\Core\Test\Integration\Helper\MailEventListener;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Doctrine\DBAL\Connection;
 
 /**
  * @codeCoverageIgnore
@@ -23,7 +24,6 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 trait TestShortHands
 {
     use KernelTestBehaviour;
-use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
     /**
      * @param array<string, mixed> $options

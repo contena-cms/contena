@@ -37,7 +37,7 @@ use Contena\Core\Framework\App\Api\AppCmsController;
 use Contena\Core\Framework\App\Api\AppJWTGenerateRoute;
 use Contena\Core\Framework\App\Api\AppPrivilegeController;
 use Contena\Core\Framework\App\Api\AppSecretRotationController;
-use Contena\Core\Framework\App\Api\ShopIdController;
+use Contena\Core\Framework\App\Api\InstallationIdController;
 use Contena\Core\Framework\App\Api\VerifyShopController;
 use Contena\Core\Framework\App\AppArchiveValidator;
 use Contena\Core\Framework\App\AppDefinition;
@@ -53,8 +53,8 @@ use Contena\Core\Framework\App\Command\AppListCommand;
 use Contena\Core\Framework\App\Command\AppPrinter;
 use Contena\Core\Framework\App\Command\AppUrlVerificationStatusCommand;
 use Contena\Core\Framework\App\Command\AppUrlVerifyCommand;
-use Contena\Core\Framework\App\Command\ChangeShopIdCommand;
-use Contena\Core\Framework\App\Command\CheckShopIdCommand;
+use Contena\Core\Framework\App\Command\ChangeInstallationIdCommand;
+use Contena\Core\Framework\App\Command\CheckInstallationIdCommand;
 use Contena\Core\Framework\App\Command\CreateAppCommand;
 use Contena\Core\Framework\App\Command\DeactivateAppCommand;
 use Contena\Core\Framework\App\Command\InstallAppCommand;
@@ -92,7 +92,6 @@ use Contena\Core\Framework\App\Lifecycle\Handler\FlowEventLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ModuleLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\RuleConditionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
-use Contena\Core\Framework\App\Lifecycle\Handler\TaxProviderLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TemplateLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\WebhookLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\PermissionLifecycleService;
@@ -113,14 +112,14 @@ use Contena\Core\Framework\App\ScheduledTask\SystemHeartbeatHandler;
 use Contena\Core\Framework\App\ScheduledTask\SystemHeartbeatTask;
 use Contena\Core\Framework\App\ScheduledTask\UpdateAppsHandler;
 use Contena\Core\Framework\App\ScheduledTask\UpdateAppsTask;
-use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
-use Contena\Core\Framework\App\ShopId\Fingerprint\ChannelDomainUrls;
-use Contena\Core\Framework\App\ShopId\Fingerprint\InstallationPath;
-use Contena\Core\Framework\App\ShopId\FingerprintGenerator;
-use Contena\Core\Framework\App\ShopIdChangeResolver\MoveShopPermanentlyStrategy;
-use Contena\Core\Framework\App\ShopIdChangeResolver\ReinstallAppsStrategy;
-use Contena\Core\Framework\App\ShopIdChangeResolver\Resolver;
-use Contena\Core\Framework\App\ShopIdChangeResolver\UninstallAppsStrategy;
+use Contena\Core\Framework\App\InstallationId\Fingerprint\AppUrl;
+use Contena\Core\Framework\App\InstallationId\Fingerprint\ChannelDomainUrls;
+use Contena\Core\Framework\App\InstallationId\Fingerprint\InstallationPath;
+use Contena\Core\Framework\App\InstallationId\FingerprintGenerator;
+use Contena\Core\Framework\App\InstallationIdChangeResolver\MoveShopPermanentlyStrategy;
+use Contena\Core\Framework\App\InstallationIdChangeResolver\ReinstallAppsStrategy;
+use Contena\Core\Framework\App\InstallationIdChangeResolver\Resolver;
+use Contena\Core\Framework\App\InstallationIdChangeResolver\UninstallAppsStrategy;
 use Contena\Core\Framework\App\Source\Local;
 use Contena\Core\Framework\App\Source\NoDatabaseSourceResolver;
 use Contena\Core\Framework\App\Source\RemoteZip;
@@ -168,7 +167,7 @@ use Symfony\Component\Clock\ClockInterface as SymfonyClockInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Contena\Core\Framework\Adapter\Asset\AssetService;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\inline_service;
@@ -199,7 +198,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AppScriptConditionConstraintsSubscriber::class)
         ->tag('kernel.event_subscriber');
 
-    $services->set(ShopIdProvider::class)
+    $services->set(InstallationIdProvider::class)
         ->public()
         ->args([
             service(SystemConfigService::class),
@@ -212,7 +211,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ModuleLoader::class)
         ->args([
             service('app.repository'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(QuerySigner::class),
         ]);
 
@@ -286,12 +285,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ])
         ->tag('contena.app_lifecycle.handler', ['priority' => -200]);
-
-    $services->set(TaxProviderLifecycleHandler::class)
-        ->args([
-            service('tax_provider.repository'),
-        ])
-        ->tag('contena.app_lifecycle.handler', ['priority' => -400]);
 
     $services->set(ModuleLifecycleHandler::class)
         ->args([
@@ -384,7 +377,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(DefinitionInstanceRegistry::class),
             service(JsonEntityEncoder::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(InAppPurchase::class),
             env('APP_URL'),
             service(SymfonyClockInterface::class),
@@ -429,11 +422,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AppRegistrationService::class)
         ->args([
-            service(HandshakeFactory::class),
             service('contena.app_system.guzzle'),
             service('app.repository'),
             env('APP_URL'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             param('kernel.contena_version'),
             service(ClockInterface::class),
             service('logger'),
@@ -464,7 +456,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(HandshakeFactory::class)
         ->args([
             env('APP_URL'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(StoreClient::class),
             param('kernel.contena_version'),
             service(ClockInterface::class),
@@ -474,10 +466,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             tagged_iterator('contena.app_lifecycle.handler'),
             service('app.repository'),
-            service(PermissionLifecycleService::class),
             service('event_dispatcher'),
             service(AppRegistrationService::class),
-            service(AppSecretRotationService::class),
             service(ManifestFactory::class),
             service(ActiveAppsLoader::class),
             service('language.repository'),
@@ -490,7 +480,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             param('kernel.project_dir'),
             service(CustomEntityLifecycleService::class),
             param('kernel.contena_version'),
-            service(AppFeatureValidator::class),
             service(SourceResolver::class),
             service(ConfigReader::class),
             service(DeletedAppsGateway::class),
@@ -635,7 +624,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             env('APP_URL'),
             param('kernel.contena_version'),
             service(LocaleProvider::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(InAppPurchase::class),
             service(ClockInterface::class),
         ]);
@@ -645,7 +634,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('contena.app_system.guzzle'),
             service('logger'),
             service(ActionButtonResponseFactory::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service('router'),
             service('request_stack'),
             service('kernel'),
@@ -683,7 +672,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service(Connection::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(InAppPurchase::class),
             service(ClockInterface::class),
         ]);
@@ -760,7 +749,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('console.command');
 
-    $services->set(ChangeShopIdCommand::class)
+    $services->set(ChangeInstallationIdCommand::class)
         ->args([
             service(Resolver::class),
         ])
@@ -780,11 +769,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('console.command');
 
-    $services->set(ShopIdController::class)
+    $services->set(InstallationIdController::class)
         ->public()
         ->args([
             service(Resolver::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service('app.repository'),
         ])
         ->call('setContainer', [
@@ -801,7 +790,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('app.repository'),
             service(AppManager::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service('logger'),
         ])
         ->tag('contena.app_url_changed_resolver', ['priority' => -100]);
@@ -810,7 +799,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('app.repository'),
             service(AppManager::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service('logger'),
         ])
         ->tag('contena.app_url_changed_resolver', ['priority' => 100]);
@@ -818,7 +807,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(UninstallAppsStrategy::class)
         ->args([
             service('app.repository'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(AppManager::class),
         ])
         ->tag('contena.app_url_changed_resolver', ['priority' => 0]);
@@ -960,23 +949,23 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(Connection::class),
         ])
-        ->tag('contena.app_system.shop_id_fingerprint');
+        ->tag('contena.app_system.installation_id_fingerprint');
 
     $services->set(InstallationPath::class)
         ->args([
             param('kernel.project_dir'),
         ])
-        ->tag('contena.app_system.shop_id_fingerprint');
+        ->tag('contena.app_system.installation_id_fingerprint');
 
     $services->set(AppUrl::class)
-        ->tag('contena.app_system.shop_id_fingerprint');
+        ->tag('contena.app_system.installation_id_fingerprint');
 
     $services->set(FingerprintGenerator::class)
         ->args([
-            tagged_iterator('contena.app_system.shop_id_fingerprint'),
+            tagged_iterator('contena.app_system.installation_id_fingerprint'),
         ]);
 
-    $services->set(CheckShopIdCommand::class)
+    $services->set(CheckInstallationIdCommand::class)
         ->args([
             service(SystemConfigService::class),
             service(FingerprintGenerator::class),
@@ -1024,7 +1013,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AppUrlVerificationPrinter::class)
         ->args([
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
         ]);
 
     $services->set(AppUrlVerificationStatusCommand::class)
@@ -1036,7 +1025,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(AppUrlVerifyCommand::class)
         ->args([
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(AppUrlVerifier::class),
             service(AppUrlVerificationPrinter::class),
         ])

@@ -63,17 +63,17 @@ class AdminUserController extends AbstractController
 
         $adminUserId = $context->getSource()->getUserId();
         if (!$adminUserId) {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
         $criteria = new Criteria([$adminUserId]);
         $criteria->addAssociations(['aclRoles', 'avatarMedia']);
 
-        $adminUser = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        $adminUser = $this->adminUserRepository->search($criteria, $context)->getEntities()->first();
         if (!$adminUser) {
             throw OAuthServerException::invalidCredentials();
         }
 
-        return $responseFactory->createDetailResponse(new Criteria(), $adminUser, $this->admin_userDefinition, $request, $context);
+        return $responseFactory->createDetailResponse(new Criteria(), $adminUser, $this->adminUserDefinition, $request, $context);
     }
 
     #[Route(
@@ -93,7 +93,7 @@ class AdminUserController extends AbstractController
 
         $adminUserId = $context->getSource()->getUserId();
         if (!$adminUserId) {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
 
         $allowedChanges = ['firstName', 'lastName', 'username', 'localeId', 'email', 'avatarMedia', 'avatarId', 'password', 'timeZone'];
@@ -126,9 +126,9 @@ class AdminUserController extends AbstractController
 
         $adminUserId = $context->getSource()->getUserId();
         if (!$adminUserId) {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
-        $result = $this->admin_userRepository->searchIds(new Criteria([$adminUserId]), $context);
+        $result = $this->adminUserRepository->searchIds(new Criteria([$adminUserId]), $context);
 
         if ($result->getTotal() === 0) {
             throw OAuthServerException::invalidCredentials();
@@ -138,7 +138,7 @@ class AdminUserController extends AbstractController
     }
 
     #[Route(
-        path: '/api/_action/admin_user/logout',
+        path: '/api/_action/admin-user/logout',
         name: 'api.action.admin_user.logout',
         methods: [Request::METHOD_POST]
     )]
@@ -150,7 +150,7 @@ class AdminUserController extends AbstractController
 
         $adminUserId = $context->getSource()->getUserId();
         if (!$adminUserId) {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
 
         $this->ssoService->revokeUserTokens($adminUserId);
@@ -159,7 +159,7 @@ class AdminUserController extends AbstractController
     }
 
     #[Route(
-        path: '/api/admin_user/{admin_userId}',
+        path: '/api/admin-user/{adminUserId}',
         name: 'api.admin_user.delete',
         defaults: [
             'auth_required' => true,
@@ -181,14 +181,14 @@ class AdminUserController extends AbstractController
         }
 
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($adminUserId): void {
-            $this->admin_userRepository->delete([['id' => $adminUserId]], $context);
+            $this->adminUserRepository->delete([['id' => $adminUserId]], $context);
         });
 
-        return $factory->createRedirectResponse($this->admin_userRepository->getDefinition(), $adminUserId, $request, $context);
+        return $factory->createRedirectResponse($this->adminUserRepository->getDefinition(), $adminUserId, $request, $context);
     }
 
     #[Route(
-        path: '/api/admin_user/{admin_userId}/access-keys/{id}',
+        path: '/api/admin-user/{adminUserId}/access-keys/{id}',
         name: 'api.admin_user_access_keys.delete',
         defaults: [
             'auth_required' => true,
@@ -208,7 +208,7 @@ class AdminUserController extends AbstractController
     }
 
     #[Route(
-        path: '/api/admin_user',
+        path: '/api/admin-user',
         name: 'api.admin_user.create',
         defaults: [
             'auth_required' => true,
@@ -246,20 +246,20 @@ class AdminUserController extends AbstractController
         }
 
         $this->connection->transactional(function () use ($data, $context, $changesAdmin, $admin, $entityId): void {
-            $this->admin_userRepository->upsert([$data], $context);
+            $this->adminUserRepository->upsert([$data], $context);
 
             if ($changesAdmin) {
                 $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($entityId, $admin): void {
-                    $this->admin_userRepository->update([['id' => $entityId, 'admin' => $admin]], $context);
+                    $this->adminUserRepository->update([['id' => $entityId, 'admin' => $admin]], $context);
                 });
             }
         });
 
-        return $factory->createRedirectResponse($this->admin_userRepository->getDefinition(), $entityId, $request, $context);
+        return $factory->createRedirectResponse($this->adminUserRepository->getDefinition(), $entityId, $request, $context);
     }
 
     #[Route(
-        path: '/api/admin_user/{admin_userId}',
+        path: '/api/admin-user/{adminUserId}',
         name: 'api.admin_user.update',
         defaults: [
             'auth_required' => true,
@@ -314,7 +314,7 @@ class AdminUserController extends AbstractController
     }
 
     #[Route(
-        path: '/api/admin_user/{admin_userId}/acl-roles/{roleId}',
+        path: '/api/admin-user/{adminUserId}/acl-roles/{roleId}',
         name: 'api.admin_user_role.delete',
         defaults: [
             'auth_required' => true,
@@ -327,10 +327,10 @@ class AdminUserController extends AbstractController
         $this->validateScope($request);
 
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($roleId, $adminUserId): void {
-            $this->admin_userRoleRepository->delete([['admin_userId' => $adminUserId, 'aclRoleId' => $roleId]], $context);
+            $this->adminUserRoleRepository->delete([['adminUserId' => $adminUserId, 'aclRoleId' => $roleId]], $context);
         });
 
-        return $factory->createRedirectResponse($this->admin_userRoleRepository->getDefinition(), $roleId, $request, $context);
+        return $factory->createRedirectResponse($this->adminUserRoleRepository->getDefinition(), $roleId, $request, $context);
     }
 
     #[Route(
@@ -354,7 +354,7 @@ class AdminUserController extends AbstractController
     /**
      * A self-service profile edit may link an avatar, nothing more. The write runs in SYSTEM_SCOPE,
      * where ACL and write protection are off, so any other field would be written to the media
-     * entity and, through its associations (admin_user, avatarUsers), to other users.
+     * entity and, through its associations (admin user, avatarUsers), to other users.
      */
     private function assertAvatarMediaIsLinkOnly(mixed $avatarMedia): void
     {

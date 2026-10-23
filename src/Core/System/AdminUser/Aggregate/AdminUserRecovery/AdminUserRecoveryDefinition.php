@@ -49,9 +49,9 @@ class AdminUserRecoveryDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of admin_user recovery.'),
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of admin user recovery.'),
             (new StringField('hash', 'hash'))->removeFlag(ApiAware::class)->addFlags(new Required())->setDescription('Password hash for admin_user recovery.'),
-            (new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class))->addFlags(new Required())->setDescription('Unique identity of admin_user.'),
+            (new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class))->addFlags(new Required())->setDescription('Unique identity of admin user.'),
             (new CreatedAtField())->addFlags(new Required()),
 
             new OneToOneAssociationField('admin_user', 'admin_user_id', 'id', AdminUserDefinition::class, false),

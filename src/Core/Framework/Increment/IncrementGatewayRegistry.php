@@ -13,7 +13,7 @@ class IncrementGatewayRegistry
      */
     final public const MESSAGE_QUEUE_POOL = 'message_queue';
 
-    final public const USER_ACTIVITY_POOL = 'admin_user_activity';
+    final public const USER_ACTIVITY_POOL = 'user_activity';
 
     /**
      * @param AbstractIncrementer[] $gateways

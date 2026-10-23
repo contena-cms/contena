@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\Currency\Channel;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Contena\Core\System\Currency\CurrencyCollection;
 
 /**
- * @extends StoreApiResponse<CurrencyCollection>
+ * @extends ChannelApiResponse<CurrencyCollection>
  */
-class CurrencyRouteResponse extends StoreApiResponse
+class CurrencyRouteResponse extends ChannelApiResponse
 {
     public function getCurrencies(): CurrencyCollection
     {

@@ -52,7 +52,7 @@ class Migration1636121186CopyChannelIdsIntoAdminUserConfig extends MigrationStep
     }
 
     /**
-     * @param list<array{admin_userId: string, channelId: string, name: string}> $data
+     * @param list<array{adminUserId: string, channelId: string, name: string}> $data
      *
      * @return array<string, list<string>>
      */
@@ -60,20 +60,20 @@ class Migration1636121186CopyChannelIdsIntoAdminUserConfig extends MigrationStep
     {
         $mapping = [];
         foreach ($data as $channelData) {
-            $mapping[$channelData['admin_userId']][] = $channelData['channelId'];
+            $mapping[$channelData['adminUserId']][] = $channelData['channelId'];
         }
 
         return $mapping;
     }
 
     /**
-     * @return list<array{admin_userId: string, channelId: string, name: string}>
+     * @return list<array{adminUserId: string, channelId: string, name: string}>
      */
     private function fetchUserChannelIds(Connection $connection): array
     {
-        /** @var list<array{admin_userId: string, channelId: string, name: string}> $result */
+        /** @var list<array{adminUserId: string, channelId: string, name: string}> $result */
         $result = $connection->createQueryBuilder()
-            ->select('admin_user.id AS admin_userId')
+            ->select('admin_user.id AS adminUserId')
             ->addSelect('LOWER(HEX(translation.channel_id)) AS channelId')
             ->addSelect('translation.name')
             ->from(AdminUserDefinition::ENTITY_NAME, 'admin_user')

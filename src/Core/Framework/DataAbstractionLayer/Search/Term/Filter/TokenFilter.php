@@ -4,9 +4,19 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter;
 
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 
 class TokenFilter extends AbstractTokenFilter
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly SearchConfigLoader $configLoader
+    ) {
+    }
+
 
     public function getDecorated(): AbstractTokenFilter
     {

@@ -1,6 +1,6 @@
 import type { RouteLocationNamedRaw, RouteLocation } from 'vue-router';
 import type { AppModulesService, AppModuleDefinition } from 'src/core/service/api/app-modules.service';
-import type StoreApiService from 'src/core/service/api/store.api.service';
+import type ChannelApiService from 'src/core/service/api/store.api.service';
 import type { ContenaDiscountCampaignService } from 'src/app/service/discount-campaign.service';
 import type {
     ExtensionStoreActionService,
@@ -35,7 +35,7 @@ export default class ContenaExtensionService {
         private readonly appModulesService: AppModulesService,
         private readonly extensionStoreActionService: ExtensionStoreActionService,
         private readonly discountCampaignService: ContenaDiscountCampaignService,
-        private readonly storeApiService: StoreApiService,
+        private readonly channelApiService: ChannelApiService,
     ) {
         this.EXTENSION_VARIANT_TYPES = Object.freeze({
             RENT: 'rent',
@@ -115,7 +115,7 @@ export default class ContenaExtensionService {
 
     public async checkLogin(): Promise<void> {
         try {
-            const { admin_userInfo } = await this.storeApiService.checkLogin();
+            const { admin_userInfo } = await this.channelApiService.checkLogin();
             Contena.Store.get('contenaExtensions').admin_userInfo = admin_userInfo;
         } catch {
             Contena.Store.get('contenaExtensions').admin_userInfo = null;

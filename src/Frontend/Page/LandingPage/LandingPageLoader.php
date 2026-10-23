@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Contena\Core\Content\Cms\Exception\PageNotFoundException;
 
 /**
- * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.
+ * Do not use direct or indirect repository calls in a PageLoader. Always use a channel-api route to get or put data.
  */
 class LandingPageLoader
 {

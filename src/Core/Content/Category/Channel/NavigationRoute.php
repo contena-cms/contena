@@ -16,7 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -28,7 +28,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 /**
  * @phpstan-type CategoryMetaInformation array{id: string, level: string, path: string}
  */
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class NavigationRoute extends AbstractNavigationRoute
 {
     final public const ALL_TAG = 'navigation';
@@ -67,8 +67,8 @@ class NavigationRoute extends AbstractNavigationRoute
     }
 
     #[Route(
-        path: '/store-api/navigation/{activeId}/{rootId}',
-        name: 'store-api.navigation',
+        path: '/channel-api/navigation/{activeId}/{rootId}',
+        name: 'channel-api.navigation',
         methods: [Request::METHOD_GET, Request::METHOD_POST],
         defaults: [PlatformRequest::ATTRIBUTE_ENTITY => CategoryDefinition::ENTITY_NAME, PlatformRequest::ATTRIBUTE_HTTP_CACHE => true],
     )]

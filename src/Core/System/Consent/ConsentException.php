@@ -87,8 +87,8 @@ class ConsentException extends HttpException
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
             self::CANNOT_RESOLVE_ACTOR,
-            'Cannot resolve actor with admin_user id "{{ admin_userId }}".',
-            ['admin_userId' => $id],
+            'Cannot resolve actor with admin user id "{{ adminUserId }}".',
+            ['adminUserId' => $id],
         );
     }
 

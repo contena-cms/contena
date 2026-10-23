@@ -17,6 +17,9 @@ use Symfony\Component\Filesystem\Path;
  */
 readonly class RemoteZip implements Source
 {
+    /**
+     * @internal
+     */
     public function __construct(
         private TemporaryDirectoryFactory $temporaryDirectoryFactory,
         private AppDownloader $downloader,
@@ -24,6 +27,8 @@ readonly class RemoteZip implements Source
         private Io $io = new Io()
     ) {
     }
+
+
 
     public static function name(): string
     {

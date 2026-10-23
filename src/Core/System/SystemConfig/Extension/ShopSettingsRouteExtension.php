@@ -15,7 +15,7 @@ use Contena\Core\System\SystemConfig\Channel\ShopSettingsRouteResponse;
  */
 final class ShopSettingsRouteExtension extends Extension
 {
-    public const NAME = 'shop-settings-route.load';
+    public const NAME = 'installation-settings-route.load';
 
     /**
      * @internal Contena owns the constructor; the properties are public API.

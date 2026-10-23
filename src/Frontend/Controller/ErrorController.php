@@ -10,13 +10,27 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Frontend\Page\Navigation\Error\ErrorPageLoaderInterface;
+use Contena\Frontend\Framework\Twig\ErrorTemplateResolver;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 class ErrorController extends FrontendController
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly ErrorTemplateResolver $errorTemplateResolver,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly ErrorPageLoaderInterface $errorPageLoader
+    ) {
+    }
+
 
     public function error(\Throwable $exception, Request $request, ChannelContext $context): Response
     {

@@ -24,6 +24,6 @@ class UpdateAppsTask extends ScheduledTask
 
     public static function shouldRun(ParameterBagInterface $bag): bool
     {
-        return $bag->get('contena.cnployment.runtime_extension_management');
+        return $bag->get('contena.deployment.runtime_extension_management');
     }
 }

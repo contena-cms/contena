@@ -43,7 +43,7 @@ export interface ContextState {
             version: null | string;
             versionRevision: null | string;
             inAppPurchases: Record<string, string[]>;
-            shopId: null | string;
+            installationId: null | string;
             appUrl: null | string;
         };
         environment: null | 'development' | 'production' | 'testing';
@@ -92,7 +92,7 @@ const state: ContextState = reactive({
             version: null,
             versionRevision: null,
             inAppPurchases: {},
-            shopId: null,
+            installationId: null,
             appUrl: null,
         },
         environment: null,

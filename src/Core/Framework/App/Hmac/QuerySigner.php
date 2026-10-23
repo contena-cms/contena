@@ -10,12 +10,29 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Store\InAppPurchase;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Core\Framework\Store\Authentication\LocaleProvider;
 
 /**
  * @internal only for use by the app-system
  */
 class QuerySigner
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly string $shopUrl,
+        private readonly string $shopwareVersion,
+        private readonly LocaleProvider $localeProvider,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly InAppPurchase $inAppPurchase,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
 
     public function signUri(string $uri, AppEntity $app, Context $context): UriInterface
     {
@@ -25,7 +42,7 @@ class QuerySigner
         }
 
         $unsignedUri = Uri::withQueryValues(new Uri($uri), [
-            'shop-id' => $this->shopIdProvider->getShopId()->id,
+            'shop-id' => $this->installationIdProvider->getInstallationId()->id,
             'shop-url' => $this->shopUrl,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
             'sw-version' => $this->contenaVersion,
@@ -33,7 +50,7 @@ class QuerySigner
             'in-app-purchases' => \urlencode($this->inAppPurchase->getJWTByExtension($app->getName()) ?? ''),
             AuthMiddleware::CONTENA_CONTEXT_LANGUAGE => $context->getLanguageId(),
             AuthMiddleware::CONTENA_USER_LANGUAGE => $this->localeProvider->getLocaleFromContext($context),
-            'sw-admin_user-id' => $context->getSource() instanceof AdminApiSource ? ($context->getSource()->getUserId() ?? '') : '',
+            'sw-admin-user-id' => $context->getSource() instanceof AdminApiSource ? ($context->getSource()->getUserId() ?? '') : '',
         ]);
 
         return Uri::withQueryValue(

@@ -108,7 +108,7 @@
                                 {% if config('core.listing.showReview') %}
                                     <div class="blog-rating">
                                         {% if blog.ratingAverage %}
-                                            {% sw_include '@Frontend/frontend/component/review/rating.html.twig' with {
+                                            {% sw_include '@Frontend/frontend/component/comment/rating.html.twig' with {
                                                 points: blog.ratingAverage,
                                                 style: 'text-primary'
                                             } %}

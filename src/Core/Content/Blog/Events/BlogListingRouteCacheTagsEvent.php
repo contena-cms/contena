@@ -3,11 +3,11 @@
 namespace Contena\Core\Content\Blog\Events;
 
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRouteResponse;
-use Contena\Core\Framework\Adapter\Cache\StoreApiRouteCacheTagsEvent;
+use Contena\Core\Framework\Adapter\Cache\ChannelApiRouteCacheTagsEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @codeCoverageIgnore
  */
-class BlogListingRouteCacheTagsEvent extends StoreApiRouteCacheTagsEvent
+class BlogListingRouteCacheTagsEvent extends ChannelApiRouteCacheTagsEvent
 {
     /**
      * @param array<string|null> $tags
@@ -25,7 +25,7 @@ class BlogListingRouteCacheTagsEvent extends StoreApiRouteCacheTagsEvent
         array $tags,
         protected string $categoryId,
         Request $request,
-        StoreApiResponse $response,
+        ChannelApiResponse $response,
         ChannelContext $context,
         Criteria $criteria
     ) {

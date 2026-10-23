@@ -13,7 +13,7 @@ use Doctrine\DBAL\Connection;
  * variants. Contena is reached through its configured public hostnames, so those must be
  * allowlisted too — otherwise every non-local request is rejected with "Invalid Host header".
  * The hostnames are derived from APP_URL and every sales channel domain, keeping the mitigation
- * in place while allowing the shop's own hosts (admin and frontend/store-api).
+ * in place while allowing the shop's own hosts (admin and frontend/channel-api).
  */
 class McpAllowedHostsProvider
 {

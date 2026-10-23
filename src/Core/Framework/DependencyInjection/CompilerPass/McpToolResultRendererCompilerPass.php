@@ -26,7 +26,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class McpToolResultRendererCompilerPass implements CompilerPassInterface
 {
-    private const SERVERS = ['admin', 'store_api'];
+    private const SERVERS = ['admin', 'channel_api'];
 
     public function process(ContainerBuilder $container): void
     {

@@ -13,7 +13,7 @@ import './image-slider';
 import './location-renderer';
 import './manufacturer-logo';
 import './blog-box';
-import './blog-description-reviews';
+import './blog-description-comments';
 import './blog-listing';
 import './blog-name';
 import './blog-slider';

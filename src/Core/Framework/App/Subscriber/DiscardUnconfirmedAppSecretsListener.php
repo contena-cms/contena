@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\App\Subscriber;
 
 use Contena\Core\Framework\App\AppCollection;
-use Contena\Core\Framework\App\ShopId\ShopIdDeletedEvent;
+use Contena\Core\Framework\App\InstallationId\InstallationIdDeletedEvent;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -26,7 +26,7 @@ class DiscardUnconfirmedAppSecretsListener
     ) {
     }
 
-    public function __invoke(ShopIdDeletedEvent $event): void
+    public function __invoke(InstallationIdDeletedEvent $event): void
     {
         $context = Context::createDefaultContext();
 

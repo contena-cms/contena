@@ -8,6 +8,7 @@ use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Frontend\Framework\Routing\AbstractDomainLoader;
 
 /**
  * @phpstan-import-type Domain from AbstractDomainLoader
@@ -33,9 +34,11 @@ class CachedDomainLoader extends AbstractDomainLoader implements ResetInterface
      */
     public function __construct(
         private readonly AbstractDomainLoader $decorated,
-        private readonly CacheInterface $cache
+        private readonly CacheInterface $cache,
     ) {
     }
+
+
 
     public function getDecorated(): AbstractDomainLoader
     {

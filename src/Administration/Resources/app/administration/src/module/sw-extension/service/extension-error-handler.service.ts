@@ -46,7 +46,7 @@ const errorCodes: { [key: string]: StoreError } = {
     ),
 };
 
-function getNotification(error: StoreApiException): MappedError {
+function getNotification(error: ChannelApiException): MappedError {
     if (error.code === 'FRAMEWORK__STORE_ERROR') {
         return mapErrorWithDocsLink(error);
     }
@@ -66,7 +66,7 @@ function getNotification(error: StoreApiException): MappedError {
     };
 }
 
-function mapErrorWithDocsLink({ title, detail: message, meta }: StoreApiException): MappedError {
+function mapErrorWithDocsLink({ title, detail: message, meta }: ChannelApiException): MappedError {
     if (meta && typeof meta.documentationLink === 'string') {
         return {
             title,
@@ -85,7 +85,7 @@ function mapErrorWithDocsLink({ title, detail: message, meta }: StoreApiExceptio
     };
 }
 
-function mapErrors(errors: StoreApiException[]) {
+function mapErrors(errors: ChannelApiException[]) {
     return errors.map(getNotification);
 }
 

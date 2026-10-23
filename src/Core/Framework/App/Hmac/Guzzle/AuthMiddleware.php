@@ -27,7 +27,7 @@ class AuthMiddleware
 
     final public const CONTENA_CONTEXT_LANGUAGE = 'sw-context-language';
 
-    final public const CONTENA_USER_LANGUAGE = 'sw-admin_user-language';
+    final public const CONTENA_USER_LANGUAGE = 'sw-admin-user-language';
 
     /**
      * Redirect policy for every app-system HTTP client. Without `strict`, Guzzle downgrades the

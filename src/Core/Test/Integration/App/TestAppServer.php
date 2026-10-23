@@ -69,9 +69,9 @@ class TestAppServer
     {
         $shopUrl = $this->getQueryParameter($request, 'shop-url');
         $appName = $this->getAppname($request);
-        $shopId = $this->getQueryParameter($request, 'shop-id');
+        $installationId = $this->getQueryParameter($request, 'shop-id');
 
-        $proof = \hash_hmac('sha256', $shopId . $shopUrl . $appName, self::TEST_SETUP_SECRET);
+        $proof = \hash_hmac('sha256', $installationId . $shopUrl . $appName, self::TEST_SETUP_SECRET);
 
         return \json_encode(['proof' => $proof, 'secret' => self::APP_SECRET, 'confirmation_url' => self::CONFIRMATION_URL], \JSON_THROW_ON_ERROR);
     }

@@ -20,17 +20,15 @@ class DatabaseConfigLoader extends AbstractConfigLoader
 {
     /**
      * @internal
-     *
-     * @param EntityRepository<ThemeCollection> $themeRepository
-     * @param EntityRepository<MediaCollection> $mediaRepository
      */
     public function __construct(
         private readonly EntityRepository $themeRepository,
         private readonly FrontendPluginRegistry $extensionRegistry,
         private readonly EntityRepository $mediaRepository,
-        private readonly string $baseTheme = FrontendPluginRegistry::BASE_THEME_NAME
+        private readonly string $baseTheme = FrontendPluginRegistry::BASE_THEME_NAME,
     ) {
     }
+
 
     public function getDecorated(): AbstractConfigLoader
     {

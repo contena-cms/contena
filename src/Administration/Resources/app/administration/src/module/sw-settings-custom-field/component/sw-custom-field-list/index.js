@@ -115,7 +115,7 @@ export default {
 
         onAddCustomField() {
             const customField = this.customFieldRepository.create();
-            customField.storeApiAware = true;
+            customField.channelApiAware = true;
 
             this.onCustomFieldEdit(customField);
         },

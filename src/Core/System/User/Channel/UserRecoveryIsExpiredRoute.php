@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -27,7 +27,7 @@ use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class UserRecoveryIsExpiredRoute extends AbstractUserRecoveryIsExpiredRoute
 {
     /**
@@ -49,7 +49,7 @@ class UserRecoveryIsExpiredRoute extends AbstractUserRecoveryIsExpiredRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/account/user-recovery-is-expired', name: 'store-api.account.user.recovery.is.expired', methods: ['POST'])]
+    #[Route(path: '/channel-api/account/user-recovery-is-expired', name: 'channel-api.account.user.recovery.is.expired', methods: ['POST'])]
     public function load(RequestDataBag $data, ChannelContext $context): UserRecoveryIsExpiredResponse
     {
         return $this->extensions->publish(

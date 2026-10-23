@@ -129,7 +129,7 @@ class MaintenanceException extends HttpException
         );
     }
 
-    public static function admin_userAlreadyExists(string $username): self
+    public static function adminUserAlreadyExists(string $username): self
     {
         return new self(
             Response::HTTP_BAD_REQUEST,
@@ -174,8 +174,8 @@ class MaintenanceException extends HttpException
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'MAINTENANCE__ACL_ROLES_NOT_LOADED',
-            'Could not get ACL roles for admin_user "{{ admin_userName }}" (ID: {{ admin_userId }})',
-            ['admin_userId' => $adminUserId, 'admin_userName' => $adminUserName],
+            'Could not get ACL roles for admin_user "{{ adminUserName }}" (ID: {{ adminUserId }})',
+            ['adminUserId' => $adminUserId, 'adminUserName' => $adminUserName],
         );
     }
 }

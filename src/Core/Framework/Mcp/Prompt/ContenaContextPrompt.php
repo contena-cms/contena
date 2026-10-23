@@ -61,7 +61,7 @@ You are interacting with a Contena 6 e-commerce platform via MCP tools.
 - State transitions via `contena-order-state` apply to the order, its transactions, and its deliveries independently.
 
 ## Common entity names
-blog, category, user, order, order_line_item, order_delivery, order_transaction, media, channel, currency, language, tax, property_group, property_group_option, manufacturer, cms_page, rule
+blog, category, user, media, channel, currency, language, property_group, property_group_option, manufacturer, cms_page, rule
 
 ## Tool response format
 All tools return a unified JSON envelope:
@@ -98,10 +98,9 @@ Field selection: `{"includes": {"blog": ["id", "name", "blogNumber", "price", "s
 ## Common workflows
 
 ### Create a blog
-1. `contena-entity-search` on `tax` to find the tax ID for your rate
-2. Read `contena://currencies` to find the currency ID
-3. `contena-entity-upsert` on `blog` with name, blogNumber, stock, taxId, and price array: `[{"currencyId": "...", "gross": 29.99, "net": 25.20, "linked": true}]`
-4. dryRun=true first, then dryRun=false to persist
+1. Read `contena://currencies` to find the currency ID
+2. `contena-entity-upsert` on `blog` with name and blogNumber
+3. dryRun=true first, then dryRun=false to persist
 
 ### Add or remove a blog category or property
 Add with `contena-entity-upsert` on `blog`; remove with `contena-entity-delete` on the mapping entity `contena-entity-schema` names (`blog_category`, `blog_property`).
@@ -165,7 +164,7 @@ Add with `contena-entity-upsert` on `blog`; remove with `contena-entity-delete` 
 - blogId is NOT required — call this tool with just the URL; cover assignment is optional
 
 ## Optional extensions
-If a requested tool or workflow is not available, read `contena://extensions` to discover optional plugins that provide additional capabilities. Each entry includes a description, tool prefix, and the exact install command to give the admin_user.
+If a requested tool or workflow is not available, read `contena://extensions` to discover optional plugins that provide additional capabilities. Each entry includes a description, tool prefix, and the exact install command to give the admin user.
 PROMPT,
             ],
         ];

@@ -15,12 +15,29 @@ use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\UserException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
+use Contena\Core\System\Country\Channel\AbstractCountryRoute;
+use Contena\Core\System\User\Channel\AbstractListAddressRoute;
+use Contena\Frontend\Page\GenericPageLoaderInterface;
 
 /**
- * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.
+ * Do not use direct or indirect repository calls in a PageLoader. Always use a channel-api route to get or put data.
  */
 class AddressDetailPageLoader
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly GenericPageLoaderInterface $genericLoader,
+        private readonly AbstractCountryRoute $countryRoute,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly AbstractListAddressRoute $listAddressRoute,
+        private readonly AbstractTranslator $translator
+    ) {
+    }
+
+
 
     /**
      * @throws AddressNotFoundException
@@ -35,8 +52,6 @@ class AddressDetailPageLoader
 
         $page = AddressDetailPage::createFrom($page);
         $this->setMetaInformation($page, $request);
-
-        $page->setSalutations($this->getSalutations($channelContext));
 
         $page->setCountries($this->getCountries($channelContext));
 

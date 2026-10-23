@@ -14,7 +14,7 @@ use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriberType;
 final readonly class WebhookSubscription
 {
     /**
-     * @param string $ownerId the id of the app, admin_user or integration, depending on $ownerType
+     * @param string $ownerId the id of the app, admin user or integration, depending on $ownerType
      * @param list<string>|null $aclRoleIds null for all of the owner's roles
      */
     public function __construct(

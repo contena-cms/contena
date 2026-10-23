@@ -12,7 +12,7 @@ class RequiredByAdminUserException extends ContenaHttpException
 {
     public function __construct(string $column)
     {
-        parent::__construct('{{ column }} is set to required by the admin_user but has no value', [
+        parent::__construct('{{ column }} is set to required by the admin user but has no value', [
             'column' => $column,
         ]);
     }

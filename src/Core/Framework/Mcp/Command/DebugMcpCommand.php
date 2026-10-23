@@ -12,7 +12,7 @@ use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
 use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Util\Json;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -47,9 +47,9 @@ class DebugMcpCommand extends Command
         private readonly ?RegistryInterface $registry,
         private readonly McpAllowlistProvider $allowlistProvider,
         private readonly McpCapabilityCatalog $catalog,
-        private readonly ?Builder $storeApiBuilder = null,
-        private readonly ?RegistryInterface $storeApiRegistry = null,
-        private readonly ?McpCapabilityCatalog $storeApiCatalog = null,
+        private readonly ?Builder $channelApiBuilder = null,
+        private readonly ?RegistryInterface $channelApiRegistry = null,
+        private readonly ?McpCapabilityCatalog $channelApiCatalog = null,
         private readonly array $unassigned = [],
         private readonly array $demotedDiscoveryTools = [],
     ) {
@@ -67,9 +67,9 @@ class DebugMcpCommand extends Command
             'scope',
             null,
             InputOption::VALUE_REQUIRED,
-            \sprintf('Limit output to one MCP server: "%s" or "%s". Omit to inspect both', ApiRouteScope::ID, StoreApiRouteScope::ID),
+            \sprintf('Limit output to one MCP server: "%s" or "%s". Omit to inspect both', ApiRouteScope::ID, ChannelApiRouteScope::ID),
             null,
-            [ApiRouteScope::ID, StoreApiRouteScope::ID],
+            [ApiRouteScope::ID, ChannelApiRouteScope::ID],
         );
         $this->addOption(
             'native',
@@ -94,9 +94,9 @@ class DebugMcpCommand extends Command
         }
 
         $requestedScopes = match ($scopeOption) {
-            null => [ApiRouteScope::ID, StoreApiRouteScope::ID],
+            null => [ApiRouteScope::ID, ChannelApiRouteScope::ID],
             ApiRouteScope::ID => [ApiRouteScope::ID],
-            StoreApiRouteScope::ID => [StoreApiRouteScope::ID],
+            ChannelApiRouteScope::ID => [ChannelApiRouteScope::ID],
             default => [],
         };
 
@@ -105,7 +105,7 @@ class DebugMcpCommand extends Command
                 'Invalid scope "%s". Use "%s" or "%s", or omit --scope to inspect both.',
                 $scopeOption,
                 ApiRouteScope::ID,
-                StoreApiRouteScope::ID,
+                ChannelApiRouteScope::ID,
             ));
 
             return self::INVALID;
@@ -136,7 +136,7 @@ class DebugMcpCommand extends Command
                 $io->note(\sprintf('Integration "%s": %d tool(s) allowed.', $integration, \count($toolsAllowlist)));
             }
 
-            if (isset($scopes[StoreApiRouteScope::ID])) {
+            if (isset($scopes[ChannelApiRouteScope::ID])) {
                 $io->note('Integration allowlists only apply to the admin scope. Store API capabilities are listed unfiltered.');
             }
         }
@@ -156,7 +156,7 @@ class DebugMcpCommand extends Command
 
         $io->writeln('Run <comment>debug:mcp <name></comment> to see full details for a specific capability.');
         if (\count($scopes) > 1) {
-            $io->writeln(\sprintf('Run <comment>debug:mcp --scope=%s</comment> to inspect a single MCP server.', StoreApiRouteScope::ID));
+            $io->writeln(\sprintf('Run <comment>debug:mcp --scope=%s</comment> to inspect a single MCP server.', ChannelApiRouteScope::ID));
         }
         $io->writeln(\sprintf(
             'Run <comment>bin/console %s</comment> for prompts, resources, the configured servers and clients.',
@@ -255,7 +255,7 @@ class DebugMcpCommand extends Command
 
     /**
      * Returns the requested scopes that are actually available, keyed by route scope ID and always
-     * ordered admin before store-api. 'name' suffixes every section heading, 'label' titles the
+     * ordered admin before channel-api. 'name' suffixes every section heading, 'label' titles the
      * scope block and names the owning server in the detail view.
      *
      * @param list<string> $requestedScopes
@@ -276,13 +276,13 @@ class DebugMcpCommand extends Command
             ];
         }
 
-        if ($this->storeApiBuilder !== null && $this->storeApiRegistry !== null && $this->storeApiCatalog !== null) {
-            $available[StoreApiRouteScope::ID] = [
+        if ($this->channelApiBuilder !== null && $this->channelApiRegistry !== null && $this->channelApiCatalog !== null) {
+            $available[ChannelApiRouteScope::ID] = [
                 'name' => 'Store API',
-                'label' => 'Store API (/store-api/_mcp)',
-                'builder' => $this->storeApiBuilder,
-                'registry' => $this->storeApiRegistry,
-                'catalog' => $this->storeApiCatalog,
+                'label' => 'Store API (/channel-api/_mcp)',
+                'builder' => $this->channelApiBuilder,
+                'registry' => $this->channelApiRegistry,
+                'catalog' => $this->channelApiCatalog,
             ];
         }
 

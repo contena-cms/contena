@@ -4,7 +4,7 @@ namespace Contena\Core\Framework\Api\Acl;
 
 
 /**
- * The ACL roles of a admin_user or integration. An admin's roles are unrestricted: they allow everything.
+ * The ACL roles of an admin user or integration. An admin's roles are unrestricted: they allow everything.
  *
  * @internal
  */

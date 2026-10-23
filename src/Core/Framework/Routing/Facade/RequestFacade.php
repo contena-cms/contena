@@ -25,7 +25,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @script-service miscellaneous
  *
- * @example scripts/store-api-request-test/store-api-request-test.twig Use request to determine method and return all json body back
+ * @example scripts/channel-api-request-test/channel-api-request-test.twig Use request to determine method and return all json body back
  */
 final readonly class RequestFacade
 {
@@ -34,7 +34,7 @@ final readonly class RequestFacade
         'content-length',
         'accept',
         'accept-language',
-        'admin_user-agent',
+        'user-agent',
         'referer',
     ];
 
@@ -118,7 +118,7 @@ final readonly class RequestFacade
 
     /**
      * The method `headers` returns all request headers as an array.
-     * It is possible to access only the following headers: content-type, content-length, accept, accept-language, admin_user-agent, referer
+     * It is possible to access only the following headers: content-type, content-length, accept, accept-language, user-agent, referer
      *
      * @return array<string, array<int, string|null>|string|null> request headers
      */

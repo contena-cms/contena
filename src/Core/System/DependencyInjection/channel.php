@@ -42,7 +42,7 @@ use Contena\Core\System\Channel\Aggregate\ChannelShippingMethod\ChannelShippingM
 use Contena\Core\System\Channel\Aggregate\ChannelTranslation\ChannelTranslationDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeDefinition;
 use Contena\Core\System\Channel\Aggregate\ChannelTypeTranslation\ChannelTypeTranslationDefinition;
-use Contena\Core\System\Channel\Api\StoreApiResponseListener;
+use Contena\Core\System\Channel\Api\ChannelApiResponseListener;
 use Contena\Core\System\Channel\Api\StructEncoder;
 use Contena\Core\System\Channel\Capability\ChannelTypeCapabilityRegistry;
 use Contena\Core\System\Channel\Context\BaseChannelContextFactory;
@@ -69,7 +69,7 @@ use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Contena\Core\System\Channel\File\Loader\ChannelFileConfigurationLoader;
 use Contena\Core\System\Channel\File\Loader\ChannelFileLoader;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileRenderer;
-use Contena\Core\System\Channel\File\Rendering\ChannelFileStoreApiMcpSubscriber;
+use Contena\Core\System\Channel\File\Rendering\ChannelFileChannelApiMcpSubscriber;
 use Contena\Core\System\Channel\File\Rendering\ChannelFileTemplateOverrideLoader;
 use Contena\Core\System\Channel\File\ChannelFileCacheInvalidator;
 use Contena\Core\System\Channel\File\ChannelFileNotFoundSubscriber;
@@ -78,10 +78,10 @@ use Contena\Core\System\Channel\File\ChannelFileTemplateResolver;
 use Contena\Core\System\Channel\Channel\ContextRoute;
 use Contena\Core\System\Channel\Channel\ContextSwitchRoute;
 use Contena\Core\System\Channel\Channel\ChannelContextSwitcher;
-use Contena\Core\System\Channel\Channel\StoreApiInfoController;
+use Contena\Core\System\Channel\Channel\ChannelApiInfoController;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Channel\ChannelExceptionHandler;
-use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\Channel\ChannelApiCustomFieldMapper;
 use Contena\Core\System\Channel\Subscriber\ChannelMaintenanceIpAllowlistSyncSubscriber;
 use Contena\Core\System\Channel\Subscriber\ChannelTypeValidator;
 use Contena\Core\System\Channel\Telemetry\ChannelTypeResolver;
@@ -178,7 +178,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ExtensionDispatcher::class),
         ]);
 
-    $services->set(ChannelFileStoreApiMcpSubscriber::class)
+    $services->set(ChannelFileChannelApiMcpSubscriber::class)
         ->args([
             service('router'),
         ])
@@ -224,7 +224,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
             service('event_dispatcher'),
             service(ClockInterface::class),
-            param('contena.api.store.context_lifetime'),
+            param('contena.api.channel.context_lifetime'),
         ]);
 
     $services->set(ChannelContextRequestRestorer::class)
@@ -238,11 +238,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('user.repository'),
             service('user_group.repository'),
             service('user_address.repository'),
-            service('payment_method.repository'),
-            tagged_iterator('tax.rule_type_filter'),
             service('event_dispatcher'),
             service('currency_country_rounding.repository'),
-            service(BaseChannelContextFactory::class),
         ]);
 
     $services->set(BaseChannelContextFactory::class)
@@ -250,12 +247,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('channel.repository'),
             service('user_group.repository'),
             service('country.repository'),
-            service('tax.repository'),
-            service('payment_method.repository'),
-            service('shipping_method.repository'),
             service('country_state.repository'),
             service('currency_country_rounding.repository'),
-            service(ContextFactory::class),
             service('language.repository'),
         ]);
 
@@ -287,8 +280,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(ChannelContextService::class)
         ->args([
-            service(ChannelContextFactory::class),
-            service(ChannelContextPersister::class),
             service('event_dispatcher'),
             service(RequestStack::class),
         ]);
@@ -307,7 +298,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(RequestStack::class),
         ]);
 
-    $services->set(StoreApiInfoController::class)
+    $services->set(ChannelApiInfoController::class)
         ->public()
         ->args([
             service(DefinitionService::class),
@@ -359,7 +350,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChannelExceptionHandler::class)
         ->tag('contena.dal.exception_handler');
 
-    $services->set(StoreApiResponseListener::class)
+    $services->set(ChannelApiResponseListener::class)
         ->tag('kernel.event_subscriber')
         ->args([
             service(StructEncoder::class),
@@ -419,7 +410,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_listener');
 
-    $services->set(StoreApiCustomFieldMapper::class)
+    $services->set(ChannelApiCustomFieldMapper::class)
         ->args([
             service(Connection::class),
         ])

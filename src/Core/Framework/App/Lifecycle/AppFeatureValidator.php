@@ -39,10 +39,6 @@ class AppFeatureValidator
             $usedFeatures[] = 'Payment Methods';
         }
 
-        if (($manifest->getTax()?->getTaxProviders() ?? []) !== []) {
-            $usedFeatures[] = 'Tax providers';
-        }
-
         if (($manifest->getWebhooks()?->getWebhooks() ?? []) !== []) {
             $usedFeatures[] = 'Webhooks';
         }

@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
  *    so on a shared tag whichever came first would answer on both endpoints.
  * 2. Capability loaders stay on the Admin API server. The app loaders (tagged `mcp.loader`) publish
  *    app capabilities, which have always been an Admin API concern; leaving the bundle's global
- *    `addLoaders()` in place would newly advertise every app tool on /store-api/_mcp too.
+ *    `addLoaders()` in place would newly advertise every app tool on /channel-api/_mcp too.
  * 3. Both servers page with Contena's own pagination parameter, so the number the allowlist request
  *    handlers slice with cannot drift from the one the SDK advertises.
  *
@@ -37,7 +37,7 @@ class McpServerBuilderCompilerPass implements CompilerPassInterface
      */
     private const SERVERS = [
         'admin' => true,
-        'store_api' => false,
+        'channel_api' => false,
     ];
 
     public function process(ContainerBuilder $container): void

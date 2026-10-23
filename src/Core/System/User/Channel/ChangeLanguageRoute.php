@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -28,7 +28,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(
     defaults: [
-        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID],
+        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
         PlatformRequest::ATTRIBUTE_CONTEXT_TOKEN_REQUIRED => true,
     ]
 )]
@@ -53,8 +53,8 @@ class ChangeLanguageRoute extends AbstractChangeLanguageRoute
     }
 
     #[Route(
-        path: '/store-api/account/change-language',
-        name: 'store-api.account.change-language',
+        path: '/channel-api/account/change-language',
+        name: 'channel-api.account.change-language',
         defaults: [PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true],
         methods: [Request::METHOD_POST]
     )]

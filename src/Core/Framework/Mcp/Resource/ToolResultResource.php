@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * @experimental stableVersion:v6.8.0
  *
  * Serves a large tool result that a previous tool call stored. The id in the URI is a signed pointer
- * that only the integration or admin_user who stored the result can read. A plain id, as issued before the
+ * that only the integration or admin user who stored the result can read. A plain id, as issued before the
  * pointers were signed, is still served to the session that stored it.
  */
 #[McpResourceTemplate(

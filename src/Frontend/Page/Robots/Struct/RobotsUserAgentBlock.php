@@ -4,13 +4,13 @@ namespace Contena\Frontend\Page\Robots\Struct;
 
 use Contena\Core\Framework\Util\Hasher;
 
-class RobotsAdminUserAgentBlock
+class RobotsUserAgentBlock
 {
     /**
      * @param list<RobotsDirective> $directives
      */
     public function __construct(
-        public readonly string $adminUserAgent,
+        public readonly string $userAgent,
         public readonly array $directives
     ) {
     }
@@ -39,7 +39,7 @@ class RobotsAdminUserAgentBlock
 
     public function render(): string
     {
-        $output = 'AdminUser-agent: ' . $this->admin_userAgent . "\n";
+        $output = 'AdminUser-agent: ' . $this->userAgent . "\n";
         foreach ($this->directives as $directive) {
             $output .= $directive->render() . "\n";
         }
@@ -49,13 +49,13 @@ class RobotsAdminUserAgentBlock
 
     /**
      * Returns a unique hash for this block to enable deduplication.
-     * The hash is based on the admin_user-agent and non-path directives only,
+     * The hash is based on the user-agent and non-path directives only,
      * as path directives vary by domain and should not affect deduplication.
      */
     public function getHash(): string
     {
         return Hasher::hash([
-            $this->admin_userAgent,
+            $this->userAgent,
             array_map(
                 static fn (RobotsDirective $d) => [$d->type->value, $d->value],
                 $this->getNonPathDirectives()

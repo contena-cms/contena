@@ -60,7 +60,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
             $params['versionId'] ?? Defaults::LIVE_VERSION,
             $params['currencyFactory'],
             $params['considerInheritance'],
-            CartPrice::TAX_STATE_GROSS,
+            Context::TAX_STATE_GROSS,
             $rounding
         );
 
@@ -137,8 +137,8 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
         if ($adminUserId = $request->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID)) {
             $appIntegrationId = strtolower((string) $request->headers->get(PlatformRequest::HEADER_APP_INTEGRATION_ID, ''));
 
-            // The app integration id header is only to be used by a privileged admin_user
-            if ($appIntegrationId !== '' && $this->admin_userAppIntegrationHeaderPrivileged($adminUserId, $appIntegrationId)) {
+            // The app integration id header is only to be used by a privileged admin user
+            if ($appIntegrationId !== '' && $this->adminUserAppIntegrationHeaderPrivileged($adminUserId, $appIntegrationId)) {
                 $adminUserId = null;
             } else {
                 $appIntegrationId = null;
@@ -168,7 +168,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
                 $adminUserId = null;
             }
 
-            if ($adminUserId !== null && $this->isAppIntegration($integrationId) && !$this->admin_userAppIntegrationHeaderPrivileged($adminUserId, $integrationId)) {
+            if ($adminUserId !== null && $this->isAppIntegration($integrationId) && !$this->adminUserAppIntegrationHeaderPrivileged($adminUserId, $integrationId)) {
                 $adminUserId = null;
             }
 
@@ -266,7 +266,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
         // Use the permissions associated to that app, if the request is made by an integration associated to an app
         $appPermissions = $this->fetchPermissionsIntegrationByApp($integrationId);
         if ($appPermissions !== null) {
-            // If both admin_userId and integrationId are provided (HEADER_APP_USER_ID case), intersect admin_user permissions with app permissions
+            // If both adminUserId and integrationId are provided (HEADER_APP_USER_ID case), intersect admin user permissions with app permissions
             if ($adminUserId !== null && !$this->isAdmin($adminUserId)) {
                 $appPermissions = array_intersect(
                     $appPermissions,
@@ -358,8 +358,8 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
             ->select('role.privileges')
             ->from('acl_user_role', 'mapping')
             ->innerJoin('mapping', 'acl_role', 'role', 'mapping.acl_role_id = role.id')
-            ->where('mapping.admin_user_id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
+            ->where('mapping.admin_user_id = :adminUserId')
+            ->setParameter('adminUserId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchFirstColumn();
 
@@ -468,7 +468,7 @@ class ApiRequestContextResolver implements RequestContextResolverInterface
     /**
      * @throws RoutingException
      */
-    private function admin_userAppIntegrationHeaderPrivileged(string $adminUserId, ?string $appIntegrationId): bool
+    private function adminUserAppIntegrationHeaderPrivileged(string $adminUserId, ?string $appIntegrationId): bool
     {
         if ($appIntegrationId === null) {
             return false;

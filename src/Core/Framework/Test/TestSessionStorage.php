@@ -87,7 +87,7 @@ class TestSessionStorage implements SessionStorageInterface
             /**
              * This early return protects multiple session objects to overwrite each others already filled bag
              *
-             * But Symfony hacks on any session a array referenced to track did the admin_user filled something in the session.
+             * But Symfony hacks on any session a array referenced to track did the admin user filled something in the session.
              * As the passed bag is not used here, it cannot track anything and says the session is empty and does not send any cookie
              *
              * To fix this behaviour we reference the new passed session bag data to the existing one in the sesion

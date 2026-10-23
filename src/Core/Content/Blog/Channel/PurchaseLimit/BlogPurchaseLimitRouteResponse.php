@@ -2,14 +2,14 @@
 
 namespace Contena\Core\Content\Blog\Channel\PurchaseLimit;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
  * @codeCoverageIgnore
  *
- * @extends StoreApiResponse<BlogPurchaseLimitCollection>
+ * @extends ChannelApiResponse<BlogPurchaseLimitCollection>
  */
-class BlogPurchaseLimitRouteResponse extends StoreApiResponse
+class BlogPurchaseLimitRouteResponse extends ChannelApiResponse
 {
     public function getResult(): BlogPurchaseLimitCollection
     {

@@ -223,7 +223,7 @@
 
                             <div class="blog-detail-reviews">
 
-                                {% sw_include '@Frontend/frontend/component/review/rating.html.twig' with {
+                                {% sw_include '@Frontend/frontend/component/comment/rating.html.twig' with {
                                     points: blog.ratingAverage,
                                     style: 'text-primary'
                                 } %}
@@ -236,7 +236,7 @@
                                     aria-controls="{{ reviewTabContent }}"
                                 >
                                     {{ totalReviews }}
-                                    {{ 'detail.reviewLinkText'|trans({'%count%': totalReviews})|sw_sanitize }}
+                                    {{ 'detail.commentLinkText'|trans({'%count%': totalReviews})|sw_sanitize }}
                                 </a>
                             </div>
                         {% endif %}

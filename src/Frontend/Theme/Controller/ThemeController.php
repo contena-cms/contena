@@ -37,7 +37,7 @@ class ThemeController extends AbstractController
      * their current values, and metadata.
      *
      * @param string $themeId The unique identifier of the theme
-     * @param Context $context The application context containing admin_user and system information
+     * @param Context $context The application context containing admin user and system information
      *
      * @return JsonResponse Returns a JSON response containing the theme configuration
      */
@@ -68,7 +68,7 @@ class ThemeController extends AbstractController
      *
      * @param string $themeId The unique identifier of the theme to update
      * @param Request $request The HTTP request containing configuration data
-     * @param Context $context The application context containing admin_user and system information
+     * @param Context $context The application context containing admin user and system information
      *
      * @return JsonResponse Returns an empty JSON response on successful update
      */
@@ -114,7 +114,7 @@ class ThemeController extends AbstractController
      *
      * @param string $themeId The unique identifier of the theme to assign
      * @param string $channelId The unique identifier of the sales channel
-     * @param Context $context The application context containing admin_user and system information
+     * @param Context $context The application context containing admin user and system information
      *
      * @return JsonResponse Returns an empty JSON response on successful assignment
      */
@@ -137,7 +137,7 @@ class ThemeController extends AbstractController
      * theme-related issues.
      *
      * @param string $themeId The unique identifier of the theme to reset
-     * @param Context $context The application context containing admin_user and system information
+     * @param Context $context The application context containing admin user and system information
      *
      * @return JsonResponse Returns an empty JSON response on successful reset
      */
@@ -158,7 +158,7 @@ class ThemeController extends AbstractController
      * The response format differs based on the Contena version for backward compatibility.
      *
      * @param string $themeId The unique identifier of the theme
-     * @param Context $context The application context containing admin_user and system information
+     * @param Context $context The application context containing admin user and system information
      *
      * @return JsonResponse Returns a JSON response containing the structured field configuration
      */

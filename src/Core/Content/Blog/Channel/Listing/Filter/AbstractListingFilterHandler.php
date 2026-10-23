@@ -23,7 +23,7 @@ abstract class AbstractListingFilterHandler
 
     /**
      * The `process` function allows the developer, to post-process the calculated listing result and further process
-     * the determined aggregation values to a more admin_user readable state.
+     * the determined aggregation values to a more admin user readable state.
      */
     public function process(Request $request, BlogListingResult $result, ChannelContext $context): void
     {

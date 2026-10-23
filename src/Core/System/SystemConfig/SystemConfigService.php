@@ -224,7 +224,7 @@ class SystemConfigService implements ResetInterface
             if ($this->symfonySystemConfigService->has($key)) {
                 /**
                  * The administration setting pages are always sending the full configuration.
-                 * This means when the admin_user wants to change an allowed configuration, we also get the read-only configuration,
+                 * This means when the admin user wants to change an allowed configuration, we also get the read-only configuration,
                  *
                  * Therefore, when the value of that field is the same as the statically configured one, we just drop that value and don't throw an exception
                  */

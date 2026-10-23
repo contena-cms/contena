@@ -4,12 +4,12 @@ namespace Contena\Core\Content\Category\Channel;
 
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<EntitySearchResult<CategoryCollection>>
+ * @extends ChannelApiResponse<EntitySearchResult<CategoryCollection>>
  */
-class CategoryListRouteResponse extends StoreApiResponse
+class CategoryListRouteResponse extends ChannelApiResponse
 {
     public function getCategories(): CategoryCollection
     {

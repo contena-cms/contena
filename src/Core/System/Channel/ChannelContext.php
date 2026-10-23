@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Currency\CurrencyEntity;
-use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Framework\Struct\StateAwareTrait;
@@ -44,7 +43,6 @@ class ChannelContext extends Struct
         protected ChannelEntity $channel,
         protected CurrencyEntity $currency,
         protected UserGroupEntity $currentUserGroup,
-        protected TaxCollection $taxRules,
         protected ?UserEntity $user,
         protected CashRoundingConfig $itemRounding,
         protected CashRoundingConfig $totalRounding,
@@ -66,11 +64,6 @@ class ChannelContext extends Struct
     public function getChannel(): ChannelEntity
     {
         return $this->channel;
-    }
-
-    public function getTaxRules(): TaxCollection
-    {
-        return $this->taxRules;
     }
 
     public function getUser(): ?UserEntity
@@ -183,11 +176,6 @@ class ChannelContext extends Struct
     public function setTaxState(string $taxState): void
     {
         $this->context->setTaxState($taxState);
-    }
-
-    public function getTaxCalculationType(): string
-    {
-        return $this->channel->getTaxCalculationType();
     }
 
     /**

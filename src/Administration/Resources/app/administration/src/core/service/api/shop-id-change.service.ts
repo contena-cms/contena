@@ -30,7 +30,7 @@ type Strategy = {
     description: string;
 };
 
-type ShopIdCheck = {
+type InstallationIdCheck = {
     fingerprints: FingerprintComparisonResult;
     apps: string[];
 };
@@ -38,10 +38,10 @@ type ShopIdCheck = {
 /**
  * @private
  */
-export default class ShopIdChangeService extends ApiService {
+export default class InstallationIdChangeService extends ApiService {
     constructor(httpClient: HttpClient, loginService: LoginService) {
         super(httpClient, loginService, '', 'application/json');
-        this.name = 'shopIdChangeService';
+        this.name = 'installationIdChangeService';
     }
 
     getChangeStrategies() {
@@ -56,7 +56,7 @@ export default class ShopIdChangeService extends ApiService {
             });
     }
 
-    changeShopId({ name }: Strategy) {
+    changeInstallationId({ name }: Strategy) {
         return this.httpClient.post(
             'app-system/shop-id/change',
             { strategy: name },
@@ -66,7 +66,7 @@ export default class ShopIdChangeService extends ApiService {
         );
     }
 
-    checkShopId() {
+    checkInstallationId() {
         return this.httpClient
             .post(
                 'app-system/shop-id/check',
@@ -79,7 +79,7 @@ export default class ShopIdChangeService extends ApiService {
                 if (resp.status === 204) {
                     return null;
                 }
-                return resp.data as ShopIdCheck;
+                return resp.data as InstallationIdCheck;
             });
     }
 }
@@ -87,4 +87,4 @@ export default class ShopIdChangeService extends ApiService {
 /**
  * @private
  */
-export type { ShopIdCheck, Strategy };
+export type { InstallationIdCheck, Strategy };

@@ -8,7 +8,7 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
@@ -17,12 +17,29 @@ use Contena\Core\Framework\App\Exception\AppRegistrationException;
 use GuzzleHttp\Exception\GuzzleException;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 /**
  * @internal only for use by the app-system
  */
 class AppRegistrationService
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Client $httpClient,
+        private readonly EntityRepository $appRepository,
+        private readonly string $shopUrl,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly string $shopwareVersion,
+        private readonly ClockInterface $clock,
+        private readonly LoggerInterface $logger
+    ) {
+    }
+
+
     /**
      * Upper bound on the unconfirmed-secret list. Each interrupted rotation or recovery prepends one mint;
      * without a cap the list would grow unbounded. An app realistically only holds its committed secret plus
@@ -278,8 +295,8 @@ class AppRegistrationService
     private function getConfirmationPayload(AppEntity $app, #[\SensitiveParameter] string $secretAccessKey): array
     {
         try {
-            $shopId = $this->shopIdProvider->getShopId();
-        } catch (ShopIdChangeSuggestedException $e) {
+            $installationId = $this->installationIdProvider->getInstallationId();
+        } catch (InstallationIdChangeSuggestedException $e) {
             throw AppRegistrationException::registrationFailed(
                 $app->getName(),
                 $e->getMessage(),
@@ -296,7 +313,7 @@ class AppRegistrationService
             'secretKey' => $secretAccessKey,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
             'shopUrl' => $this->shopUrl,
-            'shopId' => $shopId->id,
+            'installationId' => $installationId->id,
         ];
     }
 

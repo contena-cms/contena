@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\App\Lifecycle\Registration;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Manifest\Manifest;
 
 /**
@@ -32,8 +32,8 @@ readonly class HandshakeFactory
         $privateSecret = $setup->getSecret();
 
         try {
-            $shopId = $this->shopIdProvider->getShopId()->id;
-        } catch (ShopIdChangeSuggestedException $e) {
+            $installationId = $this->installationIdProvider->getInstallationId()->id;
+        } catch (InstallationIdChangeSuggestedException $e) {
             throw AppException::registrationFailed(
                 $appName,
                 $e->getMessage(),
@@ -51,7 +51,7 @@ readonly class HandshakeFactory
                 $privateSecret,
                 $setup->getRegistrationUrl(),
                 $metadata->getName(),
-                $shopId,
+                $installationId,
                 $this->contenaVersion,
                 $this->clock,
                 $currentAppSecret,
@@ -62,7 +62,7 @@ readonly class HandshakeFactory
             $this->shopUrl,
             $setup->getRegistrationUrl(),
             $metadata->getName(),
-            $shopId,
+            $installationId,
             $this->storeClient,
             $this->contenaVersion,
             $this->clock,

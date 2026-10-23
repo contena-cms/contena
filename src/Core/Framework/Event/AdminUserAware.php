@@ -6,9 +6,9 @@ namespace Contena\Core\Framework\Event;
 #[IsFlowEventAware]
 interface AdminUserAware
 {
-    public const USER_RECOVERY = 'admin_userRecovery';
+    public const USER_RECOVERY = 'adminUserRecovery';
 
-    public const USER_RECOVERY_ID = 'admin_userRecoveryId';
+    public const USER_RECOVERY_ID = 'adminUserRecoveryId';
 
     public function getUserId(): string;
 }

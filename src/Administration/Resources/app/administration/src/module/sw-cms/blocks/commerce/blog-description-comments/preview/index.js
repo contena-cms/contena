@@ -1,5 +1,5 @@
-import template from './sw-cms-preview-blog-description-reviews.html.twig';
-import './sw-cms-preview-blog-description-reviews.scss';
+import template from './sw-cms-preview-blog-description-comments.html.twig';
+import './sw-cms-preview-blog-description-comments.scss';
 
 /**
  * @private

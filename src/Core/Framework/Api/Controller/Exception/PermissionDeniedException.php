@@ -12,7 +12,7 @@ class PermissionDeniedException extends ContenaHttpException
 {
     public function __construct()
     {
-        parent::__construct('The admin_user does not have the permission to do this action.');
+        parent::__construct('The admin user does not have the permission to do this action.');
     }
 
     public function getErrorCode(): string

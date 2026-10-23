@@ -31,8 +31,8 @@ use Symfony\Component\Routing\Exception\RouteNotFoundException;
 /**
  * Authorization endpoint of the OAuth2 authorization code grant (RFC 6749 §4.1) for public clients.
  *
- * The browser is sent to `GET /api/oauth/authorize`, which validates the request and forwards the admin_user
- * to the Administration. The Administration shows a consent page and, once the logged-in admin_user decided,
+ * The browser is sent to `GET /api/oauth/authorize`, which validates the request and forwards the admin user
+ * to the Administration. The Administration shows a consent page and, once the logged-in admin user decided,
  * calls `POST /api/oauth/authorize` with its own bearer token to obtain the redirect back to the client.
  *
  * @internal
@@ -87,7 +87,7 @@ class OAuthAuthorizeController extends AbstractController
     }
 
     /**
-     * Returns the information the consent page displays before the admin_user decides.
+     * Returns the information the consent page displays before the admin user decides.
      */
     #[Route(path: '/api/oauth/authorize/info', name: 'api.oauth.authorize.info', methods: ['GET'])]
     public function info(Request $request): JsonResponse
@@ -112,7 +112,7 @@ class OAuthAuthorizeController extends AbstractController
     }
 
     /**
-     * Completes the authorization request on behalf of the authenticated admin_user and returns the
+     * Completes the authorization request on behalf of the authenticated admin user and returns the
      * redirect URI (including the authorization code, or `error=access_denied`) for the browser.
      */
     #[Route(path: '/api/oauth/authorize', name: 'api.oauth.authorize.approve', methods: ['POST'])]
@@ -125,7 +125,7 @@ class OAuthAuthorizeController extends AbstractController
 
         $adminUserId = $source->getUserId();
         if ($adminUserId === null || $adminUserId === '') {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
 
         $authorizationRequest = $this->authorizationServer->validateAuthorizationRequest(

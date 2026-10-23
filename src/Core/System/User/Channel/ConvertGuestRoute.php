@@ -5,7 +5,7 @@ namespace Contena\Core\System\User\Channel;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
@@ -27,7 +27,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(
     defaults: [
-        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID],
+        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
         PlatformRequest::ATTRIBUTE_CONTEXT_TOKEN_REQUIRED => true,
     ]
 )]
@@ -55,8 +55,8 @@ class ConvertGuestRoute extends AbstractConvertGuestRoute
     }
 
     #[Route(
-        path: '/store-api/account/convert-guest',
-        name: 'store-api.account.convert-guest',
+        path: '/channel-api/account/convert-guest',
+        name: 'channel-api.account.convert-guest',
         defaults: [
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,

@@ -3,7 +3,7 @@
 namespace Contena\Core\Framework\Routing\Telemetry;
 
 use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * Bounded output set (closed match, `other` as default), so the consuming metric labels may use `policy: open`.
  *
- * Known outputs: frontend, store-api, admin-api, administration, sync-api, payment, other.
+ * Known outputs: frontend, channel-api, admin-api, administration, sync-api, payment, other.
  *
  * @internal
  *
@@ -45,7 +45,7 @@ class AreaResolver
         $scopes = $request->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []);
 
         return match (true) {
-            \in_array(StoreApiRouteScope::ID, $scopes, true) => 'store-api',
+            \in_array(ChannelApiRouteScope::ID, $scopes, true) => 'channel-api',
             \in_array(ApiRouteScope::ID, $scopes, true) => 'admin-api',
             // Frontend/Administration route scope classes are not always present, using string literals
             \in_array('frontend', $scopes, true) => 'frontend',

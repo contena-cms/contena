@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\Blog\Channel\Suggest;
 
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<BlogListingResult>
+ * @extends ChannelApiResponse<BlogListingResult>
  */
-class BlogSuggestRouteResponse extends StoreApiResponse
+class BlogSuggestRouteResponse extends ChannelApiResponse
 {
     public function getListingResult(): BlogListingResult
     {

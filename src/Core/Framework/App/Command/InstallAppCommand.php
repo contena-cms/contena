@@ -154,7 +154,7 @@ class InstallAppCommand extends Command
                 \sprintf('Do you want to grant these permissions for app "%s"?', $manifest->getMetadata()->getName()),
                 false
             )) {
-                throw AppException::admin_userAborted();
+                throw AppException::adminUserAborted();
             }
         }
     }

@@ -50,8 +50,8 @@ class AdminUserAccessKeyDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of admin_user access key.'),
-            (new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class))->addFlags(new Required())->setDescription('Unique identity of admin_user.'),
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of admin user access key.'),
+            (new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class))->addFlags(new Required())->setDescription('Unique identity of admin user.'),
             (new StringField('access_key', 'accessKey'))->addFlags(new Required())->setDescription('Access key to admin api.'),
             (new PasswordField('secret_access_key', 'secretAccessKey'))->addFlags(new Required())->setDescription('Secret key to admin api.'),
             (new DateTimeField('last_usage_at', 'lastUsageAt'))->setDescription('Parameter that indicates when the access key was last accessed.'),

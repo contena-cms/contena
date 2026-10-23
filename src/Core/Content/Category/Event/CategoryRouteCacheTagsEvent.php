@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Category\Event;
 
-use Contena\Core\Framework\Adapter\Cache\StoreApiRouteCacheTagsEvent;
+use Contena\Core\Framework\Adapter\Cache\ChannelApiRouteCacheTagsEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,7 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @codeCoverageIgnore
  */
-class CategoryRouteCacheTagsEvent extends StoreApiRouteCacheTagsEvent
+class CategoryRouteCacheTagsEvent extends ChannelApiRouteCacheTagsEvent
 {
     /**
      * @param array<string> $tags
@@ -23,7 +23,7 @@ class CategoryRouteCacheTagsEvent extends StoreApiRouteCacheTagsEvent
         protected string $navigationId,
         array $tags,
         Request $request,
-        StoreApiResponse $response,
+        ChannelApiResponse $response,
         ChannelContext $context,
         ?Criteria $criteria
     ) {

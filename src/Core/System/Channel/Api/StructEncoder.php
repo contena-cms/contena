@@ -361,7 +361,7 @@ class StructEncoder implements ResetInterface
                 cf.name
             FROM custom_field cf
             LEFT JOIN custom_field_set_relation cfsr ON cfsr.set_id = cf.set_id
-            WHERE cf.store_api_aware = 0
+            WHERE cf.channel_api_aware = 0
         '
         );
 

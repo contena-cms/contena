@@ -90,8 +90,6 @@ use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigDefinition;
 use Contena\Core\System\Tag\TagDefinition;
-use Contena\Core\System\Tax\Aggregate\TaxRuleType\TaxRuleTypeDefinition;
-use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 use Contena\Core\System\User\Aggregate\UserGroupRegistrationChannel\UserGroupRegistrationChannelDefinition;
@@ -104,7 +102,6 @@ use Contena\Frontend\Theme\Aggregate\ThemeMediaDefinition;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationDefinition;
 use Contena\Frontend\Theme\ThemeDefinition;
 use Contena\Core\System\Integration\IntegrationDefinition;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleDefinition;
 use Contena\Core\System\Unit\UnitDefinition;
 
 /**
@@ -284,9 +281,6 @@ class PermissionCategorization
             StateMachineTransitionDefinition::ENTITY_NAME,
             StateMachineTranslationDefinition::ENTITY_NAME,
             SystemConfigDefinition::ENTITY_NAME,
-            TaxDefinition::ENTITY_NAME,
-            TaxRuleDefinition::ENTITY_NAME,
-            TaxRuleTypeDefinition::ENTITY_NAME,
             UnitDefinition::ENTITY_NAME,
             VersionDefinition::ENTITY_NAME,
         ],

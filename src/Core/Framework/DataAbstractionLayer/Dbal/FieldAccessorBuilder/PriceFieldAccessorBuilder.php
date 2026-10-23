@@ -31,7 +31,7 @@ class PriceFieldAccessorBuilder implements FieldAccessorBuilderInterface
         $currencyId = $context->getCurrencyId();
         $currencyFactor = \sprintf('* %F', $context->getCurrencyFactor());
         $jsonAccessor = 'net';
-        if ($context->getTaxState() === CartPrice::TAX_STATE_GROSS) {
+        if ($context->getTaxState() === Context::TAX_STATE_GROSS) {
             $jsonAccessor = 'gross';
         }
 
@@ -140,7 +140,7 @@ class PriceFieldAccessorBuilder implements FieldAccessorBuilderInterface
             return false;
         }
 
-        if ($context->getTaxState() === CartPrice::TAX_STATE_GROSS) {
+        if ($context->getTaxState() === Context::TAX_STATE_GROSS) {
             return true;
         }
 

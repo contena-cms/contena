@@ -34,8 +34,8 @@ class AdminUserProvisioner
      */
     public function provision(string $username, ?string $password = null, array $additionalData = []): string
     {
-        if ($this->admin_userExists($username)) {
-            throw MaintenanceException::admin_userAlreadyExists($username);
+        if ($this->adminUserExists($username)) {
+            throw MaintenanceException::adminUserAlreadyExists($username);
         }
 
         $minPasswordLength = $this->getAdminPasswordMinLength();
@@ -64,7 +64,7 @@ class AdminUserProvisioner
         return $password;
     }
 
-    private function admin_userExists(string $username): bool
+    private function adminUserExists(string $username): bool
     {
         $builder = $this->connection->createQueryBuilder();
 

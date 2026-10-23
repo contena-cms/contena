@@ -68,7 +68,7 @@ class AdminUserListCommand extends Command
         $criteria->addAssociation('aclRoles');
         $criteria->addSorting(new FieldSorting('createdAt', FieldSorting::DESCENDING));
 
-        $result = $this->admin_userRepository->search($criteria, $context);
+        $result = $this->adminUserRepository->search($criteria, $context);
 
         if ($format === self::FORMAT_JSON) {
             $output->write(json_encode($this->mapUsersToJson($result->getEntities()), \JSON_THROW_ON_ERROR));

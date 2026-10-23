@@ -32,7 +32,7 @@ readonly class CacheControlListener
             return;
         }
 
-        // With the cache rework the cache-control headers should be delivered to the admin_user,
+        // With the cache rework the cache-control headers should be delivered to the admin user,
         // so this listener must not touch them anymore. It is removed with 6.8.0.
         if (Feature::isActive('CACHE_REWORK')) {
             return;

@@ -6,7 +6,7 @@ use Contena\Core\Content\Blog\Channel\Listing\BlogListingResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +45,7 @@ class CompressedCriteriaListingProcessor extends AbstractListingProcessor
         }
 
         // the listener copied the fields as query-string values, copying them again would overwrite them with their JSON types
-        if (\in_array(StoreApiRouteScope::ID, (array) $request->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []), true)) {
+        if (\in_array(ChannelApiRouteScope::ID, (array) $request->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []), true)) {
             return;
         }
 

@@ -7,18 +7,18 @@
 
     {%- apply trim -%}
         {%- block agentic_ai_catalog_entries -%}
-            {%- set storeApiMcpServerUrl = channelFileContext.storeApiMcpServerUrl|default(null) -%}
+            {%- set channelApiMcpServerUrl = channelFileContext.channelApiMcpServerUrl|default(null) -%}
             {%- set publisher = channelFileContext.publisher|default(null) -%}
 
-            {%- if storeApiMcpServerUrl and publisher -%}
+            {%- if channelApiMcpServerUrl and publisher -%}
                 {%- set entries = entries|merge([{
-                    identifier: 'urn:air:' ~ publisher ~ ':server:store-api-mcp',
+                    identifier: 'urn:air:' ~ publisher ~ ':server:channel-api-mcp',
                     displayName: 'Contena Store API MCP Server',
                     type: 'application/mcp-server-card+json',
-                    url: storeApiMcpServerUrl,
+                    url: channelApiMcpServerUrl,
                     description: 'Authenticated Store API MCP server for supported Contena operations.',
-                    tags: ['contena', 'store-api', 'mcp'],
-                    capabilities: ['contena-store-api-context'],
+                    tags: ['contena', 'channel-api', 'mcp'],
+                    capabilities: ['contena-channel-api-context'],
                     representativeQueries: [
                         'inspect the current Contena Store API context',
                         'use authenticated Contena Store API MCP tools',

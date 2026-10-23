@@ -11,7 +11,7 @@ class OpenModalResponse extends ActionButtonResponse
     final public const ACTION_TYPE = 'openModal';
 
     /**
-     * This is the embedded link that the admin_user want to embed in the iframe after the action has been taken.
+     * This is the embedded link that the admin user want to embed in the iframe after the action has been taken.
      */
     protected string $iframeUrl = '';
 

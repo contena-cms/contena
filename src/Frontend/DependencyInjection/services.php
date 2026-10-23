@@ -134,7 +134,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Frontend\Framework\SystemCheck\ChannelReadinessCheck;
 use Contena\Frontend\Page\Navigation\Error\ErrorPageLoader;
 
@@ -209,7 +209,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(CachedDomainLoader::class . '.inner'),
             service('cache.object'),
-            service('logger'),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
 
@@ -357,7 +356,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(TemplateDataSubscriber::class)
         ->args([
             service(HreflangLoaderInterface::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(ActiveAppsLoader::class),
             service(ThemeRuntimeConfigService::class),
         ])
@@ -421,7 +420,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('event_dispatcher'),
             service(BasicCaptchaGenerator::class),
-            service(NavigationLoader::class),
         ]);
 
     $services->set(CountryStateDataPageletLoader::class)
@@ -503,7 +501,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(GenericPageLoader::class),
             service('event_dispatcher'),
-            service(CountryRoute::class),
             service(Translator::class),
         ]);
 
@@ -536,7 +533,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AddressListingPageLoader::class)
         ->args([
             service(GenericPageLoader::class),
-            service(CountryRoute::class),
             service(ListAddressRoute::class),
             service('event_dispatcher'),
             service(Translator::class),
@@ -614,7 +610,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(IconTemplateLoader::class . '.inner'),
             service(FrontendPluginConfigurationFactory::class),
             service(SourceResolver::class),
-            param('kernel.project_dir'),
         ]);
 
     $services->set(TwigAppVariable::class)

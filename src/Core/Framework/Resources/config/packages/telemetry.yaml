@@ -213,7 +213,7 @@ contena:
                         # typical web requests (25ms–1s) through long-running admin/sync/import-export (up to 60s)
                         buckets: [25, 50, 100, 250, 500, 1000, 2500, 5000, 10000, 30000, 60000]
                     labels:
-                        # AreaResolver (known: frontend, store-api, admin-api, sync-api, payment, other)
+                        # AreaResolver (known: frontend, channel-api, admin-api, sync-api, payment, other)
                         area:
                             policy: open
                         # DomainResolver (polymorphic per area; functional / action / entity groups + other)
@@ -229,7 +229,7 @@ contena:
                     description: 'SQL statements per main request'
                     type: 'histogram'
                     parameters:
-                        # a handful of queries on cached/store-api requests up to thousands on import-export, indexing and sync
+                        # a handful of queries on cached/channel-api requests up to thousands on import-export, indexing and sync
                         buckets: [10, 50, 200, 1000, 5000]
                     labels:
                         area:

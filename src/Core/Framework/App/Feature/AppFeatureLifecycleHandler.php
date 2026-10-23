@@ -8,7 +8,7 @@ use Contena\Core\Framework\App\Lifecycle\Handler\AbstractLifecycleHandler;
 
 /**
  * Syncs the features declared in an app's manifest to the `app_feature` table on
- * install and update, and removes them on uninstall/delete unless the admin_user chose
+ * install and update, and removes them on uninstall/delete unless the admin user chose
  * to keep app data.
  *
  * @internal

@@ -18,7 +18,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 #[McpTool(
     name: 'contena-media-upload',
     title: 'Media Upload',
-    description: 'Upload any image or file — including blog cover images — to Contena\'s media library from a URL. url is the only required parameter; blogId, fileName, and mediaFolderId are all optional. Call this tool immediately with just the URL whenever the admin_user asks to upload, import, or add an image. Returns the new mediaId.'
+    description: 'Upload any image or file — including blog cover images — to Contena\'s media library from a URL. url is the only required parameter; blogId, fileName, and mediaFolderId are all optional. Call this tool immediately with just the URL whenever the admin user asks to upload, import, or add an image. Returns the new mediaId.'
 )]
 #[McpToolGroup('media')]
 #[McpToolRequires('media:create')]

@@ -51,7 +51,7 @@ class CustomFieldDefinition extends EntityDefinition
         return [
             'allowUserWrites' => false,
             'allowCartExpose' => false,
-            'storeApiAware' => true,
+            'channelApiAware' => true,
             'includeInSearch' => false,
         ];
     }
@@ -76,7 +76,7 @@ class CustomFieldDefinition extends EntityDefinition
             (new FkField('set_id', 'customFieldSetId', CustomFieldSetDefinition::class))->setDescription('Unique identity of customFieldSet.'),
             (new BoolField('allow_customer_write', 'allowUserWrite'))->setDescription('When boolean value is `true`, then users have permission to write data in the custom field.'),
             (new BoolField('allow_cart_expose', 'allowCartExpose'))->setDescription('When boolean value is `true`, then the custom field\'s data can be exposed within the shopping cart or order process.'),
-            new BoolField('store_api_aware', 'storeApiAware'),
+            new BoolField('channel_api_aware', 'channelApiAware'),
             new BoolField('include_in_search', 'includeInSearch'),
             new ManyToOneAssociationField('customFieldSet', 'set_id', CustomFieldSetDefinition::class, 'id', false),
             (new OneToManyAssociationField('blogSearchConfigFields', BlogSearchConfigFieldDefinition::class, 'custom_field_id', 'id'))->addFlags(new CascadeDelete()),

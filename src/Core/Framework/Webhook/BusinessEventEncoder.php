@@ -67,7 +67,7 @@ class BusinessEventEncoder
                 new Criteria(),
                 $definition,
                 $property,
-                '/store-api'
+                '/channel-api'
             );
         }
 
@@ -158,7 +158,7 @@ class BusinessEventEncoder
             new Criteria(),
             $definition,
             $property,
-            '/store-api'
+            '/channel-api'
         );
     }
 

@@ -84,7 +84,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         'cancel_license' => '/swplatform/pluginlicenses/%s/cancel',
         'login' => '/swplatform/login',
         'create_rating' => '/swplatform/extensionstore/extensions/%s/ratings',
-        'admin_user_info' => '/swplatform/userinfo',
+        'user_info' => '/swplatform/userinfo',
     ]);
 
     $services = $containerConfigurator->services();
@@ -279,7 +279,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(PluginService::class),
             service(PluginManagementService::class),
             service(Filesystem::class),
-            param('contena.cnployment.runtime_extension_management'),
+            param('contena.deployment.runtime_extension_management'),
         ])
         ->call('setContainer', [
             service('service_container'),
@@ -382,7 +382,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('scheduled_task.repository'),
             service('logger'),
             service(InAppPurchaseUpdater::class),
-            service(StoreRequestOptionsProvider::class),
         ])
         ->tag('messenger.message_handler');
 

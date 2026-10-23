@@ -2,7 +2,7 @@
 
 namespace Contena\Core\System\Snippet\Channel;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
  * @codeCoverageIgnore
@@ -11,9 +11,9 @@ use Contena\Core\System\Channel\StoreApiResponse;
  *
  * @experimental stableVersion:v6.8.0 feature:STORE_API_SNIPPETS
  *
- * @extends StoreApiResponse<SnippetSetResultList>
+ * @extends ChannelApiResponse<SnippetSetResultList>
  */
-class SnippetRouteResponse extends StoreApiResponse
+class SnippetRouteResponse extends ChannelApiResponse
 {
     public function getResult(): SnippetSetResultList
     {

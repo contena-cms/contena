@@ -1629,7 +1629,7 @@
         "title": "Änderung der Shop-ID wird vorgeschlagen",
         "description": {
           "explanation": "In Deinem System bzw. der Umgebung wurden Änderungen festgestellt, die auf eine Änderung der Shop-ID hindeuten. Solange Du keine Option ausgewählt hast, findet keine Kommunikation mit Apps statt, um Probleme mit der Shop-Identifikation oder Datenkorruption zu vermeiden.",
-          "shopId": {
+          "installationId": {
             "title": "Was ist die Shop-ID?",
             "explanation": "Die Shop-ID ist ein Bestandteil des App-Systems von Contena. Apps, bei denen Dein Shop registriert ist, nutzen diese, um Deinen Shop eindeutig zu identifizieren. Daher ist es wichtig, dass Shop-IDs einzigartig bleiben und nicht zwischen verschiedenen Shops geteilt werden – auch nicht zwischen unterschiedlichen Umgebungen (z. B. einer Staging- oder Testkopie) desselben Shops."
           }

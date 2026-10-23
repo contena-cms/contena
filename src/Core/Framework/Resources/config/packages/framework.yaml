@@ -188,7 +188,7 @@ framework:
             log_level: notice
         Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidPriceFieldTypeException:
             log_level: notice
-        Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption:
+        Contena\Core\Content\Blog\Exception\CommentNotActiveException:
             log_level: notice
         Contena\Core\Framework\App\Exception\ActionProcessException: #App provides wrong return or does not answer at all
             log_level: notice

@@ -48,10 +48,10 @@ class AdminUserConfigDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of admin_user configuration.'),
-            (new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class))->addFlags(new Required())->setDescription('Unique identity of admin_user.'),
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of admin user configuration.'),
+            (new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class))->addFlags(new Required())->setDescription('Unique identity of admin user.'),
             (new StringField('key', 'key'))->addFlags(new Required())->setDescription('Unique key for every userconfig.'),
-            (new JsonField('value', 'value'))->setDescription('Value of the admin_user configuration.'),
+            (new JsonField('value', 'value'))->setDescription('Value of the admin user configuration.'),
 
             new ManyToOneAssociationField('admin_user', 'admin_user_id', AdminUserDefinition::class, 'id', false),
         ]);

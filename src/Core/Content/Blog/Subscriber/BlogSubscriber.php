@@ -11,6 +11,9 @@ use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\System\Channel\Entity\ChannelEntityLoadedEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\Content\Blog\AbstractIsNewDetector;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Doctrine\DBAL\Connection;
 
 /**
  * Assigns the configured default CMS layout to blog entries that have none, so a freshly
@@ -20,9 +23,17 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class BlogSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly SystemConfigService $systemConfigService)
-    {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly AbstractIsNewDetector $isNewDetector,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly RequestStack $requestStack,
+        private readonly Connection $connection
+    ) {
     }
+
 
     public static function getSubscribedEvents(): array
     {

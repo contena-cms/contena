@@ -22,17 +22,15 @@ class MailerTransportLoader
 
     /**
      * @internal
-     *
-     * @param EntityRepository<DocumentCollection> $documentRepository
      */
     public function __construct(
         private readonly Transport $envBasedTransport,
         private readonly SystemConfigService $configService,
         private readonly MailAttachmentsBuilder $attachmentsBuilder,
-        private readonly FilesystemOperator $filesystem,
-        private readonly EntityRepository $documentRepository
+        private readonly FilesystemOperator $filesystem
     ) {
     }
+
 
     /**
      * @param array<string, string> $dsns
@@ -68,7 +66,6 @@ class MailerTransportLoader
             $this->create(),
             $this->attachmentsBuilder,
             $this->filesystem,
-            $this->documentRepository
         );
     }
 
@@ -78,7 +75,6 @@ class MailerTransportLoader
             $this->envBasedTransport->fromString($dsn),
             $this->attachmentsBuilder,
             $this->filesystem,
-            $this->documentRepository
         );
     }
 

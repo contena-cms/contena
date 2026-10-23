@@ -87,7 +87,7 @@ class UserTokenSubscriber implements EventSubscriberInterface
             return null;
         }
 
-        // The context user is not the same as logged-in. We don't modify the admin_user session
+        // The context user is not the same as logged-in. We don't modify the admin user session
         if ($context->getUserId() !== $userId) {
             return null;
         }

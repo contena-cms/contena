@@ -267,49 +267,6 @@
         {% set blogData = blogData|merge({depth: {'@type': 'QuantitativeValue', value: lengthValue, unitText: lengthUnit} }) %}
     {% endif %}
 
-    {% if page.structuredDataReviews %}
-        {% set reviewData = page.structuredDataReviews %}
-        {% set reviewCount = reviewData.matrix.totalReviewCount %}
-
-        {% if page.blog.ratingAverage and page.blog.ratingAverage > 0 and reviewCount > 0 %}
-            {% set blogData = blogData|merge({
-                aggregateRating: {
-                    '@type': 'AggregateRating',
-                    ratingValue: page.blog.ratingAverage,
-                    ratingCount: reviewCount,
-                    bestRating: 5
-                }
-            }) %}
-        {% endif %}
-
-        {% set reviewItems = [] %}
-        {% for review in reviewData.entities %}
-            {% set reviewItem = {
-                '@type': 'Review',
-                author: {'@type': 'Person', name: review.externalUser},
-                datePublished: review.createdAt|format_date(pattern='Y-MM-dd'),
-                reviewRating: {
-                    '@type': 'Rating',
-                    ratingValue: review.points,
-                    bestRating: 5
-                }
-            } %}
-            {% if review.title %}
-                {% set reviewItem = reviewItem|merge({name: review.title}) %}
-            {% endif %}
-            {% if review.content %}
-                {% set reviewItem = reviewItem|merge({reviewBody: review.content|striptags}) %}
-            {% endif %}
-            {% if review.language and review.language.translationCode %}
-                {% set reviewItem = reviewItem|merge({inLanguage: review.language.translationCode.code}) %}
-            {% endif %}
-            {% set reviewItems = reviewItems|merge([reviewItem]) %}
-        {% endfor %}
-
-        {% if reviewItems|length > 0 %}
-            {% set blogData = blogData|merge({review: reviewItems}) %}
-        {% endif %}
-    {% endif %}
 
     {#
         For variant blogs (parentId is set), Google's Rich Results requires BlogGroup as the

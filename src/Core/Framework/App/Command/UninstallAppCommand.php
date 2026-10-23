@@ -31,7 +31,7 @@ class UninstallAppCommand extends Command
         SymfonyStyle $io,
         #[Argument(description: 'The name of the app')]
         string $name,
-        #[Option(description: 'Keep admin_user data of the app')]
+        #[Option(description: 'Keep admin user data of the app')]
         bool $keepUserData = false,
         #[Option(description: 'Use this option to skip recompiling of all themes')]
         bool $skipThemeCompile = false,

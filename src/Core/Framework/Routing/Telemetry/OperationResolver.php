@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
  * everything else.
  *
  * Derived from the route-name suffix, not the HTTP method (POST covers both `create` and `search`).
- * `api.action.*`, store-api and frontend routes are not CRUD and resolve operation to `none`.
+ * `api.action.*`, channel-api and frontend routes are not CRUD and resolve operation to `none`.
  *
  * @internal
  *

@@ -42,7 +42,7 @@ class AdminUserCredentialsChangedSubscriber implements EventSubscriberInterface
         $payloads = $event->getPayloads();
 
         foreach ($payloads as $payload) {
-            if ($this->admin_userCredentialsChanged($payload)) {
+            if ($this->adminUserCredentialsChanged($payload)) {
                 $this->revokeUserTokens($payload['id']);
                 $this->updateLastUpdatedPasswordTimestamp($payload['id']);
             }
@@ -61,7 +61,7 @@ class AdminUserCredentialsChangedSubscriber implements EventSubscriberInterface
     /**
      * @param array<string, mixed> $payload
      */
-    private function admin_userCredentialsChanged(array $payload): bool
+    private function adminUserCredentialsChanged(array $payload): bool
     {
         return isset($payload['password']) || (\array_key_exists('active', $payload) && $payload['active'] === false);
     }

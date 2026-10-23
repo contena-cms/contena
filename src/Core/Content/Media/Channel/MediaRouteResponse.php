@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\Media\Channel;
 
 use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<MediaCollection>
+ * @extends ChannelApiResponse<MediaCollection>
  */
-class MediaRouteResponse extends StoreApiResponse
+class MediaRouteResponse extends ChannelApiResponse
 {
     public function getMediaCollection(): MediaCollection
     {

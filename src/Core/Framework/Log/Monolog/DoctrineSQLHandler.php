@@ -24,6 +24,7 @@ class DoctrineSQLHandler extends AbstractProcessingHandler
         parent::__construct($level, $bubble);
     }
 
+
     protected function write(LogRecord $record): void
     {
         $envelope = [

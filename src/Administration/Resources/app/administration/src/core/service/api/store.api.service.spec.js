@@ -1,8 +1,8 @@
-import StoreApiService from 'src/core/service/api/store.api.service';
+import ChannelApiService from 'src/core/service/api/store.api.service';
 import createLoginService from 'src/core/service/login.service';
 import createHTTPClient from 'src/core/factory/http.factory';
 
-function getStoreApiService(client = null, loginService = null) {
+function getChannelApiService(client = null, loginService = null) {
     if (client === null) {
         client = createHTTPClient();
     }
@@ -11,7 +11,7 @@ function getStoreApiService(client = null, loginService = null) {
         loginService = createLoginService(client, Contena.Context.api);
     }
 
-    return new StoreApiService(client, loginService);
+    return new ChannelApiService(client, loginService);
 }
 
 /**
@@ -19,6 +19,6 @@ function getStoreApiService(client = null, loginService = null) {
  */
 describe('storeService', () => {
     it('is registered correctly', async () => {
-        expect(getStoreApiService()).toBeInstanceOf(StoreApiService);
+        expect(getChannelApiService()).toBeInstanceOf(ChannelApiService);
     });
 });

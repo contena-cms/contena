@@ -12,7 +12,7 @@ abstract class Field extends XmlElement
 {
     protected string $name;
 
-    protected bool $storeApiAware;
+    protected bool $channelApiAware;
 
     public function jsonSerialize(): array
     {
@@ -27,9 +27,9 @@ abstract class Field extends XmlElement
         return $this->name;
     }
 
-    public function isStoreApiAware(): bool
+    public function isChannelApiAware(): bool
     {
-        return $this->storeApiAware;
+        return $this->channelApiAware;
     }
 
     protected static function parse(\DOMElement $element): array

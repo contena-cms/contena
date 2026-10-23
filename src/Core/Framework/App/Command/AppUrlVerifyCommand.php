@@ -7,6 +7,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Contena\Core\Framework\App\Url\AppUrlVerificationPrinter;
+use Contena\Core\Framework\App\Url\AppUrlVerifier;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 /**
  * @internal
@@ -19,14 +22,25 @@ class AppUrlVerifyCommand extends Command
 {
 
     /**
+     * @internal
+     */
+    public function __construct(
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly AppUrlVerifier $appUrlVerifier,
+        private readonly AppUrlVerificationPrinter $printer
+    ) {
+    }
+
+
+    /**
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
 
-        $shopId = $this->shopIdProvider->getShopId();
-        $this->appUrlVerifier->forceVerify($shopId, true);
+        $installationId = $this->installationIdProvider->getInstallationId();
+        $this->appUrlVerifier->forceVerify($installationId, true);
 
         $state = $this->appUrlVerifier->getCurrentState();
 

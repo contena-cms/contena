@@ -9,7 +9,7 @@ import SwSettingsUsageDataConsentModal from '../sw-settings-usage-data-consent-m
 const ADMIN_USER_MIN_AGE_DAYS = 15;
 const SHOP_MIN_AGE_DAYS = 60;
 const WRONG_APP_URL_MODAL_STORAGE_KEY = 'sw-app-wrong-app-url-modal-shown';
-const SHOP_ID_CHANGE_MODAL_SELECTOR = '.sw-app-shop-id-change-modal';
+const INSTALLATION_ID_CHANGE_MODAL_SELECTOR = '.sw-app-shop-id-change-modal';
 
 type ContextSettings = {
     appUrlReachable?: boolean;
@@ -62,8 +62,8 @@ function isWrongAppUrlModalVisible(): boolean {
     return !appUrlReachable && appsRequireAppUrl && !wasModalAlreadyShown;
 }
 
-function isShopIdChangeModalVisible(): boolean {
-    return document.querySelector(SHOP_ID_CHANGE_MODAL_SELECTOR) !== null;
+function isInstallationIdChangeModalVisible(): boolean {
+    return document.querySelector(INSTALLATION_ID_CHANGE_MODAL_SELECTOR) !== null;
 }
 
 function hasAdminUserAccountReachedMinimumAge(): boolean {
@@ -138,7 +138,7 @@ export default Contena.Component.wrapComponentConfig({
                 return false;
             }
 
-            if (isFirstRunWizardActive() || isWrongAppUrlModalVisible() || isShopIdChangeModalVisible()) {
+            if (isFirstRunWizardActive() || isWrongAppUrlModalVisible() || isInstallationIdChangeModalVisible()) {
                 return false;
             }
 

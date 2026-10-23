@@ -117,7 +117,7 @@ class AppPrinter
             'Do you consent with data being shared or transferred to the domains listed above?',
             false
         )) {
-            throw AppException::admin_userAborted();
+            throw AppException::adminUserAborted();
         }
     }
 

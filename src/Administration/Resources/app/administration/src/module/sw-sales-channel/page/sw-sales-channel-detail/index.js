@@ -453,7 +453,7 @@ export default {
             }
 
             const domainUrl = this.blogExport.channelDomain.url.replace(/\/+$/g, '');
-            this.blogComparison.blogComparisonAccessUrl = `${domainUrl}/store-api/blog-export/${this.blogExport.accessKey}/${this.blogExport.fileName}`;
+            this.blogComparison.blogComparisonAccessUrl = `${domainUrl}/channel-api/blog-export/${this.blogExport.accessKey}/${this.blogExport.fileName}`;
         },
 
         loadProductExportTemplates() {

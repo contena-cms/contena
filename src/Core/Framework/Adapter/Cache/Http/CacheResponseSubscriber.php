@@ -5,7 +5,7 @@ namespace Contena\Core\Framework\Adapter\Cache\Http;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextService;
@@ -26,7 +26,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class CacheResponseSubscriber implements EventSubscriberInterface
 {
     private const POLICY_AREA_FRONTEND = 'frontend';
-    private const POLICY_AREA_STORE_API = 'store_api';
+    private const POLICY_AREA_STORE_API = 'channel_api';
 
     /**
      * Tells clients which query parameter differences may be ignored when matching a request against
@@ -60,7 +60,7 @@ class CacheResponseSubscriber implements EventSubscriberInterface
 
         $this->cacheHeadersService->applyCacheHeaders($context, $response);
 
-        $area = $this->isStoreApi($request) ? self::POLICY_AREA_STORE_API : self::POLICY_AREA_FRONTEND;
+        $area = $this->isChannelApi($request) ? self::POLICY_AREA_STORE_API : self::POLICY_AREA_FRONTEND;
 
         if (!$this->httpCacheEnabled) {
             // no-store attribute still has to be processed even in early return case
@@ -318,10 +318,10 @@ class CacheResponseSubscriber implements EventSubscriberInterface
         $response->headers->setCookie($cookie);
     }
 
-    private function isStoreApi(Request $request): bool
+    private function isChannelApi(Request $request): bool
     {
         return \in_array(
-            StoreApiRouteScope::ID,
+            ChannelApiRouteScope::ID,
             (array) $request->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []),
             true
         );

@@ -19,6 +19,7 @@ use Doctrine\DBAL\Schema\Name\Parser;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use Doctrine\Deprecations\Deprecation;
 use Doctrine\DBAL\Schema\Exception\NotImplemented;
+use Doctrine\DBAL\Schema\Name;
 
 if (class_exists('\\' . AbstractAsset::class, false)) {
     return;

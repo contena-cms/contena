@@ -60,8 +60,8 @@ final readonly class AdminUserService
         $this->connection->createQueryBuilder()
             ->update('oauth_user')
             ->set('token', ':token')
-            ->where('admin_user_id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
+            ->where('admin_user_id = :adminUserId')
+            ->setParameter('adminUserId', Uuid::fromHexToBytes($adminUserId))
             ->setParameter('token', null)
             ->executeStatement();
     }
@@ -73,7 +73,7 @@ final readonly class AdminUserService
     private function updateUserEmail(Context $context, string $adminUserId, string $newMail): void
     {
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($adminUserId, $newMail): void {
-            $this->admin_userRepository->update([
+            $this->adminUserRepository->update([
                 [
                     'id' => $adminUserId,
                     'email' => $newMail,
@@ -90,7 +90,7 @@ final readonly class AdminUserService
             new EqualsFilter('email', $email),
         );
 
-        return $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        return $this->adminUserRepository->search($criteria, $context)->getEntities()->first();
     }
 
     private function isInvitedUser(AdminUserEntity $adminUser): bool
@@ -103,7 +103,7 @@ final readonly class AdminUserService
     private function activateInvitedUser(Context $context, AdminUserEntity $adminUserEntity, ParsedIdToken $parsedIdToken): void
     {
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($adminUserEntity, $parsedIdToken): void {
-            $this->admin_userRepository->update([[
+            $this->adminUserRepository->update([[
                 'id' => $adminUserEntity->getId(),
                 'active' => true,
                 'name' => $parsedIdToken->givenName,

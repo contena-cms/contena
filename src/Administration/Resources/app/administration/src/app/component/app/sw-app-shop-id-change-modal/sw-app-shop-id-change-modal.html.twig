@@ -12,19 +12,19 @@
             <mt-banner
                 variant="neutral"
                 icon="regular-info-circle"
-                :title="$t('sw-app.component.sw-app-shop-id-change-modal.description.shopId.title')"
+                :title="$t('sw-app.component.sw-app-shop-id-change-modal.description.installationId.title')"
             >
-                {{ $t('sw-app.component.sw-app-shop-id-change-modal.description.shopId.explanation') }}
+                {{ $t('sw-app.component.sw-app-shop-id-change-modal.description.installationId.explanation') }}
             </mt-banner>
         </section>
 
         <section
-            v-if="shopIdCheck.apps.length > 0"
+            v-if="installationIdCheck.apps.length > 0"
             class="sw-app-shop-id-change-modal__content-apps"
         >
             <h4>{{ $t('sw-app.component.sw-app-shop-id-change-modal.affectedApps') }}</h4>
 
-            {{ shopIdCheck.apps.join(', ') }}
+            {{ installationIdCheck.apps.join(', ') }}
         </section>
 
         <section class="sw-app-shop-id-change-modal__content-fingerprints">
@@ -32,7 +32,7 @@
 
             <div class="sw-app-shop-id-change-modal__content-fingerprint-items">
                 <div
-                    v-for="fingerprint in shopIdCheck.fingerprints.mismatchingFingerprints"
+                    v-for="fingerprint in installationIdCheck.fingerprints.mismatchingFingerprints"
                     :key="fingerprint.identifier"
                     class="sw-app-shop-id-change-modal__content-fingerprint-item"
                 >

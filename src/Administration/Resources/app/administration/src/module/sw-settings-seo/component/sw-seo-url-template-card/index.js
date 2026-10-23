@@ -155,7 +155,7 @@ export default {
         },
         createSeoUrlTemplatesFromDefaultRoutes(channelId) {
             // Only the default template family matching the sales channel type is relevant: headless channels
-            // use the store-api routes, frontend channels the frontend routes.
+            // use the channel-api routes, frontend channels the frontend routes.
             const relevantDefaults = this.defaultSeoUrlTemplates.filter(
                 (defaultEntity) => Boolean(defaultEntity.isHeadless) === this.channelIsHeadless,
             );

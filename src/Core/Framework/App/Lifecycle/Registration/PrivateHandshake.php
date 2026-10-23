@@ -18,7 +18,7 @@ class PrivateHandshake implements AppHandshakeInterface
         private readonly string $secret,
         private readonly string $appEndpoint,
         private readonly string $appName,
-        private readonly string $shopId,
+        private readonly string $installationId,
         private readonly string $contenaVersion,
         private readonly ClockInterface $clock,
         #[\SensitiveParameter]
@@ -31,7 +31,7 @@ class PrivateHandshake implements AppHandshakeInterface
         $uri = new Uri($this->appEndpoint);
 
         $uri = Uri::withQueryValues($uri, [
-            'shop-id' => $this->shopId,
+            'shop-id' => $this->installationId,
             'shop-url' => $this->shopUrl,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
         ]);
@@ -58,6 +58,6 @@ class PrivateHandshake implements AppHandshakeInterface
 
     public function fetchAppProof(): string
     {
-        return hash_hmac('sha256', $this->shopId . $this->shopUrl . $this->appName, $this->secret);
+        return hash_hmac('sha256', $this->installationId . $this->shopUrl . $this->appName, $this->secret);
     }
 }

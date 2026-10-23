@@ -13,6 +13,7 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
  * @internal
@@ -21,7 +22,7 @@ class PasswordFieldSerializer extends AbstractFieldSerializer
 {
     public const CONFIG_MIN_LENGTH_FOR = [
         PasswordField::FOR_CUSTOMER => 'core.loginRegistration.passwordMinLength',
-        PasswordField::FOR_ADMIN => 'core.admin_userPermission.passwordMinLength',
+        PasswordField::FOR_ADMIN => 'core.userPermission.passwordMinLength',
     ];
 
     /**

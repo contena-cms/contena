@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Contena\Core\Framework\Migration\Exception\UnknownMigrationSourceException;
 use Contena\Core\Framework\Migration\MigrationCollection;
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Migration\MigrationException;
 
 #[AsCommand(
@@ -21,6 +22,17 @@ use Contena\Core\Framework\Migration\MigrationException;
 class MigrationCommand extends Command
 {
     protected SymfonyStyle $io;
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        protected readonly MigrationCollectionLoader $loader,
+        private readonly TagAwareAdapterInterface $cache,
+        protected readonly string $contenaVersion
+    ) {
+        parent::__construct();
+    }
 
 
     /**

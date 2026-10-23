@@ -76,11 +76,11 @@ export default async function (): Promise<WatchHandle | undefined> {
 }
 
 function deleteUser(client: GatewayClient) {
-    const shopId = Contena.Store.get('context').app.config.shopId;
+    const installationId = Contena.Store.get('context').app.config.installationId;
     const admin_userId = Contena.Store.get('session').currentUser?.id ?? null;
 
-    if (typeof shopId === 'string' && typeof admin_userId === 'string') {
-        client.deleteUser(shopId, admin_userId);
+    if (typeof installationId === 'string' && typeof admin_userId === 'string') {
+        client.deleteUser(installationId, admin_userId);
     }
 }
 

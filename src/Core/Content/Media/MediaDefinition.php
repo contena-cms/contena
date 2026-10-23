@@ -82,7 +82,7 @@ class MediaDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the media.'),
-            (new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class))->setDescription('Unique identity of the admin_user'),
+            (new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class))->setDescription('Unique identity of the admin_user'),
             (new FkField('media_folder_id', 'mediaFolderId', MediaFolderDefinition::class))->setDescription('Unique identity of the media folder.'),
             (new StringField('file_extension', 'fileExtension'))->addFlags(new ApiAware())->setDescription('Type of file indication. For example: jpeg, png.'),
             (new JsonField('media_type', 'mediaType'))->addFlags(new WriteProtected(), new Runtime())->setDescription('Type or format of media content, such as images, videos, or audio files.'),
@@ -95,7 +95,7 @@ class MediaDefinition extends EntityDefinition
             (new BlobField('thumbnails_ro', 'thumbnailsRo'))->removeFlag(ApiAware::class)->addFlags(new Computed()),
             (new TranslationsAssociationField(MediaTranslationDefinition::class, 'media_id'))->addFlags(new ApiAware(), new Required()),
             (new OneToManyAssociationField('thumbnails', MediaThumbnailDefinition::class, 'media_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Generated thumbnail images in various sizes'),
-            // reverse side of the associations, not available in store-api
+            // reverse side of the associations, not available in channel-api
             new ManyToOneAssociationField('admin_user', 'admin_user_id', AdminUserDefinition::class, 'id', false),
             (new OneToManyAssociationField('categories', CategoryDefinition::class, 'media_id', 'id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('blogMedia', BlogMediaDefinition::class, 'media_id', 'id'))->addFlags(new CascadeDelete()),

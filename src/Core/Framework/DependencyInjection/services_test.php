@@ -33,7 +33,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Write\Validation\TestDefini
 use Contena\Core\Framework\Test\Filesystem\Adapter\MemoryAdapterFactory;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\TestMessageHandler;
 use Contena\Core\Framework\Test\TestCacheClearer;
-use Contena\Core\Framework\Test\TestCaseHelper\StoreApiSessionListener;
+use Contena\Core\Framework\Test\TestCaseHelper\ChannelApiSessionListener;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Test\TestSessionStorageFactory;
 use Contena\Core\Framework\Test\Webhook\StaticWebhookTargetValidatorFactory;
@@ -133,7 +133,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->alias('test.browser', 'test.client');
 
-    $services->set(StoreApiSessionListener::class)
+    $services->set(ChannelApiSessionListener::class)
         ->tag('kernel.event_subscriber');
 
     // innermost decorator, above core (up to 1000) and plugin priorities, so nested re-dispatches still reach the hooks

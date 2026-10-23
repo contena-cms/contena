@@ -74,7 +74,7 @@ class FeatureFlagRegistry
                     continue;
                 }
 
-                // Static metadata may have changed since this flag was persisted; only the toggle is admin_user state.
+                // Static metadata may have changed since this flag was persisted; only the toggle is admin user state.
                 $stored[$name] = [...$static[$name], ...array_intersect_key($flag, ['active' => true, 'static' => true])];
             }
 

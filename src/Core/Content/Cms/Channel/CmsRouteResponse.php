@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\Cms\Channel;
 
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<CmsPageEntity>
+ * @extends ChannelApiResponse<CmsPageEntity>
  */
-class CmsRouteResponse extends StoreApiResponse
+class CmsRouteResponse extends ChannelApiResponse
 {
     public function getCmsPage(): CmsPageEntity
     {

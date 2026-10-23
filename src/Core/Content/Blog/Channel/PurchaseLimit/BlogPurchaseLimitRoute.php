@@ -5,14 +5,14 @@ namespace Contena\Core\Content\Blog\Channel\PurchaseLimit;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Extension\BlogPurchaseLimitRouteExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class BlogPurchaseLimitRoute extends AbstractBlogPurchaseLimitRoute
 {
 
@@ -22,8 +22,8 @@ class BlogPurchaseLimitRoute extends AbstractBlogPurchaseLimitRoute
     }
 
     #[Route(
-        path: '/store-api/blog/purchase-limit',
-        name: 'store-api.blog.purchase-limit',
+        path: '/channel-api/blog/purchase-limit',
+        name: 'channel-api.blog.purchase-limit',
         methods: [Request::METHOD_GET],
         priority: 1, // keeping priority higher than in \Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute
     )]

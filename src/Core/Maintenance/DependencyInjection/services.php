@@ -44,7 +44,7 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\Dotenv\Command\DotenvDumpCommand;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -154,8 +154,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(DefinitionInstanceRegistry::class),
             service('channel.repository'),
-            service('payment_method.repository'),
-            service('shipping_method.repository'),
             service('country.repository'),
             service('category.repository'),
         ]);
@@ -231,7 +229,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(StagingAppHandler::class)
         ->args([
             service(Connection::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
         ])
         ->tag('kernel.event_listener');
 

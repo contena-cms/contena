@@ -104,21 +104,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->defaults()
         ->public();
 
-    $services->set(ApiCaptchaController::class)
-        ->public()
-        ->args([
-            tagged_iterator('contena.frontend.captcha'),
-        ])
-        ->call('setContainer', [service('service_container')]);
-
-
-    $services->set(AccountProfileController::class)
+        $services->set(AccountProfileController::class)
         ->args([
             service(AccountProfilePageLoader::class),
-            service(ChangeUserProfileRoute::class),
-            service(ChangePasswordRoute::class),
-            service(ChangeEmailRoute::class),
-            service(DeleteUserRoute::class),
             service('logger'),
         ])
         ->call('setContainer', [service('service_container')]);
@@ -139,13 +127,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AuthController::class)
         ->args([
             service(AccountLoginPageLoader::class),
-            service(SendPasswordRecoveryMailRoute::class),
-            service(ResetPasswordRoute::class),
-            service(LoginRoute::class),
-            service(LogoutRoute::class),
-            service(ImitateUserRoute::class),
             service(AccountRecoverPasswordPageLoader::class),
-            service(ConvertGuestRoute::class),
             service(SystemConfigService::class),
         ])
         ->call('setContainer', [service('service_container')]);
@@ -167,11 +149,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CmsController::class)
         ->args([
-            service(CmsRoute::class),
-            service(CategoryRoute::class),
-            service(BlogListingRoute::class),
-            service(BlogDetailRoute::class),
-            service(FindBlogVariantRoute::class),
             service('event_dispatcher'),
             service(SystemConfigService::class),
         ])
@@ -218,11 +195,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(BlogController::class)
         ->args([
-            service(BlogPageLoader::class),
-            service(FindBlogVariantRoute::class),
-            service(MinimalQuickViewPageLoader::class),
             service(SeoUrlPlaceholderHandlerInterface::class),
-            service(BlogPurchaseLimitRoute::class),
         ])
         ->call('setContainer', [service('service_container')]);
 
@@ -235,11 +208,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RegisterController::class)
         ->args([
             service(AccountLoginPageLoader::class),
-            service(RegisterRoute::class),
-            service(RegisterConfirmRoute::class),
             service(SystemConfigService::class),
             service('user.repository'),
-            service(UserGroupRegistrationPageLoader::class),
             service('channel_domain.repository'),
             service(HeaderPageletLoader::class),
             service(FooterPageletLoader::class),

@@ -37,8 +37,6 @@ class System extends Bundle
         $phpLoader->load('custom_entity.php');
         $phpLoader->load('locale.php');
         $phpLoader->load('snippet.php');
-        $phpLoader->load('tax.php');
-        $phpLoader->load('tax_provider.php');
         $phpLoader->load('unit.php');
         $phpLoader->load('admin_user.php');
         $phpLoader->load('integration.php');

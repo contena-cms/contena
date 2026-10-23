@@ -81,18 +81,18 @@ class AdminUserDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of the admin_user.'),
+            (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of the admin user.'),
             (new FkField('locale_id', 'localeId', LocaleDefinition::class))->addFlags(new Required())->setDescription('Unique identity of locale.'),
-            (new BoolField('active', 'active'))->setDescription('When boolean value is `true`, the admin_user is enabled.'),
+            (new BoolField('active', 'active'))->setDescription('When boolean value is `true`, the admin user is enabled.'),
             // The regular Admin API CRUD endpoint authorizes elevated admin changes in the controller; direct DAL writes remain write-protected.
             // @see \Contena\Core\Framework\Api\Controller\AdminUserController
-            (new BoolField('admin', 'admin'))->addFlags((new WriteProtected(Context::SYSTEM_SCOPE))->allowWriteThroughAdminApi())->setDescription('Parameter that indicates if the admin_user is an admin.'),
+            (new BoolField('admin', 'admin'))->addFlags((new WriteProtected(Context::SYSTEM_SCOPE))->allowWriteThroughAdminApi())->setDescription('Parameter that indicates if the admin user is an admin.'),
             (new JsonField('mcp_allowlist', 'mcpAllowlist'))->setDescription(
-                'Optional per-type MCP allowlist for this admin_user. Structured as {tools, resources, prompts} '
+                'Optional per-type MCP allowlist for this admin user. Structured as {tools, resources, prompts} '
                 . 'where each key is null (unrestricted) or a list of allowed names/URIs.'
             ),
-            (new DateTimeField('last_updated_password_at', 'lastUpdatedPasswordAt'))->setDescription('Parameter that indicates when the password was last updated by the admin_user.'),
-            (new TimeZoneField('time_zone', 'timeZone'))->addFlags(new Required())->setDescription('Time configuration in the admin_user\'s profile.'),
+            (new DateTimeField('last_updated_password_at', 'lastUpdatedPasswordAt'))->setDescription('Parameter that indicates when the password was last updated by the admin user.'),
+            (new TimeZoneField('time_zone', 'timeZone'))->addFlags(new Required())->setDescription('Time configuration in the admin user\'s profile.'),
             (new CustomFields())->setDescription('Additional fields that offer a possibility to add own fields for the different program-areas.'),
             new ManyToOneAssociationField('locale', 'locale_id', LocaleDefinition::class, 'id', false),
             (new FkField('avatar_id', 'avatarId', MediaDefinition::class))->setDescription('Unique identity of the avatar.'),
@@ -100,7 +100,7 @@ class AdminUserDefinition extends EntityDefinition
             (new OneToManyAssociationField('media', MediaDefinition::class, 'admin_user_id'))->addFlags(new SetNullOnDelete()),
             (new OneToManyAssociationField('accessKeys', AdminUserAccessKeyDefinition::class, 'admin_user_id', 'id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('configs', AdminUserConfigDefinition::class, 'admin_user_id', 'id'))->addFlags(new CascadeDelete()),
-            // a admin_user that still owns webhooks cannot be deleted, so its webhooks are not lost unnoticed
+            // an admin user that still owns webhooks cannot be deleted, so its webhooks are not lost unnoticed
             (new OneToManyAssociationField('webhooks', WebhookDefinition::class, 'owner_user_id', 'id'))->removeFlag(ApiAware::class)->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('stateMachineHistoryEntries', StateMachineHistoryDefinition::class, 'admin_user_id', 'id'),
             (new OneToManyAssociationField('importExportLogEntries', ImportExportLogDefinition::class, 'admin_user_id', 'id'))->addFlags(new SetNullOnDelete()),

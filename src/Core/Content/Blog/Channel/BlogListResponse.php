@@ -4,12 +4,12 @@ namespace Contena\Core\Content\Blog\Channel;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<EntitySearchResult<BlogCollection>>
+ * @extends ChannelApiResponse<EntitySearchResult<BlogCollection>>
  */
-class BlogListResponse extends StoreApiResponse
+class BlogListResponse extends ChannelApiResponse
 {
     public function getBlogs(): BlogCollection
     {

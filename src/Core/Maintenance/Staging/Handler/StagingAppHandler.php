@@ -15,7 +15,7 @@ readonly class StagingAppHandler
     {
         $this->deleteAppsWithAppServer($event);
 
-        $this->shopIdProvider->deleteShopId();
+        $this->installationIdProvider->deleteInstallationId();
     }
 
     private function deleteAppsWithAppServer(SetupStagingEvent $event): void

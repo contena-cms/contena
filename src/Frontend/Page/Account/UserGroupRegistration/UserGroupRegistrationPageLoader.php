@@ -10,7 +10,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 /**
- * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.
+ * Do not use direct or indirect repository calls in a PageLoader. Always use a channel-api route to get or put data.
  */
 class UserGroupRegistrationPageLoader extends AbstractUserGroupRegistrationPageLoader
 {

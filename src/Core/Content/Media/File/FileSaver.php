@@ -263,7 +263,7 @@ class FileSaver
     ): MediaEntity {
         $data = [
             'id' => $media->getId(),
-            'admin_userId' => $context->getSource() instanceof AdminApiSource ? $context->getSource()->getUserId() : null,
+            'adminUserId' => $context->getSource() instanceof AdminApiSource ? $context->getSource()->getUserId() : null,
             'mimeType' => $mediaFile->getMimeType(),
             'fileExtension' => $mediaFile->getFileExtension(),
             'fileSize' => $mediaFile->getFileSize(),

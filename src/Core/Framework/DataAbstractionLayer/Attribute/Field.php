@@ -16,7 +16,7 @@ class Field
     public bool $nullable;
 
     /**
-     * @param bool|array{admin-api: bool, store-api: bool} $api
+     * @param bool|array{admin-api: bool, channel-api: bool} $api
      */
     public function __construct(
         public string $type,

@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\Sitemap\Channel;
 
 use Contena\Core\Content\Sitemap\Struct\SitemapCollection;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<SitemapCollection>
+ * @extends ChannelApiResponse<SitemapCollection>
  */
-class SitemapRouteResponse extends StoreApiResponse
+class SitemapRouteResponse extends ChannelApiResponse
 {
     public function getSitemaps(): SitemapCollection
     {

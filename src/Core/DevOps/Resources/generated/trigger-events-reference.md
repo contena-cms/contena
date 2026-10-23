@@ -26,7 +26,7 @@
 |`newsletter.register` | Triggers when admin_user registered to subscribe to a sales channel newsletter |
 |`newsletter.unsubscribe` | Triggers when admin_user unsubscribe from a sales channel newsletter |
 |`blog_export.log` | Triggers when blog export is executed |
-|`review_form.send` | Triggers when a blog review form is submitted by a user |
+|`comment_form.send` | Triggers when a blog comment form is submitted by a user |
 |`revocation_request.sent` | Contena\Core\Content\RevocationRequest\Event\RevocationRequestEvent |
 |`state_enter.order.state.cancelled` | Triggers when an order enters status "Cancelled" |
 |`state_enter.order.state.completed` | Triggers when an order enters status "Completed" |

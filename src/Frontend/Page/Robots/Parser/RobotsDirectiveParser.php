@@ -9,7 +9,7 @@ use Contena\Frontend\Page\Robots\Event\RobotsUnknownDirectiveEvent;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Contena\Frontend\Page\Robots\Struct\RobotsAdminUserAgentBlock;
+use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 
 class RobotsDirectiveParser
 {
@@ -24,7 +24,7 @@ class RobotsDirectiveParser
     public function parse(string $text, Context $context, ?string $channelId = null): ParsedRobots
     {
         $lines = explode("\n", $text);
-        $adminUserAgentBlocks = [];
+        $userAgentBlocks = [];
         $orphanedPathDirectives = [];
         $currentUserAgents = [];
         $currentDirectives = [];
@@ -92,15 +92,15 @@ class RobotsDirectiveParser
             if ($directiveTypeEnum === RobotsDirectiveType::USER_AGENT) {
                 // If we have a current block with directives, save it
                 if ($currentUserAgents !== [] && $currentDirectives !== []) {
-                    foreach ($currentUserAgents as $adminUserAgent) {
-                        $adminUserAgentBlocks[] = new RobotsAdminUserAgentBlock($adminUserAgent, $currentDirectives);
+                    foreach ($currentUserAgents as $userAgent) {
+                        $userAgentBlocks[] = new RobotsUserAgentBlock($userAgent, $currentDirectives);
                     }
                     // Reset for new block
                     $currentUserAgents = [];
                     $currentDirectives = [];
                 }
 
-                // Add admin_user agent to current block
+                // Add admin user agent to current block
                 $currentUserAgents[] = $directiveValue;
 
                 continue;
@@ -110,7 +110,7 @@ class RobotsDirectiveParser
             $directive = new RobotsDirective($directiveTypeEnum, $directiveValue);
 
             if ($currentUserAgents !== []) {
-                // We're in a admin_user-agent block
+                // We're in a user-agent block
                 $currentDirectives[] = $directive;
             } else {
                 // Orphaned directive (backward compatibility)
@@ -120,7 +120,7 @@ class RobotsDirectiveParser
                     $issues[] = new ParseIssue(
                         $lineNumber,
                         $line,
-                        'Directive \'' . $directiveTypeEnum->value . '\' found outside admin_user-agent block and will be ignored',
+                        'Directive \'' . $directiveTypeEnum->value . '\' found outside user-agent block and will be ignored',
                         ParseIssueSeverity::WARNING
                     );
                 }
@@ -129,12 +129,12 @@ class RobotsDirectiveParser
 
         // Save last block if any
         if ($currentUserAgents !== [] && $currentDirectives !== []) {
-            foreach ($currentUserAgents as $adminUserAgent) {
-                $adminUserAgentBlocks[] = new RobotsAdminUserAgentBlock($adminUserAgent, $currentDirectives);
+            foreach ($currentUserAgents as $userAgent) {
+                $userAgentBlocks[] = new RobotsUserAgentBlock($userAgent, $currentDirectives);
             }
         }
 
-        $parsedResult = new ParsedRobots($adminUserAgentBlocks, $orphanedPathDirectives, $issues);
+        $parsedResult = new ParsedRobots($userAgentBlocks, $orphanedPathDirectives, $issues);
 
         // Dispatch parsing event to allow modifications
         $parsingEvent = new RobotsDirectiveParsingEvent($text, $parsedResult, $context, $channelId);

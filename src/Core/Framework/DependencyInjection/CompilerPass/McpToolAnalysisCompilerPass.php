@@ -32,8 +32,8 @@ class McpToolAnalysisCompilerPass implements CompilerPassInterface
 
         // Build one param set per MCP scope so both endpoints get identical group/dependency/
         // privilege analysis. Admin tools carry the 'mcp.tool' tag; Store API tools carry
-        // 'contena.store_api_mcp.tool'. Each scope writes under its own param prefix.
-        foreach ([['mcp.tool', 'contena.mcp.'], ['contena.store_api_mcp.tool', 'contena.store_api_mcp.']] as [$tag, $paramPrefix]) {
+        // 'contena.channel_api_mcp.tool'. Each scope writes under its own param prefix.
+        foreach ([['mcp.tool', 'contena.mcp.'], ['contena.channel_api_mcp.tool', 'contena.channel_api_mcp.']] as [$tag, $paramPrefix]) {
             $this->buildAndValidateToolDependencies($container, $tag, $paramPrefix);
             $this->buildToolPrivilegeMap($container, $tag, $paramPrefix);
             $this->buildToolGroupMap($container, $tag, $paramPrefix);

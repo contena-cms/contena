@@ -20,7 +20,7 @@ class PluginUninstallCommand extends AbstractPluginLifecycleCommand
     protected function configure(): void
     {
         $this->configureCommand(self::LIFECYCLE_METHOD);
-        $this->addOption('keep-admin_user-data', null, InputOption::VALUE_NONE, 'Keep admin_user data of the plugin');
+        $this->addOption('keep-user-data', null, InputOption::VALUE_NONE, 'Keep admin user data of the plugin');
     }
 
     /**
@@ -38,7 +38,7 @@ class PluginUninstallCommand extends AbstractPluginLifecycleCommand
             return self::SUCCESS;
         }
 
-        $keepUserData = $input->getOption('keep-admin_user-data');
+        $keepUserData = $input->getOption('keep-user-data');
 
         $uninstalledPluginCount = 0;
         foreach ($plugins as $plugin) {

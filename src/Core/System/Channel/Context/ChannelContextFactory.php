@@ -4,6 +4,10 @@ namespace Contena\Core\System\Channel\Context;
 
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
+use Contena\Core\System\User\UserCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
@@ -16,6 +20,18 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class ChannelContextFactory extends AbstractChannelContextFactory
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EntityRepository $userRepository,
+        private readonly EntityRepository $userGroupRepository,
+        private readonly EntityRepository $userAddressRepository,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly EntityRepository $currencyCountryRepository
+    ) {
+    }
+
 
     public function getDecorated(): AbstractChannelContextFactory
     {
@@ -34,32 +50,12 @@ class ChannelContextFactory extends AbstractChannelContextFactory
         }
 
         if ($user !== null) {
-            // prefer the billing address over the sales channel country so a missing shipping address does not change the tax country
-            $locationAddress = $user->getActiveShippingAddress() ?? $user->getActiveBillingAddress();
-            $shippingLocation = $locationAddress !== null
-                ? ShippingLocation::createFromAddress($locationAddress)
-                : $base->getShippingLocation();
-
             $criteria = new Criteria([$user->getGroupId()]);
             $criteria->setTitle('context-factory::user-group');
             $userGroup = $this->userGroupRepository->search($criteria, $base->getContext())->getEntities()->first() ?? $base->getCurrentUserGroup();
         } else {
-            // e.g. the order of a deleted user still uses its own address instead of the sales channel country
-            $injectedAddress = $this->getInjectedAddress($options, ChannelContextService::SHIPPING_ADDRESS)
-                ?? $this->getInjectedAddress($options, ChannelContextService::BILLING_ADDRESS);
-            $shippingLocation = $injectedAddress !== null
-                ? ShippingLocation::createFromAddress($injectedAddress)
-                : $base->getShippingLocation();
             $userGroup = $base->getCurrentUserGroup();
         }
-
-        // loads tax rules based on active user and delivery address
-        $taxRules = $this->getTaxRules($base, $user, $shippingLocation);
-
-        // detect active payment method, first check if checkout defined other payment method, otherwise validate if user logged in, at least use shop default
-        $payment = $this->getPaymentMethod($options, $base, $user);
-
-        [$itemRounding, $totalRounding] = $this->getCashRounding($base, $shippingLocation);
 
         $context = new Context(
             $base->getContext()->getSource(),
@@ -69,8 +65,8 @@ class ChannelContextFactory extends AbstractChannelContextFactory
             $base->getContext()->getVersionId(),
             $base->getCurrency()->getFactor(),
             true,
-            CartPrice::TAX_STATE_GROSS,
-            $itemRounding
+            Context::TAX_STATE_GROSS,
+            $base->getItemRounding()
         );
 
         $channel = $base->getChannel();
@@ -84,17 +80,11 @@ class ChannelContextFactory extends AbstractChannelContextFactory
             $channel,
             $base->getCurrency(),
             $userGroup,
-            $taxRules,
-            $payment,
-            $base->getShippingMethod(),
-            $shippingLocation,
             $user,
-            $itemRounding,
-            $totalRounding,
+            $base->getItemRounding(),
+            $base->getTotalRounding(),
             $base->getLanguageInfo(),
         );
-
-        $channelContext->setMeasurementSystem($base->getMeasurementSystemInfo());
 
         if (\is_array($options[ChannelContextService::PERMISSIONS] ?? null)) {
             $channelContext->setPermissions($options[ChannelContextService::PERMISSIONS]);
@@ -108,8 +98,6 @@ class ChannelContextFactory extends AbstractChannelContextFactory
         if (\is_string($options[ChannelContextService::IMITATING_USER_ID] ?? null)) {
             $channelContext->setImitatingUserId($options[ChannelContextService::IMITATING_USER_ID]);
         }
-
-        $channelContext->setTaxState($this->taxDetector->getTaxState($channelContext));
 
         return $channelContext;
     }
@@ -126,7 +114,6 @@ class ChannelContextFactory extends AbstractChannelContextFactory
 
         $criteria = new Criteria([$userId]);
         $criteria->setTitle('context-factory::user');
-        $criteria->addAssociation('salutation');
 
         $source = $context->getSource();
         \assert($source instanceof ChannelApiSource);
@@ -152,11 +139,10 @@ class ChannelContextFactory extends AbstractChannelContextFactory
 
         $criteria = new Criteria(\array_unique($addressIds));
         $criteria->setTitle('context-factory::addresses');
-        $criteria->addAssociation('salutation');
         $criteria->addAssociation('country');
         $criteria->addAssociation('countryState');
 
-        $addresses = $this->addressRepository->search($criteria, $context)->getEntities();
+        $addresses = $this->userAddressRepository->search($criteria, $context)->getEntities();
 
         // a default address id can point to a deleted row, and the setters are not nullable yet
         // an existing requested address wins over an injected one, e.g. the order's address during recalculation

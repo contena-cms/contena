@@ -70,8 +70,8 @@ final readonly class ParsedIdToken
     }
 
     /**
-     * Initial we set the fields (admin_userName, givenName, familyName) to email.
-     * On first login with SSO we try to update all admin_user data, but it is possible for old
+     * Initial we set the fields (userName, givenName, familyName) to email.
+     * On first login with SSO we try to update all admin user data, but it is possible for old
      * datasets, that these fields are null or empty. Then we use the email again.
      */
     private static function prepareValue(?string $value, string $email): string

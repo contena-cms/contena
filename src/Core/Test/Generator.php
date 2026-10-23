@@ -13,8 +13,6 @@ use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
-use Contena\Core\System\Tax\TaxCollection;
-use Contena\Core\System\Tax\TaxEntity;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\UserEntity;
@@ -27,10 +25,9 @@ class Generator extends TestCase
     final public const TOKEN = 'test-token';
     final public const DOMAIN = 'test-domain';
     final public const NAVIGATION_CATEGORY = 'f8466865cc6a45e48ed98dd2f6a0a293';
-    final public const TAX_CALCULATION_TYPE = ChannelDefinition::CALCULATION_TYPE_HORIZONTAL;
-    final public const CUSTOMER_GROUP_DISPLAY_GROSS = true;
     final public const TAX = 'c725e107825c4c7281673aeea66ed67e';
     final public const TAX_RATE = 19.0;
+    final public const CUSTOMER_GROUP_DISPLAY_GROSS = true;
     final public const PAYMENT_METHOD = 'cce0e1ca23de4c55868ce057f628c349';
     final public const SHIPPING_METHOD = '37dbe80c5cbb4852a97cb742ed04ba41';
     final public const COUNTRY = 'd4eb3205dd9444169b3f60c056c313a1';
@@ -51,7 +48,6 @@ class Generator extends TestCase
         ?ChannelEntity $channel = null,
         ?CurrencyEntity $currency = null,
         ?UserGroupEntity $currentUserGroup = null,
-        ?TaxCollection $taxRules = null,
         ?UserEntity $user = null,
         ?CashRoundingConfig $itemRounding = null,
         ?CashRoundingConfig $totalRounding = null,
@@ -72,7 +68,6 @@ class Generator extends TestCase
             $channel = new ChannelEntity();
             $channel->setId(TestDefaults::CHANNEL);
             $channel->setNavigationCategoryId(self::NAVIGATION_CATEGORY);
-            $channel->setTaxCalculationType(self::TAX_CALCULATION_TYPE);
             $channel->setNavigationCategoryDepth(2);
             $channel->setTypeId(Defaults::CHANNEL_TYPE_FRONTEND);
         }
@@ -87,14 +82,6 @@ class Generator extends TestCase
             $currentUserGroup = new UserGroupEntity();
             $currentUserGroup->setId(TestDefaults::FALLBACK_CUSTOMER_GROUP);
             $currentUserGroup->setDisplayGross(self::CUSTOMER_GROUP_DISPLAY_GROSS);
-        }
-
-        if (!$taxRules) {
-            $tax = new TaxEntity();
-            $tax->setId(self::TAX);
-            $tax->setTaxRate(self::TAX_RATE);
-
-            $taxRules = new TaxCollection([$tax]);
         }
 
         if (!$user) {
@@ -122,7 +109,6 @@ class Generator extends TestCase
             $channel,
             $currency,
             $currentUserGroup,
-            $taxRules,
             $user,
             $itemRounding,
             $totalRounding,

@@ -31,7 +31,7 @@ readonly class CachePolicyProvider
      * 3. Area defaults (cacheable/uncacheable). Overrides from CacheAttribute are applied at this stage.
      *
      * @param string $route Route name
-     * @param string $area Area (frontend, store_api)
+     * @param string $area Area (frontend, channel_api)
      * @param bool $cacheable Whether the response is cacheable
      * @param bool $enforceNoStore Whether no-store should be enforced
      *

@@ -38,6 +38,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingTranslationLang
 use Contena\Core\Framework\DataAbstractionLayer\Exception\PropertyNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\UnableToLoadPathException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\UnsupportedCommandTypeException;
+use Symfony\Component\Validator\Exception\ValidatorException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
 
 class DataAbstractionLayerException extends HttpException
 {

@@ -21,9 +21,32 @@ use Contena\Core\Profiling\Profiler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 
 class BlogIndexer extends EntityIndexer
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly IteratorFactory $iteratorFactory,
+        private readonly EntityRepository $repository,
+        private readonly Connection $connection,
+        private readonly InheritanceUpdater $inheritanceUpdater,
+        private readonly ChildCountUpdater $childCountUpdater,
+        private readonly ManyToManyIdFieldUpdater $manyToManyIdFieldUpdater,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly MessageBusInterface $messageBus,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
     final public const INHERITANCE_UPDATER = 'blog.inheritance';
     final public const STOCK_UPDATER = 'blog.stock';
     final public const VARIANT_LISTING_UPDATER = 'blog.variant-listing';

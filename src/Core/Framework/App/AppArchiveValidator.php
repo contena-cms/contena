@@ -2,6 +2,8 @@
 
 namespace Contena\Core\Framework\App;
 
+use Contena\Core\Framework\App\Exception\AppArchiveValidationFailure;
+
 
 /**
  * @internal

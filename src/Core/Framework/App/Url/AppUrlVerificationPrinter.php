@@ -2,9 +2,10 @@
 
 namespace Contena\Core\Framework\App\Url;
 
-use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
+use Contena\Core\Framework\App\InstallationId\Fingerprint\AppUrl;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Console\Terminal;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 /**
  * @internal
@@ -12,12 +13,21 @@ use Symfony\Component\Console\Terminal;
 class AppUrlVerificationPrinter
 {
 
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly InstallationIdProvider $installationIdProvider
+    ) {
+    }
+
+
     public function print(SymfonyStyle $io, VerificationState $state, bool $manual = false): void
     {
         $io->title('App URL Verification Status');
 
-        $shopId = $this->shopIdProvider->getShopId();
-        $io->writeln(\sprintf("<info>APP URL: %s</info>\n", $shopId->getFingerprint(AppUrl::IDENTIFIER)));
+        $installationId = $this->installationIdProvider->getInstallationId();
+        $io->writeln(\sprintf("<info>APP URL: %s</info>\n", $installationId->getFingerprint(AppUrl::IDENTIFIER)));
 
         $io->definitionList(
             ['Result' => match ($state->status) {

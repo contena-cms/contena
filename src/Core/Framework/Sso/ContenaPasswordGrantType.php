@@ -22,7 +22,7 @@ class ContenaPasswordGrantType extends PasswordGrant
         $client = $this->validateClient($request);
         $adminUser = $this->validateUser($request, $client);
 
-        $this->admin_userService->removeExternalToken($adminUser->getIdentifier());
+        $this->adminUserService->removeExternalToken($adminUser->getIdentifier());
 
         return parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
     }

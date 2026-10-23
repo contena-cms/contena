@@ -146,25 +146,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(TriggerGroupResolver::class),
         ]);
 
-    $services->set(AddOrderTagAction::class)
-        ->args([
-            service('order.repository'),
-        ])
-        ->tag('flow.action', ['priority' => 1000, 'key' => 'action.add.order.tag']);
-
-    $services->set(AddUserTagAction::class)
+        $services->set(AddUserTagAction::class)
         ->args([
             service('user.repository'),
         ])
         ->tag('flow.action', ['priority' => 900, 'key' => 'action.add.user.tag']);
 
-    $services->set(RemoveOrderTagAction::class)
-        ->args([
-            service('order_tag.repository'),
-        ])
-        ->tag('flow.action', ['priority' => 800, 'key' => 'action.remove.order.tag']);
-
-    $services->set(RemoveUserTagAction::class)
+        $services->set(RemoveUserTagAction::class)
         ->args([
             service('user_tag.repository'),
         ])
@@ -182,13 +170,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('flow.action', ['priority' => 680, 'key' => 'action.change.user.status']);
 
-    $services->set(GrantDownloadAccessAction::class)
-        ->args([
-            service('order_line_item_download.repository'),
-        ])
-        ->tag('flow.action', ['priority' => 550, 'key' => 'action.grant.download.access']);
-
-    $services->set(SendMailAction::class)
+        $services->set(SendMailAction::class)
         ->args([
             service(MailService::class),
             service('mail_template.repository'),
@@ -203,48 +185,21 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('flow.action', ['priority' => 500, 'key' => 'action.mail.send']);
 
 
-    $services->set(SetOrderStateAction::class)
-        ->args([
-            service(Connection::class),
-        ])
-        ->tag('flow.action', ['priority' => 400, 'key' => 'action.set.order.state']);
-
-    $services->set(SetUserCustomFieldAction::class)
+        $services->set(SetUserCustomFieldAction::class)
         ->args([
             service(Connection::class),
             service('user.repository'),
         ])
         ->tag('flow.action', ['priority' => 350, 'key' => 'action.set.user.custom.field']);
 
-    $services->set(SetOrderCustomFieldAction::class)
-        ->args([
-            service(Connection::class),
-            service('order.repository'),
-        ])
-        ->tag('flow.action', ['priority' => 300, 'key' => 'action.set.order.custom.field']);
-
-    $services->set(SetUserGroupCustomFieldAction::class)
+        $services->set(SetUserGroupCustomFieldAction::class)
         ->args([
             service(Connection::class),
             service('user_group.repository'),
         ])
         ->tag('flow.action', ['priority' => 350, 'key' => 'action.set.user.group.custom.field']);
 
-    $services->set(AddUserAffiliateAndCampaignCodeAction::class)
-        ->args([
-            service(Connection::class),
-            service('user.repository'),
-        ])
-        ->tag('flow.action', ['priority' => 350, 'key' => 'action.add.user.affiliate.and.campaign.code']);
-
-    $services->set(AddOrderAffiliateAndCampaignCodeAction::class)
-        ->args([
-            service(Connection::class),
-            service('order.repository'),
-        ])
-        ->tag('flow.action', ['priority' => 350, 'key' => 'action.add.order.affiliate.and.campaign.code']);
-
-    $services->set(StopFlowAction::class)
+            $services->set(StopFlowAction::class)
         ->tag('flow.action', ['priority' => 1, 'key' => 'action.stop.flow']);
 
     $services->set(FlowActionCollector::class)
@@ -301,15 +256,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('flow.storer');
 
-    $services->set(OrderStorer::class)
-        ->args([
-            service('order.repository'),
-            service('event_dispatcher'),
-            service(OrderProvider::class),
-        ])
-        ->tag('flow.storer');
-
-    $services->set(BlogStorer::class)
+        $services->set(BlogStorer::class)
         ->args([
             service('blog.repository'),
             service('event_dispatcher'),
@@ -317,15 +264,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('flow.storer');
 
-    $services->set(A11yRenderedDocumentStorer::class)
-        ->args([
-            service('document.repository'),
-            service('event_dispatcher'),
-            service(DocumentResolver::class),
-        ])
-        ->tag('flow.storer');
-
-    $services->set(UserStorer::class)
+        $services->set(UserStorer::class)
         ->args([
             service('user.repository'),
             service('event_dispatcher'),
@@ -360,23 +299,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('flow.storer');
 
-    $services->set(OrderTransactionStorer::class)
-        ->args([
-            service('order_transaction.repository'),
-            service('event_dispatcher'),
-            service(OrderTransactionProvider::class),
-        ])
-        ->tag('flow.storer');
-
-    $services->set(NewsletterRecipientStorer::class)
-        ->args([
-            service('newsletter_recipient.repository'),
-            service('event_dispatcher'),
-            service(NewsletterRecipientProvider::class),
-        ])
-        ->tag('flow.storer');
-
-    $services->set(ScalarValuesStorer::class)
+            $services->set(ScalarValuesStorer::class)
         ->tag('flow.storer');
 
     $services->set(MessageStorer::class)
@@ -425,7 +348,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('event_dispatcher'),
             service('app_flow_event.repository'),
-            service(DataValidator::class),
         ])
         ->call('setContainer', [
             service('service_container'),

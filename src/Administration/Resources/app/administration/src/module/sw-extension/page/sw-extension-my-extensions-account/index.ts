@@ -83,7 +83,7 @@ export default Contena.Component.wrapComponentConfig({
             } catch (errorResponse) {
                 this.commitErrors(
                     errorResponse as AxiosError<{
-                        errors: StoreApiException[];
+                        errors: ChannelApiException[];
                     }>,
                 );
             } finally {
@@ -105,7 +105,7 @@ export default Contena.Component.wrapComponentConfig({
             } catch (errorResponse) {
                 this.commitErrors(
                     errorResponse as AxiosError<{
-                        errors: StoreApiException[];
+                        errors: ChannelApiException[];
                     }>,
                 );
             } finally {
@@ -146,7 +146,7 @@ export default Contena.Component.wrapComponentConfig({
             });
         },
 
-        commitErrors(errorResponse: AxiosError<{ errors: StoreApiException[] }>): never {
+        commitErrors(errorResponse: AxiosError<{ errors: ChannelApiException[] }>): never {
             if (errorResponse.response) {
                 const mappedErrors = extensionErrorHandler.mapErrors(errorResponse.response.data.errors);
                 Contena.Store.get('contenaExtensions').pluginErrorsMapped(mappedErrors);

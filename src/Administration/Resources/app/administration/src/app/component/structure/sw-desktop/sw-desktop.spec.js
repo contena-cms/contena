@@ -130,7 +130,7 @@ const router = createRouter({
     history: createWebHashHistory(),
 });
 
-async function createWrapper({ checkShopId = jest.fn(() => Promise.resolve()) } = {}) {
+async function createWrapper({ checkInstallationId = jest.fn(() => Promise.resolve()) } = {}) {
     // delete global $router and $routes mocks
     delete config.global.mocks.$router;
     delete config.global.mocks.$route;
@@ -153,8 +153,8 @@ async function createWrapper({ checkShopId = jest.fn(() => Promise.resolve()) } 
                 'sw-request-consent-modal': true,
             },
             provide: {
-                shopIdChangeService: {
-                    checkShopId,
+                installationIdChangeService: {
+                    checkInstallationId,
                 },
                 admin_userActivityApiService: {
                     increment: jest.fn(() => Promise.resolve()),
@@ -264,43 +264,43 @@ describe('src/app/component/structure/sw-desktop', () => {
         expect(getModuleMetadata.mock.results[0].value).toBe(false);
     });
 
-    it('should not call shopIdChangeService when appUrlReachable is false', async () => {
+    it('should not call installationIdChangeService when appUrlReachable is false', async () => {
         Contena.Store.get('context').app.config.settings.appsRequireAppUrl = false;
 
         const wrapper = await createWrapper();
 
-        const checkShopIdSpy = jest.spyOn(wrapper.vm.shopIdChangeService, 'checkShopId');
+        const checkInstallationIdSpy = jest.spyOn(wrapper.vm.installationIdChangeService, 'checkInstallationId');
 
         await wrapper.vm.$router.push({ name: 'sw.blog.create.base' });
         await flushPromises();
 
-        expect(checkShopIdSpy).not.toHaveBeenCalled();
+        expect(checkInstallationIdSpy).not.toHaveBeenCalled();
     });
 
     it('should not render consent modal provider while shop ID check is pending', async () => {
-        const checkShopId = jest.fn(() => new Promise(() => {}));
+        const checkInstallationId = jest.fn(() => new Promise(() => {}));
 
-        const wrapper = await createWrapper({ checkShopId });
+        const wrapper = await createWrapper({ checkInstallationId });
 
-        expect(checkShopId).toHaveBeenCalledTimes(1);
+        expect(checkInstallationId).toHaveBeenCalledTimes(1);
         expect(wrapper.find('sw-settings-usage-data-consent-modal-data-provider-stub').exists()).toBe(false);
     });
 
     it('should render consent modal provider after shop ID check resolves without changes', async () => {
         const wrapper = await createWrapper({
-            checkShopId: jest.fn(() => Promise.resolve(null)),
+            checkInstallationId: jest.fn(() => Promise.resolve(null)),
         });
 
         await flushPromises();
 
-        expect(wrapper.vm.isShopIdCheckPending).toBe(false);
-        expect(wrapper.vm.shopIdCheck).toBeNull();
+        expect(wrapper.vm.isInstallationIdCheckPending).toBe(false);
+        expect(wrapper.vm.installationIdCheck).toBeNull();
         expect(wrapper.vm.showUsageDataConsentModalDataProvider).toBe(true);
     });
 
     it('should not render consent modal provider while shop ID change modal is shown', async () => {
         const wrapper = await createWrapper({
-            checkShopId: jest.fn(() => Promise.resolve({ apps: [], fingerprints: {} })),
+            checkInstallationId: jest.fn(() => Promise.resolve({ apps: [], fingerprints: {} })),
         });
 
         await flushPromises();

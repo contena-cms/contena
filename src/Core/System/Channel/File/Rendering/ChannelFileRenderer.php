@@ -20,7 +20,7 @@ use Twig\Environment;
  */
 class ChannelFileRenderer
 {
-    private const USER_PROVIDED_CONTENT_OVERRIDE_KEY = 'admin_user_provided_content';
+    private const USER_PROVIDED_CONTENT_OVERRIDE_KEY = 'user_provided_content';
 
     private const USER_PROVIDED_CONTENT_TEMPLATE = '@ChannelFileUserProvidedContent/%s';
 
@@ -140,7 +140,7 @@ class ChannelFileRenderer
         // The generated override namespace is not part of the normal namespace hierarchy.
         // Resolve the render entry first, then extend that concrete template.
         return \sprintf(
-            "{%% extends '%s' %%}\n\n{%% block admin_user_provided_content %%}{{ %s|raw }}{%% endblock %%}",
+            "{%% extends '%s' %%}\n\n{%% block user_provided_content %%}{{ %s|raw }}{%% endblock %%}",
             $parentTemplateName,
             $encodedContent
         );

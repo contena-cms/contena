@@ -8,20 +8,34 @@ use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Lcobucci\JWT\Signer\Key\InMemory;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\App\AppException;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Store\InAppPurchase;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 /**
  * @internal
  */
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class AppJWTGenerateRoute
 {
 
-    #[Route('/store-api/app-system/{name}/generate-token', name: 'store-api.app-system.generate-token', methods: ['POST'])]
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly InAppPurchase $inAppPurchase,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
+    #[Route('/channel-api/app-system/{name}/generate-token', name: 'channel-api.app-system.generate-token', methods: ['POST'])]
     public function generate(string $name, ChannelContext $context): JsonResponse
     {
         if ($context->getUser() === null) {
@@ -39,11 +53,11 @@ class AppJWTGenerateRoute
 
         $expiration = $this->clock->now()->modify('+10 minutes');
 
-        /** @var non-empty-string $shopId */
-        $shopId = $this->shopIdProvider->getShopId()->id;
+        /** @var non-empty-string $installationId */
+        $installationId = $this->installationIdProvider->getInstallationId()->id;
         $builder = $configuration
             ->builder()
-            ->issuedBy($shopId)
+            ->issuedBy($installationId)
             ->issuedAt($this->clock->now())
             ->canOnlyBeUsedAfter($this->clock->now())
             ->expiresAt($expiration);
@@ -77,7 +91,7 @@ class AppJWTGenerateRoute
         return new JsonResponse([
             'token' => $builder->getToken($configuration->signer(), $configuration->signingKey())->toString(),
             'expires' => $expiration->format(\DateTime::ATOM),
-            'shopId' => $shopId,
+            'installationId' => $installationId,
         ]);
     }
 

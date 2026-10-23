@@ -16,11 +16,14 @@ use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
 class TransportCollection implements \IteratorAggregate
 {
     /**
-     * @param array<MetricTransport> $transports
+     * @internal
      */
-    private function __construct(private readonly array $transports)
-    {
+    public function __construct(
+        private readonly array $transports
+    ) {
     }
+
+
 
     /**
      * @param \Traversable<MetricTransportFactoryInterface> $transportFactories

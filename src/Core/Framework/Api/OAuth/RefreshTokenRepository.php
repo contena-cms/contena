@@ -38,7 +38,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
      */
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity): void
     {
-        // AdminUser identifier is by design null in case of authentication with integration (and no real admin_user)
+        // AdminUser identifier is by design null in case of authentication with integration (and no real admin user)
         $adminUserIdentifier = $refreshTokenEntity->getAccessToken()->getUserIdentifier();
 
         if ($adminUserIdentifier) {
@@ -48,7 +48,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
                 ->insert('refresh_token')
                 ->values([
                     'id' => ':id',
-                    'admin_user_id' => ':admin_userId',
+                    'admin_user_id' => ':adminUserId',
                     'token_id' => ':tokenId',
                     'family_id' => ':familyId',
                     'issued_at' => ':issuedAt',
@@ -56,7 +56,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
                 ])
                 ->setParameters([
                     'id' => Uuid::randomBytes(),
-                    'admin_userId' => Uuid::fromHexToBytes($adminUserIdentifier),
+                    'adminUserId' => Uuid::fromHexToBytes($adminUserIdentifier),
                     'tokenId' => $refreshTokenEntity->getIdentifier(),
                     'familyId' => $familyId ?? Uuid::randomBytes(),
                     'issuedAt' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -136,8 +136,8 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     {
         $this->connection->createQueryBuilder()
             ->delete('refresh_token')
-            ->where('admin_user_id = UNHEX(:admin_userId)')
-            ->setParameter('admin_userId', $adminUserId)
+            ->where('admin_user_id = UNHEX(:adminUserId)')
+            ->setParameter('adminUserId', $adminUserId)
             ->executeStatement();
     }
 

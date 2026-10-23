@@ -18,6 +18,9 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler(handles: InAppPurchaseUpdateTask::class)]
 final class InAppPurchaseUpdateHandler extends ScheduledTaskHandler
 {
+    /**
+     * @internal
+     */
     public function __construct(
         EntityRepository $scheduledTaskRepository,
         LoggerInterface $logger,
@@ -25,6 +28,8 @@ final class InAppPurchaseUpdateHandler extends ScheduledTaskHandler
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
     }
+
+
 
     public function run(): void
     {

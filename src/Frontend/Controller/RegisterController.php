@@ -28,14 +28,35 @@ use Contena\Core\System\User\Exception\UserNotFoundByHashException;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\System\User\Exception\UserAlreadyConfirmedException;
 use Contena\Frontend\Controller\Exception\FrontendException;
+use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
+use Contena\Frontend\Framework\Guard\DoubleSubmitGuard;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
+use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class RegisterController extends FrontendController
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly AccountLoginPageLoader $loginPageLoader,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly EntityRepository $customerRepository,
+        private readonly EntityRepository $domainRepository,
+        private readonly HeaderPageletLoaderInterface $headerPageletLoader,
+        private readonly FooterPageletLoaderInterface $footerPageletLoader,
+        private readonly DoubleSubmitGuard $doubleSubmitGuard
+    ) {
+    }
+
+
     /**
      * Scopes the double submit marker and lock of the registration submission.
      */

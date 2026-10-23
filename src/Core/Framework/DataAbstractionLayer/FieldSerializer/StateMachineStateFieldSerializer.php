@@ -39,7 +39,7 @@ class StateMachineStateFieldSerializer extends FkFieldSerializer
             return parent::encode($field, $existence, $data, $parameters);
         }
 
-        // In every other case force the admin_user to use a state-transition
+        // In every other case force the admin user to use a state-transition
         $messageTemplate = 'Changing the state-machine-state of this entity is not allowed for scope {{ scope }}. '
             . 'Either change the state-machine-state via a state-transition or use a different scope.';
         $messageParameters = [

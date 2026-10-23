@@ -128,7 +128,7 @@ class TestAdminUser
 
     public function getUserId(): string
     {
-        return $this->admin_userId;
+        return $this->adminUserId;
     }
 
     public function getAclRoleId(): ?string

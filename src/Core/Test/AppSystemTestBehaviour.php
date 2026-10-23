@@ -18,7 +18,7 @@ use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
 use Symfony\Component\DependencyInjection\ContainerInterface;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 trait AppSystemTestBehaviour
 {
@@ -88,9 +88,9 @@ trait AppSystemTestBehaviour
     }
 
     #[After]
-    protected function deleteShopIdAndResetShopIdProvider(): void
+    protected function deleteInstallationIdAndResetInstallationIdProvider(): void
     {
-        static::getContainer()->get(ShopIdProvider::class)->deleteShopId();
+        static::getContainer()->get(InstallationIdProvider::class)->deleteInstallationId();
     }
 
     /**

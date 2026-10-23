@@ -3,7 +3,7 @@
 namespace Contena\Core\System\SystemConfig\Channel;
 
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Extension\ShopSettingsRouteExtension;
@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class ShopSettingsRoute extends AbstractShopSettingsRoute
 {
     /**
@@ -28,8 +28,8 @@ class ShopSettingsRoute extends AbstractShopSettingsRoute
     }
 
     #[Route(
-        path: '/store-api/shop-settings',
-        name: 'store-api.shop-settings',
+        path: '/channel-api/installation-settings',
+        name: 'channel-api.installation-settings',
         methods: [Request::METHOD_GET],
         defaults: [PlatformRequest::ATTRIBUTE_HTTP_CACHE => true],
     )]
@@ -54,7 +54,6 @@ class ShopSettingsRoute extends AbstractShopSettingsRoute
             loginRegistration: ShopLoginRegistrationSettings::fromConfig($this->loadDomain('core.loginRegistration', $channelId)),
             cart: ShopCartSettings::fromConfig($this->loadDomain('core.cart', $channelId)),
             listing: ShopListingSettings::fromConfig($this->loadDomain('core.listing', $channelId)),
-            newsletter: ShopNewsletterSettings::fromConfig($this->loadDomain('core.newsletter', $channelId)),
         );
 
         return new ShopSettingsRouteResponse($settings);

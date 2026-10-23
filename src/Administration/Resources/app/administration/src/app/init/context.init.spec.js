@@ -11,7 +11,7 @@ import {
     getAppInformation,
     getUserInformation,
     getUserTimezone,
-    getShopId,
+    getInstallationId,
     getTheme,
 } from '@contena-ag/meteor-admin-sdk/es/context';
 import { isService } from '@contena-ag/meteor-admin-sdk/es/_private/context';
@@ -263,14 +263,14 @@ describe('src/app/init/context.init.ts', () => {
         expect(windowId).toBe(Contena.Store.get('context').app.windowId);
     });
 
-    it('should return correct shopId', async () => {
-        expect(Contena.Store.get('context').app.config.shopId).toBeNull();
+    it('should return correct installationId', async () => {
+        expect(Contena.Store.get('context').app.config.installationId).toBeNull();
 
-        expect(await getShopId()).toBeNull();
+        expect(await getInstallationId()).toBeNull();
 
-        Contena.Store.get('context').app.config.shopId = 'shop-id';
+        Contena.Store.get('context').app.config.installationId = 'shop-id';
 
-        expect(await getShopId()).toBe('shop-id');
+        expect(await getInstallationId()).toBe('shop-id');
     });
 
     describe('theme', () => {

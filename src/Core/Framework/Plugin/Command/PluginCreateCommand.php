@@ -164,7 +164,7 @@ class PluginCreateCommand extends Command
             $summarySection = null;
             $questionSection = null;
 
-            // if additional scaffolding is not disabled via flag, ask the admin_user whether to add it
+            // if additional scaffolding is not disabled via flag, ask the admin user whether to add it
             if ($interactive && !$noScaffold) {
                 // permanent section title
                 $io->section('Additional Scaffolding');
@@ -199,7 +199,7 @@ class PluginCreateCommand extends Command
 
                 $questionSection?->clear();
 
-                // the generator only sets its option if the admin_user confirmed it, so it belongs into the summary
+                // the generator only sets its option if the admin user confirmed it, so it belongs into the summary
                 if ($generator->hasCommandOption() && $configuration->hasOption($generator->getCommandOptionName())) {
                     $optionTitle = $generator->getCommandOptionTitle();
                     $optionValue = $configuration->getOption($generator->getCommandOptionName());

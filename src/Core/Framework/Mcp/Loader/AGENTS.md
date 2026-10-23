@@ -52,12 +52,12 @@ The `AppMcpCapabilityExecutor` sends a JSON POST body with this structure:
   "arguments": { ... },
   "source": {
     "url": "https://shop.example.com",
-    "shopId": "abc123",
+    "installationId": "abc123",
     "appVersion": "1.2.0"
   }
 }
 ```
-- `shopId` identifies the Contena instance (from `ShopIdProvider`)
+- `installationId` identifies the Contena instance (from `InstallationIdProvider`)
 - `appVersion` is the installed version of the app
 - The request is signed with HMAC-SHA256 via `RequestSigner`
 - Successful executions are logged at `debug` level; failures at `error` level

@@ -1,37 +1,37 @@
 // review widget
-.blog-detail-review-widget {
+.blog-detail-comment-widget {
     top: 20px;
 }
 
-.blog-detail-review-progressbar-container {
+.blog-detail-comment-progressbar-container {
     height: 14px;
     margin-top: 4px;
 }
 
-.blog-detail-review-progressbar-bar {
+.blog-detail-comment-progressbar-bar {
     background-color: $progress-bar-review;
 }
 
 // review item
-.blog-detail-review-item {
+.blog-detail-comment-item {
     border-bottom: 1px solid $border-color;
     margin-bottom: 2rem;
 }
 
-.blog-detail-review-item-date p {
+.blog-detail-comment-item-date p {
     margin-bottom: 1rem;
 }
 
-.blog-detail-review-item-verify {
+.blog-detail-comment-item-verify {
     text-align: right;
 }
 
-.blog-detail-review-item-likebox {
+.blog-detail-comment-item-likebox {
     text-align: right;
 }
 
 // review form
-.blog-detail-review-form-star {
+.blog-detail-comment-form-star {
     &.is-active {
         .icon {
             color: $icon-review-color;
@@ -45,15 +45,15 @@
 
 @include media-breakpoint-up(md) {
     // review widget
-    .blog-detail-review-rating {
+    .blog-detail-comment-rating {
         display: flex;
     }
 
     // review form
-    .blog-detail-review-form-footer {
+    .blog-detail-comment-form-footer {
         display: flex;
 
-        .blog-detail-review-form-actions {
+        .blog-detail-comment-form-actions {
             margin-left: auto;
         }
     }

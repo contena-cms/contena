@@ -25,7 +25,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
  *
  * When neither header is present, the listener falls through to standard bearer JWT auth
  * (password-grant or client_credentials). McpAllowlistProvider handles allowlist resolution
- * for all auth modes, including the per-admin_user allowlist applied to bearer JWT sessions.
+ * for all auth modes, including the per-admin-user allowlist applied to bearer JWT sessions.
  */
 class McpAuthenticationListener implements EventSubscriberInterface
 {

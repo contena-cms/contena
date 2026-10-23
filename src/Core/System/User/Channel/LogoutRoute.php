@@ -2,7 +2,7 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class LogoutRoute extends AbstractLogoutRoute
 {
     /**
@@ -42,8 +42,8 @@ class LogoutRoute extends AbstractLogoutRoute
     }
 
     #[Route(
-        path: '/store-api/account/logout',
-        name: 'store-api.account.logout',
+        path: '/channel-api/account/logout',
+        name: 'channel-api.account.logout',
         defaults: [
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,

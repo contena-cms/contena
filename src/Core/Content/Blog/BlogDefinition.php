@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\Blog;
 
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogComment\BlogCommentDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategoryTree\BlogCategoryTreeDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCustomFieldSet\BlogCustomFieldSetDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaDefinition;
@@ -60,7 +61,6 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 use Contena\Core\System\Tag\TagDefinition;
-use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\System\Unit\UnitDefinition;
 use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogDefinition;
 
@@ -140,7 +140,6 @@ class BlogDefinition extends EntityDefinition
             (new ReferenceVersionField(self::class, 'parent_version_id'))->addFlags(new ApiAware(), new Required()),
 
             (new FkField('unit_id', 'unitId', UnitDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of the unit.'),
-            (new FkField('tax_id', 'taxId', TaxDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required())->setDescription('Unique identity of tax.'),
             (new FkField('blog_media_id', 'coverId', BlogMediaDefinition::class))->addFlags(new ApiAware(), new Inherited(), new NoConstraint())->setDescription('Unique identity of a BlogMedia item used as blog cover.'),
             (new ReferenceVersionField(BlogMediaDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required()),
             (new FkField('canonical_product_id', 'canonicalBlogId', self::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of canonical blog.'),
@@ -208,8 +207,6 @@ class BlogDefinition extends EntityDefinition
             (new ParentAssociationField(self::class, 'id'))->addFlags(new ApiAware())->setDescription('Unique identity of the blog.'),
             (new ChildrenAssociationField(self::class))->addFlags(new ApiAware())->setDescription('Blog variants that inherit from this parent blog'),
 
-            (new ManyToOneAssociationField('tax', 'tax_id', TaxDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Tax configuration (rate and calculation rules)'),
-
             (new ManyToOneAssociationField('unit', 'unit_id', UnitDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Blog unit of measure (e.g., piece, liter, kg)'),
 
             (new ManyToOneAssociationField('cover', 'blog_media_id', BlogMediaDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Main blog image displayed in listings and detail pages'),
@@ -225,6 +222,8 @@ class BlogDefinition extends EntityDefinition
             (new OneToManyAssociationField('media', BlogMediaDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Blog images and media gallery'),
 
             (new OneToManyAssociationField('visibilities', BlogVisibilityDefinition::class, 'blog_id'))->addFlags(new CascadeDelete(), new Inherited()),
+
+            (new OneToManyAssociationField('comments', BlogCommentDefinition::class, 'blog_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Reader comments posted on this blog article'),
 
             (new OneToManyAssociationField('searchKeywords', BlogSearchKeywordDefinition::class, 'blog_id'))->addFlags(new CascadeDelete(false)),
 

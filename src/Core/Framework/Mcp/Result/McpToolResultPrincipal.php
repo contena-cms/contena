@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @internal
  *
  * Names the principal a stored tool result belongs to, derived from the authenticated request:
- * the integration and admin_user on the Admin API, the sales channel and context token on the Store API.
+ * the integration and admin user on the Admin API, the sales channel and context token on the Store API.
  * A Store API context token changes on login and logout, so a result stored before that is no
  * longer readable afterwards. A Store API call without `sw-context-token` has no principal, so its
  * result is returned inline.

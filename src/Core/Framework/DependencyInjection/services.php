@@ -89,7 +89,7 @@ use Contena\Core\Framework\Routing\RouteScopeListener;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Routing\SymfonyRouteScopeWhitelist;
 use Contena\Core\Framework\Routing\Telemetry\AreaResolver;
 use Contena\Core\Framework\Routing\Telemetry\DomainResolver;
@@ -740,11 +740,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('kernel'),
             service('channel.repository'),
             service(DataValidator::class),
-            service(ChannelContextPersister::class),
-            service(ChannelContextService::class),
             service('event_dispatcher'),
             service('request_stack'),
-            service(ImitateUserTokenGenerator::class),
         ])
         ->call('setContainer', [
             service('service_container'),
@@ -756,7 +753,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ApiRouteScope::class)
         ->tag('contena.route_scope');
 
-    $services->set(StoreApiRouteScope::class)
+    $services->set(ChannelApiRouteScope::class)
         ->tag('contena.route_scope');
 
     $services->set(RouteScopeRegistry::class)

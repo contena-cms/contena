@@ -83,7 +83,7 @@ class OpenApiRouteDefaultsFilter
     {
         $apiPrefix = match ($api) {
             DefinitionService::API => '/api',
-            DefinitionService::STORE_API => '/store-api',
+            DefinitionService::STORE_API => '/channel-api',
         };
 
         $hiddenPaths = [];

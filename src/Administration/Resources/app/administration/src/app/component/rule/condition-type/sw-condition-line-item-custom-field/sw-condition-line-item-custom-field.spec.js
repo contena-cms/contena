@@ -14,7 +14,7 @@ const defaultCustomFieldMock = [
         customFieldSetId: 'custom-field-set-id-1',
         allowCustomerWrite: false,
         allowCartExpose: true,
-        storeApiAware: true,
+        channelApiAware: true,
         config: {
             type: 'checkbox',
             label: 'checkbox',
@@ -35,7 +35,7 @@ const defaultCustomFieldMock = [
         customFieldSetId: 'custom-field-set-id-2',
         allowCustomerWrite: false,
         allowCartExpose: true,
-        storeApiAware: true,
+        channelApiAware: true,
         config: {
             type: 'switch',
             label: 'switch',
@@ -56,7 +56,7 @@ const defaultCustomFieldMock = [
         customFieldSetId: 'custom-field-set-id-3',
         allowCustomerWrite: false,
         allowCartExpose: true,
-        storeApiAware: true,
+        channelApiAware: true,
         config: {
             label: 'editor',
             componentName: 'sw-text-editor',
@@ -76,7 +76,7 @@ const defaultCustomFieldMock = [
         customFieldSetId: 'custom-field-set-id-4',
         allowCustomerWrite: false,
         allowCartExpose: true,
-        storeApiAware: true,
+        channelApiAware: true,
         config: {
             label: 'text',
             componentName: 'sw-field',

@@ -62,7 +62,7 @@ class StateMachineHistoryDefinition extends EntityDefinition
             (new FkField('to_state_id', 'toStateId', StateMachineStateDefinition::class))->addFlags(new Required())->setDescription('Unique identity of toState.'),
             (new ManyToOneAssociationField('toStateMachineState', 'to_state_id', StateMachineStateDefinition::class, 'id', false))->addFlags(new ApiAware()),
             (new StringField('action_name', 'transitionActionName'))->setDescription('Unique name of transition action.'),
-            (new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class))->setDescription('Unique identity of admin_user.'),
+            (new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class))->setDescription('Unique identity of admin user.'),
             new FkField('integration_id', 'integrationId', IntegrationDefinition::class),
             new LongTextField('internal_comment', 'internalComment'),
             (new StringField('source_type', 'sourceType', 32))->setDescription('Type of the API context source which triggered the transition.'),

@@ -342,7 +342,7 @@ class InfoControllerTest extends TestCase
             'kernel.contena_version_revision' => 'PHPUnit',
             'contena.media.enable_url_upload_feature' => true,
             'contena.staging.administration.show_banner' => false,
-            'contena.cnployment.runtime_extension_management' => true,
+            'contena.deployment.runtime_extension_management' => true,
             'contena.auto_update.hide_module' => $hideUpdateModule,
         ]);
 

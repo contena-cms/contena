@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
  * Auth mode → allowlist resolution:
  * - AdminUser access key (SWUA...) → admin_user.mcp_allowlist via admin_user_id lookup
  * - Integration access key (SWIA...) → integration.mcp_allowlist
- * - Integration + sw-app-admin_user-id (Copilot) → intersect(integration, admin_user)
+ * - Integration + sw-app-admin-user-id (Copilot) → intersect(integration, admin user)
  * - Bearer JWT, password grant → admin_user.mcp_allowlist via ATTRIBUTE_OAUTH_USER_ID
  * - Bearer JWT, client_credentials → integration.mcp_allowlist via ATTRIBUTE_OAUTH_CLIENT_ID
  * - Admin users (admin=true) → always unrestricted regardless of auth mode

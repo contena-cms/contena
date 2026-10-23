@@ -26,14 +26,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ]);
 
     // Mail & Flow Data Providers
-    $services->set(OrderProvider::class)
-        ->args([
-            service('event_dispatcher'),
-            service('service_container'),
-        ])
-        ->tag('contena.mail.data_provider', ['key' => 'order']);
-
-    $services->set(UserProvider::class)
+        $services->set(UserProvider::class)
         ->args([
             service('event_dispatcher'),
             service('service_container'),
@@ -61,21 +54,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.mail.data_provider', ['key' => 'user_recovery']);
 
-    $services->set(NewsletterRecipientProvider::class)
-        ->args([
-            service('event_dispatcher'),
-            service('service_container'),
-        ])
-        ->tag('contena.mail.data_provider', ['key' => 'newsletter_recipient']);
-
-    $services->set(OrderTransactionProvider::class)
-        ->args([
-            service('event_dispatcher'),
-            service('service_container'),
-        ])
-        ->tag('contena.mail.data_provider', ['key' => 'order_transaction']);
-
-    $services->set(ChannelProvider::class)
+            $services->set(ChannelProvider::class)
         ->args([
             service('event_dispatcher'),
             service('service_container'),

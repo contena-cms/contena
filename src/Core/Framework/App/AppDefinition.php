@@ -96,7 +96,7 @@ class AppDefinition extends EntityDefinition
             (new StringField('license', 'license'))->setDescription('Software license\'s like MIT, etc.'),
             (new BoolField('active', 'active'))->addFlags(new Required())->setDescription('When boolean value is `true`, the app is enabled for selection.'),
             (new BoolField('configurable', 'configurable'))->addFlags(new Required())->setDescription('When boolean value is `true`, the app is configurable for further customizations.'),
-            (new StringField('privacy', 'privacy'))->setDescription('Privacy-related configuration properties like admin_user data protection, consent mechanisms, or data privacy compliance for an app.'),
+            (new StringField('privacy', 'privacy'))->setDescription('Privacy-related configuration properties like admin user data protection, consent mechanisms, or data privacy compliance for an app.'),
             (new StringField('version', 'version'))->addFlags(new Required())->setDescription('Version of the plugin.'),
             (new BlobField('icon', 'iconRaw'))->removeFlag(ApiAware::class),
             (new StringField('icon', 'icon'))->addFlags(new WriteProtected(), new Runtime())->setDescription('Icon for the app.'),

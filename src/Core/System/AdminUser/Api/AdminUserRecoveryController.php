@@ -25,10 +25,10 @@ class AdminUserRecoveryController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/api/_action/admin_user/admin_user-recovery', defaults: ['auth_required' => false], name: 'api.action.admin_user.admin_user-recovery', methods: ['POST'])]
+    #[Route(path: '/api/_action/admin-user/admin-user-recovery', defaults: ['auth_required' => false], name: 'api.action.admin_user.admin-user-recovery', methods: ['POST'])]
     public function createUserRecovery(Request $request, Context $context): Response
     {
-        if (!$this->admin_userRecoveryEnabled) {
+        if (!$this->adminUserRecoveryEnabled) {
             // Silently do nothing to avoid revealing that the flow is disabled or whether the email exists.
             return new Response();
         }
@@ -40,31 +40,31 @@ class AdminUserRecoveryController extends AbstractController
             strtolower($email) . '-' . $request->getClientIp()
         );
 
-        $this->admin_userRecoveryService->generateUserRecovery($email, $context);
+        $this->adminUserRecoveryService->generateUserRecovery($email, $context);
 
         return new Response();
     }
 
-    #[Route(path: '/api/_action/admin_user/admin_user-recovery/hash', defaults: ['auth_required' => false], name: 'api.action.admin_user.admin_user-recovery.hash', methods: ['GET'])]
+    #[Route(path: '/api/_action/admin-user/admin-user-recovery/hash', defaults: ['auth_required' => false], name: 'api.action.admin_user.admin-user-recovery.hash', methods: ['GET'])]
     public function checkUserRecovery(Request $request, Context $context): Response
     {
-        if (!$this->admin_userRecoveryEnabled) {
+        if (!$this->adminUserRecoveryEnabled) {
             return $this->getErrorResponse();
         }
 
         $hash = (string) $request->query->get('hash');
 
-        if ($hash !== '' && $this->admin_userRecoveryService->checkHash($hash, $context)) {
+        if ($hash !== '' && $this->adminUserRecoveryService->checkHash($hash, $context)) {
             return new Response();
         }
 
         return $this->getErrorResponse();
     }
 
-    #[Route(path: '/api/_action/admin_user/admin_user-recovery/password', defaults: ['auth_required' => false], name: 'api.action.admin_user.admin_user-recovery.password', methods: ['PATCH'])]
+    #[Route(path: '/api/_action/admin-user/admin-user-recovery/password', defaults: ['auth_required' => false], name: 'api.action.admin_user.admin-user-recovery.password', methods: ['PATCH'])]
     public function updateUserPassword(#[\SensitiveParameter] Request $request, Context $context): Response
     {
-        if (!$this->admin_userRecoveryEnabled) {
+        if (!$this->adminUserRecoveryEnabled) {
             return $this->getErrorResponse();
         }
 
@@ -76,12 +76,12 @@ class AdminUserRecoveryController extends AbstractController
             return $this->getErrorResponse();
         }
 
-        $adminUser = $this->admin_userRecoveryService->getUserByHash($hash, $context);
+        $adminUser = $this->adminUserRecoveryService->getUserByHash($hash, $context);
         if ($adminUser === null) {
             return $this->getErrorResponse();
         }
 
-        if (!$this->admin_userRecoveryService->updatePassword($hash, $password, $context)) {
+        if (!$this->adminUserRecoveryService->updatePassword($hash, $password, $context)) {
             return $this->getErrorResponse();
         }
 

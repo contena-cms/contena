@@ -39,7 +39,7 @@ class AdminUserRecoveryRequestEvent extends Event implements AdminUserAware, Mai
 
     public function getUserRecovery(): AdminUserRecoveryEntity
     {
-        return $this->admin_userRecovery;
+        return $this->adminUserRecovery;
     }
 
     public function getContext(): Context
@@ -69,7 +69,7 @@ class AdminUserRecoveryRequestEvent extends Event implements AdminUserAware, Mai
     {
         if (!$this->mailRecipientStruct instanceof MailRecipientStruct) {
             /** @var AdminUserEntity $adminUser */
-            $adminUser = $this->admin_userRecovery->getUser();
+            $adminUser = $this->adminUserRecovery->getUser();
 
             $this->mailRecipientStruct = new MailRecipientStruct([
                 $adminUser->getEmail() => $adminUser->getName(),
@@ -91,6 +91,6 @@ class AdminUserRecoveryRequestEvent extends Event implements AdminUserAware, Mai
 
     public function getUserId(): string
     {
-        return $this->admin_userRecovery->getId();
+        return $this->adminUserRecovery->getId();
     }
 }

@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\RateLimiter\Policy;
 use Psr\Clock\ClockInterface;
 use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\NoLock;
+use Symfony\Component\RateLimiter\Exception\ReserveNotSupportedException;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\Policy\ResetLimiterTrait;
 use Symfony\Component\RateLimiter\RateLimit;
@@ -20,7 +21,6 @@ use Symfony\Component\RateLimiter\Util\TimeUtil;
 class TimeBackoffLimiter implements LimiterInterface
 {
     use ResetLimiterTrait;
-use Symfony\Component\RateLimiter\Exception\ReserveNotSupportedException;
 
     private readonly int $reset;
 

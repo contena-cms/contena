@@ -86,12 +86,12 @@ export default class AppClientService {
             throw new Error(`Error while fetching token, got status code: ${response.status} with response ${await response.text()}`);
         }
 
-        const data = await response.json() as { token: string, shopId: string, expires: string };
+        const data = await response.json() as { token: string, installationId: string, expires: string };
 
         return {
             headers: {
                 'contena-app-token': data.token,
-                'contena-app-shop-id': data.shopId,
+                'contena-app-shop-id': data.installationId,
             },
             expires: data.expires,
         };

@@ -10,7 +10,7 @@ use Symfony\Component\HttpFoundation\Request;
  * overlapping values, so a single `other` default is enough).
  *
  * By route shape:
- *  - frontend.* / store-api.*     → functional group (ordered prefix match, first hit wins)
+ *  - frontend.* / channel-api.*     → functional group (ordered prefix match, first hit wins)
  *  - api.action.*                 → action domain (segment after `api.action.`); `api.action.sync` excluded
  *  - admin CRUD / clone / version → uses entity name mapping from EntityGroupResolver (entity from the `entityName`/`entity` attribute)
  *  - anything else                → other
@@ -42,57 +42,57 @@ class DomainResolver
         // blog
         'frontend.detail' => 'blog',
         'frontend.blog' => 'blog',
-        'store-api.blog' => 'blog',
+        'channel-api.blog' => 'blog',
 
         // category / navigation
         'frontend.navigation' => 'category',
-        'store-api.navigation' => 'category',
-        'store-api.category' => 'category',
+        'channel-api.navigation' => 'category',
+        'channel-api.category' => 'category',
 
         // content (home + cms + landing pages)
         'frontend.home' => 'content',
         'frontend.cms' => 'content',
         'frontend.landing' => 'content',
-        'store-api.cms' => 'content',
-        'store-api.landing-page' => 'content',
+        'channel-api.cms' => 'content',
+        'channel-api.landing-page' => 'content',
 
         // search
         'frontend.search' => 'search',
-        'store-api.search' => 'search',
+        'channel-api.search' => 'search',
 
         // cart (before checkout)
         'frontend.cart' => 'cart',
         'frontend.checkout.cart' => 'cart',
         'frontend.checkout.line-item' => 'cart',
-        'store-api.checkout.cart' => 'cart',
+        'channel-api.checkout.cart' => 'cart',
 
         // checkout
         'frontend.checkout' => 'checkout',
-        'store-api.checkout' => 'checkout',
+        'channel-api.checkout' => 'checkout',
 
         // auth (before user)
         'frontend.account.login' => 'auth',
         'frontend.account.logout' => 'auth',
         'frontend.account.register' => 'auth',
         'frontend.account.recover' => 'auth',
-        'store-api.account.login' => 'auth',
-        'store-api.account.logout' => 'auth',
-        'store-api.account.register' => 'auth',
-        'store-api.account.recover' => 'auth',
+        'channel-api.account.login' => 'auth',
+        'channel-api.account.logout' => 'auth',
+        'channel-api.account.register' => 'auth',
+        'channel-api.account.recover' => 'auth',
 
         // order (before user)
         'frontend.account.order' => 'order',
         'frontend.account.edit-order' => 'order',
-        'store-api.order' => 'order',
+        'channel-api.order' => 'order',
 
         // user (account catch-all + wishlist)
         'frontend.account' => 'user',
         'frontend.wishlist' => 'user',
-        'store-api.account' => 'user',
+        'channel-api.account' => 'user',
 
         // media
         'frontend.media' => 'media',
-        'store-api.media' => 'media',
+        'channel-api.media' => 'media',
     ];
 
     /**
@@ -132,7 +132,7 @@ class DomainResolver
         $route = (string) $request->attributes->get('_route', '');
 
         // route-only branches are pure → memoized (finite route keyspace, see class docblock)
-        if (str_starts_with($route, 'frontend.') || str_starts_with($route, 'store-api.')) {
+        if (str_starts_with($route, 'frontend.') || str_starts_with($route, 'channel-api.')) {
             return $this->cache[$route] ??= $this->functionalGroup($route);
         }
 

@@ -80,7 +80,7 @@ abstract class AbstractCaptcha
 
     /**
      * getData returns data the captcha might need to render in the template for
-     * the admin_user to be able to correctly fill in the captcha value, for example
+     * the admin user to be able to correctly fill in the captcha value, for example
      * an image of distorted text.
      *
      * @return array<string|int, mixed>|null

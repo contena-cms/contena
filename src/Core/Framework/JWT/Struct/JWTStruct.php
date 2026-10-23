@@ -45,7 +45,7 @@ class JWTStruct implements ExtendableInterface
     public ?\DateTimeImmutable $nbf = null;
 
     /**
-     * Subject of the JWT (the admin_user identifier)
+     * Subject of the JWT (the admin user identifier)
      */
     public ?string $sub = null;
 

@@ -49,7 +49,7 @@ type GatewayContext = {
 };
 
 type GatewayUser = {
-    shop_id: string;
+    installation_id: string;
     id: EntityKey<'admin_user'>;
 };
 
@@ -210,9 +210,9 @@ export class GatewayClient implements TrackingClient {
         void this.#sendJsonRequest(`${this.gateWayUrl}/v2/event/anonymous`, payload);
     }
 
-    deleteUser(shopId: string, admin_userId: EntityKey<'admin_user'>) {
+    deleteUser(installationId: string, admin_userId: EntityKey<'admin_user'>) {
         void this.#sendJsonRequest(`${this.gateWayUrl}/v1/delete-admin_user`, {
-            shop_id: shopId,
+            installation_id: installationId,
             admin_user_id: admin_userId,
         });
     }
@@ -306,14 +306,14 @@ export class GatewayClient implements TrackingClient {
         }
 
         const appConfig = Contena.Store.get('context')?.app?.config;
-        const shopId = appConfig.shopId ?? '';
-        if (!shopId) {
+        const installationId = appConfig.installationId ?? '';
+        if (!installationId) {
             return null;
         }
 
         return {
             admin_user: {
-                shop_id: shopId,
+                installation_id: installationId,
                 id: this.#admin_userId,
             },
             context: this.#getTrackedContext(),

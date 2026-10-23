@@ -8,7 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\DataMappingEvent;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -17,7 +17,7 @@ use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
 use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\Channel\ChannelApiCustomFieldMapper;
 use Contena\Core\System\Channel\SuccessResponse;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Extension\ChangeUserProfileRouteExtension;
@@ -36,7 +36,7 @@ use Contena\Core\System\User\Channel\UserVatIdNormalizerTrait;
 
 #[Route(
     defaults: [
-        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID],
+        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
         PlatformRequest::ATTRIBUTE_CONTEXT_TOKEN_REQUIRED => true,
     ]
 )]
@@ -54,7 +54,7 @@ class ChangeUserProfileRoute extends AbstractChangeUserProfileRoute
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly DataValidator $validator,
         private readonly DataValidationFactoryInterface $userProfileValidationFactory,
-        private readonly StoreApiCustomFieldMapper $storeApiCustomFieldMapper,
+        private readonly ChannelApiCustomFieldMapper $channelApiCustomFieldMapper,
         private readonly ExtensionDispatcher $extensions,
     ) {
     }
@@ -65,8 +65,8 @@ class ChangeUserProfileRoute extends AbstractChangeUserProfileRoute
     }
 
     #[Route(
-        path: '/store-api/account/change-profile',
-        name: 'store-api.account.change-profile',
+        path: '/channel-api/account/change-profile',
+        name: 'channel-api.account.change-profile',
         defaults: [
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,
@@ -135,7 +135,7 @@ class ChangeUserProfileRoute extends AbstractChangeUserProfileRoute
         }
 
         if ($data->get('customFields') instanceof RequestDataBag) {
-            $userData['customFields'] = $this->storeApiCustomFieldMapper->map(
+            $userData['customFields'] = $this->channelApiCustomFieldMapper->map(
                 UserDefinition::ENTITY_NAME,
                 $data->get('customFields')
             );

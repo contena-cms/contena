@@ -11,9 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @public This class is used as type-hint for all event listeners, so the class string is "public consumable" API
  *
- * @title Loads the navigation categories for the store-api navigation route
+ * @title Loads the navigation categories for the channel-api navigation route
  *
- * @description Wraps the `/store-api/navigation` loading. A listener on the `.pre` event may resolve the categories itself — e.g. a user-group filtered tree, custom child counts, or an external source — by assigning `$extension->result` and stopping propagation, short-circuiting the core. `.post` may enrich the loaded categories.
+ * @description Wraps the `/channel-api/navigation` loading. A listener on the `.pre` event may resolve the categories itself — e.g. a user-group filtered tree, custom child counts, or an external source — by assigning `$extension->result` and stopping propagation, short-circuiting the core. `.post` may enrich the loaded categories.
  *
  * @codeCoverageIgnore
  *
@@ -42,7 +42,7 @@ final class NavigationRouteExtension extends Extension
         /**
          * @public
          *
-         * @description The current store-api request
+         * @description The current channel-api request
          */
         public readonly Request $request,
         /**

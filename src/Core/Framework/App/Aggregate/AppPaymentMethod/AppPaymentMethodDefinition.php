@@ -47,7 +47,7 @@ class AppPaymentMethodDefinition extends EntityDefinition
             (new StringField('app_name', 'appName'))->addFlags(new Required())->setDescription('Name of the app.'),
             (new StringField('identifier', 'identifier'))->addFlags(new Required())->setDescription('It is a unique identity of an AppPaymentMethod.'),
             (new StringField('pay_url', 'payUrl'))->setDescription('A URL sending the pay request.'),
-            (new StringField('finalize_url', 'finalizeUrl'))->setDescription('A URL that redirects the admin_user back to the shop.'),
+            (new StringField('finalize_url', 'finalizeUrl'))->setDescription('A URL that redirects the admin user back to the shop.'),
             (new StringField('validate_url', 'validateUrl'))->setDescription('A validate URL confirms the authenticity of a payment reference when accessed.'),
             (new StringField('capture_url', 'captureUrl'))->setDescription('A capture URL allows the payments to be processed and completed once validated.'),
             (new StringField('refund_url', 'refundUrl'))->setDescription('A refund URL is used to initiate the refund process for a purchase.'),

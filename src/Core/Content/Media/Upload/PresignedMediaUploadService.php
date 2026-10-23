@@ -252,7 +252,7 @@ readonly class PresignedMediaUploadService
 
         $data = [
             'id' => $mediaId,
-            'admin_userId' => $context->getSource() instanceof AdminApiSource ? $context->getSource()->getUserId() : null,
+            'adminUserId' => $context->getSource() instanceof AdminApiSource ? $context->getSource()->getUserId() : null,
             'mimeType' => $mimeType,
             'fileExtension' => $payload->extension,
             'fileSize' => $s3Metadata->size,

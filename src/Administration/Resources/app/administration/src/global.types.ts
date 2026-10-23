@@ -16,7 +16,7 @@ import type { HttpClient } from 'src/core/factory/http-client.types';
 import type { ContenaClass } from 'src/core/contena';
 import type RepositoryFactory from 'src/core/data/repository-factory.data';
 import type ExtensionSdkService from 'src/core/service/api/extension-sdk.service';
-import type CartStoreService from 'src/core/service/api/cart-store-api.api.service';
+import type CartStoreService from 'src/core/service/api/cart-channel-api.api.service';
 import type CustomSnippetApiService from 'src/core/service/api/custom-snippet.api.service';
 import type MediaService from 'src/core/service/api/media.api.service';
 import type LocaleFactory from 'src/core/factory/locale.factory';
@@ -30,7 +30,7 @@ import type AdminUserApiService from 'src/core/service/api/admin_user.api.servic
 import type AdminUserConfigService from 'src/core/service/api/admin_user-config.api.service';
 import type OAuthAuthorizeApiService from 'src/core/service/api/oauth-authorize.api.service';
 import type ApiServiceFactory from 'src/core/factory/api-service.factory';
-import type ShopIdChangeService from 'src/core/service/api/shop-id-change.service';
+import type InstallationIdChangeService from 'src/core/service/api/shop-id-change.service';
 import type BlogTypeApiService from 'src/app/service/blog-type.api.service';
 import type { ComponentInternalInstance, PropType as VuePropType } from 'vue';
 import type { I18n } from 'vue-i18n';
@@ -51,7 +51,7 @@ import type { Editor as CoreEditor, EditorOptions } from '@tiptap/core';
 import type Link from '@tiptap/extension-link';
 /* eslint-enable @typescript-eslint/no-unused-vars */
 import type { ComponentConfig } from './core/factory/async-component.factory';
-import type StoreApiService from './core/service/api/store.api.service';
+import type ChannelApiService from './core/service/api/store.api.service';
 import type ContenaDiscountCampaignService from './app/service/discount-campaign.service';
 import type AppModulesService from './core/service/api/app-modules.service';
 import type AclService from './app/service/acl.service';
@@ -300,7 +300,7 @@ declare global {
         shortcutService: $TSFixMe;
         snippetService: SnippetApiService;
         stateStyleDataProviderService: StateStyleService;
-        storeService: StoreApiService;
+        storeService: ChannelApiService;
         systemConfigApiService: SystemConfigApiService;
         timezoneService: $TSFixMe;
         updateService: UpdateApiService;
@@ -311,7 +311,7 @@ declare global {
         validationService: $TSFixMe;
         ssoSettingsService: SsoSettingsService;
         ssoInvitationService: SsoInvitationService;
-        shopIdChangeService: ShopIdChangeService;
+        installationIdChangeService: InstallationIdChangeService;
         blogTypeService: BlogTypeApiService;
         consentApiService: ConsentApiService;
         validationApiService: ValidationApiService;
@@ -504,7 +504,7 @@ declare global {
         };
     }
 
-    interface StoreApiException extends ContenaHttpError {
+    interface ChannelApiException extends ContenaHttpError {
         meta?: ContenaHttpError['meta'] & {
             documentationLink?: string;
         };

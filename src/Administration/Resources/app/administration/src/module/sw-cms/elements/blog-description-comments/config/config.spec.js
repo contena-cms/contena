@@ -11,7 +11,7 @@ const blogMock = {
 
 async function createWrapper({ featureActive = false } = {}) {
     return mount(
-        await wrapTestComponent('sw-cms-el-config-blog-description-reviews', {
+        await wrapTestComponent('sw-cms-el-config-blog-description-comments', {
             sync: true,
         }),
         {
@@ -70,7 +70,7 @@ async function createWrapper({ featureActive = false } = {}) {
                         },
                         getCmsElementRegistry: () => {
                             return {
-                                'blog-description-reviews': {
+                                'blog-description-comments': {
                                     defaultConfig: {
                                         blog: {
                                             source: 'static',
@@ -97,7 +97,7 @@ async function createWrapper({ featureActive = false } = {}) {
             },
             props: {
                 element: {
-                    type: 'blog-description-reviews',
+                    type: 'blog-description-comments',
                     config: {},
                     data: {},
                 },
@@ -114,7 +114,7 @@ async function createWrapper({ featureActive = false } = {}) {
     );
 }
 
-describe('src/module/sw-cms/elements/blog-description-reviews/config', () => {
+describe('src/module/sw-cms/elements/blog-description-comments/config', () => {
     beforeAll(() => {
         Contena.Store.register({
             id: 'cmsPage',
@@ -168,7 +168,7 @@ describe('src/module/sw-cms/elements/blog-description-reviews/config', () => {
         const wrapper = await createWrapper({ featureActive: true });
         const tabs = wrapper.getComponent({ name: 'mt-tabs' });
 
-        expect(tabs.props('positionIdentifier')).toBe('sw-cms-element-blog-description-reviews');
+        expect(tabs.props('positionIdentifier')).toBe('sw-cms-element-blog-description-comments');
         expect(tabs.props('defaultItem')).toBe('content');
         expect(tabs.props('items')).toEqual([
             {

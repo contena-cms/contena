@@ -12,7 +12,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 
 /**
  * This rule detects usage of the strip_tags() function, it silently drops everything after a stray "<",
- * so admin_user input like "I <3 Kisses" is truncated to "I ".
+ * so admin user input like "I <3 Kisses" is truncated to "I ".
  * Reference: https://www.php.net/manual/en/function.strip-tags.php
  *
  * @internal

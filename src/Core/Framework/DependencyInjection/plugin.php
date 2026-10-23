@@ -34,7 +34,7 @@ use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\GitignoreGenerat
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\JavascriptPluginGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\PluginClassGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScheduledTaskGenerator;
-use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\StoreApiRouteGenerator;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ChannelApiRouteGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\FrontendControllerGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\TestsGenerator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\ScaffoldingCollector;
@@ -129,7 +129,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service('plugin.repository'),
             service('event_dispatcher'),
-            service(KernelPluginCollection::class),
             service('service_container'),
             service(MigrationCollectionLoader::class),
             service(AssetService::class),
@@ -140,7 +139,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
             service(CustomEntityPersister::class),
             service(CustomEntitySchemaUpdater::class),
-            service(PluginService::class),
             service(VersionSanitizer::class),
             service(DefinitionInstanceRegistry::class),
             service(RequestStack::class),
@@ -345,7 +343,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(FrontendControllerGenerator::class)
         ->tag('contena.scaffold.generator');
 
-    $services->set(StoreApiRouteGenerator::class)
+    $services->set(ChannelApiRouteGenerator::class)
         ->tag('contena.scaffold.generator');
 
     $services->set(EntityGenerator::class)

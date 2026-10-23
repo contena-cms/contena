@@ -25,7 +25,7 @@ abstract class AbstractListingProcessor
 
     /**
      * The `process` function allows to post process the determined listing result and enrich the result with more
-     * meta information or to further process it for more admin_user readable data.
+     * meta information or to further process it for more admin user readable data.
      *
      * The function is used in different contexts, like search, suggest and listing. You can check the different context by checking
      * the `criteria.states` collection for:

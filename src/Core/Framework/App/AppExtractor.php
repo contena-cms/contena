@@ -6,17 +6,22 @@ use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\Util\ZipUtils;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
+use Contena\Core\Framework\App\AppArchiveValidator;
 
 /**
  * @internal
  */
 class AppExtractor
 {
+    /**
+     * @internal
+     */
     public function __construct(
         private readonly AppArchiveValidator $appArchiveValidator,
-        private readonly Filesystem $filesystem = new Filesystem()
+        private readonly Filesystem $filesystem = new Filesystem(),
     ) {
     }
+
 
     /**
      * If we know the expected app name we can perform extra validation.

@@ -4,7 +4,7 @@ namespace Contena\Core\Framework\Api\EventListener;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -46,7 +46,7 @@ class CompressedCriteriaRequestListener implements EventSubscriberInterface
         }
 
         $scopes = (array) $request->attributes->get(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, []);
-        if (!\in_array(StoreApiRouteScope::ID, $scopes, true)) {
+        if (!\in_array(ChannelApiRouteScope::ID, $scopes, true)) {
             return;
         }
 

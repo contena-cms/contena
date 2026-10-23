@@ -236,7 +236,7 @@ class ImportExportService
 
     private function findUser(Context $context, string $adminUserId): AdminUserEntity
     {
-        $adminUser = $this->admin_userRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
+        $adminUser = $this->adminUserRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
         \assert($adminUser !== null);
 
         return $adminUser;

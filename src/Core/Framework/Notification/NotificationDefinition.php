@@ -64,7 +64,7 @@ class NotificationDefinition extends EntityDefinition
             (new StringField('status', 'status'))->addFlags(new Required())->setDescription('When status is set, the Notification is made visible.'),
             (new LongTextField('message', 'message'))->addFlags(new Required())->setDescription('Indicates text or content of a notification message.'),
             (new BoolField('admin_only', 'adminOnly'))->setDescription('Parameter within a notification configuration that determines whether a notification is intended for administrators only.'),
-            (new ListField('required_privileges', 'requiredPrivileges'))->setDescription('Parameter within a notification configuration that specifies the required admin_user privileges or permissions to access or view a particular notification.'),
+            (new ListField('required_privileges', 'requiredPrivileges'))->setDescription('Parameter within a notification configuration that specifies the required admin user privileges or permissions to access or view a particular notification.'),
 
             (new FkField('created_by_integration_id', 'createdByIntegrationId', IntegrationDefinition::class))->setDescription('Unique identity of createdByIntegration.'),
             (new FkField('created_by_user_id', 'createdByUserId', AdminUserDefinition::class))->setDescription('Unique identity of createdByUser.'),

@@ -17,7 +17,7 @@ class McpException extends HttpException
         return new self(
             Response::HTTP_UNAUTHORIZED,
             self::MCP_UNSUPPORTED_KEY_TYPE,
-            'Only integration or admin_user access keys are supported for MCP authentication.',
+            'Only integration or admin user access keys are supported for MCP authentication.',
         );
     }
 

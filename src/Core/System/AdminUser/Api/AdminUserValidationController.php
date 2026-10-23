@@ -23,7 +23,7 @@ class AdminUserValidationController extends AbstractController
     }
 
     #[Route(
-        path: 'api/_action/admin_user/check-email-unique',
+        path: 'api/_action/admin user/check-email-unique',
         name: 'api.action.check-email-unique',
         defaults: [PlatformRequest::ATTRIBUTE_ACL => ['admin_user:read']],
         methods: [Request::METHOD_POST]
@@ -42,12 +42,12 @@ class AdminUserValidationController extends AbstractController
         $id = (string) $request->request->get('id');
 
         return new JsonResponse(
-            ['emailIsUnique' => $this->admin_userValidationService->checkEmailUnique($email, $id, $context)]
+            ['emailIsUnique' => $this->adminUserValidationService->checkEmailUnique($email, $id, $context)]
         );
     }
 
     #[Route(
-        path: 'api/_action/admin_user/check-username-unique',
+        path: 'api/_action/admin user/check-username-unique',
         name: 'api.action.check-username-unique',
         defaults: [PlatformRequest::ATTRIBUTE_ACL => ['admin_user:read']],
         methods: [Request::METHOD_POST]
@@ -66,7 +66,7 @@ class AdminUserValidationController extends AbstractController
         $id = (string) $request->request->get('id');
 
         return new JsonResponse(
-            ['usernameIsUnique' => $this->admin_userValidationService->checkUsernameUnique($username, $id, $context)]
+            ['usernameIsUnique' => $this->adminUserValidationService->checkUsernameUnique($username, $id, $context)]
         );
     }
 }

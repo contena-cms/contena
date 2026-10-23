@@ -6,6 +6,8 @@ use League\OAuth2\Server\AuthorizationServer;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\TrustedOriginUrlGenerator;
+use Contena\Core\Framework\Sso\SsoAdminUser\SsoAdminUserInvitationMailService;
+use Contena\Core\Framework\Sso\SsoAdminUser\SsoAdminUserService;
 use Contena\Core\Framework\Sso\StateValidator;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
@@ -17,6 +19,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\Sso\Config\LoginConfigService;
+use Contena\Core\Framework\Sso\LoginResponseService;
+use Contena\Core\Framework\Sso\SsoService;
 
 /**
  * @internal
@@ -24,6 +29,23 @@ use Symfony\Component\Routing\RouterInterface;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class SsoController extends AbstractController
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly AuthorizationServer $authorizationServer,
+        private readonly PsrHttpFactory $psrHttpFactory,
+        private readonly LoginConfigService $loginConfigService,
+        private readonly LoginResponseService $loginResponseService,
+        private readonly StateValidator $stateValidator,
+        private readonly SsoAdminUserService $ssoAdminUserService,
+        private readonly SsoAdminUserInvitationMailService $ssoAdminUserInvitationMailService,
+        private readonly SsoService $ssoService,
+        private readonly RouterInterface $router
+    ) {
+    }
+
+
 
     #[Route(
         path: '/api/oauth/sso/config',
@@ -92,8 +114,8 @@ class SsoController extends AbstractController
     }
 
     #[Route(
-        path: '/api/_action/sso/invite-admin_user',
-        name: 'api.action.sso.invite-admin_user',
+        path: '/api/_action/sso/invite-admin-user',
+        name: 'api.action.sso.invite-admin-user',
         defaults: ['auth_required' => true, PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => ['administration'], PlatformRequest::ATTRIBUTE_ACL => ['admin_user:create']],
         methods: [Request::METHOD_POST]
     )]
@@ -102,8 +124,8 @@ class SsoController extends AbstractController
         $email = $requestDataBag->get('email');
         $localeId = $requestDataBag->get('localeId');
 
-        $this->ssoUserService->inviteUser($email, $localeId, $context);
-        $this->ssoUserInvitationMailService->sendInvitationMailToUser($email, $localeId, $context);
+        $this->ssoAdminUserService->inviteUser($email, $localeId, $context);
+        $this->ssoAdminUserInvitationMailService->sendInvitationMailToUser($email, $localeId, $context);
 
         return new JsonResponse();
     }

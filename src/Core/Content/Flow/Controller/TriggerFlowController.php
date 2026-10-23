@@ -23,14 +23,14 @@ class TriggerFlowController extends AbstractController
 {
     /**
      * @internal
-     *
-     * @param EntityRepository<AppFlowEventCollection> $appFlowEventRepository
      */
     public function __construct(
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly EntityRepository $appFlowEventRepository,
+        private readonly EntityRepository $appFlowEventRepository
     ) {
     }
+
+
 
     #[Route(path: '/api/_action/trigger-event/{eventName}', name: 'api.action.trigger_event', defaults: [PlatformRequest::ATTRIBUTE_ACL => ['flow:dispatch']], methods: ['POST'])]
     public function trigger(string $eventName, Request $request, Context $context): JsonResponse

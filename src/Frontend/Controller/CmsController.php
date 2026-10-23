@@ -14,14 +14,25 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class CmsController extends FrontendController
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly SystemConfigService $systemConfigService
+    ) {
+    }
+
+
 
     /**
      * Rendering a CMS layout as a widget, meaning that the layout is rendered standalone without the surrounding page template.

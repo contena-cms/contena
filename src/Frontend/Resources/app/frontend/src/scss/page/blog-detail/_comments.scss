@@ -1,10 +1,10 @@
 // review widget
-.blog-detail-review-widget {
+.blog-detail-comment-widget {
     margin-bottom: $spacer;
     z-index: 1;
 }
 
-.blog-detail-reviews {
+.blog-detail-comments {
     margin-bottom: $spacer;
 
     .icon {
@@ -14,17 +14,17 @@
     }
 }
 
-.blog-detail-review-teaser-btn {
-    .blog-detail-review-teaser-hide {
+.blog-detail-comment-teaser-btn {
+    .blog-detail-comment-teaser-hide {
         display: none;
     }
 
     &.collapsed {
-        .blog-detail-review-teaser-show {
+        .blog-detail-comment-teaser-show {
             display: none;
         }
 
-        .blog-detail-review-teaser-hide {
+        .blog-detail-comment-teaser-hide {
             display: block;
         }
     }
@@ -35,24 +35,24 @@
 }
 
 // review item
-.blog-detail-review-item-points {
+.blog-detail-comment-item-points {
     margin-bottom: $spacer-sm;
 }
 
 // review item
-.blog-detail-review-item-content {
+.blog-detail-comment-item-content {
     word-break: break-word;
 }
 
 // review form
-.blog-detail-review-form-radio {
+.blog-detail-comment-form-radio {
     @include visually-hidden();
 }
 
-.blog-detail-review-form-rating-input {
+.blog-detail-comment-form-rating-input {
     display: flex;
 
-    .blog-detail-review-form-rating-text {
+    .blog-detail-comment-form-rating-text {
         margin-left: $spacer-sm;
         margin-bottom: 0;
     }
@@ -84,69 +84,69 @@
     left: 0;
 }
 
-.blog-detail-review-form-star {
+.blog-detail-comment-form-star {
     margin-right: 10px;
 
-    &:has(.blog-detail-review-form-radio:focus-visible) {
+    &:has(.blog-detail-comment-form-radio:focus-visible) {
         box-shadow: $input-btn-focus-box-shadow;
     }
 }
 
-.blog-detail-review-login .login-card .card-body {
+.blog-detail-comment-login .login-card .card-body {
     padding-top: 0;
 }
 
 // review actions
-.blog-detail-review-language {
+.blog-detail-comment-language {
     margin-bottom: $spacer;
 }
 
-.blog-detail-review-sortby-label {
+.blog-detail-comment-sortby-label {
     margin-right: $spacer-xs;
 }
 
-.blog-detail-review-cancel {
+.blog-detail-comment-cancel {
     margin-right: 5px;
 }
 
 // review offcanvas
 .offcanvas {
-    .blog-detail-review-widget {
+    .blog-detail-comment-widget {
         position: static;
     }
 
-    .blog-detail-review-form-rating-input .blog-review-point {
+    .blog-detail-comment-form-rating-input .blog-review-point {
         margin-right: $spacer-sm;
     }
 }
 
 @include media-breakpoint-up(md) {
     // review widget
-    .blog-detail-review-widget {
+    .blog-detail-comment-widget {
         margin-bottom: 0;
     }
 
     // review actions
-    .blog-detail-review-sortby-form {
+    .blog-detail-comment-sortby-form {
         justify-content: flex-end;
     }
 
     // review item
-    .blog-detail-review-language {
+    .blog-detail-comment-language {
         margin-bottom: 0;
     }
 
-    .blog-detail-review-item-points {
+    .blog-detail-comment-item-points {
         padding-right: 0;
         margin-bottom: 0;
     }
 
-    .blog-detail-review-item-title {
+    .blog-detail-comment-item-title {
         padding-left: 0;
     }
 
     // review form
-    .blog-detail-review-form-star {
+    .blog-detail-comment-form-star {
         margin-right: 5px;
     }
 }

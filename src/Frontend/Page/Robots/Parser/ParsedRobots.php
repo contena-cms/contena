@@ -7,12 +7,12 @@ use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 class ParsedRobots
 {
     /**
-     * @param list<RobotsAdminUserAgentBlock> $adminUserAgentBlocks
+     * @param list<RobotsUserAgentBlock> $userAgentBlocks
      * @param list<RobotsDirective> $orphanedPathDirectives
      * @param list<ParseIssue> $issues
      */
     public function __construct(
-        public readonly array $adminUserAgentBlocks,
+        public readonly array $userAgentBlocks,
         public readonly array $orphanedPathDirectives,
         public readonly array $issues = []
     ) {
@@ -20,7 +20,7 @@ class ParsedRobots
 
     public function hasUserAgentBlocks(): bool
     {
-        return $this->admin_userAgentBlocks !== [];
+        return $this->userAgentBlocks !== [];
     }
 
     public function hasErrors(): bool

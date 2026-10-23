@@ -13,9 +13,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
  */
 class ExtensionCompatibilitiesResolvedSubscriber implements EventSubscriberInterface
 {
-    public function __construct(private readonly Client $serviceRegistryClient)
-    {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Client $serviceRegistryClient
+    ) {
     }
+
+
 
     public static function getSubscribedEvents(): array
     {

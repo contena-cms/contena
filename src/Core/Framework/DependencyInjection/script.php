@@ -9,7 +9,7 @@ use Contena\Core\Framework\Script\Api\AclFacadeHookFactory;
 use Contena\Core\Framework\Script\Api\ScriptApiRoute;
 use Contena\Core\Framework\Script\Api\ScriptResponseEncoder;
 use Contena\Core\Framework\Script\Api\ScriptResponseFactoryFacadeHookFactory;
-use Contena\Core\Framework\Script\Api\ScriptStoreApiRoute;
+use Contena\Core\Framework\Script\Api\ScriptChannelApiRoute;
 use Contena\Core\Framework\Script\AppContextCreator;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\Framework\Script\Execution\ScriptEnvironmentFactory;
@@ -67,7 +67,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('data_collector')
         ->tag('kernel.reset', ['method' => 'reset']);
 
-    $services->set(ScriptStoreApiRoute::class)
+    $services->set(ScriptChannelApiRoute::class)
         ->public()
         ->args([
             service(ScriptExecutor::class),

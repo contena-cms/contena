@@ -26,9 +26,11 @@ class WebhookCleanup
         private readonly SystemConfigService $systemConfigService,
         private readonly Connection $connection,
         private readonly StreamLockService $streamLockService,
-        private readonly ClockInterface $clock = new NativeClock(),
+        private readonly ClockInterface $clock = new NativeClock()
     ) {
     }
+
+
 
     public function removeOldLogs(): void
     {

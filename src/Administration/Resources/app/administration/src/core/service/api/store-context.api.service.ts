@@ -9,7 +9,7 @@ import type { ContextSwitchParameters } from '../../../module/sw-order/order.typ
 
 /**
  * Gateway for the API end point "sales-channel-context"
- * Uses the _proxy endpoint of the admin api to connect to the store-api endpoint cart
+ * Uses the _proxy endpoint of the admin api to connect to the channel-api endpoint cart
  * @class
  * @extends ApiService
  */
@@ -52,7 +52,7 @@ class StoreContextService extends ApiService {
         additionalParams = {},
         additionalHeaders = {},
     ) {
-        const route = `_proxy/store-api/${channelId}/context`;
+        const route = `_proxy/channel-api/${channelId}/context`;
         const headers = this.getBasicHeaders({
             ...additionalHeaders,
             'sw-context-token': contextToken,
@@ -70,7 +70,7 @@ class StoreContextService extends ApiService {
         additionalParams = {},
         additionalHeaders = {},
     ) {
-        const route = `_proxy/store-api/${channelId}/context`;
+        const route = `_proxy/channel-api/${channelId}/context`;
         const headers = this.getBasicHeaders({
             ...additionalHeaders,
             'sw-context-token': contextToken,

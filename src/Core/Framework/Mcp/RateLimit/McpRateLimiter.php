@@ -35,7 +35,7 @@ class McpRateLimiter
         $this->enforce(RateLimiter::MCP_ADMIN_API, $key);
     }
 
-    public function enforceForStoreApi(Request $request): void
+    public function enforceForChannelApi(Request $request): void
     {
         $channelContext = $request->attributes->get(PlatformRequest::ATTRIBUTE_CHANNEL_CONTEXT_OBJECT);
 
@@ -48,7 +48,7 @@ class McpRateLimiter
 
         // Stable per-IP backstop on the same bucket: keyed on the client IP, it cannot be bypassed
         // by rotating the context token. Route + key form independent buckets, so this reuses the
-        // mcp_store_api limits without a separate configuration.
+        // mcp_channel_api limits without a separate configuration.
         $this->enforce(RateLimiter::MCP_STORE_API, $request->getClientIp() ?: 'unknown');
     }
 

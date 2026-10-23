@@ -33,9 +33,6 @@ class BlogHydrator extends EntityHydrator
         if (isset($row[$root . '.unitId'])) {
             $entity->unitId = Uuid::fromBytesToHex($row[$root . '.unitId']);
         }
-        if (isset($row[$root . '.taxId'])) {
-            $entity->taxId = Uuid::fromBytesToHex($row[$root . '.taxId']);
-        }
         if (isset($row[$root . '.coverId'])) {
             $entity->coverId = Uuid::fromBytesToHex($row[$root . '.coverId']);
         }
@@ -193,7 +190,6 @@ class BlogHydrator extends EntityHydrator
             $entity->updatedAt = new \DateTimeImmutable($row[$root . '.updatedAt']);
         }
         $entity->deliveryTime = $this->manyToOne($row, $root, $definition->getField('deliveryTime'), $context);
-        $entity->tax = $this->manyToOne($row, $root, $definition->getField('tax'), $context);
         $entity->manufacturer = $this->manyToOne($row, $root, $definition->getField('manufacturer'), $context);
         $entity->unit = $this->manyToOne($row, $root, $definition->getField('unit'), $context);
         $entity->cover = $this->manyToOne($row, $root, $definition->getField('cover'), $context);

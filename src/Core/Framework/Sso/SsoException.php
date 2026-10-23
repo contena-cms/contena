@@ -33,7 +33,7 @@ class SsoException extends HttpException
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
             self::SSO_USER_INVITATION_MAIL_TEMPLATE_NOT_FOUND,
-            'Mail template for sso admin_user invitation not found'
+            'Mail template for sso admin user invitation not found'
         );
     }
 
@@ -70,7 +70,7 @@ class SsoException extends HttpException
         return new self(
             Response::HTTP_UNAUTHORIZED,
             self::SSO_LOGIN_USER_INVALID,
-            'Login admin_user invalid: {{ missingFields }}',
+            'Login admin user invalid: {{ missingFields }}',
             [
                 'missingFields' => \implode(', ', $missingFields),
             ]
@@ -151,7 +151,7 @@ class SsoException extends HttpException
         return new self(
             Response::HTTP_UNAUTHORIZED,
             self::SSO_LOGIN_INVALID_REFRESH_OR_ACCESS_TOKEN,
-            'Invalid admin_user Access or refresh token: {{ missingFields }}',
+            'Invalid admin user Access or refresh token: {{ missingFields }}',
             [
                 'missingFields' => \implode(', ', $violations),
             ]
@@ -184,7 +184,7 @@ class SsoException extends HttpException
         return new self(
             Response::HTTP_UNAUTHORIZED,
             self::SSO_LOGIN_TOKEN_NOT_FOUND,
-            'Cannot get token from admin_user.',
+            'Cannot get token from admin user.',
         );
     }
 }

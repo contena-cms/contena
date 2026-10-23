@@ -60,7 +60,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\SerializedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StorageAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TaxFreeConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TreeBreadcrumbField;
@@ -108,7 +107,6 @@ class SchemaBuilder
         BreadcrumbField::class => Types::JSON,
         CashRoundingConfigField::class => Types::JSON,
         ObjectField::class => Types::JSON,
-        TaxFreeConfigField::class => Types::JSON,
         TreeBreadcrumbField::class => Types::JSON,
         VariantListingConfigField::class => Types::JSON,
         VersionDataPayloadField::class => Types::JSON,

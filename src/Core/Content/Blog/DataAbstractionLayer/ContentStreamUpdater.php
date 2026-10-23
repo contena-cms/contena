@@ -26,6 +26,8 @@ use Contena\Core\System\Language\LanguageEntity;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\UnmappedFieldException;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\UnmappedFieldException as DeprecatedUnmappedFieldException;
 
 class ContentStreamUpdater extends AbstractContentStreamUpdater
 {

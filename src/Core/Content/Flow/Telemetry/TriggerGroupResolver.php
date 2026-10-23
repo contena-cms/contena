@@ -39,7 +39,7 @@ class TriggerGroupResolver
         'app.' => 'app',
         'newsletter.' => 'content',
         'contact_form.' => 'content',
-        'review_form.' => 'content',
+        'comment_form.' => 'content',
         'revocation_request.' => 'content',
     ];
 

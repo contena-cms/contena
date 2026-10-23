@@ -15,23 +15,23 @@ use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\AllStoreApiSchemaMigrationScopeProvider;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\AllChannelApiSchemaMigrationScopeProvider;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\BundleSchemaPathCollection;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\CachedEntitySchemaGenerator;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreStoreApiSchemaMigrationScopeProvider;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\CoreChannelApiSchemaMigrationScopeProvider;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\EntitySchemaGenerator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinitionSchemaBuilder;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiPathBuilder;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApiRouteDefaultsFilter;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\StoreApiGenerator;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\StoreApiSchemaMigrationReporter;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\StoreApiSchemaMigrationScopeProviderInterface;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\ChannelApiGenerator;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\ChannelApiSchemaMigrationReporter;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\ChannelApiSchemaMigrationScopeProviderInterface;
 use Contena\Core\Framework\Api\Command\CreateIntegrationCommand;
 use Contena\Core\Framework\Api\Command\DumpClassSchemaCommand;
 use Contena\Core\Framework\Api\Command\DumpSchemaCommand;
-use Contena\Core\Framework\Api\Command\StoreApiSchemaMigrationReportCommand;
+use Contena\Core\Framework\Api\Command\ChannelApiSchemaMigrationReportCommand;
 use Contena\Core\Framework\Api\Context\ContextValueResolver;
 use Contena\Core\Framework\Api\Controller\AccessKeyController;
 use Contena\Core\Framework\Api\Controller\ApiController;
@@ -110,7 +110,7 @@ use Contena\Core\System\AdminUser\AdminUserDefinition;
 use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 use Contena\Core\Framework\Migration\MigrationInfo;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
@@ -208,9 +208,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('console.command');
 
-    $services->set(StoreApiSchemaMigrationReportCommand::class)
+    $services->set(ChannelApiSchemaMigrationReportCommand::class)
         ->args([
-            service(StoreApiSchemaMigrationReporter::class),
+            service(ChannelApiSchemaMigrationReporter::class),
             service(ChannelDefinitionInstanceRegistry::class),
         ])
         ->tag('console.command');
@@ -248,7 +248,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(DefinitionInstanceRegistry::class),
             service(ChannelDefinitionInstanceRegistry::class),
-            service(StoreApiGenerator::class),
+            service(ChannelApiGenerator::class),
             service(OpenApi3Generator::class),
             service(EntitySchemaGenerator::class),
         ]);
@@ -285,7 +285,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(OpenApiRouteDefaultsFilter::class),
         ]);
 
-    $services->set(StoreApiGenerator::class)
+    $services->set(ChannelApiGenerator::class)
         ->args([
             service(OpenApiSchemaBuilder::class),
             service(OpenApiDefinitionSchemaBuilder::class),
@@ -294,19 +294,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(OpenApiRouteDefaultsFilter::class),
         ]);
 
-    $services->set(CoreStoreApiSchemaMigrationScopeProvider::class)
-        ->tag(StoreApiSchemaMigrationScopeProviderInterface::SERVICE_TAG);
+    $services->set(CoreChannelApiSchemaMigrationScopeProvider::class)
+        ->tag(ChannelApiSchemaMigrationScopeProviderInterface::SERVICE_TAG);
 
-    $services->set(AllStoreApiSchemaMigrationScopeProvider::class)
+    $services->set(AllChannelApiSchemaMigrationScopeProvider::class)
         ->args([
             service(BundleSchemaPathCollection::class),
         ])
-        ->tag(StoreApiSchemaMigrationScopeProviderInterface::SERVICE_TAG);
+        ->tag(ChannelApiSchemaMigrationScopeProviderInterface::SERVICE_TAG);
 
-    $services->set(StoreApiSchemaMigrationReporter::class)
+    $services->set(ChannelApiSchemaMigrationReporter::class)
         ->args([
             service(OpenApiDefinitionSchemaBuilder::class),
-            tagged_iterator(StoreApiSchemaMigrationScopeProviderInterface::SERVICE_TAG),
+            tagged_iterator(ChannelApiSchemaMigrationScopeProviderInterface::SERVICE_TAG),
         ]);
 
     $services->set(EntitySchemaGenerator::class);
@@ -331,7 +331,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
             service(ApiRouteInfoResolver::class),
             service(InAppPurchase::class),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(StatsService::class),
             service('event_dispatcher'),
             service(PresignedMediaUploadService::class)->nullOnInvalid(),

@@ -123,8 +123,8 @@ classDiagram
         +publish(name, extension, function) mixed
     }
 
-    class ChannelFileStoreApiMcpSubscriber {
-        +addStoreApiMcpContext(extension) void
+    class ChannelFileChannelApiMcpSubscriber {
+        +addChannelApiMcpContext(extension) void
     }
 
     class ChannelFileTemplateOverrideLoader {
@@ -156,7 +156,7 @@ classDiagram
     ChannelFileLoader --> CacheTagCollector : tags public response
     ChannelFileLoader --> ChannelFileRenderer : renders file
     ChannelFileRenderer --> ExtensionDispatcher : publishes render parameters
-    ExtensionDispatcher --> ChannelFileStoreApiMcpSubscriber : dispatches render-parameters post event
+    ExtensionDispatcher --> ChannelFileChannelApiMcpSubscriber : dispatches render-parameters post event
     ChannelFileRenderer --> ChannelFileTemplateOverrideLoader : activates overrides
     ChannelFileRenderer --> TemplateFinder : resolves base template
     ChannelFileRenderer --> Environment : renders Twig

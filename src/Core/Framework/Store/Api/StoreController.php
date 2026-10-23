@@ -63,14 +63,14 @@ class StoreController extends AbstractController
             // Throws StoreTokenMissingException if no token is present
             $this->getUserStoreToken($context);
 
-            $adminUserInfo = $this->storeClient->admin_userInfo($context);
+            $userInfo = $this->storeClient->userInfo($context);
 
             return new JsonResponse([
-                'admin_userInfo' => $adminUserInfo,
+                'userInfo' => $userInfo,
             ]);
         } catch (StoreTokenMissingException|ClientException) {
             return new JsonResponse([
-                'admin_userInfo' => null,
+                'userInfo' => null,
             ]);
         }
     }
@@ -158,7 +158,7 @@ class StoreController extends AbstractController
         }
 
         /** @var AdminUserEntity|null $adminUser */
-        $adminUser = $this->admin_userRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
+        $adminUser = $this->adminUserRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
 
         if ($adminUser === null) {
             throw StoreException::storeTokenMissing();

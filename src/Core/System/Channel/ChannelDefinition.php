@@ -60,8 +60,6 @@ use Contena\Core\System\User\UserDefinition;
 class ChannelDefinition extends EntityDefinition
 {
     final public const ENTITY_NAME = 'channel';
-    final public const CALCULATION_TYPE_VERTICAL = 'vertical';
-    final public const CALCULATION_TYPE_HORIZONTAL = 'horizontal';
 
     public function getEntityName(): string
     {
@@ -81,7 +79,6 @@ class ChannelDefinition extends EntityDefinition
     public function getDefaults(): array
     {
         return [
-            'taxCalculationType' => self::CALCULATION_TYPE_HORIZONTAL,
             'homeEnabled' => true,
         ];
     }
@@ -114,7 +111,6 @@ class ChannelDefinition extends EntityDefinition
             (new TimeZoneField('business_time_zone', 'businessTimeZone'))->addFlags(new ApiAware(), new Since('6.7.13.0'))->setDescription('Business timezone used for sales-channel-specific rendering.'),
             (new TranslatedField('name'))->addFlags(new ApiAware()),
             (new StringField('short_name', 'shortName'))->addFlags(new ApiAware())->setDescription('A short name for sales channel.'),
-            (new StringField('tax_calculation_type', 'taxCalculationType'))->addFlags(new ApiAware())->setDescription('Tax calculation types are `horizontal` and `vertical`.'),
             (new StringField('access_key', 'accessKey'))->addFlags(new Required())->setDescription('Access key to store api.'),
             (new JsonField('configuration', 'configuration'))->addFlags(new ApiAware())->setDescription('Internal field.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the sales channel is enabled.'),

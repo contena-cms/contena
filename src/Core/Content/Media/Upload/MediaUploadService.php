@@ -164,7 +164,7 @@ readonly class MediaUploadService
 
         $payload = [
             'id' => $params->id ?? Uuid::randomHex(),
-            'admin_userId' => $this->getUserIdFromContext($context),
+            'adminUserId' => $this->getUserIdFromContext($context),
             'private' => $params->private ?? false,
             'path' => $decodedUrl,
             'fileSize' => $this->getContentSizeFromValidExternalUrl($url),

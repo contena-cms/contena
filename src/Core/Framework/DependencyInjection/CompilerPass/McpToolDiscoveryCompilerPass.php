@@ -8,7 +8,7 @@ use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Routing\ApiRouteScope;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -45,7 +45,7 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
 
     public function process(ContainerBuilder $container): void
     {
-        foreach (['contena.mcp.', 'contena.store_api_mcp.'] as $paramPrefix) {
+        foreach (['contena.mcp.', 'contena.channel_api_mcp.'] as $paramPrefix) {
             $container->setParameter($paramPrefix . 'tool_dependencies', []);
             $container->setParameter($paramPrefix . 'tool_privileges', []);
             $container->setParameter($paramPrefix . 'advertised_tools', []);
@@ -64,9 +64,9 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
             'contena.mcp.tool' => 'mcp.tool',
             'contena.mcp.prompt' => 'mcp.prompt',
             'contena.mcp.resource' => 'mcp.resource',
-            'contena.store_api_mcp.tool' => 'mcp.tool',
-            'contena.store_api_mcp.prompt' => 'mcp.prompt',
-            'contena.store_api_mcp.resource' => 'mcp.resource',
+            'contena.channel_api_mcp.tool' => 'mcp.tool',
+            'contena.channel_api_mcp.prompt' => 'mcp.prompt',
+            'contena.channel_api_mcp.resource' => 'mcp.resource',
         ];
 
         foreach ($tagMapping as $contenaTag => $mcpTag) {
@@ -92,10 +92,10 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
         // share names — both endpoints expose their own contena-tool-search, contena-toolsets-list
         // and contena-toolset-enable. Checking them in one pool would report those as duplicates.
         // The ids are re-read because the allowlist may have removed services.
-        $storeApiToolIds = array_keys($container->findTaggedServiceIds('contena.store_api_mcp.tool'));
+        $channelApiToolIds = array_keys($container->findTaggedServiceIds('contena.channel_api_mcp.tool'));
 
         $demoted = [];
-        foreach ([[ApiRouteScope::ID, $this->adminToolIds($container), 'contena.mcp.advertised_tools'], [StoreApiRouteScope::ID, $storeApiToolIds, 'contena.store_api_mcp.advertised_tools']] as [$scope, $serviceIds, $advertisedParam]) {
+        foreach ([[ApiRouteScope::ID, $this->adminToolIds($container), 'contena.mcp.advertised_tools'], [ChannelApiRouteScope::ID, $channelApiToolIds, 'contena.channel_api_mcp.advertised_tools']] as [$scope, $serviceIds, $advertisedParam]) {
             $this->detectToolNameConflicts($container, $serviceIds);
             $demoted[$scope] = $this->buildAdvertisedTools($container, $serviceIds, $advertisedParam);
         }
@@ -133,14 +133,14 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
                 'resources' => 'mcp.resource',
                 'resource_templates' => 'mcp.resource_template',
             ],
-            'store_api' => [
-                'tools' => 'contena.store_api_mcp.tool',
-                'prompts' => 'contena.store_api_mcp.prompt',
-                'resources' => 'contena.store_api_mcp.resource',
+            'channel_api' => [
+                'tools' => 'contena.channel_api_mcp.tool',
+                'prompts' => 'contena.channel_api_mcp.prompt',
+                'resources' => 'contena.channel_api_mcp.resource',
             ],
         ];
 
-        $storeApiScoped = $this->storeApiScopedServiceIds($container);
+        $channelApiScoped = $this->channelApiScopedServiceIds($container);
 
         foreach ($scopes as $server => $kinds) {
             if (!isset($elements[$server])) {
@@ -152,7 +152,7 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
                     // A Store API capability carries an SDK tag as well, so the bundle collects it at
                     // all. It must not additionally be claimed by the Admin API server, whose scope
                     // reads those same SDK tags.
-                    if ($server === 'admin' && isset($storeApiScoped[$serviceId])) {
+                    if ($server === 'admin' && isset($channelApiScoped[$serviceId])) {
                         continue;
                     }
 
@@ -282,11 +282,11 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
      */
     private function adminToolIds(ContainerBuilder $container): array
     {
-        $storeApiTools = $container->findTaggedServiceIds('contena.store_api_mcp.tool');
+        $channelApiTools = $container->findTaggedServiceIds('contena.channel_api_mcp.tool');
 
         return array_values(array_filter(
             array_keys($container->findTaggedServiceIds('mcp.tool')),
-            static fn (string $serviceId): bool => !isset($storeApiTools[$serviceId]),
+            static fn (string $serviceId): bool => !isset($channelApiTools[$serviceId]),
         ));
     }
 
@@ -295,11 +295,11 @@ class McpToolDiscoveryCompilerPass implements CompilerPassInterface
      *
      * @return array<string, true>
      */
-    private function storeApiScopedServiceIds(ContainerBuilder $container): array
+    private function channelApiScopedServiceIds(ContainerBuilder $container): array
     {
         $ids = [];
 
-        foreach (['contena.store_api_mcp.tool', 'contena.store_api_mcp.prompt', 'contena.store_api_mcp.resource'] as $tag) {
+        foreach (['contena.channel_api_mcp.tool', 'contena.channel_api_mcp.prompt', 'contena.channel_api_mcp.resource'] as $tag) {
             foreach (array_keys($container->findTaggedServiceIds($tag)) as $serviceId) {
                 $ids[$serviceId] = true;
             }

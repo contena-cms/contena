@@ -25,6 +25,6 @@ class AdminUser implements UserEntityInterface
      */
     public function getIdentifier(): string
     {
-        return $this->admin_userId;
+        return $this->adminUserId;
     }
 }

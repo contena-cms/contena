@@ -184,7 +184,7 @@ class CookieProvider
 
         $entries = $cookieGroup->getEntries();
         if ($entries === null || $entries->count() === 0) {
-            // Cookie groups without cookie entries should not be shown to the admin_user
+            // Cookie groups without cookie entries should not be shown to the admin user
             $cookieGroups->remove($cookieGroup->getTechnicalName());
         }
     }

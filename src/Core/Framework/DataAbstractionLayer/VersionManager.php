@@ -944,7 +944,7 @@ class VersionManager
                 $new[] = [
                     'entityId' => $id,
                     'payload' => Json::encode($payload),
-                    'admin_userId' => $data->getUserId(),
+                    'adminUserId' => $data->getUserId(),
                     'integrationId' => $data->getIntegrationId(),
                     'entityName' => $data->getEntityName(),
                     'action' => $data->getAction(),
@@ -956,7 +956,7 @@ class VersionManager
         $commit = [
             'versionId' => $targetVersionId,
             'data' => $new,
-            'admin_userId' => $writeContext->getContext()->getSource() instanceof AdminApiSource ? $writeContext->getContext()->getSource()->getUserId() : null,
+            'adminUserId' => $writeContext->getContext()->getSource() instanceof AdminApiSource ? $writeContext->getContext()->getSource()->getUserId() : null,
             'isMerge' => true,
             'message' => 'merge commit ' . $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];

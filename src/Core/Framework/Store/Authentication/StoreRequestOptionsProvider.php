@@ -93,7 +93,7 @@ class StoreRequestOptionsProvider extends AbstractStoreRequestOptionsProvider
 
     private function fetchUserStoreToken(Criteria $criteria, Context $context): ?string
     {
-        return $this->admin_userRepository->search($criteria, $context)->getEntities()->first()?->getStoreToken();
+        return $this->adminUserRepository->search($criteria, $context)->getEntities()->first()?->getStoreToken();
     }
 
     private function getLicenseDomain(): string

@@ -35,7 +35,7 @@ class CustomFieldEntity extends Entity
 
     protected bool $allowCartExpose = false;
 
-    protected bool $storeApiAware = true;
+    protected bool $channelApiAware = true;
 
     protected bool $includeInSearch = false;
 
@@ -135,14 +135,14 @@ class CustomFieldEntity extends Entity
         $this->allowCartExpose = $allowCartExpose;
     }
 
-    public function isStoreApiAware(): bool
+    public function isChannelApiAware(): bool
     {
-        return $this->storeApiAware;
+        return $this->channelApiAware;
     }
 
-    public function setStoreApiAware(bool $storeApiAware): void
+    public function setChannelApiAware(bool $channelApiAware): void
     {
-        $this->storeApiAware = $storeApiAware;
+        $this->channelApiAware = $channelApiAware;
     }
 
     public function isIncludeInSearch(): bool

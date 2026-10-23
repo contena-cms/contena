@@ -13,13 +13,13 @@ use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
 class EntityRouteResolver
 {
     /**
-     * @param iterable<EntitySeoUrlRouteInterface> $storeApiSeoUrlRoutes
+     * @param iterable<EntitySeoUrlRouteInterface> $channelApiSeoUrlRoutes
      */
     public function __construct(
         private readonly SeoUrlRouteRegistry $registry,
         private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler,
         private readonly RouterInterface $router,
-        private readonly iterable $storeApiSeoUrlRoutes = [],
+        private readonly iterable $channelApiSeoUrlRoutes = [],
     ) {
     }
 
@@ -30,7 +30,7 @@ class EntityRouteResolver
 
     /**
      * Generates a SEO URL placeholder for the given entity.
-     * Returns store-api route when no route is registered for the entity type (e.g. headless setups).
+     * Returns channel-api route when no route is registered for the entity type (e.g. headless setups).
      */
     public function generateSeoUrlPlaceholder(string $entityName, string $primaryKey, ?string $channelTypeId = null): string
     {
@@ -41,7 +41,7 @@ class EntityRouteResolver
 
     /**
      * Generates a concrete URL for the given entity via the Symfony router.
-     * Returns store-api route when no route is registered for the entity type (e.g. headless setups).
+     * Returns channel-api route when no route is registered for the entity type (e.g. headless setups).
      */
     public function generateUrl(string $entityName, string $primaryKey, ?string $channelTypeId = null): string
     {
@@ -52,7 +52,7 @@ class EntityRouteResolver
 
     public function findEntitySeoUrlRoute(string $routeName): ?EntitySeoUrlRouteInterface
     {
-        foreach ($this->storeApiSeoUrlRoutes as $entitySeoUrlRoute) {
+        foreach ($this->channelApiSeoUrlRoutes as $entitySeoUrlRoute) {
             if ($entitySeoUrlRoute->getConfig()->getRouteName() === $routeName) {
                 return $entitySeoUrlRoute;
             }
@@ -133,8 +133,8 @@ class EntityRouteResolver
 
     private function getEntitySeoUrlRouteConfig(string $entityName): SeoUrlRouteConfig
     {
-        foreach ($this->storeApiSeoUrlRoutes as $storeApiSeoUrlRoute) {
-            $config = $storeApiSeoUrlRoute->getConfig();
+        foreach ($this->channelApiSeoUrlRoutes as $channelApiSeoUrlRoute) {
+            $config = $channelApiSeoUrlRoute->getConfig();
 
             if ($config->getDefinition()->getEntityName() === $entityName) {
                 return $config;

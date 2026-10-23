@@ -33,7 +33,7 @@ async function createWrapper({ props = {} } = {}) {
 
                         // Add search params to the iframe src
                         const searchParams = new URLSearchParams(url.search);
-                        searchParams.set('shop-id', '__SHOP_ID');
+                        searchParams.set('shop-id', '__INSTALLATION_ID');
                         searchParams.set('shop-signature', '__SIGNED__');
 
                         url.search = searchParams.toString();
@@ -109,7 +109,7 @@ describe('src/app/component/extension-api/sw-iframe-renderer', () => {
         await flushPromises();
 
         expect(wrapper.vm.signedIframeSrc).toBe(
-            'https://example.com/?location-id=foo&color-scheme=light&shop-id=__SHOP_ID&shop-signature=__SIGNED__',
+            'https://example.com/?location-id=foo&color-scheme=light&shop-id=__INSTALLATION_ID&shop-signature=__SIGNED__',
         );
     });
 
@@ -130,7 +130,7 @@ describe('src/app/component/extension-api/sw-iframe-renderer', () => {
             await flushPromises();
 
             expect(wrapper.vm.signedIframeSrc).toBe(
-                'https://example.com/?location-id=foo&color-scheme=dark&shop-id=__SHOP_ID&shop-signature=__SIGNED__',
+                'https://example.com/?location-id=foo&color-scheme=dark&shop-id=__INSTALLATION_ID&shop-signature=__SIGNED__',
             );
         } finally {
             useTheme().setTheme('system');
@@ -161,7 +161,7 @@ describe('src/app/component/extension-api/sw-iframe-renderer', () => {
         const iframeSrc = iframe.attributes('src');
 
         expect(iframeSrc).toBe(
-            'http://localhost:8888/index.html?elementId=018d83de67d471d69a03e4742767f1d7&location-id=ex-dailymotion-element&color-scheme=light&shop-id=__SHOP_ID&shop-signature=__SIGNED__',
+            'http://localhost:8888/index.html?elementId=018d83de67d471d69a03e4742767f1d7&location-id=ex-dailymotion-element&color-scheme=light&shop-id=__INSTALLATION_ID&shop-signature=__SIGNED__',
         );
     });
 
@@ -241,7 +241,7 @@ describe('src/app/component/extension-api/sw-iframe-renderer', () => {
         await flushPromises();
 
         expect(wrapper.vm.signedIframeSrc).toBe(
-            'https://my-great-extension.com/app/?location-id=my-great-extension-main-module&color-scheme=light&shop-id=__SHOP_ID&shop-signature=__SIGNED__&search=T-Shirt#/detail/1',
+            'https://my-great-extension.com/app/?location-id=my-great-extension-main-module&color-scheme=light&shop-id=__INSTALLATION_ID&shop-signature=__SIGNED__&search=T-Shirt#/detail/1',
         );
     });
 
@@ -358,7 +358,7 @@ describe('src/app/component/extension-api/sw-iframe-renderer', () => {
         const iframeSrc = iframe.attributes('src');
 
         expect(iframeSrc).toBe(
-            'http://localhost:8888/index.html?elementId=018d83de67d471d69a03e4742767f1d7&location-id=ex-dailymotion-element&color-scheme=light&shop-id=__SHOP_ID&shop-signature=__SIGNED__',
+            'http://localhost:8888/index.html?elementId=018d83de67d471d69a03e4742767f1d7&location-id=ex-dailymotion-element&color-scheme=light&shop-id=__INSTALLATION_ID&shop-signature=__SIGNED__',
         );
 
         // Update location ID
@@ -372,7 +372,7 @@ describe('src/app/component/extension-api/sw-iframe-renderer', () => {
         const updatedIframeSrc = updatedIframe.attributes('src');
 
         expect(updatedIframeSrc).toBe(
-            'http://localhost:8888/index.html?elementId=018d83de67d471d69a03e4742767f1d7&location-id=ex-youtube-element&color-scheme=light&shop-id=__SHOP_ID&shop-signature=__SIGNED__',
+            'http://localhost:8888/index.html?elementId=018d83de67d471d69a03e4742767f1d7&location-id=ex-youtube-element&color-scheme=light&shop-id=__INSTALLATION_ID&shop-signature=__SIGNED__',
         );
     });
 

@@ -7,12 +7,25 @@ use Contena\Core\Service\Permission\ConsentState;
 use Contena\Core\Service\Permission\PermissionsConsent;
 use Contena\Core\Service\Permission\RemoteLogger;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**
  * @internal
  */
 class PermissionLogger implements RemoteLogger
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly MessageBusInterface $messageBus,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly SystemConfigService $systemConfigService
+    ) {
+    }
+
+
     public const CONFIG_STORE_LICENSE_HOST = 'core.store.licenseHost';
 
 
@@ -28,7 +41,7 @@ class PermissionLogger implements RemoteLogger
                 new SaveConsentRequest(
                     identifier: $consent->identifier,
                     consentingUserId: $consent->consentingUserId,
-                    shopIdentifier: $this->shopIdProvider->getShopId()->id,
+                    installationIdentifier: $this->installationIdProvider->getInstallationId()->id,
                     consentDate: $consent->grantedAt->format(\DateTime::ATOM),
                     consentRevision: $consent->revision,
                     licenseHost: $this->systemConfigService->getString(self::CONFIG_STORE_LICENSE_HOST),

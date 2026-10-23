@@ -97,7 +97,7 @@ class CartStruct extends Struct
         $this->shop = $shop;
     }
 
-    public function getShopId(): int
+    public function getInstallationId(): int
     {
         return $this->getShop()['id'];
     }

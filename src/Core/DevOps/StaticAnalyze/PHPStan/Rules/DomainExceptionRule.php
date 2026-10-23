@@ -114,7 +114,7 @@ class DomainExceptionRule implements Rule
             return [];
         }
 
-        // Allow InvalidArgumentException in commands to validate admin_user input
+        // Allow InvalidArgumentException in commands to validate admin user input
         if ($scope->getClassReflection()->is(Command::class) && $exceptionClass === 'InvalidArgumentException') {
             return [];
         }

@@ -3,8 +3,8 @@
 namespace Contena\Core\Framework\App;
 
 use Contena\Core\Framework\Api\Context\ContextSource;
-use Contena\Core\Framework\App\ShopId\FingerprintComparisonResult;
-use Contena\Core\Framework\App\ShopId\ShopId;
+use Contena\Core\Framework\App\InstallationId\FingerprintComparisonResult;
+use Contena\Core\Framework\App\InstallationId\InstallationId;
 use Contena\Core\Framework\App\Validation\Requirements\UnmetRequirement;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
@@ -15,9 +15,10 @@ use Contena\Core\Framework\App\Exception\AppNotFoundException;
 use Contena\Core\Framework\App\Exception\AppRegistrationException;
 use Contena\Core\Framework\App\Exception\AppRegistrationRejectedException;
 use Contena\Core\Framework\App\Exception\InvalidAppFlowActionVariableException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeStrategyNotFoundException;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeStrategyNotFoundException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\App\Exception\AppXmlParsingException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * @internal
@@ -47,7 +48,6 @@ class AppException extends HttpException
     public const NO_SOURCE_SUPPORTS = 'FRAMEWORK__APP_NO_SOURCE_SUPPORTS';
     public const CANNOT_MOUNT_APP_FILESYSTEM = 'FRAMEWORK__CANNOT_MOUNT_APP_FILESYSTEM';
     public const CHECKOUT_GATEWAY_PAYLOAD_INVALID_CODE = 'FRAMEWORK__APP_CHECKOUT_GATEWAY_PAYLOAD_INVALID';
-    public const APP_TAX_PROVIDER_RESPONSE_INVALID = 'FRAMEWORK__APP_TAX_PROVIDER_RESPONSE_INVALID';
     public const USER_ABORTED = 'FRAMEWORK__APP_USER_ABORTED';
     public const CANNOT_READ_FILE = 'FRAMEWORK__APP_CANNOT_READ_FILE';
     public const APP_ACTION_NOT_FOUND = 'FRAMEWORK__APP_ACTION_NOT_FOUND';
@@ -65,10 +65,10 @@ class AppException extends HttpException
     final public const REQUIRES_ADMIN_API_SOURCE = 'FRAMEWORK__APP_ACTION_REQUIRES_ADMIN_API_SOURCE';
     final public const MISSING_USER_IN_CONTEXT_SOURCE = 'FRAMEWORK__APP_MISSING_USER_IN_CONTEXT_SOURCE';
     final public const INTEGRATION_MISSING = 'FRAMEWORK__APP_MISSING_INTEGRATION';
-    final public const SHOP_ID_CHANGE_SUGGESTED = 'FRAMEWORK__APP_SHOP_ID_CHANGE_SUGGESTED';
+    final public const INSTALLATION_ID_CHANGE_SUGGESTED = 'FRAMEWORK__APP_INSTALLATION_ID_CHANGE_SUGGESTED';
     final public const APP_URL_NOT_CONFIGURED = 'FRAMEWORK__APP_URL_NOT_CONFIGURED';
-    final public const INVALID_SHOP_ID_CONFIGURATION = 'FRAMEWORK__APP_INVALID_SHOP_ID_CONFIGURATION';
-    final public const SHOP_ID_CHANGE_STRATEGY_NOT_FOUND = 'FRAMEWORK__APP_SHOP_ID_CHANGE_STRATEGY_NOT_FOUND';
+    final public const INVALID_INSTALLATION_ID_CONFIGURATION = 'FRAMEWORK__APP_INVALID_INSTALLATION_ID_CONFIGURATION';
+    final public const INSTALLATION_ID_CHANGE_STRATEGY_NOT_FOUND = 'FRAMEWORK__APP_INSTALLATION_ID_CHANGE_STRATEGY_NOT_FOUND';
     final public const APP_URL_INVALID = 'FRAMEWORK__APP_URL_INVALID';
     final public const MANIFEST_NOT_FOUND = 'FRAMEWORK__APP_MANIFEST_NOT_FOUND';
     final public const APP_REQUIREMENTS_NOT_MET = 'FRAMEWORK__APP_REQUIREMENTS_NOT_MET';
@@ -333,15 +333,6 @@ class AppException extends HttpException
         );
     }
 
-    public static function invalidTaxProviderResponse(): self
-    {
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::APP_TAX_PROVIDER_RESPONSE_INVALID,
-            'Tax provider response contains malformed tax data.'
-        );
-    }
-
     /**
      * @deprecated tag:v6.8.0 - Will be removed without replacement in next major version as it is unused
      */
@@ -388,7 +379,7 @@ class AppException extends HttpException
         );
     }
 
-    public static function admin_userAborted(): self
+    public static function adminUserAborted(): self
     {
         return new AdminUserAbortedCommandException(
             Response::HTTP_BAD_REQUEST,
@@ -563,7 +554,7 @@ class AppException extends HttpException
         return new self(
             Response::HTTP_FORBIDDEN,
             self::MISSING_USER_IN_CONTEXT_SOURCE,
-            'No admin_user available in context source "{{ contextSource }}"',
+            'No admin user available in context source "{{ contextSource }}"',
             ['contextSource' => $contextSource],
             $previous,
         );
@@ -588,9 +579,9 @@ class AppException extends HttpException
         );
     }
 
-    public static function shopIdChangeSuggested(ShopId $shopId, FingerprintComparisonResult $comparisonResult): self
+    public static function installationIdChangeSuggested(InstallationId $installationId, FingerprintComparisonResult $comparisonResult): self
     {
-        return new ShopIdChangeSuggestedException($shopId, $comparisonResult);
+        return new InstallationIdChangeSuggestedException($installationId, $comparisonResult);
     }
 
     public static function appUrlNotConfigured(): self
@@ -602,18 +593,18 @@ class AppException extends HttpException
         );
     }
 
-    public static function invalidShopIdConfiguration(): self
+    public static function invalidInstallationIdConfiguration(): self
     {
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
-            self::INVALID_SHOP_ID_CONFIGURATION,
-            'The configuration values for "core.app.shopIdV2" and "core.app.shopId" in the system config are invalid.'
+            self::INVALID_INSTALLATION_ID_CONFIGURATION,
+            'The configuration values for "core.app.installationIdV2" and "core.app.installationId" in the system config are invalid.'
         );
     }
 
-    public static function shopIdChangeResolveStrategyNotFound(string $strategy): self
+    public static function installationIdChangeResolveStrategyNotFound(string $strategy): self
     {
-        return new ShopIdChangeStrategyNotFoundException($strategy);
+        return new InstallationIdChangeStrategyNotFoundException($strategy);
     }
 
     public static function invalidAppUrl(string $reason): self

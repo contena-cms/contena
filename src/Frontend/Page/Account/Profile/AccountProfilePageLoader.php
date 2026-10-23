@@ -7,12 +7,25 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\MetaInformation;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
+use Contena\Frontend\Page\GenericPageLoaderInterface;
 
 /**
- * Do not use direct or indirect repository calls in a PageLoader. Always use a store-api route to get or put data.
+ * Do not use direct or indirect repository calls in a PageLoader. Always use a channel-api route to get or put data.
  */
 class AccountProfilePageLoader
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly GenericPageLoaderInterface $genericLoader,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly AbstractTranslator $translator
+    ) {
+    }
+
 
     /**
      * @throws CategoryNotFoundException

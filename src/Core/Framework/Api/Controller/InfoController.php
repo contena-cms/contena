@@ -24,12 +24,45 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\Increment\Exception\IncrementGatewayNotFoundException;
+use Contena\Core\Framework\Event\BusinessEventCollector;
+use Contena\Core\Framework\Migration\MigrationInfo;
+use Contena\Core\Content\Flow\Api\FlowActionCollector;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Api\Route\ApiRouteInfoResolver;
+use Contena\Core\Framework\Store\InAppPurchase;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Core\Framework\MessageQueue\Stats\StatsService;
+use Contena\Core\Content\Media\Upload\PresignedMediaUploadService;
+use Contena\Core\Maintenance\System\Service\AppUrlVerifier;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class InfoController extends AbstractController
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly DefinitionService $definitionService,
+        private readonly ParameterBagInterface $params,
+        private readonly BusinessEventCollector $eventCollector,
+        private readonly IncrementGatewayRegistry $incrementGatewayRegistry,
+        private readonly MigrationInfo $migrationInfo,
+        private readonly AppUrlVerifier $appUrlVerifier,
+        private readonly FlowActionCollector $flowActionCollector,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly ApiRouteInfoResolver $apiRouteInfoResolver,
+        private readonly InAppPurchase $inAppPurchase,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly StatsService $messageStatsService,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly ?PresignedMediaUploadService $presignedMediaUploadService,
+        private readonly MediaFileExtensionListProvider $mediaFileExtensionListProvider
+    ) {
+    }
+
 
     #[Route(
         path: '/api/_info/openapi3.json',
@@ -165,7 +198,7 @@ class InfoController extends AbstractController
 
         $config = [
             'version' => $this->getContenaVersion(),
-            'shopId' => $this->getShopId(),
+            'installationId' => $this->getInstallationId(),
             'appUrl' => (string) EnvironmentHelper::getVariable('APP_URL'),
             'versionRevision' => $this->params->get('kernel.contena_version_revision'),
             'adminWorker' => $adminWorker,
@@ -181,7 +214,7 @@ class InfoController extends AbstractController
                 'private_allowed_mime_types_by_extension' => $privateMimeTypesByExtension,
                 'enableHtmlSanitizer' => $this->params->get('contena.html_sanitizer.enabled'),
                 'enableStagingMode' => $this->params->get('contena.staging.administration.show_banner') && $this->systemConfigService->getBool(SetupStagingEvent::CONFIG_FLAG),
-                'disableExtensionManagement' => !$this->params->get('contena.cnployment.runtime_extension_management'),
+                'disableExtensionManagement' => !$this->params->get('contena.deployment.runtime_extension_management'),
                 'hideUpdateModule' => (bool) $this->params->get('contena.auto_update.hide_module'),
                 'minSearchTermLength' => $this->systemConfigService->getInt('core.search.minSearchTermLength') ?: 2,
             ],
@@ -254,12 +287,12 @@ class InfoController extends AbstractController
         return $contenaVersion;
     }
 
-    private function getShopId(): string
+    private function getInstallationId(): string
     {
         try {
-            return $this->shopIdProvider->getShopId()->id;
-        } catch (ShopIdChangeSuggestedException $e) {
-            return $e->shopId->id;
+            return $this->installationIdProvider->getInstallationId()->id;
+        } catch (InstallationIdChangeSuggestedException $e) {
+            return $e->installationId->id;
         }
     }
 }

@@ -33,9 +33,9 @@
       "frontend-detail-page": "Produktdetailseite",
       "frontend-navigation-page": "Kategorieseite",
       "frontend-landing-page": "Landingpage",
-      "store-api-blog-detail": "Produktdetailseite",
-      "store-api-category-detail": "Kategorieseite",
-      "store-api-landing-page-detail": "Landingpage"
+      "channel-api-blog-detail": "Produktdetailseite",
+      "channel-api-category-detail": "Kategorieseite",
+      "channel-api-landing-page-detail": "Landingpage"
     }
   },
   "sw-seo-url": {

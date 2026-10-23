@@ -16,7 +16,7 @@ use Contena\Core\Content\Seo\HreflangLoaderInterface;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\MainCategory\Channel\ChannelMainCategoryDefinition;
 use Contena\Core\Content\Seo\Channel\SeoUrlRoute as ChannelSeoUrlRoute;
-use Contena\Core\Content\Seo\Channel\StoreApiSeoResolver;
+use Contena\Core\Content\Seo\Channel\ChannelApiSeoResolver;
 use Contena\Core\Content\Seo\SeoResolver;
 use Contena\Core\Content\Seo\SeoUrl\Channel\ChannelSeoUrlDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
@@ -24,12 +24,12 @@ use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandler;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
-use Contena\Core\Content\Seo\SeoUrlRoute\CategoryStoreApiUrlRoute;
+use Contena\Core\Content\Seo\SeoUrlRoute\CategoryChannelApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
-use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageStoreApiUrlRoute;
-use Contena\Core\Content\Seo\SeoUrlRoute\BlogStoreApiUrlRoute;
+use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageChannelApiUrlRoute;
+use Contena\Core\Content\Seo\SeoUrlRoute\BlogChannelApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
-use Contena\Core\Content\Seo\SeoUrlRoute\StoreApiSeoUrlUpdateListener;
+use Contena\Core\Content\Seo\SeoUrlRoute\ChannelApiSeoUrlUpdateListener;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateChangeSubscriber;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateDefinition;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateIndexingHandler;
@@ -105,19 +105,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             tagged_iterator('contena.seo_url.route_loader'),
         ]);
 
-    $services->set(BlogStoreApiUrlRoute::class)
+    $services->set(BlogChannelApiUrlRoute::class)
         ->args([
             service(BlogDefinition::class),
         ])
         ->tag('contena.entity.seo_url.route');
 
-    $services->set(CategoryStoreApiUrlRoute::class)
+    $services->set(CategoryChannelApiUrlRoute::class)
         ->args([
             service(CategoryDefinition::class),
         ])
         ->tag('contena.entity.seo_url.route');
 
-    $services->set(LandingPageStoreApiUrlRoute::class)
+    $services->set(LandingPageChannelApiUrlRoute::class)
         ->args([
             service(LandingPageDefinition::class),
         ])
@@ -230,14 +230,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ]);
 
-    $services->set(ChannelSeoUrlRoute::class)
-        ->public()
-        ->args([
-            service('channel.seo_url.repository'),
-            service(ExtensionDispatcher::class),
-        ]);
-
-    $services->set(StoreApiSeoResolver::class)
+        $services->set(ChannelApiSeoResolver::class)
         ->args([
             service('channel.seo_url.repository'),
             service(DefinitionInstanceRegistry::class),
@@ -258,7 +251,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             tagged_iterator('contena.entity.seo_url.route'),
         ]);
 
-    $services->set(StoreApiSeoUrlUpdateListener::class)
+    $services->set(ChannelApiSeoUrlUpdateListener::class)
         ->args([
             service(SeoUrlUpdater::class),
         ])

@@ -6,7 +6,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
@@ -15,7 +15,7 @@ use Contena\Core\System\User\UserException;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class UserGroupRegistrationSettingsRoute extends AbstractUserGroupRegistrationSettingsRoute
 {
     /**
@@ -36,7 +36,7 @@ class UserGroupRegistrationSettingsRoute extends AbstractUserGroupRegistrationSe
      * Though this is a GET route, caching was not added as the output may be altered depending on dynamic rules,
      * which is not taken into account during the cache hash calculation.
      */
-    #[Route(path: '/store-api/user-group-registration/config/{userGroupId}', name: 'store-api.user-group-registration.config', methods: ['GET'])]
+    #[Route(path: '/channel-api/user-group-registration/config/{userGroupId}', name: 'channel-api.user-group-registration.config', methods: ['GET'])]
     public function load(string $userGroupId, ChannelContext $context): UserGroupRegistrationSettingsRouteResponse
     {
         return $this->extensions->publish(

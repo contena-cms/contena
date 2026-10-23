@@ -5,13 +5,13 @@ namespace Contena\Core\System\User\Channel;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Struct\ArrayStruct;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{wishlist: UserWishlistEntity, blogs: EntitySearchResult<BlogCollection>}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{wishlist: UserWishlistEntity, blogs: EntitySearchResult<BlogCollection>}>>
  */
-class LoadWishlistRouteResponse extends StoreApiResponse
+class LoadWishlistRouteResponse extends ChannelApiResponse
 {
     /**
      * @param EntitySearchResult<BlogCollection> $blogListing

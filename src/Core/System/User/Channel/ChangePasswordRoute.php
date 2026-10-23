@@ -5,7 +5,7 @@ namespace Contena\Core\System\User\Channel;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -33,7 +33,7 @@ use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
 #[Route(
     defaults: [
-        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID],
+        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
         PlatformRequest::ATTRIBUTE_CONTEXT_TOKEN_REQUIRED => true,
     ]
 )]
@@ -59,8 +59,8 @@ class ChangePasswordRoute extends AbstractChangePasswordRoute
     }
 
     #[Route(
-        path: '/store-api/account/change-password',
-        name: 'store-api.account.change-password',
+        path: '/channel-api/account/change-password',
+        name: 'channel-api.account.change-password',
         defaults: [PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true],
         methods: [Request::METHOD_POST]
     )]

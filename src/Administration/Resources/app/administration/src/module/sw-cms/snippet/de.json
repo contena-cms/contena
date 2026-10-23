@@ -609,7 +609,7 @@
           }
         }
       },
-      "blogDescriptionReviews": {
+      "blogDescriptionComments": {
         "label": "Produktbeschreibung und -bewertungen",
         "infoText": {
           "descriptionAndReviewsElement": "Die Produktdaten dieses Elements werden automatisch aus dem mit dem Layout verbundenen Produkt geladen. Der angezeigte Inhalt ist nur eine Beispielvorschau."
@@ -679,7 +679,7 @@
         "blogThreeColumn": {
           "label": "Drei Spalten, Produkt-Boxen"
         },
-        "blogDescriptionReviews": {
+        "blogDescriptionComments": {
           "label": "Produktbeschreibung und -bewertungen",
           "preview": {
             "label": {

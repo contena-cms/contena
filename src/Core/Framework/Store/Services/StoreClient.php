@@ -108,11 +108,11 @@ class StoreClient
     /**
      * @return array<string, mixed>
      */
-    public function admin_userInfo(Context $context): array
+    public function userInfo(Context $context): array
     {
         $response = $this->client->request(
             Request::METHOD_GET,
-            $this->endpoints['admin_user_info'],
+            $this->endpoints['user_info'],
             [
                 'query' => $this->getQueries($context),
                 'headers' => $this->getHeaders($context),

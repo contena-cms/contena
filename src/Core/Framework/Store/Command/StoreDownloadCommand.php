@@ -94,7 +94,7 @@ class StoreDownloadCommand extends Command
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('admin_user.username', $adminUserName));
 
-        $adminUserEntity = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        $adminUserEntity = $this->adminUserRepository->search($criteria, $context)->getEntities()->first();
         if ($adminUserEntity === null) {
             return $context;
         }

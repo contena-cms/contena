@@ -41,7 +41,7 @@ class OpenApiValidationCommand extends Command
         $apiType = match ($input->getOption('api-type')) {
             DefinitionService::API => DefinitionService::API,
             DefinitionService::STORE_API => DefinitionService::STORE_API,
-            default => throw new \InvalidArgumentException('Invalid --api-type, must be one of "api" or "store-api"'),
+            default => throw new \InvalidArgumentException('Invalid --api-type, must be one of "api" or "channel-api"'),
         };
 
         $schema = $this->definitionService->generate(

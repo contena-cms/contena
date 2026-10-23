@@ -47,11 +47,11 @@ class FrwRequestOptionsProvider extends AbstractStoreRequestOptionsProvider
         $contextSource = $context->getSource();
 
         $criteria = (new Criteria())->addFilter(
-            new EqualsFilter('admin_userId', $contextSource->getUserId()),
+            new EqualsFilter('adminUserId', $contextSource->getUserId()),
             new EqualsFilter('key', FirstRunWizardService::USER_CONFIG_KEY_FRW_USER_TOKEN),
         );
 
-        $adminUserConfig = $this->admin_userConfigRepository->search($criteria, $context)->getEntities()->first();
+        $adminUserConfig = $this->adminUserConfigRepository->search($criteria, $context)->getEntities()->first();
 
         return $adminUserConfig === null ? null : $adminUserConfig->getValue()[FirstRunWizardService::USER_CONFIG_VALUE_FRW_USER_TOKEN] ?? null;
     }

@@ -38,14 +38,14 @@ final class McpToolsetSessionCleanupTaskHandler extends ScheduledTaskHandler
         LoggerInterface $logger,
         private readonly McpToolsetSessionStorage $sessionStorage,
         private readonly ?SessionStoreInterface $sessionStore = null,
-        private readonly ?SessionStoreInterface $storeApiSessionStore = null,
+        private readonly ?SessionStoreInterface $channelApiSessionStore = null,
     ) {
         parent::__construct($scheduledTaskRepository, $logger);
     }
 
     public function run(): void
     {
-        $sessionStores = array_values(array_filter([$this->sessionStore, $this->storeApiSessionStore]));
+        $sessionStores = array_values(array_filter([$this->sessionStore, $this->channelApiSessionStore]));
 
         // Without a session store we cannot determine liveness. MCP is then unavailable, so no
         // session can be alive to serve; leaving the rows in place is safe and they are reclaimed

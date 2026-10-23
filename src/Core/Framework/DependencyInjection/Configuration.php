@@ -197,7 +197,7 @@ class Configuration implements ConfigurationInterface
                         ->end()
                     ->end()
                 ->end()
-                ->arrayNode('store')
+                ->arrayNode('channel')
                     ->children()
                     ->scalarNode('context_lifetime')->defaultValue('P1D')->end()
                     ->scalarNode('max_limit')->end()
@@ -235,7 +235,7 @@ class Configuration implements ConfigurationInterface
             ->end()
             ->end()
             ->arrayNode('admin_user_recovery')
-                ->info('Administration admin_user password recovery ("forgot password") flow. Disable it when passwords are managed externally, e.g. via SSO.')
+                ->info('Administration admin user password recovery ("forgot password") flow. Disable it when passwords are managed externally, e.g. via SSO.')
                 ->addDefaultsIfNotSet()
                 ->children()
                     ->booleanNode('enabled')
@@ -1404,7 +1404,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
                 ->arrayNode('default_policies')
-                    ->info('Default cache policies per area. Currently only "frontend" and "store_api" are supported.')
+                    ->info('Default cache policies per area. Currently only "frontend" and "channel_api" are supported.')
                     ->useAttributeAsKey('area')
                     ->arrayPrototype()
                         ->children()
@@ -1420,12 +1420,12 @@ class Configuration implements ConfigurationInterface
                     ->end()
                     ->validate()
                         ->ifTrue(static function ($areas) {
-                            $allowedAreas = ['frontend', 'store_api'];
+                            $allowedAreas = ['frontend', 'channel_api'];
                             $providedAreas = array_keys($areas);
 
                             return array_diff($providedAreas, $allowedAreas) !== [];
                         })
-                        ->thenInvalid('Only "frontend" and "store_api" areas are currently supported in default_policies. Config contains unsupported area(s): %s')
+                        ->thenInvalid('Only "frontend" and "channel_api" areas are currently supported in default_policies. Config contains unsupported area(s): %s')
                     ->end()
                 ->end()
                 ->arrayNode('route_policies')

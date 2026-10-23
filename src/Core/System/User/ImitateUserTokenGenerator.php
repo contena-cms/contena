@@ -44,7 +44,7 @@ class ImitateUserTokenGenerator extends JWTGenerator
         $tokenData = [
             'channelId' => $channelId,
             'userId' => $userId,
-            'admin_userId' => $adminUserId,
+            'adminUserId' => $adminUserId,
         ];
 
         $data = json_encode($tokenData);
@@ -81,7 +81,7 @@ class ImitateUserTokenGenerator extends JWTGenerator
         $givenTokenData = [
             'channelId' => $channelId,
             'userId' => $userId,
-            'admin_userId' => $adminUserId,
+            'adminUserId' => $adminUserId,
         ];
 
         $data = json_encode($givenTokenData);

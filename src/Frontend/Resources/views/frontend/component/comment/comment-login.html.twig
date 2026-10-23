@@ -2,16 +2,16 @@
 
 {% block component_account_login_header %}
     <h3 class="card-title">
-        {{ 'detail.reviewLoginHeader'|trans|sw_sanitize }}
+        {{ 'detail.commentLoginHeader'|trans|sw_sanitize }}
     </h3>
 {% endblock %}
 
 {% block component_account_login_form_description %}
     <p class="login-form-description">
-        {{ 'detail.reviewLoginDescription'|trans|sw_sanitize }}
+        {{ 'detail.commentLoginDescription'|trans|sw_sanitize }}
         <a href="{{ path('frontend.account.login.page') }}"
-           title="{{ 'detail.reviewRegisterLink'|trans|striptags }}">
-            {{ 'detail.reviewRegisterLink'|trans|sw_sanitize }}
+           title="{{ 'detail.commentRegisterLink'|trans|striptags }}">
+            {{ 'detail.commentRegisterLink'|trans|sw_sanitize }}
         </a>
     </p>
 {% endblock %}
@@ -23,7 +23,7 @@
 
     <input type="hidden"
            name="redirectParameters"
-           value="{{ {blogId: reviews.blogId, id: cmsPage.id, navigationId: contena.navigation.id}|json_encode }}">
+           value="{{ {blogId: comments.blogId, id: cmsPage.id, navigationId: contena.navigation.id}|json_encode }}">
 {% endblock %}
 
 {% block component_account_login_submit %}
@@ -31,13 +31,13 @@
         {{ parent() }}
     </div>
     <div class="login-cancel">
-        {% block page_product_detail_review_form_cancel %}
+        {% block page_blog_detail_comment_form_cancel %}
             <a href="#"
                class="btn btn-outline-secondary ms-1"
                data-bs-toggle="collapse"
                data-bs-target=".multi-collapse"
                aria-expanded="false"
-               aria-controls="review-form review-list">
+               aria-controls="comment-form comment-list">
                 {{ 'global.default.cancel'|trans|sw_sanitize }}
             </a>
         {% endblock %}

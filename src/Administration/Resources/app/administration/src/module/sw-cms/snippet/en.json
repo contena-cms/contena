@@ -609,7 +609,7 @@
           }
         }
       },
-      "blogDescriptionReviews": {
+      "blogDescriptionComments": {
         "label": "Blog description & reviews",
         "infoText": {
           "descriptionAndReviewsElement": "This element's blog data is automatically loaded by the blog associated with this layout. The content just shows a sample preview."
@@ -679,7 +679,7 @@
         "blogThreeColumn": {
           "label": "Three columns, blog boxes"
         },
-        "blogDescriptionReviews": {
+        "blogDescriptionComments": {
           "label": "Blog description & reviews",
           "preview": {
             "label": {

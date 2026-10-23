@@ -160,7 +160,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('filesystem'),
             param('kernel.cache_dir'),
             param('kernel.environment'),
-            param('contena.cnployment.cluster_setup'),
+            param('contena.deployment.cluster_setup'),
             param('contena.http_cache.reverse_proxy.enabled'),
             service('messenger.default_bus'),
             service('logger'),

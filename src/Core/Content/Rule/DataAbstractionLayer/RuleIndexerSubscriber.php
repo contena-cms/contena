@@ -20,6 +20,16 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 class RuleIndexerSubscriber implements EventSubscriberInterface
 {
 
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
     public static function getSubscribedEvents(): array
     {
         return [

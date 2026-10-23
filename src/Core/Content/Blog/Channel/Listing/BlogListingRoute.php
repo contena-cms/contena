@@ -14,7 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -24,7 +24,7 @@ use Contena\Core\Content\ContentStream\Exception\NoFilterException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Content\ContentStream\Service\AbstractContentStreamBuilder;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class BlogListingRoute extends AbstractBlogListingRoute
 {
 
@@ -39,8 +39,8 @@ class BlogListingRoute extends AbstractBlogListingRoute
     }
 
     #[Route(
-        path: '/store-api/blog-listing/{categoryId}',
-        name: 'store-api.blog.listing',
+        path: '/channel-api/blog-listing/{categoryId}',
+        name: 'channel-api.blog.listing',
         methods: [Request::METHOD_POST, Request::METHOD_GET],
         defaults: [PlatformRequest::ATTRIBUTE_ENTITY => BlogDefinition::ENTITY_NAME, PlatformRequest::ATTRIBUTE_HTTP_CACHE => true]
     )]

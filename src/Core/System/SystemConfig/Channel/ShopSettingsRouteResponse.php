@@ -2,14 +2,14 @@
 
 namespace Contena\Core\System\SystemConfig\Channel;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<ShopSettings>
+ * @extends ChannelApiResponse<ShopSettings>
  *
  * @codeCoverageIgnore
  */
-class ShopSettingsRouteResponse extends StoreApiResponse
+class ShopSettingsRouteResponse extends ChannelApiResponse
 {
     public function getSettings(): ShopSettings
     {

@@ -30,7 +30,7 @@ describe('sw-app-shop-id-change-modal', () => {
             }),
             {
                 props: {
-                    shopIdCheck: {
+                    installationIdCheck: {
                         fingerprints: {
                             mismatchingFingerprints: {
                                 app_url: {
@@ -62,10 +62,10 @@ describe('sw-app-shop-id-change-modal', () => {
                 global: {
                     stubs,
                     provide: {
-                        shopIdChangeService: {
+                        installationIdChangeService: {
                             getChangeStrategies: () => Promise.resolve(strategies),
-                            checkShopId: jest.fn(() => Promise.resolve()),
-                            changeShopId: jest.fn(() => Promise.resolve()),
+                            checkInstallationId: jest.fn(() => Promise.resolve()),
+                            changeInstallationId: jest.fn(() => Promise.resolve()),
                         },
                         shortcutService: {
                             startEventListener() {},
@@ -134,7 +134,7 @@ describe('sw-app-shop-id-change-modal', () => {
     });
 
     it('should send the selected strategy', async () => {
-        const changeShopIdMock = wrapper.vm.shopIdChangeService.changeShopId;
+        const changeInstallationIdMock = wrapper.vm.installationIdChangeService.changeInstallationId;
 
         const strategyButtons = wrapper.findAll('.sw-app-shop-id-change-modal__button-strategy');
 
@@ -145,7 +145,7 @@ describe('sw-app-shop-id-change-modal', () => {
 
         await wrapper.get('.mt-button--primary').trigger('click');
 
-        expect(changeShopIdMock.mock.calls[0][0].name).toMatch(strategies[1].name);
+        expect(changeInstallationIdMock.mock.calls[0][0].name).toMatch(strategies[1].name);
         expect(wrapper.vm._reloadPage).toHaveBeenCalled();
     });
 });

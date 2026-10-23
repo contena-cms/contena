@@ -15,19 +15,36 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentLoader;
+use Contena\Core\Content\Blog\Channel\Comment\AbstractBlogCommentSaveRoute;
+use Contena\Core\Content\Blog\Channel\Comment\BlogCommentsWidgetLoadedHook;
+use Contena\Core\Content\Blog\Channel\FindVariant\AbstractFindBlogVariantRoute;
+use Contena\Core\Content\Blog\Channel\PurchaseLimit\AbstractBlogPurchaseLimitRoute;
 use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
-use Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption;
+use Contena\Core\Content\Blog\Exception\CommentNotActiveException;
 use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
+use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
+use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
+use Contena\Frontend\Page\Blog\BlogPageLoader;
+use Contena\Frontend\Page\Blog\QuickView\MinimalQuickViewPageLoader;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Frontend\Controller\Exception\FrontendException;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class BlogController extends FrontendController
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly SeoUrlPlaceholderHandlerInterface $seoUrlPlaceholderHandler
+    ) {
+    }
+
 
     #[Route(
         path: '/detail/{blogId}',
@@ -122,34 +139,34 @@ class BlogController extends FrontendController
     }
 
     #[Route(
-        path: '/blog/{blogId}/rating',
-        name: 'frontend.detail.review.save',
+        path: '/blog/{blogId}/comment',
+        name: 'frontend.detail.comment.save',
         defaults: [
             'XmlHttpRequest' => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
         ],
         methods: [Request::METHOD_POST]
     )]
-    public function saveReview(string $blogId, RequestDataBag $data, ChannelContext $context): Response
+    public function saveComment(string $blogId, RequestDataBag $data, ChannelContext $context): Response
     {
         if (!Feature::isActive('v6.8.0.0')) {
             try {
-                $this->blogReviewSaveRoute->save($blogId, $data, $context);
+                $this->blogCommentSaveRoute->save($blogId, $data, $context);
             } catch (ConstraintViolationException $formViolations) {
-                return $this->forwardToRoute('frontend.blog.reviews', [
+                return $this->forwardToRoute('frontend.blog.comments', [
                     'blogId' => $blogId,
                     'success' => -1,
                     'formViolations' => $formViolations,
                     'data' => $data,
                 ], ['blogId' => $blogId]);
-            } catch (ReviewNotActiveExeption) {
-                throw FrontendException::reviewNotActive();
+            } catch (CommentNotActiveException) {
+                throw FrontendException::commentNotActive();
             }
         } else {
             try {
-                $this->blogReviewSaveRoute->save($blogId, $data, $context);
+                $this->blogCommentSaveRoute->save($blogId, $data, $context);
             } catch (ConstraintViolationException $formViolations) {
-                return $this->forwardToRoute('frontend.blog.reviews', [
+                return $this->forwardToRoute('frontend.blog.comments', [
                     'blogId' => $blogId,
                     'success' => -1,
                     'formViolations' => $formViolations,
@@ -169,9 +186,41 @@ class BlogController extends FrontendController
             $forwardParams['success'] = 2;
         }
 
-        return $this->forwardToRoute('frontend.blog.reviews', $forwardParams, ['blogId' => $blogId]);
+        return $this->forwardToRoute('frontend.blog.comments', $forwardParams, ['blogId' => $blogId]);
     }
 
+
+    #[Route(
+        path: '/blog/{blogId}/comments',
+        name: 'frontend.blog.comments',
+        defaults: ['XmlHttpRequest' => true],
+        methods: [Request::METHOD_GET, Request::METHOD_POST]
+    )]
+    public function loadComments(string $blogId, Request $request, ChannelContext $context): Response
+    {
+        $parentId = RequestParamHelper::get($request, 'parentId');
+
+        try {
+            $comments = $this->blogCommentLoader->load($request, $context, $blogId, $parentId);
+        } catch (CommentNotActiveException) {
+            throw FrontendException::commentNotActive();
+        }
+
+        $this->hook(new BlogCommentsWidgetLoadedHook($comments, $context));
+
+        return $this->renderFrontend(
+            '@Frontend/frontend/component/comment/comment.html.twig',
+            [
+                'comments' => $comments,
+                'ratingSuccess' => $request->attributes->get('success'),
+                'redirectTo' => RequestParamHelper::get(
+                    $request,
+                    'redirectTo',
+                    $request->attributes->get('_route')
+                ),
+            ]
+        );
+    }
 
     #[Route(
         path: '/blog/{blogId}/purchase-limit',
@@ -195,22 +244,5 @@ class BlogController extends FrontendController
             'purchaseSteps' => $result->getPurchaseSteps(),
             'maxPurchase' => $result->getMaxPurchase(),
         ]);
-    }
-
-    #[Route(
-        path: '/blog/{blogId}/garan-label',
-        name: 'frontend.blog.garan-label',
-        defaults: ['XmlHttpRequest' => true],
-        methods: [Request::METHOD_GET]
-    )]
-    public function garanLabel(string $blogId, ChannelContext $context): Response
-    {
-        try {
-            $garanLabel = $this->garanLabelRoute->load($blogId, $context)->getObject()->get('svg');
-        } catch (BlogNotFoundException) {
-            $garanLabel = null;
-        }
-
-        return $this->renderFrontend('@Frontend/frontend/component/blog/garan-label-modal.html.twig', ['garanLabel' => $garanLabel]);
     }
 }

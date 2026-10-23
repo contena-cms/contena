@@ -18,7 +18,6 @@ use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 
 /**
@@ -31,8 +30,6 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
  *     currencyId?: string,
  *     countryId?: string,
  *     countryStateId?: string,
- *     paymentMethodId?: string,
- *     shippingMethodId?: string,
  *     domainId?: string,
  * }
  *
@@ -41,29 +38,18 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
 {
     /**
-     * @param EntityRepository<ChannelCollection> $channelRepository
-     * @param EntityRepository<UserGroupCollection> $userGroupRepository
-     * @param EntityRepository<CountryCollection> $countryRepository
-     * @param EntityRepository<TaxCollection> $taxRepository
-     * @param EntityRepository<PaymentMethodCollection> $paymentMethodRepository
-     * @param EntityRepository<ShippingMethodCollection> $shippingMethodRepository
-     * @param EntityRepository<CountryStateCollection> $countryStateRepository
-     * @param EntityRepository<CurrencyCountryRoundingCollection> $currencyCountryRepository
-     * @param EntityRepository<EntityCollection<PartialEntity>> $languageRepository
+     * @internal
      */
     public function __construct(
-        private readonly EntityRepository $channelRepository,
-        private readonly EntityRepository $userGroupRepository,
+        private readonly EntityRepository $salesChannelRepository,
+        private readonly EntityRepository $customerGroupRepository,
         private readonly EntityRepository $countryRepository,
-        private readonly EntityRepository $taxRepository,
-        private readonly EntityRepository $paymentMethodRepository,
-        private readonly EntityRepository $shippingMethodRepository,
         private readonly EntityRepository $countryStateRepository,
         private readonly EntityRepository $currencyCountryRepository,
-        private readonly ContextFactory $contextFactory,
-        private readonly EntityRepository $languageRepository,
+        private readonly EntityRepository $languageRepository
     ) {
     }
+
 
     /**
      * @param ContextOptions $options
@@ -111,9 +97,6 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
         }
         $channel->setCurrency($defaultCurrency);
 
-        // load not logged in user with default shop configuration or with provided checkout scopes
-        $shippingLocation = $this->loadShippingLocation($options, $context, $channel);
-
         $groupId = $channel->getUserGroupId();
 
         $criteria = new Criteria([$channel->getUserGroupId()]);
@@ -125,16 +108,8 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
         }
         $channel->setUserGroup($userGroup);
 
-        // loads tax rules based on active user and delivery address
-        $taxRules = $this->getTaxRules($context);
-
-        // detect active payment method, first check if checkout defined other payment method, otherwise validate if user logged in, at least use shop default
-        $payment = $this->getPaymentMethod($options, $context, $channel);
-
-        // detect active delivery method, at first checkout scope, at least shop default method
-        $shippingMethod = $this->getShippingMethod($options, $context, $channel);
-
-        [$itemRounding, $totalRounding] = $this->getCashRounding($currency, $shippingLocation, $context);
+        $itemRounding = $currency->getItemRounding();
+        $totalRounding = $currency->getTotalRounding();
 
         $context = new Context(
             $context->getSource(),
@@ -144,7 +119,7 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
             $context->getVersionId(),
             $currency->getFactor(),
             true,
-            CartPrice::TAX_STATE_GROSS,
+            Context::TAX_STATE_GROSS,
             $itemRounding
         );
 
@@ -154,31 +129,15 @@ class BaseChannelContextFactory extends AbstractBaseChannelContextFactory
             $languageInfo = $this->getLanguageInfo($context);
         }
 
-        $domainId = \is_string($options[ChannelContextService::DOMAIN_ID] ?? null) ? $options[ChannelContextService::DOMAIN_ID] : null;
-
         return new BaseChannelContext(
             $context,
             $channel,
             $currency,
             $userGroup,
-            $taxRules,
-            $payment,
-            $shippingMethod,
-            $shippingLocation,
             $itemRounding,
             $totalRounding,
             $languageInfo,
-            $this->getMeasurementSystemInfo($channel, $domainId),
         );
-    }
-
-    private function getTaxRules(Context $context): TaxCollection
-    {
-        $criteria = new Criteria();
-        $criteria->setTitle('base-context-factory::taxes');
-        $criteria->addAssociation('rules.type');
-
-        return $this->taxRepository->search($criteria, $context)->getEntities();
     }
 
 

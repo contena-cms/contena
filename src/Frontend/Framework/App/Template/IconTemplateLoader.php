@@ -25,6 +25,8 @@ class IconTemplateLoader extends AbstractTemplateLoader
     ) {
     }
 
+
+
     public function getTemplatePathsForApp(Manifest $app): array
     {
         $viewPaths = $this->inner->getTemplatePathsForApp($app);

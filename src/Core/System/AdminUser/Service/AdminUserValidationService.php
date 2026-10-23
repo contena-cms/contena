@@ -38,7 +38,7 @@ class AdminUserValidationService
             )
         );
 
-        return $this->admin_userRepo->searchIds($criteria, $context)->getTotal() === 0;
+        return $this->adminUserRepo->searchIds($criteria, $context)->getTotal() === 0;
     }
 
     /**
@@ -58,6 +58,6 @@ class AdminUserValidationService
             )
         );
 
-        return $this->admin_userRepo->searchIds($criteria, $context)->getTotal() === 0;
+        return $this->adminUserRepo->searchIds($criteria, $context)->getTotal() === 0;
     }
 }

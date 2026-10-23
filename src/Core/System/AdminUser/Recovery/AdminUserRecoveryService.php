@@ -56,7 +56,7 @@ class AdminUserRecoveryService
         $adminUserId = $adminUser->getId();
 
         $adminUserIdCriteria = new Criteria();
-        $adminUserIdCriteria->addFilter(new EqualsFilter('admin_userId', $adminUserId));
+        $adminUserIdCriteria->addFilter(new EqualsFilter('adminUserId', $adminUserId));
         $adminUserIdCriteria->addAssociation('admin_user');
 
         if ($existingRecovery = $this->getUserRecovery($adminUserIdCriteria, $context)) {
@@ -64,11 +64,11 @@ class AdminUserRecoveryService
         }
 
         $recoveryData = [
-            'admin_userId' => $adminUserId,
+            'adminUserId' => $adminUserId,
             'hash' => Random::getAlphanumericString(32),
         ];
 
-        $this->admin_userRecoveryRepo->create([$recoveryData], $context);
+        $this->adminUserRecoveryRepo->create([$recoveryData], $context);
 
         $recovery = $this->getUserRecovery($adminUserIdCriteria, $context);
 
@@ -88,7 +88,7 @@ class AdminUserRecoveryService
             throw AdminUserException::invalidAppUrl((string) $e->getParameter('appUrl'));
         }
 
-        $recoveryUrl = $url . '#/login/admin_user-recovery/' . $hash;
+        $recoveryUrl = $url . '#/login/admin-user-recovery/' . $hash;
 
         $channel = $this->getChannel($context);
 
@@ -141,7 +141,7 @@ class AdminUserRecoveryService
             'password' => $password,
         ];
 
-        $this->admin_userRepo->update([$updateData], $context);
+        $this->adminUserRepo->update([$updateData], $context);
 
         $this->deleteRecoveryForUser($recovery, $context);
 
@@ -167,12 +167,12 @@ class AdminUserRecoveryService
             new EqualsFilter('email', $adminUserEmail)
         );
 
-        return $this->admin_userRepo->search($criteria, $context)->getEntities()->first();
+        return $this->adminUserRepo->search($criteria, $context)->getEntities()->first();
     }
 
     private function getUserRecovery(Criteria $criteria, Context $context): ?AdminUserRecoveryEntity
     {
-        return $this->admin_userRecoveryRepo->search($criteria, $context)->getEntities()->first();
+        return $this->adminUserRecoveryRepo->search($criteria, $context)->getEntities()->first();
     }
 
     private function deleteRecoveryForUser(AdminUserRecoveryEntity $adminUserRecoveryEntity, Context $context): void
@@ -181,7 +181,7 @@ class AdminUserRecoveryService
             'id' => $adminUserRecoveryEntity->getId(),
         ];
 
-        $this->admin_userRecoveryRepo->delete([$recoveryData], $context);
+        $this->adminUserRecoveryRepo->delete([$recoveryData], $context);
     }
 
     /**

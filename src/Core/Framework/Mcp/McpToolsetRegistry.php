@@ -52,7 +52,7 @@ class McpToolsetRegistry
 
     /**
      * The query parameter of the MCP connect URL that selects toolsets: `/api/_mcp?toolsets=order,media`
-     * and `/store-api/_mcp?toolsets=all`. The parameter exists since 6.7.15.0, this constant only since 6.7.16.0:
+     * and `/channel-api/_mcp?toolsets=all`. The parameter exists since 6.7.15.0, this constant only since 6.7.16.0:
      * code that also supports 6.7.15 detects the parameter with `\defined(McpToolsetRegistry::class . '::ALL_TOOLSETS')`
      * and uses the literal `'toolsets'`.
      */
@@ -89,7 +89,7 @@ class McpToolsetRegistry
 
         // Scope discovery to the caller's allowlist: toolsets-list and toolset-enable must never
         // surface tool names outside the caller's allowlist. Null passes through and lists
-        // everything; only an administrator admin_user, a scope without allowlists, or a call made outside
+        // everything; only an administrator admin user, a scope without allowlists, or a call made outside
         // the request cycle yields it.
         $allowlist = $this->allowlistProvider?->toolsForCurrentRequest();
 

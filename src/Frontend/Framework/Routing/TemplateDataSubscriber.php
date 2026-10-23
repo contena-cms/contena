@@ -9,7 +9,11 @@ use Contena\Frontend\Event\FrontendRenderEvent;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Page\Blog\BlogPage;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
+use Contena\Core\Framework\App\ActiveAppsLoader;
+use Contena\Core\Content\Seo\HreflangLoaderInterface;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 
 /**
  * @internal
@@ -17,12 +21,24 @@ use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
 class TemplateDataSubscriber implements EventSubscriberInterface
 {
 
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly HreflangLoaderInterface $hreflangLoader,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly ActiveAppsLoader $activeAppsLoader,
+        private readonly ThemeRuntimeConfigService $runtimeConfigService
+    ) {
+    }
+
+
     public static function getSubscribedEvents(): array
     {
         return [
             FrontendRenderEvent::class => [
                 ['addHreflang'],
-                ['addShopIdParameter'],
+                ['addInstallationIdParameter'],
                 ['addIconSetConfig'],
             ],
         ];
@@ -56,19 +72,19 @@ class TemplateDataSubscriber implements EventSubscriberInterface
         $event->setParameter('hrefLang', $this->hreflangLoader->load($parameter));
     }
 
-    public function addShopIdParameter(FrontendRenderEvent $event): void
+    public function addInstallationIdParameter(FrontendRenderEvent $event): void
     {
         if (!$this->activeAppsLoader->getActiveApps()) {
             return;
         }
 
         try {
-            $shopId = $this->shopIdProvider->getShopId()->id;
-        } catch (ShopIdChangeSuggestedException) {
+            $installationId = $this->installationIdProvider->getInstallationId()->id;
+        } catch (InstallationIdChangeSuggestedException) {
             return;
         }
 
-        $event->setParameter('appShopId', $shopId);
+        $event->setParameter('appInstallationId', $installationId);
     }
 
     public function addIconSetConfig(FrontendRenderEvent $event): void

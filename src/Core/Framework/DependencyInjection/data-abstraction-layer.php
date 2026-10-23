@@ -81,7 +81,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ReferenceVersion
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\RemoteAddressFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\StateMachineStateFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\StringFieldSerializer;
-use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TaxFreeConfigFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TimeZoneFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslatedFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslationsAssociationFieldSerializer;
@@ -305,7 +304,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ApiCriteriaValidator::class),
             service(CriteriaArrayConverter::class),
             service(CompressedCriteriaDecoder::class),
-            param('contena.api.store.max_limit'),
+            param('contena.api.channel.max_limit'),
         ]);
 
     $services->set(ApiCriteriaValidator::class)
@@ -548,13 +547,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.field_serializer');
 
     $services->set(CashRoundingConfigFieldSerializer::class)
-        ->args([
-            service('validator'),
-            service(DefinitionInstanceRegistry::class),
-        ])
-        ->tag('contena.field_serializer');
-
-    $services->set(TaxFreeConfigFieldSerializer::class)
         ->args([
             service('validator'),
             service(DefinitionInstanceRegistry::class),

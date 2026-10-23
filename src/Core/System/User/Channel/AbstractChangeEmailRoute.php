@@ -8,7 +8,7 @@ use Contena\Core\System\Channel\SuccessResponse;
 use Contena\Core\System\User\UserEntity;
 
 /**
- * This route is used to change the email of a logged-in admin_user
+ * This route is used to change the email of a logged-in admin user
  * The required fields are: "password", "email" and "emailConfirmation"
  */
 abstract class AbstractChangeEmailRoute

@@ -38,7 +38,7 @@ jest.mock('src/core/telemetry/blog-analytics/gateway-client', () => {
 });
 
 describe('src/app/post-init/blog-analytics.init.ts', () => {
-    const testShopId = 'knneBsx7LiKySnUq';
+    const testInstallationId = 'knneBsx7LiKySnUq';
     const testUserId = '8b8ebef4-7fa3-4844-ab7e-120463ea558b';
     let watchHandle;
 
@@ -58,7 +58,7 @@ describe('src/app/post-init/blog-analytics.init.ts', () => {
         Contena.Application.viewInitialized = Promise.resolve();
 
         Contena.Store.get('context').app.analyticsGatewayUrl = 'https://gateway.example';
-        Contena.Store.get('context').app.config.shopId = testShopId;
+        Contena.Store.get('context').app.config.installationId = testInstallationId;
         Contena.Store.get('session').currentUser = {
             id: testUserId,
         };
@@ -253,7 +253,7 @@ describe('src/app/post-init/blog-analytics.init.ts', () => {
             resolveFlushWithoutRetry();
             await flushPromises();
 
-            expect(mockDeleteUser).toHaveBeenCalledWith(testShopId, testUserId);
+            expect(mockDeleteUser).toHaveBeenCalledWith(testInstallationId, testUserId);
             expect(mockClearStorage).toHaveBeenCalled();
         });
 

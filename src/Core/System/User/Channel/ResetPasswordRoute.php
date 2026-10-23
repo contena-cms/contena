@@ -9,7 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -33,7 +33,7 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class ResetPasswordRoute extends AbstractResetPasswordRoute
 {
     /**
@@ -60,7 +60,7 @@ class ResetPasswordRoute extends AbstractResetPasswordRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/account/recovery-password-confirm', name: 'store-api.account.recovery.password', methods: ['POST'])]
+    #[Route(path: '/channel-api/account/recovery-password-confirm', name: 'channel-api.account.recovery.password', methods: ['POST'])]
     public function resetPassword(RequestDataBag $data, ChannelContext $context): SuccessResponse
     {
         return $this->extensions->publish(

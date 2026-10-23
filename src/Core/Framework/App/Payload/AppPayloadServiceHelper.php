@@ -13,6 +13,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Webhook\Service\WebhookRequest;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\Store\InAppPurchase;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 
 /**
  * @internal only for use by the app-system
@@ -21,13 +25,27 @@ class AppPayloadServiceHelper
 {
 
     /**
-     * @throws ShopIdChangeSuggestedException
+     * @internal
+     */
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $definitionRegistry,
+        private readonly JsonEntityEncoder $entityEncoder,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly InAppPurchase $inAppPurchase,
+        private readonly string $shopUrl,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
+    /**
+     * @throws InstallationIdChangeSuggestedException
      */
     public function buildSource(string $appVersion, string $appName): Source
     {
         return new Source(
             $this->shopUrl,
-            $this->shopIdProvider->getShopId()->id,
+            $this->installationIdProvider->getInstallationId()->id,
             $appVersion,
             $this->inAppPurchase->getJWTByExtension($appName),
         );

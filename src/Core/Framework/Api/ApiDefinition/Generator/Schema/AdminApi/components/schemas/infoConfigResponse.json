@@ -11,7 +11,7 @@
             "type": "string",
             "description": "Contena version."
           },
-          "shopId": {
+          "installationId": {
             "type": "string",
             "description": "Unique shop identifier."
           },
@@ -170,7 +170,7 @@
             }
           }
         },
-        "required": ["version", "shopId", "versionRevision", "adminWorker", "bundles", "settings", "inAppPurchases"],
+        "required": ["version", "installationId", "versionRevision", "adminWorker", "bundles", "settings", "inAppPurchases"],
         "additionalProperties": false
       }
     }

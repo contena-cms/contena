@@ -9,7 +9,7 @@ use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class BreadcrumbRoute extends AbstractBreadcrumbRoute
 {
     /**
@@ -36,8 +36,8 @@ class BreadcrumbRoute extends AbstractBreadcrumbRoute
     }
 
     #[Route(
-        path: '/store-api/breadcrumb/{id}',
-        name: 'store-api.breadcrumb',
+        path: '/channel-api/breadcrumb/{id}',
+        name: 'channel-api.breadcrumb',
         requirements: ['id' => '[0-9a-f]{32}'],
         methods: [Request::METHOD_GET],
         defaults: [PlatformRequest::ATTRIBUTE_HTTP_CACHE => true]

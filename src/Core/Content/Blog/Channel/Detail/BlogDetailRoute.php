@@ -30,7 +30,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Profiling\Profiler;
@@ -42,7 +42,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class BlogDetailRoute extends AbstractBlogDetailRoute
 {
     private const SKIP_CONFIGURATOR = 'skipConfigurator';
@@ -59,7 +59,6 @@ class BlogDetailRoute extends AbstractBlogDetailRoute
         private readonly EntityRepository $blogTranslationRepository,
         private readonly SystemConfigService $config,
         private readonly Connection $connection,
-        private readonly BlogConfiguratorLoader $configuratorLoader,
         private readonly CategoryBreadcrumbBuilder $breadcrumbBuilder,
         private readonly ChannelCmsPageLoaderInterface $cmsPageLoader,
         private readonly EntityCmsSlotConfigInheritanceBuilder $cmsSlotConfigInheritanceBuilder,
@@ -82,8 +81,8 @@ class BlogDetailRoute extends AbstractBlogDetailRoute
     }
 
     #[Route(
-        path: '/store-api/blog/{blogId}',
-        name: 'store-api.blog.detail',
+        path: '/channel-api/blog/{blogId}',
+        name: 'channel-api.blog.detail',
         defaults: [
             PlatformRequest::ATTRIBUTE_ENTITY => BlogDefinition::ENTITY_NAME,
             PlatformRequest::ATTRIBUTE_HTTP_CACHE => true,
@@ -151,9 +150,6 @@ class BlogDetailRoute extends AbstractBlogDetailRoute
                 $this->getBreadcrumbCategory($request, $blog, $context)
             );
 
-            $loadConfigurator = !$request->query->getBoolean(self::SKIP_CONFIGURATOR);
-            $configurator = $loadConfigurator ? $this->configuratorLoader->load($blog, $context) : null;
-
             $pageId = $blog->getCmsPageId();
             if ($loadCmsPage && $pageId) {
                 $slotConfig = $this->buildMergedCmsSlotConfig($blog, $context);
@@ -175,7 +171,7 @@ class BlogDetailRoute extends AbstractBlogDetailRoute
                 }
             }
 
-            return new BlogDetailRouteResponse($blog, $configurator);
+            return new BlogDetailRouteResponse($blog, null);
         });
     }
 

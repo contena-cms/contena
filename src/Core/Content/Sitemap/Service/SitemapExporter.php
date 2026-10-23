@@ -16,6 +16,20 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class SitemapExporter implements SitemapExporterInterface
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly iterable $urlProvider,
+        private readonly CacheItemPoolInterface $cache,
+        private readonly int $batchSize,
+        private readonly FilesystemOperator $filesystem,
+        private readonly EventDispatcherInterface $dispatcher
+    ) {
+    }
+
+
     /**
      * @var array<string, SitemapHandleInterface>
      */

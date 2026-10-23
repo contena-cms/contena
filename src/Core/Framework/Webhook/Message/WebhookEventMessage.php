@@ -90,7 +90,7 @@ class WebhookEventMessage
 
     public function getUserLocale(): ?string
     {
-        return $this->admin_userLocale;
+        return $this->adminUserLocale;
     }
 
     /**

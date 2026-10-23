@@ -85,7 +85,6 @@ class EntityGroupResolver
         'language' => 'system',
         'locale' => 'system',
         'salutation' => 'system',
-        'tax' => 'system',
         'unit' => 'system',
         'delivery' => 'system',       // delivery_time*
         'payment' => 'system',        // payment_method*

@@ -11,9 +11,25 @@ use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\User\UserEntity;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
+use Contena\Core\System\User\Channel\AbstractListAddressRoute;
+use Contena\Frontend\Page\GenericPageLoaderInterface;
 
 class AddressListingPageLoader
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly GenericPageLoaderInterface $genericLoader,
+        private readonly AbstractListAddressRoute $listAddressRoute,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly AbstractTranslator $translator
+    ) {
+    }
+
+
 
     /**
      * @throws CategoryNotFoundException

@@ -32,7 +32,7 @@ final readonly class ExternalAuthAdminUser implements UserEntityInterface
 
     public function getIdentifier(): string
     {
-        return $this->admin_userId;
+        return $this->adminUserId;
     }
 
     /**
@@ -45,7 +45,7 @@ final readonly class ExternalAuthAdminUser implements UserEntityInterface
         return new self(
             $data['id'],
             $data['admin_user_id'],
-            $data['admin_user_sub'],
+            $data['user_sub'],
             \array_key_exists('token', $data) && \is_array($data['token']) ? Token::fromArray($data['token']) : null,
             $data['expiry'],
             $data['email'],
@@ -96,7 +96,7 @@ final readonly class ExternalAuthAdminUser implements UserEntityInterface
                 new NotBlank(null, 'is required'),
                 new Type('string', 'Needs to be a string'),
             ],
-            'admin_user_sub' => [
+            'user_sub' => [
                 new NotBlank(null, 'is required'),
                 new Type('string', 'Needs to be a string'),
             ],

@@ -16,8 +16,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Symfony\Component\HttpClient\Exception\ServerException;
+use Contena\Core\Framework\App\ActionButton\Response\ActionButtonResponseFactory;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use GuzzleHttp\Exception\ConnectException;
 
 /**
  * @internal only for use by the app-system
@@ -25,11 +28,27 @@ use Symfony\Component\HttpClient\Exception\ServerException;
 class Executor
 {
 
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Client $guzzleClient,
+        private readonly LoggerInterface $logger,
+        private readonly ActionButtonResponseFactory $actionButtonResponseFactory,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly RouterInterface $router,
+        private readonly RequestStack $requestStack,
+        private readonly KernelInterface $kernel,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+
     public function execute(AppAction $action, Context $context): Response
     {
         try {
-            $this->shopIdProvider->getShopId();
-        } catch (ShopIdChangeSuggestedException $e) {
+            $this->installationIdProvider->getInstallationId();
+        } catch (InstallationIdChangeSuggestedException $e) {
             throw AppException::actionButtonProcessException($action->getActionId(), $e->getMessage(), $e);
         }
 

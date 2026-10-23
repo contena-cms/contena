@@ -87,14 +87,14 @@ trait StoreClientBehaviour
         $adminUserId = $source->getUserId();
 
         if ($adminUserId === null) {
-            throw new \RuntimeException('No admin_user id found in context');
+            throw new \RuntimeException('No admin user id found in context');
         }
 
         /** @var AdminUserCollection $users */
         $users = $this->getUserRepository()->search(new Criteria([$adminUserId]), $context)->getEntities();
 
         if ($users->count() === 0) {
-            throw new \RuntimeException('No admin_user found with id ' . $adminUserId);
+            throw new \RuntimeException('No admin user found with id ' . $adminUserId);
         }
 
         $adminUser = $users->first();
@@ -111,7 +111,7 @@ trait StoreClientBehaviour
         /** @var AdminApiSource $source */
         $source = $context->getSource();
         $criteria = (new Criteria())->addFilter(
-            new EqualsFilter('admin_userId', $source->getUserId()),
+            new EqualsFilter('adminUserId', $source->getUserId()),
             new EqualsFilter('key', FirstRunWizardService::USER_CONFIG_KEY_FRW_USER_TOKEN),
         );
 
@@ -130,7 +130,7 @@ trait StoreClientBehaviour
 
         static::getContainer()->get('admin_user_config.repository')->create([
             [
-                'admin_userId' => $source->getUserId(),
+                'adminUserId' => $source->getUserId(),
                 'key' => FirstRunWizardService::USER_CONFIG_KEY_FRW_USER_TOKEN,
                 'value' => [
                     FirstRunWizardService::USER_CONFIG_VALUE_FRW_USER_TOKEN => $frwUserToken,

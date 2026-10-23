@@ -19,7 +19,7 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class McpToolResultCacheCompilerPass implements CompilerPassInterface
 {
-    private const TOOL_TAGS = ['mcp.tool', 'contena.mcp.tool', 'contena.store_api_mcp.tool'];
+    private const TOOL_TAGS = ['mcp.tool', 'contena.mcp.tool', 'contena.channel_api_mcp.tool'];
 
     private const SETTER = 'setToolResultCache';
 

@@ -54,7 +54,7 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -189,7 +189,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ExtensionCompatibilitiesResolvedSubscriber::class)
         ->args([
             service(Client::class),
-            service(AbstractExtensionDataProvider::class),
         ])
         ->tag('kernel.event_subscriber');
 
@@ -299,9 +298,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(PermissionLogger::class)
         ->args([
-            service(Client::class),
             service('messenger.bus.default'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             service(SystemConfigService::class),
         ]);
 

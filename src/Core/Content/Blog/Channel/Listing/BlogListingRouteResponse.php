@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Content\Blog\Channel\Listing;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<BlogListingResult>
+ * @extends ChannelApiResponse<BlogListingResult>
  */
-class BlogListingRouteResponse extends StoreApiResponse
+class BlogListingRouteResponse extends ChannelApiResponse
 {
     public function getResult(): BlogListingResult
     {

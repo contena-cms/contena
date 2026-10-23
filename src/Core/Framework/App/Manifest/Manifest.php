@@ -18,7 +18,6 @@ use Contena\Core\Framework\App\Manifest\Xml\Permission\Permissions;
 use Contena\Core\Framework\App\Manifest\Xml\RuleCondition\RuleConditions;
 use Contena\Core\Framework\App\Manifest\Xml\Setup\Setup;
 use Contena\Core\Framework\App\Manifest\Xml\ShippingMethod\ShippingMethods;
-use Contena\Core\Framework\App\Manifest\Xml\Tax\Tax;
 use Contena\Core\Framework\App\Manifest\Xml\Webhook\Webhooks;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Symfony\Component\Config\Util\XmlUtils;
@@ -61,7 +60,6 @@ class Manifest
         private readonly ?Payments $payments,
         private readonly ?RuleConditions $ruleConditions,
         private readonly ?Frontend $frontend,
-        private readonly ?Tax $tax,
         private readonly ?ShippingMethods $shippingMethods,
         private readonly ?Gateways $gateways,
     ) {
@@ -200,11 +198,6 @@ class Manifest
         return $this->frontend;
     }
 
-    public function getTax(): ?Tax
-    {
-        return $this->tax;
-    }
-
     public function getGateways(): ?Gateways
     {
         return $this->gateways;
@@ -232,10 +225,6 @@ class Manifest
 
         if ($this->payments) {
             $urls = \array_merge($urls, $this->payments->getUrls());
-        }
-
-        if ($this->tax) {
-            $urls = \array_merge($urls, $this->tax->getUrls());
         }
 
         $urls = \array_map(static fn (string $url) => (string) \parse_url($url, \PHP_URL_HOST), $urls);
@@ -320,8 +309,6 @@ class Manifest
             $ruleConditions = $ruleConditions === null ? null : RuleConditions::fromXml($ruleConditions);
             $frontend = $doc->getElementsByTagName('frontend')->item(0);
             $frontend = $frontend === null ? null : Frontend::fromXml($frontend);
-            $tax = $doc->getElementsByTagName('tax')->item(0);
-            $tax = $tax === null ? null : Tax::fromXml($tax);
             $shippingMethods = $doc->getElementsByTagName('shipping-methods')->item(0);
             $shippingMethods = $shippingMethods === null ? null : ShippingMethods::fromXml($shippingMethods);
             $gateways = $doc->getElementsByTagName('gateways')->item(0);
@@ -330,13 +317,10 @@ class Manifest
             throw AppException::xmlParsingException($xmlFile, $e->getMessage());
         }
 
-        // A declared tax provider, checkout gateway or context gateway implicitly requires the matching
+        // A declared checkout gateway or context gateway implicitly requires the matching
         // permission, so Contena only pushes cart/user data to the handler once it is granted.
         // Adding it to the permissions here means it flows through the normal request/consent path.
         $capabilityPrivileges = [];
-        if ($tax?->getTaxProviders()) {
-            $capabilityPrivileges[] = Tax::PERMISSION;
-        }
         if ($gateways?->getCheckout()) {
             $capabilityPrivileges[] = CheckoutGateway::PERMISSION;
         }
@@ -365,7 +349,6 @@ class Manifest
             $payments,
             $ruleConditions,
             $frontend,
-            $tax,
             $shippingMethods,
             $gateways
         );

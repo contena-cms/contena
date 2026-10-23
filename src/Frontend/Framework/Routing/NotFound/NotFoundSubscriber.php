@@ -41,21 +41,21 @@ class NotFoundSubscriber implements EventSubscriberInterface, ResetInterface
 
     /**
      * @internal
-     *
-     * @param array<string, mixed> $sessionOptions
      */
     public function __construct(
         private readonly HttpKernelInterface $httpKernel,
         private readonly ChannelContextRequestRestorer $contextRestorer,
-        private bool $kernelDebug, // Do not change to readonly, as it is used in tests
+        private bool $kernelDebug,
         private readonly CacheInterface $cache,
         private readonly EntityCacheKeyGenerator $generator,
         private readonly CacheInvalidator $cacheInvalidator,
         private readonly EventDispatcherInterface $eventDispatcher,
-        array $sessionOptions = []
+        private array $sessionOptions = []
     ) {
         $this->sessionName = $sessionOptions['name'] ?? PlatformRequest::FALLBACK_SESSION_NAME;
     }
+
+
 
     public static function getSubscribedEvents(): array
     {

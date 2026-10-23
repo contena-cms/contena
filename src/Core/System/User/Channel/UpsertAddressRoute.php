@@ -7,7 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\DataMappingEvent;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -18,7 +18,7 @@ use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
-use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\Channel\ChannelApiCustomFieldMapper;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressDefinition;
@@ -34,7 +34,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\System\User\Channel\UserAddressDataNormalizerTrait;
 use Contena\Core\System\User\Channel\UserAddressValidationTrait;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class UpsertAddressRoute extends AbstractUpsertAddressRoute
 {
     use UserAddressDataNormalizerTrait;
@@ -53,7 +53,7 @@ class UpsertAddressRoute extends AbstractUpsertAddressRoute
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly DataValidationFactoryInterface $addressValidationFactory,
         private readonly SystemConfigService $systemConfigService,
-        private readonly StoreApiCustomFieldMapper $storeApiCustomFieldMapper,
+        private readonly ChannelApiCustomFieldMapper $channelApiCustomFieldMapper,
         private readonly ExtensionDispatcher $extensions,
     ) {
     }
@@ -64,8 +64,8 @@ class UpsertAddressRoute extends AbstractUpsertAddressRoute
     }
 
     #[Route(
-        path: '/store-api/account/address',
-        name: 'store-api.account.address.create',
+        path: '/channel-api/account/address',
+        name: 'channel-api.account.address.create',
         defaults: [
             'addressId' => null,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
@@ -74,8 +74,8 @@ class UpsertAddressRoute extends AbstractUpsertAddressRoute
         methods: [Request::METHOD_POST]
     )]
     #[Route(
-        path: '/store-api/account/address/{addressId}',
-        name: 'store-api.account.address.update',
+        path: '/channel-api/account/address/{addressId}',
+        name: 'channel-api.account.address.update',
         defaults: [
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
             PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,
@@ -132,7 +132,7 @@ class UpsertAddressRoute extends AbstractUpsertAddressRoute
         $addressData = $this->trimAddressFields($addressData);
 
         if ($data->get('customFields') instanceof RequestDataBag) {
-            $addressData['customFields'] = $this->storeApiCustomFieldMapper->map(
+            $addressData['customFields'] = $this->channelApiCustomFieldMapper->map(
                 UserAddressDefinition::ENTITY_NAME,
                 $data->get('customFields')
             );

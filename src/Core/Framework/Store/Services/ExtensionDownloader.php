@@ -10,6 +10,7 @@ use Contena\Core\Framework\Plugin\PluginCollection;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\PluginDownloadDataStruct;
+use GuzzleHttp\Exception\ClientException;
 
 /**
  * @internal

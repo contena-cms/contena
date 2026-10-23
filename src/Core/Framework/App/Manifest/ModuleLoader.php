@@ -4,12 +4,15 @@ namespace Contena\Core\Framework\App\Manifest;
 
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
+use Contena\Core\Framework\App\Hmac\QuerySigner;
 
 /**
  * @internal only for use by the app-system
@@ -20,6 +23,17 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
  */
 class ModuleLoader
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EntityRepository $appRepository,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly QuerySigner $querySigner
+    ) {
+    }
+
 
     /**
      * @return list<AppModule>
@@ -49,8 +63,8 @@ class ModuleLoader
     private function formatPayload(AppCollection $apps, Context $context): array
     {
         try {
-            $this->shopIdProvider->getShopId();
-        } catch (ShopIdChangeSuggestedException) {
+            $this->installationIdProvider->getInstallationId();
+        } catch (InstallationIdChangeSuggestedException) {
             return [];
         }
 

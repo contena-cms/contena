@@ -34,7 +34,7 @@
 
 <header>
     {% set home = url(schemaUrl, {'version': apiVersion})|replace({'openapi3.json': 'stoplightio.html'}) %}
-    {% set adminApi = 'store-api' not in schemaUrl %}
+    {% set adminApi = 'channel-api' not in schemaUrl %}
     <nav class="navbar navbar-expand-lg bg-dark" data-bs-theme="dark">
         <div class="container-fluid">
             <a class="navbar-brand" href="{{ home }}">

@@ -36,7 +36,7 @@ class RateLimiter
 
     final public const MCP_ADMIN_API = 'mcp_admin_api';
 
-    final public const MCP_STORE_API = 'mcp_store_api';
+    final public const MCP_STORE_API = 'mcp_channel_api';
 
     final public const APP_SHOP_VERIFY = 'app_shop_verify';
 

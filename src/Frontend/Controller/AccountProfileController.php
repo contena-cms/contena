@@ -15,14 +15,25 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoader;
 
 /**
  * @internal
- * Do not use direct or indirect repository calls in a controller. Always use a store-api route to get or put data
+ * Do not use direct or indirect repository calls in a controller. Always use a channel-api route to get or put data
  */
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class AccountProfileController extends FrontendController
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly AccountProfilePageLoader $profilePageLoader,
+        private readonly LoggerInterface $logger
+    ) {
+    }
+
+
 
     #[Route(
         path: '/account/profile',

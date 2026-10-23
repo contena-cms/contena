@@ -2,11 +2,11 @@
 
 namespace Contena\Core\Content\Blog\Events;
 
-use Contena\Core\Framework\Adapter\Cache\StoreApiRouteCacheTagsEvent;
+use Contena\Core\Framework\Adapter\Cache\ChannelApiRouteCacheTagsEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -14,13 +14,13 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @codeCoverageIgnore
  */
-class CrossSellingRouteCacheTagsEvent extends StoreApiRouteCacheTagsEvent
+class CrossSellingRouteCacheTagsEvent extends ChannelApiRouteCacheTagsEvent
 {
     public function __construct(
         protected string $blogId,
         array $tags,
         Request $request,
-        StoreApiResponse $response,
+        ChannelApiResponse $response,
         ChannelContext $context,
         ?Criteria $criteria
     ) {

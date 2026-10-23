@@ -45,7 +45,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('cache.system'),
             param('contena.sitemap.batchsize'),
             service('contena.filesystem.sitemap'),
-            service(SitemapHandleFactoryInterface::class),
             service('event_dispatcher'),
         ]);
 

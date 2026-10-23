@@ -261,9 +261,9 @@ class EntityDefinitionQueryHelper
      *
      * @example
      *
-     * fieldName => blog.taxId
+     * fieldName => blog.coverId
      * root      => blog
-     * returns   => `blog`.`tax_id`
+     * returns   => `blog`.`blog_media_id`
      *
      * This function is also used for complex field accessors like JsonArray Field, JsonObject fields.
      * It considers the translation and parent-child inheritance.

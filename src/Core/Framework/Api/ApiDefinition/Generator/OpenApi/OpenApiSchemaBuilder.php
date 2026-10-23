@@ -26,7 +26,7 @@ class OpenApiSchemaBuilder
         ],
         DefinitionService::STORE_API => [
             'name' => 'Store API',
-            'url' => '/store-api',
+            'url' => '/channel-api',
             'apiKey' => true,
         ],
     ];
@@ -412,7 +412,7 @@ EOF,
                     'type' => 'apiKey',
                     'in' => 'header',
                     'name' => PlatformRequest::HEADER_CONTEXT_TOKEN,
-                    'description' => 'Identifies an anonymous or identified admin_user session',
+                    'description' => 'Identifies an anonymous or identified admin user session',
                 ]),
             ];
         }

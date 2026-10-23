@@ -173,7 +173,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RequirementsController::class)
         ->public()
         ->args([
-            tagged_iterator('contena.installer.requirement'),
             param('kernel.project_dir'),
         ])
         ->call('setContainer', [

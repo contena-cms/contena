@@ -26,7 +26,7 @@ use Contena\Core\Framework\Webhook\Webhook;
 use Contena\Core\Profiling\Profiler;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\Service\ResetInterface;
-use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\InstallationIdChangeSuggestedException;
 
 /**
  * @internal
@@ -214,7 +214,7 @@ class WebhookManager implements ResetInterface
     ): ?WebhookEventMessage {
         try {
             $webhookData = $this->getPayloadForWebhook($webhook, $event);
-        } catch (ShopIdChangeSuggestedException) {
+        } catch (InstallationIdChangeSuggestedException) {
             // don't dispatch webhooks for apps if url changed
             return null;
         }

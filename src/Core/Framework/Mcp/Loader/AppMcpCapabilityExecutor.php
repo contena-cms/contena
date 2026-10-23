@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\App\AppSecretResolver;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 /**
  * @experimental stableVersion:v6.8.0
@@ -23,6 +25,23 @@ use Symfony\Component\Routing\RouterInterface;
  */
 class AppMcpCapabilityExecutor
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Client $client,
+        private readonly string $shopUrl,
+        private readonly InstallationIdProvider $installationIdProvider,
+        private readonly int $timeout,
+        private readonly LoggerInterface $logger,
+        private readonly KernelInterface $kernel,
+        private readonly RequestStack $requestStack,
+        private readonly RouterInterface $router,
+        private readonly AppSecretResolver $secretResolver
+    ) {
+    }
+
 
     /**
      * @param array<string, mixed> $arguments
@@ -40,7 +59,7 @@ class AppMcpCapabilityExecutor
             'arguments' => $arguments,
             'source' => [
                 'url' => $this->shopUrl,
-                'shopId' => $this->shopIdProvider->getShopId()->id,
+                'installationId' => $this->installationIdProvider->getInstallationId()->id,
                 'appVersion' => $appVersion,
             ],
         ]);

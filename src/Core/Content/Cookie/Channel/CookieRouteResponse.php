@@ -4,12 +4,12 @@ namespace Contena\Core\Content\Cookie\Channel;
 
 use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Struct\ArrayStruct;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{elements: CookieGroupCollection, hash: string, languageId: string}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{elements: CookieGroupCollection, hash: string, languageId: string}>>
  */
-class CookieRouteResponse extends StoreApiResponse
+class CookieRouteResponse extends ChannelApiResponse
 {
     public function __construct(
         CookieGroupCollection $cookieGroups,

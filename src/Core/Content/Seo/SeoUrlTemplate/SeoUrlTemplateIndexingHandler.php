@@ -85,7 +85,7 @@ final class SeoUrlTemplateIndexingHandler
 
     /**
      * Mirrors the route resolution of {@see SeoUrlUpdater::update()}: frontend routes
-     * live in the {@see SeoUrlRouteRegistry}, while headless store-api routes are only
+     * live in the {@see SeoUrlRouteRegistry}, while headless channel-api routes are only
      * registered as `contena.entity.seo_url.route` although their templates are equally
      * editable. Skipping the latter would silently drop the reindex for them.
      */

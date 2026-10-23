@@ -15,7 +15,7 @@ abstract class RouteRequestEvent extends NestedEvent implements ContenaChannelEv
 
     public function __construct(
         private readonly Request $frontendRequest,
-        private readonly Request $storeApiRequest,
+        private readonly Request $channelApiRequest,
         private readonly ChannelContext $channelContext,
         ?Criteria $criteria = null
     ) {
@@ -27,9 +27,9 @@ abstract class RouteRequestEvent extends NestedEvent implements ContenaChannelEv
         return $this->frontendRequest;
     }
 
-    public function getStoreApiRequest(): Request
+    public function getChannelApiRequest(): Request
     {
-        return $this->storeApiRequest;
+        return $this->channelApiRequest;
     }
 
     public function getChannelContext(): ChannelContext

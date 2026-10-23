@@ -1,0 +1,30 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\Extension;
+
+use Contena\Core\Framework\Extensions\Extension;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\Channel\NoContentResponse;
+
+/**
+ * @public
+ *
+ * @codeCoverageIgnore
+ *
+ * @extends Extension<NoContentResponse>
+ */
+final class BlogCommentSaveRouteExtension extends Extension
+{
+    public const NAME = 'blog-comment-save-route.save';
+
+    /**
+     * @internal Contena owns the constructor; the properties are public API.
+     */
+    public function __construct(
+        public readonly string $blogId,
+        public readonly RequestDataBag $data,
+        public readonly ChannelContext $context,
+    ) {
+    }
+}

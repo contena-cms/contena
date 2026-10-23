@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Content\Blog;
 
+use Contena\Core\Content\Blog\Aggregate\BlogComment\BlogCommentCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordCollection;
@@ -19,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\Tag\TagCollection;
-use Contena\Core\System\Tax\TaxEntity;
 use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogCollection;
 use Symfony\Component\Clock\Clock;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
@@ -37,8 +37,6 @@ class BlogEntity extends Entity implements \Stringable
     protected int $childCount = 0;
 
     protected int $autoIncrement;
-
-    protected ?string $taxId = null;
 
     protected ?string $manufacturerId = null;
 
@@ -160,9 +158,6 @@ class BlogEntity extends Entity implements \Stringable
      */
     protected array $variation = [];
 
-    protected ?TaxEntity $tax = null;
-
-
     protected ?UnitEntity $unit = null;
 
     protected ?BlogMediaEntity $cover = null;
@@ -181,6 +176,8 @@ class BlogEntity extends Entity implements \Stringable
      * @var array<string, array<string, array<string, mixed>>|null>|null
      */
     protected ?array $slotConfig = null;
+
+    protected ?BlogCommentCollection $comments = null;
 
     protected ?BlogSearchKeywordCollection $searchKeywords = null;
 
@@ -268,16 +265,6 @@ class BlogEntity extends Entity implements \Stringable
     public function setParentId(?string $parentId): void
     {
         $this->parentId = $parentId;
-    }
-
-    public function getTaxId(): ?string
-    {
-        return $this->taxId;
-    }
-
-    public function setTaxId(?string $taxId): void
-    {
-        $this->taxId = $taxId;
     }
 
     public function getManufacturerId(): ?string
@@ -661,18 +648,6 @@ class BlogEntity extends Entity implements \Stringable
         $this->packUnitPlural = $packUnitPlural;
     }
 
-    public function getTax(): ?TaxEntity
-    {
-        return $this->tax;
-    }
-
-    public function setTax(TaxEntity $tax): void
-    {
-        $this->tax = $tax;
-    }
-
-
-
     public function getUnit(): ?UnitEntity
     {
         return $this->unit;
@@ -828,6 +803,16 @@ class BlogEntity extends Entity implements \Stringable
     public function setMedia(BlogMediaCollection $media): void
     {
         $this->media = $media;
+    }
+
+    public function getComments(): ?BlogCommentCollection
+    {
+        return $this->comments;
+    }
+
+    public function setComments(BlogCommentCollection $comments): void
+    {
+        $this->comments = $comments;
     }
 
     public function getSearchKeywords(): ?BlogSearchKeywordCollection

@@ -5,7 +5,7 @@ namespace Contena\Core\System\Snippet\Channel;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
@@ -17,7 +17,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 /**
  * @experimental stableVersion:v6.8.0 feature:STORE_API_SNIPPETS
  */
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class SnippetRoute extends AbstractSnippetRoute
 {
     /**
@@ -31,8 +31,8 @@ class SnippetRoute extends AbstractSnippetRoute
     }
 
     #[Route(
-        path: '/store-api/snippet',
-        name: 'store-api.snippet',
+        path: '/channel-api/snippet',
+        name: 'channel-api.snippet',
         methods: [Request::METHOD_GET],
         defaults: [PlatformRequest::ATTRIBUTE_HTTP_CACHE => true],
     )]

@@ -33,19 +33,14 @@ class BlogSerializer extends EntitySerializer
 
     /**
      * @internal
-     *
-     * @param EntityRepository<BlogVisibilityCollection> $visibilityRepository
-     * @param EntityRepository<ChannelCollection> $channelRepository
-     * @param EntityRepository<BlogMediaCollection> $blogMediaRepository
-     * @param EntityRepository<BlogConfiguratorSettingCollection> $blogConfiguratorSettingRepository
      */
     public function __construct(
         private readonly EntityRepository $visibilityRepository,
         private readonly EntityRepository $channelRepository,
-        private readonly EntityRepository $blogMediaRepository,
-        private readonly EntityRepository $blogConfiguratorSettingRepository
+        private readonly EntityRepository $blogMediaRepository
     ) {
     }
+
 
     public function serialize(Config $config, EntityDefinition $definition, $entity): iterable
     {
@@ -145,10 +140,6 @@ class BlogSerializer extends EntitySerializer
         if (isset($deserialized['id'], $deserialized['cover']['media']['id'])) {
             yield 'cover' => $this->findCoverBlogMediaId($deserialized['id'], $deserialized['cover'], $context);
         }
-
-        if (!empty($deserialized['parentId']) && !empty($deserialized['options'])) {
-            yield 'configuratorSettings' => $this->findConfiguratorSettings($deserialized['parentId'], $deserialized['options'], $context);
-        }
     }
 
     public function supports(string $entity): bool
@@ -240,43 +231,6 @@ class BlogSerializer extends EntitySerializer
         }
 
         return $cover;
-    }
-
-    /**
-     * @param list<array{id: string}> $options
-     *
-     * @return list<array{optionId: string, blog: array{id: string}, id?: string}>
-     */
-    private function findConfiguratorSettings(string $parentId, array $options, Context $context): array
-    {
-        $configuratorSettings = [];
-
-        foreach ($options as $option) {
-            if (empty($option['id'])) {
-                continue;
-            }
-
-            $configuratorSetting = [
-                'optionId' => $option['id'],
-                'blog' => [
-                    'id' => $parentId,
-                ],
-            ];
-
-            $criteria = new Criteria();
-            $criteria->addFilter(new EqualsFilter('blogId', $parentId));
-            $criteria->addFilter(new EqualsFilter('optionId', $option['id']));
-
-            $id = $this->blogConfiguratorSettingRepository->searchIds($criteria, $context)->firstId();
-
-            if ($id) {
-                $configuratorSetting['id'] = $id;
-            }
-
-            $configuratorSettings[] = $configuratorSetting;
-        }
-
-        return $configuratorSettings;
     }
 
     /**

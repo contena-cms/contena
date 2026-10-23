@@ -113,7 +113,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
             service(MailAttachmentsBuilder::class),
             service('contena.filesystem.public'),
-            service('document.repository'),
         ]);
 
     $services->set(SmtpOauthTransportFactoryDecorator::class)

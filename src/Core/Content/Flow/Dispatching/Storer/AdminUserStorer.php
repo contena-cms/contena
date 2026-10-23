@@ -59,7 +59,7 @@ class AdminUserStorer extends FlowStorer
         }
 
         if (!Feature::isActive('v6.8.0.0')) {
-            $criteria = $this->admin_userRecoveryProvider->getCriteria($id, $storableFlow->getContext());
+            $criteria = $this->adminUserRecoveryProvider->getCriteria($id, $storableFlow->getContext());
 
             $event = new BeforeLoadStorableFlowDataEvent(
                 AdminUserRecoveryDefinition::ENTITY_NAME,
@@ -69,7 +69,7 @@ class AdminUserStorer extends FlowStorer
 
             $this->dispatcher->dispatch($event, $event->getName());
 
-            $adminUserRecovery = $this->admin_userRecoveryRepository->search($criteria, $storableFlow->getContext())->getEntities()->get($id);
+            $adminUserRecovery = $this->adminUserRecoveryRepository->search($criteria, $storableFlow->getContext())->getEntities()->get($id);
 
             if ($adminUserRecovery) {
                 return $adminUserRecovery;
@@ -78,6 +78,6 @@ class AdminUserStorer extends FlowStorer
             return null;
         }
 
-        return $this->admin_userRecoveryProvider->getData($id, $storableFlow->getContext());
+        return $this->adminUserRecoveryProvider->getData($id, $storableFlow->getContext());
     }
 }

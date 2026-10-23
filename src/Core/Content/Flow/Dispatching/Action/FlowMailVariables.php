@@ -9,7 +9,7 @@ final class FlowMailVariables
     public const TEMPLATE_DATA = 'templateData';
     public const SUBJECT = 'subject';
     public const SHOP_NAME = 'shopName';
-    public const REVIEW_FORM_DATA = 'reviewFormData';
+    public const COMMENT_FORM_DATA = 'commentFormData';
     public const RESET_URL = 'resetUrl';
     public const RECIPIENTS = 'recipients';
     public const EVENT_NAME = 'name';

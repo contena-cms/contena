@@ -36,7 +36,7 @@ class StoreService
         $storeToken = $accessToken->getShopUserToken()->getToken();
 
         $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($adminUserId, $storeToken): void {
-            $this->admin_userRepository->update([['id' => $adminUserId, 'storeToken' => $storeToken]], $context);
+            $this->adminUserRepository->update([['id' => $adminUserId, 'storeToken' => $storeToken]], $context);
         });
     }
 
@@ -47,7 +47,7 @@ class StoreService
         $adminUserId = $contextSource->getUserId();
 
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($adminUserId): void {
-            $this->admin_userRepository->update([['id' => $adminUserId, 'storeToken' => null]], $context);
+            $this->adminUserRepository->update([['id' => $adminUserId, 'storeToken' => null]], $context);
         });
     }
 }

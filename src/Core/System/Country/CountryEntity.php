@@ -3,13 +3,11 @@
 namespace Contena\Core\System\Country;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\TaxFreeConfig;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\Aggregate\CountryTranslation\CountryTranslationCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
@@ -43,10 +41,6 @@ class CountryEntity extends Entity
 
     protected ?bool $vatIdRequired = null;
 
-    protected TaxFreeConfig $userTax;
-
-    protected TaxFreeConfig $companyTax;
-
     protected ?CountryStateCollection $states = null;
 
     protected ?CountryTranslationCollection $translations = null;
@@ -57,8 +51,6 @@ class CountryEntity extends Entity
     protected ?ChannelCollection $channelDefaultAssignments = null;
 
     protected ?ChannelCollection $channels = null;
-
-    protected ?TaxRuleCollection $taxRules = null;
 
     protected ?CurrencyCountryRoundingCollection $currencyCountryRoundings = null;
 
@@ -231,16 +223,6 @@ class CountryEntity extends Entity
         $this->channels = $channels;
     }
 
-    public function getTaxRules(): ?TaxRuleCollection
-    {
-        return $this->taxRules;
-    }
-
-    public function setTaxRules(TaxRuleCollection $taxRules): void
-    {
-        $this->taxRules = $taxRules;
-    }
-
     public function getCurrencyCountryRoundings(): ?CurrencyCountryRoundingCollection
     {
         return $this->currencyCountryRoundings;
@@ -259,26 +241,6 @@ class CountryEntity extends Entity
     public function setVatIdRequired(bool $vatIdRequired): void
     {
         $this->vatIdRequired = $vatIdRequired;
-    }
-
-    public function getUserTax(): TaxFreeConfig
-    {
-        return $this->userTax;
-    }
-
-    public function setUserTax(TaxFreeConfig $userTax): void
-    {
-        $this->userTax = $userTax;
-    }
-
-    public function getCompanyTax(): TaxFreeConfig
-    {
-        return $this->companyTax;
-    }
-
-    public function setCompanyTax(TaxFreeConfig $companyTax): void
-    {
-        $this->companyTax = $companyTax;
     }
 
     public function getPostalCodeRequired(): bool

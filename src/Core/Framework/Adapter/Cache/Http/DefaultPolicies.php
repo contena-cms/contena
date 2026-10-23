@@ -4,7 +4,7 @@ namespace Contena\Core\Framework\Adapter\Cache\Http;
 
 
 /**
- * Represents default cache policies configuration for an area (e.g., frontend, store_api)
+ * Represents default cache policies configuration for an area (e.g., frontend, channel_api)
  *
  * @internal
  *

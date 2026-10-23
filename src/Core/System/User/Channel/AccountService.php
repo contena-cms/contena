@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -14,12 +13,14 @@ use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\System\User\Event\UserLoginEvent;
+use Contena\Core\System\User\Exception\UserNotFoundException;
 use Contena\Core\System\User\Extension\LoginByCredentialsExtension;
 use Contena\Core\System\User\Password\LegacyPasswordVerifier;
 use Contena\Core\System\User\Service\DoubleOptInService;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\UserException;
+use Psr\Clock\ClockInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\PasswordHasher\Hasher\CheckPasswordLengthTrait;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -27,7 +28,6 @@ use Symfony\Component\Validator\ConstraintViolation;
 class AccountService
 {
     use CheckPasswordLengthTrait;
-use Contena\Core\System\User\Exception\UserNotFoundException;
 
     /**
      * Bcrypt hash of a static placeholder password used to equalize timing when the login cannot succeed.

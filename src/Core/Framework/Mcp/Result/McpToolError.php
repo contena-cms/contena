@@ -7,7 +7,7 @@ namespace Contena\Core\Framework\Mcp\Result;
  * @experimental stableVersion:v6.8.0
  *
  * A tool failure with a stable code, so every output format can express it: MCP `isError`, an error
- * object, or a status code. The message is for the model and the admin_user; the code is for clients.
+ * object, or a status code. The message is for the model and the admin user; the code is for clients.
  */
 final readonly class McpToolError
 {

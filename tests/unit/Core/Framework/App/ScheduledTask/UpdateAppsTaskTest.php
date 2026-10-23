@@ -22,10 +22,10 @@ class UpdateAppsTaskTest extends TestCase
         static::assertTrue($task::shouldRescheduleOnFailure());
 
         $c = new ContainerBuilder();
-        $c->setParameter('contena.cnployment.runtime_extension_management', true);
+        $c->setParameter('contena.deployment.runtime_extension_management', true);
         static::assertTrue($task::shouldRun($c->getParameterBag()));
 
-        $c->setParameter('contena.cnployment.runtime_extension_management', false);
+        $c->setParameter('contena.deployment.runtime_extension_management', false);
         static::assertFalse($task::shouldRun($c->getParameterBag()));
     }
 }

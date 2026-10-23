@@ -52,12 +52,12 @@ class AdminUserConfigEntity extends Entity
 
     public function getUserId(): string
     {
-        return $this->admin_userId;
+        return $this->adminUserId;
     }
 
     public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $adminUserId;
+        $this->adminUserId = $adminUserId;
     }
 
     public function getUser(): ?AdminUserEntity

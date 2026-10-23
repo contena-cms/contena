@@ -1,5 +1,5 @@
-import template from './sw-cms-el-blog-description-reviews.html.twig';
-import './sw-cms-el-blog-description-reviews.scss';
+import template from './sw-cms-el-blog-description-comments.html.twig';
+import './sw-cms-el-blog-description-comments.scss';
 
 const { Mixin } = Contena;
 
@@ -66,8 +66,8 @@ export default {
 
     methods: {
         createdComponent() {
-            this.initElementConfig('blog-description-reviews');
-            this.initElementData('blog-description-reviews');
+            this.initElementConfig('blog-description-comments');
+            this.initElementData('blog-description-comments');
         },
     },
 };

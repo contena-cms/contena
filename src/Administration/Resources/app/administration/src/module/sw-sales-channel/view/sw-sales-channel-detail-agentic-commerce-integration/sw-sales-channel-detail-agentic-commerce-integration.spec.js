@@ -36,7 +36,7 @@ async function createWrapper(props = {}) {
                 blogExport: {
                     provider: 'open-ai',
                 },
-                blogComparisonAccessUrl: 'https://example.com/store-api/blog-export/key/file.jsonl',
+                blogComparisonAccessUrl: 'https://example.com/channel-api/blog-export/key/file.jsonl',
                 isLoading: false,
                 ...props,
             },

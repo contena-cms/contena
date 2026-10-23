@@ -1,4 +1,4 @@
-import template from './sw-cms-block-blog-description-reviews.html.twig';
+import template from './sw-cms-block-blog-description-comments.html.twig';
 
 /**
  * @private

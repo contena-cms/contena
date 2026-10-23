@@ -22,12 +22,12 @@ use Contena\Core\Framework\Mcp\Authentication\McpAuthenticationListener;
 use Contena\Core\Framework\Mcp\Authentication\McpExceptionListener;
 use Contena\Core\Framework\Mcp\Command\DebugMcpCommand;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
-use Contena\Core\Framework\Mcp\Context\StoreApiMcpContextProvider;
+use Contena\Core\Framework\Mcp\Context\ChannelApiMcpContextProvider;
 use Contena\Core\Framework\Mcp\Controller\AdminUserMcpAllowlistController;
 use Contena\Core\Framework\Mcp\Controller\IntegrationMcpAllowlistController;
 use Contena\Core\Framework\Mcp\Controller\McpServerController;
 use Contena\Core\Framework\Mcp\Controller\McpToolListController;
-use Contena\Core\Framework\Mcp\Controller\StoreApiMcpServerController;
+use Contena\Core\Framework\Mcp\Controller\ChannelApiMcpServerController;
 use Contena\Core\Framework\Mcp\Http\McpHttpTransportFactory;
 use Contena\Core\Framework\Mcp\Loader\AppMcpCapabilityExecutor;
 use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
@@ -78,15 +78,15 @@ use Contena\Core\Framework\Mcp\Tool\ToolsetEnableTool;
 use Contena\Core\Framework\Mcp\Tool\ToolsetsListTool;
 use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
-use Contena\Core\System\Channel\Mcp\Resource\StoreApiToolResultResource;
-use Contena\Core\System\Channel\Mcp\Tool\StoreApiContextTool;
-use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolSearchTool;
-use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolsetEnableTool;
-use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolsetsListTool;
+use Contena\Core\System\Channel\Mcp\Resource\ChannelApiToolResultResource;
+use Contena\Core\System\Channel\Mcp\Tool\ChannelApiContextTool;
+use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolSearchTool;
+use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetEnableTool;
+use Contena\Core\System\Channel\Mcp\Tool\ChannelApiToolsetsListTool;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Contena\Core\Framework\App\ShopId\ShopIdProvider;
+use Contena\Core\Framework\App\InstallationId\InstallationIdProvider;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -125,7 +125,7 @@ return static function (ContainerConfigurator $container): void {
     $services->set(McpContextProvider::class)
         ->args([service('request_stack')]);
 
-    $services->set(StoreApiMcpContextProvider::class)
+    $services->set(ChannelApiMcpContextProvider::class)
         ->args([service('request_stack')]);
 
     $services->set(McpAllowlistFilter::class);
@@ -198,51 +198,51 @@ return static function (ContainerConfigurator $container): void {
         ->tag('monolog.logger', ['channel' => 'mcp']);
 
     // Store-api-scoped discovery stack: second instances of the scope-neutral discovery classes,
-    // pointed at the store-api registry and params, so enabling an admin toolset never notifies
-    // store-api sessions and vice versa. App capabilities only reach the Admin API server, so
-    // store-api lists change per session only (toolset enable) and need no shared list versions.
-    $services->set('mcp.store_api.list_changed_notifier', McpListChangedNotifier::class)
+    // pointed at the channel-api registry and params, so enabling an admin toolset never notifies
+    // channel-api sessions and vice versa. App capabilities only reach the Admin API server, so
+    // channel-api lists change per session only (toolset enable) and need no shared list versions.
+    $services->set('mcp.channel_api.list_changed_notifier', McpListChangedNotifier::class)
         ->args([
-            service('mcp.server.store_api.session.store')->nullOnInvalid(),
+            service('mcp.server.channel_api.session.store')->nullOnInvalid(),
             null,
             service('logger'),
         ])
         ->tag('monolog.logger', ['channel' => 'mcp']);
 
-    $services->set('mcp.store_api.capability_catalog', McpCapabilityCatalog::class)
+    $services->set('mcp.channel_api.capability_catalog', McpCapabilityCatalog::class)
         ->args([
-            service('mcp.server.store_api.registry')->nullOnInvalid(),
+            service('mcp.server.channel_api.registry')->nullOnInvalid(),
             service(AppMcpPrivilegeProvider::class),
-            param('contena.store_api_mcp.tool_dependencies'),
-            param('contena.store_api_mcp.tool_privileges'),
-            param('contena.store_api_mcp.tool_groups'),
+            param('contena.channel_api_mcp.tool_dependencies'),
+            param('contena.channel_api_mcp.tool_privileges'),
+            param('contena.channel_api_mcp.tool_groups'),
         ]);
 
-    $services->set('mcp.store_api.toolset_registry', McpToolsetRegistry::class)
-        ->args([service('mcp.store_api.capability_catalog')]);
+    $services->set('mcp.channel_api.toolset_registry', McpToolsetRegistry::class)
+        ->args([service('mcp.channel_api.capability_catalog')]);
 
-    $services->set('mcp.store_api.list_request_handler', McpAllowlistListRequestHandler::class)
+    $services->set('mcp.channel_api.list_request_handler', McpAllowlistListRequestHandler::class)
         ->args([
-            service('mcp.server.store_api.registry'),
+            service('mcp.server.channel_api.registry'),
             null,
             param('contena.mcp.pagination_limit'),
-            param('contena.store_api_mcp.advertised_tools'),
-            service('mcp.store_api.toolset_registry'),
+            param('contena.channel_api_mcp.advertised_tools'),
+            service('mcp.channel_api.toolset_registry'),
             service(McpToolsetSessionStorage::class),
             service('request_stack'),
             service(McpRequestedToolsetResolver::class),
         ])
-        ->tag('mcp.store_api.request_handler');
+        ->tag('mcp.channel_api.request_handler');
 
-    $services->set(StoreApiMcpServerController::class)
+    $services->set(ChannelApiMcpServerController::class)
         ->public()
         ->args([
-            service('mcp.server.store_api')->nullOnInvalid(),
+            service('mcp.server.channel_api')->nullOnInvalid(),
             service(McpHttpTransportFactory::class),
             service(McpRateLimiter::class),
             service(McpSessionIdValidator::class),
             service('logger'),
-            service('mcp.store_api.list_changed_notifier'),
+            service('mcp.channel_api.list_changed_notifier'),
         ])
         ->tag('controller.service_arguments')
         ->tag('monolog.logger', ['channel' => 'mcp']);
@@ -289,9 +289,9 @@ return static function (ContainerConfigurator $container): void {
             service('mcp.server.admin.registry')->nullOnInvalid(),
             service(McpAllowlistProvider::class),
             service(McpCapabilityCatalog::class),
-            service('mcp.server.store_api.builder')->nullOnInvalid(),
-            service('mcp.server.store_api.registry')->nullOnInvalid(),
-            service('mcp.store_api.capability_catalog')->nullOnInvalid(),
+            service('mcp.server.channel_api.builder')->nullOnInvalid(),
+            service('mcp.server.channel_api.registry')->nullOnInvalid(),
+            service('mcp.channel_api.capability_catalog')->nullOnInvalid(),
             param('mcp.servers.unassigned'),
             param(McpToolDiscoveryCompilerPass::DEMOTED_DISCOVERY_TOOLS_PARAMETER),
         ])
@@ -322,7 +322,7 @@ return static function (ContainerConfigurator $container): void {
             service('logger'),
             service(McpToolsetSessionStorage::class),
             service('mcp.server.admin.session.store')->nullOnInvalid(),
-            service('mcp.server.store_api.session.store')->nullOnInvalid(),
+            service('mcp.server.channel_api.session.store')->nullOnInvalid(),
         ])
         ->tag('messenger.message_handler');
 
@@ -431,34 +431,34 @@ return static function (ContainerConfigurator $container): void {
         ])
         ->tag('mcp.tool');
 
-    $services->set(StoreApiContextTool::class)
-        ->args([service(StoreApiMcpContextProvider::class)])
-        ->tag('contena.store_api_mcp.tool');
+    $services->set(ChannelApiContextTool::class)
+        ->args([service(ChannelApiMcpContextProvider::class)])
+        ->tag('contena.channel_api_mcp.tool');
 
-    $services->set(StoreApiToolSearchTool::class)
+    $services->set(ChannelApiToolSearchTool::class)
         ->args([
-            service('mcp.server.store_api.registry')->nullOnInvalid(),
+            service('mcp.server.channel_api.registry')->nullOnInvalid(),
             service(ToolSearch::class),
             null,
         ])
-        ->tag('contena.store_api_mcp.tool');
+        ->tag('contena.channel_api_mcp.tool');
 
-    $services->set(StoreApiToolsetsListTool::class)
+    $services->set(ChannelApiToolsetsListTool::class)
         ->args([
-            service('mcp.store_api.toolset_registry'),
+            service('mcp.channel_api.toolset_registry'),
             service(McpToolsetSessionStorage::class),
             service('request_stack'),
             service(McpRequestedToolsetResolver::class),
         ])
-        ->tag('contena.store_api_mcp.tool');
+        ->tag('contena.channel_api_mcp.tool');
 
-    $services->set(StoreApiToolsetEnableTool::class)
+    $services->set(ChannelApiToolsetEnableTool::class)
         ->args([
-            service('mcp.store_api.toolset_registry'),
+            service('mcp.channel_api.toolset_registry'),
             service(McpToolsetSessionStorage::class),
             service('request_stack'),
         ])
-        ->tag('contena.store_api_mcp.tool');
+        ->tag('contena.channel_api_mcp.tool');
 
     $services->set(McpRequestedToolsetResolver::class)
         ->args([service('request_stack')]);
@@ -530,7 +530,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([service(ToolResultCacheStorage::class), service('request_stack')])
         ->tag('mcp.resource_template');
 
-    $services->set(StoreApiToolResultResource::class)
+    $services->set(ChannelApiToolResultResource::class)
         ->args([service(ToolResultCacheStorage::class), service('request_stack')])
         ->tag('mcp.resource_template');
 
@@ -539,7 +539,7 @@ return static function (ContainerConfigurator $container): void {
         ->args([
             service('contena.app_system.guzzle'),
             env('APP_URL'),
-            service(ShopIdProvider::class),
+            service(InstallationIdProvider::class),
             param('contena.mcp.app_tool_timeout'),
             service('logger'),
             service('kernel'),

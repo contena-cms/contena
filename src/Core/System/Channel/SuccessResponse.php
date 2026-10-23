@@ -5,9 +5,9 @@ namespace Contena\Core\System\Channel;
 use Contena\Core\Framework\Struct\ArrayStruct;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{success: bool}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{success: bool}>>
  */
-class SuccessResponse extends StoreApiResponse
+class SuccessResponse extends ChannelApiResponse
 {
     public function __construct()
     {

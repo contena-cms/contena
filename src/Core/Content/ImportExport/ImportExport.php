@@ -139,7 +139,7 @@ class ImportExport
                     throw $record['_error'];
                 }
 
-                // ensure that the raw csv row has all the fields, which are marked as required by the admin_user.
+                // ensure that the raw csv row has all the fields, which are marked as required by the admin user.
                 $this->ensureUserRequiredFields($row, $config);
 
                 $record = $this->ensurePrimaryKeys($record);

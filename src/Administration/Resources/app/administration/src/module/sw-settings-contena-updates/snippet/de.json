@@ -39,7 +39,7 @@
       "backupCheckboxLabel": "Ich habe eine Datensicherung angelegt und möchte die Aktualisierung nun durchführen.",
       "startUpdate": "Aktualisierung starten",
       "autoUpdateDisabled": "Automatische Aktualisierungen sind deaktiviert (contena.auto_update.enabled). Nutze die Contena CLI zum Aktualisieren.",
-      "clusterSetupDisabled": "Aktualisierungen über die Administration sind in Cluster-Setups nicht möglich (contena.cnployment.cluster_setup). Nutze die Contena CLI zum Aktualisieren.",
+      "clusterSetupDisabled": "Aktualisierungen über die Administration sind in Cluster-Setups nicht möglich (contena.deployment.cluster_setup). Nutze die Contena CLI zum Aktualisieren.",
       "progress": {
         "download": "Aktualisierung-Datei wird heruntergeladen ...",
         "deactivate": "Erweiterungen werden deaktiviert ...",

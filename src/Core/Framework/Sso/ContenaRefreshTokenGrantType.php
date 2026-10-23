@@ -48,11 +48,11 @@ class ContenaRefreshTokenGrantType extends RefreshTokenGrant
 
         $adminUserId = $oldRefreshToken['admin_user_id'];
 
-        $oAuthUser = $this->admin_userService->searchOAuthUserByUserId($adminUserId);
+        $oAuthUser = $this->adminUserService->searchOAuthUserByUserId($adminUserId);
         if ($oAuthUser instanceof ExternalAuthAdminUser && $oAuthUser->token instanceof Token) {
             $newSsoTokenResult = $this->tokenService->getUserTokenByRefreshToken($oAuthUser->token->refreshToken);
-            $oAuthUser = $this->admin_userService->updateOAuthUserWithNewToken($oAuthUser, $newSsoTokenResult);
-            $this->admin_userService->saveOAuthUser($oAuthUser);
+            $oAuthUser = $this->adminUserService->updateOAuthUserWithNewToken($oAuthUser, $newSsoTokenResult);
+            $this->adminUserService->saveOAuthUser($oAuthUser);
 
             // take the shorter token TTL to avoid that the external token gets invalid
             $accessTokenTTL = TokenTimeToLive::getLowerTTL($accessTokenTTL, new \DateInterval('PT' . $newSsoTokenResult->expiresIn . 'S'));

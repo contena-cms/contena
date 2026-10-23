@@ -2,13 +2,13 @@
 
 namespace Contena\Core\System\User\Channel;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 
 /**
- * @extends StoreApiResponse<UserGroupEntity>
+ * @extends ChannelApiResponse<UserGroupEntity>
  */
-class UserGroupRegistrationSettingsRouteResponse extends StoreApiResponse
+class UserGroupRegistrationSettingsRouteResponse extends ChannelApiResponse
 {
     public function getRegistration(): UserGroupEntity
     {

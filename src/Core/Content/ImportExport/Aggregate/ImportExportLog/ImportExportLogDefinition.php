@@ -53,7 +53,7 @@ class ImportExportLogDefinition extends EntityDefinition
             (new StringField('activity', 'activity'))->addFlags(new Required()),
             (new StringField('state', 'state'))->addFlags(new Required()),
             (new IntField('records', 'records'))->addFlags(new Required()),
-            new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class),
+            new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class),
             new FkField('profile_id', 'profileId', ImportExportProfileDefinition::class),
             new FkField('file_id', 'fileId', ImportExportFileDefinition::class),
             new FkField('invalid_records_log_id', 'invalidRecordsLogId', ImportExportLogDefinition::class),

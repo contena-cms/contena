@@ -23,19 +23,20 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 readonly class PresignedUploadUrlGenerator implements PresignedUrlGeneratorInterface
 {
     /**
-     * @param S3Target $publicTarget
-     * @param S3Target $privateTarget
+     * @internal
      */
-    private function __construct(
+    public function __construct(
         private AbstractMediaPathStrategy $mediaPathStrategy,
         private array $publicTarget,
         private array $privateTarget,
         private LoggerInterface $logger,
         private ClockInterface $clock,
         private int $expirationMinutes,
-        private bool $enabled,
+        private bool $enabled
     ) {
     }
+
+
 
     /**
      * @param array<string, mixed> $publicFilesystemConfig config of the filesystem used for public media

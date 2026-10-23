@@ -20,7 +20,7 @@
                 },
                 "example": {
                   "version": "6.7.2.0",
-                  "shopId": "NoiU8PfJtu7NBY8M",
+                  "installationId": "NoiU8PfJtu7NBY8M",
                   "versionRevision": "98fcdbeab238fbef3b47bc258340124a1dba4852",
                   "adminWorker": {
                     "enableAdminWorker": true,

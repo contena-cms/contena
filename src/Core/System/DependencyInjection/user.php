@@ -31,7 +31,6 @@ use Contena\Core\System\User\ImitateUserTokenGenerator;
 use Contena\Core\System\User\Password\LegacyEncoder\Md5;
 use Contena\Core\System\User\Password\LegacyEncoder\Sha256;
 use Contena\Core\System\User\Password\LegacyPasswordVerifier;
-use Contena\Core\System\User\Channel\AccountNewsletterRecipientRoute;
 use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\System\User\Channel\AddWishlistBlogRoute;
 use Contena\Core\System\User\Channel\ChangeUserProfileRoute;
@@ -95,7 +94,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
 use Contena\Core\System\Channel\Context\ChannelContextRestorer;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\Channel\ChannelApiCustomFieldMapper;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -341,7 +340,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('event_dispatcher'),
             service(DataValidator::class),
             service(UserProfileValidationFactory::class),
-            service(StoreApiCustomFieldMapper::class),
+            service(ChannelApiCustomFieldMapper::class),
             service(ExtensionDispatcher::class),
         ]);
 
@@ -414,7 +413,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('channel.country.repository'),
             service(Connection::class),
             service(ChannelContextService::class),
-            service(StoreApiCustomFieldMapper::class),
+            service(ChannelApiCustomFieldMapper::class),
             service(PasswordValidationFactory::class),
             service(DoubleOptInService::class),
             service(ClockInterface::class),
@@ -450,7 +449,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('event_dispatcher'),
             service(AddressValidationFactory::class),
             service(SystemConfigService::class),
-            service(StoreApiCustomFieldMapper::class),
+            service(ChannelApiCustomFieldMapper::class),
             service(ExtensionDispatcher::class),
         ]);
 
@@ -567,12 +566,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(UserValueResolver::class)
         ->tag('controller.argument_value_resolver', ['priority' => 1002]);
-
-    $services->set(AccountNewsletterRecipientRoute::class)
-        ->public()
-        ->args([
-                        service(ExtensionDispatcher::class),
-        ]);
 
     $services->set(ImitateUserRoute::class)
         ->public()

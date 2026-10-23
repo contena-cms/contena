@@ -33,9 +33,9 @@
       "frontend-detail-page": "Blog detail page",
       "frontend-navigation-page": "Category page",
       "frontend-landing-page": "Landing page",
-      "store-api-blog-detail": "Blog detail page",
-      "store-api-category-detail": "Category page",
-      "store-api-landing-page-detail": "Landing page"
+      "channel-api-blog-detail": "Blog detail page",
+      "channel-api-category-detail": "Category page",
+      "channel-api-landing-page-detail": "Landing page"
     }
   },
   "sw-seo-url": {

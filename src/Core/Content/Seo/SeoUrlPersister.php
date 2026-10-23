@@ -48,7 +48,7 @@ class SeoUrlPersister
      * that normally keeps automatic template regeneration from overwriting
      * manually modified (`isModified = true`) SEO URLs.
      *
-     * Intended for explicit admin/API updates where the admin_user wants to edit or
+     * Intended for explicit admin/API updates where the admin user wants to edit or
      * reset a manually modified SEO URL; must not be used for automatic
      * template regeneration pipelines (indexers, subscribers on other entities).
      *

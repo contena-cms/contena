@@ -3,10 +3,11 @@
 namespace Contena\Core\Framework\Api\Context;
 
 
+use Contena\Core\Framework\Struct\JsonSerializableTrait;
+
 class AdminApiSource implements ContextSource, \JsonSerializable
 {
     use JsonSerializableTrait;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     /**
      * Runtime privileges granted to authenticated Administration users by default.
@@ -42,7 +43,7 @@ use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     public function getUserId(): ?string
     {
-        return $this->admin_userId;
+        return $this->adminUserId;
     }
 
     public function getIntegrationId(): ?string

@@ -2,12 +2,12 @@
 
 namespace Contena\Core\Content\Blog\Channel\FindVariant;
 
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<FoundCombination>
+ * @extends ChannelApiResponse<FoundCombination>
  */
-class FindBlogVariantRouteResponse extends StoreApiResponse
+class FindBlogVariantRouteResponse extends ChannelApiResponse
 {
     public function getFoundCombination(): FoundCombination
     {

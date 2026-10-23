@@ -3,12 +3,12 @@
 namespace Contena\Core\Content\Breadcrumb\Channel;
 
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<BreadcrumbCollection>
+ * @extends ChannelApiResponse<BreadcrumbCollection>
  */
-class BreadcrumbRouteResponse extends StoreApiResponse
+class BreadcrumbRouteResponse extends ChannelApiResponse
 {
     public function getBreadcrumbCollection(): BreadcrumbCollection
     {

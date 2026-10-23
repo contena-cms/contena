@@ -116,8 +116,6 @@ class ChannelEntity extends Entity
      */
     protected ?array $maintenanceIpWhitelist = null;
 
-    protected string $taxCalculationType;
-
     protected ?ChannelTypeEntity $type = null;
 
     protected ?CurrencyEntity $currency = null;
@@ -820,16 +818,6 @@ class ChannelEntity extends Entity
     public function setAnalytics(?ChannelAnalyticsEntity $analytics): void
     {
         $this->analytics = $analytics;
-    }
-
-    public function getTaxCalculationType(): string
-    {
-        return $this->taxCalculationType;
-    }
-
-    public function setTaxCalculationType(string $taxCalculationType): void
-    {
-        $this->taxCalculationType = $taxCalculationType;
     }
 
     public function getUserGroupsRegistrations(): ?UserGroupCollection

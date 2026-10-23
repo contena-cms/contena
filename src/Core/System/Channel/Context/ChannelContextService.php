@@ -15,6 +15,17 @@ use Symfony\Component\HttpFoundation\RequestStack;
 
 class ChannelContextService implements ChannelContextServiceInterface
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly RequestStack $requestStack
+    ) {
+    }
+
+
     final public const CURRENCY_ID = 'currencyId';
 
     final public const LANGUAGE_ID = 'languageId';
@@ -123,7 +134,7 @@ class ChannelContextService implements ChannelContextServiceInterface
             // Only synchronize an initialized frontend session. Store API requests must remain stateless.
             $requestSession = $currentRequest?->hasSession(true) ? $currentRequest->getSession() : null;
 
-            // Remove imitating admin_user id from session, if there is no user
+            // Remove imitating admin user id from session, if there is no user
             if ($requestSession && $context->getImitatingUserId() && !$context->getUserId()) {
                 $requestSession->remove(PlatformRequest::ATTRIBUTE_IMITATING_USER_ID);
                 $context->setImitatingUserId(null);

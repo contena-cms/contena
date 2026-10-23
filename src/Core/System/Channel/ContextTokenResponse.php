@@ -6,9 +6,9 @@ use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\PlatformRequest;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{redirectUrl: string|null}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{redirectUrl: string|null}>>
  */
-class ContextTokenResponse extends StoreApiResponse
+class ContextTokenResponse extends ChannelApiResponse
 {
     public function __construct(
         string $token,

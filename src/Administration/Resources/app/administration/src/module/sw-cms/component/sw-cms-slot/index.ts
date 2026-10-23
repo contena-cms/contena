@@ -144,7 +144,7 @@ export default Contena.Component.wrapComponentConfig({
             return (
                 this.element.locked ||
                 (Contena.Store.get('cmsPage').currentPage?.type === 'blog_detail' &&
-                    ['buy-box', 'blog-description-reviews'].includes(this.element.type))
+                    ['buy-box', 'blog-description-comments'].includes(this.element.type))
             );
         },
     },

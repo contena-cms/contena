@@ -18,7 +18,7 @@ describe('src/core/telemetry/blog-analytics/gateway-client', () => {
         window.localStorage.clear();
         window.sessionStorage.clear();
 
-        Contena.Store.get('context').app.config.shopId = 'shop-1';
+        Contena.Store.get('context').app.config.installationId = 'shop-1';
         Contena.Store.get('context').app.config.version = '6.8.0.0';
         Contena.Store.get('context').app.config.appUrl = 'https://admin.contena.test';
         Contena.Context.app.systemCurrencyISOCode = 'EUR';
@@ -107,7 +107,7 @@ describe('src/core/telemetry/blog-analytics/gateway-client', () => {
                 },
                 credentials: 'omit',
                 keepalive: true,
-                body: JSON.stringify({ shop_id: 'shop-1', admin_user_id: 'admin_user-1' }),
+                body: JSON.stringify({ installation_id: 'shop-1', admin_user_id: 'admin_user-1' }),
             }),
         );
     });
@@ -129,7 +129,7 @@ describe('src/core/telemetry/blog-analytics/gateway-client', () => {
         expect(url).toBe('https://gw.test/v2/event');
 
         const payload = JSON.parse(options.body);
-        expect(payload.admin_user).toEqual({ shop_id: 'shop-1', id: 'admin_user-1' });
+        expect(payload.admin_user).toEqual({ installation_id: 'shop-1', id: 'admin_user-1' });
         expect(payload.context).toEqual({
             sw_version: '6.8.0.0',
             sw_app_url: 'https://admin.contena.test',

@@ -15,7 +15,7 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 #[McpTool(
     name: 'contena-system-config-write',
     title: 'System Config Write',
-    description: 'Modify or overwrite a Contena system configuration value — use this whenever the admin_user wants to change, set, or update a config key. Provide the full dotted key (e.g. \'core.basicInformation.shopName\') and the new value. dryRun=true (default) shows a before/after diff without saving; set dryRun=false to persist. Optionally scope to a sales channel.'
+    description: 'Modify or overwrite a Contena system configuration value — use this whenever the admin user wants to change, set, or update a config key. Provide the full dotted key (e.g. \'core.basicInformation.shopName\') and the new value. dryRun=true (default) shows a before/after diff without saving; set dryRun=false to persist. Optionally scope to a sales channel.'
 )]
 #[McpToolDependsOn('contena-system-config-read')]
 #[McpToolGroup('system-config')]

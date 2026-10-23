@@ -29,10 +29,10 @@ class AdminUserCreateCommand extends Command
     {
         $this
             ->addArgument('username', InputArgument::REQUIRED, 'Username for the admin_user')
-            ->addOption('admin', 'a', InputOption::VALUE_NONE, 'Mark the admin_user as admin')
+            ->addOption('admin', 'a', InputOption::VALUE_NONE, 'Mark the admin user as admin')
             ->addOption('password', 'p', InputOption::VALUE_REQUIRED, 'Password for the admin_user')
-            ->addOption('firstName', null, InputOption::VALUE_REQUIRED, 'The admin_user\'s firstname')
-            ->addOption('lastName', null, InputOption::VALUE_REQUIRED, 'The admin_user\'s lastname')
+            ->addOption('firstName', null, InputOption::VALUE_REQUIRED, 'The admin user\'s firstname')
+            ->addOption('lastName', null, InputOption::VALUE_REQUIRED, 'The admin user\'s lastname')
             ->addOption('email', null, InputOption::VALUE_REQUIRED, 'Email for the admin_user')
         ;
     }
@@ -64,7 +64,7 @@ class AdminUserCreateCommand extends Command
             $additionalData['admin'] = true;
         }
 
-        $savedPassword = $this->admin_userProvisioner->provision($username, $password, $additionalData);
+        $savedPassword = $this->adminUserProvisioner->provision($username, $password, $additionalData);
 
         $message = \sprintf('AdminUser "%s" successfully created.', $username);
         if ($password === null) {

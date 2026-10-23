@@ -20,7 +20,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
- * Do not use direct or indirect repository calls in a PageletLoader. Always use a store-api route to get or put data.
+ * Do not use direct or indirect repository calls in a PageletLoader. Always use a channel-api route to get or put data.
  */
 class HeaderPageletLoader implements HeaderPageletLoaderInterface
 {
@@ -86,7 +86,7 @@ class HeaderPageletLoader implements HeaderPageletLoaderInterface
         $event = new LanguageRouteRequestEvent($request, new Request(), $context, $criteria);
         $this->eventDispatcher->dispatch($event);
 
-        return $this->languageRoute->load($event->getStoreApiRequest(), $context, $criteria)->getLanguages();
+        return $this->languageRoute->load($event->getChannelApiRequest(), $context, $criteria)->getLanguages();
     }
 
     private function getCurrencies(Request $request, ChannelContext $context): CurrencyCollection
@@ -97,6 +97,6 @@ class HeaderPageletLoader implements HeaderPageletLoaderInterface
         $event = new CurrencyRouteRequestEvent($request, new Request(), $context);
         $this->eventDispatcher->dispatch($event);
 
-        return $this->currencyRoute->load($event->getStoreApiRequest(), $context, $criteria)->getCurrencies();
+        return $this->currencyRoute->load($event->getChannelApiRequest(), $context, $criteria)->getCurrencies();
     }
 }

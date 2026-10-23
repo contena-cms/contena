@@ -12,7 +12,7 @@ use Contena\Core\Framework\Validation\DataValidator;
 use Contena\Core\System\Channel\Context\ChannelContextPersister;
 use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
-use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\Channel\ChannelApiCustomFieldMapper;
 use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\Service\DoubleOptInService;
@@ -23,7 +23,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Event\DataMappingEvent;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -60,7 +60,7 @@ use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\System\User\Channel\UserAddressDataNormalizerTrait;
 use Contena\Core\System\User\Channel\UserVatIdNormalizerTrait;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class RegisterRoute extends AbstractRegisterRoute
 {
     use UserAddressDataNormalizerTrait;
@@ -84,7 +84,7 @@ class RegisterRoute extends AbstractRegisterRoute
         private readonly ChannelRepository $countryRepository,
         protected Connection $connection,
         private readonly ChannelContextServiceInterface $contextService,
-        private readonly StoreApiCustomFieldMapper $customFieldMapper,
+        private readonly ChannelApiCustomFieldMapper $customFieldMapper,
         private readonly DataValidationFactoryInterface $passwordValidationFactory,
         private readonly DoubleOptInService $doubleOptInService,
         private readonly ClockInterface $clock,
@@ -97,7 +97,7 @@ class RegisterRoute extends AbstractRegisterRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/account/register', name: 'store-api.account.register', methods: ['POST'])]
+    #[Route(path: '/channel-api/account/register', name: 'channel-api.account.register', methods: ['POST'])]
     public function register(
         RequestDataBag $data,
         ChannelContext $context,
@@ -217,7 +217,7 @@ class RegisterRoute extends AbstractRegisterRoute
                 $data->get('redirectParameters')
             );
 
-            // We don't want to leak the hash in store-api
+            // We don't want to leak the hash in channel-api
             $userEntity->setHash('');
 
             return new UserResponse($userEntity);
@@ -264,7 +264,7 @@ class RegisterRoute extends AbstractRegisterRoute
 
         $response->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $newToken);
 
-        // We don't want to leak the hash in store-api
+        // We don't want to leak the hash in channel-api
         $userEntity->setHash('');
 
         return $response;

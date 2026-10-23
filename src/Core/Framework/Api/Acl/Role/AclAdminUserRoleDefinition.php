@@ -32,7 +32,7 @@ class AclAdminUserRoleDefinition extends MappingEntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new FkField('admin_user_id', 'admin_userId', AdminUserDefinition::class))->addFlags(new PrimaryKey(), new Required()),
+            (new FkField('admin_user_id', 'adminUserId', AdminUserDefinition::class))->addFlags(new PrimaryKey(), new Required()),
             (new FkField('acl_role_id', 'aclRoleId', AclRoleDefinition::class))->addFlags(new PrimaryKey(), new Required()),
             // MappingEntityDefinitions have no default fields, so createdAt and updatedAt need to be defined here
             new CreatedAtField(),

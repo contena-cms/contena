@@ -161,7 +161,7 @@ class CategoryDefinition extends EntityDefinition
             // custom entity specific fields
             (new FkField('custom_entity_type_id', 'customEntityTypeId', CustomEntityDefinition::class, 'id'))->addFlags(new ApiAware()),
 
-            // Reverse Associations not available in store-api->setDescription('Unique identity of custom entity type.')
+            // Reverse Associations not available in channel-api->setDescription('Unique identity of custom entity type.')
             new OneToManyAssociationField('navigationChannels', ChannelDefinition::class, 'navigation_category_id'),
             new OneToManyAssociationField('footerChannels', ChannelDefinition::class, 'footer_category_id'),
             new OneToManyAssociationField('serviceChannels', ChannelDefinition::class, 'service_category_id'),

@@ -268,12 +268,12 @@ class ApiException extends HttpException
         );
     }
 
-    public static function unsupportedStoreApiSchemaEndpoint(): self
+    public static function unsupportedChannelApiSchemaEndpoint(): self
     {
         return new self(
             Response::HTTP_BAD_REQUEST,
             self::API_UNSUPPORTED_STORE_API_SCHEMA_ENDPOINT,
-            'The Store-API does not support the entity schema endpoint. Use `/store-api/_info/openapi3.json` for the OpenAPI specification.'
+            'The Store-API does not support the entity schema endpoint. Use `/channel-api/_info/openapi3.json` for the OpenAPI specification.'
         );
     }
 
@@ -364,7 +364,7 @@ class ApiException extends HttpException
     /**
      * @param list<string> $supportedScopes
      */
-    public static function unsupportedStoreApiSchemaMigrationScope(string $scope, array $supportedScopes): self
+    public static function unsupportedChannelApiSchemaMigrationScope(string $scope, array $supportedScopes): self
     {
         return new self(
             Response::HTTP_BAD_REQUEST,
@@ -454,12 +454,12 @@ class ApiException extends HttpException
         return new InvalidContextSourceException(AdminApiSource::class, $actual);
     }
 
-    public static function admin_userNotLoggedIn(): self
+    public static function adminUserNotLoggedIn(): self
     {
         return new self(
             Response::HTTP_FORBIDDEN,
             self::API_EXPECTED_USER,
-            'For this interaction an authenticated admin_user login is required.'
+            'For this interaction an authenticated admin user login is required.'
         );
     }
 

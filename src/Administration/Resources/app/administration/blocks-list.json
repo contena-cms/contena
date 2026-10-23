@@ -1582,7 +1582,7 @@
  "sw_custom_field_detail_modal_render_component",
  "sw_custom_field_detail_modal_searchable_banner",
  "sw_custom_field_detail_modal_snippet_info",
- "sw_custom_field_detail_modal_store_api_aware",
+ "sw_custom_field_detail_modal_channel_api_aware",
  "sw_custom_field_detail_modal_technical_name",
  "sw_custom_field_detail_modal_type",
  "sw_custom_field_list",

@@ -38,7 +38,7 @@ class LocaleProvider
         $criteria = new Criteria([$source->getUserId()]);
         $criteria->addAssociation('locale');
 
-        $adminUser = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        $adminUser = $this->adminUserRepository->search($criteria, $context)->getEntities()->first();
 
         if ($adminUser === null) {
             throw new EntityNotFoundException(AdminUserDefinition::ENTITY_NAME, $source->getUserId());

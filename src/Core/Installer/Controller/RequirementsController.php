@@ -14,11 +14,14 @@ use Symfony\Component\Routing\Attribute\Route;
 class RequirementsController extends InstallerController
 {
     /**
-     * @param iterable|RequirementsValidatorInterface[] $validators
+     * @internal
      */
-    public function __construct(private readonly iterable $validators)
-    {
+    public function __construct(
+        private readonly iterable $validators
+    ) {
     }
+
+
 
     #[Route(path: '/installer/requirements', name: 'installer.requirements', methods: ['GET', 'POST'])]
     public function requirements(Request $request): Response

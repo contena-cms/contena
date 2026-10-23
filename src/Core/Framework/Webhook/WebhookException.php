@@ -87,7 +87,7 @@ class WebhookException extends HttpException
         return new self(
             Response::HTTP_BAD_REQUEST,
             self::WEBHOOK_OWNER_MISSING,
-            'A webhook without an app can only be created by a admin_user or an integration, which becomes its owner.'
+            'A webhook without an app can only be created by an admin user or an integration, which becomes its owner.'
         );
     }
 

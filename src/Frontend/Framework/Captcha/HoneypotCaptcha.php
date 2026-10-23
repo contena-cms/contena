@@ -8,6 +8,7 @@ use Symfony\Component\Validator\Constraints\Blank;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class HoneypotCaptcha extends AbstractCaptcha
 {

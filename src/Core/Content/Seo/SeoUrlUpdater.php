@@ -58,7 +58,7 @@ class SeoUrlUpdater
             return;
         }
 
-        // headless route (store-api): not registered as a full route, but configurable per headless sales channel
+        // headless route (channel-api): not registered as a full route, but configurable per headless sales channel
         $entityRoute = $this->findEntitySeoUrlRoute($routeName);
         if ($entityRoute === null) {
             throw SeoException::seoUrlRouteNotFound($routeName);

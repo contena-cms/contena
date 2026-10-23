@@ -10,7 +10,7 @@ use Contena\Frontend\Page\Robots\Parser\ParsedRobots;
  * Event dispatched after robots.txt content has been parsed.
  *
  * Allows developers to:
- * - Modify the parsed result (add/remove admin_user-agent blocks, directives)
+ * - Modify the parsed result (add/remove user-agent blocks, directives)
  * - Add custom validation and issues
  * - Transform directives based on custom logic
  */

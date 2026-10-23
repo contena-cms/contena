@@ -21,14 +21,10 @@ use Symfony\Component\Mime\RawMessage;
  */
 class MailerTransportDecorator implements \Stringable, TransportInterface
 {
-    /**
-     * @param EntityRepository<DocumentCollection> $documentRepository
-     */
     public function __construct(
         private readonly TransportInterface $decorated,
         private readonly MailAttachmentsBuilder $attachmentsBuilder,
         private readonly FilesystemOperator $filesystem,
-        private readonly EntityRepository $documentRepository
     ) {
     }
 
@@ -73,35 +69,6 @@ class MailerTransportDecorator implements \Stringable, TransportInterface
             );
         }
 
-        $sentMessage = $this->decorated->send($message, $envelope);
-
-        $this->setDocumentsSent($attachments, $config->getExtension(), $config->getContext());
-        $config->getExtension()->setDocumentIds([]);
-
-        return $sentMessage;
-    }
-
-    /**
-     * @param MailAttachments $attachments
-     */
-    private function setDocumentsSent(array $attachments, MailSendSubscriberConfig $extension, Context $context): void
-    {
-        $documentAttachments = array_filter(
-            $attachments,
-            static fn (array $attachment) => \in_array($attachment['documentId'] ?? null, $extension->getDocumentIds(), true)
-        );
-
-        $documentIds = array_values(array_unique(array_column($documentAttachments, 'documentId')));
-
-        if ($documentIds === []) {
-            return;
-        }
-
-        $payload = array_map(static fn (string $documentId) => [
-            'id' => $documentId,
-            'sent' => true,
-        ], $documentIds);
-
-        $this->documentRepository->update($payload, $context);
+        return $this->decorated->send($message, $envelope);
     }
 }

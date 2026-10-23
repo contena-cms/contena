@@ -66,20 +66,20 @@
         </input-field>
 
         <input-field type="bool">
-            <name>showReview</name>
-            <label>Show reviews</label>
-            <label lang="de-DE">Bewertungen anzeigen</label>
-            <helpText>Activate to show reviews</helpText>
-            <helpText lang="de-DE">Aktivieren um Bewertungen anzuzeigen</helpText>
+            <name>showComment</name>
+            <label>Show comments</label>
+            <label lang="de-DE">Kommentare anzeigen</label>
+            <helpText>Activate to show comments</helpText>
+            <helpText lang="de-DE">Aktivieren um Kommentare anzuzeigen</helpText>
         </input-field>
 
         <input-field type="int">
-            <name>reviewsPerPage</name>
+            <name>commentsPerPage</name>
             <defaultValue>10</defaultValue>
-            <label>Number of reviews per page</label>
-            <label lang="de-DE">Anzahl der Bewertungen pro Seite</label>
-            <helpText>The number of reviews displayed on a blog page in the frontend.</helpText>
-            <helpText lang="de-DE">Die Anzahl der Bewertungen die auf einer Produktseite in der Frontend angezeigt werden.</helpText>
+            <label>Number of comments per page</label>
+            <label lang="de-DE">Anzahl der Kommentare pro Seite</label>
+            <helpText>The number of comments displayed on a blog page in the frontend.</helpText>
+            <helpText lang="de-DE">Die Anzahl der Kommentare die auf einer Blogseite im Frontend angezeigt werden.</helpText>
             <min>1</min>
         </input-field>
 

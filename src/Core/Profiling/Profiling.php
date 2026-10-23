@@ -5,7 +5,6 @@ namespace Contena\Core\Profiling;
 use Composer\InstalledVersions;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Profiling\Compiler\RemoveDevServices;
-use Contena\Core\Profiling\DependencyInjection\CompilerPass\CartServiceCompilerPass;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -40,7 +39,6 @@ class Profiling extends Bundle
 
         if ($environment === 'dev') {
             $loader->load('services_dev.php');
-            $container->addCompilerPass(new CartServiceCompilerPass());
         }
 
         $container->addCompilerPass(new RemoveDevServices());

@@ -22,7 +22,7 @@ interface AdminUserInfoResponse {
  * @sw-package framework
  * Gateway for the API end point "store"
  */
-export default class StoreApiService extends ApiService {
+export default class ChannelApiService extends ApiService {
     constructor(httpClient: HttpClient, loginService: LoginService, apiEndpoint = 'store') {
         super(httpClient, loginService, apiEndpoint, 'application/json');
 
@@ -90,4 +90,4 @@ export default class StoreApiService extends ApiService {
  * @private
  * @sw-package framework
  */
-export type { StoreApiService, AdminUserInfo };
+export type { ChannelApiService, AdminUserInfo };

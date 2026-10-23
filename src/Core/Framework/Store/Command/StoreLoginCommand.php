@@ -78,7 +78,7 @@ class StoreLoginCommand extends Command
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('admin_user.username', $adminUser));
 
-        $adminUserId = $this->admin_userRepository->searchIds($criteria, $context)->firstId();
+        $adminUserId = $this->adminUserRepository->searchIds($criteria, $context)->firstId();
 
         if ($adminUserId === null) {
             $io->error('AdminUser not found');

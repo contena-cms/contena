@@ -27,7 +27,7 @@ class McpExceptionListener implements EventSubscriberInterface
     public const CODE_UNAUTHORIZED = -32001;
     public const CODE_RATE_LIMITED = -32029;
     private const MCP_ROUTE_NAME = 'api.mcp.endpoint';
-    private const STORE_API_MCP_ROUTE_NAME = 'store-api.mcp.endpoint';
+    private const STORE_API_MCP_ROUTE_NAME = 'channel-api.mcp.endpoint';
 
     // Must run before Symfony's default exception listener (priority 0) so we intercept before an HTML error page is rendered.
     private const PRIORITY = 10;
@@ -62,7 +62,7 @@ class McpExceptionListener implements EventSubscriberInterface
         if ($request->getPathInfo() === self::OAUTH_FALLBACK_PATH && $request->getMethod() === 'POST') {
             $event->setResponse(new JsonResponse([
                 'error' => 'invalid_client',
-                'error_description' => 'Authentication failed. Configure your MCP client with the correct Admin API integration credentials for /api/_mcp or Store API sales-channel credentials for /store-api/_mcp.',
+                'error_description' => 'Authentication failed. Configure your MCP client with the correct Admin API integration credentials for /api/_mcp or Store API sales-channel credentials for /channel-api/_mcp.',
             ], Response::HTTP_UNAUTHORIZED));
 
             return;

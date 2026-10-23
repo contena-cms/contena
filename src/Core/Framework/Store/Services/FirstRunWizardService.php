@@ -41,7 +41,7 @@ use Contena\Core\Framework\Store\Struct\ShopAdminUserTokenStruct;
  */
 class FirstRunWizardService
 {
-    final public const USER_CONFIG_KEY_FRW_USER_TOKEN = 'core.frw.admin_userToken';
+    final public const USER_CONFIG_KEY_FRW_USER_TOKEN = 'core.frw.userToken';
     final public const USER_CONFIG_VALUE_FRW_USER_TOKEN = 'frwUserToken';
 
     private const TRACKING_EVENT_FRW_STARTED = 'First Run Wizard started';
@@ -365,11 +365,11 @@ class FirstRunWizardService
         $id = $this->getFrwUserTokenConfigId($context);
 
         $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($adminUserId, $frwUserToken, $id): void {
-            $this->admin_userConfigRepository->upsert(
+            $this->adminUserConfigRepository->upsert(
                 [
                     [
                         'id' => $id,
-                        'admin_userId' => $adminUserId,
+                        'adminUserId' => $adminUserId,
                         'key' => self::USER_CONFIG_KEY_FRW_USER_TOKEN,
                         'value' => [self::USER_CONFIG_VALUE_FRW_USER_TOKEN => $frwUserToken,
                         ],
@@ -390,7 +390,7 @@ class FirstRunWizardService
 
         if ($id) {
             $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($id): void {
-                $this->admin_userConfigRepository->delete([['id' => $id]], $context);
+                $this->adminUserConfigRepository->delete([['id' => $id]], $context);
             });
         }
     }
@@ -405,11 +405,11 @@ class FirstRunWizardService
         $contextSource = $context->getSource();
 
         $criteria = (new Criteria())->addFilter(
-            new EqualsFilter('admin_userId', $contextSource->getUserId()),
+            new EqualsFilter('adminUserId', $contextSource->getUserId()),
             new EqualsFilter('key', self::USER_CONFIG_KEY_FRW_USER_TOKEN)
         );
 
-        return $this->admin_userConfigRepository->searchIds($criteria, $context)->firstId();
+        return $this->adminUserConfigRepository->searchIds($criteria, $context)->firstId();
     }
 
     /**

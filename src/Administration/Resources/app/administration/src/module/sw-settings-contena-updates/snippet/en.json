@@ -39,7 +39,7 @@
       "backupCheckboxLabel": "I have created a backup and want to execute the update now.",
       "startUpdate": "Start update",
       "autoUpdateDisabled": "Automatic updates are disabled (contena.auto_update.enabled). Use Contena CLI to update.",
-      "clusterSetupDisabled": "Updating through the Administration is not possible on cluster setups (contena.cnployment.cluster_setup). Use Contena CLI to update.",
+      "clusterSetupDisabled": "Updating through the Administration is not possible on cluster setups (contena.deployment.cluster_setup). Use Contena CLI to update.",
       "progress": {
         "download": "Downloading update file...",
         "deactivate": "Deactivating extensions...",

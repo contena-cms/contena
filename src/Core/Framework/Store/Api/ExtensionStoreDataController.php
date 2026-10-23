@@ -63,7 +63,7 @@ class ExtensionStoreDataController extends AbstractController
 
         $criteria = new Criteria([$source->getUserId()]);
 
-        $adminUser = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        $adminUser = $this->adminUserRepository->search($criteria, $context)->getEntities()->first();
 
         if ($adminUser === null) {
             return $context;

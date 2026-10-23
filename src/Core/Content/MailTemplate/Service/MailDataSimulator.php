@@ -593,7 +593,7 @@ class MailDataSimulator
                 'subject' => 'Lorem ipsum dolor',
                 'comment' => 'Lorem ipsum dolor sit amet.',
             ],
-            FlowMailVariables::REVIEW_FORM_DATA => [
+            FlowMailVariables::COMMENT_FORM_DATA => [
                 'name' => 'Max',
                 'lastName' => 'Mustermann',
                 'email' => 'max.mustermann@example.com',

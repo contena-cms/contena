@@ -75,12 +75,12 @@ class AdminUserConfigController extends AbstractController
         $adminUserId = $this->getUserId($context);
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('admin_userId', $adminUserId));
+        $criteria->addFilter(new EqualsFilter('adminUserId', $adminUserId));
         if ($keys !== []) {
             $criteria->addFilter(new EqualsAnyFilter('key', $keys));
         }
 
-        return $this->admin_userConfigRepository->search($criteria, $context)->getEntities();
+        return $this->adminUserConfigRepository->search($criteria, $context)->getEntities();
     }
 
     private function getUserId(Context $context): string
@@ -92,7 +92,7 @@ class AdminUserConfigController extends AbstractController
 
         $adminUserId = $source->getUserId();
         if (!$adminUserId) {
-            throw ApiException::admin_userNotLoggedIn();
+            throw ApiException::adminUserNotLoggedIn();
         }
 
         return $adminUserId;

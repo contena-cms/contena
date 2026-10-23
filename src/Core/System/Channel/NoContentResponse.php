@@ -5,9 +5,9 @@ namespace Contena\Core\System\Channel;
 use Contena\Core\Framework\Struct\ArrayStruct;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{}>>
  */
-class NoContentResponse extends StoreApiResponse
+class NoContentResponse extends ChannelApiResponse
 {
     public function __construct()
     {

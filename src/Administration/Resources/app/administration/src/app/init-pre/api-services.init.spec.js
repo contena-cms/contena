@@ -86,7 +86,7 @@ describe('src/app/init-pre/api-services.init.ts', () => {
                 'admin_userRecoveryService',
                 'admin_userValidationService',
                 'admin_userService',
-                'shopIdChangeService',
+                'installationIdChangeService',
             ];
 
             serviceNames.forEach((serviceName) => {
@@ -166,7 +166,7 @@ describe('src/app/init-pre/api-services.init.ts', () => {
         expect(Contena.Service('admin_userRecoveryService')).toBeUndefined();
         expect(Contena.Service('admin_userValidationService')).toBeUndefined();
         expect(Contena.Service('admin_userService')).toBeUndefined();
-        expect(Contena.Service('shopIdChangeService')).toBeUndefined();
+        expect(Contena.Service('installationIdChangeService')).toBeUndefined();
 
         await initializeApiServices();
 
@@ -228,6 +228,6 @@ describe('src/app/init-pre/api-services.init.ts', () => {
         expect(Contena.Service('admin_userRecoveryService')).toBeDefined();
         expect(Contena.Service('admin_userValidationService')).toBeDefined();
         expect(Contena.Service('admin_userService')).toBeDefined();
-        expect(Contena.Service('shopIdChangeService')).toBeDefined();
+        expect(Contena.Service('installationIdChangeService')).toBeDefined();
     });
 });

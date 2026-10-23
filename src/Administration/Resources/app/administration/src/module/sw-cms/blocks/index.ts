@@ -10,7 +10,7 @@ import './commerce/blog-three-column';
 import './commerce/blog-listing';
 import './commerce/blog-slider';
 import './commerce/gallery-buybox';
-import './commerce/blog-description-reviews';
+import './commerce/blog-description-comments';
 import './commerce/cross-selling';
 
 import './form/form';

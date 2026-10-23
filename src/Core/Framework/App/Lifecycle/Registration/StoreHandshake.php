@@ -23,7 +23,7 @@ class StoreHandshake implements AppHandshakeInterface
         private readonly string $shopUrl,
         private readonly string $appEndpoint,
         private readonly string $appName,
-        private readonly string $shopId,
+        private readonly string $installationId,
         private readonly StoreClient $storeClient,
         private readonly string $contenaVersion,
         private readonly ClockInterface $clock,
@@ -37,7 +37,7 @@ class StoreHandshake implements AppHandshakeInterface
         $uri = new Uri($this->appEndpoint);
 
         $uri = Uri::withQueryValues($uri, [
-            'shop-id' => $this->shopId,
+            'shop-id' => $this->installationId,
             'shop-url' => $this->shopUrl,
             'timestamp' => (string) $this->clock->now()->getTimestamp(),
         ]);
@@ -64,7 +64,7 @@ class StoreHandshake implements AppHandshakeInterface
 
     public function fetchAppProof(): string
     {
-        $proof = $this->shopId . $this->shopUrl . $this->appName;
+        $proof = $this->installationId . $this->shopUrl . $this->appName;
 
         return $this->storeClient->signPayloadWithAppSecret($proof, $this->appName);
     }

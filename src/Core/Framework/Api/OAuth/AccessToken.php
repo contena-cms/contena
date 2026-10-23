@@ -43,7 +43,7 @@ class AccessToken implements AccessTokenEntityInterface
      */
     public function getUserIdentifier(): ?string
     {
-        return $this->admin_userIdentifier;
+        return $this->adminUserIdentifier;
     }
 
     /**
@@ -55,13 +55,13 @@ class AccessToken implements AccessTokenEntityInterface
     }
 
     /**
-     * Set the identifier of the admin_user associated with the token.
+     * Set the identifier of the admin user associated with the token.
      *
-     * @param non-empty-string $identifier The identifier of the admin_user
+     * @param non-empty-string $identifier The identifier of the admin user
      */
     public function setUserIdentifier(string $identifier): void
     {
-        $this->admin_userIdentifier = $identifier;
+        $this->adminUserIdentifier = $identifier;
     }
 
     /**

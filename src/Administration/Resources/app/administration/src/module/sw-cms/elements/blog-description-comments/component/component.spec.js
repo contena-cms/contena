@@ -11,7 +11,7 @@ const blogMock = {
 
 async function createWrapper(props = {}) {
     return mount(
-        await wrapTestComponent('sw-cms-el-blog-description-reviews', {
+        await wrapTestComponent('sw-cms-el-blog-description-comments', {
             sync: true,
         }),
         {
@@ -22,7 +22,7 @@ async function createWrapper(props = {}) {
                             return {};
                         },
                         getCmsElementRegistry: () => {
-                            return { 'blog-description-reviews': {} };
+                            return { 'blog-description-comments': {} };
                         },
                     },
                 },
@@ -43,7 +43,7 @@ async function createWrapper(props = {}) {
     );
 }
 
-describe('src/module/sw-cms/elements/blog-description-reviews/component', () => {
+describe('src/module/sw-cms/elements/blog-description-comments/component', () => {
     beforeAll(() => {
         Contena.Store.register({
             id: 'cmsPage',
@@ -65,7 +65,7 @@ describe('src/module/sw-cms/elements/blog-description-reviews/component', () => 
 
     it('should display placeholder when page type is not blog page and no blog is selected', async () => {
         const wrapper = await createWrapper();
-        expect(wrapper.find('.sw-cms-el-blog-description-reviews__detail').exists()).toBeTruthy();
+        expect(wrapper.find('.sw-cms-el-blog-description-comments__detail').exists()).toBeTruthy();
     });
 
     it('should display skeleton when page type is blog page and no blog is selected', async () => {
@@ -74,7 +74,7 @@ describe('src/module/sw-cms/elements/blog-description-reviews/component', () => 
         Contena.Store.get('cmsPage').currentPage.type = 'blog_detail';
         await flushPromises();
 
-        expect(wrapper.find('.sw-cms-el-blog-description-reviews__placeholder').exists()).toBeTruthy();
+        expect(wrapper.find('.sw-cms-el-blog-description-comments__placeholder').exists()).toBeTruthy();
     });
 
     it('should not change the persisted lock state on blog detail pages', async () => {
@@ -103,7 +103,7 @@ describe('src/module/sw-cms/elements/blog-description-reviews/component', () => 
             },
         });
 
-        expect(wrapper.find('.sw-cms-el-blog-description-reviews__detail-title').text()).toBe('Blog information');
+        expect(wrapper.find('.sw-cms-el-blog-description-comments__detail-title').text()).toBe('Blog information');
     });
 
     it('should show current demo data if mapping entity is blog', async () => {
@@ -116,7 +116,7 @@ describe('src/module/sw-cms/elements/blog-description-reviews/component', () => 
 
         await flushPromises();
 
-        expect(wrapper.find('.sw-cms-el-blog-description-reviews__detail-title').text()).toBe('Awesome Blog');
+        expect(wrapper.find('.sw-cms-el-blog-description-comments__detail-title').text()).toBe('Awesome Blog');
     });
 
     it('should show dummy data initially if mapping entity is not blog', async () => {
@@ -132,6 +132,6 @@ describe('src/module/sw-cms/elements/blog-description-reviews/component', () => 
             },
         });
 
-        expect(wrapper.find('.sw-cms-el-blog-description-reviews__detail-title').text()).toBe('Blog information');
+        expect(wrapper.find('.sw-cms-el-blog-description-comments__detail-title').text()).toBe('Blog information');
     });
 });

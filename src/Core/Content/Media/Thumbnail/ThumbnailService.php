@@ -27,12 +27,34 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexer;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Content\Media\Thumbnail\Processor\ThumbnailProcessorInterface;
 
 /**
  * @phpstan-type ImageSize array{width: int<1, max>, height: int<1, max>}
  */
 class ThumbnailService
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EntityRepository $thumbnailRepository,
+        private readonly FilesystemOperator $filesystemPublic,
+        private readonly FilesystemOperator $filesystemPrivate,
+        private readonly EntityRepository $mediaFolderRepository,
+        private readonly EventDispatcherInterface $dispatcher,
+        private readonly EntityIndexer $indexer,
+        private readonly ThumbnailSizeCalculator $thumbnailSizeCalculator,
+        private readonly Connection $connection,
+        private readonly ThumbnailProcessorInterface $thumbnailProcessor,
+        private readonly LoggerInterface $logger,
+        private readonly bool $remoteThumbnailsEnable = false
+    ) {
+    }
+
+
 
     public function generate(MediaCollection $collection, Context $context): int
     {

@@ -7,7 +7,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterNameChange;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\Constraint\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -30,7 +30,7 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Route(
     defaults: [
-        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID],
+        PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID],
         PlatformRequest::ATTRIBUTE_CONTEXT_TOKEN_REQUIRED => false,
     ]
 )]
@@ -46,7 +46,7 @@ class ImitateUserRoute extends AbstractImitateUserRoute
     /**
      * @deprecated tag:v6.8.0 - will be removed, will be sourced from JWT
      */
-    final public const USER_ID = 'admin_userId';
+    final public const USER_ID = 'adminUserId';
 
     /**
      * @internal
@@ -69,8 +69,8 @@ class ImitateUserRoute extends AbstractImitateUserRoute
 
     #[ParameterNameChange(version: 'v6.8.0', parameterName: 'requestDataBag', newName: 'data', description: 'Aligns with the abstract route.')]
     #[Route(
-        path: '/store-api/account/login/imitate-user',
-        name: 'store-api.account.imitate-user-login',
+        path: '/channel-api/account/login/imitate-user',
+        name: 'channel-api.account.imitate-user-login',
         methods: [Request::METHOD_POST]
     )]
     public function imitateUserLogin(RequestDataBag $requestDataBag, ChannelContext $context): ContextTokenResponse

@@ -6,7 +6,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\System\Channel\Context\LanguageInfo;
 use Contena\Core\System\Currency\CurrencyEntity;
-use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 
 /**
@@ -18,6 +17,19 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
  */
 class BaseChannelContext
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        protected Context $context,
+        protected ChannelEntity $channel,
+        protected CurrencyEntity $currency,
+        protected UserGroupEntity $currentUserGroup,
+        protected CashRoundingConfig $itemRounding,
+        protected CashRoundingConfig $totalRounding,
+        protected LanguageInfo $languageInfo,
+    ) {
+    }
 
     public function getCurrentUserGroup(): UserGroupEntity
     {
@@ -43,14 +55,6 @@ class BaseChannelContext
     {
         return $this->channel;
     }
-
-    public function getTaxRules(): TaxCollection
-    {
-        return $this->taxRules;
-    }
-
-
-
 
     public function getContext(): Context
     {

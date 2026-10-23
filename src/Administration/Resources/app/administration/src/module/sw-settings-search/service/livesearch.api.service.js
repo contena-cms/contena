@@ -16,7 +16,7 @@ export default class LiveSearchService extends ApiService {
     }
 
     search({ channelId, search, order }, contextToken, additionalParams = {}, additionalHeaders = {}) {
-        const route = `_proxy/store-api/${channelId}/search`;
+        const route = `_proxy/channel-api/${channelId}/search`;
         const payload = {
             channelId,
             search,

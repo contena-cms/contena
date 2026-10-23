@@ -6,7 +6,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\Framework\Validation\DataValidator;
@@ -26,7 +26,7 @@ use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class ContextSwitchRoute extends AbstractContextSwitchRoute
 {
     private const SHIPPING_METHOD_ID = ChannelContextService::SHIPPING_METHOD_ID;
@@ -55,7 +55,7 @@ class ContextSwitchRoute extends AbstractContextSwitchRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/context', name: 'store-api.switch-context', methods: ['PATCH'])]
+    #[Route(path: '/channel-api/context', name: 'channel-api.switch-context', methods: ['PATCH'])]
     public function switchContext(RequestDataBag $data, ChannelContext $context): ContextTokenResponse
     {
         return $this->extensions->publish(

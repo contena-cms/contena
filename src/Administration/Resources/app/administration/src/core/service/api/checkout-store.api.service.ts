@@ -8,7 +8,7 @@ import type { LoginService } from '../login.service';
 
 /**
  * Gateway for the API end point "order"
- * Uses the _proxy endpoint of the admin api to connect to the store-api endpoint cart
+ * Uses the _proxy endpoint of the admin api to connect to the channel-api endpoint cart
  * @class
  * @extends ApiService
  */

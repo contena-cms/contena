@@ -11,7 +11,7 @@ class OpenNewTabResponse extends ActionButtonResponse
     final public const ACTION_TYPE = 'openNewTab';
 
     /**
-     * This is the URL the admin_user is redirected to after the action has been taken.
+     * This is the URL the admin user is redirected to after the action has been taken.
      */
     protected string $redirectUrl = '';
 

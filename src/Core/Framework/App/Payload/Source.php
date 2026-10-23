@@ -6,7 +6,7 @@ namespace Contena\Core\Framework\App\Payload;
 /**
  * @internal only for use by the app-system
  *
- * @method array{url: string, shopId: string, appVersion: string} jsonSerialize()
+ * @method array{url: string, installationId: string, appVersion: string} jsonSerialize()
  */
 class Source implements \JsonSerializable
 {
@@ -17,7 +17,7 @@ use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     public function __construct(
         protected string $url,
-        protected string $shopId,
+        protected string $installationId,
         protected string $appVersion,
         protected ?string $inAppPurchases = null,
     ) {
@@ -28,9 +28,9 @@ use Contena\Core\Framework\Struct\JsonSerializableTrait;
         return $this->url;
     }
 
-    public function getShopId(): string
+    public function getInstallationId(): string
     {
-        return $this->shopId;
+        return $this->installationId;
     }
 
     public function getAppVersion(): string

@@ -16,7 +16,7 @@ use Twig\Error\LoaderError;
  */
 class ChannelFileAdministrationReader
 {
-    private const USER_PROVIDED_CONTENT_BLOCK = 'admin_user_provided_content';
+    private const USER_PROVIDED_CONTENT_BLOCK = 'user_provided_content';
 
     public function __construct(
         private readonly ChannelFileDiscovery $discovery,

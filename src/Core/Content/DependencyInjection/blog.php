@@ -56,7 +56,6 @@ use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogSlider\ContentStreamProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSlider\StaticBlogProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BuyBoxCmsElementResolver;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserIndexer;
@@ -363,7 +362,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(PagingListingProcessor::class)
         ->args([
             service(SystemConfigService::class),
-            param('contena.api.store.max_limit'),
+            param('contena.api.channel.max_limit'),
         ])
         ->tag('contena.listing.processor');
 
@@ -446,15 +445,11 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(IteratorFactory::class),
             service('blog.repository'),
             service(Connection::class),
-            service(BlogCategoryDenormalizer::class),
             service(InheritanceUpdater::class),
-            service(SearchKeywordUpdater::class),
             service(ChildCountUpdater::class),
             service(ManyToManyIdFieldUpdater::class),
             service('event_dispatcher'),
-            service(ContentStreamUpdater::class),
             service('messenger.default_bus'),
-            service(StatesUpdater::class)->nullOnInvalid(),
             service(ClockInterface::class),
         ])
         ->tag('contena.entity_indexer', ['priority' => 100]);
@@ -524,7 +519,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('blog_translation.repository'),
             service(SystemConfigService::class),
             service(Connection::class),
-            service(BlogConfiguratorLoader::class),
             service(CategoryBreadcrumbBuilder::class),
             service(ChannelCmsPageLoader::class),
             service(EntityCmsSlotConfigInheritanceBuilder::class),
@@ -557,13 +551,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ExtensionDispatcher::class),
         ]);
 
-
-    $services->set(BuyBoxCmsElementResolver::class)
-        ->args([
-            service(BlogConfiguratorLoader::class),
-            service('blog_review.repository'),
-        ])
-        ->tag('contena.cms.data_resolver');
 
     $services->set(TokenFilter::class)
         ->args([

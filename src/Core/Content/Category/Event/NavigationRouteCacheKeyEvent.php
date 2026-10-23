@@ -2,7 +2,7 @@
 
 namespace Contena\Core\Content\Category\Event;
 
-use Contena\Core\Framework\Adapter\Cache\StoreApiRouteCacheKeyEvent;
+use Contena\Core\Framework\Adapter\Cache\ChannelApiRouteCacheKeyEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelContext;
@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Request;
  *
  * @codeCoverageIgnore
  */
-class NavigationRouteCacheKeyEvent extends StoreApiRouteCacheKeyEvent
+class NavigationRouteCacheKeyEvent extends ChannelApiRouteCacheKeyEvent
 {
     /**
      * @param array<mixed> $parts

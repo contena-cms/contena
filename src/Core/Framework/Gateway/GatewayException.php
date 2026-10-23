@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\Gateway;
 
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Exception\RequestException;
 
 class GatewayException extends HttpException
 {

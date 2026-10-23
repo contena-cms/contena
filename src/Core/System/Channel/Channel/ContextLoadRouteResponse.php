@@ -3,12 +3,12 @@
 namespace Contena\Core\System\Channel\Channel;
 
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<ChannelContext>
+ * @extends ChannelApiResponse<ChannelContext>
  */
-class ContextLoadRouteResponse extends StoreApiResponse
+class ContextLoadRouteResponse extends ChannelApiResponse
 {
     public function getContext(): ChannelContext
     {

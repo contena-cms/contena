@@ -62,7 +62,7 @@ class ChannelAdminUserConfigSubscriber implements EventSubscriberInterface
             ];
         }
 
-        $this->admin_userConfigRepository->upsert($writeUserConfigs, $context);
+        $this->adminUserConfigRepository->upsert($writeUserConfigs, $context);
     }
 
     private function getAllFavoriteUserConfigs(Context $context): AdminUserConfigCollection
@@ -70,6 +70,6 @@ class ChannelAdminUserConfigSubscriber implements EventSubscriberInterface
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('key', self::CONFIG_KEY));
 
-        return $this->admin_userConfigRepository->search($criteria, $context)->getEntities();
+        return $this->adminUserConfigRepository->search($criteria, $context)->getEntities();
     }
 }

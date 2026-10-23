@@ -5,7 +5,7 @@ import SwSettingsUsageDataConsentModalDataProvider from './index';
 import SwSettingsUsageDataConsentModal from '../sw-settings-usage-data-consent-modal';
 
 const WRONG_APP_URL_MODAL_STORAGE_KEY = 'sw-app-wrong-app-url-modal-shown';
-const SHOP_ID_CHANGE_MODAL_CLASS = 'sw-app-shop-id-change-modal';
+const INSTALLATION_ID_CHANGE_MODAL_CLASS = 'sw-app-shop-id-change-modal';
 
 function createWrapper() {
     return mount(SwSettingsUsageDataConsentModalDataProvider, {
@@ -127,9 +127,9 @@ describe('/module/sw-settings-usage-data/component/sw-settings-usage-data-consen
         });
 
         it('doesnt show modal when shop id change modal is displayed', async () => {
-            const shopIdChangeModal = document.createElement('div');
-            shopIdChangeModal.classList.add(SHOP_ID_CHANGE_MODAL_CLASS);
-            document.body.appendChild(shopIdChangeModal);
+            const installationIdChangeModal = document.createElement('div');
+            installationIdChangeModal.classList.add(INSTALLATION_ID_CHANGE_MODAL_CLASS);
+            document.body.appendChild(installationIdChangeModal);
 
             const wrapper = await createWrapper();
 

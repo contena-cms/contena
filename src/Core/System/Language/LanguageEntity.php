@@ -43,8 +43,6 @@ use Contena\Core\System\NumberRange\Aggregate\NumberRangeTranslation\NumberRange
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeTypeTranslation\NumberRangeTypeTranslationCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationCollection;
 use Contena\Core\System\StateMachine\StateMachineTranslationCollection;
-use Contena\Core\System\Tax\Aggregate\TaxRuleTypeTranslation\TaxRuleTypeTranslationCollection;
-use Contena\Core\System\TaxProvider\Aggregate\TaxProviderTranslation\TaxProviderTranslationCollection;
 use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationCollection;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationCollection;
@@ -157,8 +155,6 @@ class LanguageEntity extends Entity
 
     protected ?SeoUrlCollection $seoUrlTranslations = null;
 
-    protected ?TaxRuleTypeTranslationCollection $taxRuleTypeTranslations = null;
-
 
     /**
      * @deprecated tag:v6.8.0 - Will be removed
@@ -181,8 +177,6 @@ class LanguageEntity extends Entity
     protected ?AppScriptConditionTranslationCollection $appScriptConditionTranslations = null;
 
     protected ?AppFlowActionTranslationCollection $appFlowActionTranslations = null;
-
-    protected ?TaxProviderTranslationCollection $taxProviderTranslations = null;
 
     public function getMailHeaderFooterTranslations(): ?MailHeaderFooterCollection
     {
@@ -638,16 +632,6 @@ class LanguageEntity extends Entity
         $this->seoUrlTranslations = $seoUrlTranslations;
     }
 
-    public function getTaxRuleTypeTranslations(): ?TaxRuleTypeTranslationCollection
-    {
-        return $this->taxRuleTypeTranslations;
-    }
-
-    public function setTaxRuleTypeTranslations(TaxRuleTypeTranslationCollection $taxRuleTypeTranslations): void
-    {
-        $this->taxRuleTypeTranslations = $taxRuleTypeTranslations;
-    }
-
 
 
     /**
@@ -761,15 +745,5 @@ class LanguageEntity extends Entity
     public function getApiAlias(): string
     {
         return 'language';
-    }
-
-    public function getTaxProviderTranslations(): ?TaxProviderTranslationCollection
-    {
-        return $this->taxProviderTranslations;
-    }
-
-    public function setTaxProviderTranslations(TaxProviderTranslationCollection $taxProviderTranslations): void
-    {
-        $this->taxProviderTranslations = $taxProviderTranslations;
     }
 }

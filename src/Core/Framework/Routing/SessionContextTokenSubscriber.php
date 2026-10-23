@@ -86,7 +86,7 @@ class SessionContextTokenSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$this->isRequestScoped($request, StoreApiRouteScope::class)) {
+        if (!$this->isRequestScoped($request, ChannelApiRouteScope::class)) {
             return;
         }
 
@@ -137,7 +137,7 @@ class SessionContextTokenSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        if (!$this->isRequestScoped($request, StoreApiRouteScope::class)) {
+        if (!$this->isRequestScoped($request, ChannelApiRouteScope::class)) {
             return;
         }
 
@@ -163,7 +163,7 @@ class SessionContextTokenSubscriber implements EventSubscriberInterface
 
         // an /api request must not migrate the frontend session
         if (!$mainRequest->attributes->get(ChannelRequest::ATTRIBUTE_IS_CHANNEL_REQUEST)
-            && !$this->isRequestScoped($mainRequest, StoreApiRouteScope::class)
+            && !$this->isRequestScoped($mainRequest, ChannelApiRouteScope::class)
         ) {
             return;
         }

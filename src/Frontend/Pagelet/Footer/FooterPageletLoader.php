@@ -7,12 +7,23 @@ use Contena\Core\Content\Category\Tree\TreeItem;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 
 /**
- * Do not use direct or indirect repository calls in a PageletLoader. Always use a store-api route to get or put data.
+ * Do not use direct or indirect repository calls in a PageletLoader. Always use a channel-api route to get or put data.
  */
 class FooterPageletLoader implements FooterPageletLoaderInterface
 {
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly NavigationLoaderInterface $navigationLoader
+    ) {
+    }
+
 
     public function load(Request $request, ChannelContext $channelContext): FooterPagelet
     {

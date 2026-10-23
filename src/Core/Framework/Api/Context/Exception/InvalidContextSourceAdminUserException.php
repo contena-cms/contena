@@ -15,7 +15,7 @@ class InvalidContextSourceAdminUserException extends ContenaHttpException
         Feature::throwIfActive('v6.8.0.0', Feature::deprecatedClassMessage(self::class, 'v6.8.0.0'));
 
         parent::__construct(
-            '{{ contextSource }} does not have a valid admin_user ID',
+            '{{ contextSource }} does not have a valid admin user ID',
             ['contextSource' => $contextSource]
         );
     }

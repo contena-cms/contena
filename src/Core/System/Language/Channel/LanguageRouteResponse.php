@@ -3,13 +3,13 @@
 namespace Contena\Core\System\Language\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Contena\Core\System\Language\LanguageCollection;
 
 /**
- * @extends StoreApiResponse<EntitySearchResult<LanguageCollection>>
+ * @extends ChannelApiResponse<EntitySearchResult<LanguageCollection>>
  */
-class LanguageRouteResponse extends StoreApiResponse
+class LanguageRouteResponse extends ChannelApiResponse
 {
     public function getLanguages(): LanguageCollection
     {

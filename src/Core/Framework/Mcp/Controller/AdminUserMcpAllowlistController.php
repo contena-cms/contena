@@ -16,10 +16,10 @@ use Symfony\Component\Routing\Attribute\Route;
 /**
  * @experimental stableVersion:v6.8.0
  *
- * Saves the per-admin_user MCP allowlist (tools, resources, prompts).
+ * Saves the per-admin-user MCP allowlist (tools, resources, prompts).
  *
  * Requires `api_action_user_mcp-allowlist` and `admin_user:update`, both of which
- * `users_and_permissions.editor` grants. The route writes an arbitrary `{admin_userId}`, so the
+ * `users_and_permissions.editor` grants. The route writes an arbitrary `{adminUserId}`, so the
  * entity privilege has to be part of the gate: since the allowlist decides what a principal
  * may reach over MCP, writing someone else's is a permission change.
  */
@@ -37,7 +37,7 @@ class AdminUserMcpAllowlistController
     }
 
     #[Route(
-        path: '/api/_action/admin_user/{admin_userId}/mcp-allowlist',
+        path: '/api/_action/admin-user/{adminUserId}/mcp-allowlist',
         name: 'api.action.admin_user.mcp-allowlist',
         defaults: [
             'auth_required' => true,
@@ -47,7 +47,7 @@ class AdminUserMcpAllowlistController
     )]
     public function save(string $adminUserId, Request $request, Context $context): Response
     {
-        $adminUser = $this->admin_userRepository
+        $adminUser = $this->adminUserRepository
             ->search(new Criteria([$adminUserId]), $context)
             ->getEntities()
             ->first();
@@ -75,7 +75,7 @@ class AdminUserMcpAllowlistController
         // No SYSTEM_SCOPE wrapper: `mcp_allowlist` carries no WriteProtected flag (unlike `admin`
         // on the same definition), and escalating the scope would skip AclWriteValidator, which is
         // what enforces `admin_user:update` on the write itself.
-        $this->admin_userRepository->update([
+        $this->adminUserRepository->update([
             ['id' => $adminUserId, 'mcpAllowlist' => $allowlist],
         ], $context);
 

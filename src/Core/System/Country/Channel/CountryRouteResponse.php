@@ -3,13 +3,13 @@
 namespace Contena\Core\System\Country\Channel;
 
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 use Contena\Core\System\Country\CountryCollection;
 
 /**
- * @extends StoreApiResponse<EntitySearchResult<CountryCollection>>
+ * @extends ChannelApiResponse<EntitySearchResult<CountryCollection>>
  */
-class CountryRouteResponse extends StoreApiResponse
+class CountryRouteResponse extends ChannelApiResponse
 {
     /**
      * @return EntitySearchResult<CountryCollection>

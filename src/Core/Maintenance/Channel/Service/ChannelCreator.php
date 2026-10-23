@@ -25,16 +25,12 @@ class ChannelCreator
      * @internal
      *
      * @param EntityRepository<ChannelCollection> $channelRepository
-     * @param EntityRepository<PaymentMethodCollection> $paymentMethodRepository
-     * @param EntityRepository<ShippingMethodCollection> $shippingMethodRepository
      * @param EntityRepository<CountryCollection> $countryRepository
      * @param EntityRepository<CategoryCollection> $categoryRepository
      */
     public function __construct(
         private readonly DefinitionInstanceRegistry $definitionRegistry,
         private readonly EntityRepository $channelRepository,
-        private readonly EntityRepository $paymentMethodRepository,
-        private readonly EntityRepository $shippingMethodRepository,
         private readonly EntityRepository $countryRepository,
         private readonly EntityRepository $categoryRepository
     ) {
@@ -43,8 +39,6 @@ class ChannelCreator
     /**
      * @param list<string>|null $currencies
      * @param list<string>|null $languages
-     * @param list<string>|null $shippingMethods
-     * @param list<string>|null $paymentMethods
      * @param list<string>|null $countries
      * @param array<string, mixed> $overwrites
      */
@@ -54,15 +48,11 @@ class ChannelCreator
         string $typeId,
         ?string $languageId = null,
         ?string $currencyId = null,
-        ?string $paymentMethodId = null,
-        ?string $shippingMethodId = null,
         ?string $countryId = null,
         ?string $userGroupId = null,
         ?string $navigationCategoryId = null,
         ?array $currencies = null,
         ?array $languages = null,
-        ?array $shippingMethods = null,
-        ?array $paymentMethods = null,
         ?array $countries = null,
         array $overwrites = []
     ): string {
@@ -70,14 +60,10 @@ class ChannelCreator
 
         $languageId ??= Defaults::LANGUAGE_SYSTEM;
         $currencyId ??= Defaults::CURRENCY;
-        $paymentMethodId ??= $this->getFirstActivePaymentMethodId($context);
-        $shippingMethodId ??= $this->getFirstActiveShippingMethodId($context);
         $countryId ??= $this->getFirstActiveCountryId($context);
 
         $currencies = $this->formatToMany($currencies, $currencyId, 'currency', $context);
         $languages = $this->formatToMany($languages, $languageId, 'language', $context);
-        $shippingMethods = $this->formatToMany($shippingMethods, $shippingMethodId, 'shipping_method', $context);
-        $paymentMethods = $this->formatToMany($paymentMethods, $paymentMethodId, 'payment_method', $context);
         $countries = $this->formatToMany($countries, $countryId, 'country', $context);
 
         $data = [
@@ -89,8 +75,6 @@ class ChannelCreator
             // default selection
             'languageId' => $languageId,
             'currencyId' => $currencyId,
-            'paymentMethodId' => $paymentMethodId,
-            'shippingMethodId' => $shippingMethodId,
             'countryId' => $countryId,
             'userGroupId' => $userGroupId ?? $this->getUserGroupId($context),
             'navigationCategoryId' => $navigationCategoryId ?? $this->getRootCategoryId($context),
@@ -98,8 +82,6 @@ class ChannelCreator
             // available mappings
             'currencies' => $currencies,
             'languages' => $languages,
-            'shippingMethods' => $shippingMethods,
-            'paymentMethods' => $paymentMethods,
             'countries' => $countries,
         ];
 
@@ -108,35 +90,6 @@ class ChannelCreator
         $this->channelRepository->create([$data], $context);
 
         return $data['accessKey'];
-    }
-
-    private function getFirstActiveShippingMethodId(Context $context): string
-    {
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('active', true));
-
-        $shippingMethodId = $this->shippingMethodRepository->searchIds($criteria, $context)->firstId();
-        if (!\is_string($shippingMethodId)) {
-            throw MaintenanceException::couldNotGetId('first active shipping method');
-        }
-
-        return $shippingMethodId;
-    }
-
-    private function getFirstActivePaymentMethodId(Context $context): string
-    {
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('active', true))
-            ->addSorting(new FieldSorting('position'));
-
-        $paymentMethodId = $this->paymentMethodRepository->searchIds($criteria, $context)->firstId();
-        if (!\is_string($paymentMethodId)) {
-            throw MaintenanceException::couldNotGetId('first active payment method');
-        }
-
-        return $paymentMethodId;
     }
 
     private function getFirstActiveCountryId(Context $context): string

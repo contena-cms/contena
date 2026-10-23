@@ -40,12 +40,12 @@ return static function (ContainerConfigurator $container, ContainerBuilder $buil
                 'description' => 'Contena MCP server providing tools for entity management, system configuration, and frontend operations.',
                 'instructions' => "This MCP server exposes Contena e-commerce platform capabilities.\nUse entity tools to search, read, and manage shop data.\nThe advertised tool list is not the full catalogue. If no advertised tool matches the requested action, call contena-tool-search first instead of assuming the action is unsupported; use contena-toolsets-list and contena-toolset-enable to make a matched tool callable if your client cannot invoke it inline.\nAll operations respect the authenticated admin_user's ACL permissions.\n",
                 // Both endpoints are routed by Contena's own controllers (api.mcp.endpoint and
-                // store-api.mcp.endpoint), which apply authentication, rate limiting and the
+                // channel-api.mcp.endpoint), which apply authentication, rate limiting and the
                 // capability allowlist. The bundle's controller and route loader stay switched off.
                 'transports' => ['http' => false, 'stdio' => false],
                 'registry' => $adminRegistry,
             ],
-            'store_api' => [
+            'channel_api' => [
                 'name' => 'Contena Store API',
                 'version' => '1.0.0',
                 'description' => 'Contena Store API MCP server for sales-channel and user-context operations.',

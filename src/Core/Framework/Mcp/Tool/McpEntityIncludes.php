@@ -50,7 +50,7 @@ trait McpEntityIncludes
     }
 
     /**
-     * Injects `translated` into admin_user-provided includes for entities with translated fields.
+     * Injects `translated` into user-provided includes for entities with translated fields.
      */
     private function ensureTranslatedIncludes(EntityDefinition $definition, Criteria $criteria): void
     {

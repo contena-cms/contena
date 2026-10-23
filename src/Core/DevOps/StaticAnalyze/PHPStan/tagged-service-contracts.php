@@ -42,7 +42,6 @@ use Contena\Core\System\Channel\Capability\AbstractChannelTypeCapabilities;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
 use Contena\Core\System\Snippet\Filter\SnippetFilterInterface;
-use Contena\Core\System\Tax\TaxRuleType\TaxRuleTypeFilterInterface;
 use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
@@ -106,7 +105,6 @@ return [
             'contena.value_generator_connector' => AbstractIncrementStorage::class,
             'contena.value_generator_pattern' => AbstractValueGenerator::class,
             'frontend.media.upload.validator' => FrontendMediaValidatorInterface::class,
-            'tax.rule_type_filter' => TaxRuleTypeFilterInterface::class,
         ],
     ],
 ];

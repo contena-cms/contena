@@ -19,7 +19,7 @@ interface ConsentScope
     public function resolveIdentifier(Context $context): string;
 
     /**
-     * Should return the identifier of the admin_user/admin who performed the action
+     * Should return the identifier of the admin user/admin who performed the action
      *
      * @throws ConsentException when scope cannot be resolved from the given context
      */

@@ -149,7 +149,7 @@ class SsoAdminUserInvitationMailService
             return null;
         }
 
-        return $this->admin_userRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
+        return $this->adminUserRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
     }
 
     private function getLanguageForLocale(string $localeId, Context $context): ?LanguageEntity

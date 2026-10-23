@@ -15,8 +15,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
 
 /**
- * This class is responsible for sending mail using admin_user-defined mail templates.
- * If you don't need admin_user-configurable mail templates consider using \Symfony\Component\Mailer\MailerInterface
+ * This class is responsible for sending mail using user-defined mail templates.
+ * If you don't need user-configurable mail templates consider using \Symfony\Component\Mailer\MailerInterface
  *
  * @see https://symfony.com/doc/current/mailer.html
  */

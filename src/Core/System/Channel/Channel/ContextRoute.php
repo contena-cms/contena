@@ -3,14 +3,14 @@
 namespace Contena\Core\System\Channel\Channel;
 
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Extension\ContextRouteExtension;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
-#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class ContextRoute extends AbstractContextRoute
 {
     /**
@@ -25,7 +25,7 @@ class ContextRoute extends AbstractContextRoute
         throw new DecorationPatternException(self::class);
     }
 
-    #[Route(path: '/store-api/context', name: 'store-api.context', methods: ['GET'])]
+    #[Route(path: '/channel-api/context', name: 'channel-api.context', methods: ['GET'])]
     public function load(ChannelContext $context): ContextLoadRouteResponse
     {
         return $this->extensions->publish(

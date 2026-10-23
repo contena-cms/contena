@@ -47,7 +47,7 @@ class WasModifiedByAdminUserFieldSerializer extends BoolFieldSerializer
 
         $scope = $parameters->getContext()->getContext()->getScope();
 
-        // admin_user/api scope writes always mark the entity as admin_user-modified
+        // admin user/api scope writes always mark the entity as user-modified
         if ($scope === Context::USER_SCOPE || $scope === Context::CRUD_API_SCOPE) {
             $data->setValue(true);
 

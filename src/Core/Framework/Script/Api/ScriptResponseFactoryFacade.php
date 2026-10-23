@@ -81,7 +81,7 @@ class ScriptResponseFactoryFacade
      * Note that the `render()` method will throw an exception if it is called from outside a `ChannelContext` (e.g. from an `/api` route)
      * or if the Frontend-bundle is not installed.
      *
-     * @deprecated tag:v6.8.0 - Rendering Frontend templates through the core response service is deprecated. Type the response service as `Contena\Frontend\Framework\Script\Api\FrontendScriptResponseFactoryFacade` in Frontend script hooks and use this core facade without `render()` in admin-api/store-api hooks.
+     * @deprecated tag:v6.8.0 - Rendering Frontend templates through the core response service is deprecated. Type the response service as `Contena\Frontend\Framework\Script\Api\FrontendScriptResponseFactoryFacade` in Frontend script hooks and use this core facade without `render()` in admin-api/channel-api hooks.
      *
      * @param string $view The name of the twig template you want to render e.g. `@Frontend/frontend/page/content/detail.html.twig`
      * @param array<string, mixed> $parameters The parameters you want to pass to the template, ensure that you pass the `page` parameter from the hook to the templates.

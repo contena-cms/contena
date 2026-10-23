@@ -9,7 +9,7 @@ use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
-use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\ChannelApiRouteScope;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -62,7 +62,7 @@ class ChannelAuthenticationListener implements EventSubscriberInterface
             return;
         }
 
-        if (!$this->isRequestScoped($request, StoreApiRouteScope::class)) {
+        if (!$this->isRequestScoped($request, ChannelApiRouteScope::class)) {
             return;
         }
 

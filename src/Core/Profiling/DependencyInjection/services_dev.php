@@ -66,10 +66,4 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_subscriber')
         ->tag('data_collector');
-
-    $services->set(CartDataCollectorSubscriber::class)
-        ->args([
-        ])
-        ->tag('kernel.event_subscriber')
-        ->tag('data_collector');
 };

@@ -51,7 +51,6 @@ use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\SystemConfig\CachedSystemConfigLoader;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedHook;
-use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
 
 /**
@@ -390,10 +389,6 @@ class CacheInvalidationSubscriber
         }
 
         if ($event->getEventByEntityName(ShippingMethodDefinition::ENTITY_NAME)) {
-            $keys[] = CachedChannelContextFactory::ALL_TAG;
-        }
-
-        if ($event->getEventByEntityName(TaxDefinition::ENTITY_NAME)) {
             $keys[] = CachedChannelContextFactory::ALL_TAG;
         }
 

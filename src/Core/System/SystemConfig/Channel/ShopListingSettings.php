@@ -20,8 +20,8 @@ final class ShopListingSettings extends Struct
     public function __construct(
         public readonly int $blogsPerPage,
         public readonly bool $allowBuyInListing,
-        public readonly bool $showReview,
-        public readonly int $reviewsPerPage,
+        public readonly bool $showComment,
+        public readonly int $commentsPerPage,
         public readonly bool $disableEmptyFilterOptions,
         public readonly int $markAsNew,
         public readonly bool $hideCloseoutBlogsWhenOutOfStock,
@@ -43,8 +43,8 @@ final class ShopListingSettings extends Struct
         return new self(
             blogsPerPage: self::intValue($config, 'blogsPerPage'),
             allowBuyInListing: self::boolValue($config, 'allowBuyInListing'),
-            showReview: self::boolValue($config, 'showReview'),
-            reviewsPerPage: self::intValue($config, 'reviewsPerPage'),
+            showComment: self::boolValue($config, 'showComment'),
+            commentsPerPage: self::intValue($config, 'commentsPerPage'),
             disableEmptyFilterOptions: self::boolValue($config, 'disableEmptyFilterOptions'),
             markAsNew: self::intValue($config, 'markAsNew'),
             hideCloseoutBlogsWhenOutOfStock: self::boolValue($config, 'hideCloseoutBlogsWhenOutOfStock'),

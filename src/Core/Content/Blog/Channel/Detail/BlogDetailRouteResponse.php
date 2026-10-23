@@ -5,12 +5,12 @@ namespace Contena\Core\Content\Blog\Channel\Detail;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\Struct\ArrayStruct;
-use Contena\Core\System\Channel\StoreApiResponse;
+use Contena\Core\System\Channel\ChannelApiResponse;
 
 /**
- * @extends StoreApiResponse<ArrayStruct<array{blog: ChannelBlogEntity, configurator: PropertyGroupCollection|null}>>
+ * @extends ChannelApiResponse<ArrayStruct<array{blog: ChannelBlogEntity, configurator: PropertyGroupCollection|null}>>
  */
-class BlogDetailRouteResponse extends StoreApiResponse
+class BlogDetailRouteResponse extends ChannelApiResponse
 {
     public function __construct(
         ChannelBlogEntity $blog,
