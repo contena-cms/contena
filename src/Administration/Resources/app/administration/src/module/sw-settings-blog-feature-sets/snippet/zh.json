@@ -1,0 +1,28 @@
+{
+  "sw-settings-blog-feature-sets": {
+    "list": {
+      "columnDescription": "描述",
+      "buttonAddEssentialCharacteristics": "新建"
+    },
+    "detail": {
+      "labelName": "名称",
+      "labelDescription": "描述"
+    },
+    "valuesCard": {
+      "labelType": "类型",
+      "labelPosition": "位置"
+    },
+    "modal": {
+      "textPropertyLabel": "属性",
+      "textCustomFieldLabel": "自定义字段",
+      "labelName": "名称",
+      "buttonNext": "下一步",
+      "label": {
+        "property": "属性",
+        "width": "宽度",
+        "height": "高度",
+        "description": "描述"
+      }
+    }
+  }
+}

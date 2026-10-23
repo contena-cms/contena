@@ -1,0 +1,137 @@
+{
+  "global": {
+    "default": {
+      "cancel": "取消",
+      "edit": "编辑",
+      "save": "保存",
+      "delete": "删除",
+      "close": "关闭",
+      "remove": "移除",
+      "rename": "重命名",
+      "confirm": "确认"
+    }
+  },
+  "general": {
+    "menuLink": "菜单",
+    "readMore": "了解更多",
+    "back": "返回",
+    "expand": "展开",
+    "collapse": "收起",
+    "categories": "分类",
+    "sortingLabel": "排序",
+    "next": "下一步",
+    "previous": "上一步",
+    "pagination": {
+      "prev": "上一页",
+      "next": "下一页",
+      "page": "页",
+      "title": "分页"
+    }
+  },
+  "header": {
+    "searchButton": "搜索"
+  },
+  "account": {
+    "loginSubmit": "登录",
+    "personalTypePrivate": "私有",
+    "personalSalutationLabel": "称呼",
+    "personalTitleLabel": "标题",
+    "personalFirstNameLabel": "名字",
+    "personalLastNameLabel": "姓氏",
+    "personalMailLabel": "电子邮件地址",
+    "personalPasswordLabel": "密码",
+    "personalBirthdayLabel": "出生日期",
+    "personalPhoneLabel": "电话",
+    "overviewLink": "概览",
+    "addressLink": "地址",
+    "paymentLink": "支付方式",
+    "ordersLink": "订单",
+    "addressTitle": "地址",
+    "addressMetaTitle": "地址",
+    "paymentTitle": "支付方式",
+    "paymentMetaTitle": "支付方式",
+    "ordersTitle": "订单",
+    "ordersMetaTitle": "订单",
+    "logout": "退出登录",
+    "overviewTitle": "概览",
+    "overviewMetaTitle": "概览",
+    "profileMailTitle": "电子邮件地址",
+    "profilePasswordTitle": "密码",
+    "orRegister": "或",
+    "profileSaveChanges": "保存更改",
+    "addressWelcome": "地址",
+    "orderItemColumnDate": "日期",
+    "orderActions": "操作",
+    "editOrderBackToAccountButton": "返回概览",
+    "editOrderCancelOrderModalFooterButtonBack": "返回",
+    "orderItemColumnActions": "操作",
+    "orderItemColumnName": "文章",
+    "downloadFileButton": "下载",
+    "downloadItemColumnTitle": "文件",
+    "downloadItemColumnDate": "日期",
+    "addressDefault": "默认",
+    "addressModalTitle": "地址"
+  },
+  "address": {
+    "streetLabel": "街道地址",
+    "additionalField1Label": "地址补充行 1",
+    "additionalField2Label": "地址补充行 2",
+    "cityLabel": "城市",
+    "countryLabel": "国家",
+    "countryStateLabel": "州/省",
+    "companyNameLabel": "公司"
+  },
+  "checkout": {
+    "registerSubmit": "继续",
+    "summaryHeader": "摘要",
+    "cartHeaderInfo": "文章",
+    "summaryPositionPrice": "合计",
+    "collapseTriggerMore": "显示更多",
+    "collapseTriggerLess": "收起"
+  },
+  "listing": {
+    "boxLabelNew": "新建",
+    "listingTextSite": "页",
+    "boxProductDetails": "详情",
+    "filterPriceDisplayName": "价格",
+    "filterSubmitText": "筛选"
+  },
+  "newsletter": {
+    "labelMail": "电子邮件地址",
+    "labelFirstName": "名字",
+    "labelLastName": "姓氏"
+  },
+  "contact": {
+    "commentLabel": "评论"
+  },
+  "revocationRequest": {
+    "firstNameLabel": "名字",
+    "lastNameLabel": "姓氏",
+    "eMailLabel": "电子邮件地址",
+    "commentLabel": "评论"
+  },
+  "detail": {
+    "tabsDescription": "描述",
+    "tabsReview": "评论",
+    "commentFormTitleLabel": "标题",
+    "commentSortLabel": "排序方式",
+    "commentCountBefore": "共",
+    "commentLoginHeader": "登录"
+  },
+  "footer": {
+    "newsletterInput": "电子邮件地址"
+  },
+  "cookie": {
+    "configuration": "设置"
+  },
+  "component": {
+    "blog": {
+      "feature": {
+        "customField": {
+          "true": "是",
+          "false": "否"
+        }
+      }
+    }
+  }
+}

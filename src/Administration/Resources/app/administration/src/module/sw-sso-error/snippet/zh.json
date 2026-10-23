@@ -1,0 +1,9 @@
+{
+  "global": {
+    "sw-sso-error": {
+      "error-card": {
+        "loadingLabel": "加载中…"
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+{
+  "sw-sales-channel": {
+    "general": {
+      "titleMenuItems": "渠道"
+    },
+    "list": {
+      "title": "渠道",
+      "columnName": "渠道",
+      "columnType": "类型",
+      "columnStatus": "状态",
+      "columnCreatedAt": "创建时间",
+      "status": {
+        "maintenance": "维护"
+      },
+      "blogsLabel": "文章"
+    },
+    "detail": {
+      "tabBase": "常规",
+      "tabTheme": "主题",
+      "tabProducts": "文章",
+      "titleProductComparisonPreview": "预览",
+      "labelInputName": "名称",
+      "labelInputActive": "启用",
+      "labelInputPaymentMethods": "支付方式",
+      "labelInputCountries": "国家",
+      "labelInputLanguages": "语言",
+      "labelInputCategories": "分类",
+      "labelInputCurrency": "货币",
+      "labelInputLanguage": "语言",
+      "labelInputSnippet": "文案片段",
+      "navigation": "导航",
+      "titleStatus": "状态",
+      "titleAccount": "账户",
+      "columnDomainLanguage": "语言",
+      "labelMaintenanceActive": "维护",
+      "columnDomainCurrency": "货币",
+      "blogs": {
+        "columnActive": "启用"
+      },
+      "blogComparison": {
+        "frontend": "渠道",
+        "frontendDomainLanguage": {
+          "label": "语言"
+        },
+        "frontendDomainCurrency": {
+          "label": "货币"
+        }
+      },
+      "agenticFiles": {
+        "columnFileName": "文件",
+        "columnEnabled": "状态",
+        "columnDescription": "描述",
+        "enabledState": {
+          "enabled": "已启用",
+          "disabled": "已禁用"
+        },
+        "detail": {
+          "actionPreviewPublicPath": "预览",
+          "columnSourceRole": "角色",
+          "overrideModalFieldLabel": "内容",
+          "roleExtension": "扩展"
+        }
+      },
+      "blogExport": {
+        "insights": {
+          "summary": "摘要",
+          "dateRanges": {
+            "yesterday": "昨天"
+          }
+        }
+      },
+      "blogAssignmentModal": {
+        "dynamicProductGroups": {
+          "columnName": "名称"
+        }
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "channel": {
+        "label": "渠道"
+      }
+    }
+  }
+}

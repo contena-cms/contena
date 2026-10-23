@@ -1,0 +1,14 @@
+{
+  "sw-settings-logging": {
+    "list": {
+      "title": "日志",
+      "columnDate": "日期",
+      "columnMessage": "消息",
+      "columnLevel": "优先级",
+      "levelInfo": "信息",
+      "levelWarning": "警告",
+      "levelError": "错误",
+      "titleSidebarItemRefresh": "刷新"
+    }
+  }
+}

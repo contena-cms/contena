@@ -1,0 +1,168 @@
+{
+  "sw-order": {
+    "general": {
+      "mainMenuItemGeneral": "订单",
+      "mainMenuItemList": "概览"
+    },
+    "list": {
+      "columnCustomerCompany": "公司",
+      "columnAmount": "合计",
+      "columnSalesChannel": "渠道",
+      "textOrders": "订单",
+      "titleSidebarItemRefresh": "刷新",
+      "titleSidebarItemFilter": "筛选"
+    },
+    "detail": {
+      "buttonCancel": "放弃更改",
+      "textHeadline": "排序",
+      "tabGeneral": "常规",
+      "tabDetails": "详情"
+    },
+    "createBase": {
+      "labelEmail": "电子邮件地址",
+      "labelSalesChannel": "渠道",
+      "labelCurrency": "货币",
+      "detailsTab": {
+        "labelTransactionCard": "支付",
+        "labelDeliveryCard": "配送",
+        "labelOrderCard": "排序"
+      },
+      "labelDetailsCard": "详情",
+      "detailsHeader": {
+        "textCustomer": "用户"
+      },
+      "detailsBody": {
+        "labelEmail": "电子邮件"
+      },
+      "detailsFooter": {
+        "labelCurrency": "货币"
+      },
+      "columnTotalPriceNet": "合计",
+      "columnPrice": "价格",
+      "columnTotalPrice": "合计"
+    },
+    "detailBase": {
+      "cardTitleDetails": "详情",
+      "columnProductName": "名称",
+      "columnTotalPriceNet": "合计",
+      "columnPrice": "价格",
+      "columnTotalPrice": "合计",
+      "columnType": "类型",
+      "labelSalesChannel": "渠道",
+      "labelCustomerEmail": "电子邮件地址",
+      "labelNoDeliveryTrackingCodeYet": "无"
+    },
+    "lineItemType": {
+      "blog": "文章",
+      "custom": "自定义"
+    },
+    "nestedLineItemsModal": {
+      "headerLabel": "名称"
+    },
+    "addressSelection": {
+      "modalTitleEditAddress": "地址"
+    },
+    "saveChangesBeforehandModal": {
+      "confirmButton": "保存更改"
+    },
+    "stateCard": {
+      "cardTitle": "状态",
+      "draftPlaceholder": "草稿",
+      "labelSystemUser": "系统",
+      "labelCustomer": "用户"
+    },
+    "assignMailTemplateCard": {
+      "gridColumnType": "类型",
+      "gridColumnDescription": "描述"
+    },
+    "documentCard": {
+      "labelDate": "日期",
+      "labelType": "类型"
+    },
+    "generalTab": {
+      "info": {
+        "summary": {
+          "and": "和"
+        }
+      }
+    },
+    "detailsTab": {
+      "labelTransactionCard": "支付",
+      "labelDeliveryCard": "配送",
+      "labelOrderCard": "排序"
+    },
+    "documentModal": {
+      "labelDocumentDate": "日期",
+      "labelDocumentComment": "评论",
+      "labelCreate": "创建",
+      "labelPreview": "预览",
+      "labelHighlightedItemsHeader": "名称",
+      "labelHighlightedItemsEntry": "合计"
+    },
+    "documentSendModal": {
+      "labelType": "类型",
+      "labelDate": "日期",
+      "labelRecipient": "电子邮件地址"
+    },
+    "stateHistoryModal": {
+      "labelSystemUser": "系统",
+      "labelCustomer": "用户",
+      "column": {
+        "createdAt": "日期",
+        "transaction": "支付",
+        "delivery": "配送",
+        "order": "排序"
+      }
+    },
+    "newCustomerModal": {
+      "labelDetails": "详情"
+    },
+    "invalidPromotionModal": {
+      "buttonConfirm": "确定"
+    },
+    "initialModal": {
+      "tabCustomer": "用户",
+      "tabProducts": "文章",
+      "userGrid": {
+        "columnCustomerName": "名称",
+        "columnSalesChannel": "渠道",
+        "columnEmailAddress": "电子邮件地址",
+        "buttonSelectSalesChannel": "选择"
+      },
+      "options": {
+        "textHeadlineOrder": "排序",
+        "textHeadlinePayment": "支付"
+      }
+    },
+    "filters": {
+      "orderDateFilter": {
+        "options": {
+          "today": "今天",
+          "yesterday": "昨天",
+          "custom": "自定义"
+        }
+      },
+      "channelFilter": {
+        "label": "渠道"
+      },
+      "tagFilter": {
+        "label": "标签"
+      },
+      "blogFilter": {
+        "label": "文章"
+      }
+    },
+    "components": {
+      "uploadDocumentModal": {
+        "upload": "上传"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "order": {
+        "label": "订单"
+      }
+    }
+  }
+}

@@ -1,0 +1,83 @@
+{
+  "sw-category": {
+    "general": {
+      "mainMenuItemIndex": "分类",
+      "mainMenuItemList": "概览",
+      "headlineCategories": "分类",
+      "descriptionLabel": "描述",
+      "treeHeadline": "分类"
+    },
+    "view": {
+      "general": "常规",
+      "cms": "布局",
+      "blogs": "文章"
+    },
+    "base": {
+      "general": {
+        "categoryNameLabel": "名称",
+        "headlineInformationCard": "常规",
+        "isCategoryActiveLabel": "启用",
+        "labelCategoryTags": "标签",
+        "types": {
+          "link": "链接"
+        }
+      },
+      "entry-point-card": {
+        "cardTitle": "导航"
+      },
+      "entry-point-modal": {
+        "channelSelection": "渠道",
+        "mainNavigationName": "显示名称",
+        "layoutHeadline": "布局"
+      },
+      "seo": {
+        "labelMetaDescription": "描述"
+      },
+      "menu": {
+        "descriptionLabel": "描述"
+      },
+      "customEntity": {
+        "instanceAssignment": {
+          "title": "标题"
+        }
+      },
+      "link": {
+        "linkNewTabLabel": "在新标签页打开",
+        "type": {
+          "internal": "内部"
+        }
+      },
+      "blogs": {
+        "blogAssignmentLabel": "文章",
+        "columnNameLabel": "名称",
+        "blogAssignmentTypeLabel": "类型"
+      }
+    }
+  },
+  "sw-landing-page": {
+    "view": {
+      "general": "常规",
+      "cms": "布局"
+    },
+    "base": {
+      "general": {
+        "labelName": "名称",
+        "headlineInformationCard": "常规",
+        "isActiveLabel": "启用",
+        "labelTags": "标签"
+      },
+      "seo": {
+        "labelSalesChannel": "渠道",
+        "labelSocialMediaTitle": "标题",
+        "labelSocialMediaDescription": "描述"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "category": {
+        "label": "分类"
+      }
+    }
+  }
+}

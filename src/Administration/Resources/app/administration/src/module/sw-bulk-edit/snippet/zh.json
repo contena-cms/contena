@@ -1,0 +1,79 @@
+{
+  "sw-bulk-edit": {
+    "changeTypes": {
+      "clear": "清除"
+    },
+    "blog": {
+      "alertRestrictedFields": {
+        "stock": "库存"
+      },
+      "generalInformation": {
+        "active": {
+          "switchLabel": "启用"
+        }
+      },
+      "prices": {
+        "cardTitle": "价格",
+        "price": {
+          "label": "价格"
+        }
+      },
+      "property": {
+        "cardTitle": "属性"
+      },
+      "media": {
+        "cardTitle": "媒体"
+      },
+      "customFields": {
+        "cardTitle": "自定义字段"
+      }
+    },
+    "modal": {
+      "confirm": {
+        "buttons": {
+          "applyChanges": "应用更改"
+        }
+      },
+      "success": {
+        "buttonDownload": "下载",
+        "failedDocuments": {
+          "columnOrder": "排序"
+        }
+      }
+    },
+    "order": {
+      "status": {
+        "cardTitle": "状态",
+        "documents": {
+          "options": {
+            "all": "全部"
+          }
+        }
+      },
+      "documents": {
+        "generateInvoice": {
+          "labelDatePicker": "日期",
+          "labelTextarea": "评论"
+        }
+      },
+      "customFields": {
+        "cardTitle": "自定义字段"
+      },
+      "tags": {
+        "cardTitle": "标签"
+      }
+    },
+    "user": {
+      "account": {
+        "cardTitle": "账户"
+      },
+      "customFields": {
+        "cardTitle": "自定义字段"
+      },
+      "tags": {
+        "cardTitle": "标签"
+      }
+    },
+    "applyChanges": "应用更改"
+  }
+}

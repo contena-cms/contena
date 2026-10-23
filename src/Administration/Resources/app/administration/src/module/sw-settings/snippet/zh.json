@@ -1,0 +1,19 @@
+{
+  "sw-settings": {
+    "general": {
+      "mainMenuItemGeneral": "设置"
+    },
+    "index": {
+      "title": "设置",
+      "tabSystem": "系统",
+      "tabGeneral": "常规",
+      "tabCustomer": "用户",
+      "tabContent": "内容",
+      "tabPlugins": "扩展"
+    },
+    "system-config": {
+      "labelSalesChannelSelect": "渠道",
+      "tabGeneral": "常规"
+    }
+  }
+}

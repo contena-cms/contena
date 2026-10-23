@@ -1,0 +1,35 @@
+{
+  "sw-settings-search": {
+    "general": {
+      "mainMenuItemGeneral": "搜索"
+    },
+    "page": {
+      "generalTab": "常规"
+    },
+    "generalTab": {
+      "labelExcludedSearchTermsNoResults": "未找到结果",
+      "labelGeneralTab": "常规",
+      "labelCustomFieldsTab": "自定义字段",
+      "modal": {
+        "textTitle": "标题",
+        "textDescription": "描述",
+        "textTag": "标签",
+        "textTotal": "合计"
+      },
+      "list": {
+        "columnContent": "内容"
+      }
+    },
+    "liveSearchTab": {
+      "labelSalesChannelSelect": "渠道",
+      "textNoResult": "未找到结果"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "blog_search_config": {
+        "label": "搜索"
+      }
+    }
+  }
+}

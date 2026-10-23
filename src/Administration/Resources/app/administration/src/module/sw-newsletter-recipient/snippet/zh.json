@@ -1,0 +1,25 @@
+{
+  "sw-newsletter-recipient": {
+    "general": {
+      "language": "语言",
+      "salutation": "称呼",
+      "channel": "渠道",
+      "tags": "标签"
+    },
+    "list": {
+      "titleSidebarItemRefresh": "刷新",
+      "status": "状态",
+      "email": "电子邮件地址",
+      "name": "名称",
+      "title": "标题",
+      "firstName": "名字",
+      "lastName": "姓氏",
+      "channel": "渠道",
+      "city": "城市",
+      "street": "街道",
+      "createdAt": "创建时间",
+      "updatedAt": "更新时间",
+      "optIn": "启用"
+    }
+  }
+}

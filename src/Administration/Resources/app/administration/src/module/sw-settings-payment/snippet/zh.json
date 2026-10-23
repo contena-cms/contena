@@ -1,0 +1,33 @@
+{
+  "sw-settings-payment": {
+    "general": {
+      "mainMenuItemGeneral": "支付方式"
+    },
+    "overview": {
+      "activeToggle": "启用"
+    },
+    "list": {
+      "textHeadline": "支付",
+      "columnName": "名称",
+      "columnDescription": "描述",
+      "columnActive": "启用",
+      "columnPosition": "位置",
+      "columnExtension": "扩展"
+    },
+    "detail": {
+      "titleCard": "支付方式",
+      "labelName": "名称",
+      "labelTechnicalName": "技术名称",
+      "labelPosition": "位置",
+      "labelActive": "启用",
+      "labelDescription": "描述"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "payment": {
+        "label": "支付方式"
+      }
+    }
+  }
+}

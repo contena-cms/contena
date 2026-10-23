@@ -1,0 +1,60 @@
+{
+  "sw-settings-rule": {
+    "filter": {
+      "conditionFilter": {
+        "label": "条件"
+      },
+      "assignmentFilter": {
+        "label": "分配",
+        "values": {
+          "paymentMethods": "支付方式"
+        }
+      },
+      "tagFilter": {
+        "label": "标签"
+      }
+    },
+    "list": {
+      "columnName": "规则",
+      "columnDescription": "描述",
+      "columnDateUpdated": "更新时间",
+      "columnPriority": "优先级",
+      "columnStatus": "状态",
+      "columnTags": "标签",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "detail": {
+      "titleCard": "常规",
+      "labelName": "名称",
+      "labelDescription": "描述",
+      "labelPriority": "优先级",
+      "labelType": "类型",
+      "ruleCard": "条件",
+      "tabGeneral": "常规",
+      "tabAssignments": "分配",
+      "associations": {
+        "paymentMethods": "支付方式",
+        "columns": {
+          "name": "名称",
+          "description": "描述",
+          "active": "启用",
+          "extension": "扩展",
+          "position": "位置"
+        }
+      },
+      "types": {
+        "shipping": "配送",
+        "payment": "支付",
+        "price": "价格"
+      },
+      "groups": {
+        "general": "常规",
+        "users": "用户",
+        "orders": "订单"
+      }
+    },
+    "conditionModal": {
+      "modalTitle": "筛选"
+    }
+  }
+}

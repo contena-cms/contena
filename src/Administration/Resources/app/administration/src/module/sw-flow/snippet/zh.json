@@ -1,0 +1,83 @@
+{
+  "sw-flow": {
+    "labelDescription": {
+      "labelTag": "标签"
+    },
+    "list": {
+      "labelColumnActive": "启用",
+      "labelColumnName": "名称",
+      "labelColumnDescription": "描述"
+    },
+    "detail": {
+      "labelLogCard": "日志",
+      "labelGeneralInformationName": "名称",
+      "labelGeneralInformationDescription": "描述",
+      "labelGeneralInformationPriority": "优先级",
+      "labelGeneralInformationActive": "启用",
+      "sequence": {
+        "conditionTitle": "条件"
+      }
+    },
+    "page": {
+      "tabGeneral": "常规"
+    },
+    "flowNotification": {
+      "messageError": "发生错误。"
+    },
+    "actions": {
+      "group": {
+        "tag": "标签",
+        "user": "用户",
+        "general": "常规",
+        "order": "排序"
+      }
+    },
+    "modals": {
+      "rule": {
+        "tabRule": "条件",
+        "tabDetail": "常规",
+        "labelName": "名称",
+        "labelPriority": "优先级",
+        "labelDescription": "描述",
+        "labelType": "类型"
+      },
+      "tag": {
+        "labelTagsField": "标签"
+      },
+      "userStatus": {
+        "active": "启用",
+        "inactive": "停用"
+      },
+      "mail": {
+        "tabGeneral": "常规",
+        "labelMailType": "类型",
+        "labelDescription": "描述",
+        "labelDefault": "默认",
+        "labelCustomer": "用户",
+        "labelCustom": "自定义"
+      },
+      "setEntityCustomField": {
+        "customField": "自定义字段",
+        "options": {
+          "clear": "清除"
+        }
+      }
+    },
+    "triggers": {
+      "user": "用户",
+      "order": "排序",
+      "group": "分组",
+      "mail": "电子邮件",
+      "create": "创建",
+      "state": "州/省",
+      "login": "登录",
+      "logout": "退出登录",
+      "message": "消息",
+      "log": "日志",
+      "open": "打开",
+      "failed": "失败",
+      "update": "更新",
+      "password": "密码"
+    }
+  }
+}

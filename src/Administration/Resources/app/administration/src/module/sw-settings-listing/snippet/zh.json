@@ -1,0 +1,38 @@
+{
+  "sw-settings-listing": {
+    "general": {
+      "mainMenuItemGeneral": "文章",
+      "textHeadline": "文章",
+      "blogSortingCriteriaGrid": {
+        "header": {
+          "name": "名称",
+          "order": "排序",
+          "priority": "优先级"
+        },
+        "options": {
+          "label": {
+            "customField": "自定义字段"
+          }
+        }
+      }
+    },
+    "index": {
+      "blogSorting": {
+        "grid": {
+          "header": {
+            "name": "名称",
+            "priority": "优先级"
+          }
+        }
+      }
+    },
+    "base": {
+      "general": {
+        "title": "常规",
+        "labelName": "名称",
+        "labelTechnicalName": "技术名称",
+        "labelActive": "启用"
+      }
+    }
+  }
+}

@@ -1,0 +1,105 @@
+{
+  "sw-profile": {
+    "index": {
+      "titlePasswordCard": "密码",
+      "labelFirstNameField": "名字",
+      "labelLastNameField": "姓氏",
+      "labelUsernameField": "用户名",
+      "labelEmailField": "电子邮件地址"
+    },
+    "tabGeneral": {
+      "title": "常规"
+    },
+    "tabSearchPreferences": {
+      "cardSearchContent": {
+        "buttonSelect": "全选",
+        "buttonDeselect": "取消全选"
+      },
+      "modules": {
+        "order": {
+          "countryName": "国家",
+          "city": "城市",
+          "street": "街道",
+          "company": "公司",
+          "lastName": "姓氏",
+          "firstName": "名字",
+          "additionalAddressLine1": "地址补充行 1",
+          "additionalAddressLine2": "地址补充行 2",
+          "email": "电子邮件地址",
+          "tagsName": "标签"
+        },
+        "user": {
+          "tagsName": "标签",
+          "email": "电子邮件地址",
+          "company": "公司",
+          "firstName": "名字",
+          "lastName": "姓氏",
+          "countryName": "国家",
+          "city": "城市",
+          "street": "街道",
+          "additionalAddressLine1": "地址补充行 1",
+          "additionalAddressLine2": "地址补充行 2"
+        },
+        "blog": {
+          "name": "名称",
+          "tagsName": "标签"
+        },
+        "media": {
+          "tagsName": "标签",
+          "title": "标题",
+          "fileName": "名称",
+          "mediaFolderName": "文件夹"
+        },
+        "landing_page": {
+          "name": "名称",
+          "tagsName": "标签"
+        },
+        "category": {
+          "name": "名称",
+          "tagsName": "标签"
+        },
+        "shipping_method": {
+          "name": "名称"
+        },
+        "payment_method": {
+          "name": "名称"
+        },
+        "user_group": {
+          "name": "名称"
+        },
+        "channel": {
+          "name": "名称"
+        },
+        "property": {
+          "name": "名称"
+        },
+        "property_group": {
+          "name": "名称"
+        },
+        "promotion": {
+          "name": "名称"
+        },
+        "blog_stream": {
+          "name": "名称"
+        },
+        "newsletter_recipient": {
+          "email": "电子邮件地址"
+        },
+        "blog_manufacturer": {
+          "name": "名称"
+        },
+        "cms_page": {
+          "name": "名称"
+        },
+        "flow": {
+          "name": "名称",
+          "description": "描述"
+        },
+        "rule": {
+          "name": "名称",
+          "description": "描述"
+        }
+      }
+    }
+  }
+}

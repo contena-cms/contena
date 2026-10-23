@@ -1,0 +1,37 @@
+{
+  "sw-media": {
+    "general": {
+      "mainMenuItemGeneral": "媒体"
+    },
+    "sidebar": {
+      "actions": {
+        "delete": "删除",
+        "download": "下载",
+        "move": "移动",
+        "replace": "替换",
+        "settings": "设置"
+      },
+      "sections": {
+        "actions": "操作",
+        "preview": "预览"
+      },
+      "metadata": {
+        "name": "名称",
+        "title": "标题",
+        "fileSize": "尺寸",
+        "width": "宽度",
+        "height": "高度"
+      }
+    },
+    "index": {
+      "rootFolderName": "媒体"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "media": {
+        "label": "媒体"
+      }
+    }
+  }
+}

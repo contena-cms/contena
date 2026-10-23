@@ -1,0 +1,40 @@
+{
+  "sw-settings-language": {
+    "general": {
+      "mainMenuItemGeneral": "语言"
+    },
+    "addModal": {
+      "labelLanguage": "语言",
+      "docsLinkLabel": "了解更多"
+    },
+    "list": {
+      "textHeadline": "语言",
+      "columnName": "名称",
+      "columnActive": "启用",
+      "columnSalesChannels": "渠道",
+      "columnDefault": "默认",
+      "defaultLabel": "默认",
+      "titleSidebarItemRefresh": "刷新",
+      "cardTitle": "语言"
+    },
+    "detail": {
+      "titleCard": "设置",
+      "labelName": "名称",
+      "labelActive": "启用",
+      "channels": {
+        "title": "渠道",
+        "showLess": "收起"
+      },
+      "snippetUpdates": {
+        "updateButton": "更新"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "language": {
+        "label": "语言"
+      }
+    }
+  }
+}

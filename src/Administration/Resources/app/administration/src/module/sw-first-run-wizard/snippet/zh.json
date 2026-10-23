@@ -1,0 +1,26 @@
+{
+  "sw-first-run-wizard": {
+    "general": {
+      "buttonNext": "下一步",
+      "buttonFinish": "完成"
+    },
+    "welcome": {
+      "modalTitle": "欢迎"
+    },
+    "recommendedPlugins": {
+      "modalTitle": "扩展",
+      "category": "分类"
+    },
+    "contenaAccount": {
+      "passwordLabel": "密码",
+      "emailAddressLabel": "电子邮件地址"
+    },
+    "finish": {
+      "documentationLabel": "文档",
+      "modalTitle": "完成"
+    },
+    "stepItemTitle": {
+      "plugins": "扩展"
+    }
+  }
+}

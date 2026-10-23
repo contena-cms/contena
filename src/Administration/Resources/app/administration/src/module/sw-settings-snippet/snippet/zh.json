@@ -1,0 +1,35 @@
+{
+  "sw-settings-snippet": {
+    "general": {
+      "mainMenuItemGeneral": "文案片段",
+      "searchBarTitleSnippets": "文案片段"
+    },
+    "detail": {
+      "cardSnippetSetsTitle": "翻译",
+      "labelName": "名称"
+    },
+    "list": {
+      "buttonDelete": "删除",
+      "columnKey": "名称",
+      "contextMenuDelete": "删除 | 重置",
+      "titleSidebarItemRefresh": "刷新",
+      "titleSidebarItemFilter": "筛选"
+    },
+    "setList": {
+      "buttonClone": "复制",
+      "buttonImport": "导入",
+      "columnChangedAt": "最后更新",
+      "columnName": "名称"
+    },
+    "filter": {
+      "author": "作者"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "snippet": {
+        "label": "文案片段"
+      }
+    }
+  }
+}

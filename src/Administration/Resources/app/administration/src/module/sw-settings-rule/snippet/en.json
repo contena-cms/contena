@@ -40,7 +40,6 @@
       }
     },
     "list": {
-      "columnTaxProviders": "Tax Provider assignments",
       "columnWarehouseGroup": "Warehouse group assignments",
       "textHeadline": "Rule Builder",
       "buttonAddRule": "Create rule",
@@ -67,7 +66,6 @@
       "invalid": "Invalid",
       "messageEmpty": "No rules yet",
       "assignments": {
-        "taxProviders": "Tax Provider | Tax Providers",
         "warehouseGroup": "Warehouse group | Warehouse groups",
         "cartPromotions": "promotion cart rule | promotion cart rules",
         "orderPromotions": "promotion order rule | promotion order rules",
@@ -121,7 +119,6 @@
         "promotionGroupRules": "Promotion set group rules",
         "shippingMethodAvailabilityRule": "Shipping method availability rules",
         "flows": "Flow Builders",
-        "taxProviders": "Tax Providers",
         "columns": {
           "name": "Name",
           "manufacturer": "Manufacturer",

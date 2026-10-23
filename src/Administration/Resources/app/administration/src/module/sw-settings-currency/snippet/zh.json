@@ -1,0 +1,22 @@
+{
+  "sw-settings-currency": {
+    "list": {
+      "columnName": "名称"
+    },
+    "detail": {
+      "titleCard": "设置",
+      "labelName": "名称",
+      "titleCountryRoundingCard": "国家",
+      "currencyCountry": {
+        "countryColumn": "国家"
+      }
+    },
+    "currency-country-modal": {
+      "labelCountrySelect": "国家",
+      "titleNewCurrencyCountry": "国家"
+    },
+    "price-rounding": {
+      "labelIntervalNone": "无"
+    }
+  }
+}

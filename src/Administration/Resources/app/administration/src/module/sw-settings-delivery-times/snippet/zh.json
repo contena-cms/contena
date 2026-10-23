@@ -1,0 +1,12 @@
+{
+  "sw-settings-delivery-time": {
+    "list": {
+      "columnName": "名称",
+      "columnUnit": "单位"
+    },
+    "detail": {
+      "labelName": "名称",
+      "labelUnit": "单位"
+    }
+  }
+}

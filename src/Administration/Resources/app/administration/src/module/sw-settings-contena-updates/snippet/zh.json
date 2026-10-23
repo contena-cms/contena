@@ -1,0 +1,14 @@
+{
+  "sw-settings-contena-updates": {
+    "extensions": {
+      "columns": {
+        "name": "扩展"
+      }
+    },
+    "methodModal": {
+      "actions": {
+        "continue": "继续"
+      }
+    }
+  }
+}

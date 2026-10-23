@@ -1,0 +1,117 @@
+{
+  "sw-user": {
+    "general": {
+      "mainMenuItemGeneral": "用户",
+      "mainMenuItemList": "概览"
+    },
+    "card": {
+      "placeholderTitle": "标题",
+      "placeholderFirstName": "名字",
+      "placeholderLastName": "姓氏",
+      "placeholderCompany": "公司",
+      "placeholderEmail": "电子邮件地址",
+      "labelSalutation": "称呼",
+      "labelTitle": "标题",
+      "labelFirstName": "名字",
+      "labelLastName": "姓氏",
+      "labelCompany": "公司",
+      "labelEmail": "电子邮件",
+      "labelTags": "标签"
+    },
+    "list": {
+      "textCustomers": "用户",
+      "columnCompany": "公司",
+      "columnName": "名称",
+      "columnFirstName": "名字",
+      "columnLastName": "姓氏",
+      "columnStreet": "街道",
+      "columnCity": "城市",
+      "columnEmail": "电子邮件地址",
+      "columnBoundSalesChannel": "渠道",
+      "columnActive": "启用",
+      "columnCreatedAt": "创建时间",
+      "emptyBoundSalesChannel": "全部",
+      "titleSidebarItemRefresh": "刷新",
+      "titleSidebarItemFilter": "筛选"
+    },
+    "baseForm": {
+      "labelSalutation": "称呼",
+      "labelTitle": "标题",
+      "labelFirstName": "名字",
+      "labelLastName": "姓氏",
+      "labelEmail": "电子邮件地址",
+      "labelCompany": "公司",
+      "labelSalesChannel": "渠道",
+      "labelBirthday": "出生日期",
+      "labelPassword": "密码",
+      "labelLanguage": "语言",
+      "labelTags": "标签"
+    },
+    "baseInfo": {
+      "contactEmail": "电子邮件地址",
+      "labelBirthday": "出生日期",
+      "labelLanguage": "语言",
+      "labelCompany": "公司",
+      "contentActive": "启用 | 停用",
+      "labelBoundSalesChannel": "渠道",
+      "emptyBoundSalesChannel": "全部"
+    },
+    "detailBase": {
+      "labelAccountCard": "账户",
+      "labelAddressesCard": "地址",
+      "labelOrderCard": "订单"
+    },
+    "detailAddresses": {
+      "cardTitle": "地址",
+      "buttonSelect": "选择",
+      "modalTitleAddress": "地址",
+      "columnCompany": "公司",
+      "columnFirstName": "名字",
+      "columnLastName": "姓氏",
+      "columnStreet": "街道",
+      "columnCity": "城市",
+      "columnActions": "操作"
+    },
+    "detailOrder": {
+      "ordersTitle": "订单"
+    },
+    "addressForm": {
+      "labelCompany": "公司",
+      "labelSalutation": "称呼",
+      "labelTitle": "标题",
+      "labelFirstName": "名字",
+      "labelLastName": "姓氏",
+      "labelStreet": "街道",
+      "labelCity": "城市",
+      "labelCountry": "国家",
+      "labelState": "州/省",
+      "labelAdditionalAddressLine1": "地址补充行 1",
+      "labelAdditionalAddressLine2": "地址补充行 2"
+    },
+    "detail": {
+      "tabGeneral": "常规",
+      "tabAddresses": "地址"
+    },
+    "filter": {
+      "salutation": {
+        "label": "称呼"
+      },
+      "status": {
+        "label": "状态"
+      },
+      "tags": {
+        "label": "标签"
+      }
+    },
+    "userType": {
+      "labelPrivate": "私有"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "user": {
+        "label": "用户"
+      }
+    }
+  }
+}

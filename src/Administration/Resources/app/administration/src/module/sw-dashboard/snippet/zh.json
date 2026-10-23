@@ -1,0 +1,15 @@
+{
+  "sw-dashboard": {
+    "general": {
+      "mainMenuItemGeneral": "仪表盘"
+    },
+    "todayStats": {
+      "orders": "订单",
+      "orderTime": "时间"
+    },
+    "monthStats": {
+      "orderNumber": "订单",
+      "totalTurnover": "合计"
+    }
+  }
+}

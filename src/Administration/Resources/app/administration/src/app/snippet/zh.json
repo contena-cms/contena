@@ -1,0 +1,307 @@
+{
+  "global": {
+    "default": {
+      "add": "添加",
+      "apply": "应用",
+      "cancel": "取消",
+      "delete": "删除",
+      "remove": "移除",
+      "edit": "编辑",
+      "duplicate": "复制",
+      "copy": "复制",
+      "error": "错误",
+      "warning": "警告",
+      "save": "保存",
+      "success": "成功",
+      "info": "信息",
+      "yes": "是",
+      "no": "否",
+      "confirm": "确认",
+      "ascending": "升序",
+      "descending": "降序",
+      "open": "打开",
+      "close": "关闭",
+      "back": "返回",
+      "discard": "放弃",
+      "attention": "警告"
+    },
+    "notification": {
+      "unspecifiedSaveErrorMessage": "发生错误。"
+    },
+    "theme": {
+      "names": {
+        "system": "系统"
+      }
+    },
+    "notification-center": {
+      "title": "通知",
+      "triggerAriaLabel": "通知",
+      "worker-listener": {
+        "importExport": {
+          "title": "导入/导出"
+        }
+      }
+    },
+    "sw-admin-menu": {
+      "linkLogout": "退出登录",
+      "navigation": {
+        "mainMenuItemProducts": "文章",
+        "mainMenuItemContent": "内容"
+      }
+    },
+    "sw-file-input": {
+      "buttonChoose": "选择文件"
+    },
+    "sw-tag-field": {
+      "title": "标签"
+    },
+    "sw-snippet-field-edit-modal": {
+      "title": "文案片段",
+      "labelName": "名称"
+    },
+    "sw-data-grid": {
+      "labelDeSelectAll": "取消全选",
+      "labelSelectAll": "全选"
+    },
+    "sw-text-preview": {
+      "showMoreButton": "显示更多"
+    },
+    "sw-media-folder-item": {
+      "labelContextMenuRename": "重命名",
+      "labelContextMenuMove": "移动",
+      "labelContextMenuShowSettings": "设置"
+    },
+    "sw-media-media-item": {
+      "labelContextMenuReplace": "替换",
+      "labelContextMenuRename": "重命名",
+      "labelContextMenuDetail": "详情",
+      "labelContextMenuMove": "移动"
+    },
+    "sw-media-modal-move": {
+      "buttonMove": "移动"
+    },
+    "sw-media-modal-replace": {
+      "buttonUpload": "上传",
+      "buttonReplace": "替换"
+    },
+    "sw-media-url-form": {
+      "upload": "上传"
+    },
+    "sw-media-modal-folder-settings": {
+      "labelSettings": "设置",
+      "labelFolderName": "名称"
+    },
+    "sw-sidebar-media-item": {
+      "title": "媒体",
+      "placeholderSearch": "搜索…"
+    },
+    "sw-entity-advanced-selection-modal": {
+      "searchPlaceholder": "搜索…",
+      "filter": "筛选",
+      "entity": {
+        "blog": "文章",
+        "rule": "规则"
+      }
+    },
+    "sw-search-bar": {
+      "searchTypeAll": "全部"
+    },
+    "sw-search-bar-item": {
+      "typeLabelCustomer": "用户",
+      "typeLabelProduct": "文章",
+      "typeLabelOrder": "排序",
+      "typeLabelMedia": "媒体",
+      "typeLabelCategory": "分类"
+    },
+    "sw-condition": {
+      "field": {
+        "type": "条件",
+        "categoryIds": "分类",
+        "selectedField": "自定义字段",
+        "renderedField": "自定义字段"
+      },
+      "cartLineItemWithQuantity": {
+        "id": "文章"
+      },
+      "condition": {
+        "channelRule": "渠道",
+        "currencyRule": "货币",
+        "languageRule": "语言",
+        "lineItemOfTypeRule": {
+          "blog": "文章"
+        },
+        "lineItemCondition": {
+          "all": "全部"
+        },
+        "promotionCodeOfTypeRule": {
+          "global": "无"
+        }
+      }
+    },
+    "sw-condition-generic": {
+      "cartLineItemOfType": {
+        "lineItemType": {
+          "options": {
+            "blog": "文章"
+          }
+        }
+      },
+      "promotionCodeOfType": {
+        "promotionCodeType": {
+          "options": {
+            "global": "无"
+          }
+        }
+      }
+    },
+    "sw-simple-search-field": {
+      "defaultPlaceholder": "搜索…"
+    },
+    "entities": {
+      "all": "全部",
+      "custom_field": "自定义字段 | 自定义字段",
+      "category": "分类 | 分类",
+      "cms_page": "布局 | 布局",
+      "property": "属性 | 属性",
+      "country": "国家 | 国家",
+      "user": "用户 | 用户",
+      "user_address": "地址 | 地址",
+      "extension": "扩展 | 扩展",
+      "language": "语言 | 语言",
+      "media": "媒体",
+      "order": "排序 | 订单",
+      "order_address": "地址 | 地址",
+      "plugin_manager": "插件",
+      "blog": "文章 | 文章",
+      "rule": "规则 | 规则",
+      "rule_condition": "条件 | 条件",
+      "channel": "渠道 | 渠道",
+      "snippet": "文案片段 | 文案片段",
+      "tag": "标签 | 标签",
+      "theme": "主题 | 主题",
+      "unit": "单位 | 单位"
+    },
+    "sw-search-preferences-modal": {
+      "columnActive": "启用"
+    },
+    "sw-help-center": {
+      "title": "支持"
+    }
+  },
+  "sw-text-editor-toolbar": {
+    "link": {
+      "labelLink": "链接",
+      "labelProduct": "文章",
+      "labelCategory": "分类",
+      "labelMedia": "文件",
+      "labelEmail": "电子邮件地址"
+    },
+    "title": {
+      "link": "链接",
+      "undo": "撤销",
+      "redo": "重做"
+    }
+  },
+  "mt-text-editor-toolbar-button-link": {
+    "label": "链接"
+  },
+  "sw-text-editor-toolbar-button-link": {
+    "linkDetail": "文章",
+    "linkEmail": "电子邮件",
+    "openInNewTab": "在新标签页打开",
+    "applyLink": "应用",
+    "linkOptions": {
+      "blog": "文章",
+      "category": "分类",
+      "media": "文件",
+      "email": "电子邮件"
+    }
+  },
+  "sw-tree": {
+    "general": {
+      "placeholderSearch": "搜索…"
+    }
+  },
+  "sw-property-assignment": {
+    "columnGroup": "属性"
+  },
+  "sw-language-switch": {
+    "titleModalUnsavedChanges": "未保存的更改",
+    "titleModalButtonRevertUnsavedChanges": "放弃更改"
+  },
+  "sw-license-violation": {
+    "reload": "重新加载",
+    "table": {
+      "plugin": "扩展"
+    }
+  },
+  "sw-sales-channel-switch": {
+    "titleModalUnsavedChanges": "未保存的更改",
+    "titleModalButtonRevertUnsavedChanges": "放弃更改"
+  },
+  "sw-rule-modal": {
+    "labelDescription": "描述",
+    "labelName": "名称",
+    "labelPriority": "优先级",
+    "ruleCard": "条件"
+  },
+  "sw-shortcut-overview": {
+    "sectionNavigation": "导航",
+    "functionSpecialShortcutClearCache": "清除缓存"
+  },
+  "sw-discard-changes-modal": {
+    "actions": {
+      "discard": "放弃更改",
+      "keepEditing": "继续编辑"
+    }
+  },
+  "sw-app": {
+    "component": {
+      "sw-app-wrong-app-url-modal": {
+        "labelLearnMoreButton": "了解更多"
+      }
+    }
+  },
+  "sw-wizard": {
+    "finishButton": "完成",
+    "nextButton": "下一步"
+  },
+  "sw-base-filter": {
+    "resetButton": "重置"
+  },
+  "sw-boolean-filter": {
+    "placeholder": "全部",
+    "active": "启用",
+    "inactive": "停用"
+  },
+  "sw-existence-filter": {
+    "placeholder": "全部"
+  },
+  "sw-restricted-rules": {
+    "and": "和",
+    "or": "或"
+  },
+  "help-center": {
+    "sidebar": {
+      "title": "帮助",
+      "support": {
+        "title": "支持",
+        "documentation": {
+          "text": "文档"
+        }
+      }
+    }
+  },
+  "sw-model-editor": {
+    "properties": {
+      "transformation": {
+        "position": {
+          "label": "位置"
+        }
+      }
+    }
+  },
+  "sw-ui-shell-update-2026-modal": {
+    "nextButton": "下一步"
+  }
+}

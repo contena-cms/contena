@@ -1,0 +1,208 @@
+{
+  "sw-cms": {
+    "general": {
+      "greeting": "布局"
+    },
+    "sorting": {
+      "labelSortByAllPages": "所有类型"
+    },
+    "list": {
+      "gridHeaderName": "名称",
+      "gridHeaderType": "类型",
+      "gridHeaderAssignments": "已分配"
+    },
+    "section": {
+      "sidebar": "侧边栏"
+    },
+    "sidebar": {
+      "contentMenu": {
+        "generalSettings": "常规",
+        "settings": "设置",
+        "layoutSettings": "布局"
+      }
+    },
+    "detail": {
+      "label": {
+        "blockCategoryText": "文本",
+        "blockCategorySidebar": "侧边栏",
+        "blockCategoryImage": "图片",
+        "blockCategoryApp": "应用",
+        "buttonElementSettingsConfirm": "完成",
+        "backgroundMediaField": "图片",
+        "labelNavigation": "导航"
+      },
+      "sidebar": {
+        "titlePageSettings": "设置",
+        "mobileOptionHidden": "隐藏"
+      }
+    },
+    "elements": {
+      "general": {
+        "config": {
+          "tab": {
+            "content": "内容",
+            "settings": "设置"
+          }
+        }
+      },
+      "image": {
+        "label": "图片"
+      },
+      "imageSlider": {
+        "config": {
+          "label": {
+            "sliderItems": "图片",
+            "navigationPositionNone": "无"
+          }
+        }
+      },
+      "blogBox": {
+        "component": {
+          "label": {
+            "badgeNew": "新建"
+          }
+        },
+        "config": {
+          "label": {
+            "selection": "文章"
+          }
+        }
+      },
+      "blogListing": {
+        "config": {
+          "tab": {
+            "sorting": "排序",
+            "filter": "筛选"
+          },
+          "sorting": {
+            "gridHeaderName": "名称",
+            "gridHeaderPriority": "优先级"
+          },
+          "filter": {
+            "gridHeaderStatus": "状态",
+            "gridHeaderName": "名称"
+          }
+        }
+      },
+      "blogSlider": {
+        "config": {
+          "label": {
+            "selection": "文章",
+            "navigation": "导航",
+            "navigationPositionNone": "无",
+            "blogStreamSorting": "排序"
+          }
+        }
+      },
+      "sidebarCategoryNavigation": {
+        "component": {
+          "label": {
+            "navigation": "导航"
+          }
+        },
+        "preview": {
+          "label": {
+            "navigation": "导航"
+          }
+        }
+      },
+      "text": {
+        "label": "文本",
+        "config": {
+          "label": {
+            "content": "文本"
+          }
+        }
+      },
+      "form": {
+        "config": {
+          "label": {
+            "title": "标题"
+          }
+        },
+        "element": {
+          "label": {
+            "newsletterSubmit": "继续",
+            "comment": "评论"
+          },
+          "newsletter": {
+            "label": {
+              "firstName": "名字",
+              "lastName": "姓氏",
+              "salutation": "称呼"
+            }
+          }
+        }
+      },
+      "buyBox": {
+        "config": {
+          "label": {
+            "selection": "文章"
+          }
+        }
+      },
+      "blogDescriptionComments": {
+        "preview": {
+          "label": {
+            "description": "描述"
+          }
+        }
+      },
+      "crossSelling": {
+        "config": {
+          "label": {
+            "selection": "文章"
+          }
+        }
+      },
+      "html": {
+        "labelContent": "内容"
+      }
+    },
+    "blocks": {
+      "commerce": {
+        "blogDescriptionComments": {
+          "preview": {
+            "label": {
+              "description": "描述"
+            }
+          }
+        }
+      },
+      "sidebar": {
+        "categoryNavigation": {
+          "preview": {
+            "label": {
+              "navigation": "导航"
+            }
+          }
+        }
+      },
+      "text": {
+        "text": {
+          "label": "文本"
+        }
+      }
+    },
+    "components": {
+      "cmsLayoutModal": {
+        "actionConfirm": "保存"
+      },
+      "cmsLayoutAssignmentModal": {
+        "labelCategories": "分类",
+        "labelSalesChannel": "渠道",
+        "tabCategories": "分类",
+        "blogs": {
+          "blogAssignmentLabel": "文章",
+          "columnNameLabel": "名称"
+        }
+      },
+      "cmsListItem": {
+        "rename": "重命名",
+        "modal": {
+          "buttonRename": "重命名"
+        }
+      }
+    }
+  }
+}

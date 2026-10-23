@@ -1,0 +1,57 @@
+{
+  "sw-promotion-v2": {
+    "general": {
+      "mainMenuItemList": "概览"
+    },
+    "list": {
+      "columnActive": "启用",
+      "columnName": "名称",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "detail": {
+      "tabs": {
+        "tabGeneral": "常规",
+        "tabConditions": "条件"
+      },
+      "base": {
+        "general": {
+          "nameLabel": "名称",
+          "priorityLabel": "优先级",
+          "activeLabel": "启用"
+        },
+        "codes": {
+          "individual": {
+            "columnCustomer": "用户"
+          }
+        }
+      },
+      "conditions": {
+        "preConditions": {
+          "labelPromotionSalesChannel": "渠道"
+        },
+        "setgroups": {
+          "titleName": "分组",
+          "labelSorting": "排序"
+        }
+      },
+      "discounts": {
+        "pricesModal": {
+          "labelCurrency": "货币"
+        }
+      }
+    }
+  },
+  "sw-promotion": {
+    "detail": {
+      "main": {
+        "discounts": {
+          "labelType": "类型",
+          "labelSorting": "排序方式",
+          "pricesModal": {
+            "labelCurrency": "货币"
+          }
+        }
+      }
+    }
+  }
+}

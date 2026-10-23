@@ -1,0 +1,10 @@
+{
+  "sw-seo-url-template-card": {
+    "general": {
+      "labelSalesChannelSelect": "渠道"
+    }
+  },
+  "sw-seo-url": {
+    "labelSalesChannelSelect": "渠道"
+  }
+}

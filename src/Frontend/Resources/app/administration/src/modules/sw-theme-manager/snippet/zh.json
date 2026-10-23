@@ -1,0 +1,70 @@
+{
+  "sw-theme": {
+    "Frontend": {
+      "default": {
+        "themeColors": {
+          "default": {
+            "sw-background-color": {
+              "label": "背景"
+            }
+          }
+        },
+        "statusColors": {
+          "default": {
+            "sw-color-success": {
+              "label": "成功"
+            },
+            "sw-color-danger": {
+              "label": "错误"
+            }
+          }
+        },
+        "eCommerce": {
+          "default": {
+            "sw-color-price": {
+              "label": "价格"
+            }
+          }
+        },
+        "media": {
+          "label": "媒体"
+        }
+      }
+    }
+  },
+  "sw-theme-manager": {
+    "general": {
+      "mainMenuItemGeneral": "主题",
+      "defaultTab": "常规"
+    },
+    "themeListItem": {
+      "rename": "重命名"
+    },
+    "modal": {
+      "modalTitleRename": "重命名"
+    },
+    "list": {
+      "titleSidebarItemRefresh": "刷新",
+      "textThemeOverview": "主题",
+      "gridHeaderName": "名称"
+    },
+    "actions": {
+      "rename": "重命名"
+    },
+    "detail": {
+      "description": "描述",
+      "label": {
+        "media": "媒体",
+        "links": "链接",
+        "text": "文本"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "theme": {
+        "label": "主题"
+      }
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "sw-settings-custom-field": {
+    "general": {
+      "mainMenuItemGeneral": "自定义字段"
+    },
+    "set": {
+      "list": {
+        "textHeadline": "自定义字段",
+        "columnName": "标签"
+      },
+      "detail": {
+        "labelTechnicalName": "技术名称",
+        "labelPosition": "位置"
+      }
+    },
+    "customField": {
+      "detail": {
+        "buttonEditApply": "应用更改",
+        "labelCustomFieldType": "类型",
+        "labelTechnicalName": "技术名称",
+        "labelLabel": "标签",
+        "labelDeleteOption": "删除",
+        "labelPlaceholder": "占位文本",
+        "labelDate": "日期",
+        "labelTime": "时间",
+        "labelDateType": "类型",
+        "labelCustomFieldPosition": "位置"
+      },
+      "list": {
+        "labelCustomFieldLabel": "标签",
+        "labelCustomFieldType": "类型",
+        "labelCustomFieldPosition": "位置",
+        "contextMenuCustomFieldView": "编辑"
+      },
+      "entity": {
+        "blog": "文章",
+        "category": "分类",
+        "country": "国家",
+        "user": "用户",
+        "channel": "渠道"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "custom_field": {
+        "label": "自定义字段"
+      }
+    }
+  }
+}

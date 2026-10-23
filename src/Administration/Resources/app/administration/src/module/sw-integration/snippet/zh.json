@@ -1,0 +1,15 @@
+{
+  "sw-integration": {
+    "list": {
+      "permissions": "角色"
+    },
+    "mcp": {
+      "allTypeLabel": "全部"
+    },
+    "detail": {
+      "buttonApplyEdit": "保存更改",
+      "labelFieldLabel": "名称",
+      "permissions": "权限"
+    }
+  }
+}

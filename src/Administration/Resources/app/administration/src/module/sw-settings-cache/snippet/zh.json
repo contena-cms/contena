@@ -1,0 +1,20 @@
+{
+  "sw-settings-cache": {
+    "section": {
+      "clearCachesHeadline": "清除缓存",
+      "clearCachesButton": "清除缓存"
+    },
+    "modal": {
+      "actions": {
+        "clear": "清除"
+      }
+    }
+  },
+  "sw-privileges": {
+    "additional_permissions": {
+      "system": {
+        "clear_cache": "清除缓存"
+      }
+    }
+  }
+}

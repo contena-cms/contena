@@ -1,0 +1,15 @@
+{
+  "sw-settings-salutation": {
+    "list": {
+      "columnSalutationKey": "技术名称",
+      "columnDisplayName": "称呼",
+      "columnPosition": "位置"
+    },
+    "detail": {
+      "cardTitle": "称呼",
+      "fieldPositionLabel": "位置",
+      "fieldDisplayNameLabel": "称呼",
+      "fieldSalutationKeyLabel": "技术名称"
+    }
+  }
+}

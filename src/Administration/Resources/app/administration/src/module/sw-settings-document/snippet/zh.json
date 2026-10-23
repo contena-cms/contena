@@ -1,0 +1,22 @@
+{
+  "sw-settings-document": {
+    "list": {
+      "columnName": "名称",
+      "columnType": "类型",
+      "columnAssignment": "分配"
+    },
+    "detail": {
+      "configCard": "设置",
+      "assignmentCard": "分配",
+      "labelName": "名称",
+      "labelDisplayPrices": "价格",
+      "labelDisplayHeader": "页头",
+      "labelCompanyCity": "城市",
+      "labelCompanyCountry": "国家",
+      "labelCompanyEmail": "电子邮件地址",
+      "labelCompanyStreet": "街道",
+      "labelSalesChannel": "渠道",
+      "labelDisplayFooter": "页脚"
+    }
+  }
+}

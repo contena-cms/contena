@@ -1,0 +1,44 @@
+{
+  "sw-settings-tag": {
+    "general": {
+      "mainMenuItemGeneral": "标签"
+    },
+    "list": {
+      "textHeadline": "标签",
+      "columnName": "标签",
+      "columnConnections": "分配",
+      "filter": "筛选",
+      "bulkMergeMessageAnd": "和",
+      "bulkMergeNoUndoNotice": "此操作无法撤销。",
+      "assignments": {
+        "filter": {
+          "blogs": "文章",
+          "media": "媒体",
+          "categories": "分类",
+          "users": "用户",
+          "orders": "排序",
+          "rules": "规则"
+        }
+      }
+    },
+    "detail": {
+      "generalTab": "常规",
+      "assignmentsTab": "分配",
+      "assignments": {
+        "blogs": "文章",
+        "media": "媒体",
+        "categories": "分类",
+        "users": "用户",
+        "orders": "订单",
+        "rules": "规则"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "tag": {
+        "label": "标签"
+      }
+    }
+  }
+}

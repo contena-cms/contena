@@ -1,0 +1,119 @@
+{
+  "sw-blog": {
+    "visibility": {
+      "columnSalesChannel": "渠道",
+      "columnAll": "可见",
+      "labelVisibility": "渠道"
+    },
+    "general": {
+      "mainMenuItemGeneral": "文章",
+      "mainMenuItemList": "文章",
+      "mainMenuItemOverview": "概览"
+    },
+    "basicForm": {
+      "labelTitle": "名称",
+      "labelDescription": "描述"
+    },
+    "categoryForm": {
+      "labelCategory": "分类"
+    },
+    "settingsForm": {
+      "labelWidth": "宽度",
+      "labelHeight": "高度",
+      "labelStock": "库存"
+    },
+    "detailBase": {
+      "cardTitlePrices": "价格",
+      "cardTitleMedia": "媒体",
+      "cardTitleDownloads": "文件"
+    },
+    "specifications": {
+      "cardTitleCustomFields": "自定义字段",
+      "cardTitleProperties": "属性",
+      "cardTitleDownloads": "文件"
+    },
+    "reviewForm": {
+      "labelCreatedAt": "创建时间",
+      "labelTitle": "标题"
+    },
+    "prices": {
+      "toolbarLabel": "规则"
+    },
+    "list": {
+      "textProductOverview": "文章",
+      "columnName": "名称",
+      "columnActive": "启用",
+      "columnPrice": "价格",
+      "columnCreatedAt": "创建时间",
+      "columnUpdatedAt": "更新时间",
+      "columnVisibilities": "渠道",
+      "columnCategories": "分类",
+      "columnTags": "标签",
+      "columnMedia": "媒体",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "detail": {
+      "tabGeneral": "常规",
+      "tabLayout": "布局"
+    },
+    "advancedPrices": {
+      "columnType": "类型",
+      "advancedListPricePriceLabel": "价格"
+    },
+    "properties": {
+      "cardTitle": "属性",
+      "columnProperty": "属性"
+    },
+    "variations": {
+      "generatedListColumnDownload": "文件",
+      "nextModalButton": "下一步",
+      "progressTypeOf": "共",
+      "generatedListColumnVariation": "名称",
+      "generatedListColumnMedia": "媒体",
+      "generatedListColumnActive": "启用",
+      "generatedListColumnStock": "库存",
+      "overview": {
+        "filterReset": "重置",
+        "filter": "筛选"
+      }
+    },
+    "crossselling": {
+      "inputCrossSellingTitle": "名称",
+      "inputCrossSellingActive": "启用",
+      "inputCrossSellingType": "类型",
+      "inputCrossSellingPosition": "位置",
+      "inputCrossSellingSorting": "排序",
+      "nameSortingType": "名称"
+    },
+    "filters": {
+      "activeFilter": {
+        "label": "启用"
+      },
+      "imagesFilter": {
+        "label": "图片"
+      },
+      "stockFilter": {
+        "label": "库存"
+      },
+      "priceFilter": {
+        "label": "价格"
+      },
+      "channelsFilter": {
+        "label": "渠道"
+      },
+      "categoriesFilter": {
+        "label": "分类"
+      },
+      "tagsFilter": {
+        "label": "标签"
+      }
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "blog": {
+        "label": "文章"
+      }
+    }
+  }
+}

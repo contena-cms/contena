@@ -1,0 +1,218 @@
+{
+  "sw-extension": {
+    "store": {
+      "tabs": {
+        "apps": "应用",
+        "themes": "主题"
+      }
+    },
+    "my-extensions": {
+      "listing": {
+        "initialSearchType": "扩展",
+        "controls": {
+          "filterOptions": {
+            "last-updated": "最后更新"
+          }
+        },
+        "version": "版本",
+        "update": "更新"
+      },
+      "bulk": {
+        "update": "更新",
+        "uninstallModal": {
+          "alert": "此操作无法撤销。"
+        }
+      },
+      "account": {
+        "login": "登录",
+        "logout": "退出登录",
+        "mailLabel": "电子邮件地址",
+        "passwordLabel": "密码"
+      },
+      "tabs": {
+        "app": "应用",
+        "theme": "主题"
+      }
+    },
+    "errors": {
+      "appLicenseCouldNotBeVerified": {
+        "actionLogin": "登录"
+      },
+      "storeSessionExpired": {
+        "actionLabel": "登录"
+      }
+    },
+    "mainMenu": {
+      "mainMenuItemExtensionStore": "扩展",
+      "support": "支持"
+    }
+  },
+  "sw-extension-store": {
+    "listing": {
+      "tabs": {
+        "themes": "主题"
+      }
+    },
+    "detail": {
+      "labelButtonReadMore": "了解更多",
+      "cardTitleDetails": "详情",
+      "details": {
+        "labelCategory": "分类 | 分类",
+        "labelVersion": "版本",
+        "labelUpdatedAt": "最后更新",
+        "labelLanguages": "语言"
+      }
+    },
+    "component": {
+      "sw-extension-buy-modal": {
+        "variantSummary": {
+          "labelPrice": "价格"
+        }
+      },
+      "sw-extension-permissions-details-modal": {
+        "operationCreate": "创建"
+      }
+    }
+  },
+  "entityCategories": {
+    "app": {
+      "title": "应用",
+      "entities": {
+        "app": "应用"
+      }
+    },
+    "category": {
+      "title": "分类",
+      "entities": {
+        "category": "分类",
+        "category_tag": "标签"
+      }
+    },
+    "user": {
+      "title": "用户",
+      "entities": {
+        "user": "用户",
+        "user_address": "地址",
+        "user_tag": "标签"
+      }
+    },
+    "custom_fields": {
+      "title": "自定义字段",
+      "entities": {
+        "custom_field": "自定义字段"
+      }
+    },
+    "documents": {
+      "entities": {
+        "document_type": "类型"
+      }
+    },
+    "google_shopping": {
+      "entities": {
+        "swag_google_shopping_account": "账户",
+        "swag_google_shopping_category": "分类"
+      }
+    },
+    "import_export": {
+      "title": "导入/导出",
+      "entities": {
+        "import_export_file": "文件",
+        "import_export_log": "日志",
+        "import_export_profile": "个人资料"
+      }
+    },
+    "mail_templates": {
+      "entities": {
+        "mail_template_media": "媒体",
+        "mail_template_type": "类型"
+      }
+    },
+    "media": {
+      "title": "媒体",
+      "entities": {
+        "media_folder": "文件夹",
+        "media_tag": "标签"
+      }
+    },
+    "order": {
+      "title": "订单",
+      "entities": {
+        "order": "排序",
+        "order_address": "地址",
+        "order_customer": "用户",
+        "order_tag": "标签"
+      }
+    },
+    "other": {
+      "entities": {
+        "notification": "通知",
+        "plugin": "插件"
+      }
+    },
+    "payment": {
+      "title": "支付"
+    },
+    "blog": {
+      "title": "文章",
+      "entities": {
+        "blog": "文章",
+        "blog_category": "分类",
+        "blog_media": "媒体",
+        "blog_price": "价格",
+        "blog_stream": "文章分组",
+        "blog_tag": "标签",
+        "blog_sorting": "排序"
+      }
+    },
+    "promotion": {
+      "entities": {
+        "promotion_channel": "渠道"
+      }
+    },
+    "rules": {
+      "title": "规则",
+      "entities": {
+        "rule": "规则"
+      }
+    },
+    "channel": {
+      "title": "渠道",
+      "entities": {
+        "channel": "渠道",
+        "channel_country": "国家",
+        "channel_currency": "货币",
+        "channel_language": "语言"
+      }
+    },
+    "settings": {
+      "title": "设置",
+      "entities": {
+        "country": "国家",
+        "currency": "货币",
+        "language": "语言",
+        "salutation": "称呼",
+        "tax": "税费",
+        "version": "版本"
+      }
+    },
+    "social_shopping": {
+      "entities": {
+        "swag_social_shopping_channel": "渠道"
+      }
+    },
+    "tag": {
+      "title": "标签",
+      "entities": {
+        "tag": "标签"
+      }
+    },
+    "theme": {
+      "title": "主题",
+      "entities": {
+        "theme": "主题",
+        "theme_media": "媒体",
+        "theme_channel": "渠道"
+      }
+    }
+  }
+}

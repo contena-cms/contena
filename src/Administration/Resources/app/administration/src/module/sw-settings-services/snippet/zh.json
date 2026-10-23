@@ -1,0 +1,14 @@
+{
+  "sw-settings-services": {
+    "sw-settings-services-hero": {
+      "learn-more": "了解更多"
+    },
+    "index": {
+      "label-documentation-link": "文档"
+    },
+    "service-card": {
+      "status-active": "启用",
+      "status-inactive": "停用"
+    }
+  }
+}

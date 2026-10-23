@@ -1,0 +1,37 @@
+{
+  "sw-review": {
+    "list": {
+      "columnProduct": "文章",
+      "columnUser": "用户",
+      "columnCreatedAt": "创建时间",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "filters": {
+      "channelFilter": {
+        "label": "渠道"
+      },
+      "languageFilter": {
+        "label": "语言"
+      },
+      "userFilter": {
+        "label": "用户"
+      },
+      "blogFilter": {
+        "label": "文章"
+      }
+    },
+    "detail": {
+      "cardTitleReviewProperties": "属性",
+      "labelTitle": "标题",
+      "labelSalesChannel": "渠道",
+      "labelCreatedAt": "创建时间",
+      "labelProduct": "文章",
+      "labelEmail": "电子邮件地址",
+      "labelLanguage": "语言",
+      "labelContent": "内容",
+      "labelComment": "评论",
+      "labelCustomer": "用户",
+      "titleCardComment": "评论"
+    }
+  }
+}

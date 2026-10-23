@@ -1,0 +1,93 @@
+{
+  "sw-users-permissions": {
+    "sso": {
+      "modal": {
+        "labelEmail": "电子邮件"
+      }
+    },
+    "roles": {
+      "general": {
+        "cardLabel": "角色"
+      },
+      "role-grid": {
+        "labelName": "名称",
+        "labelDescription": "描述"
+      },
+      "detail": {
+        "role": "角色",
+        "labelName": "名称",
+        "labelDescription": "描述",
+        "permissions": "权限"
+      },
+      "grid": {
+        "title": "权限"
+      },
+      "tabs": {
+        "general": "常规"
+      }
+    },
+    "users": {
+      "admin_user-grid": {
+        "labelFirstName": "名字",
+        "labelLastName": "姓氏",
+        "labelRoles": "角色",
+        "labelEmail": "电子邮件地址",
+        "status": "状态"
+      },
+      "admin_user-detail": {
+        "labelFirstName": "名字",
+        "labelLastName": "姓氏",
+        "labelEmail": "电子邮件地址",
+        "labelPassword": "密码",
+        "labelLanguage": "语言",
+        "labelActive": "启用",
+        "labelRoles": "角色",
+        "labelPermissions": "权限",
+        "passwordConfirmation": {
+          "labelConfirmPassword": "密码"
+        },
+        "modal": {
+          "buttonApplyEdit": "保存更改",
+          "labelFieldLabel": "名称"
+        }
+      }
+    }
+  },
+  "sw-privileges": {
+    "roles": {
+      "all": "全部",
+      "editor": "编辑",
+      "creator": "创建",
+      "deleter": "删除"
+    },
+    "permissionType": {
+      "update": "更新",
+      "create": "创建",
+      "delete": "删除"
+    },
+    "permissions": {
+      "parents": {
+        "content": "内容",
+        "users": "用户",
+        "orders": "订单",
+        "blogs": "文章",
+        "settings": "设置"
+      }
+    },
+    "additional_permissions": {
+      "system": {
+        "label": "设置"
+      },
+      "orders": {
+        "label": "订单"
+      },
+      "routes": {
+        "system:clear:cache": "清除缓存"
+      },
+      "app": {
+        "label": "应用",
+        "all": "全部"
+      }
+    }
+  }
+}

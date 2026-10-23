@@ -1,0 +1,28 @@
+{
+  "sw-settings-state-machine": {
+    "list": {
+      "grid": {
+        "columnName": "名称",
+        "columnTechnicalName": "技术名称"
+      }
+    },
+    "detail": {
+      "fieldLabels": {
+        "name": "名称",
+        "technicalName": "技术名称"
+      }
+    },
+    "state": {
+      "list": {
+        "grid": {
+          "columnName": "名称",
+          "columnTechnicalName": "技术名称"
+        }
+      },
+      "detail": {
+        "labelName": "名称",
+        "labelTechnicalName": "技术名称"
+      }
+    }
+  }
+}

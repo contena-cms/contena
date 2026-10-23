@@ -1,0 +1,78 @@
+{
+  "sw-import-export": {
+    "general": {
+      "mainMenuItemGeneral": "导入/导出"
+    },
+    "activity": {
+      "columns": {
+        "size": "尺寸",
+        "profile": "个人资料",
+        "date": "日期",
+        "state": "状态"
+      },
+      "logInfo": {
+        "labelType": "类型",
+        "labelState": "状态",
+        "labelProfile": "个人资料",
+        "exportLabel": "导出",
+        "importLabel": "导入"
+      },
+      "detail": {
+        "importLabel": "导入",
+        "ExportLabel": "导出"
+      },
+      "result": {
+        "errors": "错误",
+        "logInfo": {
+          "labelType": "类型",
+          "labelState": "状态",
+          "labelProfile": "个人资料"
+        }
+      },
+      "status": {
+        "failed": "失败"
+      }
+    },
+    "profile": {
+      "blogLabel": "文章",
+      "userLabel": "用户",
+      "categoriesLabel": "分类",
+      "orderLabel": "订单",
+      "mediaLabel": "媒体",
+      "generalTab": "常规",
+      "technicalNameFieldLabel": "技术名称",
+      "mapping": {
+        "isRequired": "必填",
+        "position": "位置"
+      },
+      "typeColumn": "类型",
+      "nameColumn": "名称",
+      "technicalNameColumn": "技术名称",
+      "customTypeLabel": "自定义",
+      "defaultTypeLabel": "默认",
+      "propertyLabel": "属性",
+      "types": {
+        "importLabel": "导入",
+        "exportLabel": "导出"
+      }
+    },
+    "exporter": {
+      "exportLabel": "导出"
+    },
+    "importer": {
+      "profileLabel": "个人资料",
+      "importLabel": "导入"
+    },
+    "page": {
+      "importTab": "导入",
+      "exportTab": "导出"
+    }
+  },
+  "sw-privileges": {
+    "additional_permissions": {
+      "system": {
+        "import_export": "导入/导出"
+      }
+    }
+  }
+}

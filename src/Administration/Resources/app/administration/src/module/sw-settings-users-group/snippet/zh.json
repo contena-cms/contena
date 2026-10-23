@@ -1,0 +1,18 @@
+{
+  "sw-settings-user-group": {
+    "list": {
+      "columnName": "名称"
+    },
+    "detail": {
+      "fieldNameLabel": "名称"
+    },
+    "registration": {
+      "title": "标题"
+    },
+    "modal": {
+      "seoUrl": {
+        "channel": "渠道"
+      }
+    }
+  }
+}

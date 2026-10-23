@@ -1,0 +1,44 @@
+{
+  "sw-blog-stream": {
+    "list": {
+      "columnName": "名称",
+      "columnDescription": "描述",
+      "columnDateUpdated": "最后更新",
+      "columnStatus": "状态",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "filter": {
+      "values": {
+        "active": "启用",
+        "customFields": "自定义字段",
+        "category": "分类",
+        "categories": "分类",
+        "categoriesRo": "分类",
+        "cheapestPrice": "价格",
+        "description": "描述",
+        "group": "属性",
+        "height": "高度",
+        "name": "名称",
+        "price": "价格",
+        "blog": "文章",
+        "channel": "渠道",
+        "stock": "库存",
+        "tags": "标签",
+        "tax": "税费",
+        "unit": "单位",
+        "width": "宽度",
+        "properties": "属性",
+        "property_group": "属性"
+      }
+    },
+    "detail": {
+      "labelName": "名称",
+      "labelDescription": "描述",
+      "titleFilter": "条件",
+      "buttonOpenPreview": "预览"
+    },
+    "previewModal": {
+      "title": "预览"
+    }
+  }
+}

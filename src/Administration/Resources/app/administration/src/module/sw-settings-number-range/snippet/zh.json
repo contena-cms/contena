@@ -1,0 +1,18 @@
+{
+  "sw-settings-number-range": {
+    "list": {
+      "columnName": "名称",
+      "columnUsedIn": "类型",
+      "columnAssignment": "分配"
+    },
+    "detail": {
+      "configCard": "设置",
+      "assignmentCard": "分配",
+      "labelName": "名称",
+      "labelDescription": "描述",
+      "labelPreview": "预览",
+      "labelType": "类型",
+      "labelSalesChannel": "渠道"
+    }
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "sw-property": {
+    "general": {
+      "mainMenuItemGeneral": "属性"
+    },
+    "list": {
+      "textProperties": "属性",
+      "columnName": "属性",
+      "titleSidebarItemRefresh": "刷新",
+      "columnDescription": "描述"
+    },
+    "detail": {
+      "mediaDisplayType": "图片",
+      "textDisplayType": "文本",
+      "positionSortingType": "自定义",
+      "labelName": "名称",
+      "labelSortingType": "排序",
+      "labelOptionName": "名称",
+      "labelOptionMedia": "图片",
+      "labelPosition": "位置",
+      "labelOptionPosition": "位置",
+      "contextMenuOptionView": "编辑",
+      "labelDescription": "描述"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "property": {
+        "label": "属性"
+      }
+    }
+  }
+}

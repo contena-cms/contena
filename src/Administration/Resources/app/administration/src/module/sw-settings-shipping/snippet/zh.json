@@ -1,0 +1,41 @@
+{
+  "sw-settings-shipping": {
+    "general": {
+      "mainMenuItemGeneral": "配送"
+    },
+    "list": {
+      "textHeadline": "配送",
+      "columnName": "名称",
+      "columnDescription": "描述",
+      "columnActive": "启用",
+      "columnPosition": "位置",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "detail": {
+      "titleCard": "设置",
+      "labelName": "名称",
+      "labelTechnicalName": "技术名称",
+      "labelActive": "启用",
+      "labelPosition": "位置",
+      "labelDescription": "描述",
+      "tax": {
+        "labelTaxType": "类型"
+      }
+    },
+    "constants": {
+      "price": "价格"
+    },
+    "priceMatrix": {
+      "columnPrice": "价格",
+      "columnCalculationRule": "规则",
+      "textOr": "或"
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "shipping": {
+        "label": "配送"
+      }
+    }
+  }
+}

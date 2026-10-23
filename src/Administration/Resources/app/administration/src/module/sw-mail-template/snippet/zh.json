@@ -1,0 +1,37 @@
+{
+  "sw-mail-template": {
+    "general": {
+      "mainMenuItemList": "概览"
+    },
+    "list": {
+      "titleMailFooterList": "页脚",
+      "columnMailType": "类型",
+      "columnDescription": "描述",
+      "columnSalesChannels": "渠道",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "detail": {
+      "basic": {
+        "labelMailType": "类型",
+        "labelDescription": "描述",
+        "labelSalesChannels": "渠道"
+      },
+      "previewModalTitle": "预览"
+    }
+  },
+  "sw-mail-header-footer": {
+    "list": {
+      "columnName": "名称",
+      "columnDescription": "描述",
+      "columnSalesChannels": "渠道",
+      "titleSidebarItemRefresh": "刷新"
+    },
+    "detail": {
+      "basic": {
+        "labelName": "名称",
+        "labelDescription": "描述",
+        "labelSalesChannels": "渠道"
+      }
+    }
+  }
+}

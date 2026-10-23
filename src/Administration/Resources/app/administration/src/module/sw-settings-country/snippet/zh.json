@@ -1,0 +1,51 @@
+{
+  "sw-settings-country": {
+    "page": {
+      "generalTab": "设置"
+    },
+    "general": {
+      "mainMenuItemGeneral": "国家"
+    },
+    "list": {
+      "textHeadline": "国家",
+      "columnName": "名称",
+      "columnPosition": "位置",
+      "columnActive": "启用"
+    },
+    "detail": {
+      "titleCard": "常规",
+      "labelName": "名称",
+      "labelPosition": "位置",
+      "labelActive": "启用",
+      "labelShippingAvailable": "配送",
+      "editAction": "编辑",
+      "columnStateNameLabel": "名称",
+      "previewTitle": "预览",
+      "labelCustomer": "用户"
+    }
+  },
+  "sw-country-state-detail": {
+    "labelName": "名称",
+    "labelPosition": "位置"
+  },
+  "sw-privileges": {
+    "permissions": {
+      "country": {
+        "label": "国家"
+      }
+    }
+  },
+  "sw-custom-snippet": {
+    "address": {
+      "countryState": "州/省",
+      "salutation": "称呼",
+      "country": "国家",
+      "lastName": "姓氏",
+      "firstName": "名字",
+      "street": "街道",
+      "city": "城市",
+      "company": "公司",
+      "title": "标题"
+    }
+  }
+}
