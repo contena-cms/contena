@@ -1,19 +1,19 @@
 {% block sw_condition_base_field_condition %}
 {# @deprecated tag:v6.8.0 - Will be removed. Use `sw_condition_base` instead. #}
-{% block sw_content_stream_filter %}
+{% block sw_blog_stream_filter %}
 {# @deprecated tag:v6.8.0 - Will be removed. Use `sw_condition_base_content` instead. #}
-{% block sw_content_stream_filter_container %}
-{% block sw_content_stream_filter_selects %}
+{% block sw_blog_stream_filter_container %}
+{% block sw_blog_stream_filter_selects %}
 <div class="sw-blog-stream-filter__fields">
-    {% block sw_content_stream_filter_fields %}
+    {% block sw_blog_stream_filter_fields %}
     <template
         v-for="(definition, index) in fieldDefinitions"
         :key="index"
     >
-        {% block sw_content_stream_filter_field_select %}
+        {% block sw_blog_stream_filter_field_select %}
         <sw-blog-stream-field-select
             v-bind="{ field: fields[index], definition, index }"
-            :disabled="!acl.can('content_stream.editor') || undefined"
+            :disabled="!acl.can('blog_stream.editor') || undefined"
             :has-error="hasError"
             @field-changed="updateFields"
         />
@@ -27,10 +27,10 @@
 {% endblock %}
 
 {% block sw_condition_value_content %}
-{% block sw_content_stream_filter_value %}
+{% block sw_blog_stream_filter_value %}
 <sw-blog-stream-value
     v-bind="{ condition, ...lastField }"
-    :disabled="!acl.can('content_stream.editor') || undefined"
+    :disabled="!acl.can('blog_stream.editor') || undefined"
     @type-change="changeType"
     @boolean-change="changeBooleanValue"
     @empty-change="changeEmptyValue"
@@ -39,13 +39,13 @@
 {% endblock %}
 
 {% block sw_condition_base_field_actions %}
-{% block sw_content_stream_filter_field_actions %}
+{% block sw_blog_stream_filter_field_actions %}
 <sw-context-button
-    v-tooltip="getNoPermissionsTooltip('content_stream.editor', false)"
+    v-tooltip="getNoPermissionsTooltip('blog_stream.editor', false)"
     class="sw-condition__context-button"
-    :disabled="!acl.can('content_stream.editor') || undefined"
+    :disabled="!acl.can('blog_stream.editor') || undefined"
 >
-    {% block sw_content_stream_filter_field_create_before_action %}
+    {% block sw_blog_stream_filter_field_create_before_action %}
     <sw-context-menu-item
         class="sw-blog-stream-filter__create-before-action"
         @click="onCreateBefore"
@@ -54,7 +54,7 @@
     </sw-context-menu-item>
     {% endblock %}
 
-    {% block sw_content_stream_filter_field_create_after_action %}
+    {% block sw_blog_stream_filter_field_create_after_action %}
     <sw-context-menu-item
         class="sw-blog-stream-filter__create-after-action"
         @click="onCreateAfter"
@@ -63,7 +63,7 @@
     </sw-context-menu-item>
     {% endblock %}
 
-    {% block sw_content_stream_filter_field_delete_action %}
+    {% block sw_blog_stream_filter_field_delete_action %}
     <sw-context-menu-item
         variant="danger"
         @click="onDeleteCondition"
@@ -76,7 +76,7 @@
 {% endblock %}
 
 {% block sw_condition_base_error %}
-{% block sw_content_stream_filter_error %}
+{% block sw_blog_stream_filter_error %}
 <sw-field-error :error="currentError" />
 {% endblock %}
 {% endblock %}

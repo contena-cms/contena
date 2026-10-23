@@ -402,16 +402,16 @@
             "navigationPositionInside": "Inside",
             "navigationPositionOutside": "Outside",
             "blogAssignmentType": "Blog assignment",
-            "contentStreamSorting": "Sorting",
-            "contentStreamLimit": "Maximum number of blogs",
-            "contentStreamChoice": "Dynamic blog group"
+            "blogStreamSorting": "Sorting",
+            "blogStreamLimit": "Maximum number of blogs",
+            "blogStreamChoice": "Dynamic blog group"
           },
           "placeholder": {
             "title": "Slider title",
             "selection": "Select blogs",
             "minWidth": "Minimum width",
-            "contentStreamChoice": "Select a dynamic blog group",
-            "contentStreamSorting": "Select a sorting..."
+            "blogStreamChoice": "Select a dynamic blog group",
+            "blogStreamSorting": "Select a sorting..."
           },
           "helpText": {
             "minWidth": "Enter the minimum width with your desired unit. For example: 200px",
@@ -419,9 +419,9 @@
           },
           "blogAssignmentTypeOptions": {
             "manual": "Manual assignment",
-            "contentStream": "Dynamic blog group"
+            "blogStream": "Dynamic blog group"
           },
-          "contentStreamSortingOptions": {
+          "blogStreamSortingOptions": {
             "nameAsc": "Name ascending",
             "nameDesc": "Name descending",
             "priceAsc": "Price ascending",
@@ -862,7 +862,7 @@
           "blogAssignmentPlaceholder": "Search and assign blogs...",
           "blogAssignmentLabel": "Blogs",
           "blogAssignmentEmptyStateDescription": "No blogs assigned",
-          "contentStreamAssignmentEmptyStateDescription": "No dynamic blog group assigned",
+          "blogStreamAssignmentEmptyStateDescription": "No dynamic blog group assigned",
           "columnNameLabel": "Name",
           "columnManufacturerLabel": "Manufacturer"
         }

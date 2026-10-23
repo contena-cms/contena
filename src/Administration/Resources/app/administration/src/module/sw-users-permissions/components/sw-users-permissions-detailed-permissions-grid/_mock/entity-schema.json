@@ -726,10 +726,10 @@
         "localField": "id",
         "referenceField": "languageId"
       },
-      "contentStreamTranslations": {
+      "blogStreamTranslations": {
         "type": "association",
         "relation": "one_to_many",
-        "entity": "content_stream_translation",
+        "entity": "blog_stream_translation",
         "flags": {
           "cascade_delete": true,
           "read_protected": [
@@ -3709,14 +3709,14 @@
         "localField": "blogId",
         "referenceField": "id"
       },
-      "contentStreamId": {
+      "blogStreamId": {
         "type": "uuid",
         "flags": []
       },
-      "contentStream": {
+      "blogStream": {
         "type": "association",
         "relation": "many_to_one",
-        "entity": "content_stream",
+        "entity": "blog_stream",
         "flags": {
           "read_protected": [
             [
@@ -3724,7 +3724,7 @@
             ]
           ]
         },
-        "localField": "contentStreamId",
+        "localField": "blogStreamId",
         "referenceField": "id"
       },
       "assignedProducts": {
@@ -3931,7 +3931,7 @@
           "required": true
         }
       },
-      "contentStreamId": {
+      "blogStreamId": {
         "type": "uuid",
         "flags": {
           "required": true
@@ -4027,12 +4027,12 @@
         "type": "boolean",
         "flags": []
       },
-      "contentStream": {
+      "blogStream": {
         "type": "association",
         "relation": "many_to_one",
-        "entity": "content_stream",
+        "entity": "blog_stream",
         "flags": [],
-        "localField": "contentStreamId",
+        "localField": "blogStreamId",
         "referenceField": "id"
       },
       "frontendSalesChannel": {
@@ -5011,8 +5011,8 @@
       }
     }
   },
-  "content_stream": {
-    "entity": "content_stream",
+  "blog_stream": {
+    "entity": "blog_stream",
     "properties": {
       "id": {
         "type": "uuid",
@@ -5062,23 +5062,23 @@
       "translations": {
         "type": "association",
         "relation": "one_to_many",
-        "entity": "content_stream_translation",
+        "entity": "blog_stream_translation",
         "flags": {
           "cascade_delete": true,
           "required": true
         },
         "localField": "id",
-        "referenceField": "contentStreamId"
+        "referenceField": "blogStreamId"
       },
       "filters": {
         "type": "association",
         "relation": "one_to_many",
-        "entity": "content_stream_filter",
+        "entity": "blog_stream_filter",
         "flags": {
           "cascade_delete": true
         },
         "localField": "id",
-        "referenceField": "contentStreamId"
+        "referenceField": "blogStreamId"
       },
       "blogCrossSellings": {
         "type": "association",
@@ -5088,7 +5088,7 @@
           "cascade_delete": true
         },
         "localField": "id",
-        "referenceField": "contentStreamId"
+        "referenceField": "blogStreamId"
       },
       "blogExports": {
         "type": "association",
@@ -5096,7 +5096,7 @@
         "entity": "blog_export",
         "flags": [],
         "localField": "id",
-        "referenceField": "contentStreamId"
+        "referenceField": "blogStreamId"
       },
       "categories": {
         "type": "association",
@@ -5104,7 +5104,7 @@
         "entity": "category",
         "flags": [],
         "localField": "id",
-        "referenceField": "contentStreamId"
+        "referenceField": "blogStreamId"
       },
       "createdAt": {
         "type": "date",
@@ -5126,8 +5126,8 @@
       }
     }
   },
-  "content_stream_filter": {
-    "entity": "content_stream_filter",
+  "blog_stream_filter": {
+    "entity": "blog_stream_filter",
     "properties": {
       "id": {
         "type": "uuid",
@@ -5136,7 +5136,7 @@
           "required": true
         }
       },
-      "contentStreamId": {
+      "blogStreamId": {
         "type": "uuid",
         "flags": {
           "required": true
@@ -5173,18 +5173,18 @@
         "type": "int",
         "flags": []
       },
-      "contentStream": {
+      "blogStream": {
         "type": "association",
         "relation": "many_to_one",
-        "entity": "content_stream",
+        "entity": "blog_stream",
         "flags": [],
-        "localField": "contentStreamId",
+        "localField": "blogStreamId",
         "referenceField": "id"
       },
       "parent": {
         "type": "association",
         "relation": "many_to_one",
-        "entity": "content_stream_filter",
+        "entity": "blog_stream_filter",
         "flags": [],
         "localField": "parentId",
         "referenceField": "id"
@@ -5192,7 +5192,7 @@
       "queries": {
         "type": "association",
         "relation": "one_to_many",
-        "entity": "content_stream_filter",
+        "entity": "blog_stream_filter",
         "flags": {
           "cascade_delete": true
         },
@@ -5216,8 +5216,8 @@
       }
     }
   },
-  "content_stream_translation": {
-    "entity": "content_stream_translation",
+  "blog_stream_translation": {
+    "entity": "blog_stream_translation",
     "properties": {
       "name": {
         "type": "string",
@@ -5244,7 +5244,7 @@
         "type": "date",
         "flags": []
       },
-      "contentStreamId": {
+      "blogStreamId": {
         "type": "uuid",
         "flags": {
           "primary_key": true,
@@ -5258,12 +5258,12 @@
           "required": true
         }
       },
-      "contentStream": {
+      "blogStream": {
         "type": "association",
         "relation": "many_to_one",
-        "entity": "content_stream",
+        "entity": "blog_stream",
         "flags": [],
-        "localField": "contentStreamId",
+        "localField": "blogStreamId",
         "referenceField": "id"
       },
       "language": {

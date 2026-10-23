@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilderInterface;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -49,7 +49,7 @@ return static function (ContainerConfigurator $container): void {
     $services->alias('Contena\Administration\Notification\NotificationDefinition', 'current');
 
     // @deprecated tag:v6.8.0 Will be removed
-    $services->alias(ContentStreamBuilderInterface::class, 'current');
+    $services->alias(BlogStreamBuilderInterface::class, 'current');
 
     // @deprecated tag:v6.8.0 This comment is not adjacent to the registration
 

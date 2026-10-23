@@ -30,7 +30,7 @@ Module.register('sw-blog-stream', {
     color: 'var(--sw-color-module-green-default)',
     icon: 'regular-layer-group',
     favicon: 'icon-module-blogs.svg',
-    entity: 'content_stream',
+    entity: 'blog_stream',
 
     routes: {
         index: {
@@ -39,7 +39,7 @@ Module.register('sw-blog-stream', {
             },
             path: 'index',
             meta: {
-                privilege: 'content_stream.viewer',
+                privilege: 'blog_stream.viewer',
             },
         },
         create: {
@@ -47,7 +47,7 @@ Module.register('sw-blog-stream', {
             path: 'create',
             meta: {
                 parentPath: 'sw.blog.stream.index',
-                privilege: 'content_stream.viewer',
+                privilege: 'blog_stream.viewer',
             },
         },
         detail: {
@@ -55,11 +55,11 @@ Module.register('sw-blog-stream', {
             path: 'detail/:id',
             meta: {
                 parentPath: 'sw.blog.stream.index',
-                privilege: 'content_stream.viewer',
+                privilege: 'blog_stream.viewer',
             },
             props: {
                 default(route) {
-                    return { contentStreamId: route.params.id.toLowerCase() };
+                    return { blogStreamId: route.params.id.toLowerCase() };
                 },
             },
         },
@@ -70,7 +70,7 @@ Module.register('sw-blog-stream', {
             path: 'sw.blog.stream.index',
             label: 'sw-blog-stream.general.mainMenuItemGeneral',
             id: 'sw-blog-stream',
-            privilege: 'content_stream.viewer',
+            privilege: 'blog_stream.viewer',
             parent: 'sw-catalogue',
             color: 'var(--sw-color-module-green-default)',
             position: 30,

@@ -43,7 +43,7 @@ class ContentTest extends TestCase
             'blog.php',
             'newsletter_recipient.php',
             'rule.php',
-            'content_stream.php',
+            'blog_stream.php',
             'blog_export.php',
             'property.php',
             'cms.php',

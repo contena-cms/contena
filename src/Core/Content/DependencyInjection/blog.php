@@ -18,7 +18,7 @@ use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordDefin
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogStreamMapping\BlogStreamMappingDefinition;
 use Contena\Core\Content\Blog\Api\BlogActionController;
 use Contena\Core\Content\Blog\Api\BlogNumberFkResolver;
 use Contena\Core\Content\Blog\BlogDefinition;
@@ -53,7 +53,7 @@ use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTaskHandler;
 use Contena\Core\Content\Blog\Cms\BlogBoxCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogListingCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogSlider\ContentStreamProcessor;
+use Contena\Core\Content\Blog\Cms\BlogSlider\BlogStreamProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSlider\StaticBlogProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
@@ -61,7 +61,7 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserIndexer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogExceptionHandler;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
-use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogStreamUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
 use Contena\Core\Content\Blog\IsNewDetector;
@@ -76,7 +76,7 @@ use Contena\Core\Content\Blog\Subscriber\RepairDigitalBlogStatesSubscriber;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Cms\Channel\ChannelCmsPageLoader;
 use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilder;
 use Contena\Core\Content\Media\UnusedMediaPurger;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
@@ -120,7 +120,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.entity.definition')
         ->tag('contena.entity.hookable');
 
-    $services->set(ContentStreamMappingDefinition::class)
+    $services->set(BlogStreamMappingDefinition::class)
         ->tag('contena.entity.definition');
 
     $services->set(ChannelBlogDefinition::class)
@@ -296,9 +296,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.cms.blog_slider.processor');
 
-    $services->set(ContentStreamProcessor::class)
+    $services->set(BlogStreamProcessor::class)
         ->args([
-            service(ContentStreamBuilder::class),
+            service(BlogStreamBuilder::class),
             service('channel.blog.repository'),
             service('event_dispatcher'),
             service('logger'),
@@ -434,7 +434,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(BlogListingLoader::class),
             service('category.repository'),
-            service(ContentStreamBuilder::class),
+            service(BlogStreamBuilder::class),
             service(CacheTagCollector::class),
             service(ExtensionDispatcher::class),
             service('logger'),
@@ -454,7 +454,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.entity_indexer', ['priority' => 100]);
 
-    $services->set(ContentStreamUpdater::class)
+    $services->set(BlogStreamUpdater::class)
         ->args([
             service(Connection::class),
             service(BlogDefinition::class),
@@ -462,7 +462,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('messenger.default_bus'),
             service(ManyToManyIdFieldUpdater::class),
             service('language.repository'),
-            param('contena.content_stream.indexing'),
+            param('contena.blog_stream.indexing'),
         ])
         ->tag('contena.entity_indexer');
 

@@ -32,8 +32,8 @@ export default {
 
     data() {
         return {
-            contentStreams: [],
-            contentStreamFilter: [],
+            blogStreams: [],
+            blogStreamFilter: [],
             isProductStreamsLoading: false,
             isProductLoading: false,
             page: 1,
@@ -48,14 +48,14 @@ export default {
             return this.repositoryFactory.create('blog');
         },
 
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
         blogCriteria() {
             const criteria = new Criteria(1, 500);
 
-            criteria.filters = this.contentStreamFilter;
+            criteria.filters = this.blogStreamFilter;
             criteria.addAssociation('visibilities.channel');
             criteria.addFilter(
                 Criteria.not('AND', [Criteria.equals('blog.visibilities.channelId', this.channel.id)]),
@@ -64,7 +64,7 @@ export default {
             return criteria;
         },
 
-        contentStreamCriteria() {
+        blogStreamCriteria() {
             const criteria = new Criteria(this.page, this.limit);
 
             criteria.addFilter(Criteria.equals('internal', false));
@@ -75,7 +75,7 @@ export default {
             return criteria;
         },
 
-        contentStreamColumns() {
+        blogStreamColumns() {
             return [
                 {
                     property: 'name',
@@ -103,14 +103,14 @@ export default {
         getProductStreams() {
             this.isProductStreamsLoading = true;
 
-            return this.contentStreamRepository
-                .search(this.contentStreamCriteria)
-                .then((contentStreams) => {
-                    this.contentStreams = contentStreams;
-                    this.total = contentStreams.total;
+            return this.blogStreamRepository
+                .search(this.blogStreamCriteria)
+                .then((blogStreams) => {
+                    this.blogStreams = blogStreams;
+                    this.total = blogStreams.total;
                 })
                 .catch(() => {
-                    this.contentStreams = [];
+                    this.blogStreams = [];
                     this.total = 0;
                 })
                 .finally(() => {
@@ -134,31 +134,31 @@ export default {
             this.getProductStreams();
         },
 
-        onOpen(contentStream) {
+        onOpen(blogStream) {
             const route = this.$router.resolve({
                 name: 'sw.blog.stream.detail',
-                params: { id: contentStream.id },
+                params: { id: blogStream.id },
             });
 
             window.open(route.href, '_blank');
         },
 
-        async onSelect(contentStreams) {
-            if (Object.keys(contentStreams).length <= 0) {
+        async onSelect(blogStreams) {
+            if (Object.keys(blogStreams).length <= 0) {
                 this.$emit('selection-change', [], 'groupProducts');
                 return;
             }
 
             try {
-                const blogs = await this.getProductsFromProductStreams(contentStreams);
+                const blogs = await this.getProductsFromProductStreams(blogStreams);
                 this.$emit('selection-change', blogs, 'groupProducts');
             } catch (error) {
                 this.createNotificationError({ message: error.message });
             }
         },
 
-        getProductsFromProductStreams(contentStreams) {
-            const promises = Object.keys(contentStreams).map((id) => {
+        getProductsFromProductStreams(blogStreams) {
+            const promises = Object.keys(blogStreams).map((id) => {
                 return this.getProductStreamFilter(id).then(() => this.getProducts());
             });
 
@@ -177,13 +177,13 @@ export default {
         },
 
         getProductStreamFilter(id) {
-            return this.contentStreamRepository
+            return this.blogStreamRepository
                 .get(id)
-                .then((contentStreamFilter) => {
-                    this.contentStreamFilter = contentStreamFilter.apiFilter;
+                .then((blogStreamFilter) => {
+                    this.blogStreamFilter = blogStreamFilter.apiFilter;
                 })
                 .catch((error) => {
-                    this.contentStreamFilter = [];
+                    this.blogStreamFilter = [];
                     return error;
                 });
         },

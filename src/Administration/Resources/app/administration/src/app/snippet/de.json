@@ -110,7 +110,7 @@
           "message": "Alle Daten werden indexiert. | Weitere Daten zur Indexierung verbleibend ...",
           "messageSuccess": "Daten indexiert."
         },
-        "contentStream": {
+        "blogStream": {
           "title": "Indexierung der dynamischen Produktgruppen",
           "message": "Dynamische Produktgruppe indexiert. | Noch eine dynamische Produktgruppe verbleibend ... | Circa {n} dynamische Produktgruppen verbleibend ...",
           "messageSuccess": "Dynamische Produktgruppen indexiert."
@@ -193,7 +193,7 @@
       "deleteTitle": "Eintrag löschen",
       "placeholderToManyAssociationCard": "Nach Assoziationen suchen ...",
       "labelRemoveAssociation": "Zuweisung aufheben",
-      "contentStreamPreview": {
+      "blogStreamPreview": {
         "emptyMessageNoStream": "Keine dynamische Produktgruppe ausgewählt",
         "emptyMessageNoProducts": "Keine Produkte gefunden",
         "emptyMessageNoSearchResults": "Keine Produkte gefunden für \"{term}\""
@@ -1096,7 +1096,7 @@
       "blog_manufacturer": "Hersteller",
       "blog_media": "Produktmedium | Produktmedien",
       "blog_price": "Produktpreis | Produktpreise",
-      "content_stream": "Produktgruppe | Produktgruppen",
+      "blog_stream": "Produktgruppe | Produktgruppen",
       "blog_review": "Bewertung | Bewertungen",
       "blog_variation": "Variante | Varianten",
       "promotion": "Promotion | Promotions",

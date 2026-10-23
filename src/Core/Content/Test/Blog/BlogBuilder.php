@@ -40,7 +40,7 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
  * @phpstan-type ConfiguratorSettings array<array{option: array{id: string, name: string, group: array{id: string, name: string}}}>
  * @phpstan-type Options array<array{id: string, name: string, position: int, group: array{id: string, name: string}} | array{id: string}>
  * @phpstan-type Media array<array{id: string, position: int, media: array{fileName: string}}>
- * @phpstan-type CrossSellings array<array{id: string, name: string, sortBy: string, sortDirection: 'ASC'|'DESC', active: bool, type: 'contentStream', contentStreamId?: string, contentStream?: array{id: string, name: string, filters: mixed}}>
+ * @phpstan-type CrossSellings array<array{id: string, name: string, sortBy: string, sortDirection: 'ASC'|'DESC', active: bool, type: 'blogStream', blogStreamId?: string, blogStream?: array{id: string, name: string, filters: mixed}}>
  */
 class BlogBuilder
 {
@@ -644,13 +644,13 @@ class BlogBuilder
             'sortBy' => substr($sort, 1),
             'sortDirection' => $sort[0] === '+' ? 'ASC' : 'DESC',
             'active' => true,
-            'type' => 'contentStream',
+            'type' => 'blogStream',
         ];
 
         if ($this->ids->has($stream)) {
-            $crossSelling['contentStreamId'] = $this->ids->get($stream);
+            $crossSelling['blogStreamId'] = $this->ids->get($stream);
         } else {
-            $crossSelling['contentStream'] = [
+            $crossSelling['blogStream'] = [
                 'id' => $this->ids->get($stream),
                 'name' => $stream,
                 'filters' => [

@@ -454,11 +454,11 @@ class BlogListingTest extends TestCase
                 ],
             ],
         ];
-        $blogRepository = static::getContainer()->get('content_stream.repository');
+        $blogRepository = static::getContainer()->get('blog_stream.repository');
         $blogRepository->create([$stream], $this->context);
 
         static::getContainer()->get('category.repository')
-            ->create([['id' => $categoryStreamId, 'contentStreamId' => $streamId, 'name' => 'test', 'parentId' => null, 'blogAssignmentType' => 'content_stream']], Context::createDefaultContext());
+            ->create([['id' => $categoryStreamId, 'blogStreamId' => $streamId, 'name' => 'test', 'parentId' => null, 'blogAssignmentType' => 'blog_stream']], Context::createDefaultContext());
     }
 
     /**

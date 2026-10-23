@@ -558,7 +558,7 @@
                           "sortDirection": "ASC",
                           "limit": 24,
                           "active": true,
-                          "type": "contentStream",
+                          "type": "blogStream",
                           "translations": null,
                           "translated": {
                             "name": "selling"
@@ -900,7 +900,7 @@
                           "sortDirection": "ASC",
                           "limit": 24,
                           "active": true,
-                          "type": "contentStream",
+                          "type": "blogStream",
                           "translations": null,
                           "translated": {
                             "name": "selling"
@@ -975,7 +975,7 @@
                           "sortDirection": "ASC",
                           "limit": 24,
                           "active": true,
-                          "type": "contentStream",
+                          "type": "blogStream",
                           "translations": null,
                           "translated": {
                             "name": "selling"
@@ -1201,7 +1201,7 @@
         "sortDirection": "ASC",
         "limit": 24,
         "active": true,
-        "type": "contentStream",
+        "type": "blogStream",
         "translations": null,
         "translated": {
           "name": "selling"

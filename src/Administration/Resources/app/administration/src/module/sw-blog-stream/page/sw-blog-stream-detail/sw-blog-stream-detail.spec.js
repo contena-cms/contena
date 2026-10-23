@@ -3,7 +3,7 @@
  */
 
 import { mount } from '@vue/test-utils';
-import ContentStreamConditionService from 'src/app/service/blog-stream-condition.service';
+import BlogStreamConditionService from 'src/app/service/blog-stream-condition.service';
 
 const responses = global.repositoryFactoryMock.responses;
 
@@ -80,7 +80,7 @@ responses.addResponse({
 async function createWrapper() {
     return mount(await wrapTestComponent('sw-blog-stream-detail', { sync: true }), {
         props: {
-            contentStreamId: null,
+            blogStreamId: null,
         },
         global: {
             stubs: {
@@ -112,7 +112,7 @@ async function createWrapper() {
                 customFieldDataProviderService: {
                     getCustomFieldSets: () => Promise.resolve({}),
                 },
-                contentStreamConditionService: ContentStreamConditionService(),
+                blogStreamConditionService: BlogStreamConditionService(),
                 blogTypeService: {
                     fetchProductTypes: () => Promise.resolve(['digital', 'physical']),
                 },
@@ -136,7 +136,7 @@ describe('src/module/sw-blog-stream/page/sw-blog-stream-detail', () => {
 
         await flushPromises();
 
-        expect(wrapper.vm.contentStream.displayAsGroup).toBe(true);
+        expect(wrapper.vm.blogStream.displayAsGroup).toBe(true);
     });
 
     it('should stop the save button spinner after successfully creating a new blog stream', async () => {
@@ -152,7 +152,7 @@ describe('src/module/sw-blog-stream/page/sw-blog-stream-detail', () => {
     });
 
     it('should show warning banner when indexing is disabled', async () => {
-        Contena.Context.app.contentStreamIndexingEnabled = false;
+        Contena.Context.app.blogStreamIndexingEnabled = false;
 
         const wrapper = await createWrapper();
         await flushPromises();
@@ -162,7 +162,7 @@ describe('src/module/sw-blog-stream/page/sw-blog-stream-detail', () => {
     });
 
     it('should not show warning banner when indexing is enabled', async () => {
-        Contena.Context.app.contentStreamIndexingEnabled = true;
+        Contena.Context.app.blogStreamIndexingEnabled = true;
 
         const wrapper = await createWrapper();
         await flushPromises();
@@ -175,7 +175,7 @@ describe('src/module/sw-blog-stream/page/sw-blog-stream-detail', () => {
         const wrapper = await createWrapper();
         await flushPromises();
 
-        wrapper.vm.contentStreamFiltersTree = [
+        wrapper.vm.blogStreamFiltersTree = [
             {
                 field: 'states',
             },
@@ -191,7 +191,7 @@ describe('src/module/sw-blog-stream/page/sw-blog-stream-detail', () => {
         const wrapper = await createWrapper();
         await flushPromises();
 
-        wrapper.vm.contentStreamFiltersTree = [
+        wrapper.vm.blogStreamFiltersTree = [
             {
                 field: 'stock',
             },

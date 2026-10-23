@@ -12,9 +12,9 @@ use Contena\Core\Content\Blog\Extension\BlogListingCriteriaExtension;
 use Contena\Core\Content\Blog\Extension\BlogListingRouteExtension;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamException;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
+use Contena\Core\Content\BlogStream\BlogStreamException;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilder;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilderInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -48,7 +48,7 @@ class BlogListingRouteTest extends TestCase
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            static::createStub(ContentStreamBuilder::class),
+            static::createStub(BlogStreamBuilder::class),
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -73,22 +73,22 @@ class BlogListingRouteTest extends TestCase
             new PartialEntity(
                 [
                     'id' => $categoryId,
-                    'contentStreamId' => $streamId,
-                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
+                    'blogStreamId' => $streamId,
+                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
                 ]
             )])]);
 
-        $contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $contentStreamBuilder->method('enrichCriteria')
+        $blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $blogStreamBuilder->method('enrichCriteria')
             ->willReturnCallback(static function (Criteria $criteria, string $id, mixed ...$_): void {
-                $criteria->addFilter(new EqualsFilter('blog.content_stream', $id));
+                $criteria->addFilter(new EqualsFilter('blog.blog_stream', $id));
             });
 
         $eventDispatcher = new EventDispatcher();
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            $contentStreamBuilder,
+            $blogStreamBuilder,
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -106,7 +106,7 @@ class BlogListingRouteTest extends TestCase
             'blog.visibilities.visibility',
             'blog.visibilities.channelId',
             'blog.active',
-            'blog.content_stream',
+            'blog.blog_stream',
         ], $criteria->getFilterFields());
 
         static::assertSame($streamId, $result->getStreamId());
@@ -120,13 +120,13 @@ class BlogListingRouteTest extends TestCase
             new PartialEntity(
                 [
                     'id' => $categoryId,
-                    'contentStreamId' => $streamId,
-                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
+                    'blogStreamId' => $streamId,
+                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
                 ]
             )])]);
 
-        $contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $contentStreamBuilder->method('enrichCriteria');
+        $blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $blogStreamBuilder->method('enrichCriteria');
 
         $cacheTagCollector = $this->createMock(CacheTagCollector::class);
         $calls = [
@@ -144,7 +144,7 @@ class BlogListingRouteTest extends TestCase
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            $contentStreamBuilder,
+            $blogStreamBuilder,
             $cacheTagCollector,
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -160,7 +160,7 @@ class BlogListingRouteTest extends TestCase
 
     public function testBrokenBlogStreamListsNoBlogsAndLogsAWarning(): void
     {
-        $exception = ContentStreamException::noFilters('streamId');
+        $exception = BlogStreamException::noFilters('streamId');
 
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())
@@ -168,7 +168,7 @@ class BlogListingRouteTest extends TestCase
             ->with(
                 'Blog stream configured for category listing has no usable filters.',
                 [
-                    'contentStreamId' => 'streamId',
+                    'blogStreamId' => 'streamId',
                     'exception' => $exception,
                 ]
             );
@@ -183,7 +183,7 @@ class BlogListingRouteTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('warning');
 
-        $criteria = $this->loadBlogStreamListing(ContentStreamException::emptyBlogStream('streamId'), $logger);
+        $criteria = $this->loadBlogStreamListing(BlogStreamException::emptyBlogStream('streamId'), $logger);
 
         static::assertSame([
             'blog.visibilities.visibility',
@@ -198,7 +198,7 @@ class BlogListingRouteTest extends TestCase
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             static::createStub(EntityRepository::class),
-            static::createStub(ContentStreamBuilder::class),
+            static::createStub(BlogStreamBuilder::class),
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -225,7 +225,7 @@ class BlogListingRouteTest extends TestCase
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            static::createStub(ContentStreamBuilder::class),
+            static::createStub(BlogStreamBuilder::class),
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -251,15 +251,15 @@ class BlogListingRouteTest extends TestCase
             new PartialEntity(
                 [
                     'id' => $categoryId,
-                    'contentStreamId' => $streamId,
-                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
+                    'blogStreamId' => $streamId,
+                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
                 ]
             )])]);
 
-        $contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $contentStreamBuilder->method('enrichCriteria')
+        $blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $blogStreamBuilder->method('enrichCriteria')
             ->willReturnCallback(static function (Criteria $criteria, string $id, mixed ...$_): void {
-                $criteria->addFilter(new EqualsFilter('blog.content_stream', $id));
+                $criteria->addFilter(new EqualsFilter('blog.blog_stream', $id));
                 $criteria->addState(BlogListingLoader::STATE_SKIP_ADD_GROUPING);
             });
 
@@ -267,7 +267,7 @@ class BlogListingRouteTest extends TestCase
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            $contentStreamBuilder,
+            $blogStreamBuilder,
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -293,24 +293,24 @@ class BlogListingRouteTest extends TestCase
             new PartialEntity(
                 [
                     'id' => $categoryId,
-                    'contentStreamId' => $streamId,
-                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
+                    'blogStreamId' => $streamId,
+                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
                 ]
             )])]);
 
         // A builder that only implements the deprecated interface (e.g. a decorator that has not yet
         // adopted AbstractBlogStreamBuilder). The route must fall back to buildFilters() without a
         // TypeError, add the stream filters, and leave display-as-group enabled (no state set).
-        $contentStreamBuilder = $this->createMock(ContentStreamBuilderInterface::class);
-        $contentStreamBuilder->expects($this->once())
+        $blogStreamBuilder = $this->createMock(BlogStreamBuilderInterface::class);
+        $blogStreamBuilder->expects($this->once())
             ->method('buildFilters')
-            ->willReturn([new EqualsFilter('blog.content_stream', $streamId)]);
+            ->willReturn([new EqualsFilter('blog.blog_stream', $streamId)]);
 
         $eventDispatcher = new EventDispatcher();
         $controller = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            $contentStreamBuilder,
+            $blogStreamBuilder,
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($eventDispatcher),
             static::createStub(LoggerInterface::class),
@@ -325,7 +325,7 @@ class BlogListingRouteTest extends TestCase
         );
 
         static::assertFalse($criteria->hasState(BlogListingLoader::STATE_SKIP_ADD_GROUPING));
-        static::assertContainsEquals(new EqualsFilter('blog.content_stream', $streamId), $criteria->getFilters());
+        static::assertContainsEquals(new EqualsFilter('blog.blog_stream', $streamId), $criteria->getFilters());
     }
 
     public function testPublishesExtension(): void
@@ -347,7 +347,7 @@ class BlogListingRouteTest extends TestCase
         $route = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             static::createStub(EntityRepository::class),
-            static::createStub(ContentStreamBuilder::class),
+            static::createStub(BlogStreamBuilder::class),
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher($dispatcher),
             static::createStub(LoggerInterface::class),
@@ -362,18 +362,18 @@ class BlogListingRouteTest extends TestCase
             new PartialEntity(
                 [
                     'id' => 'categoryId',
-                    'contentStreamId' => 'streamId',
-                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
+                    'blogStreamId' => 'streamId',
+                    'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
                 ]
             )])]);
 
-        $contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $contentStreamBuilder->method('enrichCriteria')->willThrowException($streamException);
+        $blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $blogStreamBuilder->method('enrichCriteria')->willThrowException($streamException);
 
         $route = new BlogListingRoute(
             static::createStub(BlogListingLoader::class),
             $categoryRepository,
-            $contentStreamBuilder,
+            $blogStreamBuilder,
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher(new EventDispatcher()),
             $logger,

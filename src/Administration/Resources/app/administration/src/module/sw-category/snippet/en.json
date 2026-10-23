@@ -156,7 +156,7 @@
         "blogAssignmentPlaceholder": "Search and assign blogs...",
         "blogAssignmentLabel": "Blogs",
         "blogAssignmentEmptyStateDescription": "No blogs assigned",
-        "contentStreamAssignmentEmptyStateDescription": "No dynamic blog group assigned",
+        "blogStreamAssignmentEmptyStateDescription": "No dynamic blog group assigned",
         "columnNameLabel": "Name",
         "columnManufacturerLabel": "Manufacturer",
         "blogAssignmentTypeLabel": "Type",

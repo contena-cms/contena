@@ -60,7 +60,7 @@ class AdministrationController extends AbstractController
 
     private readonly bool $esFrontendEnabled;
 
-    private readonly bool $contentStreamIndexingEnabled;
+    private readonly bool $blogStreamIndexingEnabled;
 
     private readonly bool $hideUpdateModule;
 
@@ -100,8 +100,8 @@ class AdministrationController extends AbstractController
         $this->esFrontendEnabled = $params->has('elasticsearch.enabled')
             ? $params->get('elasticsearch.enabled')
             : false;
-        $this->contentStreamIndexingEnabled = $params->has('contena.content_stream.indexing')
-            ? $params->get('contena.content_stream.indexing')
+        $this->blogStreamIndexingEnabled = $params->has('contena.blog_stream.indexing')
+            ? $params->get('contena.blog_stream.indexing')
             : true;
         $this->hideUpdateModule = $params->has('contena.auto_update.hide_module')
             ? (bool) $params->get('contena.auto_update.hide_module')
@@ -137,7 +137,7 @@ class AdministrationController extends AbstractController
             'frontendEsEnable' => $this->esFrontendEnabled,
             'refreshTokenTtl' => $refreshTokenTtl * 1000,
             'serviceRegistryUrl' => $this->serviceRegistryUrl,
-            'contentStreamIndexingEnabled' => $this->contentStreamIndexingEnabled,
+            'blogStreamIndexingEnabled' => $this->blogStreamIndexingEnabled,
             'hideUpdateModule' => $this->hideUpdateModule,
             'analyticsGatewayUrl' => $this->analyticsGatewayUrl,
         ]);

@@ -71,10 +71,10 @@ class Migration1731576063UpdateBlogComparisonTemplateTest extends TestCase
     private function prepareOldDatabaseEntry(string $body): string
     {
         $id = Uuid::randomBytes();
-        $contentStreamId = Uuid::randomBytes();
+        $blogStreamId = Uuid::randomBytes();
 
-        $this->connection->insert('content_stream', [
-            'id' => $contentStreamId,
+        $this->connection->insert('blog_stream', [
+            'id' => $blogStreamId,
             'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ]);
 
@@ -82,7 +82,7 @@ class Migration1731576063UpdateBlogComparisonTemplateTest extends TestCase
             'blog_export',
             [
                 'id' => $id,
-                'content_stream_id' => $contentStreamId,
+                'blog_stream_id' => $blogStreamId,
                 'channel_id' => Uuid::fromHexToBytes(TestDefaults::CHANNEL),
                 'file_name' => Uuid::randomHex(),
                 'access_key' => 'SWPERXF3DUTXS0JGRWRWWDHMTA',
@@ -95,7 +95,7 @@ class Migration1731576063UpdateBlogComparisonTemplateTest extends TestCase
             ],
             [
                 'id' => 'binary',
-                'content_stream_id' => 'binary',
+                'blog_stream_id' => 'binary',
                 'channel_id' => 'binary',
                 'currency_id' => 'binary',
             ]

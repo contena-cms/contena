@@ -53,7 +53,7 @@ class CmsSlotsDataResolverTest extends TestCase
     {
         $resolverContext = new ResolverContext($this->context, new Request());
 
-        $config = new FieldConfig('blogs', 'content_stream', $this->ids->get('stream'));
+        $config = new FieldConfig('blogs', 'blog_stream', $this->ids->get('stream'));
         $configs = new FieldConfigCollection();
         $configs->add($config);
 
@@ -81,7 +81,7 @@ class CmsSlotsDataResolverTest extends TestCase
     private function initData(): void
     {
         $context = Context::createDefaultContext();
-        $this->getContainer()->get('content_stream.repository')->create([
+        $this->getContainer()->get('blog_stream.repository')->create([
             [
                 'id' => $this->ids->get('stream'),
                 'filters' => [

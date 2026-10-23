@@ -61,12 +61,12 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
     protected function tearDown(): void
     {
         $this->connection->executeStatement('DELETE FROM blog_sorting WHERE url_key LIKE :key', ['key' => 'test-sorting-%']);
-        $this->connection->executeStatement('DELETE FROM content_stream_filter WHERE field LIKE :field', ['field' => 'customFields.sorting_stream_test_%']);
+        $this->connection->executeStatement('DELETE FROM blog_stream_filter WHERE field LIKE :field', ['field' => 'customFields.sorting_stream_test_%']);
 
         // Clean up streams
         if ($this->ids->has('stream-1')) {
             $this->connection->executeStatement(
-                'DELETE FROM content_stream WHERE id = :id',
+                'DELETE FROM blog_stream WHERE id = :id',
                 ['id' => Uuid::fromHexToBytes($this->ids->get('stream-1'))]
             );
         }
@@ -156,9 +156,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
     {
         $this->createCustomFields();
 
-        $contentStreamRepository = static::getContainer()->get('content_stream.repository');
+        $blogStreamRepository = static::getContainer()->get('blog_stream.repository');
 
-        $contentStreamRepository->create([
+        $blogStreamRepository->create([
             [
                 'id' => $this->ids->get('stream-1'),
                 'name' => 'Test Stream',
@@ -227,9 +227,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
 
         $this->disableElasticsearch();
 
-        $contentStreamRepository = static::getContainer()->get('content_stream.repository');
+        $blogStreamRepository = static::getContainer()->get('blog_stream.repository');
 
-        $contentStreamRepository->create([
+        $blogStreamRepository->create([
             [
                 'id' => $this->ids->get('stream-1'),
                 'name' => 'Test Stream Disabled',

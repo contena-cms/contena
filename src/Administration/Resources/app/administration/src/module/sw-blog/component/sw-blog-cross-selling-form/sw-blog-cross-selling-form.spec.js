@@ -46,7 +46,7 @@ async function createWrapper() {
                             };
                         },
                     },
-                    contentStreamConditionService: {
+                    blogStreamConditionService: {
                         search: () => {},
                     },
                 },
@@ -70,7 +70,7 @@ describe('module/sw-blog/component/sw-blog-cross-selling-form', () => {
     it('should get correct sorting types', async () => {
         wrapper = await createWrapper();
         await wrapper.setData({
-            contentStream: {
+            blogStream: {
                 filters: {
                     entity: 'blog',
                     source: 'source',

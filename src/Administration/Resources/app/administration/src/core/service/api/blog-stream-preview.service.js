@@ -5,10 +5,10 @@ import ApiService from '../api.service';
  * @private
  * @sw-package inventory
  */
-export default class ContentStreamPreviewService extends ApiService {
+export default class BlogStreamPreviewService extends ApiService {
     constructor(httpClient, loginService) {
         super(httpClient, loginService, null, 'application/json');
-        this.name = 'contentStreamPreviewService';
+        this.name = 'blogStreamPreviewService';
     }
 
     /**

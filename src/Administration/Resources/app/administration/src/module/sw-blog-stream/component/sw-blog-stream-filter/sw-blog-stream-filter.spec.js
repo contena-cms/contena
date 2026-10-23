@@ -88,12 +88,12 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-filter', () => {
     });
 
     it.each([
-        ['true', 'sw-context-button-stub', 'content_stream.viewer'],
-        [undefined, 'sw-context-button-stub', 'content_stream.viewer, content_stream.editor'],
-        ['true', 'sw-blog-stream-value-stub', 'content_stream.viewer'],
-        [undefined, 'sw-blog-stream-value-stub', 'content_stream.viewer, content_stream.editor'],
-        ['true', 'sw-blog-stream-field-select-stub', 'content_stream.viewer'],
-        [undefined, 'sw-blog-stream-field-select-stub', 'content_stream.viewer, content_stream.editor'],
+        ['true', 'sw-context-button-stub', 'blog_stream.viewer'],
+        [undefined, 'sw-context-button-stub', 'blog_stream.viewer, blog_stream.editor'],
+        ['true', 'sw-blog-stream-value-stub', 'blog_stream.viewer'],
+        [undefined, 'sw-blog-stream-value-stub', 'blog_stream.viewer, blog_stream.editor'],
+        ['true', 'sw-blog-stream-field-select-stub', 'blog_stream.viewer'],
+        [undefined, 'sw-blog-stream-field-select-stub', 'blog_stream.viewer, blog_stream.editor'],
     ])("should have %p as disabled state on '%s' when having %s role", async (state, element, role) => {
         const roles = role.split(', ');
 
@@ -137,7 +137,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-filter', () => {
     });
 
     it('should set default value to 100 when selecting cheapestPrice.percentage field', async () => {
-        const wrapper = await createWrapper(['content_stream.editor']);
+        const wrapper = await createWrapper(['blog_stream.editor']);
 
         await wrapper.setProps({
             condition: {
@@ -155,7 +155,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-filter', () => {
     });
 
     it('should set default value to 100 for cheapestPrice.percentage with non-range type', async () => {
-        const wrapper = await createWrapper(['content_stream.editor']);
+        const wrapper = await createWrapper(['blog_stream.editor']);
 
         await wrapper.setProps({
             condition: {
@@ -173,7 +173,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-filter', () => {
     });
 
     it('should set default parameters to 100 for cheapestPrice.percentage with range type', async () => {
-        const wrapper = await createWrapper(['content_stream.editor']);
+        const wrapper = await createWrapper(['blog_stream.editor']);
 
         await wrapper.setProps({
             condition: {
@@ -191,7 +191,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-filter', () => {
     });
 
     it('should not set default value for non-percentage fields', async () => {
-        const wrapper = await createWrapper(['content_stream.editor']);
+        const wrapper = await createWrapper(['blog_stream.editor']);
 
         await wrapper.setProps({
             condition: {

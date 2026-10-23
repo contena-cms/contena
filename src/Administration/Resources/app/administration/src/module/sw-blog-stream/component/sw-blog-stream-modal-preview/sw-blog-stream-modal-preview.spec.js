@@ -24,7 +24,7 @@ async function createWrapper() {
             props: {
                 filters: [
                     {
-                        contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                        blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                         parentId: null,
                         type: 'multi',
                         field: null,
@@ -39,7 +39,7 @@ async function createWrapper() {
                         id: '75a72e9922c04f5d846ecda1cc334c8a',
                         queries: [
                             {
-                                contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                                blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                                 parentId: '75a72e9922c04f5d846ecda1cc334c8a',
                                 type: 'multi',
                                 field: null,
@@ -54,7 +54,7 @@ async function createWrapper() {
                                 id: 'c0a1b051ada543f69fb57f2adcc2334c',
                                 queries: [
                                     {
-                                        contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                                        blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                                         parentId: 'c0a1b051ada543f69fb57f2adcc2334c',
                                         type: 'equals',
                                         field: 'categoriesRo.id',
@@ -70,7 +70,7 @@ async function createWrapper() {
                                         queries: [],
                                     },
                                     {
-                                        contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                                        blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                                         parentId: 'c0a1b051ada543f69fb57f2adcc2334c',
                                         type: 'equalsAny',
                                         field: 'id',
@@ -107,7 +107,7 @@ async function createWrapper() {
                     'sw-data-grid': true,
                 },
                 provide: {
-                    contentStreamPreviewService: {},
+                    blogStreamPreviewService: {},
                 },
             },
         },
@@ -188,7 +188,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-modal-preview', () 
         const wrapper = await createWrapper();
 
         const previewMock = jest.fn().mockResolvedValue({ elements: [], total: 0 });
-        wrapper.vm.contentStreamPreviewService.preview = previewMock;
+        wrapper.vm.blogStreamPreviewService.preview = previewMock;
         wrapper.vm.selectedSalesChannel = 'sales-channel-id';
 
         await wrapper.setProps({ displayAsGroup: true });
@@ -245,7 +245,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-modal-preview', () 
         await wrapper.setProps({
             filters: [
                 {
-                    contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                    blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                     parentId: null,
                     type: 'multi',
                     field: null,
@@ -260,7 +260,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-modal-preview', () 
                     id: '75a72e9922c04f5d846ecda1cc334c8a',
                     queries: [
                         {
-                            contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                            blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                             parentId: '75a72e9922c04f5d846ecda1cc334c8a',
                             type: 'multi',
                             field: null,
@@ -275,7 +275,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-modal-preview', () 
                             id: 'c0a1b051ada543f69fb57f2adcc2334c',
                             queries: [
                                 {
-                                    contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                                    blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                                     parentId: 'c0a1b051ada543f69fb57f2adcc2334c',
                                     type: 'not',
                                     field: null,
@@ -290,7 +290,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-modal-preview', () 
                                     id: 'f301f6a0755f47bda70e77b58848e135',
                                     queries: [
                                         {
-                                            contentStreamId: '7a1abc58b4a641a1a0f723962b302a91',
+                                            blogStreamId: '7a1abc58b4a641a1a0f723962b302a91',
                                             parentId: 'f301f6a0755f47bda70e77b58848e135',
                                             type: 'equalsAny',
                                             field: 'id',

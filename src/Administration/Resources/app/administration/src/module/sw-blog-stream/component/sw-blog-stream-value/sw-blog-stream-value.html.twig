@@ -1,11 +1,11 @@
-{% block sw_content_stream_value %}
+{% block sw_blog_stream_value %}
 <div
     class="sw-blog-stream-value"
     :class="componentClasses"
 >
 
     <template v-if="!fieldDefinition">
-        {% block sw_content_stream_value_no_definition_placeholder %}
+        {% block sw_blog_stream_value_no_definition_placeholder %}
         <sw-container
             ref="blog-stream-value-placeholder"
             class="sw-blog-stream-value__placeholder"
@@ -14,7 +14,7 @@
     </template>
 
     <template v-else-if="fieldType === 'boolean'">
-        {% block sw_content_stream_value_boolean_value %}
+        {% block sw_blog_stream_value_boolean_value %}
         <sw-single-select
             ref="blog-stream-value-select-boolean"
             class="sw-blog-stream-value__select"
@@ -28,7 +28,7 @@
     </template>
 
     <template v-else-if="fieldType === 'empty'">
-        {% block sw_content_stream_value_empty_value %}
+        {% block sw_blog_stream_value_empty_value %}
         <sw-single-select
             ref="blog-stream-value-select-empty"
             v-model:value="emptyValue"
@@ -42,7 +42,7 @@
     </template>
 
     <template v-else>
-        {% block sw_content_stream_value_operator_select %}
+        {% block sw_blog_stream_value_operator_select %}
         <sw-single-select
             ref="blog-stream-value-operator-select"
             v-model:value="filterType"
@@ -74,7 +74,7 @@
         </template>
 
         <template v-else-if="isEntityCustomField(fieldName)">
-            {% block sw_content_stream_value_entity_single_value_custom_field %}
+            {% block sw_blog_stream_value_entity_single_value_custom_field %}
             <sw-entity-single-select
                 v-if="!isMultiSelectValue"
                 ref="blog-stream-value-select-custom-field"
@@ -100,7 +100,7 @@
             </sw-entity-single-select>
             {% endblock %}
 
-            {% block sw_content_stream_value_entity_multi_value_custom_field %}
+            {% block sw_blog_stream_value_entity_multi_value_custom_field %}
             <sw-entity-multi-id-select
                 v-else-if="isMultiSelectValue"
                 ref="blog-stream-value-select-entity-multi-id-select"
@@ -136,7 +136,7 @@
         </template>
 
         <template v-else-if="fieldType === 'uuid'">
-            {% block sw_content_stream_value_entity_single_value %}
+            {% block sw_blog_stream_value_entity_single_value %}
             <sw-entity-single-select
                 v-if="definition.entity === 'blog' && actualCondition.type === 'equals'"
                 ref="blog-stream-value-select-single-value"
@@ -153,7 +153,7 @@
                         name="selection-label-property"
                         v-bind="{ item }"
                     >
-                        {% block sw_content_stream_value_results_variant_info %}
+                        {% block sw_blog_stream_value_results_variant_info %}
                         <sw-blog-variant-info
                             :variations="item.variation"
                         >
@@ -171,7 +171,7 @@
                         <sw-select-result
                             v-bind="{ item, index }"
                         >
-                            {% block sw_content_stream_value_results_list_result_label %}
+                            {% block sw_blog_stream_value_results_list_result_label %}
                             <span class="sw-select-result__result-item-text">
                                 <sw-blog-variant-info
                                     :variations="item.variation"
@@ -217,7 +217,7 @@
                 </template>
             </sw-entity-single-select>
 
-            {% block sw_content_stream_value_entity_single_value_visibilities %}
+            {% block sw_blog_stream_value_entity_single_value_visibilities %}
             <sw-entity-single-select
                 v-else-if="definition.entity === 'blog_visibility' && actualCondition.type === 'equals'"
                 ref="blog-stream-value-select-value-visibilities"
@@ -243,13 +243,13 @@
                 show-clearable-button
             >
                 <template #result-description-property="{ item }">
-                    {% block sw_content_stream_value_equals_result_label %}
+                    {% block sw_blog_stream_value_equals_result_label %}
                     <slot
                         v-if="definition.entity === 'category'"
                         name="result-description-property"
                         v-bind="{ item }"
                     >
-                        {% block sw_content_stream_value_equals_result_label_default %}
+                        {% block sw_blog_stream_value_equals_result_label_default %}
                         {{ getCategoryBreadcrumb(item) }}
                         {% endblock %}
                     </slot>
@@ -258,7 +258,7 @@
             </sw-entity-single-select>
             {% endblock %}
 
-            {% block sw_content_stream_value_entity_multi_value %}
+            {% block sw_blog_stream_value_entity_multi_value %}
             <sw-entity-multi-id-select
                 v-else-if="definition.entity === 'property_group_option' && (actualCondition.type === 'equalsAny' || actualCondition.type === 'equalsAll')"
                 ref="blog-stream-value-select-multi-value"
@@ -328,7 +328,7 @@
                         name="result-label-property"
                         v-bind="{ item, index }"
                     >
-                        {% block sw_content_stream_value_results_list_result_label %}
+                        {% block sw_blog_stream_value_results_list_result_label %}
                         <span class="sw-select-result__result-item-text">
                             <sw-blog-variant-info :variations="item.variation">
                                 {{ getProductLabel(item) }}
@@ -339,7 +339,7 @@
                 </template>
             </sw-entity-multi-id-select>
 
-            {% block sw_content_stream_value_entity_multi_value_visibilities %}
+            {% block sw_blog_stream_value_entity_multi_value_visibilities %}
             <sw-entity-multi-id-select
                 v-else-if="definition.entity === 'blog_visibility' && (actualCondition.type === 'equalsAny' || actualCondition.type === 'equalsAll')"
                 ref="blog-stream-value-select-multi-value-visibilities"
@@ -381,13 +381,13 @@
                 :advanced-selection-component="definition.entity === 'blog' ? 'sw-advanced-selection-blog' : ''"
             >
                 <template #result-description-property="{ item }">
-                    {% block sw_content_stream_value_multi_select_result_label %}
+                    {% block sw_blog_stream_value_multi_select_result_label %}
                     <slot
                         v-if="definition.entity === 'category'"
                         name="result-description-property"
                         v-bind="{ item }"
                     >
-                        {% block sw_content_stream_value_multi_select_result_label_default %}
+                        {% block sw_blog_stream_value_multi_select_result_label_default %}
                         {{ getCategoryBreadcrumb(item) }}
                         {% endblock %}
                     </slot>
@@ -396,7 +396,7 @@
             </sw-entity-multi-id-select>
             {% endblock %}
 
-            {% block sw_content_stream_value_entity_no_operator_selected_placeholder %}
+            {% block sw_blog_stream_value_entity_no_operator_selected_placeholder %}
             <sw-container
                 v-else
                 ref="blog-stream-value-selected-placeholder"
@@ -406,9 +406,9 @@
         </template>
 
         <template v-else-if="getConditionType(condition) === 'range'">
-            {% block sw_content_stream_value_range_value %}
+            {% block sw_blog_stream_value_range_value %}
             <template v-if="filterType === 'range'">
-                {% block sw_content_stream_value_range_from_value %}
+                {% block sw_blog_stream_value_range_from_value %}
                 <component
                     :is="inputComponent"
                     ref="blog-stream-value-range-from-value-component"
@@ -418,7 +418,7 @@
                 />
                 {% endblock %}
 
-                {% block sw_content_stream_value_range_to_value %}
+                {% block sw_blog_stream_value_range_to_value %}
                 <component
                     :is="inputComponent"
                     ref="blog-stream-value-range-to-value-component"
@@ -430,7 +430,7 @@
             </template>
 
             <template v-else>
-                {% block sw_content_stream_value_range_one_limit %}
+                {% block sw_blog_stream_value_range_one_limit %}
                 <component
                     :is="inputComponent"
                     ref="blog-stream-value-range-one-limit-component"
@@ -445,7 +445,7 @@
 
         <!-- eslint-disable vue/valid-v-else-if -->
         <template v-else-if="actualCondition.type === 'equalsAny'">
-            {% block sw_content_stream_value_multi_value %}
+            {% block sw_blog_stream_value_multi_value %}
             <sw-multi-tag-select
                 ref="blog-stream-value-multi-value-tagged-field"
                 v-model:value="multiValue"
@@ -455,7 +455,7 @@
         </template>
 
         <template v-else-if="filterType === 'since' || filterType === 'until'">
-            {% block sw_content_stream_value_relative_time_operator %}
+            {% block sw_blog_stream_value_relative_time_operator %}
             <sw-single-select
                 ref="blog-stream-value-relative-time-operator"
                 v-model:value="operator"
@@ -465,7 +465,7 @@
             />
             {% endblock %}
 
-            {% block sw_content_stream_value_relative_time_value %}
+            {% block sw_blog_stream_value_relative_time_value %}
             <mt-number-field
                 ref="blog-stream-value-relative-time-number-field"
                 v-model="stringValue"
@@ -483,7 +483,7 @@
         </template>
 
         <template v-else>
-            {% block sw_content_stream_value_single_value %}
+            {% block sw_blog_stream_value_single_value %}
             <component
                 :is="inputComponent"
                 ref="blog-stream-value-single-value-component"

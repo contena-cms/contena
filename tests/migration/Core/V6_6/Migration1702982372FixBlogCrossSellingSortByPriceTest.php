@@ -38,7 +38,7 @@ class Migration1702982372FixBlogCrossSellingSortByPriceTest extends TestCase
             'blog_id' => $blogId,
             'blog_version_id' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
             'position' => 0,
-            'type' => 'contentStream',
+            'type' => 'blogStream',
             'sort_by' => 'price',
             'sort_direction' => FieldSorting::ASCENDING,
             'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),

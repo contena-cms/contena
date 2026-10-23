@@ -151,7 +151,7 @@ export default {
             this.crossSelling = this.crossSellingRepository.create();
             this.crossSelling.blogId = this.blog.id;
             this.crossSelling.position = this.blog.crossSellings.length + 1;
-            this.crossSelling.type = 'contentStream';
+            this.crossSelling.type = 'blogStream';
             this.crossSelling.sortBy = 'name';
             this.crossSelling.sortDirection = 'ASC';
             this.crossSelling.limit = 24;

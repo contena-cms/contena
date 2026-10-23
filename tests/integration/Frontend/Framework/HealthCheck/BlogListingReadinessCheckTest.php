@@ -298,9 +298,9 @@ class BlogListingReadinessCheckTest extends TestCase
         $data = [
             'id' => $categoryId,
             'name' => 'Test',
-            'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
-            'contentStreamId' => $streamId,
-            'contentStream' => [
+            'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
+            'blogStreamId' => $streamId,
+            'blogStream' => [
                 'id' => $streamId,
                 'name' => 'test',
                 'filters' => [[

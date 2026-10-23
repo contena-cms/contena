@@ -721,7 +721,7 @@ contena:
         routing_overwrite:
         stats:
 
-    content_stream:
+    blog_stream:
         indexing: true
     blog_export:
         read_buffer_size: 200

@@ -13,7 +13,7 @@ const categoryMock = {
     isNew: () => false,
 };
 
-const contentStreamMock = {
+const blogStreamMock = {
     name: 'Very cheap pc parts',
     apiFilter: ['foo', 'bar'],
     invalid: false,
@@ -51,7 +51,7 @@ async function createWrapper() {
                 repositoryFactory: {
                     create: () => {
                         return {
-                            get: () => Promise.resolve(contentStreamMock),
+                            get: () => Promise.resolve(blogStreamMock),
                         };
                     },
                 },
@@ -75,7 +75,7 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
 
         await wrapper
             .getComponent('.sw-category-detail-blogs__product-assignment-type-select')
-            .vm.$emit('update:value', 'content_stream');
+            .vm.$emit('update:value', 'blog_stream');
 
         // Ensure default select is replaced with stream select inside `select` slot
         expect(wrapper.find('.sw-entity-many-to-many-select').exists()).toBeFalsy();
@@ -87,7 +87,7 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
 
         await wrapper.setData({
             category: {
-                blogAssignmentType: 'content_stream',
+                blogAssignmentType: 'blog_stream',
             },
         });
 
@@ -101,7 +101,7 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
 
         await wrapper
             .getComponent('.sw-category-detail-blogs__product-assignment-type-select')
-            .vm.$emit('update:value', 'content_stream');
+            .vm.$emit('update:value', 'blog_stream');
         await wrapper.setData({
             manualAssignedProductsCount: 5,
         });
@@ -117,7 +117,7 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
         const assignmentTypes = wrapper.vm.blogAssignmentTypes;
 
         expect(assignmentTypes[0].value).toBe('blog');
-        expect(assignmentTypes[1].value).toBe('content_stream');
+        expect(assignmentTypes[1].value).toBe('blog_stream');
     });
 
     it('should try to load blog stream preview when stream id is present', async () => {
@@ -129,11 +129,11 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
 
         await wrapper
             .getComponent('.sw-category-detail-blogs__product-stream-select')
-            .vm.$emit('update:value', 'some_content_stream_id');
+            .vm.$emit('update:value', 'some_blog_stream_id');
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.contentStreamFilter).toEqual(['foo', 'bar']);
-        expect(wrapper.vm.contentStreamInvalid).toBe(false);
+        expect(wrapper.vm.blogStreamFilter).toEqual(['foo', 'bar']);
+        expect(wrapper.vm.blogStreamInvalid).toBe(false);
     });
 
     it('should empty the blog stream id when changing the assignment type to blog', async () => {
@@ -141,7 +141,7 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
 
         await wrapper.setData({
             category: {
-                contentStreamId: 'some_content_stream_id',
+                blogStreamId: 'some_blog_stream_id',
             },
         });
 
@@ -150,6 +150,6 @@ describe('module/sw-category/view/sw-category-detail-blogs.spec', () => {
             .vm.$emit('update:value', 'blog');
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.category.contentStreamId).toBeNull();
+        expect(wrapper.vm.category.blogStreamId).toBeNull();
     });
 });

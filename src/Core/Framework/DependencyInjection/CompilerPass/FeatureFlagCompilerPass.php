@@ -15,7 +15,7 @@ class FeatureFlagCompilerPass implements CompilerPassInterface
         'v6.8.0.0' => [
             'Contena\Administration\Controller\NotificationController',
             'Contena\Administration\Notification\NotificationDefinition',
-            'Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface',
+            'Contena\Core\Content\BlogStream\Service\BlogStreamBuilderInterface',
             'Contena\Core\Framework\Plugin\Util\AssetService',
             'Contena\Elasticsearch\Blog\SearchConfigLoader',
         ],

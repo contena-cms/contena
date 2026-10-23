@@ -38,7 +38,7 @@ class BlogListingLoader
 {
     /**
      * Criteria state that suppresses the variant grouping (`displayGroup` field grouping) otherwise
-     * applied to blog listings. Set by {@see AbstractContentStreamBuilder::enrichCriteria()}
+     * applied to blog listings. Set by {@see AbstractBlogStreamBuilder::enrichCriteria()}
      * when a blog stream is configured to not display its variants as a group.
      */
     final public const STATE_SKIP_ADD_GROUPING = 'skipAddGrouping';

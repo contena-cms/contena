@@ -79,8 +79,8 @@ export default function createSearchTypeService() {
             listingRoute: 'sw.settings.shipping.index',
             hideOnGlobalSearchBar: true,
         },
-        content_stream: {
-            entityName: 'content_stream',
+        blog_stream: {
+            entityName: 'blog_stream',
             placeholderSnippet: 'sw-blog-stream.general.placeholderSearchBar',
             listingRoute: 'sw.blog.stream.index',
             hideOnGlobalSearchBar: true,

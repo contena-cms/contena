@@ -14,8 +14,8 @@ use Contena\Core\Content\Category\Channel\CategoryRoute;
 use Contena\Core\Content\Category\Channel\NavigationRoute;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
-use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamWriteResultHelper;
+use Contena\Core\Content\BlogStream\BlogStreamDefinition;
+use Contena\Core\Content\BlogStream\DataAbstractionLayer\BlogStreamWriteResultHelper;
 use Contena\Core\Content\LandingPage\Channel\LandingPageRoute;
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
 use Contena\Core\Content\Media\Channel\MediaRoute;
@@ -64,7 +64,7 @@ class CacheInvalidationSubscriber
     public function __construct(
         private readonly CacheInvalidator $cacheInvalidator,
         private readonly Connection $connection,
-        private readonly bool $contentStreamIndexerEnabled,
+        private readonly bool $blogStreamIndexerEnabled,
     ) {
     }
 
@@ -211,8 +211,8 @@ class CacheInvalidationSubscriber
     {
         // invalidates all routes which are loaded based on a stream (e.G. category listing and cross selling)
         $streamIds = [
-            ...$event->getPrimaryKeys(ContentStreamDefinition::ENTITY_NAME),
-            ...ContentStreamWriteResultHelper::getAffectedStreamIds($event),
+            ...$event->getPrimaryKeys(BlogStreamDefinition::ENTITY_NAME),
+            ...BlogStreamWriteResultHelper::getAffectedStreamIds($event),
         ];
 
         $streamIds = array_values(array_unique($streamIds));
@@ -445,7 +445,7 @@ class CacheInvalidationSubscriber
 
     public function invalidateStreamsBeforeIndexing(EntityWrittenContainerEvent $event): void
     {
-        // invalidates all stream based pages and routes before the blog indexer changes content_stream_mapping
+        // invalidates all stream based pages and routes before the blog indexer changes blog_stream_mapping
         $ids = $event->getPrimaryKeys(BlogDefinition::ENTITY_NAME);
 
         if ($ids === []) {
@@ -454,10 +454,10 @@ class CacheInvalidationSubscriber
 
         // invalidates blog listings which are based on a blog stream
         $ids = $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT LOWER(HEX(content_stream_id))
-             FROM content_stream_mapping
-             WHERE content_stream_mapping.blog_id IN (:ids)
-             AND content_stream_mapping.blog_version_id = :version',
+            'SELECT DISTINCT LOWER(HEX(blog_stream_id))
+             FROM blog_stream_mapping
+             WHERE blog_stream_mapping.blog_id IN (:ids)
+             AND blog_stream_mapping.blog_version_id = :version',
             ['ids' => Uuid::fromHexToBytesList($ids), 'version' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION)],
             ['ids' => ArrayParameterType::BINARY]
         );
@@ -728,15 +728,15 @@ class CacheInvalidationSubscriber
      */
     private function getStreamIds(array $ids): array
     {
-        if (!$this->contentStreamIndexerEnabled) {
+        if (!$this->blogStreamIndexerEnabled) {
             return [];
         }
 
         return $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT LOWER(HEX(content_stream_id))
-             FROM content_stream_mapping
-             WHERE content_stream_mapping.blog_id IN (:ids)
-             AND content_stream_mapping.blog_version_id = :version',
+            'SELECT DISTINCT LOWER(HEX(blog_stream_id))
+             FROM blog_stream_mapping
+             WHERE blog_stream_mapping.blog_id IN (:ids)
+             AND blog_stream_mapping.blog_version_id = :version',
             ['ids' => Uuid::fromHexToBytesList($ids), 'version' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION)],
             ['ids' => ArrayParameterType::BINARY]
         );

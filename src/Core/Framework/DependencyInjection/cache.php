@@ -197,7 +197,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(CacheInvalidator::class),
             service(Connection::class),
-            param('contena.content_stream.indexing'),
+            param('contena.blog_stream.indexing'),
         ])
         ->tag('kernel.event_listener', ['event' => CategoryIndexerEvent::class, 'method' => 'invalidateCategoryRouteByCategoryIds', 'priority' => 2000])
         ->tag('kernel.event_listener', ['event' => LandingPageIndexerEvent::class, 'method' => 'invalidateIndexedLandingPages', 'priority' => 2000])

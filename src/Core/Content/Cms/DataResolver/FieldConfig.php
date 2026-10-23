@@ -10,7 +10,7 @@ class FieldConfig extends Struct
     final public const SOURCE_STATIC = 'static';
     final public const SOURCE_MAPPED = 'mapped';
     final public const SOURCE_DEFAULT = 'default';
-    final public const SOURCE_CONTENT_STREAM = 'content_stream';
+    final public const SOURCE_BLOG_STREAM = 'blog_stream';
 
     /**
      * @param array<mixed>|bool|float|int|string|null $value
@@ -96,7 +96,7 @@ class FieldConfig extends Struct
 
     public function isBlogStream(): bool
     {
-        return $this->source === self::SOURCE_CONTENT_STREAM;
+        return $this->source === self::SOURCE_BLOG_STREAM;
     }
 
     public function isDefault(): bool

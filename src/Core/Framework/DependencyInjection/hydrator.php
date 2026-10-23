@@ -12,8 +12,8 @@ use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordHydra
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityHydrator;
 use Contena\Core\Content\Blog\BlogHydrator;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingHydrator;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterHydrator;
-use Contena\Core\Content\ContentStream\ContentStreamHydrator;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamFilter\BlogStreamFilterHydrator;
+use Contena\Core\Content\BlogStream\BlogStreamHydrator;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionHydrator;
 use Contena\Core\Content\Property\PropertyGroupHydrator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -84,13 +84,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(ContentStreamHydrator::class)
+    $services->set(BlogStreamHydrator::class)
         ->public()
         ->args([
             service('service_container'),
         ]);
 
-    $services->set(ContentStreamFilterHydrator::class)
+    $services->set(BlogStreamFilterHydrator::class)
         ->public()
         ->args([
             service('service_container'),

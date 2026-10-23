@@ -92,10 +92,10 @@ class Migration1726557614FixBlogComparisonIdealoWithHtmlFormatTest extends TestC
     private function prepareOldDatabaseEntry(string $body): string
     {
         $id = Uuid::randomBytes();
-        $contentStreamID = Uuid::randomBytes();
+        $blogStreamID = Uuid::randomBytes();
 
-        $this->connection->insert('content_stream', [
-            'id' => $contentStreamID,
+        $this->connection->insert('blog_stream', [
+            'id' => $blogStreamID,
             'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ]);
 
@@ -103,7 +103,7 @@ class Migration1726557614FixBlogComparisonIdealoWithHtmlFormatTest extends TestC
             'blog_export',
             [
                 'id' => $id,
-                'content_stream_id' => $contentStreamID,
+                'blog_stream_id' => $blogStreamID,
                 'channel_id' => Uuid::fromHexToBytes(TestDefaults::CHANNEL),
                 'file_name' => Uuid::randomHex(),
                 'access_key' => 'SWPEM3BKR1DJWNHEYTJQQU84AQ',
@@ -116,7 +116,7 @@ class Migration1726557614FixBlogComparisonIdealoWithHtmlFormatTest extends TestC
             ],
             [
                 'id' => Types::BINARY,
-                'content_stream_id' => Types::BINARY,
+                'blog_stream_id' => Types::BINARY,
                 'channel_id' => Types::BINARY,
                 'currency_id' => Types::BINARY,
             ]

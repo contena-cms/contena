@@ -5,7 +5,7 @@ namespace Contena\Core\Content\Category;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationCollection;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\ContentStream\ContentStreamEntity;
+use Contena\Core\Content\BlogStream\BlogStreamEntity;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
@@ -71,9 +71,9 @@ class CategoryEntity extends Entity
 
     protected ?CmsPageEntity $cmsPage = null;
 
-    protected ?string $contentStreamId = null;
+    protected ?string $blogStreamId = null;
 
-    protected ?ContentStreamEntity $contentStream = null;
+    protected ?BlogStreamEntity $blogStream = null;
 
     /**
      * @var array<string, array<string, array<string, mixed>>|null>|null
@@ -340,24 +340,24 @@ class CategoryEntity extends Entity
         $this->cmsPageIdSwitched = $switched;
     }
 
-    public function getBlogStream(): ?ContentStreamEntity
+    public function getBlogStream(): ?BlogStreamEntity
     {
-        return $this->contentStream;
+        return $this->blogStream;
     }
 
-    public function setBlogStream(ContentStreamEntity $contentStream): void
+    public function setBlogStream(BlogStreamEntity $blogStream): void
     {
-        $this->contentStream = $contentStream;
+        $this->blogStream = $blogStream;
     }
 
     public function getBlogStreamId(): ?string
     {
-        return $this->contentStreamId;
+        return $this->blogStreamId;
     }
 
-    public function setBlogStreamId(string $contentStreamId): void
+    public function setBlogStreamId(string $blogStreamId): void
     {
-        $this->contentStreamId = $contentStreamId;
+        $this->blogStreamId = $blogStreamId;
     }
 
     /**

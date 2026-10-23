@@ -1,8 +1,8 @@
-{% block sw_content_stream_grid_preview_content %}
+{% block sw_blog_stream_grid_preview_content %}
 <div class="sw-blog-stream-grid-preview">
-    {% block sw_content_stream_grid_preview_search_field_label %}
+    {% block sw_blog_stream_grid_preview_search_field_label %}
     <div class="sw-blog-stream-grid-preview__toolbar">
-        {% block sw_content_stream_grid_preview_search_field %}
+        {% block sw_blog_stream_grid_preview_search_field %}
         <sw-simple-search-field
             v-model:value="searchTerm"
             size="small"
@@ -16,7 +16,7 @@
     </div>
     {% endblock %}
 
-    {% block sw_content_stream_grid_preview_grid %}
+    {% block sw_blog_stream_grid_preview_grid %}
     <sw-data-grid
         v-if="total"
         class="sw-blog-stream-grid-preview__grid"
@@ -30,9 +30,9 @@
         @selection-change="onSelectionChange"
     >
 
-        {% block sw_content_stream_grid_preview_grid_columns %}
+        {% block sw_blog_stream_grid_preview_grid_columns %}
         <template #column-name="{ item, column }">
-            {% block sw_content_stream_grid_preview_grid_column_name %}
+            {% block sw_blog_stream_grid_preview_grid_column_name %}
             <router-link
                 v-if="column.routerLink"
                 :to="{ name: column.routerLink, params: { id: item.id } }"
@@ -51,7 +51,7 @@
         </template>
 
         <template #column-manufacturer.name="{ item, column }">
-            {% block sw_content_stream_grid_preview_grid_column_manufacturer %}
+            {% block sw_blog_stream_grid_preview_grid_column_manufacturer %}
             <router-link
                 v-if="column.routerLink && item.manufacturerId"
                 :to="{ name: column.routerLink, params: { id: item.manufacturerId } }"
@@ -65,7 +65,7 @@
         </template>
 
         <template #column-active="{ item }">
-            {% block sw_content_stream_grid_preview_grid_column_active %}
+            {% block sw_blog_stream_grid_preview_grid_column_active %}
             <sw-data-grid-column-boolean
                 :value="item.active"
                 :is-inline-edit="false"
@@ -74,13 +74,13 @@
         </template>
 
         <template #column-price="{ item }">
-            {% block sw_content_stream_grid_preview_grid_column_price %}
+            {% block sw_blog_stream_grid_preview_grid_column_price %}
             {{ currencyFilter(getPriceForDefaultCurrency(item), systemCurrency.isoCode) }}
             {% endblock %}
         </template>
 
         <template #column-stock="{ item }">
-            {% block sw_content_stream_grid_preview_grid_column_stock %}
+            {% block sw_blog_stream_grid_preview_grid_column_stock %}
             {{ item.stock }}
             {% endblock %}
         </template>
@@ -89,7 +89,7 @@
         <slot name="additional-columns"></slot>
 
         <template #pagination>
-            {% block sw_content_stream_grid_preview_grid_pagination %}
+            {% block sw_blog_stream_grid_preview_grid_pagination %}
             <sw-pagination
                 v-bind="{ total, page, limit }"
                 :total-visible="7"
@@ -101,7 +101,7 @@
     </sw-data-grid>
     {% endblock %}
 
-    {% block sw_content_stream_grid_preview_empty_state %}
+    {% block sw_blog_stream_grid_preview_empty_state %}
     <slot name="empty-state">
         <mt-empty-state
             v-if="!total && !isLoading"

@@ -730,7 +730,7 @@
         "name": "streamIds",
         "type": "multi-entity-id-select",
         "config": {
-          "entity": "content_stream"
+          "entity": "blog_stream"
         }
       }
     ]

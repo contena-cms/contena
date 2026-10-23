@@ -41,7 +41,7 @@ class TaskNameResolver
         'blog_download.media.cleanup' => true,
         'blog_export_generate_task' => true,
         'blog_keyword_dictionary.cleanup' => true,
-        'content_stream.mapping.update' => true,
+        'blog_stream.mapping.update' => true,
         'channel_context.cleanup' => true,
         'services.install' => true,
         'contena.elasticsearch.create.alias' => true,

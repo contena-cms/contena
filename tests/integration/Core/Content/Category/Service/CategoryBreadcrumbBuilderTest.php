@@ -666,16 +666,16 @@ class CategoryBreadcrumbBuilderTest extends TestCase
             ],
         ];
 
-        $contentStreamsRepository = static::getContainer()->get('content_stream.repository');
-        $contentStreamsRepository->create([$stream], $this->channelContext->getContext());
+        $blogStreamsRepository = static::getContainer()->get('blog_stream.repository');
+        $blogStreamsRepository->create([$stream], $this->channelContext->getContext());
     }
 
     private function createCategoryStreams(): string
     {
         $data = [
             'id' => $this->ids->create('category_stream_id_1'),
-            'contentStreamId' => $this->ids->get('stream_id_1'),
-            'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM,
+            'blogStreamId' => $this->ids->get('stream_id_1'),
+            'blogAssignmentType' => CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM,
             'active' => true,
             'name' => 'Home',
         ];

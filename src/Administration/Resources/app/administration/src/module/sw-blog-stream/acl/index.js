@@ -4,12 +4,12 @@
 Contena.Service('privileges').addPrivilegeMappingEntry({
     category: 'permissions',
     parent: 'catalogues',
-    key: 'content_stream',
+    key: 'blog_stream',
     roles: {
         viewer: {
             privileges: [
-                'content_stream:read',
-                'content_stream_filter:read',
+                'blog_stream:read',
+                'blog_stream_filter:read',
                 'custom_field_set:read',
                 'custom_field:read',
                 'custom_field_set_relation:read',
@@ -28,20 +28,20 @@ Contena.Service('privileges').addPrivilegeMappingEntry({
         },
         editor: {
             privileges: [
-                'content_stream:update',
-                'content_stream_filter:update',
-                'content_stream_filter:delete',
-                'content_stream_filter:create',
+                'blog_stream:update',
+                'blog_stream_filter:update',
+                'blog_stream_filter:delete',
+                'blog_stream_filter:create',
             ],
-            dependencies: ['content_stream.viewer'],
+            dependencies: ['blog_stream.viewer'],
         },
         creator: {
-            privileges: ['content_stream:create'],
-            dependencies: ['content_stream.viewer', 'content_stream.editor'],
+            privileges: ['blog_stream:create'],
+            dependencies: ['blog_stream.viewer', 'blog_stream.editor'],
         },
         deleter: {
-            privileges: ['content_stream:delete'],
-            dependencies: ['content_stream.viewer'],
+            privileges: ['blog_stream:delete'],
+            dependencies: ['blog_stream.viewer'],
         },
     },
 });

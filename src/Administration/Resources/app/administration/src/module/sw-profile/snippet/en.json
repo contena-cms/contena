@@ -134,7 +134,7 @@
           "name": "Name",
           "code": "Code"
         },
-        "content_stream": {
+        "blog_stream": {
           "name": "Name"
         },
         "newsletter_recipient": {

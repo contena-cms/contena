@@ -30,7 +30,7 @@ class Content extends Bundle
         $phpLoader->load('media_path.php');
         $phpLoader->load('blog.php');
         $phpLoader->load('rule.php');
-        $phpLoader->load('content_stream.php');
+        $phpLoader->load('blog_stream.php');
         $phpLoader->load('property.php');
         $phpLoader->load('cms.php');
         $phpLoader->load('mail.php');

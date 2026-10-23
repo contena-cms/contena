@@ -257,20 +257,20 @@ function registerThumbnailMiddleware(factory: typeof WorkerNotificationFactory) 
         },
     });
 
-    factory.register('ContentStreamIndexingMessage', {
-        name: 'Contena\\Core\\Content\\ContentStream\\DataAbstractionLayer\\ContentStreamIndexingMessage',
+    factory.register('BlogStreamIndexingMessage', {
+        name: 'Contena\\Core\\Content\\BlogStream\\DataAbstractionLayer\\BlogStreamIndexingMessage',
         fn: function middleware(next, { entry, $root, notification }) {
             messageQueueNotification(
-                'contentStream',
+                'blogStream',
                 ids,
                 next,
                 entry,
                 $root,
                 notification,
                 {
-                    title: 'global.notification-center.worker-listener.contentStream.title',
-                    message: 'global.notification-center.worker-listener.contentStream.message',
-                    success: 'global.notification-center.worker-listener.contentStream.messageSuccess',
+                    title: 'global.notification-center.worker-listener.blogStream.title',
+                    message: 'global.notification-center.worker-listener.blogStream.message',
+                    success: 'global.notification-center.worker-listener.blogStream.messageSuccess',
                 },
                 50,
             );

@@ -402,16 +402,16 @@
             "navigationPositionInside": "Innen",
             "navigationPositionOutside": "Außen",
             "blogAssignmentType": "Produkt-Zuweisung",
-            "contentStreamSorting": "Sortierung",
-            "contentStreamLimit": "Maximale Produktanzahl",
-            "contentStreamChoice": "Dynamische Produktgruppe"
+            "blogStreamSorting": "Sortierung",
+            "blogStreamLimit": "Maximale Produktanzahl",
+            "blogStreamChoice": "Dynamische Produktgruppe"
           },
           "placeholder": {
             "title": "Slider-Titel",
             "selection": "Produkte auswählen",
             "minWidth": "Minimale Breite",
-            "contentStreamChoice": "Wähle eine dynamische Produktgruppe ...",
-            "contentStreamSorting": "Wähle eine Sortierung ..."
+            "blogStreamChoice": "Wähle eine dynamische Produktgruppe ...",
+            "blogStreamSorting": "Wähle eine Sortierung ..."
           },
           "helpText": {
             "minWidth": "Gib die minimale Breite in der gewünschten Einheit an. Zum Beispiel: 200px",
@@ -419,9 +419,9 @@
           },
           "blogAssignmentTypeOptions": {
             "manual": "Manuelle Zuweisung",
-            "contentStream": "Dynamische Produktgruppe"
+            "blogStream": "Dynamische Produktgruppe"
           },
-          "contentStreamSortingOptions": {
+          "blogStreamSortingOptions": {
             "nameAsc": "Name aufsteigend",
             "nameDesc": "Name absteigend",
             "priceAsc": "Preis aufsteigend",
@@ -862,7 +862,7 @@
           "blogAssignmentPlaceholder": "Produkte durchsuchen und zuweisen ...",
           "blogAssignmentLabel": "Produkte",
           "blogAssignmentEmptyStateDescription": "Keine Produkte zugewiesen",
-          "contentStreamAssignmentEmptyStateDescription": "Keine dynamische Produktgruppe zugewiesen",
+          "blogStreamAssignmentEmptyStateDescription": "Keine dynamische Produktgruppe zugewiesen",
           "columnNameLabel": "Name",
           "columnManufacturerLabel": "Hersteller"
         }

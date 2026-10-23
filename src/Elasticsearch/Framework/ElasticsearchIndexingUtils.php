@@ -125,7 +125,7 @@ WHERE custom_field_set_relation.entity_name = :entity
     private function fetchCustomFieldNamesUsedInBlogStream(): array
     {
         $rows = $this->connection->fetchFirstColumn(
-            'SELECT api_filter FROM content_stream WHERE api_filter LIKE :pattern',
+            'SELECT api_filter FROM blog_stream WHERE api_filter LIKE :pattern',
             ['pattern' => '%customFields.%']
         );
 

@@ -1669,7 +1669,7 @@ class Configuration implements ConfigurationInterface
 
     private function createBlogStreamSection(): ArrayNodeDefinition
     {
-        $treeBuilder = new TreeBuilder('content_stream');
+        $treeBuilder = new TreeBuilder('blog_stream');
         $rootNode = $treeBuilder->getRootNode();
 
         $rootNode

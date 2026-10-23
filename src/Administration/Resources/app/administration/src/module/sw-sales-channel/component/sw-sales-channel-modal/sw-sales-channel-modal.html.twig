@@ -7,8 +7,8 @@
     {% block sw_channel_modal_grid %}
     <sw-sales-channel-modal-grid
         v-if="!detailType"
-        :blog-streams-exist="contentStreamsExist"
-        :blog-streams-loading="contentStreamsLoading"
+        :blog-streams-exist="blogStreamsExist"
+        :blog-streams-loading="blogStreamsLoading"
         :add-channel-action="addChannelAction"
         @grid-detail-open="onGridOpenDetails"
         @grid-channel-add="onAddChannel"

@@ -129,8 +129,8 @@
                 "feature_toggle": {
                     "$ref": "#/definitions/feature_toggle"
                 },
-                "content_stream": {
-                    "$ref": "#/definitions/content_stream"
+                "blog_stream": {
+                    "$ref": "#/definitions/blog_stream"
                 },
                 "mcp": {
                     "$ref": "#/definitions/mcp"
@@ -293,7 +293,7 @@
             },
             "title": "Feature toggle"
         },
-        "content_stream": {
+        "blog_stream": {
             "type": "object",
             "additionalProperties": false,
             "properties": {

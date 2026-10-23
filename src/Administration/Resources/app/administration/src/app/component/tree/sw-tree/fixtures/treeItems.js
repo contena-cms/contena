@@ -39,7 +39,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:26:01.950+00:00',
             updatedAt: null,
             translated: {
@@ -94,7 +94,7 @@ export default function getTreeItems() {
                     keywords: null,
                     cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
                     cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-                    contentStreamId: null,
+                    blogStreamId: null,
                     createdAt: '2021-06-17T06:27:07.267+00:00',
                     updatedAt: null,
                     translated: {
@@ -160,7 +160,7 @@ export default function getTreeItems() {
                     keywords: null,
                     cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
                     cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-                    contentStreamId: null,
+                    blogStreamId: null,
                     createdAt: '2021-06-17T06:27:07.268+00:00',
                     updatedAt: null,
                     translated: {
@@ -402,7 +402,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.267+00:00',
             updatedAt: null,
             translated: {
@@ -468,7 +468,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.271+00:00',
             updatedAt: null,
             translated: {
@@ -534,7 +534,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.272+00:00',
             updatedAt: null,
             translated: {
@@ -600,7 +600,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.271+00:00',
             updatedAt: null,
             translated: {
@@ -666,7 +666,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.270+00:00',
             updatedAt: null,
             translated: {
@@ -732,7 +732,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.272+00:00',
             updatedAt: null,
             translated: {
@@ -798,7 +798,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.268+00:00',
             updatedAt: null,
             translated: {
@@ -864,7 +864,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.273+00:00',
             updatedAt: null,
             translated: {
@@ -930,7 +930,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.275+00:00',
             updatedAt: null,
             translated: {
@@ -996,7 +996,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.274+00:00',
             updatedAt: null,
             translated: {
@@ -1062,7 +1062,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.277+00:00',
             updatedAt: null,
             translated: {
@@ -1128,7 +1128,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.273+00:00',
             updatedAt: null,
             translated: {
@@ -1194,7 +1194,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.277+00:00',
             updatedAt: null,
             translated: {
@@ -1260,7 +1260,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.276+00:00',
             updatedAt: null,
             translated: {
@@ -1325,7 +1325,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.275+00:00',
             updatedAt: null,
             translated: {
@@ -1390,7 +1390,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.274+00:00',
             updatedAt: null,
             translated: {
@@ -1456,7 +1456,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.276+00:00',
             updatedAt: null,
             translated: {
@@ -1522,7 +1522,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'a4aaaa76a546453da734a3f0cee2f9d4',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.275+00:00',
             updatedAt: null,
             translated: {
@@ -1588,7 +1588,7 @@ export default function getTreeItems() {
             keywords: null,
             cmsPageId: 'eef7acaf69f547b0a27fbc239a75ee4b',
             cmsPageVersionId: '0fa91ce3e96a4bc2be4bd9ce752c3425',
-            contentStreamId: null,
+            blogStreamId: null,
             createdAt: '2021-06-17T06:27:07.277+00:00',
             updatedAt: null,
             translated: {

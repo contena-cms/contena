@@ -13,7 +13,7 @@ const { mapPropertyErrors } = Component.getComponentHelper();
 export default {
     template,
 
-    inject: ['repositoryFactory', 'contentStreamConditionService'],
+    inject: ['repositoryFactory', 'blogStreamConditionService'],
 
     provide() {
         return {
@@ -40,9 +40,9 @@ export default {
         return {
             showDeleteModal: false,
             showModalPreview: false,
-            contentStream: null,
-            contentStreamFilter: [],
-            contentStreamFilterTree: null,
+            blogStream: null,
+            blogStreamFilter: [],
+            blogStreamFilterTree: null,
             optionSearchTerm: '',
             useManualAssignment: false,
             sortBy: 'name',
@@ -69,24 +69,24 @@ export default {
             return this.repositoryFactory.create('blog_cross_selling');
         },
 
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
-        contentStreamFilterRepository() {
-            if (!this.contentStream || !this.contentStream.filters) {
+        blogStreamFilterRepository() {
+            if (!this.blogStream || !this.blogStream.filters) {
                 return null;
             }
 
-            const { entity, source } = this.contentStream.filters;
+            const { entity, source } = this.blogStream.filters;
 
             return this.repositoryFactory.create(entity, source);
         },
 
-        contentStreamFilterCriteria() {
+        blogStreamFilterCriteria() {
             const criteria = new Criteria(1, 25);
 
-            criteria.addFilter(Criteria.equals('contentStreamId', this.crossSelling.contentStreamId));
+            criteria.addFilter(Criteria.equals('blogStreamId', this.crossSelling.blogStreamId));
 
             return criteria;
         },
@@ -134,8 +134,8 @@ export default {
         crossSellingTypes() {
             return [
                 {
-                    label: this.$t('sw-blog.crossselling.contentStreamType'),
-                    value: 'contentStream',
+                    label: this.$t('sw-blog.crossselling.blogStreamType'),
+                    value: 'blogStream',
                 },
                 {
                     label: this.$t('sw-blog.crossselling.blogListType'),
@@ -145,7 +145,7 @@ export default {
         },
 
         previewDisabled() {
-            return !this.contentStream;
+            return !this.blogStream;
         },
 
         sortingConCat() {
@@ -160,7 +160,7 @@ export default {
         },
 
         associationValue() {
-            return this.crossSelling?.contentStreamId || '';
+            return this.crossSelling?.blogStreamId || '';
         },
 
         crossSellingTypeOptions() {
@@ -183,7 +183,7 @@ export default {
             });
         },
 
-        contentStreamCriteria() {
+        blogStreamCriteria() {
             const criteria = new Criteria();
             criteria.addFilter(Criteria.equals('internal', false));
             return criteria;
@@ -191,7 +191,7 @@ export default {
     },
 
     watch: {
-        'crossSelling.contentStreamId'() {
+        'crossSelling.blogStreamId'() {
             if (!this.useManualAssignment) {
                 this.loadStreamPreview();
             }
@@ -205,7 +205,7 @@ export default {
     methods: {
         createdComponent() {
             this.useManualAssignment = this.crossSelling.type === 'blogList';
-            if (!this.useManualAssignment && this.crossSelling.contentStreamId !== null) {
+            if (!this.useManualAssignment && this.crossSelling.blogStreamId !== null) {
                 this.loadStreamPreview();
             }
         },
@@ -238,25 +238,25 @@ export default {
         },
 
         loadStreamPreview() {
-            this.contentStreamRepository.get(this.crossSelling.contentStreamId).then((contentStream) => {
-                this.contentStream = contentStream;
+            this.blogStreamRepository.get(this.crossSelling.blogStreamId).then((blogStream) => {
+                this.blogStream = blogStream;
                 this.getProductStreamFilter();
             });
         },
 
         getProductStreamFilter() {
-            if (this.contentStreamFilterRepository === null) {
+            if (this.blogStreamFilterRepository === null) {
                 return [];
             }
-            return this.contentStreamFilterRepository
-                .search(this.contentStreamFilterCriteria)
-                .then((contentStreamFilter) => {
-                    this.contentStreamFilter = contentStreamFilter;
+            return this.blogStreamFilterRepository
+                .search(this.blogStreamFilterCriteria)
+                .then((blogStreamFilter) => {
+                    this.blogStreamFilter = blogStreamFilter;
                 });
         },
 
         updateProductStreamFilterTree({ conditions }) {
-            this.contentStreamFilterTree = conditions;
+            this.blogStreamFilterTree = conditions;
         },
 
         onSortingChanged(value) {

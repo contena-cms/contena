@@ -19,10 +19,10 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
-use Contena\Core\Content\ContentStream\Exception\EmptyContentStreamException;
-use Contena\Core\Content\ContentStream\Exception\NoFilterException;
+use Contena\Core\Content\BlogStream\Exception\EmptyBlogStreamException;
+use Contena\Core\Content\BlogStream\Exception\NoFilterException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Core\Content\ContentStream\Service\AbstractContentStreamBuilder;
+use Contena\Core\Content\BlogStream\Service\AbstractBlogStreamBuilder;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ChannelApiRouteScope::ID]])]
 class BlogListingRoute extends AbstractBlogListingRoute
@@ -64,7 +64,7 @@ class BlogListingRoute extends AbstractBlogListingRoute
 
         $categoryCriteria = new Criteria([$categoryId]);
         $categoryCriteria->setTitle('blog-listing-route::category-loading');
-        $categoryCriteria->addFields(['blogAssignmentType', 'contentStreamId']);
+        $categoryCriteria->addFields(['blogAssignmentType', 'blogStreamId']);
         $categoryCriteria->setLimit(1);
 
         /** @var ?PartialEntity */
@@ -88,7 +88,7 @@ class BlogListingRoute extends AbstractBlogListingRoute
         $result = BlogListingResult::createFrom($entities);
         $result->addState(...$entities->getStates());
 
-        $result->setStreamId($category->get('contentStreamId'));
+        $result->setStreamId($category->get('blogStreamId'));
 
         return new BlogListingRouteResponse($result);
     }
@@ -96,28 +96,28 @@ class BlogListingRoute extends AbstractBlogListingRoute
     private function extendCriteria(ChannelContext $channelContext, Criteria $criteria, PartialEntity $category): void
     {
         $blogAssignmentType = $category->get('blogAssignmentType');
-        $contentStreamId = $category->get('contentStreamId');
+        $blogStreamId = $category->get('blogStreamId');
 
-        if ($blogAssignmentType === CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM && \is_string($contentStreamId) && $contentStreamId !== '') {
+        if ($blogAssignmentType === CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM && \is_string($blogStreamId) && $blogStreamId !== '') {
             $this->cacheTagCollector->addTag(
-                EntityCacheKeyGenerator::buildStreamTag($contentStreamId)
+                EntityCacheKeyGenerator::buildStreamTag($blogStreamId)
             );
 
-            $contentStreamBuilder = $this->contentStreamBuilder;
+            $blogStreamBuilder = $this->blogStreamBuilder;
 
             try {
-                if ($contentStreamBuilder instanceof AbstractContentStreamBuilder) {
-                    $contentStreamBuilder->enrichCriteria($criteria, $contentStreamId, $channelContext->getContext());
+                if ($blogStreamBuilder instanceof AbstractBlogStreamBuilder) {
+                    $blogStreamBuilder->enrichCriteria($criteria, $blogStreamId, $channelContext->getContext());
                 } else {
-                    $criteria->addFilter(...$contentStreamBuilder->buildFilters($contentStreamId, $channelContext->getContext()));
+                    $criteria->addFilter(...$blogStreamBuilder->buildFilters($blogStreamId, $channelContext->getContext()));
                 }
-            } catch (EmptyContentStreamException) {
+            } catch (EmptyBlogStreamException) {
                 // An empty group selects all blogs, as in the blog export
             } catch (NoFilterException $exception) {
                 $this->logger->warning(
                     'Blog stream configured for category listing has no usable filters.',
                     [
-                        'contentStreamId' => $contentStreamId,
+                        'blogStreamId' => $blogStreamId,
                         'exception' => $exception,
                     ]
                 );

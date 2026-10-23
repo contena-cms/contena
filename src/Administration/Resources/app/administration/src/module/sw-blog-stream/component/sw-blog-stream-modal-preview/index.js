@@ -13,7 +13,7 @@ const BLOG_COMPARISON_CHANNEL_TYPE_ID = 'ed535e5722134ac1aa6524f73e26881b';
 export default {
     template,
 
-    inject: ['repositoryFactory', 'contentStreamPreviewService'],
+    inject: ['repositoryFactory', 'blogStreamPreviewService'],
 
     emits: ['modal-close'],
 
@@ -170,7 +170,7 @@ export default {
                 return false;
             }
 
-            return this.contentStreamPreviewService
+            return this.blogStreamPreviewService
                 .preview(
                     this.selectedSalesChannel,
                     this.previewCriteria,

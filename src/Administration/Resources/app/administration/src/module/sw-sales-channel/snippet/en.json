@@ -180,7 +180,7 @@
                 "accessKey": "Access key",
                 "accessUrl": "Export URL",
                 "buttonCreateNewAccessKey": "Create a new access key",
-                "contentStream": "Dynamic blog group",
+                "blogStream": "Dynamic blog group",
                 "fileFormatLabels": {
                     "csv": "CSV",
                     "xml": "XML"

@@ -1,7 +1,7 @@
 import { reactive } from 'vue';
 import { DOMWrapper, mount } from '@vue/test-utils';
 import RuleConditionService from 'src/app/service/rule-condition.service';
-import { CONTENT_STREAM_CONDITIONS } from '../../constant/sw-settings-rule.constant';
+import { BLOG_STREAM_CONDITIONS } from '../../constant/sw-settings-rule.constant';
 
 /**
  * @sw-package fundamentals@after-sales
@@ -223,13 +223,13 @@ describe('src/module/sw-settings-rule/view/sw-settings-rule-detail-base', () => 
         });
 
         it('should show warning banner when indexing is disabled and rule contains blog stream conditions', async () => {
-            Contena.Context.app.contentStreamIndexingEnabled = false;
+            Contena.Context.app.blogStreamIndexingEnabled = false;
 
             const props = {
                 ...defaultProps,
                 conditions: [
                     {
-                        type: CONTENT_STREAM_CONDITIONS[0],
+                        type: BLOG_STREAM_CONDITIONS[0],
                     },
                 ],
             };
@@ -243,13 +243,13 @@ describe('src/module/sw-settings-rule/view/sw-settings-rule-detail-base', () => 
         });
 
         it('should not show warning banner when indexing is enabled', async () => {
-            Contena.Context.app.contentStreamIndexingEnabled = true;
+            Contena.Context.app.blogStreamIndexingEnabled = true;
 
             const props = {
                 ...defaultProps,
                 conditions: [
                     {
-                        type: CONTENT_STREAM_CONDITIONS[0],
+                        type: BLOG_STREAM_CONDITIONS[0],
                     },
                 ],
             };
@@ -263,7 +263,7 @@ describe('src/module/sw-settings-rule/view/sw-settings-rule-detail-base', () => 
         });
 
         it('should not show warning banner when no blog stream conditions exist', async () => {
-            Contena.Context.app.contentStreamIndexingEnabled = false;
+            Contena.Context.app.blogStreamIndexingEnabled = false;
 
             const props = {
                 ...defaultProps,
@@ -283,7 +283,7 @@ describe('src/module/sw-settings-rule/view/sw-settings-rule-detail-base', () => 
         });
 
         it('should show warning banner when blog stream conditions exist in nested children', async () => {
-            Contena.Context.app.contentStreamIndexingEnabled = false;
+            Contena.Context.app.blogStreamIndexingEnabled = false;
 
             const props = {
                 ...defaultProps,
@@ -295,7 +295,7 @@ describe('src/module/sw-settings-rule/view/sw-settings-rule-detail-base', () => 
                                 type: 'andContainer',
                                 children: [
                                     {
-                                        type: CONTENT_STREAM_CONDITIONS[0],
+                                        type: BLOG_STREAM_CONDITIONS[0],
                                         children: [],
                                     },
                                 ],
@@ -314,7 +314,7 @@ describe('src/module/sw-settings-rule/view/sw-settings-rule-detail-base', () => 
         });
 
         it('should show blog type warning when cartLineItemProductStates condition exists', async () => {
-            Contena.Context.app.contentStreamIndexingEnabled = true;
+            Contena.Context.app.blogStreamIndexingEnabled = true;
 
             const props = {
                 ...defaultProps,

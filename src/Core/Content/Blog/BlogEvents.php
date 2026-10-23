@@ -158,41 +158,41 @@ class BlogEvents
 
     final public const BLOG_SERVICE_ID_SEARCH_RESULT_LOADED_EVENT = 'blog_service.id.search.result.loaded';
 
-    final public const CONTENT_STREAM_WRITTEN_EVENT = 'content_stream.written';
+    final public const BLOG_STREAM_WRITTEN_EVENT = 'blog_stream.written';
 
-    final public const CONTENT_STREAM_DELETED_EVENT = 'content_stream.deleted';
+    final public const BLOG_STREAM_DELETED_EVENT = 'blog_stream.deleted';
 
-    final public const CONTENT_STREAM_LOADED_EVENT = 'content_stream.loaded';
+    final public const BLOG_STREAM_LOADED_EVENT = 'blog_stream.loaded';
 
-    final public const CONTENT_STREAM_SEARCH_RESULT_LOADED_EVENT = 'content_stream.search.result.loaded';
+    final public const BLOG_STREAM_SEARCH_RESULT_LOADED_EVENT = 'blog_stream.search.result.loaded';
 
-    final public const CONTENT_STREAM_AGGREGATION_LOADED_EVENT = 'content_stream.aggregation.result.loaded';
+    final public const BLOG_STREAM_AGGREGATION_LOADED_EVENT = 'blog_stream.aggregation.result.loaded';
 
-    final public const CONTENT_STREAM_ID_SEARCH_RESULT_LOADED_EVENT = 'content_stream.id.search.result.loaded';
+    final public const BLOG_STREAM_ID_SEARCH_RESULT_LOADED_EVENT = 'blog_stream.id.search.result.loaded';
 
-    final public const CONTENT_STREAM_ASSIGNMENT_WRITTEN_EVENT = 'content_stream_assignment.written';
+    final public const BLOG_STREAM_ASSIGNMENT_WRITTEN_EVENT = 'blog_stream_assignment.written';
 
-    final public const CONTENT_STREAM_ASSIGNMENT_DELETED_EVENT = 'content_stream_assignment.deleted';
+    final public const BLOG_STREAM_ASSIGNMENT_DELETED_EVENT = 'blog_stream_assignment.deleted';
 
-    final public const CONTENT_STREAM_ASSIGNMENT_LOADED_EVENT = 'content_stream_assignment.loaded';
+    final public const BLOG_STREAM_ASSIGNMENT_LOADED_EVENT = 'blog_stream_assignment.loaded';
 
-    final public const CONTENT_STREAM_ASSIGNMENT_SEARCH_RESULT_LOADED_EVENT = 'content_stream_assignment.search.result.loaded';
+    final public const BLOG_STREAM_ASSIGNMENT_SEARCH_RESULT_LOADED_EVENT = 'blog_stream_assignment.search.result.loaded';
 
-    final public const CONTENT_STREAM_ASSIGNMENT_AGGREGATION_LOADED_EVENT = 'content_stream_assignment.aggregation.result.loaded';
+    final public const BLOG_STREAM_ASSIGNMENT_AGGREGATION_LOADED_EVENT = 'blog_stream_assignment.aggregation.result.loaded';
 
-    final public const CONTENT_STREAM_ASSIGNMENT_ID_SEARCH_RESULT_LOADED_EVENT = 'content_stream_assignment.id.search.result.loaded';
+    final public const BLOG_STREAM_ASSIGNMENT_ID_SEARCH_RESULT_LOADED_EVENT = 'blog_stream_assignment.id.search.result.loaded';
 
-    final public const CONTENT_STREAM_TAB_WRITTEN_EVENT = 'content_stream_tab.written';
+    final public const BLOG_STREAM_TAB_WRITTEN_EVENT = 'blog_stream_tab.written';
 
-    final public const CONTENT_STREAM_TAB_DELETED_EVENT = 'content_stream_tab.deleted';
+    final public const BLOG_STREAM_TAB_DELETED_EVENT = 'blog_stream_tab.deleted';
 
-    final public const CONTENT_STREAM_TAB_LOADED_EVENT = 'content_stream_tab.loaded';
+    final public const BLOG_STREAM_TAB_LOADED_EVENT = 'blog_stream_tab.loaded';
 
-    final public const CONTENT_STREAM_TAB_SEARCH_RESULT_LOADED_EVENT = 'content_stream_tab.search.result.loaded';
+    final public const BLOG_STREAM_TAB_SEARCH_RESULT_LOADED_EVENT = 'blog_stream_tab.search.result.loaded';
 
-    final public const CONTENT_STREAM_TAB_AGGREGATION_LOADED_EVENT = 'content_stream_tab.aggregation.result.loaded';
+    final public const BLOG_STREAM_TAB_AGGREGATION_LOADED_EVENT = 'blog_stream_tab.aggregation.result.loaded';
 
-    final public const CONTENT_STREAM_TAB_ID_SEARCH_RESULT_LOADED_EVENT = 'content_stream_tab.id.search.result.loaded';
+    final public const BLOG_STREAM_TAB_ID_SEARCH_RESULT_LOADED_EVENT = 'blog_stream_tab.id.search.result.loaded';
 
     final public const BLOG_TRANSLATION_WRITTEN_EVENT = 'blog_translation.written';
 

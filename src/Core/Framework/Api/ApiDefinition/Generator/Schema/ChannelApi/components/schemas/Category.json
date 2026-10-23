@@ -85,7 +85,7 @@
                         ]
                     },
                     "blogAssignmentType": {
-                        "description": "Type of blog assignment: Dynamic blog group as or `content_stream` or Manual assignment as `blog`.",
+                        "description": "Type of blog assignment: Dynamic blog group as or `blog_stream` or Manual assignment as `blog`.",
                         "type": "string"
                     },
                     "visible": {

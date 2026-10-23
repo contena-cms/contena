@@ -70,7 +70,7 @@ describe('src/app/init-post/worker.init.ts', () => {
         'Contena\\Elasticsearch\\Framework\\Indexing\\IndexingMessage',
         'Contena\\Core\\Content\\Media\\Message\\GenerateThumbnailsMessage',
         'Contena\\Core\\Checkout\\Promotion\\DataAbstractionLayer\\PromotionIndexingMessage',
-        'Contena\\Core\\Content\\ContentStream\\DataAbstractionLayer\\ContentStreamIndexingMessage',
+        'Contena\\Core\\Content\\BlogStream\\DataAbstractionLayer\\BlogStreamIndexingMessage',
         'Contena\\Core\\Content\\Category\\DataAbstractionLayer\\CategoryIndexingMessage',
         'Contena\\Core\\Content\\Media\\DataAbstractionLayer\\MediaIndexingMessage',
         'Contena\\Core\\System\\Channel\\DataAbstractionLayer\\ChannelIndexingMessage',

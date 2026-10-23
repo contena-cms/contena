@@ -36,7 +36,7 @@
 
             {% block sw_category_detail_product_assignment_manual_alert %}
             <mt-banner
-                v-if="category.blogAssignmentType === 'content_stream' && manualAssignedProductsCount > 0"
+                v-if="category.blogAssignmentType === 'blog_stream' && manualAssignedProductsCount > 0"
                 variant="info"
             >
                 {{ $t('sw-category.base.blogs.alertManualAssignedProductsOnAssignmentTypeStream') }}
@@ -47,30 +47,30 @@
 
         {% block sw_category_detail_product_assignment_stream_select %}
         <template
-            v-if="category.blogAssignmentType === 'content_stream'"
+            v-if="category.blogAssignmentType === 'blog_stream'"
             #select
         >
 
             {% block sw_category_detail_product_assignment_stream_select_field %}
             <sw-entity-single-select
-                v-model:value="category.contentStreamId"
+                v-model:value="category.blogStreamId"
                 class="sw-category-detail-blogs__product-stream-select"
-                entity="content_stream"
-                :criteria="contentStreamCriteria"
+                entity="blog_stream"
+                :criteria="blogStreamCriteria"
                 show-clearable-button
                 :disabled="!acl.can('category.editor')"
                 :label="$t('sw-category.base.blogs.blogAssignmentTypeStreamLabel')"
                 :help-text="dynamicProductGroupHelpText"
                 :placeholder="$t('sw-category.base.blogs.blogAssignmentTypeStreamPlaceholder')"
-                :error="contentStreamInvalidError || categoryProductStreamIdError"
+                :error="blogStreamInvalidError || categoryProductStreamIdError"
             />
             {% endblock %}
 
             {% block sw_category_detail_product_assignment_stream_preview_link %}
             <div class="sw-category-detail-blogs__product-stream-preview-link">
                 <router-link
-                    v-if="category.contentStreamId"
-                    :to="{ name: 'sw.blog.stream.detail', params: { id: category.contentStreamId } }"
+                    v-if="category.blogStreamId"
+                    :to="{ name: 'sw.blog.stream.detail', params: { id: category.blogStreamId } }"
                 >
                     {{ $t('sw-category.base.blogs.dynamicProductGroupDetailLinkText') }}
                     <mt-icon
@@ -85,11 +85,11 @@
 
         {% block sw_category_detail_product_assignment_stream_preview_grid %}
         <template
-            v-if="category.blogAssignmentType === 'content_stream'"
+            v-if="category.blogAssignmentType === 'blog_stream'"
             #data-grid
         >
             <sw-blog-stream-grid-preview
-                :filters="contentStreamFilter"
+                :filters="blogStreamFilter"
                 :columns="blogColumns"
             />
         </template>

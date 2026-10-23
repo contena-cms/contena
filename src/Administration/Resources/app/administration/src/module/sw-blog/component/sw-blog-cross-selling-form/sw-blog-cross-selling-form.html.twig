@@ -86,12 +86,12 @@
             </sw-container>
 
             <div v-if="!useManualAssignment">
-                {% block sw_prduct_cross_selling_form_content_stream_field %}
+                {% block sw_prduct_cross_selling_form_blog_stream_field %}
                 <sw-entity-single-select
                     id="sw-field--crossSelling-blog-group"
-                    v-model:value="crossSelling.contentStreamId"
-                    entity="content_stream"
-                    :criteria="contentStreamCriteria"
+                    v-model:value="crossSelling.blogStreamId"
+                    entity="blog_stream"
+                    :criteria="blogStreamCriteria"
                     class="sw-select-cross-selling__select-blog-stream"
                     :label="$t('sw-blog.crossselling.inputCrossSellingProductStream')"
                     :placeholder="$t('sw-blog.crossselling.inputCrossSellingProductStreamPlaceholder')"
@@ -162,7 +162,7 @@
             <sw-blog-stream-modal-preview
                 v-if="showModalPreview"
                 ref="modalPreview"
-                :filters="contentStreamFilterTree"
+                :filters="blogStreamFilterTree"
                 @modal-close="closeModalPreview"
             />
             {% endblock %}
@@ -213,13 +213,13 @@
 
     {% block sw_product_cross_selling_form_condition_tree_invisibly %}
     <sw-condition-tree
-        v-if="contentStreamFilterRepository"
+        v-if="blogStreamFilterRepository"
         v-show="false"
-        association-field="contentStreamId"
+        association-field="blogStreamId"
         child-association-field="queries"
-        :initial-conditions="contentStreamFilter"
-        :condition-repository="contentStreamFilterRepository"
-        :condition-data-provider-service="contentStreamConditionService"
+        :initial-conditions="blogStreamFilter"
+        :condition-repository="blogStreamFilterRepository"
+        :condition-data-provider-service="blogStreamConditionService"
         :association-value="associationValue"
         :root-condition="null"
         @conditions-changed="updateProductStreamFilterTree"

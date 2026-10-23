@@ -541,7 +541,7 @@
             <xs:element name="channel" type="empty" minOccurs="0"/>
             <xs:element name="landing_page" type="empty" minOccurs="0"/>
             <xs:element name="promotion" type="empty" minOccurs="0"/>
-            <xs:element name="content_stream" type="empty" minOccurs="0"/>
+            <xs:element name="blog_stream" type="empty" minOccurs="0"/>
             <xs:element name="property_group" type="empty" minOccurs="0"/>
             <xs:element name="property_group_option" type="empty" minOccurs="0"/>
             <xs:element name="blog_review" type="empty" minOccurs="0"/>

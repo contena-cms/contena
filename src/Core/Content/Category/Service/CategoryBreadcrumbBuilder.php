@@ -81,9 +81,9 @@ class CategoryBreadcrumbBuilder
         }
 
         $categoryIds = $blog->getCategoryIds() ?? [];
-        $contentStreamIds = $blog->getStreamIds() ?? [];
+        $blogStreamIds = $blog->getStreamIds() ?? [];
 
-        if ($contentStreamIds === [] && $categoryIds === []) {
+        if ($blogStreamIds === [] && $categoryIds === []) {
             return null;
         }
 
@@ -95,8 +95,8 @@ class CategoryBreadcrumbBuilder
         if ($categoryIds !== []) {
             $criteria->setIds($categoryIds);
         } else {
-            $criteria->addFilter(new EqualsAnyFilter('contentStreamId', $contentStreamIds));
-            $criteria->addFilter(new EqualsFilter('blogAssignmentType', CategoryDefinition::BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM));
+            $criteria->addFilter(new EqualsAnyFilter('blogStreamId', $blogStreamIds));
+            $criteria->addFilter(new EqualsFilter('blogAssignmentType', CategoryDefinition::BLOG_ASSIGNMENT_TYPE_BLOG_STREAM));
         }
 
         // categories hidden in the navigation must still yield a breadcrumb, but visible ones are preferred

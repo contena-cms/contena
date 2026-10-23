@@ -16,7 +16,7 @@ export default {
 
     inject: [
         'repositoryFactory',
-        'contentStreamConditionService',
+        'blogStreamConditionService',
         'acl',
         'customFieldDataProviderService',
         'blogTypeService',
@@ -42,7 +42,7 @@ export default {
     mixins: [
         Mixin.getByName('placeholder'),
         Mixin.getByName('notification'),
-        Mixin.getByName('discard-detail-page-changes')('contentStream'),
+        Mixin.getByName('discard-detail-page-changes')('blogStream'),
         Mixin.getByName('sw-inline-snippet'),
     ],
 
@@ -52,7 +52,7 @@ export default {
     },
 
     props: {
-        contentStreamId: {
+        blogStreamId: {
             type: String,
             required: false,
             default: null,
@@ -65,12 +65,12 @@ export default {
             isSaving: false,
             customFieldsLoading: false,
             isSaveSuccessful: false,
-            contentStream: {
+            blogStream: {
                 name: null,
                 description: null,
             },
-            contentStreamFilters: null,
-            contentStreamFiltersTree: null,
+            blogStreamFilters: null,
+            blogStreamFiltersTree: null,
             deletedProductStreamFilters: [],
             blogCustomFields: {},
             showModalPreview: false,
@@ -88,19 +88,19 @@ export default {
 
     computed: {
         identifier() {
-            return this.placeholder(this.contentStream, 'name');
+            return this.placeholder(this.blogStream, 'name');
         },
 
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
-        contentStreamFiltersRepository() {
-            if (!this.contentStream?.filters?.entity || !this.contentStream?.filters?.source) {
+        blogStreamFiltersRepository() {
+            if (!this.blogStream?.filters?.entity || !this.blogStream?.filters?.source) {
                 return null;
             }
 
-            return this.repositoryFactory.create(this.contentStream.filters.entity, this.contentStream.filters.source);
+            return this.repositoryFactory.create(this.blogStream.filters.entity, this.blogStream.filters.source);
         },
 
         customFieldSetRepository() {
@@ -108,7 +108,7 @@ export default {
         },
 
         tooltipSave() {
-            if (!this.acl.can('content_stream.editor')) {
+            if (!this.acl.can('blog_stream.editor')) {
                 return {
                     message: this.$t('sw-privileges.tooltip.warning'),
                     appearance: 'dark',
@@ -139,36 +139,36 @@ export default {
             return this.isSystemLanguage;
         },
 
-        ...mapPropertyErrors('contentStream', ['name']),
+        ...mapPropertyErrors('blogStream', ['name']),
 
         showCustomFields() {
-            return !!this.contentStream?.id && this.customFieldSets && this.customFieldSets.length > 0;
+            return !!this.blogStream?.id && this.customFieldSets && this.customFieldSets.length > 0;
         },
 
-        contentStreamIndexingEnabled() {
-            return Context.app.contentStreamIndexingEnabled ?? true;
+        blogStreamIndexingEnabled() {
+            return Context.app.blogStreamIndexingEnabled ?? true;
         },
 
         deprecatedFiltersInUse() {
-            if (!this.contentStreamFiltersTree) {
+            if (!this.blogStreamFiltersTree) {
                 return [];
             }
 
-            return this.contentStreamConditionService.getDeprecationsInTree(this.contentStreamFiltersTree);
+            return this.blogStreamConditionService.getDeprecationsInTree(this.blogStreamFiltersTree);
         },
     },
 
     watch: {
-        contentStreamId: {
+        blogStreamId: {
             immediate: true,
             handler() {
-                if (!this.contentStreamId) {
+                if (!this.blogStreamId) {
                     this.createProductStream();
                     return;
                 }
 
                 this.isLoading = true;
-                this.loadEntityData(this.contentStreamId).then(() => {
+                this.loadEntityData(this.blogStreamId).then(() => {
                     this.isLoading = false;
                 });
             },
@@ -182,15 +182,15 @@ export default {
     methods: {
         createdComponent() {
             Contena.ExtensionAPI.publishData({
-                id: 'sw-blog-stream-detail__contentStream',
-                path: 'contentStream',
+                id: 'sw-blog-stream-detail__blogStream',
+                path: 'blogStream',
                 scope: this,
             });
             this.languageId = Context.api.languageId;
 
             const promises = [this.loadCustomFieldSets(), this.loadProductTypes()];
 
-            if (this.contentStreamId) {
+            if (this.blogStreamId) {
                 promises.push(this.getProductCustomFields());
             }
 
@@ -200,7 +200,7 @@ export default {
         },
 
         loadCustomFieldSets() {
-            this.customFieldDataProviderService.getCustomFieldSets('content_stream').then((sets) => {
+            this.customFieldDataProviderService.getCustomFieldSets('blog_stream').then((sets) => {
                 this.customFieldSets = sets;
             });
         },
@@ -214,15 +214,15 @@ export default {
         createProductStream() {
             this.getProductCustomFields().then(() => {
                 Context.api.languageId = Context.api.systemLanguageId;
-                this.contentStream = this.contentStreamRepository.create(Context.api);
-                this.contentStream.displayAsGroup = true;
-                this.contentStreamFilters = this.contentStream.filters;
+                this.blogStream = this.blogStreamRepository.create(Context.api);
+                this.blogStream.displayAsGroup = true;
+                this.blogStreamFilters = this.blogStream.filters;
             });
         },
 
-        loadEntityData(contentStreamId) {
-            return this.contentStreamRepository.get(contentStreamId, Context.api).then((contentStream) => {
-                this.contentStream = contentStream;
+        loadEntityData(blogStreamId) {
+            return this.blogStreamRepository.get(blogStreamId, Context.api).then((blogStream) => {
+                this.blogStream = blogStream;
                 return this.loadFilters();
             });
         },
@@ -230,22 +230,22 @@ export default {
         loadFilters(collection = null) {
             if (collection === null) {
                 const filterCriteria = new Criteria(1, 25);
-                filterCriteria.addFilter(Criteria.equals('contentStreamId', this.contentStreamId));
+                filterCriteria.addFilter(Criteria.equals('blogStreamId', this.blogStreamId));
 
-                return this.contentStreamFiltersRepository.search(filterCriteria, Context.api).then((blogFilter) => {
+                return this.blogStreamFiltersRepository.search(filterCriteria, Context.api).then((blogFilter) => {
                     return this.loadFilters(blogFilter);
                 });
             }
 
             if (collection.length >= collection.total) {
-                this.contentStreamFilters = collection;
+                this.blogStreamFilters = collection;
                 return Promise.resolve();
             }
 
             const nextCriteria = Criteria.fromCriteria(collection.criteria);
             nextCriteria.page += 1;
 
-            return this.contentStreamFiltersRepository.search(nextCriteria, collection.context).then((nextFilters) => {
+            return this.blogStreamFiltersRepository.search(nextCriteria, collection.context).then((nextFilters) => {
                 collection.push(...nextFilters);
                 collection.criteria = nextFilters.criteria;
                 collection.total = nextFilters.total;
@@ -255,7 +255,7 @@ export default {
         },
 
         abortOnLanguageChange() {
-            return this.contentStreamRepository.hasChanges(this.contentStream);
+            return this.blogStreamRepository.hasChanges(this.blogStream);
         },
 
         saveOnLanguageChange() {
@@ -266,7 +266,7 @@ export default {
             this.languageId = languageId;
 
             this.isLoading = true;
-            this.loadEntityData(this.contentStream.id).then(() => {
+            this.loadEntityData(this.blogStream.id).then(() => {
                 this.isLoading = false;
             });
         },
@@ -276,14 +276,14 @@ export default {
                 const behavior = {
                     cloneChildren: true,
                     overwrites: {
-                        name: `${this.contentStream.name || this.contentStream.translated.name} ${this.$t('global.default.copy')}`,
+                        name: `${this.blogStream.name || this.blogStream.translated.name} ${this.$t('global.default.copy')}`,
                     },
                 };
 
                 this.isLoading = true;
 
-                return this.contentStreamRepository
-                    .clone(this.contentStream.id, behavior, Contena.Context.api)
+                return this.blogStreamRepository
+                    .clone(this.blogStream.id, behavior, Contena.Context.api)
                     .then((clone) => {
                         const route = {
                             name: 'sw.blog.stream.detail',
@@ -306,13 +306,13 @@ export default {
             this.isSaveSuccessful = false;
             this.isSaving = true;
 
-            if (this.contentStream.isNew()) {
-                this.contentStream.filters = this.contentStreamFiltersTree;
+            if (this.blogStream.isNew()) {
+                this.blogStream.filters = this.blogStreamFiltersTree;
                 return this.saveProductStream()
                     .then(() => {
                         this.$router.push({
                             name: 'sw.blog.stream.detail',
-                            params: { id: this.contentStream.id },
+                            params: { id: this.blogStream.id },
                         });
                         this.isSaveSuccessful = true;
                         this.isSaving = false;
@@ -323,11 +323,11 @@ export default {
                     });
             }
 
-            return this.contentStreamRepository
-                .save(this.contentStream, Context.api)
+            return this.blogStreamRepository
+                .save(this.blogStream, Context.api)
                 .then(this.syncProductStreamFilters)
                 .then(() => {
-                    return this.loadEntityData(this.contentStream.id);
+                    return this.loadEntityData(this.blogStream.id);
                 })
                 .then(() => {
                     this.isSaveSuccessful = true;
@@ -346,13 +346,13 @@ export default {
         },
 
         saveProductStream() {
-            return this.contentStreamRepository.save(this.contentStream, Context.api);
+            return this.blogStreamRepository.save(this.blogStream, Context.api);
         },
 
         syncProductStreamFilters() {
-            return this.contentStreamFiltersRepository.sync(this.contentStreamFiltersTree, Context.api).then(() => {
+            return this.blogStreamFiltersRepository.sync(this.blogStreamFiltersTree, Context.api).then(() => {
                 if (this.deletedProductStreamFilters.length > 0) {
-                    return this.contentStreamFiltersRepository
+                    return this.blogStreamFiltersRepository
                         .syncDeleted(this.deletedProductStreamFilters, Context.api)
                         .then(() => {
                             this.deletedProductStreamFilters = [];
@@ -431,7 +431,7 @@ export default {
         },
 
         updateFilterTree({ conditions, deletedIds }) {
-            this.contentStreamFiltersTree = conditions;
+            this.blogStreamFiltersTree = conditions;
             this.deletedProductStreamFilters = [...this.deletedProductStreamFilters, ...deletedIds];
         },
 

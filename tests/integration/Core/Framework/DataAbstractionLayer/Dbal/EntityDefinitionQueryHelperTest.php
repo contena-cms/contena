@@ -5,7 +5,7 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Dbal;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\BlogStream\BlogStreamDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
@@ -72,7 +72,7 @@ class EntityDefinitionQueryHelperTest extends TestCase
         ];
 
         yield 'With resolved translated field' => [
-            ContentStreamDefinition::class,
+            BlogStreamDefinition::class,
             'description.invalid',
             [
                 'description',
@@ -80,7 +80,7 @@ class EntityDefinitionQueryHelperTest extends TestCase
         ];
 
         yield 'Without resolved translated field' => [
-            ContentStreamDefinition::class,
+            BlogStreamDefinition::class,
             'description.invalid',
             [
                 'description',

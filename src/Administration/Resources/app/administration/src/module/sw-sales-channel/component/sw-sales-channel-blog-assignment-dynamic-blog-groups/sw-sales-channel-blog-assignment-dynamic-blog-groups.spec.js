@@ -14,7 +14,7 @@ async function getError(method, ...args) {
     }
 }
 
-const contentStreamsMock = [
+const blogStreamsMock = [
     {
         id: 1,
         name: 'Low prices',
@@ -28,7 +28,7 @@ const contentStreamsMock = [
         name: 'High prices',
     },
 ];
-contentStreamsMock.total = 3;
+blogStreamsMock.total = 3;
 
 const blogsMock = [
     {
@@ -94,7 +94,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
         wrapper.vm.createdComponent();
 
         expect(wrapper.vm.getProductStreams).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.contentStreamColumns).toEqual(
+        expect(wrapper.vm.blogStreamColumns).toEqual(
             expect.arrayContaining([expect.objectContaining({ property: 'name' })]),
         );
 
@@ -104,13 +104,13 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
     it('should get blog streams successful', async () => {
         const wrapper = await createWrapper();
 
-        wrapper.vm.contentStreamRepository.search = jest.fn(() => {
-            return Promise.resolve(contentStreamsMock);
+        wrapper.vm.blogStreamRepository.search = jest.fn(() => {
+            return Promise.resolve(blogStreamsMock);
         });
 
         await wrapper.vm.getProductStreams();
 
-        expect(wrapper.vm.contentStreams).toEqual(
+        expect(wrapper.vm.blogStreams).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ name: 'Low prices' }),
                 expect.objectContaining({ name: 'Standard prices' }),
@@ -119,22 +119,22 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
         );
         expect(wrapper.vm.total).toBe(3);
 
-        wrapper.vm.contentStreamRepository.search.mockRestore();
+        wrapper.vm.blogStreamRepository.search.mockRestore();
     });
 
     it('should get blog streams failed', async () => {
         const wrapper = await createWrapper();
 
-        wrapper.vm.contentStreamRepository.search = jest.fn(() => {
+        wrapper.vm.blogStreamRepository.search = jest.fn(() => {
             return Promise.reject();
         });
 
         await wrapper.vm.getProductStreams();
 
-        expect(wrapper.vm.contentStreams).toEqual(expect.arrayContaining([]));
+        expect(wrapper.vm.blogStreams).toEqual(expect.arrayContaining([]));
         expect(wrapper.vm.total).toBe(0);
 
-        wrapper.vm.contentStreamRepository.search.mockRestore();
+        wrapper.vm.blogStreamRepository.search.mockRestore();
     });
 
     it('should get blog streams when searching', async () => {
@@ -155,7 +155,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
         expect(wrapper.vm.term).toBe('Standard prices');
         expect(wrapper.vm.page).toBe(1);
         expect(wrapper.vm.getProductStreams).toHaveBeenCalledTimes(1);
-        expect(wrapper.vm.contentStreamCriteria.term).toBe('Standard prices');
+        expect(wrapper.vm.blogStreamCriteria.term).toBe('Standard prices');
 
         wrapper.vm.getProductStreams.mockRestore();
     });
@@ -182,7 +182,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
         window.open = jest.fn();
         wrapper.vm.$router.resolve = jest.fn(() => ({ href: 'href' }));
 
-        wrapper.vm.onOpen(contentStreamsMock[1]);
+        wrapper.vm.onOpen(blogStreamsMock[1]);
 
         expect(wrapper.vm.$router.resolve).toHaveBeenCalledWith(
             expect.objectContaining({
@@ -203,7 +203,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
             return Promise.resolve(blogsMock);
         });
 
-        await wrapper.vm.onSelect({ 1: contentStreamsMock[0] });
+        await wrapper.vm.onSelect({ 1: blogStreamsMock[0] });
 
         expect(wrapper.vm.getProductsFromProductStreams).toHaveBeenCalledTimes(1);
         expect(wrapper.emitted()['selection-change'][0]).toEqual(expect.arrayContaining([blogsMock, 'groupProducts']));
@@ -219,7 +219,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
             return Promise.reject(new Error('Whoops!'));
         });
 
-        await wrapper.vm.onSelect({ 1: contentStreamsMock[0] });
+        await wrapper.vm.onSelect({ 1: blogStreamsMock[0] });
 
         expect(wrapper.vm.getProductsFromProductStreams).toHaveBeenCalledTimes(1);
         expect(wrapper.vm.createNotificationError).toHaveBeenCalledWith(expect.objectContaining({ message: 'Whoops!' }));
@@ -243,7 +243,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
             return Promise.resolve(blogsMock);
         });
 
-        await wrapper.vm.getProductsFromProductStreams({ 1: contentStreamsMock[0] }).then((values) => {
+        await wrapper.vm.getProductsFromProductStreams({ 1: blogStreamsMock[0] }).then((values) => {
             expect(values.flat()).toEqual(
                 expect.arrayContaining([
                     expect.objectContaining({ name: 'Gaming chair' }),
@@ -265,7 +265,7 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
         expect(
             (
                 await getError(wrapper.vm.getProductsFromProductStreams, {
-                    1: contentStreamsMock[0],
+                    1: blogStreamsMock[0],
                 })
             ).message,
         ).toBe('Whoops!');
@@ -276,39 +276,39 @@ describe('src/module/sw-sales-channel/component/sw-sales-channel-blogs-assignmen
     it('should get blog stream filter successful', async () => {
         const wrapper = await createWrapper();
 
-        const contentStreamFilterMock = {
+        const blogStreamFilterMock = {
             operator: 'OR',
             queries: [],
             type: 'multi',
         };
 
-        wrapper.vm.contentStreamRepository.get = jest.fn(() => {
+        wrapper.vm.blogStreamRepository.get = jest.fn(() => {
             return Promise.resolve({
-                apiFilter: [contentStreamFilterMock],
+                apiFilter: [blogStreamFilterMock],
             });
         });
 
         await wrapper.vm.getProductStreamFilter(1);
 
-        expect(wrapper.vm.contentStreamFilter).toEqual(
-            expect.arrayContaining([expect.objectContaining(contentStreamFilterMock)]),
+        expect(wrapper.vm.blogStreamFilter).toEqual(
+            expect.arrayContaining([expect.objectContaining(blogStreamFilterMock)]),
         );
 
-        wrapper.vm.contentStreamRepository.get.mockRestore();
+        wrapper.vm.blogStreamRepository.get.mockRestore();
     });
 
     it('should get blog stream filter failed', async () => {
         const wrapper = await createWrapper();
 
-        wrapper.vm.contentStreamRepository.get = jest.fn(() => {
+        wrapper.vm.blogStreamRepository.get = jest.fn(() => {
             throw new Error('Whoops!');
         });
 
         expect((await getError(wrapper.vm.getProductStreamFilter, 1)).message).toBe('Whoops!');
 
-        expect(wrapper.vm.contentStreamFilter).toEqual(expect.arrayContaining([]));
+        expect(wrapper.vm.blogStreamFilter).toEqual(expect.arrayContaining([]));
 
-        wrapper.vm.contentStreamRepository.get.mockRestore();
+        wrapper.vm.blogStreamRepository.get.mockRestore();
     });
 
     it('should get blogs successful', async () => {

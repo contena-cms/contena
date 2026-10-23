@@ -495,7 +495,7 @@
       "nameSortingType": "Name",
       "releaseDateAscendingSortingType": "Erscheinungsdatum, aufsteigend",
       "releaseDateDescendingSortingType": "Erscheinungsdatum, absteigend",
-      "contentStreamType": "Dynamische Produktgruppe",
+      "blogStreamType": "Dynamische Produktgruppe",
       "blogListType": "Manuelle Zuweisung",
       "deleteConfirmTitle": "Cross Selling löschen",
       "deleteConfirmText": "Möchtest Du die Cross-Selling-Konfiguration wirklich löschen?",

@@ -167,11 +167,11 @@ class Migration1740321707SetAutoplayTimeoutAndSpeedSettingsForBlogSliderTest ext
                 'value' => 'outside',
                 'source' => 'static',
             ],
-            'contentStreamLimit' => [
+            'blogStreamLimit' => [
                 'value' => 10,
                 'source' => 'static',
             ],
-            'contentStreamSorting' => [
+            'blogStreamSorting' => [
                 'value' => 'name:ASC',
                 'source' => 'static',
             ],
@@ -228,11 +228,11 @@ class Migration1740321707SetAutoplayTimeoutAndSpeedSettingsForBlogSliderTest ext
                 'value' => 'outside',
                 'source' => 'static',
             ],
-            'contentStreamLimit' => [
+            'blogStreamLimit' => [
                 'value' => 10,
                 'source' => 'static',
             ],
-            'contentStreamSorting' => [
+            'blogStreamSorting' => [
                 'value' => 'name:ASC',
                 'source' => 'static',
             ],

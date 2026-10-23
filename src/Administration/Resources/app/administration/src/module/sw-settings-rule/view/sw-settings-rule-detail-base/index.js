@@ -1,6 +1,6 @@
 import template from './sw-settings-rule-detail-base.html.twig';
 import './sw-settings-rule-detail-base.scss';
-import { CONTENT_STREAM_CONDITIONS } from '../../constant/sw-settings-rule.constant';
+import { BLOG_STREAM_CONDITIONS } from '../../constant/sw-settings-rule.constant';
 
 /**
  * @private
@@ -74,13 +74,13 @@ export default {
             return this.rule && this.customFieldSets && this.customFieldSets.length > 0;
         },
 
-        contentStreamIndexingEnabled() {
-            return Contena.Context.app.contentStreamIndexingEnabled ?? true;
+        blogStreamIndexingEnabled() {
+            return Contena.Context.app.blogStreamIndexingEnabled ?? true;
         },
 
         showProductStreamIndexingWarning() {
             return (
-                this.contentStreamIndexingEnabled === false &&
+                this.blogStreamIndexingEnabled === false &&
                 this.conditions &&
                 this.hasProductStreamConditions(this.conditions)
             );
@@ -122,7 +122,7 @@ export default {
 
         hasProductStreamConditions(conditions) {
             return conditions.some((condition) => {
-                if (CONTENT_STREAM_CONDITIONS.includes(condition.type)) {
+                if (BLOG_STREAM_CONDITIONS.includes(condition.type)) {
                     return true;
                 }
 

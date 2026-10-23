@@ -57,21 +57,21 @@
             </sw-cms-inherit-wrapper>
             {% endblock %}
 
-            <template v-if="element.config.blogs.source === 'content_stream'">
-                {% block sw_cms_element_product_slider_config_mt_content_content_stream_select %}
+            <template v-if="element.config.blogs.source === 'blog_stream'">
+                {% block sw_cms_element_product_slider_config_mt_content_blog_stream_select %}
                 <sw-cms-inherit-wrapper
                     field="blogs"
                     :element="element"
-                    :label="$t('sw-cms.elements.blogSlider.config.label.contentStreamChoice')"
+                    :label="$t('sw-cms.elements.blogSlider.config.label.blogStreamChoice')"
                     @inheritance:restore="onRestoreInheritance"
                 >
                     <template #default="{ isInherited }">
                         <sw-entity-single-select
                             v-model:value="element.config.blogs.value"
-                            entity="content_stream"
-                            :criteria="contentStreamCriteria"
+                            entity="blog_stream"
+                            :criteria="blogStreamCriteria"
                             class="sw-cms-el-config-blog-slider__tab-content-blog-stream-select"
-                            :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.contentStreamChoice')"
+                            :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.blogStreamChoice')"
                             :disabled="isInherited"
                             show-clearable-button
                             @update:value="onChangeProductStream"
@@ -80,7 +80,7 @@
                 </sw-cms-inherit-wrapper>
                 {% endblock %}
 
-                {% block sw_cms_element_product_slider_config_mt_content_content_stream_performance_hint %}
+                {% block sw_cms_element_product_slider_config_mt_content_blog_stream_performance_hint %}
                 <mt-banner
                     class="sw-cms-el-config-blog-slider__tab-content-blog-stream-performance-hint"
                     variant="info"
@@ -91,9 +91,9 @@
 
                 <sw-blog-stream-modal-preview
                     v-if="showProductStreamPreview"
-                    :filters="contentStream.apiFilter"
-                    :default-limit="element.config.contentStreamLimit.value"
-                    :default-sorting="element.config.contentStreamSorting.value"
+                    :filters="blogStream.apiFilter"
+                    :default-limit="element.config.blogStreamLimit.value"
+                    :default-sorting="element.config.blogStreamSorting.value"
                     @modal-close="onCloseProductStreamModal"
                 />
 
@@ -101,36 +101,36 @@
                     columns="1fr 1fr"
                     gap="30px"
                 >
-                    {% block sw_cms_element_product_slider_config_mt_content_content_stream_sorting %}
+                    {% block sw_cms_element_product_slider_config_mt_content_blog_stream_sorting %}
                     <sw-cms-inherit-wrapper
-                        field="contentStreamSorting"
+                        field="blogStreamSorting"
                         :element="element"
-                        :label="$t('sw-cms.elements.blogSlider.config.label.contentStreamSorting')"
+                        :label="$t('sw-cms.elements.blogSlider.config.label.blogStreamSorting')"
                     >
                         <template #default="{ isInherited }">
                             <sw-single-select
-                                v-model:value="element.config.contentStreamSorting.value"
+                                v-model:value="element.config.blogStreamSorting.value"
                                 class="sw-cms-el-config-blog-slider__tab-content-blog-stream-sorting"
-                                :options="contentStreamSortingOptions"
-                                :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.contentStreamSorting')"
-                                :disabled="isInherited || !contentStream"
+                                :options="blogStreamSortingOptions"
+                                :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.blogStreamSorting')"
+                                :disabled="isInherited || !blogStream"
                                 show-clearable-button
                             />
                         </template>
                     </sw-cms-inherit-wrapper>
                     {% endblock %}
 
-                    {% block sw_cms_element_product_slider_config_mt_content_content_stream_limit %}
+                    {% block sw_cms_element_product_slider_config_mt_content_blog_stream_limit %}
                     <sw-cms-inherit-wrapper
-                        field="contentStreamLimit"
+                        field="blogStreamLimit"
                         :element="element"
-                        :label="$t('sw-cms.elements.blogSlider.config.label.contentStreamLimit')"
+                        :label="$t('sw-cms.elements.blogSlider.config.label.blogStreamLimit')"
                     >
                         <template #default="{ isInherited }">
                             <mt-number-field
-                                v-model="element.config.contentStreamLimit.value"
+                                v-model="element.config.blogStreamLimit.value"
                                 class="sw-cms-el-config-blog-slider__tab-content-blog-stream-limit"
-                                :disabled="isInherited || !contentStream"
+                                :disabled="isInherited || !blogStream"
                                 :min="1"
                             />
                         </template>
@@ -138,11 +138,11 @@
                     {% endblock %}
                 </sw-container>
 
-                {% block sw_cms_element_product_slider_config_mt_content_content_stream_preview_link %}
+                {% block sw_cms_element_product_slider_config_mt_content_blog_stream_preview_link %}
                 <div class="sw-cms-el-config-blog-slider__product-stream-preview-link-container">
                     <a
                         class="sw-cms-el-config-blog-slider__product-stream-preview-link link"
-                        :class="{ 'is--disabled': !contentStream }"
+                        :class="{ 'is--disabled': !blogStream }"
                         href="#"
                         @click.prevent="onClickProductStreamPreview"
                     >
@@ -468,21 +468,21 @@
                     </sw-cms-inherit-wrapper>
                 {% endblock %}
 
-                    <template v-if="element.config.blogs.source === 'content_stream'">
-                    {% block sw_cms_element_product_slider_config_content_content_stream_select %}
+                    <template v-if="element.config.blogs.source === 'blog_stream'">
+                    {% block sw_cms_element_product_slider_config_content_blog_stream_select %}
                         <sw-cms-inherit-wrapper
                             field="blogs"
                             :element="element"
-                            :label="$t('sw-cms.elements.blogSlider.config.label.contentStreamChoice')"
+                            :label="$t('sw-cms.elements.blogSlider.config.label.blogStreamChoice')"
                             @inheritance:restore="onRestoreInheritance"
                         >
                             <template #default="{ isInherited }">
                                 <sw-entity-single-select
                                     v-model:value="element.config.blogs.value"
-                                    entity="content_stream"
-                                    :criteria="contentStreamCriteria"
+                                    entity="blog_stream"
+                                    :criteria="blogStreamCriteria"
                                     class="sw-cms-el-config-blog-slider__tab-content-blog-stream-select"
-                                    :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.contentStreamChoice')"
+                                    :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.blogStreamChoice')"
                                     :disabled="isInherited"
                                     show-clearable-button
                                     @update:value="onChangeProductStream"
@@ -491,7 +491,7 @@
                         </sw-cms-inherit-wrapper>
                     {% endblock %}
 
-                    {% block sw_cms_element_product_slider_config_content_content_stream_performance_hint %}
+                    {% block sw_cms_element_product_slider_config_content_blog_stream_performance_hint %}
                         <mt-banner
                             class="sw-cms-el-config-blog-slider__tab-content-blog-stream-performance-hint"
                             variant="info"
@@ -502,9 +502,9 @@
 
                         <sw-blog-stream-modal-preview
                             v-if="showProductStreamPreview"
-                            :filters="contentStream.apiFilter"
-                            :default-limit="element.config.contentStreamLimit.value"
-                            :default-sorting="element.config.contentStreamSorting.value"
+                            :filters="blogStream.apiFilter"
+                            :default-limit="element.config.blogStreamLimit.value"
+                            :default-sorting="element.config.blogStreamSorting.value"
                             @modal-close="onCloseProductStreamModal"
                         />
 
@@ -512,36 +512,36 @@
                             columns="1fr 1fr"
                             gap="30px"
                         >
-                        {% block sw_cms_element_product_slider_config_content_content_stream_sorting %}
+                        {% block sw_cms_element_product_slider_config_content_blog_stream_sorting %}
                             <sw-cms-inherit-wrapper
-                                field="contentStreamSorting"
+                                field="blogStreamSorting"
                                 :element="element"
-                                :label="$t('sw-cms.elements.blogSlider.config.label.contentStreamSorting')"
+                                :label="$t('sw-cms.elements.blogSlider.config.label.blogStreamSorting')"
                             >
                                 <template #default="{ isInherited }">
                                     <sw-single-select
-                                        v-model:value="element.config.contentStreamSorting.value"
+                                        v-model:value="element.config.blogStreamSorting.value"
                                         class="sw-cms-el-config-blog-slider__tab-content-blog-stream-sorting"
-                                        :options="contentStreamSortingOptions"
-                                        :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.contentStreamSorting')"
-                                        :disabled="isInherited || !contentStream"
+                                        :options="blogStreamSortingOptions"
+                                        :placeholder="$t('sw-cms.elements.blogSlider.config.placeholder.blogStreamSorting')"
+                                        :disabled="isInherited || !blogStream"
                                         show-clearable-button
                                     />
                                 </template>
                             </sw-cms-inherit-wrapper>
                         {% endblock %}
 
-                        {% block sw_cms_element_product_slider_config_content_content_stream_limit %}
+                        {% block sw_cms_element_product_slider_config_content_blog_stream_limit %}
                             <sw-cms-inherit-wrapper
-                                field="contentStreamLimit"
+                                field="blogStreamLimit"
                                 :element="element"
-                                :label="$t('sw-cms.elements.blogSlider.config.label.contentStreamLimit')"
+                                :label="$t('sw-cms.elements.blogSlider.config.label.blogStreamLimit')"
                             >
                                 <template #default="{ isInherited }">
                                     <mt-number-field
-                                        v-model="element.config.contentStreamLimit.value"
+                                        v-model="element.config.blogStreamLimit.value"
                                         class="sw-cms-el-config-blog-slider__tab-content-blog-stream-limit"
-                                        :disabled="isInherited || !contentStream"
+                                        :disabled="isInherited || !blogStream"
                                         :min="1"
                                     />
                                 </template>
@@ -549,11 +549,11 @@
                         {% endblock %}
                         </sw-container>
 
-                    {% block sw_cms_element_product_slider_config_content_content_stream_preview_link %}
+                    {% block sw_cms_element_product_slider_config_content_blog_stream_preview_link %}
                         <div class="sw-cms-el-config-blog-slider__product-stream-preview-link-container">
                             <a
                                 class="sw-cms-el-config-blog-slider__product-stream-preview-link link"
-                                :class="{ 'is--disabled': !contentStream }"
+                                :class="{ 'is--disabled': !blogStream }"
                                 href="#"
                                 @click.prevent="onClickProductStreamPreview"
                             >

@@ -10,7 +10,7 @@ use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingTranslationCollection;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsPageTranslation\CmsPageTranslationEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSlotTranslation\CmsSlotTranslationEntity;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\ContentStreamTranslationCollection;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamTranslation\BlogStreamTranslationCollection;
 use Contena\Core\Content\ImportExport\ImportExportProfileTranslationCollection;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageTranslation\LandingPageTranslationCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterCollection;
@@ -117,7 +117,7 @@ class LanguageEntity extends Entity
 
     protected ?PluginTranslationCollection $pluginTranslations = null;
 
-    protected ?ContentStreamTranslationCollection $contentStreamTranslations = null;
+    protected ?BlogStreamTranslationCollection $blogStreamTranslations = null;
 
     protected ?StateMachineTranslationCollection $stateMachineTranslations = null;
 
@@ -476,14 +476,14 @@ class LanguageEntity extends Entity
         $this->pluginTranslations = $pluginTranslations;
     }
 
-    public function getBlogStreamTranslations(): ?ContentStreamTranslationCollection
+    public function getBlogStreamTranslations(): ?BlogStreamTranslationCollection
     {
-        return $this->contentStreamTranslations;
+        return $this->blogStreamTranslations;
     }
 
-    public function setBlogStreamTranslations(ContentStreamTranslationCollection $contentStreamTranslations): void
+    public function setBlogStreamTranslations(BlogStreamTranslationCollection $blogStreamTranslations): void
     {
-        $this->contentStreamTranslations = $contentStreamTranslations;
+        $this->blogStreamTranslations = $blogStreamTranslations;
     }
 
     /**

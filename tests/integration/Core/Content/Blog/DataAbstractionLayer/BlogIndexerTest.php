@@ -12,7 +12,7 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
+use Contena\Core\Content\Blog\DataAbstractionLayer\BlogStreamUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\RatingAverageUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
@@ -72,7 +72,7 @@ class BlogIndexerTest extends TestCase
             self::getContainer()->get(StockStorage::class),
             self::getContainer()->get('event_dispatcher'),
             self::getContainer()->get(CheapestPriceUpdater::class),
-            self::getContainer()->get(ContentStreamUpdater::class),
+            self::getContainer()->get(BlogStreamUpdater::class),
             $this->messageBus,
             Feature::isActive('v6.8.0.0') ? null : self::getContainer()->get(StatesUpdater::class),
             new NativeClock()

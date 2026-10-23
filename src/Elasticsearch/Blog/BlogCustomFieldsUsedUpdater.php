@@ -5,7 +5,7 @@ namespace Contena\Elasticsearch\Blog;
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamFilter\BlogStreamFilterDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -28,7 +28,7 @@ class BlogCustomFieldsUsedUpdater implements EventSubscriberInterface
     {
         return [
             BlogSortingDefinition::ENTITY_NAME . '.written' => 'blogSortingWritten',
-            ContentStreamFilterDefinition::ENTITY_NAME . '.written' => 'contentStreamFilterWritten',
+            BlogStreamFilterDefinition::ENTITY_NAME . '.written' => 'blogStreamFilterWritten',
         ];
     }
 
@@ -58,13 +58,13 @@ class BlogCustomFieldsUsedUpdater implements EventSubscriberInterface
         $this->createFieldsInIndices($customFieldNames);
     }
 
-    public function contentStreamFilterWritten(EntityWrittenEvent $event): void
+    public function blogStreamFilterWritten(EntityWrittenEvent $event): void
     {
         if (!$this->elasticsearchHelper->allowIndexing()) {
             return;
         }
 
-        $contentStreamFilterIds = [];
+        $blogStreamFilterIds = [];
 
         foreach ($event->getResults()->only(
             EntityWriteResult::OPERATION_INSERT,
@@ -75,14 +75,14 @@ class BlogCustomFieldsUsedUpdater implements EventSubscriberInterface
                 continue;
             }
 
-            $contentStreamFilterIds[] = $key;
+            $blogStreamFilterIds[] = $key;
         }
 
-        if ($contentStreamFilterIds === []) {
+        if ($blogStreamFilterIds === []) {
             return;
         }
 
-        $customFieldNames = $this->fetchCustomFieldNamesFromStreamFilters($contentStreamFilterIds);
+        $customFieldNames = $this->fetchCustomFieldNamesFromStreamFilters($blogStreamFilterIds);
 
         $this->createFieldsInIndices($customFieldNames);
     }
@@ -127,15 +127,15 @@ class BlogCustomFieldsUsedUpdater implements EventSubscriberInterface
     }
 
     /**
-     * @param list<string> $contentStreamFilterIds
+     * @param list<string> $blogStreamFilterIds
      *
      * @return list<string>
      */
-    private function fetchCustomFieldNamesFromStreamFilters(array $contentStreamFilterIds): array
+    private function fetchCustomFieldNamesFromStreamFilters(array $blogStreamFilterIds): array
     {
         return $this->connection->fetchFirstColumn(
-            'SELECT DISTINCT REPLACE(field, \'customFields.\', \'\') FROM content_stream_filter WHERE id IN (:ids) AND field LIKE :field',
-            ['ids' => Uuid::fromHexToBytesList($contentStreamFilterIds), 'field' => 'customFields.%'],
+            'SELECT DISTINCT REPLACE(field, \'customFields.\', \'\') FROM blog_stream_filter WHERE id IN (:ids) AND field LIKE :field',
+            ['ids' => Uuid::fromHexToBytesList($blogStreamFilterIds), 'field' => 'customFields.%'],
             ['ids' => ArrayParameterType::STRING]
         );
     }

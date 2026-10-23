@@ -15,7 +15,7 @@ describe('src/app/main.ts', () => {
         ValidationService: undefined,
         TimezoneService: undefined,
         RuleConditionService: undefined,
-        ContentStreamConditionService: undefined,
+        BlogStreamConditionService: undefined,
         StateStyleService: undefined,
         CustomFieldService: undefined,
         ExtensionHelperService: undefined,
@@ -96,7 +96,7 @@ describe('src/app/main.ts', () => {
         serviceMocks.RuleConditionService = (await import('src/app/service/rule-condition.service')).default;
 
         jest.mock('src/app/service/blog-stream-condition.service');
-        serviceMocks.ContentStreamConditionService = (
+        serviceMocks.BlogStreamConditionService = (
             await import('src/app/service/blog-stream-condition.service')
         ).default;
 
@@ -265,7 +265,7 @@ describe('src/app/main.ts', () => {
         expect(services).toContain('entityValidationService');
         expect(services).toContain('timezoneService');
         expect(services).toContain('ruleConditionDataProviderService');
-        expect(services).toContain('contentStreamConditionService');
+        expect(services).toContain('blogStreamConditionService');
         expect(services).toContain('customFieldDataProviderService');
         expect(services).toContain('extensionHelperService');
         expect(services).toContain('languageAutoFetchingService');
@@ -337,9 +337,9 @@ describe('src/app/main.ts', () => {
         Contena.Service('ruleConditionDataProviderService');
         expect(serviceMocks.RuleConditionService).toHaveBeenCalled();
 
-        expect(serviceMocks.ContentStreamConditionService).not.toHaveBeenCalled();
-        Contena.Service('contentStreamConditionService');
-        expect(serviceMocks.ContentStreamConditionService).toHaveBeenCalled();
+        expect(serviceMocks.BlogStreamConditionService).not.toHaveBeenCalled();
+        Contena.Service('blogStreamConditionService');
+        expect(serviceMocks.BlogStreamConditionService).toHaveBeenCalled();
 
         expect(serviceMocks.CustomFieldService).not.toHaveBeenCalled();
         Contena.Service('customFieldDataProviderService');

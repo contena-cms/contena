@@ -37,7 +37,7 @@
                                 },
                                 "source": {
                                     "type": "string",
-                                    "enum": ["static", "mapped", "default", "content_stream"]
+                                    "enum": ["static", "mapped", "default", "blog_stream"]
                                 },
                                 "value": {
                                     "description": "Configured value; its type depends on the field (string, number, boolean, array or null)."

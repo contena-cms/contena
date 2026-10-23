@@ -544,7 +544,7 @@
                         "description": "Dynamic blog streams this blog belongs to based on defined filters",
                         "type": "array",
                         "items": {
-                            "$ref": "#/components/schemas/ContentStream"
+                            "$ref": "#/components/schemas/BlogStream"
                         }
                     },
                     "categoriesRo": {

@@ -467,7 +467,7 @@ export default {
         ...mapPropertyErrors('channel', ['name', 'userGroupId', 'navigationCategoryId']),
 
         ...mapPropertyErrors('blogExport', [
-            'contentStreamId',
+            'blogStreamId',
             'encoding',
             'fileName',
             'fileFormat',
@@ -550,7 +550,7 @@ export default {
             return criteria;
         },
 
-        contentStreamCriteria() {
+        blogStreamCriteria() {
             const criteria = new Criteria();
             criteria.addFilter(Criteria.equals('internal', false));
             return criteria;

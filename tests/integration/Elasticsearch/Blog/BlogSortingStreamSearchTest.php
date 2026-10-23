@@ -91,7 +91,7 @@ class BlogSortingStreamSearchTest extends TestCase
         $connection->executeStatement('DELETE FROM blog');
 
         $connection->executeStatement(
-            'DELETE FROM content_stream WHERE id IN (SELECT content_stream_id FROM content_stream_translation WHERE name LIKE :name)',
+            'DELETE FROM blog_stream WHERE id IN (SELECT blog_stream_id FROM blog_stream_translation WHERE name LIKE :name)',
             ['name' => 'Custom Field %Stream%']
         );
 
@@ -385,7 +385,7 @@ class BlogSortingStreamSearchTest extends TestCase
 
         $this->connection->executeStatement('DELETE FROM blog_sorting WHERE url_key LIKE :key', ['key' => 'ss-test-%']);
         $this->connection->executeStatement(
-            'DELETE FROM content_stream WHERE id IN (SELECT content_stream_id FROM content_stream_translation WHERE name LIKE :name)',
+            'DELETE FROM blog_stream WHERE id IN (SELECT blog_stream_id FROM blog_stream_translation WHERE name LIKE :name)',
             ['name' => 'Custom Field %Stream%']
         );
         $this->connection->executeStatement('DELETE FROM custom_field');
@@ -462,8 +462,8 @@ class BlogSortingStreamSearchTest extends TestCase
             ],
         ], $this->context);
 
-        $contentStreamRepository = static::getContainer()->get('content_stream.repository');
-        $contentStreamRepository->create([
+        $blogStreamRepository = static::getContainer()->get('blog_stream.repository');
+        $blogStreamRepository->create([
             [
                 'id' => $this->ids->get('stream-1'),
                 'name' => 'Custom Field Bool Stream',

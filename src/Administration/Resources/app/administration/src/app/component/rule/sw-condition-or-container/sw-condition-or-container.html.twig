@@ -27,7 +27,7 @@
     {% block sw_condition_or_container_actions %}
     <div class="sw-condition-or-container__actions">
         <mt-button
-            v-tooltip.top="getNoPermissionsTooltip('content_stream.editor')"
+            v-tooltip.top="getNoPermissionsTooltip('blog_stream.editor')"
             ghost
             size="small"
             class="sw-condition-or-container__actions--or"
@@ -39,7 +39,7 @@
         </mt-button>
         <mt-button
             v-if="level !== 0"
-            v-tooltip.top="getNoPermissionsTooltip('content_stream.editor')"
+            v-tooltip.top="getNoPermissionsTooltip('blog_stream.editor')"
             ghost
             size="small"
             class="sw-condition-or-container__actions--sub"
@@ -51,7 +51,7 @@
         </mt-button>
 
         <mt-button
-            v-tooltip.top="getNoPermissionsTooltip('content_stream.editor')"
+            v-tooltip.top="getNoPermissionsTooltip('blog_stream.editor')"
             size="small"
             class="sw-condition-or-container__actions--delete"
             :disabled="disabled"

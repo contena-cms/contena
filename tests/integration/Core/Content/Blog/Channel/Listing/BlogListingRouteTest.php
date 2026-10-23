@@ -11,7 +11,7 @@ use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Events\BlogListingCriteriaEvent;
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterCollection;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamFilter\BlogStreamFilterCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -72,9 +72,9 @@ class BlogListingRouteTest extends TestCase
     private EntityRepository $blogRepository;
 
     /**
-     * @var EntityRepository<ContentStreamFilterCollection>
+     * @var EntityRepository<BlogStreamFilterCollection>
      */
-    private EntityRepository $contentStreamFilterRepository;
+    private EntityRepository $blogStreamFilterRepository;
 
     protected function setUp(): void
     {
@@ -89,9 +89,9 @@ class BlogListingRouteTest extends TestCase
         $blogRepository = static::getContainer()->get('blog.repository');
         $this->blogRepository = $blogRepository;
 
-        /** @var EntityRepository<ContentStreamFilterCollection> */
-        $contentStreamFilterRepository = static::getContainer()->get('content_stream_filter.repository');
-        $this->contentStreamFilterRepository = $contentStreamFilterRepository;
+        /** @var EntityRepository<BlogStreamFilterCollection> */
+        $blogStreamFilterRepository = static::getContainer()->get('blog_stream_filter.repository');
+        $this->blogStreamFilterRepository = $blogStreamFilterRepository;
     }
 
     public function testLoadBlogs(): void
@@ -191,7 +191,7 @@ class BlogListingRouteTest extends TestCase
 
     public function testLoadBlogsUsingDynamicGroupWithEmptyBlogStreamId(): void
     {
-        $this->createData('content_stream');
+        $this->createData('blog_stream');
 
         $this->browser->request(
             'POST',
@@ -208,7 +208,7 @@ class BlogListingRouteTest extends TestCase
 
     public function testLoadBlogsUsingDynamicGroupWithBlogStream(): void
     {
-        $this->createData('content_stream', $this->ids->create('contentStream'));
+        $this->createData('blog_stream', $this->ids->create('blogStream'));
 
         $this->browser->request(
             'POST',
@@ -226,7 +226,7 @@ class BlogListingRouteTest extends TestCase
 
     public function testLoadBlogsUsingDynamicGroupWithBlogStreamAndMainVariant(): void
     {
-        $this->createData('content_stream', $this->ids->create('contentStream'), 'greenL');
+        $this->createData('blog_stream', $this->ids->create('blogStream'), 'greenL');
 
         $this->browser->request(
             'POST',
@@ -244,7 +244,7 @@ class BlogListingRouteTest extends TestCase
 
     public function testLoadBlogsUsingDynamicGroupUpdatesAfterSeparateFilterSync(): void
     {
-        $this->createData('content_stream', $this->ids->create('contentStream'));
+        $this->createData('blog_stream', $this->ids->create('blogStream'));
 
         $this->browser->request(
             'POST',
@@ -257,12 +257,12 @@ class BlogListingRouteTest extends TestCase
         static::assertContains($response['elements'][0]['id'], [$this->variantIds['redL'], $this->variantIds['redXl']]);
 
         $filterId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(id)) FROM content_stream_filter WHERE content_stream_id = :streamId',
-            ['streamId' => Uuid::fromHexToBytes($this->ids->get('contentStream'))]
+            'SELECT LOWER(HEX(id)) FROM blog_stream_filter WHERE blog_stream_id = :streamId',
+            ['streamId' => Uuid::fromHexToBytes($this->ids->get('blogStream'))]
         );
         static::assertIsString($filterId);
 
-        $this->contentStreamFilterRepository->update([[
+        $this->blogStreamFilterRepository->update([[
             'id' => $filterId,
             'field' => 'options.id',
             'value' => $this->optionIds['green'],
@@ -281,16 +281,16 @@ class BlogListingRouteTest extends TestCase
 
     public function testLoadBlogsUsingDynamicGroupWithOnlyAnEmptyCondition(): void
     {
-        $this->createData('content_stream', $this->ids->create('contentStream'));
+        $this->createData('blog_stream', $this->ids->create('blogStream'));
 
         $filterId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(id)) FROM content_stream_filter WHERE content_stream_id = :streamId',
-            ['streamId' => Uuid::fromHexToBytes($this->ids->get('contentStream'))]
+            'SELECT LOWER(HEX(id)) FROM blog_stream_filter WHERE blog_stream_id = :streamId',
+            ['streamId' => Uuid::fromHexToBytes($this->ids->get('blogStream'))]
         );
         static::assertIsString($filterId);
 
         // "Blog" "is equal to any of" without a blog
-        $this->contentStreamFilterRepository->update([[
+        $this->blogStreamFilterRepository->update([[
             'id' => $filterId,
             'type' => 'equalsAny',
             'field' => 'id',
@@ -311,16 +311,16 @@ class BlogListingRouteTest extends TestCase
 
     public function testLoadBlogsUsingInvalidDynamicGroup(): void
     {
-        $this->createData('content_stream', $this->ids->create('contentStream'));
+        $this->createData('blog_stream', $this->ids->create('blogStream'));
 
         $filterId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(id)) FROM content_stream_filter WHERE content_stream_id = :streamId',
-            ['streamId' => Uuid::fromHexToBytes($this->ids->get('contentStream'))]
+            'SELECT LOWER(HEX(id)) FROM blog_stream_filter WHERE blog_stream_id = :streamId',
+            ['streamId' => Uuid::fromHexToBytes($this->ids->get('blogStream'))]
         );
         static::assertIsString($filterId);
 
         // A dynamic blog group without any condition is invalid
-        $this->contentStreamFilterRepository->delete([['id' => $filterId]], Context::createDefaultContext());
+        $this->blogStreamFilterRepository->delete([['id' => $filterId]], Context::createDefaultContext());
 
         $this->browser->request(
             'POST',
@@ -736,7 +736,7 @@ class BlogListingRouteTest extends TestCase
         ];
     }
 
-    private function createData(string $blogAssignmentType = 'blog', ?string $contentStreamId = null, ?string $mainVariant = null): void
+    private function createData(string $blogAssignmentType = 'blog', ?string $blogStreamId = null, ?string $mainVariant = null): void
     {
         $this->blogId = Uuid::randomHex();
 
@@ -899,8 +899,8 @@ class BlogListingRouteTest extends TestCase
             'blogs' => $blogs,
         ];
 
-        static::getContainer()->get('content_stream.repository')->create([[
-            'id' => $this->ids->create('contentStream'),
+        static::getContainer()->get('blog_stream.repository')->create([[
+            'id' => $this->ids->create('blogStream'),
             'name' => 'test',
             'filters' => [[
                 'type' => 'equals',
@@ -912,7 +912,7 @@ class BlogListingRouteTest extends TestCase
         $this->categoryRepository->upsert([$data], Context::createDefaultContext());
         $this->categoryRepository->upsert([[
             'id' => $this->ids->get('category'),
-            'contentStreamId' => $contentStreamId,
+            'blogStreamId' => $blogStreamId,
         ]], Context::createDefaultContext());
 
         if ($mainVariant) {

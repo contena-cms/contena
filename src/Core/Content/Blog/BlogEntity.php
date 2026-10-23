@@ -10,7 +10,7 @@ use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationCollectio
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\ContentStream\ContentStreamCollection;
+use Contena\Core\Content\BlogStream\BlogStreamCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
@@ -236,7 +236,7 @@ class BlogEntity extends Entity implements \Stringable
 
     protected ?BlogEntity $canonicalBlog = null;
 
-    protected ?ContentStreamCollection $streams = null;
+    protected ?BlogStreamCollection $streams = null;
 
 
     protected ?string $openGraphMediaId = null;
@@ -1153,12 +1153,12 @@ class BlogEntity extends Entity implements \Stringable
         $this->canonicalBlog = $blog;
     }
 
-    public function getStreams(): ?ContentStreamCollection
+    public function getStreams(): ?BlogStreamCollection
     {
         return $this->streams;
     }
 
-    public function setStreams(ContentStreamCollection $streams): void
+    public function setStreams(BlogStreamCollection $streams): void
     {
         $this->streams = $streams;
     }

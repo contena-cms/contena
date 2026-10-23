@@ -851,7 +851,7 @@ describe('module/sw-cms/service/cms.service.spec.js', () => {
             [
                 // Only test some values
                 ['app_payment_method', ['category.media.appPaymentMethods']],
-                ['category', ['category.children', 'category.media.categories', 'category.contentStream.categories']],
+                ['category', ['category.children', 'category.media.categories', 'category.blogStream.categories']],
             ].forEach(([entityName, paths]) => {
                 expect(result.entity[entityName]).toEqual(paths);
             });

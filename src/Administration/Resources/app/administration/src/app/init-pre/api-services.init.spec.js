@@ -62,7 +62,7 @@ describe('src/app/init-pre/api-services.init.ts', () => {
                 'orderStateMachineService',
                 'orderService',
                 'blogExportService',
-                'contentStreamPreviewService',
+                'blogStreamPreviewService',
                 'promotionSyncService',
                 'recommendationsService',
                 'ruleConditionsConfigApiService',
@@ -142,7 +142,7 @@ describe('src/app/init-pre/api-services.init.ts', () => {
         expect(Contena.Service('orderStateMachineService')).toBeUndefined();
         expect(Contena.Service('orderService')).toBeUndefined();
         expect(Contena.Service('blogExportService')).toBeUndefined();
-        expect(Contena.Service('contentStreamPreviewService')).toBeUndefined();
+        expect(Contena.Service('blogStreamPreviewService')).toBeUndefined();
         expect(Contena.Service('promotionSyncService')).toBeUndefined();
         expect(Contena.Service('recommendationsService')).toBeUndefined();
         expect(Contena.Service('ruleConditionsConfigApiService')).toBeUndefined();
@@ -204,7 +204,7 @@ describe('src/app/init-pre/api-services.init.ts', () => {
         expect(Contena.Service('orderStateMachineService')).toBeDefined();
         expect(Contena.Service('orderService')).toBeDefined();
         expect(Contena.Service('blogExportService')).toBeDefined();
-        expect(Contena.Service('contentStreamPreviewService')).toBeDefined();
+        expect(Contena.Service('blogStreamPreviewService')).toBeDefined();
         expect(Contena.Service('promotionSyncService')).toBeDefined();
         expect(Contena.Service('recommendationsService')).toBeDefined();
         expect(Contena.Service('ruleConditionsConfigApiService')).toBeDefined();

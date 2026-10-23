@@ -21,7 +21,7 @@ import JsonApiParser from 'src/core/service/jsonapi-parser.service';
 import ValidationService from 'src/core/service/validation.service';
 import TimezoneService from 'src/core/service/timezone.service';
 import RuleConditionService from 'src/app/service/rule-condition.service';
-import ContentStreamConditionService from 'src/app/service/blog-stream-condition.service';
+import BlogStreamConditionService from 'src/app/service/blog-stream-condition.service';
 import BlogTypeApiService from 'src/app/service/blog-type.api.service';
 import StateStyleService from 'src/app/service/state-style.service';
 import CustomFieldService from 'src/app/service/custom-field.service';
@@ -155,8 +155,8 @@ Application.addServiceProvider('feature', () => {
     .addServiceProvider('ruleConditionDataProviderService', () => {
         return new RuleConditionService();
     })
-    .addServiceProvider('contentStreamConditionService', () => {
-        return new ContentStreamConditionService();
+    .addServiceProvider('blogStreamConditionService', () => {
+        return new BlogStreamConditionService();
     })
     .addServiceProvider('blogTypeService', () => {
         const initContainer = Contena.Application.getContainer('init');

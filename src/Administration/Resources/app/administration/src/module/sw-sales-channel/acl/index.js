@@ -29,7 +29,7 @@ Contena.Service('privileges').addPrivilegeMappingEntry({
                 Contena.Service('privileges').getPrivileges('media.viewer'),
                 'blog:read',
                 'blog_export:read',
-                'content_stream:read',
+                'blog_stream:read',
                 'blog_visibility:read',
                 'property_group:read',
                 'property_group_option:read',
@@ -87,7 +87,7 @@ Contena.Service('privileges').addPrivilegeMappingEntry({
         },
         creator: {
             privileges: [
-                'content_stream:read',
+                'blog_stream:read',
                 'channel:create',
                 'blog_export:create',
                 'blog_export:update',

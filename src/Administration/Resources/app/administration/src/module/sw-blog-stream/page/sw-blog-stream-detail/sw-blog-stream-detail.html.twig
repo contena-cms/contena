@@ -1,23 +1,23 @@
-{% block sw_content_stream_detail %}
+{% block sw_blog_stream_detail %}
 <sw-page class="sw-blog-stream-detail">
-    {% block sw_content_stream_detail_header %}
+    {% block sw_blog_stream_detail_header %}
     <template #smart-bar-header>
-        <h2 v-if="contentStream.name">
-            {{ contentStream.name }}
+        <h2 v-if="blogStream.name">
+            {{ blogStream.name }}
         </h2>
 
         <h2
             v-else
             class="sw-blog-stream-detail__empty-title"
         >
-            {{ placeholder(contentStream, 'name', $t('sw-blog-stream.detail.textHeadline')) }}
+            {{ placeholder(blogStream, 'name', $t('sw-blog-stream.detail.textHeadline')) }}
         </h2>
     </template>
     {% endblock %}
 
-    {% block sw_content_stream_detail_actions %}
+    {% block sw_blog_stream_detail_actions %}
     <template #smart-bar-actions>
-        {% block sw_content_stream_detail_actions_abort %}
+        {% block sw_blog_stream_detail_actions_abort %}
         <mt-button
             v-tooltip.bottom="tooltipCancel"
             :disabled="isLoading"
@@ -32,19 +32,19 @@
         <sw-button-group
             v-tooltip.bottom="{
                 message: $t('sw-privileges.tooltip.warning'),
-                disabled: acl.can('content_stream.editor'),
+                disabled: acl.can('blog_stream.editor'),
                 showOnDisabledElements: true
             }"
             class="sw-blog-stream-detail__save-button-group"
             :split-button="true"
         >
-            {% block sw_content_stream_detail_actions_save %}
+            {% block sw_blog_stream_detail_actions_save %}
             <sw-button-process
                 v-model:process-success="isSaveSuccessful"
                 v-tooltip.bottom="tooltipSave"
                 class="sw-blog-stream-detail__save-action"
                 :is-loading="isSaving"
-                :disabled="!acl.can('content_stream.editor')"
+                :disabled="!acl.can('blog_stream.editor')"
                 variant="primary"
                 @click.prevent="onSave"
             >
@@ -52,25 +52,25 @@
             </sw-button-process>
             {% endblock %}
 
-            {% block sw_content_stream_detail_actions_save_context_menu %}
+            {% block sw_blog_stream_detail_actions_save_context_menu %}
             <sw-context-button>
                 <template #button>
                     <mt-button
                         class="sw-blog-stream-detail__button-context-menu"
                         square
                         variant="primary"
-                        :disabled="isLoading || !acl.can('content_stream.editor')"
+                        :disabled="isLoading || !acl.can('blog_stream.editor')"
                         size="default"
                     >
                         <mt-icon name="regular-chevron-down-xs" />
                     </mt-button>
                 </template>
 
-                {% block sw_content_stream_detail_actions_save_context_menu_actions %}
-                {% block sw_content_stream_detail_actions_duplicate %}
+                {% block sw_blog_stream_detail_actions_save_context_menu_actions %}
+                {% block sw_blog_stream_detail_actions_duplicate %}
                 <sw-context-menu-item
                     class="sw-blog-stream-detail__save-duplicate-action"
-                    :disabled="!acl.can('content_stream.creator') || !acl.can('content_stream.editor')"
+                    :disabled="!acl.can('blog_stream.creator') || !acl.can('blog_stream.editor')"
                     @click="onDuplicate"
                 >
                     {{ $t('sw-blog.detail.buttonSaveDuplicate') }}
@@ -83,27 +83,27 @@
     </template>
     {% endblock %}
 
-    {% block sw_content_stream_detail_language_switch %}
+    {% block sw_blog_stream_detail_language_switch %}
     <template #language-switch>
         <sw-language-switch
             :save-changes-function="saveOnLanguageChange"
             :abort-change-function="abortOnLanguageChange"
-            :disabled="!contentStreamId"
+            :disabled="!blogStreamId"
             @on-change="onChangeLanguage"
         />
     </template>
     {% endblock %}
 
-    {% block sw_content_stream_detail_content %}
+    {% block sw_blog_stream_detail_content %}
     <template #content>
         <sw-card-view>
-            {% block sw_content_stream_detail_content_language_info %}
+            {% block sw_blog_stream_detail_content_language_info %}
             <sw-language-info
-                :entity-description="placeholder(contentStream, 'name', $t('sw-blog-stream.detail.textHeadline'))"
+                :entity-description="placeholder(blogStream, 'name', $t('sw-blog-stream.detail.textHeadline'))"
             />
             {% endblock %}
 
-            {% block sw_content_stream_detail_basic_info %}
+            {% block sw_blog_stream_detail_basic_info %}
             <mt-card
                 position-identifier="sw-blog-stream-detail-basic-info"
                 :large="true"
@@ -112,62 +112,62 @@
             >
                 {% block sw_product_basic_form_name_field %}
                 <mt-text-field
-                    v-model="contentStream.name"
-                    v-tooltip.bottom="getNoPermissionsTooltip('content_stream.editor')"
-                    name="sw-field--contentStream-name"
+                    v-model="blogStream.name"
+                    v-tooltip.bottom="getNoPermissionsTooltip('blog_stream.editor')"
+                    name="sw-field--blogStream-name"
                     :label="$t('sw-blog-stream.detail.labelName')"
                     :validation="nameRequired"
                     :required="isSystemLanguage"
-                    :placeholder="placeholder(contentStream, 'name', $t('sw-blog-stream.detail.placeholderName'))"
-                    :error="contentStreamNameError"
-                    :disabled="!acl.can('content_stream.editor')"
+                    :placeholder="placeholder(blogStream, 'name', $t('sw-blog-stream.detail.placeholderName'))"
+                    :error="blogStreamNameError"
+                    :disabled="!acl.can('blog_stream.editor')"
                 />
                 {% endblock %}
 
                 {% block sw_product_basic_form_description_field %}
                 <mt-textarea
-                    v-model="contentStream.description"
-                    v-tooltip.bottom="getNoPermissionsTooltip('content_stream.editor')"
-                    name="sw-field--contentStream-description"
+                    v-model="blogStream.description"
+                    v-tooltip.bottom="getNoPermissionsTooltip('blog_stream.editor')"
+                    name="sw-field--blogStream-description"
                     :label="$t('sw-blog-stream.detail.labelDescription')"
-                    :placeholder="placeholder(contentStream, 'description', $t('sw-blog-stream.detail.placeholderDescription'))"
-                    :disabled="!acl.can('content_stream.editor')"
+                    :placeholder="placeholder(blogStream, 'description', $t('sw-blog-stream.detail.placeholderDescription'))"
+                    :disabled="!acl.can('blog_stream.editor')"
                 />
                 {% endblock %}
 
                 {% block sw_product_basic_form_display_as_group_field %}
                 <mt-switch
-                    v-if="contentStream"
-                    v-model="contentStream.displayAsGroup"
-                    v-tooltip.bottom="getNoPermissionsTooltip('content_stream.editor')"
+                    v-if="blogStream"
+                    v-model="blogStream.displayAsGroup"
+                    v-tooltip.bottom="getNoPermissionsTooltip('blog_stream.editor')"
                     class="sw-blog-stream-detail__display-as-group"
                     :label="$t('sw-blog-stream.detail.labelDisplayAsGroup')"
                     :help-text="$t('sw-blog-stream.detail.helpTextDisplayAsGroup')"
-                    :disabled="!acl.can('content_stream.editor')"
+                    :disabled="!acl.can('blog_stream.editor')"
                     bordered
                 />
                 {% endblock %}
             </mt-card>
             {% endblock %}
 
-            {% block sw_content_stream_detail_filter %}
+            {% block sw_blog_stream_detail_filter %}
             <mt-card
                 :large="true"
                 position-identifier="sw-blog-stream-detail-filter"
                 class="sw-blog-stream-detail__condition_container"
-                :class="{ 'is--disabled': !acl.can('content_stream.editor') }"
+                :class="{ 'is--disabled': !acl.can('blog_stream.editor') }"
                 :title="$t('sw-blog-stream.detail.titleFilter')"
                 :is-loading="isLoading"
             >
                 <div
-                    v-if="!contentStreamIndexingEnabled"
+                    v-if="!blogStreamIndexingEnabled"
                     class="sw-blog-stream-detail__product-stream-warning"
                 >
                     <mt-banner
                         variant="attention"
-                        :title="$t('sw-blog-stream.detail.contentStreamIndexingWarning.title')"
+                        :title="$t('sw-blog-stream.detail.blogStreamIndexingWarning.title')"
                     >
-                        <p v-html="$t('sw-blog-stream.detail.contentStreamIndexingWarning.message')">
+                        <p v-html="$t('sw-blog-stream.detail.blogStreamIndexingWarning.message')">
                         </p>
 
                         <mt-link
@@ -176,7 +176,7 @@
                             href="https://developer.contena.cn/docs/guides/hosting/performance/performance-tweaks.html#disable-blog-stream-indexer"
                             target="_blank"
                         >
-                            {{ $t('sw-blog-stream.detail.contentStreamIndexingWarning.action') }}
+                            {{ $t('sw-blog-stream.detail.blogStreamIndexingWarning.action') }}
                         </mt-link>
                     </mt-banner>
                 </div>
@@ -208,7 +208,7 @@
                     </mt-banner>
                 </div>
 
-                {% block sw_content_stream_detail_filter_preview_button %}
+                {% block sw_blog_stream_detail_filter_preview_button %}
                 <mt-button
                     v-if="!isLoading"
                     class="sw-blog-stream-detail__open_modal_preview"
@@ -219,16 +219,16 @@
                 </mt-button>
                 {% endblock %}
 
-                {% block sw_content_stream_detail_filter_tree %}
+                {% block sw_blog_stream_detail_filter_tree %}
                 <sw-condition-tree
-                    :initial-conditions="contentStreamFilters"
-                    :condition-repository="contentStreamFiltersRepository"
-                    :condition-data-provider-service="contentStreamConditionService"
+                    :initial-conditions="blogStreamFilters"
+                    :condition-repository="blogStreamFiltersRepository"
+                    :condition-data-provider-service="blogStreamConditionService"
                     child-association-field="queries"
-                    association-field="contentStreamId"
-                    :association-value="contentStream.id"
+                    association-field="blogStreamId"
+                    :association-value="blogStream.id"
                     :root-condition="null"
-                    :disabled="!acl.can('content_stream.editor')"
+                    :disabled="!acl.can('blog_stream.editor')"
                     @conditions-changed="updateFilterTree"
                 />
                 {% endblock %}
@@ -239,8 +239,8 @@
             <sw-blog-stream-modal-preview
                 v-if="showModalPreview"
                 ref="modalPreview"
-                :filters="contentStreamFiltersTree"
-                :display-as-group="contentStream.displayAsGroup"
+                :filters="blogStreamFiltersTree"
+                :display-as-group="blogStream.displayAsGroup"
                 @modal-close="closeModalPreview"
             />
             {% endblock %}
@@ -254,8 +254,8 @@
                 :title="$t('sw-settings-custom-field.general.mainMenuItemGeneral')"
             >
                 <sw-custom-field-set-renderer
-                    :entity="contentStream"
-                    :disabled="!acl.can('content_stream.editor')"
+                    :entity="blogStream"
+                    :disabled="!acl.can('blog_stream.editor')"
                     :sets="customFieldSets"
                 />
             </mt-card>

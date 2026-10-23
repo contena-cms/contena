@@ -45,7 +45,7 @@ Contena.Service('privileges').addPrivilegeMappingEntry({
                 'cms_slot:delete',
                 Contena.Service('privileges').getPrivileges('media.creator'),
                 'currency:read',
-                'content_stream:read',
+                'blog_stream:read',
                 'blog_manufacturer:read',
                 'category:update',
                 'landing_page:update',

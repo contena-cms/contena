@@ -16,8 +16,8 @@ use Contena\Core\Content\Blog\Channel\CrossSelling\AbstractBlogCrossSellingRoute
 use Contena\Core\Content\Blog\Channel\CrossSelling\BlogCrossSellingRoute;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
 use Contena\Core\Content\Blog\Events\BlogCrossSellingIdsCriteriaEvent;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterCollection;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamFilter\BlogStreamFilterCollection;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilderInterface;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
@@ -90,7 +90,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -125,7 +125,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -165,7 +165,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -194,7 +194,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -227,7 +227,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(true),
+            'blogStreamId' => $this->createBlogStream(true),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -267,7 +267,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(true),
+            'blogStreamId' => $this->createBlogStream(true),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -307,7 +307,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 3,
-            'contentStreamId' => $this->createBlogStream(true, true),
+            'blogStreamId' => $this->createBlogStream(true, true),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -567,13 +567,13 @@ class CrossSellingRouteTest extends TestCase
             'name' => 'First Cross Selling',
             'position' => 1,
             'active' => true,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ], [
             'id' => $crossSellingIds[1],
             'name' => 'Second Cross Selling',
             'position' => 2,
             'active' => true,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -605,13 +605,13 @@ class CrossSellingRouteTest extends TestCase
             'name' => 'First Cross Selling',
             'position' => 1,
             'active' => true,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ], [
             'id' => $crossSellingIds[1],
             'name' => 'Second Cross Selling',
             'position' => 2,
             'active' => true,
-            'contentStreamId' => $this->createBlogStream(),
+            'blogStreamId' => $this->createBlogStream(),
         ]];
         $blogData['configuratorSettings'] = [[
             'option' => [
@@ -693,11 +693,11 @@ class CrossSellingRouteTest extends TestCase
             'sortBy' => BlogCrossSellingDefinition::SORT_BY_PRICE,
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
-            'contentStreamId' => $streamId,
+            'blogStreamId' => $streamId,
         ]];
 
         // dynamic blog group which contains the whole variant family and one unrelated blog
-        static::getContainer()->get('content_stream.repository')->create([
+        static::getContainer()->get('blog_stream.repository')->create([
             [
                 'id' => $streamId,
                 'name' => 'testStream',
@@ -750,7 +750,7 @@ class CrossSellingRouteTest extends TestCase
         $route = new BlogCrossSellingRoute(
             static::getContainer()->get('blog_cross_selling.repository'),
             $eventDispatcher,
-            static::createStub(ContentStreamBuilderInterface::class),
+            static::createStub(BlogStreamBuilderInterface::class),
             static::getContainer()->get('channel.blog.repository'),
             static::createStub(SystemConfigService::class),
             static::createStub(BlogListingLoader::class),
@@ -799,7 +799,7 @@ class CrossSellingRouteTest extends TestCase
             'sortBy' => BlogCrossSellingDefinition::SORT_BY_PRICE,
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
-            'contentStreamId' => $this->createBlogStream(false, false, $blogId),
+            'blogStreamId' => $this->createBlogStream(false, false, $blogId),
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -823,7 +823,7 @@ class CrossSellingRouteTest extends TestCase
         $otherBlogIds = array_column($this->createBlogs(), 'id');
 
         // "Blog" "is equal to any of" without a blog, as saved by the Administration
-        static::getContainer()->get('content_stream.repository')->create([
+        static::getContainer()->get('blog_stream.repository')->create([
             [
                 'id' => $streamId,
                 'name' => 'Empty dynamic blog group',
@@ -842,7 +842,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 100,
-            'contentStreamId' => $streamId,
+            'blogStreamId' => $streamId,
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -866,7 +866,7 @@ class CrossSellingRouteTest extends TestCase
         $streamId = Uuid::randomHex();
         $this->createBlogs();
 
-        static::getContainer()->get('content_stream.repository')->create([
+        static::getContainer()->get('blog_stream.repository')->create([
             ['id' => $streamId, 'name' => 'Dynamic blog group without conditions'],
         ], $this->channelContext->getContext());
 
@@ -876,7 +876,7 @@ class CrossSellingRouteTest extends TestCase
             'sortBy' => BlogCrossSellingDefinition::SORT_BY_PRICE,
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
-            'contentStreamId' => $streamId,
+            'blogStreamId' => $streamId,
         ]];
 
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
@@ -898,7 +898,7 @@ class CrossSellingRouteTest extends TestCase
         $initialBlogIds = array_column($this->createBlogs(), 'id');
         $replacementBlogIds = array_column($this->createBlogs(), 'id');
 
-        static::getContainer()->get('content_stream.repository')->create([
+        static::getContainer()->get('blog_stream.repository')->create([
             [
                 'id' => $streamId,
                 'name' => 'testStream',
@@ -919,7 +919,7 @@ class CrossSellingRouteTest extends TestCase
             'sortDirection' => FieldSorting::ASCENDING,
             'active' => true,
             'limit' => 10,
-            'contentStreamId' => $streamId,
+            'blogStreamId' => $streamId,
         ]];
         $this->blogRepository->create([$blogData], $this->channelContext->getContext());
 
@@ -932,14 +932,14 @@ class CrossSellingRouteTest extends TestCase
         );
 
         $filterId = static::getContainer()->get(Connection::class)->fetchOne(
-            'SELECT LOWER(HEX(id)) FROM content_stream_filter WHERE content_stream_id = :streamId',
+            'SELECT LOWER(HEX(id)) FROM blog_stream_filter WHERE blog_stream_id = :streamId',
             ['streamId' => Uuid::fromHexToBytes($streamId)],
         );
         static::assertIsString($filterId);
 
-        /** @var EntityRepository<ContentStreamFilterCollection> $contentStreamFilterRepository */
-        $contentStreamFilterRepository = static::getContainer()->get('content_stream_filter.repository');
-        $contentStreamFilterRepository->update([[
+        /** @var EntityRepository<BlogStreamFilterCollection> $blogStreamFilterRepository */
+        $blogStreamFilterRepository = static::getContainer()->get('blog_stream_filter.repository');
+        $blogStreamFilterRepository->update([[
             'id' => $filterId,
             'value' => implode('|', $replacementBlogIds),
         ]], Context::createDefaultContext());
@@ -950,7 +950,7 @@ class CrossSellingRouteTest extends TestCase
         static::assertEqualsCanonicalizing(
             array_values($replacementBlogIds),
             array_values($element->getBlogs()->getIds()),
-            'Cross-selling must reflect updated content_stream_filter value even when the parent content_stream is untouched.',
+            'Cross-selling must reflect updated blog_stream_filter value even when the parent blog_stream is untouched.',
         );
     }
 
@@ -963,7 +963,7 @@ class CrossSellingRouteTest extends TestCase
             $randomBlogIds .= '|' . $includedBlogId;
         }
 
-        static::getContainer()->get('content_stream.repository')->create([
+        static::getContainer()->get('blog_stream.repository')->create([
             [
                 'id' => $id,
                 'filters' => [

@@ -25,7 +25,7 @@ Contena.Service('privileges')
                     'custom_field_set:read',
                     'custom_field:read',
                     'custom_field_set_relation:read',
-                    'content_stream:read',
+                    'blog_stream:read',
                     'currency:read',
                 ],
                 dependencies: [],

@@ -110,7 +110,7 @@
           "message": "All data indexed. | Indexing data.",
           "messageSuccess": "Indexing has finished."
         },
-        "contentStream": {
+        "blogStream": {
           "title": "Indexing dynamic blog groups",
           "message": "Dynamic blog group indexed. | One dynamic blog group remaining... | {n} dynamic blog groups remaining...",
           "messageSuccess": "Dynamic blog groups have been indexed."
@@ -193,7 +193,7 @@
       "deleteTitle": "Delete entry",
       "placeholderToManyAssociationCard": "Search associations...",
       "labelRemoveAssociation": "Remove association",
-      "contentStreamPreview": {
+      "blogStreamPreview": {
         "emptyMessageNoStream": "No dynamic blog group selected",
         "emptyMessageNoProducts": "No blogs found",
         "emptyMessageNoSearchResults": "No blogs found for \"{term}\""
@@ -1096,7 +1096,7 @@
       "blog_manufacturer": "Manufacturer | Manufacturers",
       "blog_media": "Blog media",
       "blog_price": "Blog price | Blog prices",
-      "content_stream": "Dynamic blog group | Dynamic blog groups",
+      "blog_stream": "Dynamic blog group | Dynamic blog groups",
       "blog_variation": "variant | variants",
       "blog_review": "Review | Reviews",
       "promotion": "Promotion | Promotions",

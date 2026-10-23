@@ -22,9 +22,9 @@ use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSlotTranslation\CmsSlotTranslationDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\ContentStreamTranslationDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamFilter\BlogStreamFilterDefinition;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamTranslation\BlogStreamTranslationDefinition;
+use Contena\Core\Content\BlogStream\BlogStreamDefinition;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFileDefinition;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogDefinition;
 use Contena\Core\Content\ImportExport\ImportExportProfileDefinition;
@@ -235,9 +235,9 @@ class PermissionCategorization
             BlogKeywordDictionaryDefinition::ENTITY_NAME,
             BlogMediaDefinition::ENTITY_NAME,
             BlogSearchKeywordDefinition::ENTITY_NAME,
-            ContentStreamDefinition::ENTITY_NAME,
-            ContentStreamFilterDefinition::ENTITY_NAME,
-            ContentStreamTranslationDefinition::ENTITY_NAME,
+            BlogStreamDefinition::ENTITY_NAME,
+            BlogStreamFilterDefinition::ENTITY_NAME,
+            BlogStreamTranslationDefinition::ENTITY_NAME,
             BlogTagDefinition::ENTITY_NAME,
             BlogVisibilityDefinition::ENTITY_NAME,
             BlogSortingDefinition::ENTITY_NAME,

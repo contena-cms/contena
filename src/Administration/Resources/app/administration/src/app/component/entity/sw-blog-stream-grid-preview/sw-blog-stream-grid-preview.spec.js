@@ -88,7 +88,7 @@ const createWrapper = async () => {
                         }),
                     },
                     validationService: {},
-                    contentStreamPreviewService: {
+                    blogStreamPreviewService: {
                         preview: () =>
                             Promise.resolve({
                                 elements: mockProducts,
@@ -121,7 +121,7 @@ describe('components/entity/sw-blog-stream-grid-preview.spec', () => {
     });
 
     it('should load blogs with correct criteria when filters are being set', async () => {
-        const spyPreviewProduct = jest.spyOn(wrapper.vm.contentStreamPreviewService, 'preview');
+        const spyPreviewProduct = jest.spyOn(wrapper.vm.blogStreamPreviewService, 'preview');
 
         await wrapper.setProps({
             filters: mockFilter,
@@ -147,7 +147,7 @@ describe('components/entity/sw-blog-stream-grid-preview.spec', () => {
     });
 
     it('should forward displayAsGroup=false to the preview service', async () => {
-        const spyPreviewProduct = jest.spyOn(wrapper.vm.contentStreamPreviewService, 'preview');
+        const spyPreviewProduct = jest.spyOn(wrapper.vm.blogStreamPreviewService, 'preview');
 
         await wrapper.setProps({
             filters: mockFilter,

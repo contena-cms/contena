@@ -137,7 +137,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
         ['uuid', 'equals', 'sw-entity-single-select-stub'],
         ['string', 'equalsAny', 'sw-multi-tag-select-stub'],
     ])('should have a disabled input with %s field type', async (fieldType, actualCondition, element, entity = '') => {
-        const wrapper = await createWrapper(['content_stream.viewer'], fieldType, actualCondition, entity, false);
+        const wrapper = await createWrapper(['blog_stream.viewer'], fieldType, actualCondition, entity, false);
         await wrapper.setProps({ disabled: true });
 
         const targetElement = wrapper.get(element);
@@ -146,7 +146,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should have a disabled input with json_list field type', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], 'json_list', 'equals', '', true);
+        const wrapper = await createWrapper(['blog_stream.viewer'], 'json_list', 'equals', '', true);
         await wrapper.setProps({ disabled: true, fieldName: 'states' });
 
         const targetElement = wrapper.get('.sw-single-select');
@@ -155,7 +155,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should render if is a json field', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], 'testingType', 'equals', '');
+        const wrapper = await createWrapper(['blog_stream.viewer'], 'testingType', 'equals', '');
         await wrapper.setProps({
             disabled: true,
             definition: {
@@ -174,7 +174,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should render placeholder if no definition exists', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], '', 'equals', '');
+        const wrapper = await createWrapper(['blog_stream.viewer'], '', 'equals', '');
         await wrapper.setProps({
             disabled: true,
             fieldType: 'uuid',
@@ -207,11 +207,11 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should fire event when trigger value for boolean type', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], 'boolean', 'equals', '', true);
+        const wrapper = await createWrapper(['blog_stream.viewer'], 'boolean', 'equals', '', true);
         await flushPromises();
 
-        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
-        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        const blogStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await blogStreamValueSwitch.get('.sw-select__selection').trigger('click');
         await flushPromises();
 
         await new DOMWrapper(document.body).get('.sw-select-option--1').trigger('click');
@@ -221,17 +221,17 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should fire event with type `equals` when trigger value for boolean type YES', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], 'boolean', 'equals', '', true);
+        const wrapper = await createWrapper(['blog_stream.viewer'], 'boolean', 'equals', '', true);
         await flushPromises();
 
-        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
-        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        const blogStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await blogStreamValueSwitch.get('.sw-select__selection').trigger('click');
         await flushPromises();
 
-        const contentStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(0);
+        const blogStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(0);
 
-        expect(contentStreamValueYes.text()).toBe('global.default.yes');
-        await contentStreamValueYes.trigger('click');
+        expect(blogStreamValueYes.text()).toBe('global.default.yes');
+        await blogStreamValueYes.trigger('click');
         await flushPromises();
 
         expect(wrapper.emitted('boolean-change')).toBeTruthy();
@@ -240,17 +240,17 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should fire event with type `not` when trigger value for boolean type No', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], 'boolean', 'equals', '', true);
+        const wrapper = await createWrapper(['blog_stream.viewer'], 'boolean', 'equals', '', true);
         await flushPromises();
 
-        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
-        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        const blogStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await blogStreamValueSwitch.get('.sw-select__selection').trigger('click');
         await flushPromises();
 
-        const contentStreamValueNo = new DOMWrapper(document.body).findAll('.sw-select-result').at(1);
+        const blogStreamValueNo = new DOMWrapper(document.body).findAll('.sw-select-result').at(1);
 
-        expect(contentStreamValueNo.text()).toBe('global.default.no');
-        await contentStreamValueNo.trigger('click');
+        expect(blogStreamValueNo.text()).toBe('global.default.no');
+        await blogStreamValueNo.trigger('click');
 
         expect(wrapper.emitted('boolean-change')).toBeTruthy();
         expect(wrapper.emitted('boolean-change')[0][0].type).toBe('notEquals');
@@ -258,29 +258,29 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should fire events with correct types when trigger value for empty type changes', async () => {
-        const wrapper = await createWrapper(['content_stream.viewer'], 'empty', 'equals', '', true);
+        const wrapper = await createWrapper(['blog_stream.viewer'], 'empty', 'equals', '', true);
         await flushPromises();
 
-        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
-        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        const blogStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await blogStreamValueSwitch.get('.sw-select__selection').trigger('click');
         await flushPromises();
 
-        let contentStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(0);
+        let blogStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(0);
 
-        expect(contentStreamValueYes.text()).toBe('global.default.yes');
-        await contentStreamValueYes.trigger('click');
+        expect(blogStreamValueYes.text()).toBe('global.default.yes');
+        await blogStreamValueYes.trigger('click');
         await flushPromises();
 
         expect(wrapper.emitted('empty-change')).toBeTruthy();
         expect(wrapper.emitted('empty-change')[0][0].type).toBe('notEquals');
 
-        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        await blogStreamValueSwitch.get('.sw-select__selection').trigger('click');
         await flushPromises();
 
-        contentStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(1);
+        blogStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(1);
 
-        expect(contentStreamValueYes.text()).toBe('global.default.no');
-        await contentStreamValueYes.trigger('click');
+        expect(blogStreamValueYes.text()).toBe('global.default.no');
+        await blogStreamValueYes.trigger('click');
         await flushPromises();
 
         expect(wrapper.emitted('empty-change')[1][0].type).toBe('equals');
@@ -412,7 +412,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should show the values of an equalsAny condition as tags', async () => {
-        const wrapper = await createWrapper(['content_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
+        const wrapper = await createWrapper(['blog_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
         await flushPromises();
 
         const tags = wrapper.findAll('.sw-select-selection-list__item');
@@ -423,7 +423,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should add a value to an equalsAny condition', async () => {
-        const wrapper = await createWrapper(['content_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
+        const wrapper = await createWrapper(['blog_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
         await flushPromises();
 
         const input = wrapper.get('.sw-select-selection-list__input');
@@ -434,7 +434,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
     });
 
     it('should remove a value from an equalsAny condition', async () => {
-        const wrapper = await createWrapper(['content_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
+        const wrapper = await createWrapper(['blog_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
         await flushPromises();
 
         await wrapper.get('.sw-select-selection-list__item-holder--0 .sw-label__dismiss').trigger('click');

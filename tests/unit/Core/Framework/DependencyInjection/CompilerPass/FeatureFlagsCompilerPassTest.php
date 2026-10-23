@@ -5,8 +5,8 @@ namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilder;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilderInterface;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\FeatureFlagCompilerPass;
 use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Deprecation\ClassAliasRegistry;
@@ -273,8 +273,8 @@ class FeatureFlagsCompilerPassTest extends TestCase
     public function testItRemovesDeprecatedBlogStreamInterfaceAliasWhenFlagIsActive(): void
     {
         $container = new ContainerBuilder();
-        $container->setDefinition(ContentStreamBuilder::class, new Definition());
-        $container->setAlias(ContentStreamBuilderInterface::class, ContentStreamBuilder::class)
+        $container->setDefinition(BlogStreamBuilder::class, new Definition());
+        $container->setAlias(BlogStreamBuilderInterface::class, BlogStreamBuilder::class)
             ->setDeprecated('contena/core', '6.8.0', 'The "%alias_id%" service alias is deprecated.');
         $container->setParameter('contena.feature.flags', [
             'v6.8.0.0' => ['major' => true, 'active' => true],
@@ -282,15 +282,15 @@ class FeatureFlagsCompilerPassTest extends TestCase
 
         Feature::withFeatureEnabled('v6.8.0.0', fn () => $this->compilerPass->process($container));
 
-        static::assertFalse($container->hasAlias(ContentStreamBuilderInterface::class));
-        static::assertTrue($container->hasDefinition(ContentStreamBuilder::class));
+        static::assertFalse($container->hasAlias(BlogStreamBuilderInterface::class));
+        static::assertTrue($container->hasDefinition(BlogStreamBuilder::class));
     }
 
     public function testItKeepsDeprecatedBlogStreamInterfaceAliasWhenFlagIsInactive(): void
     {
         $container = new ContainerBuilder();
-        $container->setDefinition(ContentStreamBuilder::class, new Definition());
-        $container->setAlias(ContentStreamBuilderInterface::class, ContentStreamBuilder::class)
+        $container->setDefinition(BlogStreamBuilder::class, new Definition());
+        $container->setAlias(BlogStreamBuilderInterface::class, BlogStreamBuilder::class)
             ->setDeprecated('contena/core', '6.8.0', 'The "%alias_id%" service alias is deprecated.');
         $container->setParameter('contena.feature.flags', [
             'v6.8.0.0' => ['major' => true, 'active' => false],
@@ -298,6 +298,6 @@ class FeatureFlagsCompilerPassTest extends TestCase
 
         Feature::withFeatureDisabled('v6.8.0.0', fn () => $this->compilerPass->process($container));
 
-        static::assertTrue($container->hasAlias(ContentStreamBuilderInterface::class));
+        static::assertTrue($container->hasAlias(BlogStreamBuilderInterface::class));
     }
 }

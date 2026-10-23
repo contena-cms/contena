@@ -374,7 +374,7 @@ export default function conditionService() {
     function getConditions() {
         return [
             {
-                type: 'contentStreamFilter',
+                type: 'blogStreamFilter',
                 component: 'sw-blog-stream-filter',
                 label: 'blog',
                 scopes: ['blog'],

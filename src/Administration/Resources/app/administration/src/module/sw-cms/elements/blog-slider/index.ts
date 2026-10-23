@@ -74,11 +74,11 @@ Contena.Service('cmsService').registerCmsElement({
             source: 'static',
             value: null,
         },
-        contentStreamSorting: {
+        blogStreamSorting: {
             source: 'static',
             value: 'name:ASC',
         },
-        contentStreamLimit: {
+        blogStreamLimit: {
             source: 'static',
             value: 10,
         },

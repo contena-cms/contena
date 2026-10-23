@@ -52,7 +52,7 @@ class BlogCriteriaParser extends CriteriaParser
 
             $query = new BoolQuery();
 
-            // Contena\Administration\Controller\AdminContentStreamController::contentStreamPreview() add BlogAvailableFilter
+            // Contena\Administration\Controller\AdminBlogStreamController::blogStreamPreview() add BlogAvailableFilter
             // but remove active filter, so we need to check if active filter is added to the query
             foreach ($filter->getQueries() as $subFilter) {
                 if ($subFilter instanceof EqualsFilter && \in_array($subFilter->getField(), ['blog.active', 'active'], true)) {

@@ -17,12 +17,12 @@ export default {
 
     data() {
         return {
-            contentStreams: null,
+            blogStreams: null,
             sortBy: 'createdAt',
             sortDirection: 'DESC',
             isLoading: false,
             showDeleteModal: false,
-            searchConfigEntity: 'content_stream',
+            searchConfigEntity: 'blog_stream',
         };
     },
 
@@ -33,8 +33,8 @@ export default {
     },
 
     computed: {
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
         /**
@@ -46,11 +46,11 @@ export default {
     },
 
     methods: {
-        onInlineEditSave(promise, contentStream) {
+        onInlineEditSave(promise, blogStream) {
             return promise
                 .then(() => {
                     this.createNotificationSuccess({
-                        message: this.$t('sw-blog-stream.detail.messageSaveSuccess', { name: contentStream.name }, 0),
+                        message: this.$t('sw-blog-stream.detail.messageSaveSuccess', { name: blogStream.name }, 0),
                     });
                 })
                 .catch(() => {
@@ -75,11 +75,11 @@ export default {
             if (this.acl.can('category:read')) {
                 criteria.addAggregation(
                     Criteria.terms(
-                        'content_stream',
+                        'blog_stream',
                         'id',
                         null,
                         null,
-                        Criteria.count('categories', 'content_stream.categories.id'),
+                        Criteria.count('categories', 'blog_stream.categories.id'),
                     ),
                 );
             }
@@ -98,11 +98,11 @@ export default {
                 criteria.resetSorting();
             }
 
-            return this.contentStreamRepository
+            return this.blogStreamRepository
                 .search(criteria)
                 .then((items) => {
                     this.total = items.total;
-                    this.contentStreams = items;
+                    this.blogStreams = items;
                     this.isLoading = false;
 
                     return items;
@@ -155,19 +155,19 @@ export default {
         },
 
         onDeleteItemFailed({ id, errorResponse }) {
-            const stream = this.contentStreams?.get(id);
+            const stream = this.blogStreams?.get(id);
             const message = errorResponse?.response?.data?.errors?.[0]?.detail || null;
 
             if (!stream) {
                 return;
             }
 
-            if (!this.contentStreams.aggregations.content_stream) {
+            if (!this.blogStreams.aggregations.blog_stream) {
                 this.createNotificationError({ message });
                 return;
             }
 
-            const aggregation = this.contentStreams.aggregations.content_stream.buckets
+            const aggregation = this.blogStreams.aggregations.blog_stream.buckets
                 .filter((bucket) => {
                     return bucket.key === id;
                 })
@@ -202,7 +202,7 @@ export default {
 
             this.isLoading = true;
 
-            this.contentStreamRepository
+            this.blogStreamRepository
                 .clone(item.id, behavior, Contena.Context.api)
                 .then((clone) => {
                     const route = {

@@ -97,7 +97,7 @@
       "messageSaveSuccess": "Die Regel \"{name}\" wurde erfolgreich gespeichert.",
       "ruleCard": "Bedingungen",
       "messageSaveError": "Beim Speichern der Regel ist ein Fehler aufgetreten",
-      "contentStreamIndexingWarning": {
+      "blogStreamIndexingWarning": {
         "title": "Indexierung dynamischer Produktgruppen ist deaktiviert",
         "message": "Die Bedingung „Position in dynamischer Produktgruppe” wird nie zutreffen.",
         "action": "Mehr dazu in unserer Dokumentation"

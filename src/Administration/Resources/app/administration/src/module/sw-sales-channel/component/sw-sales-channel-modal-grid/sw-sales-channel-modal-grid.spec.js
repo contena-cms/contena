@@ -24,7 +24,7 @@ function createAddChannelAction({ disabled = () => false, loading = () => false 
     return { disabled, loading };
 }
 
-async function createWrapper({ addChannelAction = createAddChannelAction(), contentStreamsExist = true } = {}) {
+async function createWrapper({ addChannelAction = createAddChannelAction(), blogStreamsExist = true } = {}) {
     const mockSearch = jest
         .fn()
         .mockResolvedValue(Object.assign([...mockSalesChannelTypes], { total: mockSalesChannelTypes.length }));
@@ -32,7 +32,7 @@ async function createWrapper({ addChannelAction = createAddChannelAction(), cont
     return mount(await wrapTestComponent('sw-sales-channel-modal-grid', { sync: true }), {
         props: {
             addChannelAction,
-            contentStreamsExist,
+            blogStreamsExist,
         },
         global: {
             stubs: {

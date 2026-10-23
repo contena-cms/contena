@@ -951,7 +951,7 @@ describe('src/module/sw-sales-channel/view/sw-sales-channel-detail-base', () => 
         expect(field.attributes().disabled).toBeUndefined();
     });
 
-    it('should have the entity single field for blog export contentStreamId disabled', async () => {
+    it('should have the entity single field for blog export blogStreamId disabled', async () => {
         const wrapper = await createWrapper();
 
         await wrapper.setProps({
@@ -965,7 +965,7 @@ describe('src/module/sw-sales-channel/view/sw-sales-channel-detail-base', () => 
         expect(field.attributes().disabled).toBe('true');
     });
 
-    it('should have the entity single field for blog export contentStreamId enabled', async () => {
+    it('should have the entity single field for blog export blogStreamId enabled', async () => {
         global.activeAclRoles = ['channel.editor'];
 
         const wrapper = await createWrapper();

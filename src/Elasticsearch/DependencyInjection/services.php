@@ -33,7 +33,7 @@ use Contena\Elasticsearch\Admin\Indexer\UserGroupAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\LandingPageAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\MediaAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\BlogAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\ContentStreamAdminSearchIndexer;
+use Contena\Elasticsearch\Admin\Indexer\BlogStreamAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\ChannelAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Subscriber\RefreshIndexSubscriber;
 use Contena\Elasticsearch\ExplainFieldQueryBuilder;
@@ -714,14 +714,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.elastic.admin-searcher-index', ['key' => 'category']);
 
 
-    $services->set(ContentStreamAdminSearchIndexer::class)
+    $services->set(BlogStreamAdminSearchIndexer::class)
         ->args([
             service(Connection::class),
             service(IteratorFactory::class),
-            service('content_stream.repository'),
+            service('blog_stream.repository'),
             param('elasticsearch.administration.indexing_batch_size'),
         ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'content_stream']);
+        ->tag('contena.elastic.admin-searcher-index', ['key' => 'blog_stream']);
 
     $services->set(BlogCriteriaParser::class)
         ->decorate(CriteriaParser::class)

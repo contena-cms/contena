@@ -14,7 +14,7 @@ const { Criteria } = Contena.Data;
 export default {
     template,
 
-    inject: ['repositoryFactory', 'contentStreamPreviewService'],
+    inject: ['repositoryFactory', 'blogStreamPreviewService'],
 
     emits: ['selection-change'],
 
@@ -121,16 +121,16 @@ export default {
 
         emptyStateMessage() {
             if (!this.filters) {
-                return this.$t('global.entity-components.contentStreamPreview.emptyMessageNoStream');
+                return this.$t('global.entity-components.blogStreamPreview.emptyMessageNoStream');
             }
 
             if (this.searchTerm.length) {
-                return this.$t('global.entity-components.contentStreamPreview.emptyMessageNoSearchResults', {
+                return this.$t('global.entity-components.blogStreamPreview.emptyMessageNoSearchResults', {
                     term: this.searchTerm,
                 });
             }
 
-            return this.$t('global.entity-components.contentStreamPreview.emptyMessageNoProducts');
+            return this.$t('global.entity-components.blogStreamPreview.emptyMessageNoProducts');
         },
 
         assetFilter() {
@@ -200,7 +200,7 @@ export default {
             return this.channelRepository
                 .searchIds(this.channelCriteria)
                 .then(({ data }) => {
-                    return this.contentStreamPreviewService.preview(
+                    return this.blogStreamPreviewService.preview(
                         data.at(0),
                         this.criteria,
                         [],

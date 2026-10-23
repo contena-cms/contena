@@ -57,8 +57,8 @@ class CategoryHydrator extends EntityHydrator
         if (isset($row[$root . '.cmsPageId'])) {
             $entity->cmsPageId = Uuid::fromBytesToHex($row[$root . '.cmsPageId']);
         }
-        if (isset($row[$root . '.contentStreamId'])) {
-            $entity->contentStreamId = Uuid::fromBytesToHex($row[$root . '.contentStreamId']);
+        if (isset($row[$root . '.blogStreamId'])) {
+            $entity->blogStreamId = Uuid::fromBytesToHex($row[$root . '.blogStreamId']);
         }
         if (isset($row[$root . '.createdAt'])) {
             $entity->createdAt = new \DateTimeImmutable($row[$root . '.createdAt']);
@@ -73,7 +73,7 @@ class CategoryHydrator extends EntityHydrator
 
         $entity->media = $this->manyToOne($row, $root, $definition->getField('media'), $context);
         $entity->cmsPage = $this->manyToOne($row, $root, $definition->getField('cmsPage'), $context);
-        $entity->contentStream = $this->manyToOne($row, $root, $definition->getField('contentStream'), $context);
+        $entity->blogStream = $this->manyToOne($row, $root, $definition->getField('blogStream'), $context);
 
         $this->translate($definition, $entity, $row, $root, $context, $definition->getTranslatedFields());
         $this->hydrateFields($definition, $entity, $root, $row, $context, $definition->getExtensionFields());

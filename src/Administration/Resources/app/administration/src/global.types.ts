@@ -288,7 +288,7 @@ declare global {
         oauthAuthorizeApiService: OAuthAuthorizeApiService;
         orderStateMachineService: OrderStateMachineApiService;
         privileges: PrivilegesService;
-        contentStreamConditionService: $TSFixMe;
+        blogStreamConditionService: $TSFixMe;
         recentlySearchService: $TSFixMe;
         repositoryFactory: RepositoryFactory;
         ruleConditionDataProviderService: RuleConditionService;

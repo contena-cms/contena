@@ -11,10 +11,10 @@ use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordDefin
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
-use Contena\Core\Content\Blog\Aggregate\ContentStreamMapping\ContentStreamMappingDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogStreamMapping\BlogStreamMappingDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\BlogStream\BlogStreamDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
@@ -235,7 +235,7 @@ class BlogDefinition extends EntityDefinition
 
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, BlogCategoryDefinition::class, 'blog_id', 'category_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Categories this blog is assigned to'),
 
-            (new ManyToManyAssociationField('streams', ContentStreamDefinition::class, ContentStreamMappingDefinition::class, 'blog_id', 'content_stream_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Dynamic blog streams this blog belongs to based on defined filters'),
+            (new ManyToManyAssociationField('streams', BlogStreamDefinition::class, BlogStreamMappingDefinition::class, 'blog_id', 'blog_stream_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Dynamic blog streams this blog belongs to based on defined filters'),
 
             (new ManyToManyAssociationField('categoriesRo', CategoryDefinition::class, BlogCategoryTreeDefinition::class, 'blog_id', 'category_id'))->addFlags(new ApiAware(), new CascadeDelete(false), new WriteProtected())->setDescription('Read-only category tree including all parent categories for optimized queries'),
 

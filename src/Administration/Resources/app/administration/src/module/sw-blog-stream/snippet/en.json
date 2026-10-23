@@ -139,7 +139,7 @@
       "titleResult": "Blog group",
       "messageSaveSuccess": "Dynamic blog group \"{name}\" has been saved.",
       "messageSaveError": "Dynamic blog group \"{name}\" could not be saved.",
-      "contentStreamIndexingWarning": {
+      "blogStreamIndexingWarning": {
         "title": "Dynamic Blog Group indexing is disabled",
         "message": "Some features may not work as expected: <ul><li>Category pages may not reflect changes until the HTTP cache expires or is manually cleared.</li><li>The rule condition \"Item in dynamic blog group\" will never be true.</li></ul>",
         "action": "Learn more in our documentation"
@@ -155,7 +155,7 @@
   },
   "sw-privileges": {
     "permissions": {
-      "content_stream": {
+      "blog_stream": {
         "label": "Dynamic blog groups"
       }
     }

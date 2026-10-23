@@ -156,7 +156,7 @@
         "blogAssignmentPlaceholder": "Produkte durchsuchen und zuweisen ...",
         "blogAssignmentLabel": "Produkte",
         "blogAssignmentEmptyStateDescription": "Keine Produkte zugewiesen",
-        "contentStreamAssignmentEmptyStateDescription": "Keine dynamische Produktgruppe zugewiesen",
+        "blogStreamAssignmentEmptyStateDescription": "Keine dynamische Produktgruppe zugewiesen",
         "columnNameLabel": "Name",
         "columnManufacturerLabel": "Hersteller",
         "blogAssignmentTypeLabel": "Typ",

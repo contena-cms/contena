@@ -598,18 +598,18 @@
         </div>
         {% endblock %}
 
-        {% block sw_channel_detail_base_general_input_product_comparison_content_stream %}
+        {% block sw_channel_detail_base_general_input_product_comparison_blog_stream %}
         <sw-entity-single-select
-            v-model:value="blogExport.contentStreamId"
+            v-model:value="blogExport.blogStreamId"
             class="sw-sales-channel-detail__product-comparison-blog-stream"
-            :label="$t('sw-sales-channel.detail.blogComparison.contentStream')"
+            :label="$t('sw-sales-channel.detail.blogComparison.blogStream')"
             label-property="name"
             value-property="id"
             required
             show-clearable-button
             :disabled="!acl.can('channel.editor') || undefined"
-            entity="content_stream"
-            :criteria="contentStreamCriteria"
+            entity="blog_stream"
+            :criteria="blogStreamCriteria"
             :error="blogExportProductStreamIdError"
         />
         {% endblock %}

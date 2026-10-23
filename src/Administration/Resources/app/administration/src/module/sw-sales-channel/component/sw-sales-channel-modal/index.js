@@ -19,8 +19,8 @@ export default {
     data() {
         return {
             detailType: null,
-            contentStreamsExist: false,
-            contentStreamsLoading: false,
+            blogStreamsExist: false,
+            blogStreamsLoading: false,
         };
     },
 
@@ -39,18 +39,18 @@ export default {
             return this.$t('sw-sales-channel.modal.title');
         },
 
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
         addChannelAction() {
             return {
                 loading: (channelTypeId) => {
-                    return this.isProductComparisonSalesChannelType(channelTypeId) && this.contentStreamsLoading;
+                    return this.isProductComparisonSalesChannelType(channelTypeId) && this.blogStreamsLoading;
                 },
 
                 disabled: (channelTypeId) => {
-                    return this.isProductComparisonSalesChannelType(channelTypeId) && !this.contentStreamsExist;
+                    return this.isProductComparisonSalesChannelType(channelTypeId) && !this.blogStreamsExist;
                 },
             };
         },
@@ -62,14 +62,14 @@ export default {
 
     methods: {
         createdComponent() {
-            this.contentStreamsLoading = true;
+            this.blogStreamsLoading = true;
             const criteria = new Criteria(1, 1);
             criteria.addFilter(Criteria.equals('internal', false));
-            this.contentStreamRepository.search(criteria).then((result) => {
+            this.blogStreamRepository.search(criteria).then((result) => {
                 if (result.total > 0) {
-                    this.contentStreamsExist = true;
+                    this.blogStreamsExist = true;
                 }
-                this.contentStreamsLoading = false;
+                this.blogStreamsLoading = false;
             });
         },
 

@@ -19,7 +19,7 @@ export default {
         return {
             activeTab: 'content',
             blogCollection: null,
-            contentStream: null,
+            blogStream: null,
             showProductStreamPreview: false,
 
             // Temporary values to store the previous selection in case the admin_user changes the assignment type.
@@ -47,8 +47,8 @@ export default {
             return this.repositoryFactory.create('blog');
         },
 
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
         blogs() {
@@ -78,7 +78,7 @@ export default {
             return this.getProductAssignmentTypes();
         },
 
-        contentStreamSortingOptions() {
+        blogStreamSortingOptions() {
             return this.getProductStreamSortingOptions();
         },
 
@@ -162,7 +162,7 @@ export default {
             ];
         },
 
-        contentStreamCriteria() {
+        blogStreamCriteria() {
             const criteria = new Criteria();
             criteria.addFilter(Criteria.equals('internal', false));
             return criteria;
@@ -184,7 +184,7 @@ export default {
                 return;
             }
 
-            if (this.element.config.blogs.source === 'content_stream') {
+            if (this.element.config.blogs.source === 'blog_stream') {
                 this.loadProductStream();
             } else {
                 this.loadManualAssignment();
@@ -210,8 +210,8 @@ export default {
                     value: 'static',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.blogAssignmentTypeOptions.contentStream'),
-                    value: 'content_stream',
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogAssignmentTypeOptions.blogStream'),
+                    value: 'blog_stream',
                 },
             ];
         },
@@ -219,46 +219,46 @@ export default {
         getProductStreamSortingOptions() {
             return [
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.nameAsc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.nameAsc'),
                     value: 'name:ASC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.nameDesc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.nameDesc'),
                     value: 'name:DESC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.creationDateAsc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.creationDateAsc'),
                     value: 'createdAt:ASC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.creationDateDesc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.creationDateDesc'),
                     value: 'createdAt:DESC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.priceAsc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.priceAsc'),
                     value: 'cheapestPrice:ASC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.priceDesc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.priceDesc'),
                     value: 'cheapestPrice:DESC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.releaseDateAsc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.releaseDateAsc'),
                     value: 'releaseDate:ASC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.releaseDateDesc'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.releaseDateDesc'),
                     value: 'releaseDate:DESC',
                 },
                 {
-                    label: this.$t('sw-cms.elements.blogSlider.config.contentStreamSortingOptions.random'),
+                    label: this.$t('sw-cms.elements.blogSlider.config.blogStreamSortingOptions.random'),
                     value: 'random',
                 },
             ];
         },
 
         onChangeAssignmentType(type) {
-            if (type === 'content_stream') {
+            if (type === 'blog_stream') {
                 this.tempProductIds = this.element.config.blogs.value;
                 this.element.config.blogs.value = this.tempStreamId;
             } else {
@@ -268,7 +268,7 @@ export default {
         },
 
         async loadProductStream() {
-            this.contentStream = await this.contentStreamRepository.get(
+            this.blogStream = await this.blogStreamRepository.get(
                 this.element.config.blogs.value,
                 Contena.Context.api,
                 new Criteria(1, 25),
@@ -277,7 +277,7 @@ export default {
 
         onChangeProductStream(streamId) {
             if (streamId === null) {
-                this.contentStream = null;
+                this.blogStream = null;
                 return;
             }
 
@@ -285,7 +285,7 @@ export default {
         },
 
         onClickProductStreamPreview() {
-            if (this.contentStream === null) {
+            if (this.blogStream === null) {
                 return;
             }
 
@@ -315,7 +315,7 @@ export default {
         },
 
         onRestoreInheritance() {
-            if (this.element.config.blogs.source === 'content_stream') {
+            if (this.element.config.blogs.source === 'blog_stream') {
                 this.element.config.blogs.value = this.originProductsValue;
                 this.loadProductStream();
             } else {

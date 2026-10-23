@@ -17,13 +17,13 @@ export default {
     emits: ['grid-channel-add', 'grid-detail-open'],
 
     props: {
-        contentStreamsExist: {
+        blogStreamsExist: {
             type: Boolean,
             required: false,
             default: true,
         },
 
-        contentStreamsLoading: {
+        blogStreamsLoading: {
             type: Boolean,
             required: false,
             default: false,

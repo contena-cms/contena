@@ -27,10 +27,10 @@ const defaultConfig = {
         value: ['de8de156da134dabac24257f81ff282f', '2fbb5fe2e29a4d70aa5854ce7ce3e20b'],
         source: 'static',
     },
-    contentStreamSorting: {
+    blogStreamSorting: {
         value: 'name:ASC',
     },
-    contentStreamLimit: {
+    blogStreamLimit: {
         value: 10,
     },
     displayMode: {
@@ -62,7 +62,7 @@ const defaultConfig = {
     },
 };
 
-const contentStreamMock = {
+const blogStreamMock = {
     name: 'Cheap pc parts',
     apiFilter: ['foo', 'bar'],
     invalid: false,
@@ -160,7 +160,7 @@ async function createWrapper(customCmsElementConfig = {}, { featureActive = fals
                     repositoryFactory: {
                         create: () => {
                             return {
-                                get: () => Promise.resolve(contentStreamMock),
+                                get: () => Promise.resolve(blogStreamMock),
                                 search: (criteria) => {
                                     const blogs = criteria.ids.length ? blogMock.slice(0, 1) : blogMock;
 
@@ -242,17 +242,17 @@ describe('module/sw-cms/elements/blog-slider/config', () => {
         expect(wrapper.find('.sw-cms-el-config-blog-slider__tab-content-blogs').exists()).toBeTruthy();
     });
 
-    it('should fetch blog stream when assignment type is "content_stream"', async () => {
+    it('should fetch blog stream when assignment type is "blog_stream"', async () => {
         const wrapper = await createWrapper({
             blogs: {
                 value: 'de8de156da134dabac24257f81ff282f',
-                source: 'content_stream',
+                source: 'blog_stream',
             },
         });
 
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.contentStream).toEqual(contentStreamMock);
+        expect(wrapper.vm.blogStream).toEqual(blogStreamMock);
     });
 
     it('should fetch blog stream when changing blog stream via select', async () => {
@@ -262,7 +262,7 @@ describe('module/sw-cms/elements/blog-slider/config', () => {
 
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.contentStream).toEqual(contentStreamMock);
+        expect(wrapper.vm.blogStream).toEqual(blogStreamMock);
     });
 
     it('should set blog stream to null when changing blog stream via select and no stream is given', async () => {
@@ -272,14 +272,14 @@ describe('module/sw-cms/elements/blog-slider/config', () => {
 
         await wrapper.vm.$nextTick();
 
-        expect(wrapper.vm.contentStream).toBeNull();
+        expect(wrapper.vm.blogStream).toBeNull();
     });
 
-    it('should render blog stream selection when element blog type is "content_stream"', async () => {
+    it('should render blog stream selection when element blog type is "blog_stream"', async () => {
         const wrapper = await createWrapper({
             blogs: {
                 value: 'de8de156da134dabac24257f81ff282f',
-                source: 'content_stream',
+                source: 'blog_stream',
             },
         });
 
@@ -298,10 +298,10 @@ describe('module/sw-cms/elements/blog-slider/config', () => {
         expect(wrapper.find('.sw-cms-el-config-blog-slider__tab-content-blog-stream-limit').exists()).toBeTruthy();
     });
 
-    it('should store the blogIds after changing the assignment type to "content_stream"', async () => {
+    it('should store the blogIds after changing the assignment type to "blog_stream"', async () => {
         const wrapper = await createWrapper();
 
-        wrapper.vm.onChangeAssignmentType('content_stream');
+        wrapper.vm.onChangeAssignmentType('blog_stream');
 
         await wrapper.vm.$nextTick();
 
@@ -315,7 +315,7 @@ describe('module/sw-cms/elements/blog-slider/config', () => {
         const wrapper = await createWrapper({
             blogs: {
                 value: 'de8de156da134dabac24257f81ff282f',
-                source: 'content_stream',
+                source: 'blog_stream',
             },
         });
 
@@ -333,7 +333,7 @@ describe('module/sw-cms/elements/blog-slider/config', () => {
         const wrapper = await createWrapper({
             blogs: {
                 value: 'de8de156da134dabac24257f81ff282f',
-                source: 'content_stream',
+                source: 'blog_stream',
             },
         });
 

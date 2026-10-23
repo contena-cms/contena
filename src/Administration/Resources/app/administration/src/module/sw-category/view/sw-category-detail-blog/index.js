@@ -25,8 +25,8 @@ export default {
 
     data() {
         return {
-            contentStreamFilter: null,
-            contentStreamInvalid: false,
+            blogStreamFilter: null,
+            blogStreamInvalid: false,
             manualAssignedProductsCount: 0,
             parentProducts: [],
         };
@@ -37,8 +37,8 @@ export default {
             return Contena.Store.get('swCategoryDetail').category;
         },
 
-        contentStreamRepository() {
-            return this.repositoryFactory.create('content_stream');
+        blogStreamRepository() {
+            return this.repositoryFactory.create('blog_stream');
         },
 
         blogRepository() {
@@ -75,23 +75,23 @@ export default {
             return new Criteria(1, 10).addAssociation('options.group').addAssociation('manufacturer');
         },
 
-        contentStreamCriteria() {
+        blogStreamCriteria() {
             const criteria = new Criteria();
             criteria.addFilter(Criteria.equals('internal', false));
             return criteria;
         },
 
-        contentStreamInvalidError() {
-            if (this.contentStreamInvalid) {
+        blogStreamInvalidError() {
+            if (this.blogStreamInvalid) {
                 return new ContenaError({
-                    code: 'CONTENT_STREAM_INVALID',
+                    code: 'BLOG_STREAM_INVALID',
                     detail: this.$t('sw-category.base.blogs.dynamicProductGroupInvalidMessage'),
                 });
             }
             return null;
         },
 
-        ...mapPropertyErrors('category', ['contentStreamId', 'blogAssignmentType']),
+        ...mapPropertyErrors('category', ['blogStreamId', 'blogAssignmentType']),
 
         blogAssignmentTypes() {
             return [
@@ -100,7 +100,7 @@ export default {
                     label: this.$t('sw-category.base.blogs.blogAssignmentTypeManualLabel'),
                 },
                 {
-                    value: 'content_stream',
+                    value: 'blog_stream',
                     label: this.$t('sw-category.base.blogs.blogAssignmentTypeStreamLabel'),
                 },
             ];
@@ -143,9 +143,9 @@ export default {
     },
 
     watch: {
-        'category.contentStreamId'(id) {
+        'category.blogStreamId'(id) {
             if (!id) {
-                this.contentStreamFilter = null;
+                this.blogStreamFilter = null;
                 return;
             }
             this.loadProductStreamPreview();
@@ -158,22 +158,22 @@ export default {
 
     methods: {
         createdComponent() {
-            if (!this.category.contentStreamId) {
+            if (!this.category.blogStreamId) {
                 return;
             }
             this.loadProductStreamPreview();
         },
 
         loadProductStreamPreview() {
-            this.contentStreamRepository
-                .get(this.category.contentStreamId)
+            this.blogStreamRepository
+                .get(this.category.blogStreamId)
                 .then((response) => {
-                    this.contentStreamFilter = response.apiFilter;
-                    this.contentStreamInvalid = response.invalid;
+                    this.blogStreamFilter = response.apiFilter;
+                    this.blogStreamInvalid = response.invalid;
                 })
                 .catch(() => {
-                    this.contentStreamFilter = null;
-                    this.contentStreamInvalid = true;
+                    this.blogStreamFilter = null;
+                    this.blogStreamInvalid = true;
                 });
         },
 
@@ -232,7 +232,7 @@ export default {
 
         onUpdateProductAssignmentType(value) {
             if (value === 'blog') {
-                this.category.contentStreamId = null;
+                this.category.blogStreamId = null;
             }
         },
     },

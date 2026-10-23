@@ -1,7 +1,7 @@
 /**
  * @sw-package framework
  */
-import ContentStreamConditionService from 'src/app/service/blog-stream-condition.service';
+import BlogStreamConditionService from 'src/app/service/blog-stream-condition.service';
 
 const statesDeprecation = {
     field: 'states',
@@ -19,7 +19,7 @@ const blogStatesDeprecation = {
 };
 
 describe('app/service/blog-stream-condition.service.js', () => {
-    const service = new ContentStreamConditionService();
+    const service = new BlogStreamConditionService();
 
     it('should be able to add properties to general allowlist', async () => {
         expect(service.isPropertyInAllowList(null, 'newProp')).toBe(false);

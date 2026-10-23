@@ -163,9 +163,9 @@ class MigrationIndexerSafeguardTest extends TestCase
             'indexer' => 'blog.indexer',
             'tables' => ['blog', 'blog_category', 'blog_option', 'blog_property'],
         ];
-        yield 'content_stream.indexer' => [
-            'indexer' => 'content_stream.indexer',
-            'tables' => ['content_stream', 'content_stream_filter'],
+        yield 'blog_stream.indexer' => [
+            'indexer' => 'blog_stream.indexer',
+            'tables' => ['blog_stream', 'blog_stream_filter'],
         ];
         yield 'promotion.indexer' => [
             'indexer' => 'promotion.indexer',

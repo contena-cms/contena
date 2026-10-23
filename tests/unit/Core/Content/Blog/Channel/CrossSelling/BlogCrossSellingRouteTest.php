@@ -22,9 +22,9 @@ use Contena\Core\Content\Blog\Channel\CrossSelling\CrossSellingElementCollection
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
 use Contena\Core\Content\Blog\Events\BlogCrossSellingStreamCriteriaEvent;
 use Contena\Core\Content\Blog\Extension\BlogCrossSellingRouteExtension;
-use Contena\Core\Content\ContentStream\ContentStreamException;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilder;
-use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
+use Contena\Core\Content\BlogStream\BlogStreamException;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilder;
+use Contena\Core\Content\BlogStream\Service\BlogStreamBuilderInterface;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
@@ -61,7 +61,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
     private CacheTagCollector&Stub $cacheTagCollector;
 
-    private ContentStreamBuilder&Stub $contentStreamBuilder;
+    private BlogStreamBuilder&Stub $blogStreamBuilder;
 
     private Connection&Stub $connection;
 
@@ -74,9 +74,9 @@ class BlogCrossSellingRouteTest extends TestCase
         $this->cacheTagCollector = static::createStub(CacheTagCollector::class);
         $this->connection = static::createStub(Connection::class);
         $this->connection->method('fetchOne')->willReturn(false);
-        $this->contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $this->contentStreamBuilder->method('enrichCriteria')->willReturnCallback(static function (Criteria $criteria, mixed ...$_): void {
-            $criteria->addFilter(new EqualsFilter('blog.content_stream', 'stream'));
+        $this->blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $this->blogStreamBuilder->method('enrichCriteria')->willReturnCallback(static function (Criteria $criteria, mixed ...$_): void {
+            $criteria->addFilter(new EqualsFilter('blog.blog_stream', 'stream'));
         });
 
         $this->route = $this->createRoute();
@@ -92,7 +92,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier($crossSellingId);
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId($streamId);
         $crossSelling->setBlogId($blogId);
         $crossSelling->setLimit(10);
@@ -153,7 +153,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier($crossSellingId);
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId($streamId);
         $crossSelling->setBlogId($blogId);
         $crossSelling->setLimit(10);
@@ -171,9 +171,9 @@ class BlogCrossSellingRouteTest extends TestCase
             )
         );
 
-        $this->contentStreamBuilder->method('enrichCriteria')->willReturnCallback(static function (Criteria $criteria, string $id, mixed ...$_) use ($streamId): void {
+        $this->blogStreamBuilder->method('enrichCriteria')->willReturnCallback(static function (Criteria $criteria, string $id, mixed ...$_) use ($streamId): void {
             static::assertSame($streamId, $id);
-            $criteria->addFilter(new EqualsFilter('blog.content_stream', $streamId));
+            $criteria->addFilter(new EqualsFilter('blog.blog_stream', $streamId));
             $criteria->addState(BlogListingLoader::STATE_SKIP_ADD_GROUPING);
         });
 
@@ -203,7 +203,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier(Uuid::randomHex());
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId(Uuid::randomHex());
         $crossSelling->setBlogId($blogId);
         $crossSelling->setLimit(10);
@@ -243,7 +243,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier(Uuid::randomHex());
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId(Uuid::randomHex());
         $crossSelling->setBlogId($blogId);
         $crossSelling->setLimit(10);
@@ -279,7 +279,7 @@ class BlogCrossSellingRouteTest extends TestCase
         $route = new BlogCrossSellingRoute(
             $this->crossSellingRepository,
             $eventDispatcher,
-            $this->contentStreamBuilder,
+            $this->blogStreamBuilder,
             static::createStub(ChannelRepository::class),
             static::createStub(SystemConfigService::class),
             $listingLoader,
@@ -352,7 +352,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier($crossSellingId);
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId($streamId);
         $crossSelling->setBlogId($blogId);
         $crossSelling->setLimit(10);
@@ -395,7 +395,7 @@ class BlogCrossSellingRouteTest extends TestCase
         static::assertContains(
             EntityCacheKeyGenerator::buildStreamTag($streamId),
             $observedTags,
-            'Stream tag must be added unconditionally so content_stream_filter writes invalidate cross-selling responses.'
+            'Stream tag must be added unconditionally so blog_stream_filter writes invalidate cross-selling responses.'
         );
     }
 
@@ -439,7 +439,7 @@ class BlogCrossSellingRouteTest extends TestCase
 
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier($crossSellingId);
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId($streamId);
         $crossSelling->setBlogId($blogId);
         $crossSelling->setLimit(10);
@@ -460,16 +460,16 @@ class BlogCrossSellingRouteTest extends TestCase
         // A builder that only implements the deprecated interface (e.g. a decorator that has not yet adopted
         // AbstractBlogStreamBuilder). The route must fall back to buildFilters() without a TypeError, add
         // the stream filters and leave display-as-group enabled (no skip-grouping state).
-        $contentStreamBuilder = $this->createMock(ContentStreamBuilderInterface::class);
-        $contentStreamBuilder->expects($this->once())
+        $blogStreamBuilder = $this->createMock(BlogStreamBuilderInterface::class);
+        $blogStreamBuilder->expects($this->once())
             ->method('buildFilters')
-            ->willReturn([new EqualsFilter('blog.content_stream', $streamId)]);
+            ->willReturn([new EqualsFilter('blog.blog_stream', $streamId)]);
 
         $listingLoader = $this->createMock(BlogListingLoader::class);
         $listingLoader->expects($this->once())
             ->method('load')
             ->willReturnCallback(function (Criteria $criteria) use ($streamId): EntitySearchResult {
-                static::assertContainsEquals(new EqualsFilter('blog.content_stream', $streamId), $criteria->getFilters());
+                static::assertContainsEquals(new EqualsFilter('blog.blog_stream', $streamId), $criteria->getFilters());
                 static::assertFalse($criteria->hasState(BlogListingLoader::STATE_SKIP_ADD_GROUPING));
 
                 return new EntitySearchResult(
@@ -485,7 +485,7 @@ class BlogCrossSellingRouteTest extends TestCase
         $route = new BlogCrossSellingRoute(
             $this->crossSellingRepository,
             static::createStub(EventDispatcherInterface::class),
-            $contentStreamBuilder,
+            $blogStreamBuilder,
             static::createStub(ChannelRepository::class),
             static::createStub(SystemConfigService::class),
             $listingLoader,
@@ -505,9 +505,9 @@ class BlogCrossSellingRouteTest extends TestCase
         $streamId = Uuid::randomHex();
         $crossSelling = $this->stubStreamCrossSelling($blogId, $streamId);
 
-        $exception = ContentStreamException::noFilters($streamId);
-        $contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $contentStreamBuilder->method('enrichCriteria')->willThrowException($exception);
+        $exception = BlogStreamException::noFilters($streamId);
+        $blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $blogStreamBuilder->method('enrichCriteria')->willThrowException($exception);
 
         $listingLoader = $this->createMock(BlogListingLoader::class);
         $listingLoader->expects($this->never())->method('load');
@@ -518,7 +518,7 @@ class BlogCrossSellingRouteTest extends TestCase
             ->with(
                 'Blog stream configured for cross-selling has no usable filters.',
                 [
-                    'contentStreamId' => $streamId,
+                    'blogStreamId' => $streamId,
                     'exception' => $exception,
                 ]
             );
@@ -532,7 +532,7 @@ class BlogCrossSellingRouteTest extends TestCase
                 }
             });
 
-        $element = $this->createRoute(listingLoader: $listingLoader, contentStreamBuilder: $contentStreamBuilder, logger: $logger)
+        $element = $this->createRoute(listingLoader: $listingLoader, blogStreamBuilder: $blogStreamBuilder, logger: $logger)
             ->load($blogId, new Request(), Generator::generateChannelContext(), new Criteria())
             ->getResult()
             ->first();
@@ -555,8 +555,8 @@ class BlogCrossSellingRouteTest extends TestCase
         $streamId = Uuid::randomHex();
         $this->stubStreamCrossSelling($blogId, $streamId);
 
-        $contentStreamBuilder = static::createStub(ContentStreamBuilder::class);
-        $contentStreamBuilder->method('enrichCriteria')->willThrowException(ContentStreamException::emptyBlogStream($streamId));
+        $blogStreamBuilder = static::createStub(BlogStreamBuilder::class);
+        $blogStreamBuilder->method('enrichCriteria')->willThrowException(BlogStreamException::emptyBlogStream($streamId));
 
         $crossSellingBlog = new BlogEntity();
         $crossSellingBlog->setId(Uuid::randomHex());
@@ -585,7 +585,7 @@ class BlogCrossSellingRouteTest extends TestCase
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->never())->method('warning');
 
-        $element = $this->createRoute(listingLoader: $listingLoader, contentStreamBuilder: $contentStreamBuilder, logger: $logger)
+        $element = $this->createRoute(listingLoader: $listingLoader, blogStreamBuilder: $blogStreamBuilder, logger: $logger)
             ->load($blogId, new Request(), Generator::generateChannelContext(), new Criteria())
             ->getResult()
             ->first();
@@ -614,7 +614,7 @@ class BlogCrossSellingRouteTest extends TestCase
         $route = new BlogCrossSellingRoute(
             static::createStub(EntityRepository::class),
             static::createStub(EventDispatcherInterface::class),
-            static::createStub(ContentStreamBuilder::class),
+            static::createStub(BlogStreamBuilder::class),
             static::createStub(ChannelRepository::class),
             static::createStub(SystemConfigService::class),
             static::createStub(BlogListingLoader::class),
@@ -638,7 +638,7 @@ class BlogCrossSellingRouteTest extends TestCase
     {
         $crossSelling = new BlogCrossSellingEntity();
         $crossSelling->setUniqueIdentifier(Uuid::randomHex());
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
+        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_BLOG_STREAM);
         $crossSelling->setBlogStreamId(Uuid::randomHex());
         $crossSelling->setBlogId($parentId ?? $blogId);
         $crossSelling->setLimit(10);
@@ -725,13 +725,13 @@ class BlogCrossSellingRouteTest extends TestCase
         ?BlogListingLoader $listingLoader = null,
         ?ChannelRepository $blogRepository = null,
         ?Connection $connection = null,
-        ?ContentStreamBuilder $contentStreamBuilder = null,
+        ?BlogStreamBuilder $blogStreamBuilder = null,
         ?LoggerInterface $logger = null,
     ): BlogCrossSellingRoute {
         return new BlogCrossSellingRoute(
             $this->crossSellingRepository,
             static::createStub(EventDispatcherInterface::class),
-            $contentStreamBuilder ?? $this->contentStreamBuilder,
+            $blogStreamBuilder ?? $this->blogStreamBuilder,
             $blogRepository ?? static::createStub(ChannelRepository::class),
             static::createStub(SystemConfigService::class),
             $listingLoader ?? $this->listingLoader,

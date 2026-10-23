@@ -6,7 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\BlogStream\BlogStreamDefinition;
 use Contena\Core\Content\Flow\FlowDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Content\MailTemplate\MailTemplateDefinition;
@@ -40,7 +40,7 @@ class DemodataCommandTest extends TestCase
         PropertyGroupDefinition::class,
         CategoryDefinition::class,
         BlogDefinition::class,
-        ContentStreamDefinition::class,
+        BlogStreamDefinition::class,
         AdminUserDefinition::class,
         FlowDefinition::class,
         CustomFieldSetDefinition::class,

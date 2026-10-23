@@ -8,7 +8,7 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
+use Contena\Core\Content\BlogStream\BlogStreamDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlDefinition;
@@ -66,7 +66,7 @@ class CategoryDefinition extends EntityDefinition
 
     final public const BLOG_ASSIGNMENT_TYPE_BLOG = 'blog';
 
-    final public const BLOG_ASSIGNMENT_TYPE_CONTENT_STREAM = 'content_stream';
+    final public const BLOG_ASSIGNMENT_TYPE_BLOG_STREAM = 'blog_stream';
 
     final public const CONFIG_KEY_DEFAULT_CMS_PAGE_CATEGORY = 'core.cms.default_category_cms_page';
 
@@ -126,7 +126,7 @@ class CategoryDefinition extends EntityDefinition
             (new TreePathField('path', 'path'))->addFlags(new ApiAware())->setDescription('A relative URL to the category.'),
             (new ChildCountField())->addFlags(new ApiAware()),
 
-            (new StringField('blog_assignment_type', 'blogAssignmentType'))->addFlags(new ApiAware(), new Required())->setDescription('Type of blog assignment: Dynamic blog group as or `content_stream` or Manual assignment as `blog`.'),
+            (new StringField('blog_assignment_type', 'blogAssignmentType'))->addFlags(new ApiAware(), new Required())->setDescription('Type of blog assignment: Dynamic blog group as or `blog_stream` or Manual assignment as `blog`.'),
             (new BoolField('visible', 'visible'))->addFlags(new ApiAware())->setDescription('Displays categories on category page when true.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the category is listed for selection.'),
 
@@ -155,8 +155,8 @@ class CategoryDefinition extends EntityDefinition
             (new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of CMS page.'),
             (new ReferenceVersionField(CmsPageDefinition::class))->addFlags(new Required(), new ApiAware()),
             (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('CMS page layout for the category'),
-            (new FkField('content_stream_id', 'contentStreamId', ContentStreamDefinition::class))->setDescription('Unique identity of blog stream.'),
-            new ManyToOneAssociationField('contentStream', 'content_stream_id', ContentStreamDefinition::class, 'id', false),
+            (new FkField('blog_stream_id', 'blogStreamId', BlogStreamDefinition::class))->setDescription('Unique identity of blog stream.'),
+            new ManyToOneAssociationField('blogStream', 'blog_stream_id', BlogStreamDefinition::class, 'id', false),
 
             // custom entity specific fields
             (new FkField('custom_entity_type_id', 'customEntityTypeId', CustomEntityDefinition::class, 'id'))->addFlags(new ApiAware()),

@@ -108,7 +108,7 @@ export default function createCustomFieldService() {
         'media',
         'landing_page',
         'promotion',
-        'content_stream',
+        'blog_stream',
         'property_group',
         'property_group_option',
         'blog_review',

@@ -6,7 +6,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
+use Contena\Core\Content\BlogStream\Aggregate\BlogStreamFilter\BlogStreamFilterDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -24,7 +24,7 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
     {
         static::assertSame([
             BlogSortingDefinition::ENTITY_NAME . '.written' => 'blogSortingWritten',
-            ContentStreamFilterDefinition::ENTITY_NAME . '.written' => 'contentStreamFilterWritten',
+            BlogStreamFilterDefinition::ENTITY_NAME . '.written' => 'blogStreamFilterWritten',
         ], BlogCustomFieldsUsedUpdater::getSubscribedEvents());
     }
 
@@ -75,9 +75,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testBlogSortingWithCustomFieldTriggersIndexing(): void
@@ -159,7 +159,7 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             ->method('allowIndexing')
             ->willReturn(true);
 
-        $contentStreamFilterId = Uuid::randomHex();
+        $blogStreamFilterId = Uuid::randomHex();
 
         $connection = $this->createMock(Connection::class);
         $connection
@@ -191,9 +191,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testMultipleBlogStreamFiltersAreProcessed(): void
@@ -203,8 +203,8 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             ->method('allowIndexing')
             ->willReturn(true);
 
-        $contentStreamFilterId1 = Uuid::randomHex();
-        $contentStreamFilterId2 = Uuid::randomHex();
+        $blogStreamFilterId1 = Uuid::randomHex();
+        $blogStreamFilterId2 = Uuid::randomHex();
 
         $connection = $this->createMock(Connection::class);
         $connection
@@ -234,9 +234,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testNoCustomFieldsInSortingDoesNotTriggerIndexing(): void
@@ -276,7 +276,7 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             ->method('allowIndexing')
             ->willReturn(true);
 
-        $contentStreamFilterId = Uuid::randomHex();
+        $blogStreamFilterId = Uuid::randomHex();
 
         $connection = $this->createMock(Connection::class);
         // Returns empty array - no custom fields found
@@ -297,9 +297,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testMultipleBlogSortingsAreProcessed(): void
@@ -446,7 +446,7 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             ->method('allowIndexing')
             ->willReturn(true);
 
-        $contentStreamFilterId = Uuid::randomHex();
+        $blogStreamFilterId = Uuid::randomHex();
 
         $connection = $this->createMock(Connection::class);
         $connection
@@ -479,9 +479,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testBlogStreamWrittenWithNoCustomFieldFilters(): void
@@ -491,7 +491,7 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             ->method('allowIndexing')
             ->willReturn(true);
 
-        $contentStreamFilterId = Uuid::randomHex();
+        $blogStreamFilterId = Uuid::randomHex();
 
         $connection = $this->createMock(Connection::class);
         $connection
@@ -511,9 +511,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testBlogSortingAndStreamEventsProcessedIndependently(): void
@@ -563,8 +563,8 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $results = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $results, Context::createDefaultContext());
-        $updater->contentStreamFilterWritten($event);
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $results, Context::createDefaultContext());
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testDuplicateCustomFieldsAreDeduplicatedInSorting(): void
@@ -706,9 +706,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testBlogSortingWithEmptyWriteResults(): void
@@ -748,9 +748,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             static::createStub(Connection::class)
         );
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, [], Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, [], Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testBlogSortingWithMixedFieldTypes(): void
@@ -861,7 +861,7 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
             ->method('allowIndexing')
             ->willReturn(true);
 
-        $contentStreamFilterId = Uuid::randomHex();
+        $blogStreamFilterId = Uuid::randomHex();
 
         $connection = $this->createMock(Connection::class);
         $connection
@@ -890,9 +890,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testBlogSortingWithNonStringPrimaryKeyIsSkipped(): void
@@ -938,9 +938,9 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         $writeResults = [
         ];
 
-        $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
+        $event = new EntityWrittenEvent(BlogStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
 
-        $updater->contentStreamFilterWritten($event);
+        $updater->blogStreamFilterWritten($event);
     }
 
     public function testSortingWithInvalidJsonFromDatabaseIsSkipped(): void

@@ -24,7 +24,7 @@ type WrapperOptions = {
     entity?: 'blog_manufacturer' | 'user';
 };
 
-type ContentStreamValueVm = {
+type BlogStreamValueVm = {
     searchTerm: string;
     customFieldCriteria: Criteria;
     getCustomFieldLabel: (item: Entity<'blog_manufacturer'> | Entity<'user'>) => string;
@@ -120,7 +120,7 @@ describe('src/module/sw-blog-stream/component/sw-blog-stream-value/sw-blog-strea
             entity: 'user',
             labelProperty: ['firstName', 'lastName'],
         });
-        const viewModel = wrapper.vm as unknown as ContentStreamValueVm;
+        const viewModel = wrapper.vm as unknown as BlogStreamValueVm;
         viewModel.searchTerm = 'Ada';
 
         expect(viewModel.customFieldCriteria.queries).toEqual([

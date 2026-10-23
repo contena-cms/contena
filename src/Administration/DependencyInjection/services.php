@@ -47,7 +47,7 @@ use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\System\Tag\Service\FilterTagIdsService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Filesystem\Filesystem;
-use Contena\Administration\Controller\AdminContentStreamController;
+use Contena\Administration\Controller\AdminBlogStreamController;
 use Contena\Administration\System\Channel\Subscriber\ChannelAdminUserConfigSubscriber;
 use Contena\Core\Framework\Notification\Api\NotificationController;
 use Contena\Core\Framework\Notification\NotificationDefinition;
@@ -147,7 +147,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->call('setContainer', [service('service_container')]);
 
-    $services->set(AdminContentStreamController::class)
+    $services->set(AdminBlogStreamController::class)
         ->public()
         ->args([
             service(BlogDefinition::class),

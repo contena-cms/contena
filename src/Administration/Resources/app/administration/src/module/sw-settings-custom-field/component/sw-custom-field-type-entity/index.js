@@ -63,7 +63,7 @@ export default {
                 },
                 {
                     label: this.$t('sw-settings-custom-field.customField.entity.dynamicProductGroup'),
-                    value: 'content_stream',
+                    value: 'blog_stream',
                 },
                 {
                     label: this.$t('sw-settings-custom-field.customField.entity.shoppingExperienceLayout'),

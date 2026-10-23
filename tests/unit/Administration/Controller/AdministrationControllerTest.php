@@ -135,7 +135,7 @@ class AdministrationControllerTest extends TestCase
                     'frontendEsEnable' => true,
                     'serviceRegistryUrl' => $this->serviceRegistryUrl,
                     'refreshTokenTtl' => 7 * 86400 * 1000,
-                    'contentStreamIndexingEnabled' => true,
+                    'blogStreamIndexingEnabled' => true,
                     'hideUpdateModule' => true,
                     'analyticsGatewayUrl' => $this->analyticsGatewayUrl,
                 ]
