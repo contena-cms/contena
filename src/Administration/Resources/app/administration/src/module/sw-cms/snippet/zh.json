@@ -39,6 +39,7 @@
       },
       "sidebar": {
         "titlePageSettings": "设置",
+        "confirmReminderNavigator": "不再询问",
         "mobileOptionHidden": "隐藏"
       }
     },
@@ -212,6 +213,7 @@
       "cmsLayoutAssignmentModal": {
         "labelCategories": "分类",
         "labelSalesChannel": "渠道",
+        "resetOptionSalesChannel": "全部渠道",
         "tabCategories": "分类",
         "tabLandingPages": "落地页",
         "blogs": {

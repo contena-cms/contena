@@ -21,7 +21,8 @@
       "labelPosition": "位置",
       "labelOptionPosition": "位置",
       "contextMenuOptionView": "编辑",
-      "labelDescription": "描述"
+      "labelDescription": "描述",
+      "textOptionHeadline": "新值"
     }
   },
   "sw-privileges": {

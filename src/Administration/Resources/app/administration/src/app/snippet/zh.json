@@ -1146,41 +1146,226 @@
     "messageEmptyTitle": "暂无属性",
     "messageEmptySubline": "如需添加属性，请前往属性模块。"
   },
+  "sw-language-info": {
+    "infoTextChildLanguage": "“{entityDescription}”以内容语言 <span>“{language}”</span> 显示，继承自",
+    "infoTextRootLanguage": "“{entityDescription}”以内容语言 <span>“{language}”</span> 显示。回退语言为系统默认语言",
+    "infoTextNewEntity": "“{entityDescription}”以系统默认语言显示。请始终用你设定的系统默认语言维护新数据。"
+  },
   "sw-language-switch": {
+    "messageModalUnsavedChanges": "当前语言下有未保存的更改，现在保存吗？",
     "titleModalUnsavedChanges": "未保存的更改",
     "titleModalButtonRevertUnsavedChanges": "放弃更改"
   },
+  "sw-inheritance-warning": {
+    "infoTextInheritedField": "{moduleName} 含有继承字段。只要继承状态处于启用状态，内容就会被继承。点击链接图标可解除字段继承，再次点击可恢复继承状态。"
+  },
   "sw-license-violation": {
+    "title": "扩展警告",
     "reload": "重新加载",
+    "alertText": "检测到本次安装中至少有一个扩展存在许可违规。为消除违规并避免法律后果，请根据违规类型订阅、购买或租用该扩展。如果已不再使用该扩展，可通过“永久删除扩展”按钮或“我的扩展”将其删除。若未采取上述任一措施，Contena 保留就许可违规收取罚金的权利。",
+    "deletePlugin": "永久删除扩展",
+    "messageDeleteConfirm": "确定要彻底删除扩展“{pluginName}”吗？",
+    "checkboxMessage": "我已了解此提示及可能产生的后果。",
+    "closeModal": "关闭通知",
+    "ignorePlugin": "永久忽略",
+    "successfullyDeleted": "扩展已删除",
+    "alreadyRemoved": "扩展已被移除",
     "table": {
       "plugin": "扩展"
     }
   },
   "sw-sales-channel-switch": {
+    "messageModalUnsavedChanges": "当前渠道有未保存的更改，现在保存吗？",
+    "placeholderSelect": "搜索…",
     "titleModalUnsavedChanges": "未保存的更改",
-    "titleModalButtonRevertUnsavedChanges": "放弃更改"
+    "titleModalButtonRevertUnsavedChanges": "放弃更改",
+    "labelDefaultOption": "全部渠道"
+  },
+  "sw-config-form-renderer": {
+    "placeholder": "请填写{name}…",
+    "option": "区域设置“{locale}”未设置标签…",
+    "configLoadErrorMessage": "加载配置时出错： | 加载配置时出现错误："
+  },
+  "locale": {
+    "de-DE": "德语",
+    "en-GB": "英语（英国）",
+    "bg-BG": "保加利亚语",
+    "bs-BA": "波斯尼亚语",
+    "cs-CZ": "捷克语",
+    "da-DK": "丹麦语",
+    "el-GR": "希腊语",
+    "en-US": "英语（美国）",
+    "es-ES": "西班牙语",
+    "fi-FI": "芬兰语",
+    "fr-FR": "法语",
+    "hi-IN": "印地语",
+    "hr-HR": "克罗地亚语",
+    "hu-HU": "匈牙利语",
+    "id-ID": "印度尼西亚语",
+    "it-IT": "意大利语",
+    "ko-KR": "韩语",
+    "lv-LV": "拉脱维亚语",
+    "nl-NL": "荷兰语",
+    "nn-NO": "挪威语",
+    "pl-PL": "波兰语",
+    "pt-PT": "葡萄牙语",
+    "ro-RO": "罗马尼亚语",
+    "ru-RU": "俄语",
+    "sk-SK": "斯洛伐克语",
+    "sl-SI": "斯洛文尼亚语",
+    "sr-RS": "塞尔维亚语",
+    "sv-SE": "瑞典语",
+    "tr-TR": "土耳其语",
+    "uk-UA": "乌克兰语",
+    "vi-VN": "越南语"
+  },
+  "sw-image-slider": {
+    "imageAlt": "第 {index} / {total} 张图片"
+  },
+  "sw-confirm-modal": {
+    "defaultText": "确定要继续吗？"
   },
   "sw-rule-modal": {
+    "modalTitleNew": "新建全局规则",
+    "modalTitleModify": "修改全局规则",
     "labelDescription": "描述",
+    "placeholderDescription": "输入规则描述…",
     "labelName": "名称",
+    "placeholderName": "输入规则名称…",
     "labelPriority": "优先级",
+    "placeholderPriority": "设置该规则的优先级…",
+    "messageSaveSuccess": "规则“{name}”已保存。",
+    "messageSaveError": "保存规则时发生错误",
     "ruleCard": "条件"
   },
+  "sw-select-rule-create": {
+    "addNewRule": "新建规则…"
+  },
   "sw-shortcut-overview": {
+    "title": "键盘快捷键",
+    "iconTooltip": "按 `{key}` 查看可用快捷键列表",
+    "modalTitle": "键盘快捷键",
+    "sectionGeneralShortcuts": "通用快捷键",
+    "sectionAddingItems": "添加条目",
     "sectionNavigation": "导航",
+    "sectionAccessibility": "无障碍",
+    "disableShortcuts": "禁用键盘快捷键",
+    "function": "功能",
+    "keyboardShortcut": "快捷键",
+    "functionAddProduct": "添加博客",
+    "functionAddCategory": "添加分类",
+    "functionAddShoppingExperienceLayout": "添加商城体验布局",
+    "functionAddCustomer": "添加用户",
+    "functionAddRule": "添加规则",
+    "functionAddSaleschannel": "添加渠道",
+    "functionGoToDashboard": "打开仪表盘",
+    "functionGoToProducts": "打开博客",
+    "functionGoToCategories": "打开分类",
+    "functionGoToDynamicProductGroups": "打开动态博客组",
+    "functionGoToCustomers": "打开用户",
+    "functionGoToShoppingExperience": "打开商城体验",
     "functionGoToMedia": "打开媒体",
+    "functionGoToSettingsListing": "打开设置",
+    "functionGoToSnippets": "打开文案",
+    "functionGoToRuleBuilder": "打开规则生成器",
+    "functionGoToPlugins": "打开我的扩展",
     "functionAccessibilitySkipToContent": "跳到正文",
+    "functionAccessibilityMoveFocusForward": "移到下一个可聚焦元素",
+    "functionAccessibilityMoveFocusBackward": "移到上一个可聚焦元素",
+    "functionAccessibilityCloseDialog": "关闭对话框",
+    "functionSpecialShortcutFocusSearch": "聚焦搜索",
+    "functionSpecialShortcutOpenFilters": "打开筛选",
+    "functionSpecialShortcutToggleNavigation": "切换导航",
+    "functionSpecialShortcutCycleTheme": "切换外观",
+    "functionSpecialShortcutShortcutListing": "键盘快捷键",
+    "functionSpecialShortcutSaveDetailView": "保存当前视图",
+    "functionSpecialShortcutCancelDetailView": "关闭当前详情页",
     "functionSpecialShortcutClearCache": "清除缓存"
   },
   "sw-discard-changes-modal": {
+    "title": "放弃未保存的更改？",
+    "message": "你有未保存的更改，确定离开本页并放弃这些更改吗？",
     "actions": {
       "discard": "放弃更改",
       "keepEditing": "继续编辑"
     }
   },
+  "sw-privileges": {
+    "tooltip": {
+      "warning": "你的权限不足。"
+    },
+    "error": {
+      "description": "你没有执行此操作所需的权限，请联系管理员授权。所需权限："
+    }
+  },
+  "sw-custom-field-set-renderer": {
+    "labelCustomFieldSetSelectSwitch": "选择自定义字段集",
+    "placeholderCustomFieldSetSelect": "选择自定义字段集…",
+    "labelCustomFieldSetSelect": "自定义字段集",
+    "messagePluginSets": "插件提供的自定义字段集（无法移除）"
+  },
+  "sw-rating-stars": {
+    "ratingTooltipText": "{actual} / {max} 星"
+  },
   "sw-app": {
     "component": {
+      "sw-app-actions": {
+        "messageErrorFetchButtons": "获取应用操作时发生错误。",
+        "closeWindow": "关闭窗口",
+        "iframeModalConfirmMessage": "确定要关闭“{title}”吗？",
+        "iframeModalConfirmMessageDescription": "请确认所有流程都已完成。",
+        "dontAskMeAgain": "不再询问"
+      },
+      "sw-app-shop-id-change-modal": {
+        "title": "建议更改站点标识",
+        "description": {
+          "explanation": "检测到系统与环境的变化，提示站点标识可能已改变。在你选定方案之前，系统不会与任何应用通信，以避免站点识别出错或数据损坏。",
+          "installationId": {
+            "title": "什么是站点标识？",
+            "explanation": "站点标识是 Contena 应用体系的一项机制。已注册到你站点的应用用它来唯一识别该站点。因此站点标识必须保持唯一，不能在不同站点之间共用，甚至同一站点的不同环境（例如暂存或测试副本）之间也不能共用。"
+          }
+        },
+        "affectedApps": "受影响的应用：",
+        "detectedChanges": "检测到以下变化：",
+        "success": "站点标识已更新。",
+        "error": "站点标识更新失败。",
+        "oldValue": "旧值",
+        "newValue": "新值",
+        "remindMeLater": "稍后提醒我",
+        "selectAnOption": "请仔细阅读以下方案，选择最符合你实际情况的一项：",
+        "fingerprints": {
+          "app_url": {
+            "label": "APP_URL 环境变量",
+            "description": "应用通过 APP_URL 连接你站点的 Admin API。"
+          },
+          "installation_path": {
+            "label": "安装路径"
+          },
+          "channel_domain_urls": {
+            "label": "渠道域名",
+            "description": "修改、删除现有域名或新增域名时，渠道域名的校验和会发生变化。"
+          }
+        },
+        "strategies": {
+          "move-shop-permanently": {
+            "description": "若你已把站点永久迁移到其他基础设施或新环境，通常应选择此项。Contena 会以相同的站点标识通知应用（即在应用服务器上重新注册），应用保持已安装状态，站点仍按原站点识别。这意味着本实例会覆盖原安装中的应用数据。",
+            "name": "保留站点标识"
+          },
+          "reinstall-apps": {
+            "description": "若你复制了站点（例如生产站点的暂存或测试环境）并希望在该副本中使用应用，通常应选择此项。Contena 会重新安装这些应用，并以新的站点标识在应用服务器上重新注册，站点将按新站点识别。",
+            "name": "生成新的站点标识"
+          },
+          "uninstall-apps": {
+            "name": "卸载应用",
+            "description": "若你复制了站点（例如生产站点的暂存或测试环境）且不希望在该副本中使用应用，通常应选择此项。Contena 会删除这些应用且不通知应用服务器，同时生成新的站点标识，站点将按新站点识别。"
+          }
+        }
+      },
       "sw-app-wrong-app-url-modal": {
+        "title": "APP_URL 配置错误",
+        "explanationHeader": "与扩展的连接出错。",
+        "explanation": "由于系统配置有误，扩展无法与你的站点建立连接。",
+        "textDetails": "技术细节：APP_URL 配置错误。",
         "labelLearnMoreButton": "了解更多"
       }
     }
@@ -1197,8 +1382,29 @@
     "active": "启用",
     "inactive": "停用"
   },
+  "sw-date-filter": {
+    "selectTimeframe": {
+      "placeholder": "选择时间范围"
+    }
+  },
   "sw-existence-filter": {
-    "placeholder": "全部"
+    "placeholder": "全部",
+    "noCriteria": "不含{criteriaName}",
+    "hasCriteria": "包含{criteriaName}"
+  },
+  "sw-filter-panel": {
+    "titleSidebarItemFilter": "筛选条件"
+  },
+  "sw-sidebar-filter-panel": {
+    "resetButton": "全部重置"
+  },
+  "sw-empty-state": {
+    "messageNoResultTitle": "未找到内容",
+    "messageNoResultSublineSimple": "请调整筛选条件或搜索词以获取结果。",
+    "messageNoResultSubline": "请调整筛选条件或搜索词以获取结果，同时检查搜索配置。",
+    "messageNoResultSublineBefore": "请调整筛选条件或搜索词以获取结果，同时检查",
+    "messageNoResultSublineLink": "配置",
+    "messageNoResultLink": "前往搜索偏好设置"
   },
   "sw-restricted-rules": {
     "and": "和",

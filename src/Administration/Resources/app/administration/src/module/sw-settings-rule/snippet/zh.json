@@ -31,6 +31,7 @@
       "labelPriority": "优先级",
       "labelType": "类型",
       "ruleCard": "条件",
+      "messageSaveError": "保存规则时发生错误",
       "tabGeneral": "常规",
       "tabAssignments": "分配",
       "associations": {

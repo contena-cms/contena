@@ -8,7 +8,8 @@
     "general": {
       "mainMenuItemGeneral": "文章",
       "mainMenuItemList": "文章",
-      "mainMenuItemOverview": "概览"
+      "mainMenuItemOverview": "概览",
+      "mainMenuItemAdd": "添加博客"
     },
     "basicForm": {
       "labelTitle": "名称",
@@ -42,6 +43,7 @@
     },
     "list": {
       "textProductOverview": "文章",
+      "buttonAddProduct": "添加博客",
       "columnName": "名称",
       "columnActive": "启用",
       "columnPrice": "价格",
@@ -119,7 +121,8 @@
       },
       "tagsFilter": {
         "label": "标签"
-      }
+      },
+      "messageEmptyTitle": "未找到内容"
     }
   },
   "sw-privileges": {

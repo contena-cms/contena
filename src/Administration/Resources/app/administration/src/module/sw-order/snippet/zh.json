@@ -48,7 +48,8 @@
       "columnPriceGross": "价格（含税）",
       "columnTotalPriceNet": "合计",
       "columnPrice": "价格",
-      "columnTotalPrice": "合计"
+      "columnTotalPrice": "合计",
+      "buttonAddProduct": "添加博客"
     },
     "detailBase": {
       "cardTitleDetails": "详情",
@@ -61,6 +62,7 @@
       "columnTotalPrice": "合计",
       "columnType": "类型",
       "labelSalesChannel": "渠道",
+      "buttonAddProduct": "添加博客",
       "labelCustomerPhoneNumber": "电话号码",
       "labelCustomerEmail": "电子邮件地址",
       "labelNoDeliveryTrackingCodeYet": "无",
@@ -171,7 +173,8 @@
       },
       "blogFilter": {
         "label": "文章"
-      }
+      },
+      "messageEmptyTitle": "未找到内容"
     },
     "components": {
       "uploadDocumentModal": {

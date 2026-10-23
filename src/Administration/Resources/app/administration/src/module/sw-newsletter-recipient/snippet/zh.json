@@ -8,6 +8,7 @@
     },
     "list": {
       "titleSidebarItemRefresh": "刷新",
+      "titleSidebarItemFilter": "筛选条件",
       "status": "状态",
       "email": "电子邮件地址",
       "name": "名称",

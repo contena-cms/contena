@@ -37,6 +37,9 @@
         "order": "排序"
       }
     },
+    "rule": {
+      "addRule": "添加规则"
+    },
     "modals": {
       "rule": {
         "tabRule": "条件",

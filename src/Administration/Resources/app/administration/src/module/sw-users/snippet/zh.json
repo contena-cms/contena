@@ -5,7 +5,8 @@
     },
     "general": {
       "mainMenuItemGeneral": "用户",
-      "mainMenuItemList": "概览"
+      "mainMenuItemList": "概览",
+      "mainMenuItemAdd": "添加用户"
     },
     "card": {
       "placeholderTitle": "标题",
@@ -24,6 +25,7 @@
     },
     "list": {
       "textCustomers": "用户",
+      "buttonAddCustomer": "添加用户",
       "columnCompany": "公司",
       "columnCustomerNumber": "用户编号",
       "columnName": "名称",
@@ -125,7 +127,8 @@
       },
       "tags": {
         "label": "标签"
-      }
+      },
+      "messageEmptyTitle": "未找到内容"
     },
     "userType": {
       "labelPrivate": "私有"

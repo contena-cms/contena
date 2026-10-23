@@ -1,10 +1,12 @@
 {
   "sw-sales-channel": {
     "general": {
-      "titleMenuItems": "渠道"
+      "titleMenuItems": "渠道",
+      "addSalesChannel": "添加渠道"
     },
     "list": {
       "title": "渠道",
+      "buttonAddSalesChannel": "添加渠道",
       "columnName": "渠道",
       "columnType": "类型",
       "columnStatus": "状态",
@@ -13,6 +15,10 @@
         "maintenance": "维护"
       },
       "blogsLabel": "文章"
+    },
+    "modal": {
+      "title": "添加渠道",
+      "buttonAddChannel": "添加渠道"
     },
     "detail": {
       "tabBase": "常规",
