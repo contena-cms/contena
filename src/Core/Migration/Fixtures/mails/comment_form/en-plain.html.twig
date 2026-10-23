@@ -1,0 +1,13 @@
+A blog comment has just been {% if commentFormData.id is defined %}edited{% else %}sent{% endif %}.
+
+{% if commentFormData.name is defined %}Name: {{ commentFormData.name }}{% endif %}
+
+{% if commentFormData.email is defined %}Email address: {{ commentFormData.email }}{% endif %}
+
+{% if blog.translated.name is defined %}Blog: {{ blog.translated.name }}{% endif %}
+
+
+Title: {{ commentFormData.title }}
+
+Content:
+{{ commentFormData.content }}

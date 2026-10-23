@@ -1,0 +1,13 @@
+Ein Blog-Kommentar wurde soeben {% if commentFormData.id is defined %}bearbeitet{% else %}abgegeben{% endif %}.
+
+{% if commentFormData.name is defined %}Name: {{ commentFormData.name }}{% endif %}
+
+{% if commentFormData.email is defined %}E-Mail-Adresse: {{ commentFormData.email }}{% endif %}
+
+{% if blog.translated.name is defined %}Produkt: {{ blog.translated.name }}{% endif %}
+
+
+Titel: {{ commentFormData.title }}
+
+Inhalt:
+{{ commentFormData.content }}

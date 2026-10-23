@@ -2,20 +2,20 @@
 
 namespace Contena\Core\Migration\Traits;
 
-use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
+use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionDefinition;
 use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
-use Contena\Core\Migration\Traits\ImportTranslationsTrait;
+use Doctrine\DBAL\Connection;
 
 class StateMachineMigrationImporter
 {
     use ImportTranslationsTrait;
-use Contena\Core\Framework\Migration\MigrationException;
 
     public function __construct(private readonly Connection $connection)
     {

@@ -1,0 +1,51 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\Channel\Review;
+
+use Contena\Core\Framework\Struct\Struct;
+
+class MatrixElement extends Struct
+{
+    public function __construct(
+        protected int $points,
+        protected int $count,
+        protected float $percent = 0.0
+    ) {
+    }
+
+    public function getPoints(): int
+    {
+        return $this->points;
+    }
+
+    public function setPoints(int $points): MatrixElement
+    {
+        $this->points = $points;
+
+        return $this;
+    }
+
+    public function getCount(): int
+    {
+        return $this->count;
+    }
+
+    public function setCount(int $count): MatrixElement
+    {
+        $this->count = $count;
+
+        return $this;
+    }
+
+    public function getPercent(): float
+    {
+        return $this->percent;
+    }
+
+    public function setPercent(float $percent): MatrixElement
+    {
+        $this->percent = $percent;
+
+        return $this;
+    }
+}
