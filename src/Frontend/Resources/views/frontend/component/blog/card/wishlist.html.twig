@@ -1,0 +1,44 @@
+{% block component_product_wishlist %}
+    {% if blogId is not empty %}
+        {% set addToWishlistOptions = {
+            blogId: blogId,
+            router: {
+                add: {
+                    afterLoginPath: path('frontend.wishlist.add.after.login', { blogId: blogId }),
+                    path: path('frontend.wishlist.blog.add', { blogId: blogId }),
+                },
+                remove: {
+                    path: path('frontend.wishlist.blog.remove', { blogId: blogId }),
+                }
+            },
+            texts: {
+                add: 'listing.addToWishlist'|trans|sw_sanitize,
+                remove: 'listing.removeFromWishlist'|trans|sw_sanitize
+            },
+        } %}
+
+        {% set size = size ?? 'md' %}
+
+        <div class="blog-wishlist">
+            {% block component_product_wishlist_button %}
+                <button
+                    class="blog-wishlist-{{ blogId }} blog-wishlist-action{% if appearance == 'circle' %}-circle blog-wishlist-btn btn btn-light{% endif %} blog-wishlist-not-added blog-wishlist-loading z-2"
+                    title="{{ 'listing.addToWishlist'|trans|sw_sanitize }}"
+                    data-add-to-wishlist="true"
+                    data-add-to-wishlist-options="{{ addToWishlistOptions|json_encode }}"
+                >
+                    {% block component_product_wishlist_icon %}
+                        {% sw_icon 'heart-fill' style { class: 'wishlist icon-wishlist-added', size: size } %}
+                        {% sw_icon 'heart' style { class: 'wishlist icon-wishlist-not-added', size: size } %}
+
+                        {% if showText %}
+                            <span class="blog-wishlist-btn-content blog-wishlist-btn-content-{{ size }}">
+                                {{ 'listing.addToWishlist'|trans|sw_sanitize }}
+                            </span>
+                        {% endif %}
+                    {% endblock %}
+                </button>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}

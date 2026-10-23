@@ -1,0 +1,246 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "OrderLineItem": {
+                "description": "Added since version: 6.0.0.0",
+                "required": [
+                    "apiAlias",
+                    "id",
+                    "orderId",
+                    "identifier",
+                    "quantity",
+                    "label",
+                    "children",
+                    "states"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "versionId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "orderId": {
+                        "description": "Unique identity of order.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "orderVersionId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "blogId": {
+                        "description": "Unique identity of blog.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "blogVersionId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "promotionId": {
+                        "description": "Unique identity of blog.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "parentId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "parentVersionId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "coverId": {
+                        "description": "Unique identity of cover image.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "identifier": {
+                        "description": "It is a unique identity of an item in cart before its converted to an order.",
+                        "type": "string"
+                    },
+                    "referencedId": {
+                        "description": "Unique identity of type of entity.",
+                        "type": "string"
+                    },
+                    "quantity": {
+                        "description": "Number of items of blog.",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "label": {
+                        "description": "It is a typical blog name given to the line item.",
+                        "type": "string"
+                    },
+                    "payload": {
+                        "description": "Data owned by the line item type. `blog` and `promotion` line items carry `BlogLineItemPayload` and `PromotionLineItemPayload`. Core defines no payload for `credit`, `custom`, `container` and `discount` line items, theirs holds whatever their creator set, for example the admin, an integration or an app script. Types added by extensions carry their own keys, and extensions can add keys to the core payloads too. An empty payload is an empty array.",
+                        "type": ["object", "array"],
+                        "maxItems": 0,
+                        "additionalProperties": true
+                    },
+                    "good": {
+                        "description": "When set to true, it indicates the line item is physical else it is virtual.",
+                        "type": "boolean"
+                    },
+                    "removable": {
+                        "description": "Allows the line item to be removable from the cart when set to true.",
+                        "type": "boolean"
+                    },
+                    "stackable": {
+                        "description": "Allows to change the quantity of the line item when set to true.",
+                        "type": "boolean"
+                    },
+                    "position": {
+                        "description": "Position of line items placed in an order.",
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "priceDefinition": {
+                        "type": "object",
+                        "$ref": "#/components/schemas/CartPriceQuantity"
+                    },
+                    "unitPrice": {
+                        "description": "Price of blog per item (where, quantity=1).",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "totalPrice": {
+                        "description": "Cost of blog based on quantity.",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "description": {
+                        "description": "Description of line items in an order.",
+                        "type": "string"
+                    },
+                    "type": {
+                        "description": "Type of the line item, which decides what `payload` contains. Core uses the listed values. Extensions add their own types, so expect any string. Show a type you don't know from the fields every line item has, such as `label`, `quantity` and the price, and ignore its `payload`.",
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "enum": [
+                                    "blog",
+                                    "credit",
+                                    "custom",
+                                    "promotion",
+                                    "container",
+                                    "discount",
+                                    "quantity"
+                                ]
+                            },
+                            {
+                                "type": "string"
+                            }
+                        ]
+                    },
+                    "customFields": {
+                        "type": "object"
+                    },
+                    "states": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "deprecated": true
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "cover": {
+                        "$ref": "#/components/schemas/Media",
+                        "description": "Line item image or thumbnail"
+                    },
+                    "blog": {
+                        "$ref": "#/components/schemas/Blog",
+                        "description": "Referenced blog if this is a blog line item"
+                    },
+                    "orderDeliveryPositions": {
+                        "description": "Delivery positions for this line item",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderDeliveryPosition"
+                        }
+                    },
+                    "downloads": {
+                        "description": "Digital downloads associated with this line item",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderLineItemDownload"
+                        }
+                    },
+                    "parent": {
+                        "$ref": "#/components/schemas/OrderLineItem"
+                    },
+                    "children": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/OrderLineItem"
+                        }
+                    },
+                    "apiAlias": {
+                        "type": "string",
+                        "const": "order_line_item"
+                    },
+                    "extensions": {
+                        "type": "object"
+                    },
+                    "translated": {
+                        "description": "Order line items have no translatable fields, so this is an empty array.",
+                        "type": ["object", "array"],
+                        "maxItems": 0
+                    }
+                },
+                "type": "object",
+                "allOf": [
+                    {
+                        "if": {
+                            "required": ["type"],
+                            "properties": {
+                                "type": {
+                                    "const": "blog"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "payload": {
+                                    "$ref": "#/components/schemas/BlogLineItemPayload"
+                                }
+                            }
+                        }
+                    },
+                    {
+                        "if": {
+                            "required": ["type"],
+                            "properties": {
+                                "type": {
+                                    "const": "promotion"
+                                }
+                            }
+                        },
+                        "then": {
+                            "properties": {
+                                "payload": {
+                                    "$ref": "#/components/schemas/PromotionLineItemPayload"
+                                }
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,18 @@
+{% set payload = [
+    {
+        'entity': 'blog',
+        'action': 'upsert',
+        'payload': [
+            { 'id':  hook.updateProductId, 'active': true }
+        ]
+    },
+    {
+        'entity': 'blog',
+        'action': 'delete',
+        'payload': [
+        { 'id':  hook.deleteProductId }
+    ]
+    },
+] %}
+
+{% do services.writer.sync(payload) %}

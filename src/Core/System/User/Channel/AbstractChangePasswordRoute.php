@@ -1,0 +1,20 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\User\Channel;
+
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\Channel\ContextTokenResponse;
+use Contena\Core\System\Channel\ChannelContext;
+
+/**
+ * This route is used to change the password of a logged-in admin_user
+ * The required fields are: "password", "newPassword" and "newPasswordConfirm"
+ */
+abstract class AbstractChangePasswordRoute
+{
+    abstract public function getDecorated(): AbstractChangePasswordRoute;
+
+    abstract public function change(RequestDataBag $requestDataBag, ChannelContext $context, UserEntity $user): ContextTokenResponse;
+}

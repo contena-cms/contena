@@ -1,0 +1,10 @@
+{# @var services \Contena\Core\Framework\Script\ServiceStubs #}
+
+{% do services.cart.blogs.add(hook.ids.get('p1'), 5) %}
+
+{% set blog = services.cart.blogs.get(hook.ids.get('p1')) %}
+
+{% set split = blog.take(2, 'new-key') %}
+
+{% do services.cart.blogs.add(split) %}
+

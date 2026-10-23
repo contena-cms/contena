@@ -1,0 +1,5 @@
+{% if scope.channelContext.user is not defined %}
+    {% return false %}
+{% endif %}
+
+{% return compare(operator, scope.channelContext.user.groupId, userGroupIds) %}

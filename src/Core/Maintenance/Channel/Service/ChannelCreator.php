@@ -1,0 +1,217 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Maintenance\Channel\Service;
+
+use Contena\Core\System\User\Aggregate\UserGroup\UserGroupDefinition;
+use Contena\Core\Checkout\Payment\PaymentMethodCollection;
+use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
+use Contena\Core\Content\Category\CategoryCollection;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Util\AccessKeyHelper;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Maintenance\MaintenanceException;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\Channel\ChannelCollection;
+
+/**
+ * @internal
+ */
+class ChannelCreator
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<ChannelCollection> $channelRepository
+     * @param EntityRepository<PaymentMethodCollection> $paymentMethodRepository
+     * @param EntityRepository<ShippingMethodCollection> $shippingMethodRepository
+     * @param EntityRepository<CountryCollection> $countryRepository
+     * @param EntityRepository<CategoryCollection> $categoryRepository
+     */
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $definitionRegistry,
+        private readonly EntityRepository $channelRepository,
+        private readonly EntityRepository $paymentMethodRepository,
+        private readonly EntityRepository $shippingMethodRepository,
+        private readonly EntityRepository $countryRepository,
+        private readonly EntityRepository $categoryRepository
+    ) {
+    }
+
+    /**
+     * @param list<string>|null $currencies
+     * @param list<string>|null $languages
+     * @param list<string>|null $shippingMethods
+     * @param list<string>|null $paymentMethods
+     * @param list<string>|null $countries
+     * @param array<string, mixed> $overwrites
+     */
+    public function createChannel(
+        string $id,
+        string $name,
+        string $typeId,
+        ?string $languageId = null,
+        ?string $currencyId = null,
+        ?string $paymentMethodId = null,
+        ?string $shippingMethodId = null,
+        ?string $countryId = null,
+        ?string $userGroupId = null,
+        ?string $navigationCategoryId = null,
+        ?array $currencies = null,
+        ?array $languages = null,
+        ?array $shippingMethods = null,
+        ?array $paymentMethods = null,
+        ?array $countries = null,
+        array $overwrites = []
+    ): string {
+        $context = Context::createDefaultContext();
+
+        $languageId ??= Defaults::LANGUAGE_SYSTEM;
+        $currencyId ??= Defaults::CURRENCY;
+        $paymentMethodId ??= $this->getFirstActivePaymentMethodId($context);
+        $shippingMethodId ??= $this->getFirstActiveShippingMethodId($context);
+        $countryId ??= $this->getFirstActiveCountryId($context);
+
+        $currencies = $this->formatToMany($currencies, $currencyId, 'currency', $context);
+        $languages = $this->formatToMany($languages, $languageId, 'language', $context);
+        $shippingMethods = $this->formatToMany($shippingMethods, $shippingMethodId, 'shipping_method', $context);
+        $paymentMethods = $this->formatToMany($paymentMethods, $paymentMethodId, 'payment_method', $context);
+        $countries = $this->formatToMany($countries, $countryId, 'country', $context);
+
+        $data = [
+            'id' => $id,
+            'name' => $name,
+            'typeId' => $typeId,
+            'accessKey' => AccessKeyHelper::generateAccessKey('sales-channel'),
+
+            // default selection
+            'languageId' => $languageId,
+            'currencyId' => $currencyId,
+            'paymentMethodId' => $paymentMethodId,
+            'shippingMethodId' => $shippingMethodId,
+            'countryId' => $countryId,
+            'userGroupId' => $userGroupId ?? $this->getUserGroupId($context),
+            'navigationCategoryId' => $navigationCategoryId ?? $this->getRootCategoryId($context),
+
+            // available mappings
+            'currencies' => $currencies,
+            'languages' => $languages,
+            'shippingMethods' => $shippingMethods,
+            'paymentMethods' => $paymentMethods,
+            'countries' => $countries,
+        ];
+
+        $data = array_replace_recursive($data, $overwrites);
+
+        $this->channelRepository->create([$data], $context);
+
+        return $data['accessKey'];
+    }
+
+    private function getFirstActiveShippingMethodId(Context $context): string
+    {
+        $criteria = (new Criteria())
+            ->setLimit(1)
+            ->addFilter(new EqualsFilter('active', true));
+
+        $shippingMethodId = $this->shippingMethodRepository->searchIds($criteria, $context)->firstId();
+        if (!\is_string($shippingMethodId)) {
+            throw MaintenanceException::couldNotGetId('first active shipping method');
+        }
+
+        return $shippingMethodId;
+    }
+
+    private function getFirstActivePaymentMethodId(Context $context): string
+    {
+        $criteria = (new Criteria())
+            ->setLimit(1)
+            ->addFilter(new EqualsFilter('active', true))
+            ->addSorting(new FieldSorting('position'));
+
+        $paymentMethodId = $this->paymentMethodRepository->searchIds($criteria, $context)->firstId();
+        if (!\is_string($paymentMethodId)) {
+            throw MaintenanceException::couldNotGetId('first active payment method');
+        }
+
+        return $paymentMethodId;
+    }
+
+    private function getFirstActiveCountryId(Context $context): string
+    {
+        $criteria = (new Criteria())
+            ->setLimit(1)
+            ->addFilter(new EqualsFilter('active', true))
+            ->addSorting(new FieldSorting('position'));
+
+        $countryId = $this->countryRepository->searchIds($criteria, $context)->firstId();
+        if (!\is_string($countryId)) {
+            throw MaintenanceException::couldNotGetId('first active country');
+        }
+
+        return $countryId;
+    }
+
+    private function getRootCategoryId(Context $context): string
+    {
+        $criteria = new Criteria();
+        $criteria->setLimit(1);
+        $criteria->addFilter(new EqualsFilter('category.parentId', null));
+        $criteria->addSorting(new FieldSorting('category.createdAt', FieldSorting::ASCENDING));
+
+        $categoryId = $this->categoryRepository->searchIds($criteria, $context)->firstId();
+        if (!\is_string($categoryId)) {
+            throw MaintenanceException::couldNotGetId('root category');
+        }
+
+        return $categoryId;
+    }
+
+    /**
+     * @return list<array{id: string}>
+     */
+    private function getAllIdsOf(string $entity, Context $context): array
+    {
+        return $this->definitionRegistry->getRepository($entity)->searchIds(new Criteria(), $context)->getPrimaryKeyData();
+    }
+
+    private function getUserGroupId(Context $context): string
+    {
+        $criteria = (new Criteria())
+            ->setLimit(1);
+
+        $repository = $this->definitionRegistry->getRepository(UserGroupDefinition::ENTITY_NAME);
+
+        $id = $repository->searchIds($criteria, $context)->firstId();
+
+        if ($id === null) {
+            throw MaintenanceException::couldNotGetId('user group');
+        }
+
+        return $id;
+    }
+
+    /**
+     * @param list<string>|null $values
+     *
+     * @return array<array{id: string}>
+     */
+    private function formatToMany(?array $values, string $default, string $entity, Context $context): array
+    {
+        if (!\is_array($values)) {
+            return $this->getAllIdsOf($entity, $context);
+        }
+
+        $values = array_unique(array_merge($values, [$default]));
+
+        return array_map(
+            static fn (string $id): array => ['id' => $id],
+            $values
+        );
+    }
+}

@@ -1,0 +1,12 @@
+{
+  "extends": "../../app/frontend/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "../../app/frontend",
+    "paths": {
+      "contena": ["src/contena.ts"]
+    },
+    "typeRoots": ["../../app/frontend/node_modules/@types"]
+  },
+  "include": ["**/*"]
+}

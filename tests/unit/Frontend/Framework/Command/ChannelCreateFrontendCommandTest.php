@@ -1,0 +1,208 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Frontend\Framework\Command;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Maintenance\Channel\Service\ChannelCreator;
+use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Contena\Frontend\Framework\Command\ChannelCreateFrontendCommand;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * @internal
+ */
+#[CoversClass(ChannelCreateFrontendCommand::class)]
+class ChannelCreateFrontendCommandTest extends TestCase
+{
+    /**
+     * @param array<IdSearchResult> $idsSearchResult
+     */
+    #[DataProvider('dataProviderTestExecuteCommandSuccessful')]
+    public function testExecuteCommandSuccessful(
+        ?string $snippetSetId = null,
+        ?string $isoCode = null,
+        array $idsSearchResult = [],
+        ?string $exception = null
+    ): void {
+        $snippetSetRepository = StaticEntityRepository::of(SnippetSetCollection::class, $idsSearchResult);
+
+        $foundSnippetSetId = $snippetSetId;
+        if (!$foundSnippetSetId) {
+            foreach ($idsSearchResult as $idSearchResult) {
+                $foundSnippetSetId = $idSearchResult->firstId() ?: $foundSnippetSetId;
+            }
+        }
+
+        $mockChannelCreator = $this->createMock(ChannelCreator::class);
+
+        $mockChannelCreator->expects($this->once())
+            ->method('createChannel')
+            ->with(
+                'id',
+                'name',
+                Defaults::CHANNEL_TYPE_FRONTEND,
+                'languageId',
+                'currencyId',
+                'paymentMethodId',
+                'shippingMethodId',
+                'countryId',
+                'userGroupId',
+                'navigationCategoryId',
+                null,
+                null,
+                null,
+                null,
+                null,
+                [
+                    'domains' => [
+                        [
+                            'url' => 'url',
+                            'languageId' => 'languageId',
+                            'snippetSetId' => $foundSnippetSetId,
+                            'currencyId' => 'currencyId',
+                        ],
+                    ],
+                    'navigationCategoryDepth' => 3,
+                    'name' => 'name',
+                ]
+            );
+
+        $cmd = new ChannelCreateFrontendCommand(
+            $snippetSetRepository,
+            $mockChannelCreator
+        );
+
+        $inputs = array_merge(
+            [
+                'id',
+                null, // typeId
+                'name',
+                'languageId',
+                'currencyId',
+                'paymentMethodId',
+                'shippingMethodId',
+                'countryId',
+                'userGroupId',
+                'navigationCategoryId',
+                $snippetSetId,
+            ],
+            $snippetSetId ? [] : [$isoCode],
+            [
+                'url',
+                'languageId',
+                'currencyId',
+                'name',
+            ]
+        );
+
+        $input = static::createStub(InputInterface::class);
+        $input->method('getOption')
+            ->willReturn(...$inputs);
+
+        $output = static::createStub(OutputInterface::class);
+
+        $status = $cmd->run($input, $output);
+
+        static::assertSame(ChannelCreateFrontendCommand::SUCCESS, $status);
+    }
+
+    /**
+     * @param array<IdSearchResult> $idsSearchResult
+     */
+    #[DataProvider('dataProviderTestExecuteCommandWithAnException')]
+    public function testExecuteCommandWithAnException(
+        ?string $snippetSetId,
+        string $isoCode,
+        array $idsSearchResult,
+        \Exception $exception
+    ): void {
+        $snippetSetRepository = StaticEntityRepository::of(SnippetSetCollection::class, $idsSearchResult);
+
+        $mockChannelCreator = static::createStub(ChannelCreator::class);
+
+        $cmd = new ChannelCreateFrontendCommand(
+            $snippetSetRepository,
+            $mockChannelCreator
+        );
+
+        $inputs = [
+            'id',
+            null, // typeId
+            'name',
+            'languageId',
+            'currencyId',
+            'paymentMethodId',
+            'shippingMethodId',
+            'countryId',
+            'userGroupId',
+            'navigationCategoryId',
+            $snippetSetId,
+            $isoCode,
+            'url',
+            'languageId',
+            'currencyId',
+            'name',
+        ];
+
+        $input = static::createStub(InputInterface::class);
+        $input->method('getOption')
+            ->willReturn(...$inputs);
+
+        $output = static::createStub(OutputInterface::class);
+
+        $this->expectExceptionObject($exception);
+
+        $cmd->run($input, $output);
+    }
+
+    public static function dataProviderTestExecuteCommandSuccessful(): \Generator
+    {
+        yield 'with snippetSetId input' => [
+            'snippetSetId' => 'snippetSetId',
+            'isoCode' => null,
+            'idsSearchResult' => [],
+            'exception' => null,
+        ];
+
+        yield 'with valid isoCode' => [
+            'snippetSetId' => null,
+            'isoCode' => 'de-DE',
+            'idsSearchResult' => [
+                new IdSearchResult(1, ['snippetSetId' => ['primaryKey' => 'snippetSetId', 'data' => []]], new Criteria(), Context::createDefaultContext()),
+            ],
+            'exception' => null,
+        ];
+
+        yield 'with not found isoCode, use en-GB as fallback' => [
+            'snippetSetId' => null,
+            'isoCode' => 'nl-NL',
+            'idsSearchResult' => [
+                new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+                new IdSearchResult(1, ['snippetSetId' => ['primaryKey' => 'snippetSetId', 'data' => []]], new Criteria(), Context::createDefaultContext()),
+            ],
+            'exception' => null,
+        ];
+    }
+
+    public static function dataProviderTestExecuteCommandWithAnException(): \Generator
+    {
+        yield 'with not found fallback isoCode, throw exception' => [
+            'snippetSetId' => null,
+            'isoCode' => 'nl-NL',
+            'idsSearchResult' => [
+                new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+                new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+            ],
+            'exception' => new \InvalidArgumentException('Snippet set with isoCode nl-NL cannot be found.'),
+        ];
+    }
+}

@@ -1,0 +1,811 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Feature;
+
+use Doctrine\DBAL\Exception\ConnectionException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Feature\Event\BeforeFeatureFlagToggleEvent;
+use Contena\Core\Framework\Feature\Event\FeatureFlagToggledEvent;
+use Contena\Core\Framework\Feature\FeatureException;
+use Contena\Core\Framework\Feature\FeatureFlagRegistry;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+/**
+ * @internal
+ *
+ * @phpstan-import-type FeatureFlagConfig from Feature
+ */
+#[CoversClass(FeatureFlagRegistry::class)]
+class FeatureFlagRegistryTest extends TestCase
+{
+    use EnvTestBehaviour;
+
+    public function testStoredSubFeatureOverrideSurvivesMajorAssociation(): void
+    {
+        $this->setEnvVars(['JSON_LD_DATA' => null, 'ACCESSIBILITY_TWEAKS' => null, 'FEATURE_ALL' => null]);
+        Feature::resetRegisteredFeatures();
+
+        $storage = new ArrayKeyValueStorage();
+        $storage->set(FeatureFlagRegistry::STORAGE_KEY, [
+            'V6_8_0_0' => ['major' => true, 'active' => false],
+            'JSON_LD_DATA' => ['major' => true, 'active' => false],
+            'ACCESSIBILITY_TWEAKS' => ['major' => true, 'active' => false],
+        ]);
+
+        $registry = new FeatureFlagRegistry(
+            $storage,
+            new EventDispatcher(),
+            [
+                'V6_8_0_0' => ['default' => true],
+                'JSON_LD_DATA' => ['major' => 'v6.8.0.0', 'default' => false, 'toggleable' => true],
+                'ACCESSIBILITY_TWEAKS' => ['default' => true, 'toggleable' => true],
+            ],
+            true
+        );
+
+        $registry->register();
+
+        static::assertTrue(Feature::isActive('v6.8.0.0'));
+        static::assertFalse(Feature::isActive('JSON_LD_DATA'));
+        static::assertFalse(Feature::isActive('ACCESSIBILITY_TWEAKS'));
+        static::assertSame('v6.8.0.0', Feature::getRegisteredFeatures()['JSON_LD_DATA']['major'] ?? null);
+    }
+
+    public function testDisableWithoutEnabledFeatureToggle(): void
+    {
+        $exception = FeatureException::featureCannotBeToggled('FEATURE_ABC');
+        static::expectExceptionObject($exception);
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            false
+        );
+
+        $service->disable('FEATURE_ABC');
+    }
+
+    public function testEnableWithoutEnabledFeatureToggle(): void
+    {
+        $exception = FeatureException::featureCannotBeToggled('FEATURE_ABC');
+        static::expectExceptionObject($exception);
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            false
+        );
+
+        $service->enable('FEATURE_ABC');
+    }
+
+    public function testDisableNonExistFeature(): void
+    {
+        $exception = FeatureException::featureNotRegistered('FEATURE_NON_EXIST');
+        static::expectExceptionObject($exception);
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $service->disable('FEATURE_NON_EXIST');
+    }
+
+    public function testDisableToggleableMajorFeature(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+        ]);
+        static::assertTrue(Feature::isActive('FEATURE_MAJOR'));
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $service->disable('FEATURE_MAJOR');
+        static::assertFalse(Feature::isActive('FEATURE_MAJOR'));
+    }
+
+    public function testDisableToggleableFeature(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_TOGGLEABLE_FALSE' => [
+                'active' => true,
+                'toggleable' => false,
+            ],
+            'FEATURE_TOGGLEABLE_TRUE' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $service->disable('FEATURE_TOGGLEABLE_TRUE');
+        static::assertFalse(Feature::isActive('FEATURE_TOGGLEABLE_TRUE'));
+
+        $exception = FeatureException::featureCannotBeToggled('FEATURE_TOGGLEABLE_FALSE');
+        static::expectExceptionObject($exception);
+        $service->disable('FEATURE_TOGGLEABLE_FALSE');
+    }
+
+    public function testEnableToggleableFeature(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_TOGGLEABLE_FALSE' => [
+                'active' => false,
+                'toggleable' => false,
+            ],
+            'FEATURE_TOGGLEABLE_TRUE' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $service->enable('FEATURE_TOGGLEABLE_TRUE');
+        static::assertTrue(Feature::isActive('FEATURE_TOGGLEABLE_TRUE'));
+
+        $exception = FeatureException::featureCannotBeToggled('FEATURE_TOGGLEABLE_FALSE');
+        static::expectExceptionObject($exception);
+        $service->enable('FEATURE_TOGGLEABLE_FALSE');
+    }
+
+    public function testEnableNonExistFeature(): void
+    {
+        $exception = FeatureException::featureNotRegistered('FEATURE_NON_EXIST');
+        static::expectExceptionObject($exception);
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+            ],
+        ]);
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $service->enable('FEATURE_NON_EXIST');
+    }
+
+    public function testEnableToggleableMajorFeature(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+        ]);
+        static::assertFalse(Feature::isActive('FEATURE_MAJOR'));
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $service->enable('FEATURE_MAJOR');
+        static::assertTrue(Feature::isActive('FEATURE_MAJOR'));
+    }
+
+    public function testEnableNoneToggleableMajorFeatureThrowsException(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => false,
+                'toggleable' => false,
+            ],
+        ]);
+        static::assertFalse(Feature::isActive('FEATURE_MAJOR'));
+
+        $service = new FeatureFlagRegistry(
+            new ArrayKeyValueStorage(),
+            new EventDispatcher(),
+            [],
+            true
+        );
+
+        $exception = FeatureException::featureCannotBeToggled('FEATURE_MAJOR');
+        static::expectExceptionObject($exception);
+
+        $service->enable('FEATURE_MAJOR');
+    }
+
+    public function testDisable(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $storage = new ArrayKeyValueStorage();
+        $dispatcher = new EventDispatcher();
+
+        $service = new FeatureFlagRegistry(
+            $storage,
+            $dispatcher,
+            [],
+            true
+        );
+
+        $service->disable('FEATURE_ABC');
+
+        static::assertTrue($storage->has('feature.flags'));
+        static::assertEquals([
+            'FEATURE_ABC' => [
+                'active' => false,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+                'static' => false,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+            ],
+        ], $storage->get('feature.flags'));
+        static::assertFalse(Feature::isActive('FEATURE_ABC'));
+    }
+
+    public function testEnable(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $storage = new ArrayKeyValueStorage();
+        $dispatcher = new EventDispatcher();
+
+        $service = new FeatureFlagRegistry(
+            $storage,
+            $dispatcher,
+            [],
+            true
+        );
+
+        $service->enable('FEATURE_ABC');
+
+        static::assertTrue($storage->has('feature.flags'));
+        static::assertEquals([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+                'static' => false,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => true,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+            ],
+        ], $storage->get('feature.flags'));
+        static::assertTrue(Feature::isActive('FEATURE_ABC'));
+    }
+
+    public function testEnableDispatchEvent(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $storage = new ArrayKeyValueStorage();
+        $dispatcher = new EventDispatcher();
+
+        $beforeEventDispatched = false;
+        $toggledEventDispatched = false;
+
+        $dispatcher->addListener(BeforeFeatureFlagToggleEvent::class, static function (BeforeFeatureFlagToggleEvent $event) use (&$beforeEventDispatched): void {
+            static::assertSame('FEATURE_ABC', $event->feature);
+            static::assertTrue($event->active);
+            $beforeEventDispatched = true;
+        });
+
+        $dispatcher->addListener(FeatureFlagToggledEvent::class, static function (FeatureFlagToggledEvent $event) use (&$toggledEventDispatched): void {
+            static::assertSame('FEATURE_ABC', $event->feature);
+            static::assertTrue($event->active);
+            $toggledEventDispatched = true;
+        });
+
+        $service = new FeatureFlagRegistry(
+            $storage,
+            $dispatcher,
+            [],
+            true
+        );
+
+        $service->enable('FEATURE_ABC');
+
+        static::assertTrue($beforeEventDispatched);
+        static::assertTrue($toggledEventDispatched);
+        static::assertTrue($storage->has('feature.flags'));
+        static::assertEquals([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+                'static' => false,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => false,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+            ],
+        ], $storage->get('feature.flags'));
+    }
+
+    public function testDisableDispatchEvent(): void
+    {
+        Feature::resetRegisteredFeatures();
+        Feature::registerFeatures([
+            'FEATURE_ABC' => [
+                'active' => true,
+                'toggleable' => true,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => false,
+                'toggleable' => true,
+            ],
+        ]);
+
+        $storage = new ArrayKeyValueStorage();
+        $dispatcher = new EventDispatcher();
+
+        $beforeEventDispatched = false;
+        $toggledEventDispatched = false;
+
+        $dispatcher->addListener(BeforeFeatureFlagToggleEvent::class, static function (BeforeFeatureFlagToggleEvent $event) use (&$beforeEventDispatched): void {
+            static::assertSame('FEATURE_ABC', $event->feature);
+            static::assertFalse($event->active);
+            $beforeEventDispatched = true;
+        });
+
+        $dispatcher->addListener(FeatureFlagToggledEvent::class, static function (FeatureFlagToggledEvent $event) use (&$toggledEventDispatched): void {
+            static::assertSame('FEATURE_ABC', $event->feature);
+            static::assertFalse($event->active);
+            $toggledEventDispatched = true;
+        });
+
+        $registry = new FeatureFlagRegistry(
+            $storage,
+            $dispatcher,
+            [],
+            true
+        );
+
+        $registry->disable('FEATURE_ABC');
+
+        static::assertTrue($beforeEventDispatched);
+        static::assertTrue($toggledEventDispatched);
+        static::assertTrue($storage->has('feature.flags'));
+        static::assertEquals([
+            'FEATURE_ABC' => [
+                'active' => false,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+                'static' => false,
+            ],
+            'FEATURE_MAJOR' => [
+                'active' => false,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+            ],
+        ], $storage->get('feature.flags'));
+    }
+
+    public function testRegisterWhenNoConnection(): void
+    {
+        Feature::resetRegisteredFeatures();
+        $storage = $this->createMock(AbstractKeyValueStorage::class);
+        $storage->expects($this->once())->method('get')->with(FeatureFlagRegistry::STORAGE_KEY, [])->willThrowException(static::createStub(ConnectionException::class));
+
+        $service = new FeatureFlagRegistry(
+            $storage,
+            new EventDispatcher(),
+            [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            true
+        );
+
+        $service->register();
+
+        static::assertSame([
+            'FEATURE_STORED' => [
+                'active' => true,
+                'default' => false,
+                'toggleable' => true,
+                'description' => '',
+            ],
+        ], Feature::getRegisteredFeatures());
+    }
+
+    /**
+     * @param array<string, FeatureFlagConfig> $staticFeatureFlags
+     * @param array<string, array<string, mixed>>|string $stored
+     * @param array<string, FeatureFlagConfig> $expected
+     */
+    #[DataProvider('registerDataProvider')]
+    public function testRegister(bool $enabled, array $staticFeatureFlags, array|string $stored, array $expected): void
+    {
+        Feature::resetRegisteredFeatures();
+        $storage = new ArrayKeyValueStorage(['feature.flags' => $stored]);
+
+        $service = new FeatureFlagRegistry(
+            $storage,
+            new EventDispatcher(),
+            $staticFeatureFlags,
+            $enabled
+        );
+
+        $service->register();
+
+        static::assertSame($expected, Feature::getRegisteredFeatures());
+    }
+
+    /**
+     * @return iterable<array-key, array{enabled: bool, staticFeatureFlags: array<string, FeatureFlagConfig>, stored: array<string, array<string, mixed>>|string, expected: array<string, FeatureFlagConfig>}>
+     */
+    public static function registerDataProvider(): iterable
+    {
+        yield 'register empty' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [],
+            'stored' => [],
+            'expected' => [],
+        ];
+
+        yield 'register static' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+            'stored' => [],
+            'expected' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+        ];
+
+        yield 'register stored' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [],
+            'stored' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'major' => false,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            'expected' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+        ];
+
+        yield 'register stored without enable feature toggle' => [
+            'enabled' => false,
+            'staticFeatureFlags' => [],
+            'stored' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            'expected' => [],
+        ];
+
+        yield 'register stored is string' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [],
+            'stored' => \json_encode([
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ], \JSON_THROW_ON_ERROR),
+            'expected' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+        ];
+
+        yield 'register static and stored' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+            'stored' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            'expected' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+        ];
+
+        yield 'register static and stored without enabled feature toggle' => [
+            'enabled' => false,
+            'staticFeatureFlags' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+            'stored' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            'expected' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+        ];
+
+        yield 'register static and stored with major' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+            'stored' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'major' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            'expected' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+        ];
+
+        yield 'register static and stored with major and static' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+            'stored' => [
+                'FEATURE_STORED' => [
+                    'active' => true,
+                    'major' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'major' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                ],
+            ],
+            'expected' => [
+                'FEATURE_STATIC' => [
+                    'active' => true,
+                    'default' => false,
+                    'toggleable' => true,
+                    'description' => '',
+                    'static' => true,
+                ],
+            ],
+        ];
+
+        yield 'keep a stored override when the static flag name needs normalization' => [
+            'enabled' => true,
+            'staticFeatureFlags' => [
+                'foo-bar' => [
+                    'major' => 'v6.8.0.0',
+                    'default' => false,
+                    'toggleable' => true,
+                ],
+            ],
+            'stored' => [
+                'FOO_BAR' => [
+                    'major' => true,
+                    'active' => false,
+                ],
+            ],
+            'expected' => [
+                'FOO_BAR' => [
+                    'major' => 'v6.8.0.0',
+                    'default' => false,
+                    'toggleable' => true,
+                    'active' => false,
+                    'description' => '',
+                ],
+            ],
+        ];
+    }
+}

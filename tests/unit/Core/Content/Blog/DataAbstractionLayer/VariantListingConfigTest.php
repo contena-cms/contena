@@ -1,0 +1,30 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Blog\DataAbstractionLayer;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingConfig;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+#[CoversClass(VariantListingConfig::class)]
+class VariantListingConfigTest extends TestCase
+{
+    public function testInstantiate(): void
+    {
+        $displayParent = true;
+        $mainVariantId = '1';
+        $configuratorGroupConfig = [
+            ['id' => 'group-a', 'representation' => 'box', 'expressionForListings' => true],
+        ];
+
+        $variantListingConfig = new VariantListingConfig($displayParent, $mainVariantId, $configuratorGroupConfig);
+
+        static::assertSame($displayParent, $variantListingConfig->getDisplayParent());
+        static::assertSame($mainVariantId, $variantListingConfig->getMainVariantId());
+        static::assertSame($configuratorGroupConfig, $variantListingConfig->getConfiguratorGroupConfig());
+    }
+}

@@ -1,0 +1,613 @@
+<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
+{% block sw_product_variants_overview %}
+<div class="sw-blog-variants-overview">
+
+    {% block sw_product_variants_overview_option_list_toolbar %}
+    <div class="sw-configuration-option-list__toolbar">
+        {% block sw_product_variants_overview_option_list_toolbar_container %}
+        <sw-container
+            columns="1fr minmax(min-content, max-content) minmax(min-content, calc(var(--scale-size-160) + var(--scale-size-20))) minmax(min-content, calc(var(--scale-size-160) + var(--scale-size-20)))"
+            gap="0 var(--scale-size-10)"
+        >
+
+            {% block sw_product_variants_overview_option_list_toolbar_container_search_field %}
+            <sw-simple-search-field
+                v-model:value="term"
+                variant="form"
+                size="small"
+                @search-term-change="onSearch"
+            />
+            {% endblock %}
+
+            {% block sw_product_variants_overview_option_list_toolbar_container_filter_list %}
+            <div class="sw-blog-variants-overview__filter-list-button">
+
+                {% block sw_product_variants_overview_option_list_toolbar_container_filter_list_button %}
+                <mt-button
+                    variant="secondary"
+                    @click="filterWindowOpen = !filterWindowOpen"
+                >
+                    {{ $t('sw-blog.variations.generatedFilterList') }}
+                    <mt-icon
+                        name="regular-filter"
+                        size="var(--scale-size-12)"
+                    />
+                </mt-button>
+                {% endblock %}
+
+                {% block sw_product_variants_overview_option_list_toolbar_container_filter_context_menu %}
+                <sw-context-menu v-show="filterWindowOpen">
+                    <sw-container
+                        columns="1fr"
+                        gap="var(--scale-size-6)"
+                    >
+
+                        {% block sw_product_variants_overview_option_list_toolbar_container_filter_tree %}
+                        <sw-tree
+                            v-show="filterOptions.length"
+                            :sortable="false"
+                            :items="filterOptions"
+                            :searchable="false"
+                            :disable-context-menu="true"
+                            bind-items-to-folder
+                        >
+                            <template
+                                #items="{ treeItems, sortable, draggedItem, disableContextMenu, onChangeRoute, checkItem }"
+                            >
+                                <sw-tree-item
+                                    v-for="(item, index) in treeItems"
+                                    :key="item.id"
+                                    :sortable="false"
+                                    :item="item"
+                                    :disable-context-menu="true"
+                                    @check-item="filterOptionChecked"
+                                />
+                            </template>
+                        </sw-tree>
+                        {% endblock %}
+
+                        {% block sw_product_variants_overview_option_list_toolbar_container_filter_buttons %}
+                        <div class="sw-blog-variants-overview__filter-buttons">
+                            {% block sw_product_variants_overview_option_list_toolbar_container_button_filter_reset %}
+                            <mt-button
+                                variant="secondary"
+                                @click="resetFilterOptions()"
+                            >
+                                {{ $t('sw-blog.variations.overview.filterReset') }}
+                            </mt-button>
+                            {% endblock %}
+
+                            {% block sw_product_variants_overview_option_list_toolbar_container_button_update_list %}
+                            <mt-button
+                                variant="primary"
+                                @click="getList()"
+                            >
+                                {{ $t('sw-blog.variations.overview.filter') }}
+                            </mt-button>
+                            {% endblock %}
+                        </div>
+                        {% endblock %}
+
+                    </sw-container>
+                </sw-context-menu>
+                {% endblock %}
+            </div>
+            {% endblock %}
+
+            {% block sw_product_variants_overview_option_list_toolbar_buttons %}
+            <mt-button
+                v-tooltip="{
+                    message: $t('sw-privileges.tooltip.warning'),
+                    disabled: acl.can('blog.creator'),
+                    showOnDisabledElements: true
+                }"
+                :disabled="!acl.can('blog.creator')"
+                class="sw-blog-variants__generate-action"
+                variant="primary"
+                @click="$emit('generator-open')"
+            >
+                {{ $t('sw-blog.variations.overview.generateVariants') }}
+            </mt-button>
+
+            <mt-button
+                class="sw-blog-variants__configure-frontend-action"
+                :disabled="!acl.can('blog.editor')"
+                variant="primary"
+                @click="$emit('delivery-open')"
+            >
+                {{ $t('sw-blog.variations.overview.frontendDelivery') }}
+            </mt-button>
+            {% endblock %}
+
+        </sw-container>
+        {% endblock %}
+
+    </div>
+    {% endblock %}
+
+    {% block sw_product_variants_overview_data_grid %}
+    <sw-data-grid
+        ref="variantGrid"
+        class="sw-blog-variants-overview__data-grid"
+        :data-source="variants"
+        :columns="variantColumns"
+        :show-settings="true"
+        :show-selection="acl.can('blog.deleter')"
+        :sort-by="sortBy"
+        :sort-direction="sortDirection"
+        :is-loading="isLoading"
+        :skeleton-item-amount="limit"
+        :allow-inline-edit="acl.can('blog.editor')"
+        identifier="blog-variants-overview"
+        @column-sort="onSortColumn"
+        @inline-edit-save="onInlineEditSave"
+        @inline-edit-cancel="onInlineEditCancel"
+    >
+
+        {% block sw_product_variants_overview_data_grid_column_name %}
+        <template
+            #column-name="{ item }"
+        >
+            <template v-if="item.options">
+                <router-link
+                    :to="{ name: 'sw.blog.detail.base', params: { id: item.id } }"
+                    class="sw-blog-variants-overview__variation-link"
+                    @click="onOptionEdit(item)"
+                >
+
+                    <mt-icon name="regular-link-xs" />
+
+                    <span
+                        v-for="(singleVariation, index) in item.options"
+                        :key="index"
+                        class="sw-blog-variants-overview__single-variation"
+                    >
+                        {{ singleVariation.translated.name }}
+                    </span>
+                </router-link>
+            </template>
+
+            <sw-label
+                v-if="variantIsDigital(item)"
+                class="sw-blog-variants-overview__digital-indicator"
+            >
+                {{ $t('sw-blog.variations.generatedListColumnContentProductState.is-download') }}
+            </sw-label>
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_data_grid_column_price %}
+        <template
+            v-for="currency in currencies"
+            :key="`switch-${currency.isoCode}`"
+            #[`column-price.${currency.id}.net`]="{ item, compact, isInlineEdit }"
+        >
+
+            {% block sw_product_variants_overview_data_grid_column_price_inline_edit %}
+            <template v-if="isInlineEdit">
+                {% block sw_product_variants_overview_data_grid_column_price_inline_edit_inherit %}
+                <sw-inheritance-switch
+                    :is-inherited="isPriceFieldInherited(item, currency)"
+                    class="sw-blog-detail-context-prices__inherited-icon"
+                    @inheritance-restore="onInheritanceRestore(item, currency)"
+                    @inheritance-remove="onInheritanceRemove(item, currency)"
+                />
+                {% endblock %}
+
+                {% block sw_product_variants_overview_data_grid_column_price_inline_edit_price_field %}
+                <sw-price-field
+                    :value="item.price ? item.price : []"
+                    :default-price="getDefaultPriceForVariant(item, currency)"
+                    :tax-rate="blogTaxRate"
+                    :label="false"
+                    :compact="compact"
+                    enable-inheritance
+                    :currency="currency"
+                />
+                {% endblock %}
+            </template>
+            {% endblock %}
+
+            {% block sw_product_variants_overview_data_grid_column_price_preview %}
+            <template v-else>
+                {% block sw_product_variants_overview_data_grid_column_price_preview_inherit %}
+                <sw-inheritance-switch
+                    :key="`else-switch-${currency.isoCode}`"
+                    :is-inherited="isPriceFieldInherited(item, currency)"
+                    class="sw-blog-detail-context-prices__inherited-icon"
+                    :disabled="true"
+                />
+                {% endblock %}
+
+                {% block sw_product_variants_overview_data_grid_column_price_preview_price_field %}
+                <sw-price-preview
+                    :key="`else-price-field-${currency.isoCode}`"
+                    :value="item.price ? item.price : []"
+                    :default-price="getDefaultPriceForVariant(item, currency)"
+                    :tax-rate="blogTaxRate"
+                    :currency="currency"
+                />
+                {% endblock %}
+            </template>
+            {% endblock %}
+
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_data_grid_column_stock %}
+        <template
+            #column-stock="{ item, isInlineEdit, compact }"
+        >
+            {% block sw_product_variants_overview_data_grid_column_stock_inline_edit_field %}
+            <mt-number-field
+                v-if="isInlineEdit && (!variantIsDigital(item) || item.isCloseout === true)"
+                v-model="item.stock"
+                number-type="int"
+                :size="compact ? 'small' : 'default'"
+            />
+            {% endblock %}
+
+            {% block sw_product_variants_overview_data_grid_column_stock_preview %}
+            <span v-else>
+                {{ item.stock }}
+            </span>
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_data_grid_column_product_number %}
+        <template
+            #column-blogNumber="{ item, isInlineEdit, compact }"
+        >
+            {% block sw_product_variants_overview_data_grid_column_product_number_inline_edit %}
+
+            <mt-text-field
+                v-if="isInlineEdit"
+                v-model="item.blogNumber"
+                :size="compact ? 'small' : 'default'"
+            />
+            {% endblock %}
+
+            {% block sw_product_variants_overview_data_grid_column_product_number_preview %}
+            <span
+                v-else
+                class="sw-blog-variants-overview_product-number"
+            >
+                {{ item.blogNumber }}
+            </span>
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_data_grid_column_media %}
+        <template #column-media="{ item, isInlineEdit, compact }">
+            {% block sw_product_variants_overview_data_grid_column_media_inline_edit %}
+            {% block sw_product_variants_overview_data_grid_column_media_inherit %}
+            <sw-inheritance-switch
+                :is-inherited="isMediaFieldInherited(item)"
+                :disabled="!isInlineEdit"
+                class="sw-blog-variants-overview_media__inherited-icon"
+                @inheritance-restore="onMediaInheritanceRestore(item, isInlineEdit)"
+                @inheritance-remove="onMediaInheritanceRemove(item, isInlineEdit)"
+            />
+            {% endblock %}
+
+            {% block sw_product_variants_overview_data_grid_column_media_content %}
+            <sw-blog-variants-media-upload
+                :source="item"
+                :upload-tag="item.id"
+                :is-inherited="isMediaFieldInherited(item)"
+                :disabled="isInlineEdit ? isMediaFieldInherited(item) : true"
+                :parent-blog="blog"
+            />
+            {% endblock %}
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        <template #column-downloads="{item, isInlineEdit, compact}">
+            <sw-upload-listener
+                :upload-tag="item.blogNumber"
+                auto-upload
+                @media-upload-finish="(event) => successfulUpload(event, item)"
+            />
+
+            <sw-media-compact-upload-v2
+                v-if="blogDownloadFolderId"
+                :upload-tag="item.blogNumber"
+                :disabled="!isInlineEdit"
+                private-filesystem
+                allow-multi-select
+                add-files-on-multiselect
+                :disable-deletion-for-last-item="{
+                    value: true,
+                    helpText: $t('sw-blog.list.columnDownloadsTooltip')
+                }"
+                :source-multiselect="getDownloadsSource(item)"
+                :target-folder-id="blogDownloadFolderId"
+                file-accept="*/*"
+                @delete-item="(file) => removeFile(`${file.fileName}.${file.fileExtension}`, item)"
+            />
+        </template>
+
+        {% block sw_product_variants_overview_data_grid_column_active %}
+        <template
+            #column-active="{ item, isInlineEdit }"
+        >
+            <template v-if="isInlineEdit">
+                <sw-data-grid-column-boolean
+                    v-model:value="item.active"
+                    :is-inline-edit="isInlineEdit"
+                    :disabled="isActiveFieldInherited(item)"
+                />
+
+                <sw-inheritance-switch
+                    :is-inherited="isActiveFieldInherited(item)"
+                    class="sw-blog-variants-overview__active-inherited-icon"
+                    @inheritance-restore="onActiveInheritanceRestore(item)"
+                    @inheritance-remove="onActiveInheritanceRemove(item)"
+                />
+            </template>
+
+            <template v-else>
+                <mt-icon
+                    v-if="item.active === true"
+                    name="regular-checkmark-xs"
+                    size="var(--scale-size-12)"
+                    class="is--active"
+                />
+                <mt-icon
+                    v-else-if="item.active === false"
+                    name="regular-times-s"
+                    size="var(--scale-size-10)"
+                    class="is--inactive"
+                />
+                <mt-icon
+                    v-else
+                    key="inherit-icon"
+                    name="regular-link-horizontal"
+                    size="var(--scale-size-16)"
+                />
+            </template>
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_actions %}
+        <template
+            #actions="{ item }"
+        >
+            {% block sw_product_variants_overview_actions_items %}
+            <sw-context-menu-item
+                v-tooltip="{
+                    message: $t('sw-privileges.tooltip.warning'),
+                    disabled: acl.can('blog.editor'),
+                    showOnDisabledElements: true
+                }"
+                :disabled="!acl.can('blog.editor')"
+                @click="onOptionEdit(item)"
+            >
+                {{ $t('global.default.edit') }}
+            </sw-context-menu-item>
+
+            <sw-context-menu-item
+                v-tooltip="{
+                    message: $t('sw-privileges.tooltip.warning'),
+                    disabled: acl.can('blog.deleter'),
+                    showOnDisabledElements: true
+                }"
+                variant="danger"
+                :disabled="!acl.can('blog.deleter')"
+                @click="onVariationDelete(item)"
+            >
+                {{ $t('global.default.delete') }}
+            </sw-context-menu-item>
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_pagination %}
+        <template #pagination>
+            <sw-pagination
+                :page="page"
+                :limit="limit"
+                :total="total"
+                :total-visible="7"
+                @page-change="onPageChange"
+            />
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_bulk %}
+        <template #bulk>
+            {% block sw_product_variants_overview_bulk_edit %}
+            <span
+                v-if="acl.can('blog.editor')"
+                class="link link-primary"
+                role="link"
+                tabindex="0"
+                @click="toggleBulkEditModal"
+            >
+                {{ $t('global.default.bulkEdit') }}
+            </span>
+            {% endblock %}
+
+            {% block sw_product_variants_overview_bulk_delete %}
+            <span
+                v-if="acl.can('blog.deleter')"
+                class="link link-danger sw-blog-variants-overview__bulk-delete-action"
+                role="link"
+                tabindex="0"
+                @click="onClickBulkDelete"
+            >
+                {{ $t('global.default.delete') }}
+            </span>
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        {% block sw_product_variants_overview_bulk_edit_modal %}
+        <template #bulk-modals="{ selection }">
+            <sw-bulk-edit-modal
+                v-if="showBulkEditModal"
+                class="sw-blog-variants-overview__bulk-edit-modal"
+                :selection="selection"
+                :bulk-grid-edit-columns="variantColumns"
+                @edit-items="onEditItems"
+                @modal-close="toggleBulkEditModal"
+            >
+                {% block sw_product_variants_overview_bulk_edit_modal_column_name %}
+                <template #column-name="{ item }">
+                    <template v-if="item.options">
+                        <router-link
+                            class="sw-blog-variants-overview__variation-link"
+                            :to="{ name: 'sw.blog.detail.base', params: { id: item.id } }"
+                            @click="onOptionEdit(item)"
+                        >
+                            <mt-icon
+                                class="sw-blog-variants-overview__variation-link-icon"
+                                name="regular-link-xs"
+                            />
+                            <span
+                                v-for="(singleVariation, index) in item.options"
+                                :key="index"
+                                class="sw-blog-variants-overview__variation-link-name"
+                            >
+                                {{ singleVariation.translated.name }}
+                            </span>
+                        </router-link>
+                    </template>
+                </template>
+                {% endblock %}
+
+                {% block sw_product_variants_overview_bulk_edit_modal_column_price %}
+                <template
+                    v-for="currency in currencies"
+                    :key="currency.id"
+                    #[`column-price.${currency.id}.net`]="{ item }"
+                >
+                    <sw-inheritance-switch
+                        :key="`else-switch-${currency.isoCode}`"
+                        :is-inherited="isPriceFieldInherited(item, currency)"
+                        disabled
+                    />
+                    <sw-price-preview
+                        :key="`else-price-field-${currency.isoCode}`"
+                        :value="item.price ? item.price : []"
+                        :default-price="getDefaultPriceForVariant(item, currency)"
+                        :tax-rate="blogTaxRate"
+                        :currency="currency"
+                    />
+                </template>
+                {% endblock %}
+
+                {% block sw_product_variants_overview_bulk_edit_modal_column_media %}
+                <template #column-media="{ item }">
+                    <sw-inheritance-switch
+                        class="sw-blog-variants-overview_media__inherited-icon"
+                        :is-inherited="isMediaFieldInherited(item)"
+                        disabled
+                    />
+                    <sw-blog-variants-media-upload
+                        :source="item"
+                        :upload-tag="item.id"
+                        :is-inherited="isMediaFieldInherited(item)"
+                        :parent-blog="blog"
+                        disabled
+                    />
+                </template>
+                {% endblock %}
+
+                <template #column-downloads="{item, isInlineEdit, compact}">
+                    <sw-upload-listener
+                        :upload-tag="item.blogNumber"
+                        auto-upload
+                        @media-upload-finish="(event) => successfulUpload(event, item)"
+                    />
+
+                    <sw-media-compact-upload-v2
+                        v-if="blogDownloadFolderId"
+                        :upload-tag="item.blogNumber"
+                        :disabled="!isInlineEdit"
+                        private-filesystem
+                        allow-multi-select
+                        :disable-deletion-for-last-item="{
+                            value: true,
+                            helpText: $t('sw-blog.list.columnDownloadsTooltip')
+                        }"
+                        :add-files-on-multiselect="true"
+                        :source-multiselect="getDownloadsSource(item)"
+                        :target-folder-id="blogDownloadFolderId"
+                        file-accept="*/*"
+                        @delete-item="(file) => removeFile(`${file.fileName}.${file.fileExtension}`, item)"
+                    />
+                </template>
+
+                {% block sw_product_variants_overview_bulk_edit_modal_column_active %}
+                <template #column-active="{ item }">
+                    <mt-icon
+                        v-if="item.active === true"
+                        class="is--active"
+                        name="regular-checkmark-xs"
+                        size="var(--scale-size-16)"
+                    />
+                    <mt-icon
+                        v-else-if="item.active === false"
+                        class="is--inactive"
+                        name="regular-times-s"
+                        size="var(--scale-size-16)"
+                    />
+                    <mt-icon
+                        v-else
+                        key="inherit-icon"
+                        name="regular-link-horizontal"
+                        size="16"
+                    />
+                </template>
+                {% endblock %}
+            </sw-bulk-edit-modal>
+        </template>
+        {% endblock %}
+
+    </sw-data-grid>
+    {% endblock %}
+
+    {% block sw_product_variants_overview_data_grid_action_modals %}
+    <sw-modal
+        v-if="showDeleteModal"
+        class="sw-blog-variants-overview__delete-modal"
+        :title="$t('global.default.warning')"
+        variant="small"
+        @modal-close="onCloseDeleteModal"
+    >
+
+        <p
+            class="sw-blog-variants-overview__modal--confirm-delete-text"
+        >
+            {{ toBeDeletedVariantIds.length > 1 ? $t('sw-blog.variations.generatedListDeleteModalMessagePlural') : $t('sw-blog.variations.generatedListDeleteModalMessage') }}
+        </p>
+
+        <template #modal-footer>
+            {% block sw_product_variants_overview_data_grid_action_modals_buttons %}
+            <mt-button
+                class="sw-blog-variants-overview__modal--cancel-button"
+                size="small"
+                :disabled="modalLoading"
+                variant="secondary"
+                @click="onCloseDeleteModal"
+            >
+                {{ $t('global.default.cancel') }}
+            </mt-button>
+            <mt-button
+                variant="critical"
+                size="small"
+                :disabled="modalLoading"
+                @click="onConfirmDelete"
+            >
+                {{ $t('global.default.delete') }}
+            </mt-button>
+            {% endblock %}
+        </template>
+    </sw-modal>
+    {% endblock %}
+</div>
+{% endblock %}

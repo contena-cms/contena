@@ -1,0 +1,138 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Adapter\Filesystem\Adapter;
+
+use AsyncAws\S3\S3Client;
+use League\Flysystem\AsyncAwsS3\PortableVisibilityConverter;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\AsyncAwsS3WriteBatchAdapter;
+use Contena\Core\Framework\Adapter\Filesystem\Adapter\AwsS3v3Factory;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\HttpClient\MockHttpClient;
+use Symfony\Component\HttpClient\Response\MockResponse;
+
+/**
+ * @internal
+ */
+#[CoversClass(AwsS3v3Factory::class)]
+class AwsS3v3FactoryTest extends TestCase
+{
+    public function testGetType(): void
+    {
+        static::assertSame('amazon-s3', (new AwsS3v3Factory())->getType());
+    }
+
+    public function testCreate(): void
+    {
+        $config = [
+            'bucket' => 'private',
+            'endpoint' => 'http://localhost:9000',
+            'use_path_style_endpoint' => true,
+            'region' => 'local',
+            'root' => 'foobar',
+            'credentials' => [
+                'key' => 'foo',
+                'secret' => 'bar',
+            ],
+            'options' => [
+                'visibility' => 'private',
+            ],
+        ];
+
+        $client = new S3Client([
+            'region' => 'local',
+            'endpoint' => 'http://localhost:9000',
+            'pathStyleEndpoint' => '1',
+            'accessKeyId' => 'foo',
+            'accessKeySecret' => 'bar',
+        ]);
+
+        static::assertEquals(
+            new AsyncAwsS3WriteBatchAdapter($client, 'private', 'foobar', new PortableVisibilityConverter()),
+            (new AwsS3v3Factory())->create($config)
+        );
+    }
+
+    public function testCreateEmptyEndpointIsNotConsidered(): void
+    {
+        $config = [
+            'bucket' => 'private',
+            'endpoint' => '',
+            'use_path_style_endpoint' => true,
+            'region' => 'local',
+            'root' => 'foobar',
+            'credentials' => [
+                'key' => 'foo',
+                'secret' => 'bar',
+            ],
+            'options' => [
+                'visibility' => 'private',
+            ],
+        ];
+
+        $client = new S3Client([
+            'region' => 'local',
+            'pathStyleEndpoint' => '1',
+            'accessKeyId' => 'foo',
+            'accessKeySecret' => 'bar',
+        ]);
+
+        static::assertEquals(
+            new AsyncAwsS3WriteBatchAdapter($client, 'private', 'foobar', new PortableVisibilityConverter()),
+            (new AwsS3v3Factory())->create($config)
+        );
+    }
+
+    public function testCreateWithCustomBatchSize(): void
+    {
+        $config = [
+            'bucket' => 'private',
+            'region' => 'local',
+            'root' => 'foobar',
+        ];
+
+        $customBatchSize = 100;
+        $factory = new AwsS3v3Factory($customBatchSize);
+
+        $client = new S3Client([
+            'region' => 'local',
+        ]);
+
+        $adapter = new AsyncAwsS3WriteBatchAdapter($client, 'private', 'foobar', new PortableVisibilityConverter());
+        $adapter->batchSize = $customBatchSize;
+
+        static::assertEquals(
+            $adapter,
+            $factory->create($config)
+        );
+    }
+
+    public function testCreateWithCustomHttpClient(): void
+    {
+        $requestedUrls = [];
+        $httpClient = new MockHttpClient(static function (string $method, string $url) use (&$requestedUrls): MockResponse {
+            $requestedUrls[] = $method . ' ' . $url;
+
+            return new MockResponse('', ['http_code' => 404]);
+        });
+
+        $config = [
+            'bucket' => 'private',
+            'endpoint' => 'http://localhost:9000',
+            'use_path_style_endpoint' => true,
+            'region' => 'local',
+            'root' => 'foobar',
+            'credentials' => [
+                'key' => 'foo',
+                'secret' => 'bar',
+            ],
+        ];
+
+        $adapter = (new AwsS3v3Factory(250, $httpClient))->create($config);
+
+        static::assertInstanceOf(AsyncAwsS3WriteBatchAdapter::class, $adapter);
+        static::assertFalse($adapter->fileExists('file.txt'));
+        static::assertSame(['HEAD http://localhost:9000/private/foobar/file.txt'], $requestedUrls);
+    }
+}

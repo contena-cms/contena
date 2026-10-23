@@ -1,0 +1,77 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Seo\Event;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Seo\Event\SeoUrlUpdateEvent;
+use Contena\Core\Content\Seo\SeoException;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Feature\FeatureException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Test\Annotation\DisabledFeatures;
+
+/**
+ * @internal
+ */
+#[CoversClass(SeoUrlUpdateEvent::class)]
+class SeoUrlUpdateEventTest extends TestCase
+{
+    public function testGetContextReturnsPassedContext(): void
+    {
+        $context = Context::createDefaultContext();
+        $event = new SeoUrlUpdateEvent([], $context);
+
+        static::assertSame($context, $event->getContext());
+    }
+
+    public function testExposesTheSeoUrls(): void
+    {
+        $seoUrls = [['routeName' => 'frontend.detail.page', 'seoPathInfo' => 'awesome-blog']];
+        $event = new SeoUrlUpdateEvent($seoUrls, Context::createDefaultContext());
+
+        static::assertSame($seoUrls, $event->getSeoUrls());
+    }
+
+    #[DisabledFeatures(['v6.8.0.0'])]
+    public function testGetNullableContextReturnsContextWhenFeatureInactiveAndContextProvided(): void
+    {
+        $context = Context::createDefaultContext();
+        $event = new SeoUrlUpdateEvent([], $context);
+
+        static::assertSame($context, $event->getNullableContext());
+    }
+
+    #[DisabledFeatures(['v6.8.0.0'])]
+    public function testGetNullableContextReturnsNullWithoutContext(): void
+    {
+        $event = new SeoUrlUpdateEvent([]);
+
+        static::assertNull($event->getNullableContext());
+    }
+
+    public function testConstructorRequiresContextWhenFeatureActive(): void
+    {
+        $this->expectExceptionObject(FeatureException::error(
+            'Tried to access deprecated functionality: Not passing $context to ' . SeoUrlUpdateEvent::class . ' is deprecated and will be required in v6.8.0.'
+        ));
+        new SeoUrlUpdateEvent([]);
+    }
+
+    #[DisabledFeatures(['v6.8.0.0'])]
+    public function testGetContextThrowsWithoutContext(): void
+    {
+        $event = new SeoUrlUpdateEvent([]);
+
+        $this->expectExceptionObject(SeoException::invalidEventData('No context provided. Pass $context to the constructor of ' . SeoUrlUpdateEvent::class));
+        $event->getContext();
+    }
+
+    public function testGetNullableContextThrowsWhenFeatureActive(): void
+    {
+        $event = new SeoUrlUpdateEvent([], Context::createDefaultContext());
+
+        $this->expectExceptionObject(FeatureException::error('Tried to access deprecated functionality: getNullableContext() is deprecated, use getContext() instead.'));
+        $event->getNullableContext();
+    }
+}

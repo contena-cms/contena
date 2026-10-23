@@ -1,0 +1,430 @@
+import { required } from 'src/core/service/validation.service';
+import EntityValidationService from 'src/app/service/entity-validation.service';
+import template from './sw-user-detail-addresses.html.twig';
+import './sw-user-detail-addresses.scss';
+
+/**
+ * @sw-package checkout
+ */
+
+const { ContenaError } = Contena.Classes;
+const { Mixin, EntityDefinition } = Contena;
+const { Criteria } = Contena.Data;
+
+// eslint-disable-next-line sw-deprecation-rules/private-feature-declarations
+export default {
+    template,
+
+    inject: ['repositoryFactory', 'customFieldDataProviderService'],
+
+    mixins: [Mixin.getByName('notification')],
+
+    props: {
+        user: {
+            type: Object,
+            required: true,
+        },
+        userEditMode: {
+            type: Boolean,
+            required: true,
+        },
+    },
+
+    data() {
+        return {
+            isLoading: false,
+            activeCustomer: this.user,
+            showAddAddressModal: false,
+            showEditAddressModal: false,
+            showDeleteAddressModal: false,
+            addressSortProperty: null,
+            addressSortDirection: '',
+            currentAddress: null,
+            userAddressCustomFieldSets: null,
+        };
+    },
+
+    computed: {
+        userRepository() {
+            return this.repositoryFactory.create('user');
+        },
+
+        // @deprecated tag:v6.8.0 - Use customFieldDataProviderService instead.
+        customFieldSetRepository() {
+            return this.repositoryFactory.create('custom_field_set');
+        },
+
+        userAddressRepository() {
+            return this.repositoryFactory.create('user_address');
+        },
+
+        addressColumns() {
+            return this.getAddressColumns();
+        },
+
+        addressRepository() {
+            return this.repositoryFactory.create(this.activeCustomer.addresses.entity, this.activeCustomer.addresses.source);
+        },
+
+        sortedAddresses() {
+            if (this.addressSortProperty) {
+                return this.activeCustomer.addresses.sort((a, b) => {
+                    const aValue = a[this.addressSortProperty];
+                    const bValue = b[this.addressSortProperty];
+
+                    let isBigger = null;
+
+                    if (typeof aValue === 'string' && typeof bValue === 'string') {
+                        isBigger = aValue.toUpperCase() > bValue.toUpperCase();
+                    }
+
+                    if (typeof aValue === 'number' && typeof bValue === 'number') {
+                        isBigger = aValue - bValue > 0;
+                    }
+
+                    if (isBigger !== null) {
+                        if (this.addressSortDirection === 'DESC') {
+                            return isBigger ? -1 : 1;
+                        }
+
+                        return isBigger ? 1 : -1;
+                    }
+
+                    return 0;
+                });
+            }
+
+            return this.activeCustomer.addresses;
+        },
+
+        salutationRepository() {
+            return this.repositoryFactory.create('salutation');
+        },
+
+        salutationCriteria() {
+            const criteria = new Criteria(1, 1);
+
+            criteria.addFilter(Criteria.equals('salutationKey', 'not_specified'));
+
+            return criteria;
+        },
+    },
+
+    watch: {
+        currentAddress(newValue, oldValue) {
+            if (newValue || !oldValue) {
+                return;
+            }
+
+            this.clearAddressErrors(oldValue);
+        },
+    },
+
+    created() {
+        this.createdComponent();
+    },
+
+    beforeUnmount() {
+        this.clearAddressErrors(this.currentAddress);
+    },
+
+    methods: {
+        createdComponent() {
+            this.isLoading = true;
+
+            if (!this.activeCustomer.id && this.$route.params.id) {
+                this.userRepository.get(this.$route.params.id).then((user) => {
+                    this.activeCustomer = user;
+                    this.isLoading = false;
+                });
+                return;
+            }
+
+            if (!this.activeCustomer.id) {
+                this.$router.push({
+                    name: 'sw.user.detail.base',
+                    params: { id: this.$route.params.id },
+                });
+                return;
+            }
+
+            this.customFieldDataProviderService.getCustomFieldSets('user_address').then((customFieldSets) => {
+                this.userAddressCustomFieldSets = customFieldSets;
+            });
+
+            this.isLoading = false;
+        },
+
+        getAddressColumns() {
+            return [
+                {
+                    property: 'defaultShippingAddress',
+                    label: this.$t('sw-user.detailAddresses.columnDefaultShippingAddress'),
+                    align: 'center',
+                    iconLabel: 'regular-shopping-cart',
+                    iconTooltip: this.$t('sw-user.detailAddresses.columnDefaultShippingAddress'),
+                    iconSize: '20px',
+                },
+                {
+                    property: 'defaultBillingAddress',
+                    label: this.$t('sw-user.detailAddresses.columnDefaultBillingAddress'),
+                    align: 'center',
+                    iconLabel: 'regular-file-text',
+                    iconTooltip: this.$t('sw-user.detailAddresses.columnDefaultBillingAddress'),
+                    iconSize: '20px',
+                },
+                {
+                    property: 'lastName',
+                    label: this.$t('sw-user.detailAddresses.columnLastName'),
+                },
+                {
+                    property: 'firstName',
+                    label: this.$t('sw-user.detailAddresses.columnFirstName'),
+                },
+                {
+                    property: 'company',
+                    label: this.$t('sw-user.detailAddresses.columnCompany'),
+                },
+                {
+                    property: 'street',
+                    label: this.$t('sw-user.detailAddresses.columnStreet'),
+                },
+                {
+                    property: 'zipcode',
+                    label: this.$t('sw-user.detailAddresses.columnZipCode'),
+                    align: 'right',
+                },
+                {
+                    property: 'city',
+                    label: this.$t('sw-user.detailAddresses.columnCity'),
+                },
+            ];
+        },
+
+        setAddressSorting(column) {
+            this.addressSortProperty = column.property;
+
+            let direction = 'ASC';
+            if (this.addressSortProperty === column.dataIndex) {
+                if (this.addressSortDirection === direction) {
+                    direction = 'DESC';
+                }
+            }
+            this.addressSortProperty = column.dataIndex;
+            this.addressSortDirection = direction;
+        },
+
+        onCreateNewAddress() {
+            this.showAddAddressModal = true;
+            this.createNewCustomerAddress();
+        },
+
+        async createNewCustomerAddress() {
+            const defaultSalutationId = await this.getDefaultSalutation();
+
+            const newAddress = this.addressRepository.create();
+            newAddress.userId = this.activeCustomer.id;
+            newAddress.salutationId = defaultSalutationId;
+
+            this.currentAddress = newAddress;
+        },
+
+        onSaveAddress() {
+            if (this.currentAddress === null || !this.isValidAddress(this.currentAddress)) {
+                return;
+            }
+
+            let address = this.getLoadedAddress(this.currentAddress.id);
+
+            if (typeof address === 'undefined' || address === null) {
+                address = this.addressRepository.create(Contena.Context.api, this.currentAddress.id);
+            }
+
+            Object.assign(address, this.currentAddress);
+
+            this.userAddressRepository.save(address).then(() => {
+                this.currentAddress = null;
+
+                this.refreshList();
+            });
+        },
+
+        isValidAddress(address) {
+            const ignoreFields = ['createdAt'];
+            const requiredAddressFields = Object.keys(EntityDefinition.getRequiredFields('user_address'));
+            const errorStore = Contena.Store.get('error');
+            let isValid = true;
+
+            requiredAddressFields.forEach((field) => {
+                if (ignoreFields.includes(field)) {
+                    return;
+                }
+
+                if (required(address[field])) {
+                    this.removeRequiredFieldError(address.id, field);
+                    return;
+                }
+
+                isValid = false;
+
+                errorStore.addApiError({
+                    expression: `user_address.${address.id}.${field}`,
+                    error: new ContenaError({
+                        code: EntityValidationService.ERROR_CODE_REQUIRED,
+                    }),
+                });
+            });
+
+            return isValid;
+        },
+
+        onCloseAddressModal() {
+            if (this.defaultShippingAddressId) {
+                this.activeCustomer.defaultShippingAddressId = this.defaultShippingAddressId;
+            }
+
+            if (this.defaultBillingAddressId) {
+                this.activeCustomer.defaultBillingAddressId = this.defaultBillingAddressId;
+            }
+
+            if (this.$route.query.detailId) {
+                this.$route.query.detailId = null;
+            }
+
+            this.currentAddress = null;
+        },
+
+        clearAddressErrors(address) {
+            if (!address) {
+                return;
+            }
+
+            const errorStore = Contena.Store.get('error');
+            const addressErrors = errorStore.getErrorsForEntity('user_address', address.id);
+
+            if (!addressErrors) {
+                return;
+            }
+
+            Object.keys(addressErrors).forEach((field) => this.removeRequiredFieldError(address.id, field));
+
+            if (Object.keys(addressErrors).length === 0) {
+                errorStore.removeApiError(`user_address.${address.id}`);
+            }
+        },
+
+        removeRequiredFieldError(addressId, field) {
+            const errorStore = Contena.Store.get('error');
+            const error = errorStore.getApiErrorFromPath('user_address', addressId, [field]);
+
+            if (error?.code !== EntityValidationService.ERROR_CODE_REQUIRED) {
+                return;
+            }
+
+            errorStore.removeApiError(`user_address.${addressId}.${field}`);
+        },
+
+        // user.addresses only holds the first page, so prefer the records the grid currently shows
+        getLoadedAddress(id) {
+            return this.$refs.addressGrid?.records?.get(id) ?? this.activeCustomer.addresses.get(id);
+        },
+
+        onEditAddress(id) {
+            const currentAddress = this.addressRepository.create(Contena.Context.api, id);
+            // Otherwise repository save will do a POST call instead of PATCH
+            currentAddress._isNew = false;
+
+            // assign values and id to new address
+            Object.assign(currentAddress, this.getLoadedAddress(id));
+
+            this.currentAddress = currentAddress;
+            this.showEditAddressModal = id;
+        },
+
+        onDeleteAddress(id) {
+            if (this.isDefaultAddress(id)) {
+                return;
+            }
+            this.showDeleteAddressModal = id;
+        },
+
+        onConfirmDeleteAddress(id) {
+            this.onCloseDeleteAddressModal();
+
+            return this.userAddressRepository.delete(id).then(() => {
+                this.refreshList();
+            });
+        },
+
+        onCloseDeleteAddressModal() {
+            this.showDeleteAddressModal = false;
+        },
+
+        isDefaultAddress(addressId) {
+            return (
+                this.activeCustomer.defaultBillingAddressId === addressId ||
+                this.activeCustomer.defaultShippingAddressId === addressId
+            );
+        },
+
+        onChangeDefaultBillingAddress(billingAddressId) {
+            this.activeCustomer.defaultBillingAddressId = billingAddressId;
+            this.user.defaultBillingAddressId = billingAddressId;
+        },
+
+        onChangeDefaultShippingAddress(shippingAddressId) {
+            this.activeCustomer.defaultShippingAddressId = shippingAddressId;
+            this.user.defaultShippingAddressId = shippingAddressId;
+        },
+
+        async onDuplicateAddress(addressId) {
+            const { id } = await this.userAddressRepository.clone(addressId);
+            const newAddress = await this.userAddressRepository.get(id);
+
+            this.activeCustomer.addresses.push(newAddress);
+        },
+
+        onChangeDefaultAddress(data) {
+            if (!data.value) {
+                if (this.defaultShippingAddressId) {
+                    this.activeCustomer.defaultShippingAddressId = this.defaultShippingAddressId;
+                }
+
+                if (this.defaultBillingAddressId) {
+                    this.activeCustomer.defaultBillingAddressId = this.defaultBillingAddressId;
+                }
+                return;
+            }
+
+            const preFix = this.createPrefix(data.name, '-address');
+            const name = `default${preFix}AddressId`;
+
+            this[name] = this.activeCustomer[name];
+            this.activeCustomer[name] = data.id;
+            this.user[name] = data.id;
+        },
+
+        onChange(term) {
+            this.activeCustomer.addresses.criteria.setPage(1);
+            this.activeCustomer.addresses.criteria.setTerm(term);
+
+            this.refreshList();
+        },
+
+        refreshList() {
+            this.$refs.addressGrid.load();
+        },
+
+        createPrefix(string, replace) {
+            const preFix = string.replace(replace, '');
+
+            return `${preFix.charAt(0).toUpperCase()}${preFix.slice(1)}`;
+        },
+
+        async getDefaultSalutation() {
+            const res = await this.salutationRepository.searchIds(this.salutationCriteria);
+
+            return res.data?.[0];
+        },
+    },
+};

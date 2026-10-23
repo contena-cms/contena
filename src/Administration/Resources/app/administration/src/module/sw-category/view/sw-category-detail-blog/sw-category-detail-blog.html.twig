@@ -1,0 +1,137 @@
+{% block sw_category_detail_products %}
+<div class="sw-category-detail-blogs">
+
+    {% block sw_category_detail_product_assignment %}
+    <sw-many-to-many-assignment-card
+        v-if="category.type !== 'folder'"
+        display-variants
+        :title="$t('sw-category.base.blogs.blogAssignmentHeadline')"
+        :entity-collection="category.blogs"
+        :columns="blogColumns"
+        :is-loading="isLoading"
+        :disabled="!acl.can('category.editor')"
+        :local-mode="category.isNew()"
+        :criteria="blogCriteria"
+        :select-label="$t('sw-category.base.blogs.blogAssignmentLabel')"
+        :placeholder="$t('sw-category.base.blogs.blogAssignmentPlaceholder')"
+        @paginate="onPaginateManualProductAssignment"
+    >
+
+        {% block sw_category_detail_product_assignment_type_select %}
+        <template #prepend-select>
+
+            {% block sw_category_detail_product_assignment_type_select_field %}
+            <sw-single-select
+                v-model:value="category.blogAssignmentType"
+                class="sw-category-detail-blogs__product-assignment-type-select"
+                :label="$t('sw-category.base.blogs.blogAssignmentTypeLabel')"
+                :error="categoryProductAssignmentTypeError"
+                :options="blogAssignmentTypes"
+                :disabled="!acl.can('category.editor')"
+                required
+                show-clearable-button
+                @update:value="onUpdateProductAssignmentType"
+            />
+            {% endblock %}
+
+            {% block sw_category_detail_product_assignment_manual_alert %}
+            <mt-banner
+                v-if="category.blogAssignmentType === 'content_stream' && manualAssignedProductsCount > 0"
+                variant="info"
+            >
+                {{ $t('sw-category.base.blogs.alertManualAssignedProductsOnAssignmentTypeStream') }}
+            </mt-banner>
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        {% block sw_category_detail_product_assignment_stream_select %}
+        <template
+            v-if="category.blogAssignmentType === 'content_stream'"
+            #select
+        >
+
+            {% block sw_category_detail_product_assignment_stream_select_field %}
+            <sw-entity-single-select
+                v-model:value="category.contentStreamId"
+                class="sw-category-detail-blogs__product-stream-select"
+                entity="content_stream"
+                :criteria="contentStreamCriteria"
+                show-clearable-button
+                :disabled="!acl.can('category.editor')"
+                :label="$t('sw-category.base.blogs.blogAssignmentTypeStreamLabel')"
+                :help-text="dynamicProductGroupHelpText"
+                :placeholder="$t('sw-category.base.blogs.blogAssignmentTypeStreamPlaceholder')"
+                :error="contentStreamInvalidError || categoryProductStreamIdError"
+            />
+            {% endblock %}
+
+            {% block sw_category_detail_product_assignment_stream_preview_link %}
+            <div class="sw-category-detail-blogs__product-stream-preview-link">
+                <router-link
+                    v-if="category.contentStreamId"
+                    :to="{ name: 'sw.blog.stream.detail', params: { id: category.contentStreamId } }"
+                >
+                    {{ $t('sw-category.base.blogs.dynamicProductGroupDetailLinkText') }}
+                    <mt-icon
+                        name="regular-long-arrow-right"
+                        size="16px"
+                    />
+                </router-link>
+            </div>
+            {% endblock %}
+        </template>
+        {% endblock %}
+
+        {% block sw_category_detail_product_assignment_stream_preview_grid %}
+        <template
+            v-if="category.blogAssignmentType === 'content_stream'"
+            #data-grid
+        >
+            <sw-blog-stream-grid-preview
+                :filters="contentStreamFilter"
+                :columns="blogColumns"
+            />
+        </template>
+        {% endblock %}
+
+        {% block sw_category_detail_product_assignment_column_name %}
+        <template #[nameColumn]="{ item, column }">
+            <router-link
+                :to="{ name: column.routerLink, params: { id: item.id } }"
+            >
+                <sw-blog-variant-info :variations="item.variation">
+                    {{ getItemName(item) }}
+                </sw-blog-variant-info>
+            </router-link>
+        </template>
+        {% endblock %}
+
+        {% block sw_category_detail_product_assignment_column_manufacturer %}
+        <template #[manufacturerColumn]="{ item, column }">
+            <router-link
+                v-if="getManufacturer(item)"
+                :to="{ name: column.routerLink, params: { id: item.manufacturerId } }"
+            >
+                {{ getManufacturer(item).name || getManufacturer(item).translated.name }}
+            </router-link>
+            <span v-else></span>
+        </template>
+        {% endblock %}
+
+        {% block sw_category_detail_product_assignment_empty_state %}
+        <template #empty-state>
+            <mt-empty-state
+                centered
+                :icon="$route.meta.$module.icon"
+                :headline="$t('sw-category.base.blogs.blogAssignmentEmptyStateDescription')"
+                description=""
+            />
+        </template>
+        {% endblock %}
+
+    </sw-many-to-many-assignment-card>
+    {% endblock %}
+
+</div>
+{% endblock %}

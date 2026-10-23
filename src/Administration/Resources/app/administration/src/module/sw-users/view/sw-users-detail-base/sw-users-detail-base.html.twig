@@ -1,0 +1,58 @@
+{% block sw_customer_detail_base %}
+<div class="sw-user-detail-base">
+    {% block sw_customer_detail_base_info_holder %}
+    <div class="sw-user-detail-base__info-holder">
+        {% block sw_customer_detail_base_info_card %}
+        <sw-user-card
+            :title="$t('sw-user.detailBase.labelAccountCard')"
+            :user="user"
+            :edit-mode="userEditMode"
+            :is-loading="isLoading"
+        >
+            {% block sw_customer_detail_base_info_metadata %}
+            <sw-user-base-info
+                :user="user"
+                :is-loading="isLoading"
+                :user-edit-mode="userEditMode"
+            />
+            {% endblock %}
+        </sw-user-card>
+        {% endblock %}
+
+        {% block sw_customer_detail_base_default_addresses_card %}
+        <mt-card
+            v-if="user.defaultShippingAddress || user.defaultBillingAddress"
+            :title="$t('sw-user.detailBase.labelAddressesCard')"
+            position-identifier="sw-user-detail-base-default-addresses"
+            class="sw-user-detail-base__default-addresses"
+            :is-loading="user.isLoading"
+        >
+            {% block sw_customer_detail_base_default_addresses %}
+            <template #grid>
+                <sw-user-default-addresses
+                    :user-edit-mode="userEditMode"
+                    :user="user"
+                />
+            </template>
+            {% endblock %}
+        </mt-card>
+        {% endblock %}
+
+        {% block sw_customer_detail_custom_field_sets %}
+        <mt-card
+            v-if="!!userCustomFieldSets && userCustomFieldSets.length > 0"
+            position-identifier="sw-user-detail-base-custom-field-sets"
+            :title="$t('sw-settings-custom-field.general.mainMenuItemGeneral')"
+            :is-loading="user.isLoading"
+        >
+            <sw-custom-field-set-renderer
+                :entity="user"
+                :disabled="!userEditMode"
+                :sets="userCustomFieldSets"
+            />
+        </mt-card>
+        {% endblock %}
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

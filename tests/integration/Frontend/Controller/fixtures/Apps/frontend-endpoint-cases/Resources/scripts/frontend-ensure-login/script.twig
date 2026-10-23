@@ -1,0 +1,5 @@
+{% do hook.channelContext.ensureLoggedIn(hook.query['allow-guest']|boolval) %}
+
+{% do hook.setResponse(
+    services.response.render('@MyApp/frontend/page/user-greeting/index.html.twig', { 'page': hook.page, 'user': hook.channelContext.user })
+) %}

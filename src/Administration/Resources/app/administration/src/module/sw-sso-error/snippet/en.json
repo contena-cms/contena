@@ -1,0 +1,18 @@
+{
+  "global": {
+    "sw-sso-error": {
+      "general": {
+        "title": "SSO error",
+        "description": "Contena login error"
+      },
+      "error-card": {
+        "title": "No access to this store",
+        "text": "Your login was successful, but you don't have access to this Contena store.",
+        "button": "Log in with different account",
+        "loggedInAsPrefix": "Logged in as:",
+        "logoAltText": "Contena logo",
+        "loadingLabel": "Loading..."
+      }
+    }
+  }
+}

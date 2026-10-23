@@ -1,0 +1,13 @@
+{% set ids = hook.event.getIds('blog') %}
+
+{% set ids = ids.only('insert').with('description', 'parentId') %}
+{% if ids.empty %}
+    {% return %}
+{% endif %}
+
+{% set tags = [] %}
+{% for id in ids %}
+    {% set tags = tags|merge(['my-blog-' ~ id]) %}
+{% endfor %}
+
+{% do services.cache.invalidate(tags) %}

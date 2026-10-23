@@ -1,0 +1,21 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "\/_action\/index-blogs": {
+            "post": {
+                "tags": [
+                    "System Operations"
+                ],
+                "summary": "Send blog indexing message",
+                "description": "Dispatches a blog indexing message to the message bus, with the provided ids",
+                "operationId": "blogIndexing",
+                "responses": {
+                    "204": {
+                        "description": "Returns an empty response indicating that the message dispatched."
+                    }
+                }
+            }
+        }
+    }
+}

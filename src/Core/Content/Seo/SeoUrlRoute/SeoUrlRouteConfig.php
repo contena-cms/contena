@@ -1,0 +1,71 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Seo\SeoUrlRoute;
+
+use Contena\Core\Content\Seo\Exception\SeoUrlRouteConfigException;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\Log\Package;
+
+class SeoUrlRouteConfig
+{
+    /**
+     * @param array<string, string> $routeParameters
+     */
+    public function __construct(
+        private readonly EntityDefinition $definition,
+        private readonly string $routeName,
+        private string $template,
+        private bool $skipInvalid = true,
+        private readonly ?string $primaryKeyParameterKey = null,
+        private readonly ?string $targetRouteName = null,
+        private readonly array $routeParameters = [],
+    ) {
+    }
+
+    public function getDefinition(): EntityDefinition
+    {
+        return $this->definition;
+    }
+
+    public function getRouteName(): string
+    {
+        return $this->routeName;
+    }
+
+    public function getTargetRouteName(): string
+    {
+        return $this->targetRouteName ?? $this->routeName;
+    }
+
+    public function getTemplate(): string
+    {
+        return $this->template;
+    }
+
+    public function setTemplate(string $template): void
+    {
+        $this->template = $template;
+    }
+
+    public function getSkipInvalid(): bool
+    {
+        return $this->skipInvalid;
+    }
+
+    public function setSkipInvalid(bool $skipInvalid): void
+    {
+        $this->skipInvalid = $skipInvalid;
+    }
+
+    /**
+     * @return array<string, string>
+     */
+    public function getPrimaryKeyParameter(string $primaryKey): array
+    {
+        if ($this->primaryKeyParameterKey === null) {
+            throw SeoUrlRouteConfigException::routeConfigMissingParameterKeyForPrimaryKey($this->definition->getEntityName());
+        }
+
+        return [...$this->routeParameters, $this->primaryKeyParameterKey => $primaryKey];
+    }
+}

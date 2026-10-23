@@ -1,0 +1,19 @@
+{
+  "name": "TestTheme",
+  "author": "Contena",
+  "views": [
+    "@Frontend",
+    "@Plugins",
+    "@TestTheme"
+  ],
+  "style": [
+    "app/frontend/src/scss/overrides.scss",
+    "@Frontend",
+    "app/frontend/src/scss/base.scss"
+  ],
+  "script": [
+    "@Frontend",
+    "app/frontend/dist/frontend/js/test-theme/test-theme.js"
+  ],
+  "asset": []
+}

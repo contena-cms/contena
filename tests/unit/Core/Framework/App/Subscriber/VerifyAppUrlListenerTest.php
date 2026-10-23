@@ -1,0 +1,84 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\App\Subscriber;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
+use Contena\Core\Framework\App\ShopId\ShopId;
+use Contena\Core\Framework\App\ShopId\ShopIdChangedEvent;
+use Contena\Core\Framework\App\Subscriber\VerifyAppUrlListener;
+use Contena\Core\Framework\App\Url\AppUrlVerifier;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+#[CoversClass(VerifyAppUrlListener::class)]
+class VerifyAppUrlListenerTest extends TestCase
+{
+    public function testForceVerifyCalledWhenUrlsDiffer(): void
+    {
+        $verifier = $this->createMock(AppUrlVerifier::class);
+        $listener = new VerifyAppUrlListener($verifier);
+
+        $newShopId = ShopId::v2('new-shop-id', [AppUrl::IDENTIFIER => 'https://new.example']);
+        $oldShopId = ShopId::v2('old-shop-id', [AppUrl::IDENTIFIER => 'https://old.example']);
+
+        $event = new ShopIdChangedEvent($newShopId, $oldShopId);
+
+        $verifier->expects($this->once())
+            ->method('forceVerify')
+            ->with($newShopId);
+
+        $listener($event);
+    }
+
+    public function testNoVerificationWhenUrlsNotChanged(): void
+    {
+        $verifier = $this->createMock(AppUrlVerifier::class);
+        $listener = new VerifyAppUrlListener($verifier);
+
+        $newShopId = ShopId::v2('new-shop-id', [AppUrl::IDENTIFIER => 'https://www.example.com']);
+        $oldShopId = ShopId::v2('old-shop-id', [AppUrl::IDENTIFIER => 'https://www.example.com']);
+
+        $event = new ShopIdChangedEvent($newShopId, $oldShopId);
+
+        $verifier->expects($this->never())
+            ->method('forceVerify');
+
+        $listener($event);
+    }
+
+    public function testForceVerifyWhenNoOldShopId(): void
+    {
+        $verifier = $this->createMock(AppUrlVerifier::class);
+        $listener = new VerifyAppUrlListener($verifier);
+
+        $shopId = ShopId::v2('new-shop-id', [AppUrl::IDENTIFIER => 'https://www.example.com']);
+
+        $event = new ShopIdChangedEvent($shopId, null);
+
+        $verifier->expects($this->once())
+            ->method('forceVerify')
+            ->with($shopId);
+
+        $listener($event);
+    }
+
+    public function testNoVerificationWhenNewUrlMissing(): void
+    {
+        $verifier = $this->createMock(AppUrlVerifier::class);
+        $listener = new VerifyAppUrlListener($verifier);
+
+        $newShopId = ShopId::v2('new-shop-id');
+        $oldShopId = ShopId::v2('old-shop-id', [AppUrl::IDENTIFIER => 'https://www.example.com']);
+
+        $event = new ShopIdChangedEvent($newShopId, $oldShopId);
+
+        $verifier->expects($this->never())
+            ->method('forceVerify');
+
+        $listener($event);
+    }
+}

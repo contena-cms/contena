@@ -1,0 +1,10 @@
+{
+  "name": "PluginWildcardAndExplicit",
+  "author": "Contena",
+  "views": [
+    "@Frontend",
+    "@PayPal",
+    "@PluginWildcardAndExplicit",
+    "@Plugins"
+  ]
+}

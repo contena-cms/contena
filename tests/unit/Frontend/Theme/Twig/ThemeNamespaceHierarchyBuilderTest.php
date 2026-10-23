@@ -1,0 +1,311 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Frontend\Theme\Twig;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Document\Event\DocumentTemplateRendererParameterEvent;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\ChannelRequest;
+use Contena\Core\System\Channel\File\Event\ChannelFileTemplateResolveEvent;
+use Contena\Core\Test\Generator;
+use Contena\Frontend\Theme\DatabaseChannelThemeLoader;
+use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilderInterface;
+use Contena\Frontend\Theme\Twig\ThemeNamespaceHierarchyBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\HttpKernel\HttpKernelInterface;
+use Symfony\Component\HttpKernel\KernelEvents;
+
+/**
+ * @internal
+ */
+#[CoversClass(ThemeNamespaceHierarchyBuilder::class)]
+class ThemeNamespaceHierarchyBuilderTest extends TestCase
+{
+    private ThemeNamespaceHierarchyBuilder $builder;
+
+    private TestInheritanceBuilder $inheritanceBuilder;
+
+    protected function setUp(): void
+    {
+        $connectionMock = static::createStub(Connection::class);
+        $cachedThemeLoader = new DatabaseChannelThemeLoader($connectionMock);
+
+        $this->inheritanceBuilder = new TestInheritanceBuilder();
+        $this->builder = new ThemeNamespaceHierarchyBuilder($this->inheritanceBuilder, $cachedThemeLoader);
+    }
+
+    public function testThemeNamespaceHierarchyBuilderSubscribesToRequestAndExceptionEvents(): void
+    {
+        $events = $this->builder->getSubscribedEvents();
+
+        static::assertSame([
+            KernelEvents::REQUEST,
+            KernelEvents::EXCEPTION,
+            DocumentTemplateRendererParameterEvent::class,
+            ChannelFileTemplateResolveEvent::class,
+        ], array_keys($events));
+    }
+
+    public function testThemesAreEmptyIfRequestHasNoValidAttributes(): void
+    {
+        $request = Request::createFromGlobals();
+
+        $this->builder->requestEvent(new RequestEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST));
+
+        $this->assertThemes([], $this->builder);
+    }
+
+    public function testThemesIfThemeNameIsSet(): void
+    {
+        $request = Request::createFromGlobals();
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_NAME, 'TestTheme');
+
+        $this->builder->requestEvent(new RequestEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST));
+
+        $this->assertThemes([
+            'Frontend' => true,
+            'TestTheme' => true,
+        ], $this->builder);
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     * @param array<string, bool> $expectedThemes
+     */
+    #[DataProvider('onRenderingDocumentProvider')]
+    public function testOnRenderingDocument(array $parameters, array $expectedThemes, ?string $usingTheme, ?string $usingParentTheme = null): void
+    {
+        $request = Request::createFromGlobals();
+        $event = new DocumentTemplateRendererParameterEvent($parameters);
+
+        $expectedDB = [[
+            'themeId' => 'theme',
+            'technicalName' => $usingTheme,
+            'parentThemeId' => $usingParentTheme !== null ? 'parentTheme' : null,
+            'configInheritance' => null,
+            'assigned' => 1,
+        ]];
+
+        if ($usingParentTheme !== null) {
+            $expectedDB[] = [
+                'themeId' => 'parentTheme',
+                'technicalName' => $usingParentTheme,
+                'parentThemeId' => null,
+                'configInheritance' => null,
+                'assigned' => 0,
+            ];
+        }
+
+        if (\array_key_exists('context', $parameters)) {
+            $connectionMock = $this->createMock(Connection::class);
+            $connectionMock->expects($this->exactly(1))->method('fetchAllAssociative')->willReturn($expectedDB);
+        } else {
+            $connectionMock = static::createStub(Connection::class);
+        }
+        $cachedThemeLoader = new DatabaseChannelThemeLoader($connectionMock);
+
+        $builder = new ThemeNamespaceHierarchyBuilder(new TestInheritanceBuilder(), $cachedThemeLoader);
+
+        $builder->onDocumentRendering($event);
+
+        $this->assertThemes($expectedThemes, $builder);
+
+        $builder = new ThemeNamespaceHierarchyBuilder(new TestInheritanceBuilder(), $cachedThemeLoader);
+
+        $builder->requestEvent(new ExceptionEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST, new \RuntimeException()));
+
+        $this->assertThemes([], $builder);
+    }
+
+    public function testRequestEventWithExceptionEvent(): void
+    {
+        $request = Request::createFromGlobals();
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_NAME, 'TestTheme');
+
+        $this->builder->requestEvent(new ExceptionEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST, new \RuntimeException()));
+
+        $this->assertThemes([
+            'Frontend' => true,
+            'TestTheme' => true,
+        ], $this->builder);
+    }
+
+    public function testOnChannelFileTemplateResolveLoadsThemeForChannel(): void
+    {
+        $connectionMock = $this->createMock(Connection::class);
+        $connectionMock
+            ->expects($this->once())
+            ->method('fetchAllAssociative')
+            ->willReturn([[
+                'themeId' => 'theme',
+                'technicalName' => 'SwagTheme',
+                'parentThemeId' => null,
+                'configInheritance' => null,
+                'assigned' => 1,
+            ]]);
+
+        $builder = new ThemeNamespaceHierarchyBuilder(new TestInheritanceBuilder(), new DatabaseChannelThemeLoader($connectionMock));
+        $builder->onChannelFileTemplateResolve(new ChannelFileTemplateResolveEvent(Uuid::randomHex()));
+
+        $this->assertThemes([
+            'SwagTheme' => true,
+            'Frontend' => true,
+        ], $builder);
+    }
+
+    public function testThemesIfBaseNameIsSet(): void
+    {
+        $request = Request::createFromGlobals();
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_NAME, null);
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_BASE_NAME, 'TestTheme');
+
+        $this->builder->requestEvent(new RequestEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST));
+
+        $this->assertThemes([
+            'Frontend' => true,
+            'TestTheme' => true,
+        ], $this->builder);
+    }
+
+    public function testReset(): void
+    {
+        $request = Request::createFromGlobals();
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_NAME, null);
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_BASE_NAME, 'TestTheme');
+
+        $this->builder->requestEvent(new RequestEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST));
+
+        $this->builder->reset();
+
+        $this->assertThemes([], $this->builder);
+    }
+
+    public function testItReturnsItsInputIfNoThemesAreSet(): void
+    {
+        $bundles = ['a' => 1, 'b' => 2];
+
+        $hierarchy = $this->builder->buildNamespaceHierarchy(['a' => 1, 'b' => 2]);
+
+        static::assertSame($bundles, $hierarchy);
+    }
+
+    public function testItPassesBundlesAndThemesToBuilder(): void
+    {
+        $bundles = ['a' => 1, 'b' => 2];
+
+        $request = Request::createFromGlobals();
+        $request->attributes->set(ChannelRequest::ATTRIBUTE_THEME_NAME, 'TestTheme');
+
+        $this->builder->requestEvent(new RequestEvent(static::createStub(HttpKernelInterface::class), $request, HttpKernelInterface::MAIN_REQUEST));
+
+        $hierarchy = $this->builder->buildNamespaceHierarchy($bundles);
+
+        static::assertEquals([
+            'Frontend' => 1,
+            'TestTheme' => 1,
+        ], $hierarchy);
+        static::assertSame($bundles, $this->inheritanceBuilder->receivedBundles);
+    }
+
+    /**
+     * @return iterable<string, array<mixed>>
+     */
+    public static function onRenderingDocumentProvider(): iterable
+    {
+        $context = Generator::generateChannelContext();
+
+        yield 'no theme is using' => [
+            [
+                'context' => $context,
+            ],
+            [
+                'Frontend' => true,
+            ],
+            null,
+        ];
+
+        yield 'no context in parameters' => [
+            [],
+            [],
+            'SwagTheme',
+        ];
+
+        yield 'theme is using' => [
+            [
+                'context' => $context,
+            ],
+            [
+                'SwagTheme' => true,
+                'Frontend' => true,
+            ],
+            'SwagTheme',
+        ];
+
+        yield 'missing direct theme name uses parent theme' => [
+            [
+                'context' => $context,
+            ],
+            [
+                'SwagTheme' => true,
+                'Frontend' => true,
+            ],
+            null,
+            'SwagTheme',
+        ];
+    }
+
+    /**
+     * @param array<string, bool> $expectation
+     */
+    private function assertThemes(array $expectation, ThemeNamespaceHierarchyBuilder $builder): void
+    {
+        $bundles = ['SomeBundle' => 1];
+        $hierarchy = $builder->buildNamespaceHierarchy($bundles);
+
+        if ($expectation === []) {
+            // Without detected themes the hierarchy is passed through untouched
+            static::assertSame($bundles, $hierarchy);
+
+            return;
+        }
+
+        // TestInheritanceBuilder maps every theme it receives to a priority
+        static::assertEquals(array_map(static fn (bool $active): int => $active ? 1 : 0, $expectation), $hierarchy);
+    }
+}
+
+/**
+ * @internal
+ */
+class TestInheritanceBuilder implements ThemeInheritanceBuilderInterface
+{
+    /**
+     * @var array<string, int>|null
+     */
+    public ?array $receivedBundles = null;
+
+    /**
+     * @param array<string, int> $bundles
+     * @param array<int|string, bool> $themes
+     *
+     * @return array<string, int>
+     */
+    public function build(array $bundles, array $themes): array
+    {
+        $this->receivedBundles = $bundles;
+
+        // Convert boolean theme values to integer priorities for test purposes
+        $result = [];
+        foreach ($themes as $key => $value) {
+            $result[(string) $key] = $value === true ? 1 : 0;
+        }
+
+        return $result;
+    }
+}

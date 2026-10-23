@@ -1,0 +1,43 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Store\Api;
+
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\Api\ExtensionStoreDataController;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+
+/**
+ * @internal
+ */
+class ExtensionStoreDataControllerTest extends TestCase
+{
+    use ExtensionBehaviour;
+    use IntegrationTestBehaviour;
+    use StoreClientBehaviour;
+
+    private ExtensionStoreDataController $controller;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->controller = static::getContainer()->get(ExtensionStoreDataController::class);
+    }
+
+    public function testInstalled(): void
+    {
+        $this->installApp(__DIR__ . '/../_fixtures/TestApp');
+
+        $this->getStoreRequestHandler()->reset();
+        $this->getStoreRequestHandler()->append(new Response(200, [], '[]'));
+
+        $response = $this->controller->getInstalledExtensions($this->createAdminStoreContext());
+        $data = json_decode($response->getContent() ?: '', true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertNotCount(0, $data);
+        static::assertContains('TestApp', array_column($data, 'name'));
+    }
+}

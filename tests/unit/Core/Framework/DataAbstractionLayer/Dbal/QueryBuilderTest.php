@@ -1,0 +1,89 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Dbal;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver;
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+
+/**
+ * @internal
+ */
+#[CoversClass(QueryBuilder::class)]
+class QueryBuilderTest extends TestCase
+{
+    private QueryBuilder $queryBuilder;
+
+    protected function setUp(): void
+    {
+        $driver = static::createStub(Driver::class);
+        $driver->method('getDatabasePlatform')->willReturn(new MySQLPlatform());
+
+        $this->queryBuilder = new QueryBuilder(new Connection([], $driver));
+    }
+
+    /**
+     * @return array<non-empty-string, list<non-empty-string>>
+     */
+    public static function provideTitlesLookingLikeParameters(): array
+    {
+        return [
+            'named parameter' => ['my :title'],
+            'positional parameter' => ['my title ?'],
+        ];
+    }
+
+    #[DataProvider('provideTitlesLookingLikeParameters')]
+    public function testCriteriaTitleLookingLikeParameter(string $title): void
+    {
+        $this->queryBuilder->select('LOWER(HEX(id))')
+            ->from('blog_manufacturer')
+            ->where('blog_manufacturer.id = UNHEX(:id)')
+            ->setParameter('id', Uuid::randomHex())
+            ->setTitle($title);
+
+        $result = $this->queryBuilder->executeQuery()->fetchOne();
+        static::assertNotFalse($result);
+
+        $sql = $this->queryBuilder->getSQL();
+        $matches = [];
+        preg_match('/-- (.+)\n/', $sql, $matches);
+        static::assertArrayHasKey(1, $matches);
+        static::assertSame($title, $matches[1]);
+    }
+
+    public function testOrderByIsExposedAsPairsAndAsStrings(): void
+    {
+        $this->queryBuilder->orderBy('`blog`.`stock`');
+        $this->queryBuilder->orderBy('`blog`.`name`', 'DESC');
+        $this->queryBuilder->addOrderBy('MIN(`blog`.`price`)');
+
+        static::assertSame(
+            [['`blog`.`name`', 'DESC'], ['MIN(`blog`.`price`)', 'ASC']],
+            $this->queryBuilder->getOrderByPairs()
+        );
+
+        static::assertSame(
+            ['`blog`.`name` DESC', 'MIN(`blog`.`price`) ASC'],
+            $this->queryBuilder->getOrderByParts()
+        );
+    }
+
+    public function testCriteriaTitleWithControlCharactersStaysInTheSqlComment(): void
+    {
+        $this->queryBuilder->select('id')
+            ->from('blog_manufacturer')
+            ->setTitle("first\0\r\nsecond");
+
+        $sql = $this->queryBuilder->getSQL();
+
+        static::assertStringStartsWith('-- first   second' . \PHP_EOL, $sql);
+        static::assertSame(1, substr_count($sql, \PHP_EOL));
+    }
+}

@@ -1,0 +1,84 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\ImportExport\Processing\Pipe;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\ImportExport\Processing\Pipe\AbstractPipe;
+use Contena\Core\Content\ImportExport\Processing\Pipe\ChainPipe;
+use Contena\Core\Content\ImportExport\Struct\Config;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+#[CoversClass(ChainPipe::class)]
+class ChainPipeTest extends TestCase
+{
+    public function testChainPipe(): void
+    {
+        $outerPipe = $this->createMock(AbstractPipe::class);
+        $innerPipe = $this->createMock(AbstractPipe::class);
+
+        $chainPipe = new ChainPipe([$outerPipe, $innerPipe]);
+
+        $data = [
+            'foo' => ['bar' => 'baz'],
+        ];
+        $config = new Config([], [], []);
+
+        $outerPipe->expects($this->once())->method('in')
+            ->willReturnCallback(
+                function (Config $c, $record) use ($config, $data) {
+                    $this->assertSame($config, $c);
+
+                    $record = \is_array($record) ? $record : iterator_to_array($record);
+                    $this->assertSame($data, $record);
+
+                    yield from $record;
+                }
+            );
+
+        $innerPipe->expects($this->once())->method('in')
+            ->willReturnCallback(
+                function (Config $c, $record) use ($config, $data) {
+                    $this->assertSame($config, $c);
+
+                    $record = \is_array($record) ? $record : iterator_to_array($record);
+                    $this->assertSame($data, $record);
+
+                    yield from $record;
+                }
+            );
+
+        $result = iterator_to_array($chainPipe->in($config, $data));
+        static::assertSame($data, $result);
+
+        $outerPipe->expects($this->once())->method('out')
+            ->willReturnCallback(
+                function (Config $c, $record) use ($config, $data) {
+                    $this->assertSame($config, $c);
+
+                    $record = \is_array($record) ? $record : iterator_to_array($record);
+                    $this->assertSame($data, $record);
+
+                    yield from $record;
+                }
+            );
+
+        $innerPipe->expects($this->once())->method('out')
+            ->willReturnCallback(
+                function (Config $c, $record) use ($config, $data) {
+                    $this->assertSame($config, $c);
+
+                    $record = \is_array($record) ? $record : iterator_to_array($record);
+                    $this->assertSame($data, $record);
+
+                    yield from $record;
+                }
+            );
+
+        $result = iterator_to_array($chainPipe->out($config, $data));
+        static::assertSame($data, $result);
+    }
+}

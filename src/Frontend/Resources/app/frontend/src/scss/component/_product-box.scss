@@ -1,0 +1,265 @@
+/*
+Blog box
+==============================================
+Styling for productbox component.
+*/
+
+$box-standard-height-img: 200px;
+$box-image-height-img: 332px;
+
+.blog-box {
+    height: 100%;
+
+    // Do not expand the Bootstrap `stretched-link` pseudo element over the entire blog card.
+    // By giving it the image height, only the image itself is linked and the remaining content is still selectable.
+    &.box-standard .stretched-link::after,
+    &.box-minimal .stretched-link::after {
+        height: calc(#{$box-standard-height-img} + var(--#{$prefix}card-spacer-y));
+    }
+
+    &.box-image .stretched-link::after {
+        height: calc(#{$box-image-height-img} + var(--#{$prefix}card-spacer-y));
+    }
+
+    &.box-image {
+        .blog-image-wrapper {
+            height: $box-image-height-img;
+        }
+
+        .blog-image {
+            max-height: $box-image-height-img;
+        }
+
+        // box-image uses cover mode for standard display mode
+        .blog-image.is-standard {
+            height: 100%;
+            object-fit: cover;
+        }
+    }
+}
+
+.blog-variant-characteristics {
+    min-height: 3em;
+
+    .blog-variant-characteristics-text {
+        @include truncate-multiline(1.5em, 2, $sw-background-color);
+
+        font-size: $font-size-sm;
+    }
+
+    .blog-variant-characteristics-option {
+        font-weight: $font-weight-bold;
+    }
+}
+
+.blog-image-wrapper {
+    height: $box-standard-height-img;
+    flex-grow: 1;
+    flex-shrink: 0;
+    flex-basis: 180px;
+    margin-bottom: 15px;
+    position: relative;
+}
+
+.blog-image-link {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &.is-cover {
+        align-items: flex-start;
+    }
+}
+
+.blog-image {
+    display: block;
+    max-width: 100%;
+    // 'max-height: 100%' not working in firefox
+    max-height: $box-standard-height-img;
+
+    &.is-standard,
+    &.is-cover,
+    &.is-contain {
+        width: 100%;
+        height: 100%;
+    }
+
+    &.is-cover {
+        object-fit: cover;
+    }
+
+    &.is-contain {
+        object-fit: contain;
+    }
+
+    &.is-standard {
+        object-fit: scale-down;
+    }
+}
+
+.blog-image-placeholder {
+    max-width: 180px;
+    height: 100%;
+    margin: 0 auto;
+}
+
+.blog-rating {
+    margin-bottom: 10px;
+    min-height: 25px;
+}
+
+/* stylelint-disable value-no-vendor-prefix, property-no-vendor-prefix */
+// See for further information: https://github.com/postcss/autoprefixer/issues/1141#issuecomment-430938342
+.blog-name {
+    color: $headings-color;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+    height: 2.75rem;
+    margin-bottom: 10px;
+    font-size: 1.125rem;
+    line-height: 1.375rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-decoration: none;
+
+    &:hover {
+        color: var(--sw-color-brand-primary, #{$sw-color-brand-primary});
+        text-decoration: none;
+    }
+}
+
+.blog-description {
+    height: 4.5rem;
+    margin-top: 10px;
+    font-size: $font-size-base;
+    line-height: $line-height-base;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+}
+/* stylelint-enable value-no-vendor-prefix, property-no-vendor-prefix */
+
+.blog-price-info {
+    margin-top: 10px;
+
+    .blog-advanced-list-price-wrapper {
+        font-weight: $font-weight-normal;
+    }
+}
+
+.blog-price-unit {
+    height: 36px;
+    font-size: 0.875rem;
+    line-height: 1.125rem;
+    overflow: hidden;
+}
+
+.blog-unit-label {
+    font-weight: $font-weight-bold;
+}
+
+.blog-cheapest-price {
+    min-height: 20px;
+    font-size: $font-size-sm;
+    line-height: 1.25rem;
+    margin-bottom: 32px;
+
+    .blog-cheapest-price-price {
+        font-weight: $font-weight-bold;
+    }
+
+    &.with-regulation-price,
+    &.with-list-price {
+        margin-bottom: 6px;
+    }
+
+    &.with-from-price {
+        margin-bottom: 5px;
+    }
+}
+
+.blog-price {
+    color: $headings-color;
+    min-height: 20px;
+    margin-top: 10px;
+    margin-bottom: 0;
+    font-size: 1.125rem;
+    font-weight: $font-weight-bold;
+    line-height: 1.25rem;
+    overflow: hidden;
+
+    &.with-list-price {
+        color: $danger;
+    }
+
+    .list-price {
+        color: $headings-color;
+        font-weight: $font-weight-normal;
+        padding-left: 5px;
+        font-size: 0.75rem;
+
+        .list-price-price {
+            text-decoration: line-through;
+        }
+    }
+
+    .regulation-price,
+    &.with-regulation-price .list-price-percentage {
+        color: $headings-color;
+        font-weight: $font-weight-normal;
+        font-size: 0.75rem;
+        padding-left: 0;
+    }
+
+    &.with-regulation-price .list-price-percentage {
+        white-space: nowrap;
+    }
+
+    .list-price-no-line-through .list-price-price {
+        text-decoration: none;
+    }
+
+    .strikeprice-text {
+        color: $headings-color;
+        font-weight: $font-weight-normal;
+        padding-left: 5px;
+        font-size: 0.75rem;
+    }
+}
+
+.blog-action {
+    margin-top: 20px;
+}
+
+.blog-badges {
+    position: absolute;
+    top: 30px;
+    left: -1px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+
+    .badge {
+        --#{$prefix}badge-padding-x: 8px;
+        --#{$prefix}badge-padding-y: 0;
+        --#{$prefix}badge-font-size: 1.125rem;
+        --#{$prefix}badge-font-weight: #{$font-weight-bold};
+        --#{$prefix}badge-color: #{$badge-color};
+        --#{$prefix}badge-border-radius: 0 3px 3px 0;
+        width: max-content;
+        height: 2rem;
+        margin: 0 0 8px;
+        line-height: 2rem;
+        letter-spacing: 0;
+    }
+}
+
+.blog-price-wrapper {
+    font-size: 1.125rem;
+}

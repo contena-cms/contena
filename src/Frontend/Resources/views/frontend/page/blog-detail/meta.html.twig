@@ -1,0 +1,99 @@
+{% sw_extends '@Frontend/frontend/layout/meta.html.twig' %}
+
+{% block layout_head_meta_tags_opengraph %}
+    {% set ogTitle = page.blog.translated.ogTitle|default(metaTitle) %}
+    {% set ogDescription = page.blog.translated.ogDescription|default(metaDescription) %}
+    {% set ogMedia = page.blog.openGraphMedia ?? (page.blog.cover.media ?? null) %}
+
+    <meta property="og:type"
+          content="blog">
+    <meta property="og:site_name"
+          content="{{ config('core.basicInformation.shopName') }}">
+    <meta property="og:url"
+          content="{{ seoUrl('frontend.detail.page', { blogId: page.blog.id }) }}">
+    <meta property="og:title"
+          content="{{ ogTitle }}">
+
+    <meta property="og:description"
+          content="{{ ogDescription }}">
+
+    {% if page.blog.cover.media.getMediaType().getName() === 'VIDEO' %}
+        <meta property="og:video"
+              content="{{ page.blog.cover.media.url }}">
+    {% endif %}
+
+    {% if ogMedia.url is defined %}
+        <meta property="og:image"
+              content="{{ ogMedia.url }}">
+    {% endif %}
+
+    {% if page.blog.manufacturer %}
+        <meta property="blog:brand"
+              content="{{ page.blog.manufacturer.translated.name }}">
+    {% endif %}
+
+    {% set metaPrice = page.blog.calculatedPrice %}
+    {% if page.blog.calculatedPrices.count > 0 %}
+        {% set metaPrice = page.blog.calculatedPrices.last %}
+    {% endif %}
+    <meta property="blog:price:amount"
+          content="{{ metaPrice.unitPrice|round(context.currency.itemRounding.decimals) }}">
+    <meta property="blog:price:currency"
+          content="{{ context.currency.isoCode }}">
+    <meta property="blog:blog_link"
+          content="{{ seoUrl('frontend.detail.page', { blogId: page.blog.id }) }}">
+
+    <meta name="twitter:card"
+          content="blog">
+    <meta name="twitter:site"
+          content="{{ config('core.basicInformation.shopName') }}">
+    <meta name="twitter:title"
+          content="{{ ogTitle }}">
+    <meta name="twitter:description"
+          content="{{ ogDescription }}">
+    {% if ogMedia %}
+        <meta name="twitter:image"
+              content="{{ ogMedia.url }}">
+    {% endif %}
+{% endblock %}
+
+{% block layout_head_title_inner %}
+    {% if page.metaInformation.metaTitle %}{{ page.metaInformation.metaTitle }}{% else %}{{ page.blog.translated.name }}{% if page.blog.variation %} - {% for variation in page.blog.variation %}{{ variation.group }}: {{ variation.option }}{% if page.blog.variation|last != variation %}{{ ' | ' }}{% endif %}{% endfor %}{% endif %}{% endif %}
+{% endblock %}
+
+{% block layout_head_canonical %}
+    {% set canonicalUrl = page.blog.id %}
+
+    {% if page.blog.canonicalProductId %}
+        {% set canonicalUrl = page.blog.canonicalProductId %}
+    {% endif %}
+
+    <link rel="canonical" href="{{ seoUrl('frontend.detail.page', { blogId: canonicalUrl }) }}">
+{% endblock %}
+
+{% block layout_head_meta_tags_image_meta %}{% if page.blog.cover and page.blog.cover.media %}{{ page.blog.cover.media.url }}{% else %}{{ parent() }}{% endif %}{% endblock %}
+
+{% block layout_head_meta_tags_schema_webpage %}
+    {{ parent() }}
+    {% if not feature('JSON_LD_DATA') and page.blog.cover and page.blog.cover.media and page.blog.cover.media.url %}
+        <meta itemprop="primaryImageOfPage"
+              content="{{ page.blog.cover.media.url }}">
+    {% endif %}
+{% endblock %}
+
+{% block layout_head_json_ld %}
+    {% if feature('JSON_LD_DATA') %}
+        {% set jsonLdWebPageType = 'ItemPage' %}
+        {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-webpage.html.twig' %}
+        {% if feature('BREADCRUMB_REWORK') %}
+            {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-breadcrumb.html.twig' with {
+                breadcrumbItems: page.breadcrumb
+            } only %}
+        {% else %}
+            {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-breadcrumb.html.twig' with {
+                category: page.blog.seoCategory
+            } only %}
+        {% endif %}
+        {% sw_include '@Frontend/frontend/layout/structured-data/json-ld-blog.html.twig' %}
+    {% endif %}
+{% endblock %}

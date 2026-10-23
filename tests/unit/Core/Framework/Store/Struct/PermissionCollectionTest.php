@@ -1,0 +1,89 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Store\Struct;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\Struct\PermissionCollection;
+
+/**
+ * @internal
+ */
+#[CoversClass(PermissionCollection::class)]
+class PermissionCollectionTest extends TestCase
+{
+    private const PERMISSIONS = [
+        [
+            'entity' => 'blog',
+            'operation' => AclRoleDefinition::PRIVILEGE_CREATE,
+        ],
+        [
+            'entity' => 'promotion',
+            'operation' => AclRoleDefinition::PRIVILEGE_UPDATE,
+        ],
+        [
+            'entity' => 'xxx',
+            'operation' => AclRoleDefinition::PRIVILEGE_DELETE,
+        ],
+        [
+            'entity' => 'plugin',
+            'operation' => AclRoleDefinition::PRIVILEGE_READ,
+        ],
+    ];
+
+    public function testItCategorizesAPermissionCollection(): void
+    {
+        $permissionCollection = new PermissionCollection(self::PERMISSIONS);
+        $categorizedCollection = $permissionCollection->getCategorizedPermissions();
+
+        static::assertCount(3, $categorizedCollection);
+        static::assertSame([
+            'blog',
+            'promotion',
+            'other',
+        ], array_keys($categorizedCollection));
+    }
+
+    public function testItAddsMissingReadPermissionDependencies(): void
+    {
+        $permissionCollection = new PermissionCollection(self::PERMISSIONS);
+
+        static::assertNotCount(0, $permissionCollection->getElements());
+        static::assertCount(7, $permissionCollection->getElements());
+
+        $countReadPermissions = 0;
+        foreach ($permissionCollection->getElements() as $permission) {
+            if ($permission->getOperation() === AclRoleDefinition::PRIVILEGE_READ) {
+                ++$countReadPermissions;
+            }
+        }
+
+        static::assertSame(4, $countReadPermissions);
+    }
+
+    public function testItFiltersDuplicatePermissions(): void
+    {
+        $permissionsData = [
+            [
+                'entity' => 'blog',
+                'operation' => AclRoleDefinition::PRIVILEGE_DELETE,
+            ],
+            [
+                'entity' => 'blog',
+                'operation' => AclRoleDefinition::PRIVILEGE_DELETE,
+            ],
+        ];
+
+        $permissionCollection = new PermissionCollection($permissionsData);
+
+        static::assertCount(2, $permissionCollection->getElements());
+
+        static::assertSame('blog', $permissionCollection->getElements()[0]->getEntity());
+        static::assertSame('delete', $permissionCollection->getElements()[0]->getOperation());
+
+        static::assertSame('blog', $permissionCollection->getElements()[1]->getEntity());
+        static::assertSame('read', $permissionCollection->getElements()[1]->getOperation());
+    }
+}

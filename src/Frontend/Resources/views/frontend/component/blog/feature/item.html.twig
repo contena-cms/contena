@@ -1,0 +1,37 @@
+{% set TYPE_BLOG_ATTRIBUTE = constant('\\Contena\\Core\\Content\\Blog\\Aggregate\\BlogFeatureSet\\BlogFeatureSetDefinition::TYPE_BLOG_ATTRIBUTE') %}
+{% set TYPE_BLOG_PROPERTY = constant('\\Contena\\Core\\Content\\Blog\\Aggregate\\BlogFeatureSet\\BlogFeatureSetDefinition::TYPE_BLOG_PROPERTY') %}
+{% set TYPE_BLOG_CUSTOM_FIELD = constant('\\Contena\\Core\\Content\\Blog\\Aggregate\\BlogFeatureSet\\BlogFeatureSetDefinition::TYPE_BLOG_CUSTOM_FIELD') %}
+{% set TYPE_BLOG_REFERENCE_PRICE = constant('\\Contena\\Core\\Content\\Blog\\Aggregate\\BlogFeatureSet\\BlogFeatureSetDefinition::TYPE_BLOG_REFERENCE_PRICE') %}
+
+{% set type = '' %}
+
+{% block component_product_feature_item %}
+    {% if feature.type == TYPE_BLOG_ATTRIBUTE %}
+        {% set type = 'feature-attribute' %}
+    {% elseif feature.type == TYPE_BLOG_PROPERTY %}
+        {% set type = 'feature-property' %}
+    {% elseif feature.type == TYPE_BLOG_CUSTOM_FIELD %}
+        {% set type = 'feature-custom-field' %}
+    {% elseif feature.type == TYPE_BLOG_REFERENCE_PRICE and lineItem.price.referencePrice is not null %}
+        {% set type = 'feature-reference-price' %}
+    {% endif %}
+
+    {% if not (type is empty or feature.label is empty or feature.value is empty) %}
+        {% set featureContent %}
+            {% sw_include '@Frontend/frontend/component/blog/feature/types/' ~ type ~ '.html.twig' with {
+                type: type,
+                label: feature.label,
+                value: feature.value,
+            } %}
+        {% endset %}
+
+        {% if featureContent|striptags|trim is not empty %}
+            <li class="blog-feature-list-item">
+
+                {{ featureContent }}
+
+            </li>
+        {% endif %}
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,55 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "\/_proxy\/generate-imitate-user-token": {
+            "post": {
+                "tags": [
+                    "User impersonation"
+                ],
+                "summary": "Generate a user impersonation token",
+                "description": "Generates a user impersonation token for the given user and sales channel.\n\nThe token can be used to authenticate as the user in the sales channel.",
+                "operationId": "generateImitateCustomerToken",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": ["userId", "channelId"],
+                                "properties": {
+                                    "userId": {
+                                        "description": "ID of the user",
+                                        "type": "string"
+                                    },
+                                    "channelId": {
+                                        "description": "ID of the sales channel",
+                                        "type": "string"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The generated user impersonation token.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "properties": {
+                                        "token": {
+                                            "description": "The generated user impersonation token",
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

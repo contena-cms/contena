@@ -1,0 +1,151 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\SystemConfig\Validation;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Validation\DataValidationDefinition;
+use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\System\SystemConfig\DTO\SystemConfigTab;
+use Contena\Core\System\SystemConfig\Service\ConfigurationService;
+use Contena\Core\System\SystemConfig\SystemConfigException;
+use Symfony\Component\Validator\Constraint;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @internal
+ */
+class SystemConfigValidator
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly ConfigurationService $configurationService,
+        private readonly DataValidator $validator
+    ) {
+    }
+
+    /**
+     * @param array<string, mixed> $inputData
+     *
+     * @throws ConstraintViolationException
+     */
+    public function validate(array $inputData, Context $context): void
+    {
+        $definition = new DataValidationDefinition('systemConfig.update');
+
+        /**
+         * @var array<string, mixed> $inputValues
+         */
+        foreach ($inputData as $saleChannelId => $inputValues) {
+            // If sales channel is defined, nulls are valid values, as they are used to remove custom values in child configuration
+            $allowNulls = $saleChannelId !== 'null';
+
+            $allKeys = array_keys($inputValues);
+
+            $domains = array_map($this->getSystemConfigDomain(...), $allKeys);
+            $domains = array_unique($domains);
+
+            $subDefinition = new DataValidationDefinition('systemConfig.update.' . $saleChannelId);
+
+            foreach ($domains as $domain) {
+                $formConfig = $this->getSystemConfigByDomain($domain, $context);
+                $constraints = $this->prepareValidationConstraints($formConfig, $allKeys, $allowNulls);
+
+                foreach ($constraints as $elementName => $elementConstraints) {
+                    $subDefinition->add($elementName, ...$elementConstraints);
+                }
+            }
+
+            if ($subDefinition->getProperties() === []) {
+                continue;
+            }
+
+            $definition->addSub($saleChannelId, $subDefinition);
+        }
+
+        $this->validator->validate($inputData, $definition);
+    }
+
+    /**
+     * @param list<SystemConfigTab> $formConfig
+     * @param array<string> $inputConfigKeys
+     *
+     * @return array<string, Constraint[]>
+     */
+    private function prepareValidationConstraints(array $formConfig, array $inputConfigKeys, bool $allowNulls): array
+    {
+        $constraints = [];
+
+        foreach ($formConfig as $tab) {
+            foreach ($tab->cards as $card) {
+                foreach ($card->elements as $element) {
+                    if (!\in_array($element->name, $inputConfigKeys, true)) {
+                        continue;
+                    }
+
+                    $constraints[$element->name] = $this->buildConstraintsWithConfigs($element->config, $allowNulls);
+                }
+            }
+        }
+
+        return $constraints;
+    }
+
+    /**
+     * @param array<string, mixed> $elementConfig
+     *
+     * @return list<Constraint>
+     */
+    private function buildConstraintsWithConfigs(array $elementConfig, bool $allowNulls): array
+    {
+        /** @var array<string, callable(mixed): Constraint> $constraints */
+        $constraints = [
+            'minLength' => static fn (mixed $ruleValue) => new Assert\Length(min: $ruleValue === null ? null : max(0, (int) $ruleValue)),
+            'maxLength' => static fn (mixed $ruleValue) => new Assert\Length(max: $ruleValue === null ? null : max(1, (int) $ruleValue)),
+            'min' => static fn (mixed $ruleValue) => new Assert\Range(min: $ruleValue),
+            'max' => static fn (mixed $ruleValue) => new Assert\Range(max: $ruleValue),
+            'dataType' => static fn (mixed $ruleValue) => new Assert\Type($ruleValue),
+            'required' => static fn (mixed $ruleValue) => new Assert\NotBlank(null, null, $allowNulls),
+        ];
+
+        $constraintsResult = [];
+
+        foreach ($constraints as $ruleName => $constraint) {
+            if (!\array_key_exists($ruleName, $elementConfig)) {
+                continue;
+            }
+
+            $ruleValue = $elementConfig[$ruleName];
+
+            $constraintsResult[] = $constraint($ruleValue);
+        }
+
+        return $constraintsResult;
+    }
+
+    /**
+     * @return list<SystemConfigTab>
+     */
+    private function getSystemConfigByDomain(string $domain, Context $context): array
+    {
+        try {
+            return $this->configurationService->getSystemConfigDefinition($domain, $context);
+        } catch (SystemConfigException) {
+            return [];
+        }
+    }
+
+    private function getSystemConfigDomain(string $key): string
+    {
+        $parts = explode('.', $key);
+
+        if (\count($parts) < 3) {
+            return $parts[0];
+        }
+
+        return $parts[0] . '.' . $parts[1];
+    }
+}

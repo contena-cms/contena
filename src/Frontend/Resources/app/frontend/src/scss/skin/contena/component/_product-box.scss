@@ -1,0 +1,23 @@
+/*
+Blog box
+==============================================
+Styling for productbox component.
+*/
+
+.blog-box {
+    --#{$prefix}card-bg: var(--bs-body-bg);
+    border-color: $border-color;
+
+    .card-body {
+        --#{$prefix}card-spacer-y: #{$spacer};
+        --#{$prefix}card-spacer-x: #{$spacer};
+    }
+}
+
+.blog-name {
+    font-weight: $font-weight-semibold;
+}
+
+.blog-price {
+    color: $price-color;
+}

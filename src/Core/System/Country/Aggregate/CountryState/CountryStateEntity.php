@@ -1,0 +1,129 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Country\Aggregate\CountryState;
+
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Country\Aggregate\CountryStateTranslation\CountryStateTranslationCollection;
+use Contena\Core\System\Country\CountryEntity;
+
+/**
+ * @codeCoverageIgnore
+ */
+class CountryStateEntity extends Entity
+{
+    use EntityCustomFieldsTrait;
+    use EntityIdTrait;
+
+    protected string $countryId;
+
+    protected string $shortCode;
+
+    protected ?string $name = null;
+
+    protected int $position;
+
+    protected bool $active;
+
+    protected ?CountryEntity $country = null;
+
+    protected ?CountryStateTranslationCollection $translations = null;
+
+    protected ?UserAddressCollection $userAddresses = null;
+
+    protected ?OrderAddressCollection $orderAddresses = null;
+
+    public function getCountryId(): string
+    {
+        return $this->countryId;
+    }
+
+    public function setCountryId(string $countryId): void
+    {
+        $this->countryId = $countryId;
+    }
+
+    public function getShortCode(): string
+    {
+        return $this->shortCode;
+    }
+
+    public function setShortCode(string $shortCode): void
+    {
+        $this->shortCode = $shortCode;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(?string $name): void
+    {
+        $this->name = $name;
+    }
+
+    public function getPosition(): int
+    {
+        return $this->position;
+    }
+
+    public function setPosition(int $position): void
+    {
+        $this->position = $position;
+    }
+
+    public function getActive(): bool
+    {
+        return $this->active;
+    }
+
+    public function setActive(bool $active): void
+    {
+        $this->active = $active;
+    }
+
+    public function getCountry(): ?CountryEntity
+    {
+        return $this->country;
+    }
+
+    public function setCountry(CountryEntity $country): void
+    {
+        $this->country = $country;
+    }
+
+    public function getTranslations(): ?CountryStateTranslationCollection
+    {
+        return $this->translations;
+    }
+
+    public function setTranslations(CountryStateTranslationCollection $translations): void
+    {
+        $this->translations = $translations;
+    }
+
+    public function getUserAddresses(): ?UserAddressCollection
+    {
+        return $this->userAddresses;
+    }
+
+    public function setUserAddresses(UserAddressCollection $userAddresses): void
+    {
+        $this->userAddresses = $userAddresses;
+    }
+
+    public function getOrderAddresses(): ?OrderAddressCollection
+    {
+        return $this->orderAddresses;
+    }
+
+    public function setOrderAddresses(OrderAddressCollection $orderAddresses): void
+    {
+        $this->orderAddresses = $orderAddresses;
+    }
+}

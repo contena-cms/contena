@@ -1,0 +1,19 @@
+/**
+ * @sw-package discovery
+ */
+
+import header from './header.csv.twig?raw';
+import body from './body.csv.twig?raw';
+
+Contena.Service('exportTemplateService').registerProductExportTemplate({
+    name: 'billiger_de',
+    translationKey: 'sw-sales-channel.detail.blogComparison.templates.template-label.billiger-de',
+    headerTemplate: header.trim(),
+    bodyTemplate: body.trim(),
+    footerTemplate: '',
+    fileName: 'billiger.csv',
+    encoding: 'UTF-8',
+    fileFormat: 'csv',
+    generateByCronjob: false,
+    interval: 86400,
+});

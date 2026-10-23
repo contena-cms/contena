@@ -1,0 +1,4 @@
+{% set response = services.response.render('@Frontend/frontend/base.html.twig', { 'page': hook.page }) %}
+{% do response.cache.tag('my-custom-tag') %}
+
+{% do hook.setResponse(response) %}

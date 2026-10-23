@@ -1,0 +1,780 @@
+/* eslint-disable sw-test-rules/test-file-max-lines-warning */
+
+/**
+ * @sw-package buyers-experience
+ */
+import { mount } from '@vue/test-utils';
+import Criteria from 'src/core/data/criteria.data';
+
+let repositoryFactoryMock;
+let repositoryFactoryCreateMock;
+
+async function createWrapper(propsOverride = {}, repositoryFactoryOverride = {}) {
+    const blogMediaRepositoryMock = {
+        create: jest.fn(() => {
+            return {
+                _isNew: true,
+                mediaId: null,
+                position: null,
+                blogId: null,
+                media: null,
+            };
+        }),
+        save: jest.fn(() => Promise.resolve()),
+        syncDeleted: jest.fn(() => Promise.resolve()),
+        search: jest.fn(() => Promise.resolve([])),
+        get: jest.fn(() => Promise.resolve({})),
+    };
+
+    repositoryFactoryCreateMock = {
+        search: () => Promise.resolve([]),
+        save: jest.fn(() => Promise.resolve([])).mockName('repositoryFactory save'),
+        get: () => Promise.resolve({}),
+        syncDeleted: () => Promise.resolve({}),
+        create: jest.fn(() => ({})), // General create mock
+    };
+    repositoryFactoryMock = {
+        create: jest.fn((entityName) => {
+            if (entityName === 'blog_media') {
+                return blogMediaRepositoryMock;
+            }
+            return repositoryFactoryCreateMock;
+        }),
+        ...repositoryFactoryOverride,
+    };
+
+    return mount(await wrapTestComponent('sw-blog-variants-overview', { sync: true }), {
+        props: {
+            selectedGroups: [],
+            uploadTag: 'uploadTag',
+            blogEntity: {
+                id: '72bfaf5d90214ce592715a9649d8760a',
+                variantListingConfig: null,
+            },
+            ...propsOverride,
+        },
+        global: {
+            provide: {
+                mediaPresignedUploadService: {
+                    prepareUpload: jest.fn(),
+                    uploadToPresignedUrl: jest.fn(),
+                    finalizeUpload: jest.fn(),
+                },
+                repositoryFactory: repositoryFactoryMock,
+                searchRankingService: {
+                    isValidTerm: (term) => {
+                        return term && term.trim().length >= 1;
+                    },
+                },
+                configService: {
+                    getConfig: () =>
+                        Promise.resolve({
+                            settings: {
+                                enableUrlFeature: false,
+                            },
+                        }),
+                },
+                mediaService: {
+                    addListener: () => {},
+                    removeByTag: () => {},
+                    removeListener: () => {},
+                    getDefaultFolderId: () => {
+                        return Promise.resolve('defaultFolderId');
+                    },
+                },
+                mediaDefaultFolderService: {
+                    getDefaultFolderId: () => {
+                        return Promise.resolve('defaultFolderId');
+                    },
+                },
+                shortcutService: {
+                    startEventListener: () => {},
+                    stopEventListener: () => {},
+                },
+                fileValidationService: {},
+            },
+            stubs: {
+                'sw-container': await wrapTestComponent('sw-container', {
+                    sync: true,
+                }),
+                'sw-simple-search-field': await wrapTestComponent('sw-simple-search-field', { sync: true }),
+                'sw-context-menu': await wrapTestComponent('sw-context-menu', { sync: true }),
+                'sw-tree': await wrapTestComponent('sw-tree', {
+                    sync: true,
+                }),
+                'sw-tree-item': true,
+                'sw-data-grid': await wrapTestComponent('sw-data-grid', {
+                    sync: true,
+                }),
+                'router-link': true,
+                'sw-label': true,
+                'sw-inheritance-switch': true,
+                'sw-price-field': true,
+                'sw-price-preview': true,
+                'sw-text-field': true,
+                'sw-blog-variants-media-upload': true,
+                'sw-upload-listener': true,
+                'sw-media-compact-upload-v2': await wrapTestComponent('sw-media-compact-upload-v2', { sync: true }),
+                'sw-data-grid-column-boolean': true,
+                'sw-context-menu-item': await wrapTestComponent('sw-context-menu-item', { sync: true }),
+                'sw-pagination': true,
+                'sw-bulk-edit-modal': true,
+                'sw-modal': {
+                    template: `
+                        <div class="sw-modal">
+                          <slot name="modal-header"></slot>
+                          <slot></slot>
+                          <slot name="modal-footer"></slot>
+                        </div>
+                    `,
+                },
+                'sw-checkbox-field': await wrapTestComponent('sw-checkbox-field', { sync: true }),
+                'sw-checkbox-field-deprecated': await wrapTestComponent('sw-checkbox-field-deprecated', { sync: true }),
+                'sw-base-field': await wrapTestComponent('sw-base-field', {
+                    sync: true,
+                }),
+                'sw-loader': true,
+                'sw-tree-input-field': true,
+                'sw-context-button': {
+                    template: '<div class="sw-context-button"><slot></slot></div>',
+                },
+                'sw-data-grid-settings': true,
+                'sw-data-grid-inline-edit': true,
+                'sw-data-grid-skeleton': true,
+                'sw-field-error': true,
+                'sw-ai-copilot-badge': true,
+                'sw-help-text': true,
+                'sw-button-group': true,
+                'sw-media-url-form': true,
+                'sw-media-preview-v2': true,
+                'sw-context-menu-divider': true,
+                'sw-media-modal-v2': true,
+                'sw-provide': { template: '<slot/>', inheritAttrs: false },
+            },
+        },
+    });
+}
+
+describe('src/module/sw-blog/component/sw-blog-variants/sw-blog-variants-overview', () => {
+    beforeEach(() => {
+        global.activeAclRoles = [];
+
+        const mockMediaEntity = {
+            id: 'media-id-123',
+            position: 1,
+            fileName: 'test-image',
+            fileExtension: 'jpg',
+            url: 'http://example.com/test-image.jpg',
+        };
+
+        const mockProductMediaEntity = {
+            id: 'blog-media-assoc-id-1',
+            mediaId: mockMediaEntity.id,
+            media: mockMediaEntity,
+            position: mockMediaEntity.position,
+        };
+
+        const blogMediaCollection = new Contena.Data.EntityCollection(
+            '/blog/72bfaf5d90214ce592715a9649d8760a/media',
+            'blog_media',
+            Contena.Context.api,
+            null,
+            [mockProductMediaEntity],
+        );
+
+        const blog = {
+            id: '72bfaf5d90214ce592715a9649d8760a',
+            media: blogMediaCollection,
+        };
+
+        blog.getEntityName = () => 'T-Shirt';
+
+        Contena.Store.unregister('swProductDetail');
+        Contena.Store.register({
+            id: 'swProductDetail',
+            state() {
+                return {
+                    blog: blog,
+                    currencies: [],
+                    variants: [
+                        {
+                            id: 1,
+                            blogNumber: '1',
+                            name: null,
+                            options: [
+                                {
+                                    id: 1,
+                                    name: '30',
+                                    translated: {
+                                        name: '30',
+                                    },
+                                    groupId: 'size-group-id',
+                                },
+                            ],
+                        },
+                        {
+                            id: 2,
+                            blogNumber: '2',
+                            name: null,
+                            options: [
+                                {
+                                    id: 2,
+                                    name: '32',
+                                    translated: {
+                                        name: '32',
+                                    },
+                                    groupId: 'size-group-id',
+                                },
+                            ],
+                        },
+                    ],
+                    taxes: [],
+                };
+            },
+            getters: {
+                isLoading: () => false,
+            },
+            actions: {
+                setVariants(state, variants) {
+                    state.variants = variants;
+                },
+                setLoading() {},
+                setProduct(state, newProduct) {
+                    state.blog = newProduct;
+                },
+            },
+        });
+    });
+
+    it('should have an disabled generate variants button', async () => {
+        const wrapper = await createWrapper();
+        const generateVariantsButton = wrapper.find('.sw-blog-variants__generate-action');
+        expect(generateVariantsButton.exists()).toBeTruthy();
+        expect(generateVariantsButton.attributes('disabled')).toBeDefined();
+    });
+
+    it('should have an enabled generate variants button', async () => {
+        global.activeAclRoles = ['blog.creator'];
+
+        const wrapper = await createWrapper();
+        const generateVariantsButton = wrapper.find('.sw-blog-variants__generate-action');
+        expect(generateVariantsButton.exists()).toBeTruthy();
+        expect(generateVariantsButton.attributes('disabled')).toBeUndefined();
+    });
+
+    it('should enable selection deleting of list variants', async () => {
+        global.activeAclRoles = ['blog.deleter'];
+
+        const wrapper = await createWrapper();
+        const selectionColumn = wrapper.find('.sw-data-grid__header .sw-data-grid__cell--selection');
+        expect(selectionColumn.exists()).toBeTruthy();
+    });
+
+    it('should be able to turn on delete confirmation modal', async () => {
+        global.activeAclRoles = ['blog.deleter'];
+
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const deleteContextButton = wrapper.find('.sw-context-menu-item.sw-context-menu-item--danger');
+        await deleteContextButton.trigger('click');
+
+        const deleteModal = wrapper.find('.sw-blog-variants-overview__delete-modal');
+        expect(deleteModal.exists()).toBeTruthy();
+    });
+
+    it('should not be able to turn on delete confirmation modal', async () => {
+        global.activeAclRoles = ['blog.editor'];
+
+        const wrapper = await createWrapper();
+
+        const deleteContextButton = wrapper.find('.sw-context-menu-item.sw-context-menu-item--danger');
+        expect(deleteContextButton.classes('is--disabled')).toBeTruthy();
+    });
+
+    it('should be able to delete variants', async () => {
+        global.activeAclRoles = ['blog.deleter'];
+
+        const wrapper = await createWrapper();
+
+        const selectAllInput = wrapper.find('.sw-data-grid__select-all input[type="checkbox"]');
+        await selectAllInput.setChecked();
+
+        const deleteVariantsButton = wrapper.find('.sw-blog-variants-overview__bulk-delete-action');
+        expect(deleteVariantsButton.exists()).toBeTruthy();
+
+        await deleteVariantsButton.trigger('click');
+
+        const deleteModal = wrapper.find('.sw-blog-variants-overview__delete-modal');
+        expect(deleteModal.exists()).toBeTruthy();
+    });
+
+    it('should not be able to delete variants', async () => {
+        global.activeAclRoles = ['blog.editor'];
+
+        const wrapper = await createWrapper();
+
+        const deleteVariantsButton = wrapper.find('.sw-blog-variants-overview__bulk-delete-action');
+        expect(deleteVariantsButton.exists()).toBeFalsy();
+    });
+
+    it('should keep the current inline edit row when another variant is double clicked before saving', async () => {
+        global.activeAclRoles = ['blog.editor'];
+
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const variantGrid = wrapper.vm.$refs.variantGrid;
+
+        variantGrid.onDbClickCell(wrapper.vm.variants[0]);
+        expect(variantGrid.currentInlineEditId).toBe(1);
+
+        variantGrid.onDbClickCell(wrapper.vm.variants[1]);
+        expect(variantGrid.currentInlineEditId).toBe(1);
+    });
+
+    it('should add the downloads column when the blog type is equal "digital"', async () => {
+        const wrapper = await createWrapper(
+            {
+                blogStates: ['is-download'],
+                blogType: 'digital',
+            },
+            {
+                create: (entity) => {
+                    if (entity === 'media_default_folder') {
+                        return {
+                            search: () =>
+                                Promise.resolve([
+                                    {
+                                        id: 'defaultMediaFolderId',
+                                        entity: 'blog_download',
+                                    },
+                                ]),
+                        };
+                    }
+                    return { search: () => Promise.resolve() };
+                },
+            },
+        );
+
+        expect(wrapper.find('.sw-data-grid__cell--downloads').exists()).toBeTruthy();
+    });
+
+    it('should remove file from digital variant item', async () => {
+        const item = {
+            id: '1',
+            blogNumber: '1',
+            name: 'Example blog',
+            downloads: [
+                {
+                    media: {
+                        fileName: 'example',
+                        fileExtension: 'png',
+                    },
+                },
+                {
+                    media: {
+                        fileName: 'test',
+                        fileExtension: 'gif',
+                    },
+                },
+            ],
+        };
+
+        const wrapper = await createWrapper(
+            { blogStates: ['is-download'], blogType: 'digital' },
+            {
+                create: () => ({
+                    search: () => Promise.resolve([item]),
+                    save: () => Promise.resolve(),
+                }),
+            },
+        );
+        await wrapper.vm.getList();
+
+        // should be deleted
+        await wrapper.vm.removeFile('example.png', wrapper.vm.variants.at(0));
+        // should not be deleted (because it's the last one)
+        await wrapper.vm.removeFile('test.gif', wrapper.vm.variants.at(0));
+
+        const previewItems = wrapper
+            .find('.sw-data-grid__cell--downloads')
+            .findAll('.sw-media-compact-upload-v2__preview-item');
+        expect(previewItems).toHaveLength(1);
+        expect(previewItems.at(0).find('.sw-context-menu-item').text()).toBe('test.gif');
+    });
+
+    it('should save successful uploaded files', async () => {
+        const item = {
+            id: '1',
+            blogNumber: '1',
+            name: 'Example blog',
+            downloads: [
+                {
+                    media: {
+                        id: 'lel',
+                        fileName: 'test',
+                        fileExtension: 'png',
+                    },
+                },
+            ],
+        };
+
+        const file = {
+            id: 'test-id',
+            fileName: 'example',
+            fileExtension: 'png',
+        };
+
+        const wrapper = await createWrapper(
+            { blogStates: ['is-download'], blogType: 'digital' },
+            {
+                create: () => ({
+                    search: () => Promise.resolve([item]),
+                    save: () => Promise.resolve(),
+                    create: () => Promise.resolve(),
+                    get: () => Promise.resolve(file),
+                }),
+            },
+        );
+        await wrapper.vm.getList();
+
+        // not existing
+        await wrapper.vm.successfulUpload({ targetId: 'test-id', downloads: [] }, item);
+        // existing
+        await wrapper.vm.successfulUpload({ targetId: 'test-id', downloads: [] }, item);
+
+        const previewItems = wrapper
+            .find('.sw-data-grid__cell--downloads')
+            .findAll('.sw-media-compact-upload-v2__preview-item');
+        expect(previewItems).toHaveLength(2);
+        expect(previewItems.at(1).find('.sw-context-menu-item').text()).toBe('example.png');
+    });
+
+    it('should push to a new route when editing items', async () => {
+        const wrapper = await createWrapper();
+        wrapper.vm.$router.push = jest.fn();
+        await wrapper.setData({
+            $refs: {
+                variantGrid: {
+                    selection: {
+                        foo: { states: ['is-download'], type: 'digital' },
+                    },
+                },
+            },
+        });
+
+        await wrapper.vm.onEditItems();
+        expect(wrapper.vm.$router.push).toHaveBeenCalledWith(
+            expect.objectContaining({
+                name: 'sw.bulk.edit.blog',
+                params: expect.objectContaining({
+                    parentId: '72bfaf5d90214ce592715a9649d8760a',
+                    includesDigital: '0',
+                }),
+            }),
+        );
+
+        wrapper.vm.$router.push.mockRestore();
+    });
+
+    it('The price of variant should be set to null', async () => {
+        const wrapper = await createWrapper();
+
+        const variant = {
+            price: [
+                {
+                    currencyId: 'b7d2554b0ce847cd82f3ac9bd1c0dfca',
+                    gross: '123',
+                    net: '123',
+                },
+            ],
+        };
+
+        const currency = {
+            id: 'b7d2554b0ce847cd82f3ac9bd1c0dfca',
+        };
+
+        wrapper.vm.onInheritanceRestore(variant, currency);
+
+        expect(variant.price).toBeNull();
+    });
+
+    it('buildSearchQuery modifies criteria correctly', async () => {
+        const criteria = new Criteria();
+        const term = 'test';
+        const wrapper = await createWrapper();
+
+        wrapper.vm.term = term;
+        wrapper.vm.buildSearchQuery(criteria);
+
+        expect(criteria.queries).toHaveLength(3);
+        expect(criteria.queries[0].query.type).toBe('equals');
+        expect(criteria.queries[0].query.field).toBe('blog.options.name');
+        expect(criteria.queries[0].query.value).toBe(term);
+        expect(criteria.queries[0].score).toBe(3500);
+        expect(criteria.queries[1].query.type).toBe('contains');
+        expect(criteria.queries[1].query.field).toBe('blog.options.name');
+        expect(criteria.queries[1].query.value).toBe(term);
+        expect(criteria.queries[1].score).toBe(500);
+        expect(criteria.queries[2].query.type).toBe('contains');
+        expect(criteria.queries[2].query.field).toBe('blog.blogNumber');
+        expect(criteria.queries[2].query.value).toBe(term);
+        expect(criteria.queries[2].score).toBe(5000);
+    });
+
+    it('buildSearchQuery ignores empty terms from leading or repeated whitespace', async () => {
+        const criteria = new Criteria();
+        const wrapper = await createWrapper();
+
+        // Regression test for issue #16838: a leading space produced an empty
+        // term, which built a `contains` filter with an empty value and made the
+        // API reject the whole query with FRAMEWORK__INVALID_FILTER_QUERY.
+        wrapper.vm.term = ' red';
+        wrapper.vm.buildSearchQuery(criteria);
+
+        // Only the non-empty term "red" yields option queries (+1 blogNumber query).
+        expect(criteria.queries).toHaveLength(3);
+        criteria.queries.forEach((query) => {
+            expect(query.query.value).not.toBe('');
+        });
+        expect(criteria.queries[0].query.value).toBe('red');
+        expect(criteria.queries[1].query.value).toBe('red');
+        // The blogNumber query uses the trimmed term, not the raw " red".
+        expect(criteria.queries[2].query.value).toBe('red');
+    });
+
+    it('buildSearchQuery returns an unmodified criteria for a whitespace-only term', async () => {
+        const criteria = new Criteria();
+        const wrapper = await createWrapper();
+
+        wrapper.vm.term = '   ';
+        wrapper.vm.buildSearchQuery(criteria);
+
+        expect(criteria.queries).toHaveLength(0);
+    });
+
+    it('should update variant listing config of blog when deleting variant', async () => {
+        global.activeAclRoles = ['blog.deleter'];
+
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const blog = {
+            variantListingConfig: {
+                displayParent: 0,
+                configuratorGroupConfig: [],
+                mainVariantId: 1,
+            },
+            ...wrapper.vm.blog,
+        };
+
+        await wrapper.setProps({
+            blogEntity: blog,
+        });
+
+        const deleteContextButton = wrapper.find('.sw-context-menu-item.sw-context-menu-item--danger');
+        await deleteContextButton.trigger('click');
+
+        const deleteModal = wrapper.find('.sw-blog-variants-overview__delete-modal');
+        expect(deleteModal.exists()).toBe(true);
+
+        await deleteModal
+            .findAll('button')
+            .find((button) => button.text().trim() === 'global.default.delete')
+            .trigger('click');
+        await flushPromises();
+
+        expect(wrapper.vm.blogRepository.save).toHaveBeenCalledTimes(1);
+    });
+
+    describe('frontend presentation when deleting variants', () => {
+        async function createProductWrapper(variantListingConfig) {
+            global.activeAclRoles = ['blog.deleter'];
+            const wrapper = await createWrapper({
+                blogEntity: { id: '72bfaf5d90214ce592715a9649d8760a', variantListingConfig },
+            });
+            await flushPromises();
+
+            return wrapper;
+        }
+
+        async function confirmDeletion(wrapper) {
+            await wrapper
+                .find('.sw-blog-variants-overview__delete-modal')
+                .findAll('button')
+                .find((button) => button.text().trim() === 'global.default.delete')
+                .trigger('click');
+            await flushPromises();
+
+            expect(repositoryFactoryCreateMock.save).toHaveBeenCalledTimes(1);
+
+            return repositoryFactoryCreateMock.save.mock.calls[0][0].variantListingConfig;
+        }
+
+        async function deleteVariant(variantListingConfig, rowIndex) {
+            const wrapper = await createProductWrapper(variantListingConfig);
+            await wrapper.findAll('.sw-context-menu-item--danger')[rowIndex].trigger('click');
+
+            return confirmDeletion(wrapper);
+        }
+
+        it.each([
+            ['keep showing a variant', false, false],
+            ['keep showing a variant when no choice was saved', null, false],
+            ['keep showing the main blog', true, true],
+        ])('should %s when the chosen main variant is deleted', async (_, displayParent, expectedDisplayParent) => {
+            const savedConfig = await deleteVariant({ displayParent, mainVariantId: 1, configuratorGroupConfig: [] }, 0);
+
+            expect(savedConfig).toEqual({
+                displayParent: expectedDisplayParent,
+                mainVariantId: null,
+                configuratorGroupConfig: [],
+            });
+        });
+
+        it('should keep the chosen main variant when another variant is deleted', async () => {
+            const savedConfig = await deleteVariant(
+                { displayParent: false, mainVariantId: 1, configuratorGroupConfig: [] },
+                1,
+            );
+
+            expect(savedConfig).toEqual({ displayParent: false, mainVariantId: 1, configuratorGroupConfig: [] });
+        });
+
+        it('should reset the frontend presentation when all variants are deleted', async () => {
+            const wrapper = await createProductWrapper({
+                displayParent: false,
+                mainVariantId: 1,
+                configuratorGroupConfig: [],
+            });
+
+            await wrapper.find('.sw-data-grid__select-all input[type="checkbox"]').setChecked();
+            await wrapper.find('.sw-blog-variants-overview__bulk-delete-action').trigger('click');
+
+            expect(await confirmDeletion(wrapper)).toBeNull();
+        });
+    });
+
+    it('should contain a currencyColumns computed property', async () => {
+        const wrapper = await createWrapper();
+
+        Contena.Store.get('swProductDetail').currencies = undefined;
+
+        expect(wrapper.vm.currencyColumns).toEqual([]);
+
+        Contena.Store.get('swProductDetail').currencies = [
+            {
+                id: 'b7d2554b0ce847cd82f3ac9bd1c0dfca',
+                name: 'Euro',
+                isSystemDefault: true,
+                translated: {
+                    name: 'Euro',
+                },
+            },
+            {
+                id: 'b7d2554b0ce847cd82f3ac9bd1c0dfcb',
+                name: 'Dollar',
+                isSystemDefault: false,
+                translated: {
+                    name: 'Dollar',
+                },
+            },
+        ];
+
+        expect(wrapper.vm.currencyColumns).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    property: 'price.b7d2554b0ce847cd82f3ac9bd1c0dfca.net',
+                    label: 'Euro',
+                    visible: true,
+                }),
+                expect.objectContaining({
+                    property: 'price.b7d2554b0ce847cd82f3ac9bd1c0dfcb.net',
+                    label: 'Dollar',
+                    visible: false,
+                }),
+            ]),
+        );
+    });
+
+    it('should correctly create a new blog_media entity when media inheritance is removed', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const mockVariant = {
+            id: 'variant-id-1',
+            media: new Contena.Data.EntityCollection('/blog/variant-id-1/media', 'blog_media', Contena.Context.api),
+        };
+
+        const storeProductMedia = Contena.Store.get('swProductDetail').blog.media.first();
+        const mediaItemToUnInherit = storeProductMedia
+            ? storeProductMedia.media
+            : {
+                  id: 'fallback-media-id',
+                  position: 1,
+              };
+
+        const mockProductMediaRepositoryCreate = jest.fn(() => {
+            return {
+                _isNew: true,
+                mediaId: null,
+                position: null,
+                blogId: null,
+                media: null,
+            };
+        });
+
+        wrapper.vm.blogMediaRepository.create = mockProductMediaRepositoryCreate;
+
+        await wrapper.vm.onMediaInheritanceRemove(mockVariant, mediaItemToUnInherit);
+
+        expect(mockProductMediaRepositoryCreate).toHaveBeenCalledTimes(1);
+        expect(mockProductMediaRepositoryCreate).toHaveBeenCalledWith(Contena.Context.api);
+
+        expect(mockVariant.media).toHaveLength(1);
+
+        const newProductMedia = mockVariant.media.at(0);
+        expect(newProductMedia).toBeDefined();
+        expect(newProductMedia.mediaId).toBe(mediaItemToUnInherit.id);
+        expect(newProductMedia.position).toBe(mediaItemToUnInherit.position);
+        expect(newProductMedia.blogId).toBe('72bfaf5d90214ce592715a9649d8760a');
+
+        expect(newProductMedia.media).toEqual(mediaItemToUnInherit);
+        expect(newProductMedia._isNew).toBe(true);
+    });
+
+    it('should handle error when deleting variant fails', async () => {
+        global.activeAclRoles = ['blog.deleter'];
+
+        const syncDeletedMock = jest.fn().mockRejectedValueOnce(new Error('Delete failed'));
+
+        const wrapper = await createWrapper(
+            {},
+            {
+                create: jest.fn(() => ({
+                    search: () => Promise.resolve([]),
+                    save: jest.fn(() => Promise.resolve()),
+                    get: () => Promise.resolve({}),
+                    syncDeleted: syncDeletedMock,
+                })),
+            },
+        );
+        await flushPromises();
+
+        const createNotificationErrorSpy = jest.spyOn(wrapper.vm, 'createNotificationError');
+
+        wrapper.vm.toBeDeletedVariantIds = [{ id: 'variant-1' }];
+        wrapper.vm.showDeleteModal = true;
+        wrapper.vm.modalLoading = false;
+
+        await wrapper.vm.onConfirmDelete();
+        await flushPromises();
+
+        expect(wrapper.vm.modalLoading).toBe(false);
+        expect(wrapper.vm.toBeDeletedVariantIds).toEqual([]);
+        expect(createNotificationErrorSpy).toHaveBeenCalledWith({
+            message: 'sw-blog.variations.generatedListMessageDeleteError',
+        });
+    });
+});

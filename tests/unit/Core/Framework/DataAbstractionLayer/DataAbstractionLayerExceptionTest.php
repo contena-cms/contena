@@ -1,0 +1,316 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidFilterQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidPriceFieldTypeException;
+use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Test\Annotation\DisabledFeatures;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[CoversClass(DataAbstractionLayerException::class)]
+class DataAbstractionLayerExceptionTest extends TestCase
+{
+    public function testInvalidPriceFieldType(): void
+    {
+        $exception = DataAbstractionLayerException::invalidPriceFieldType('invalid');
+
+        static::assertInstanceOf(DataAbstractionLayerException::class, $exception);
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+        static::assertSame('FRAMEWORK__INVALID_PRICE_FIELD_TYPE', $exception->getErrorCode());
+        static::assertSame(['type' => 'invalid'], $exception->getParameters());
+    }
+
+    #[DisabledFeatures(['v6.8.0.0'])]
+    public function testInvalidPriceFieldTypeKeepsLegacyException(): void
+    {
+        $exception = DataAbstractionLayerException::invalidPriceFieldType('invalid');
+
+        static::assertInstanceOf(InvalidPriceFieldTypeException::class, $exception);
+        static::assertSame('FRAMEWORK__INVALID_PRICE_FIELD_TYPE', $exception->getErrorCode());
+        static::assertSame(['type' => 'invalid'], $exception->getParameters());
+    }
+
+    public function testInvalidCronIntervalFormat(): void
+    {
+        $e = DataAbstractionLayerException::invalidCronIntervalFormat('foo');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_CRON_INTERVAL_CODE, $e->getErrorCode());
+        static::assertSame('Unknown or bad CronInterval format "foo".', $e->getMessage());
+    }
+
+    public function testInvalidDateIntervalFormat(): void
+    {
+        $e = DataAbstractionLayerException::invalidDateIntervalFormat('foo');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_DATE_INTERVAL_CODE, $e->getErrorCode());
+        static::assertSame('Unknown or bad DateInterval format "foo".', $e->getMessage());
+    }
+
+    public function testInvalidSerializerField(): void
+    {
+        $e = DataAbstractionLayerException::invalidSerializerField(FkField::class, new IdField('foo', 'foo'));
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_FIELD_SERIALIZER_CODE, $e->getErrorCode());
+    }
+
+    public function testInvalidCriteriaIds(): void
+    {
+        $e = DataAbstractionLayerException::invalidCriteriaIds(['foo'], 'bar');
+
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_CRITERIA_IDS, $e->getErrorCode());
+    }
+
+    public function testInvalidApiCriteriaIds(): void
+    {
+        $e = DataAbstractionLayerException::invalidApiCriteriaIds(
+            DataAbstractionLayerException::invalidCriteriaIds(['foo'], 'bar')
+        );
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_API_CRITERIA_IDS, $e->getErrorCode());
+    }
+
+    public function testInvalidLanguageId(): void
+    {
+        $e = DataAbstractionLayerException::invalidLanguageId('foo');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_LANGUAGE_ID, $e->getErrorCode());
+    }
+
+    public function testInvalidFilterQuery(): void
+    {
+        $e = DataAbstractionLayerException::invalidFilterQuery('foo', 'baz');
+
+        static::assertInstanceOf(InvalidFilterQueryException::class, $e);
+        static::assertSame('foo', $e->getMessage());
+        static::assertSame('baz', $e->getParameters()['path']);
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_FILTER_QUERY, $e->getErrorCode());
+    }
+
+    public function testInvalidSortQuery(): void
+    {
+        $e = DataAbstractionLayerException::invalidSortQuery('foo', 'baz');
+
+        static::assertSame('foo', $e->getMessage());
+        static::assertSame('baz', $e->getParameters()['path']);
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::INVALID_SORT_QUERY, $e->getErrorCode());
+    }
+
+    public function testCannotCreateNewVersion(): void
+    {
+        $e = DataAbstractionLayerException::cannotCreateNewVersion('blog', 'blog-id');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('Cannot create new version. blog by id blog-id not found.', $e->getMessage());
+        static::assertSame(DataAbstractionLayerException::CANNOT_CREATE_NEW_VERSION, $e->getErrorCode());
+    }
+
+    public function testVersionMergeAlreadyLocked(): void
+    {
+        $e = DataAbstractionLayerException::versionMergeAlreadyLocked('version-id');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::VERSION_MERGE_ALREADY_LOCKED, $e->getErrorCode());
+        static::assertSame('Merging of version version-id is locked, as the merge is already running by another process.', $e->getMessage());
+    }
+
+    public function testEntityNotVersionAware(): void
+    {
+        $e = DataAbstractionLayerException::entityNotVersionAware('entity-name');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::ENTITY_NOT_VERSION_AWARE, $e->getErrorCode());
+        static::assertSame('Entity "entity-name" is not version aware', $e->getMessage());
+    }
+
+    public function testExpectedArray(): void
+    {
+        $e = DataAbstractionLayerException::expectedArray('some/path/0');
+
+        static::assertSame('Expected data at some/path/0 to be an array.', $e->getMessage());
+        static::assertSame('some/path/0', $e->getParameters()['path']);
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('FRAMEWORK__WRITE_MALFORMED_INPUT', $e->getErrorCode());
+    }
+
+    public function testExpectedAssociativeArray(): void
+    {
+        $e = DataAbstractionLayerException::expectedAssociativeArray('some/path/0');
+
+        static::assertSame('Expected data at some/path/0 to be an associative array.', $e->getMessage());
+        static::assertSame('some/path/0', $e->getParameters()['path']);
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('FRAMEWORK__INVALID_WRITE_INPUT', $e->getErrorCode());
+    }
+
+    public function testDecodeHandledByHydrator(): void
+    {
+        $field = new ManyToManyAssociationField(
+            'galleries',
+            'MediaGallery',
+            'MediaGalleryMapping',
+            'media_id',
+            'gallery_id',
+        );
+
+        $e = DataAbstractionLayerException::decodeHandledByHydrator($field);
+
+        static::assertSame(
+            \sprintf('Decoding of %s is handled by the entity hydrator.', ManyToManyAssociationField::class),
+            $e->getMessage()
+        );
+        static::assertSame(ManyToManyAssociationField::class, $e->getParameters()['fieldClass']);
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::DECODE_HANDLED_BY_HYDRATOR, $e->getErrorCode());
+    }
+
+    public function testFkFieldByStorageNameNotFound(): void
+    {
+        $e = DataAbstractionLayerException::fkFieldByStorageNameNotFound(BlogDefinition::class, 'taxId');
+
+        static::assertSame(
+            'Can not detect FK field with storage name taxId in definition Contena\Core\Content\Blog\BlogDefinition',
+            $e->getMessage()
+        );
+
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::REFERENCE_FIELD_BY_STORAGE_NAME_NOT_FOUND, $e->getErrorCode());
+    }
+
+    public function testLanguageFieldByStorageNameNotFound(): void
+    {
+        $e = DataAbstractionLayerException::languageFieldByStorageNameNotFound(BlogDefinition::class, 'taxId');
+
+        static::assertSame(
+            'Can not detect language field with storage name taxId in definition Contena\Core\Content\Blog\BlogDefinition',
+            $e->getMessage()
+        );
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::REFERENCE_FIELD_BY_STORAGE_NAME_NOT_FOUND, $e->getErrorCode());
+    }
+
+    public function testDefinitionFieldDoesNotExist(): void
+    {
+        $e = DataAbstractionLayerException::definitionFieldDoesNotExist(BlogDefinition::class, 'taxId');
+
+        static::assertSame(
+            'Can not detect reference field with storage name taxId in definition Contena\Core\Content\Blog\BlogDefinition',
+            $e->getMessage()
+        );
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::REFERENCE_FIELD_BY_STORAGE_NAME_NOT_FOUND, $e->getErrorCode());
+    }
+
+    public function testExpectedArrayWithType(): void
+    {
+        $path = 'includes';
+        $type = 'string';
+
+        $exception = DataAbstractionLayerException::expectedArrayWithType($path, $type);
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::EXPECTED_ARRAY_WITH_TYPE, $exception->getErrorCode());
+        static::assertSame(
+            \sprintf('Expected data at %s to be of the type array, %s given', $path, $type),
+            $exception->getMessage()
+        );
+        static::assertSame($path, $exception->getParameters()['path']);
+        static::assertSame($type, $exception->getParameters()['type']);
+    }
+
+    public function testMissingFieldValue(): void
+    {
+        $field = new IdField('test_field', 'test_field');
+        $exception = DataAbstractionLayerException::missingFieldValue($field);
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::MISSING_FIELD_VALUE, $exception->getErrorCode());
+        static::assertSame(
+            'A value for the field "test_field" is required, but it is missing or `null`.',
+            $exception->getMessage()
+        );
+    }
+
+    public function testUnsupportedQueryFilter(): void
+    {
+        $exception = DataAbstractionLayerException::unsupportedQueryFilter('foo');
+
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+        static::assertSame(DataAbstractionLayerException::UNSUPPORTED_QUERY_FILTER, $exception->getErrorCode());
+        static::assertSame('Unsupported query foo', $exception->getMessage());
+    }
+
+    public function testInvalidSortingDirection(): void
+    {
+        $e = DataAbstractionLayerException::invalidSortingDirection('foo');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('FRAMEWORK__INVALID_SORT_DIRECTION', $e->getErrorCode());
+        static::assertSame('The given sort direction "foo" is invalid.', $e->getMessage());
+    }
+
+    public function testUnmappedField(): void
+    {
+        // force the v6.8 path so the factory builds the new Exception\UnmappedFieldException
+        // (with the flag off it returns the deprecated bridge, which is @codeCoverageIgnore'd)
+        $e = Feature::fake(['v6.8.0.0'], static fn () => DataAbstractionLayerException::unmappedField('blog.categoriesRo.id', new BlogDefinition()));
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('FRAMEWORK__DBAL_UNMAPPED_FIELD', $e->getErrorCode());
+        static::assertSame('Field "id" in entity "blog" was not found.', $e->getMessage());
+    }
+
+    public function testConfigNotFound(): void
+    {
+        $e = DataAbstractionLayerException::configNotFound();
+
+        static::assertSame('Configuration for blog search definition not found', $e->getMessage());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+        static::assertSame('FRAMEWORK__BLOG_SEARCH_CONFIGURATION_NOT_FOUND', $e->getErrorCode());
+    }
+
+    /**
+     * @deprecated tag:v6.8.0 - will be removed. testConfigNotFound will cover the new behavior
+     */
+    #[DisabledFeatures(['v6.8.0.0'])]
+    public function testConfigNotFoundDeprecated(): void
+    {
+        if (!\class_exists('\Contena\Elasticsearch\Blog\ElasticsearchBlogException')) {
+            static::markTestSkipped('\Contena\Elasticsearch\Blog\ElasticsearchBlogException does not exist');
+        }
+
+        $e = DataAbstractionLayerException::configNotFound();
+
+        static::assertSame('Configuration for blog elasticsearch definition not found', $e->getMessage());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+        static::assertSame('ELASTICSEARCH_BLOG__CONFIGURATION_NOT_FOUND', $e->getErrorCode());
+    }
+
+    public function testInvalidCriteriaParameter(): void
+    {
+        $e = DataAbstractionLayerException::invalidCompressedCriteriaParameter('error message');
+
+        static::assertSame('Invalid _criteria parameter: error message', $e->getMessage());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('FRAMEWORK__INVALID_COMPRESSED_CRITERIA_PARAMETER', $e->getErrorCode());
+    }
+}

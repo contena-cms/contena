@@ -1,0 +1,104 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Maintenance\AdminUser\Service;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Maintenance\MaintenanceException;
+use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
+use Contena\Core\Test\Stub\Doctrine\FakeQueryBuilder;
+use Symfony\Component\Clock\NativeClock;
+
+/**
+ * @internal
+ */
+#[CoversClass(AdminUserProvisioner::class)]
+class AdminUserProvisionerTest extends TestCase
+{
+    public function testProvision(): void
+    {
+        $localeId = Uuid::randomBytes();
+        $connection = $this->createMock(Connection::class);
+
+        $connection->expects($this->once())
+            ->method('insert')
+            ->with(
+                'admin_user',
+                static::callback(static function (array $data) use ($localeId): bool {
+                    static::assertSame('admin', $data['username']);
+                    static::assertSame('first', $data['first_name']);
+                    static::assertSame('last', $data['last_name']);
+                    static::assertSame('test@test.com', $data['email']);
+                    static::assertSame($localeId, $data['locale_id']);
+                    static::assertFalse($data['admin']);
+                    static::assertTrue($data['active']);
+
+                    return password_verify('contena', (string) $data['password']);
+                })
+            );
+        $connection->expects($this->once())->method('fetchOne')->willReturn(json_encode(['_value' => 8], \JSON_THROW_ON_ERROR));
+        $connection->expects($this->exactly(2))->method('createQueryBuilder')->willReturnOnConsecutiveCalls(
+            new FakeQueryBuilder($connection, []),
+            new FakeQueryBuilder($connection, [[$localeId]])
+        );
+
+        $admin_user = [
+            'firstName' => 'first',
+            'lastName' => 'last',
+            'email' => 'test@test.com',
+            'admin' => false,
+        ];
+
+        $provisioner = new AdminUserProvisioner($connection, new NativeClock());
+        $provisioner->provision('admin', 'contena', $admin_user);
+    }
+
+    public function testProvisionThrowsIfUserAlreadyExists(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->never())
+            ->method('insert');
+
+        $connection->expects($this->once())->method('createQueryBuilder')->willReturnOnConsecutiveCalls(
+            new FakeQueryBuilder($connection, [[Uuid::randomBytes()]]),
+        );
+
+        $admin_user = [
+            'firstName' => 'first',
+            'lastName' => 'last',
+            'email' => 'test@test.com',
+            'admin' => false,
+        ];
+
+        $provisioner = new AdminUserProvisioner($connection, new NativeClock());
+        $this->expectExceptionObject(new \RuntimeException('AdminUser with username "admin" already exists.'));
+        $provisioner->provision('admin', 'contena', $admin_user);
+    }
+
+    public function testProvisionThrowsIfPasswordTooShort(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->never())
+            ->method('insert');
+
+        $connection->expects($this->once())->method('createQueryBuilder')->willReturnOnConsecutiveCalls(
+            new FakeQueryBuilder($connection, []),
+        );
+
+        $connection->expects($this->once())->method('fetchOne')->willReturn(json_encode(['_value' => 8], \JSON_THROW_ON_ERROR));
+
+        $admin_user = [
+            'firstName' => 'first',
+            'lastName' => 'last',
+            'email' => 'test@test.com',
+            'admin' => false,
+        ];
+
+        $provisioner = new AdminUserProvisioner($connection, new NativeClock());
+        $this->expectExceptionObject(MaintenanceException::passwordTooShort(8));
+        $provisioner->provision('admin', 'short', $admin_user);
+    }
+}

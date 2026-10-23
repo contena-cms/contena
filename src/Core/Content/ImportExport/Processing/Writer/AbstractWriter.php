@@ -1,0 +1,24 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\ImportExport\Processing\Writer;
+
+use Contena\Core\Content\ImportExport\Struct\Config;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+
+abstract class AbstractWriter
+{
+    /**
+     * @param array<string, mixed> $data
+     */
+    abstract public function append(Config $config, array $data, int $index): void;
+
+    abstract public function flush(Config $config, string $targetPath): void;
+
+    abstract public function finish(Config $config, string $targetPath): void;
+
+    protected function getDecorated(): AbstractWriter
+    {
+        throw new DecorationPatternException(self::class);
+    }
+}

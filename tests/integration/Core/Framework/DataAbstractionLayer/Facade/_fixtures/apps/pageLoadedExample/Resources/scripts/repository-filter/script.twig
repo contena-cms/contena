@@ -1,0 +1,12 @@
+{% set page = hook.page %}
+{# @var page \Contena\Frontend\Page\Page #}
+
+{% set criteria = {
+    'filter': [
+        { 'field': 'blogNumber', 'type': 'equals', 'value': 'p1' }
+    ]
+} %}
+
+{% set blog = services.repository.search('blog', criteria).getEntities().first %}
+
+{% do page.addExtension('myProduct', blog) %}

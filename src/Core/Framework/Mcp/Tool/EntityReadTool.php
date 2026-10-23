@@ -1,0 +1,108 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Mcp\Tool;
+
+use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
+use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
+use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
+use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
+use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
+use Contena\Core\Framework\Mcp\Context\McpContextProvider;
+use Contena\Core\Framework\Mcp\Result\McpToolError;
+use Contena\Core\Framework\ContenaHttpException;
+
+/**
+ * @experimental stableVersion:v6.8.0
+ */
+#[McpTool(
+    name: 'contena-entity-read',
+    title: 'Entity Read',
+    description: 'Read a single Contena entity by its UUID. Use when you already have an entity ID. For searching by other fields, use contena-entity-search instead. Returns {success, data: {id, ...fields}, _meta: {}}. Pass criteria JSON to include associations or select fields.'
+)]
+#[McpToolDependsOn('contena-entity-schema')]
+#[McpToolGroup('entity')]
+#[McpToolRequires(entityParam: 'entity', operations: ['read'])]
+class EntityReadTool extends McpToolResponse
+{
+    use McpEntityIncludes;
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $registry,
+        private readonly RequestCriteriaBuilder $criteriaBuilder,
+        private readonly McpContextProvider $contextProvider,
+        private readonly JsonEntityEncoder $encoder,
+        private readonly AclCriteriaValidator $criteriaValidator,
+    ) {
+    }
+
+    public function __invoke(
+        #[Schema(description: 'Entity name to read, e.g. "order" or "blog". See the contena://entities resource for the full list.')]
+        string $entity,
+        #[Schema(description: 'The entity\'s UUID (32-character hex). To find a record by any other field, use contena-entity-search instead.')]
+        string $id,
+        #[Schema(description: 'A JSON OBJECT of Admin API criteria, as a string — most usefully "associations" to include related data, e.g. {"associations":{"lineItems":{}}} on an order, and "includes" to trim the response. Defaults to no criteria.')]
+        string $criteria = '{}',
+    ): string {
+        $context = $this->contextProvider->getContext();
+
+        if (!$this->registry->has($entity)) {
+            return $this->error(\sprintf('Entity "%s" not found. Use the contena://entities resource for available entity names.', $entity), McpToolError::INVALID_ARGUMENTS);
+        }
+
+        if ($error = $this->requirePrivilege($context, $entity . ':read')) {
+            return $error;
+        }
+
+        $payload = $this->decodeJsonOrError($criteria, 'criteria');
+        if (\is_string($payload)) {
+            return $payload;
+        }
+
+        $definition = $this->registry->getByEntityName($entity);
+        $repository = $this->registry->getRepository($entity);
+
+        try {
+            $criteriaObj = $this->criteriaBuilder->fromArray(
+                $payload,
+                new Criteria([$id]),
+                $definition,
+                $context,
+            );
+        } catch (ContenaHttpException $e) {
+            // Scoped to this call on purpose: a DAL failure from the read
+            // below is a bug, not bad input, and must still reach the log.
+            // `fromArray()` only parses the payload and checks field flags, so
+            // every ContenaHttpException it raises is something the caller can fix.
+            return $this->invalidCriteriaError($e);
+        }
+
+        // Criteria can reference associated entities that require their own read privileges
+        // (same association ACL model as the Admin API).
+        $missing = $this->criteriaValidator->validate($entity, $criteriaObj, $context);
+        if ($missing !== []) {
+            return $this->missingPrivilegesError($missing);
+        }
+
+        $this->applyDefaultIncludes($definition, $criteriaObj);
+
+        $result = $repository->search($criteriaObj, $context);
+        $entityResult = $result->getEntities()->get($id);
+
+        if ($entityResult === null) {
+            return $this->error(\sprintf('Entity "%s" with ID "%s" not found.', $entity, $id), McpToolError::NOT_FOUND);
+        }
+
+        $encoded = $this->encoder->encode($criteriaObj, $definition, $entityResult, '/api');
+
+        return $this->success($encoded);
+    }
+}

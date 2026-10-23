@@ -1,0 +1,85 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Demodata;
+
+use Faker\Factory;
+use Faker\Generator;
+use Psr\Clock\ClockInterface;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\Demodata\Faker\Commerce;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\Console\Input\ArgvInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+/**
+ * @final
+ */
+class DemodataService
+{
+    public const DEMODATA_CUSTOM_FIELDS_KEY = 'contenaDemoData';
+
+    /**
+     * @internal
+     *
+     * @param \IteratorAggregate<DemodataGeneratorInterface> $generators
+     */
+    public function __construct(
+        private readonly \IteratorAggregate $generators,
+        private readonly string $projectDir,
+        private readonly DefinitionInstanceRegistry $registry,
+        private readonly ClockInterface $clock
+    ) {
+    }
+
+    public function generate(DemodataRequest $request, Context $context, ?SymfonyStyle $console): DemodataContext
+    {
+        if (!$console) {
+            $console = new SymfonyStyle(new ArgvInput(), new NullOutput());
+        }
+
+        $faker = $this->getFaker();
+
+        $demodataContext = new DemodataContext($context, $faker, $this->projectDir, $console, $this->registry);
+
+        foreach ($request->all() as $definitionClass => $numberOfItems) {
+            if ($numberOfItems === 0) {
+                continue;
+            }
+
+            $definition = $this->registry->get($definitionClass);
+
+            $console->section(\sprintf('Generating %d items for %s', $numberOfItems, $definition->getEntityName()));
+
+            $validGenerators = array_filter(iterator_to_array($this->generators), static fn (DemodataGeneratorInterface $generator) => $generator->getDefinition() === $definitionClass);
+
+            if ($validGenerators === []) {
+                throw DemodataException::noGeneratorFound($definitionClass);
+            }
+
+            $start = (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT);
+
+            foreach ($validGenerators as $generator) {
+                $generator->generate($numberOfItems, $demodataContext, $request->getOptions($definitionClass));
+            }
+
+            $end = (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT) - $start;
+
+            $console->note(\sprintf('Took %F seconds', $end));
+
+            $demodataContext->setTiming($definition, $numberOfItems, $end);
+        }
+
+        return $demodataContext;
+    }
+
+    private function getFaker(): Generator
+    {
+        $faker = Factory::create('de-DE');
+        $faker->addProvider(new Commerce($faker));
+
+        return $faker;
+    }
+}

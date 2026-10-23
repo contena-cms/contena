@@ -1,0 +1,289 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\System\User\Channel;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\PlatformRequest;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Test\TestDefaults;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+
+/**
+ * @internal
+ *
+ * @see https://github.com/contena-cms/contena/issues/20225
+ */
+#[Group('store-api')]
+class LoginWithInvalidDefaultAddressTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+    use ChannelApiTestBehaviour;
+
+    private KernelBrowser $browser;
+
+    private IdsCollection $ids;
+
+    private Connection $connection;
+
+    private string $email;
+
+    protected function setUp(): void
+    {
+        $this->ids = new IdsCollection();
+        $this->browser = $this->createCustomChannelBrowser(['id' => $this->ids->create('sales-channel')]);
+        $this->assignChannelContext($this->browser);
+        $this->connection = static::getContainer()->get(Connection::class);
+        $this->email = Uuid::randomHex() . '@example.com';
+    }
+
+    public function testLoginSucceedsWhenDefaultBillingAddressIsMissing(): void
+    {
+        $this->createUser();
+        $this->deleteAddress('billing-address');
+
+        static::assertSame(200, $this->login());
+    }
+
+    public function testLoginSucceedsWhenDefaultShippingAddressIsMissing(): void
+    {
+        $this->createUser();
+        $this->deleteAddress('shipping-address');
+
+        static::assertSame(200, $this->login());
+    }
+
+    public function testLoginSucceedsWhenBothDefaultAddressesAreMissing(): void
+    {
+        $this->createUser();
+        $this->deleteAddress('billing-address');
+        $this->deleteAddress('shipping-address');
+
+        static::assertSame(200, $this->login());
+    }
+
+    public function testCartIsBlockedAndOrderIsRefusedWhenDefaultBillingAddressIsMissing(): void
+    {
+        $this->createUser();
+        $this->createBlog(BlogDefinition::TYPE_PHYSICAL);
+        $this->deleteAddress('billing-address');
+        static::assertSame(200, $this->login());
+
+        $errors = $this->addBlogToCart();
+
+        static::assertArrayHasKey('billing-address-missing', $errors);
+        static::assertTrue($errors['billing-address-missing']['block']);
+        static::assertNotSame(
+            'checkout.billing-address-missing',
+            $errors['billing-address-missing']['translatedMessage'],
+            'the snippet must resolve, otherwise the raw key is shown to the user'
+        );
+
+        $this->assertOrderIsRefused();
+    }
+
+    public function testDigitalOnlyCartIsRefusedWhenDefaultShippingAddressIsMissing(): void
+    {
+        $this->createUser();
+        $this->createBlog(BlogDefinition::TYPE_DIGITAL);
+        $this->deleteAddress('shipping-address');
+        static::assertSame(200, $this->login());
+
+        $errors = $this->addBlogToCart();
+
+        static::assertArrayHasKey('shipping-address-missing', $errors);
+        static::assertTrue($errors['shipping-address-missing']['block']);
+        static::assertNotSame(
+            'checkout.shipping-address-missing',
+            $errors['shipping-address-missing']['translatedMessage'],
+            'the snippet must resolve, otherwise the raw key is shown to the user'
+        );
+
+        // a digital-only cart creates no delivery, so only the validator can stop the order
+        $this->assertOrderIsRefused();
+    }
+
+    public function testContextFallsBackToTheBillingAddressWhenTheShippingAddressIsMissing(): void
+    {
+        $this->createUser();
+        $this->deleteAddress('shipping-address');
+        static::assertSame(200, $this->login());
+
+        $this->browser->request('GET', '/store-api/context');
+        static::assertSame(200, $this->browser->getResponse()->getStatusCode());
+
+        $context = $this->decodeResponse();
+        static::assertSame($this->ids->get('billing-address'), $context['shippingLocation']['address']['id'] ?? null);
+    }
+
+    public function testUserCanRepairTheMissingDefaultAddress(): void
+    {
+        $this->createUser();
+        $this->createBlog(BlogDefinition::TYPE_PHYSICAL);
+        $this->deleteAddress('billing-address');
+        $this->deleteAddress('shipping-address');
+        static::assertSame(200, $this->login());
+
+        static::assertNotCount(0, $this->addBlogToCart());
+
+        $this->browser->request('POST', '/store-api/account/address', [
+            'firstName' => 'Max',
+            'lastName' => 'Mustermann',
+            'street' => 'Musterstraße 2',
+            'city' => 'Schöppingen',
+            'zipcode' => '12345',
+            'salutationId' => $this->getValidSalutationId(),
+            'countryId' => $this->getValidCountryId($this->ids->get('sales-channel')),
+        ]);
+        static::assertSame(200, $this->browser->getResponse()->getStatusCode());
+
+        // the route mints its own id
+        $addressId = $this->decodeResponse()['id'] ?? null;
+        static::assertIsString($addressId);
+
+        foreach (['default-billing', 'default-shipping'] as $type) {
+            $this->browser->request('PATCH', '/store-api/account/address/' . $type . '/' . $addressId);
+            static::assertSame(204, $this->browser->getResponse()->getStatusCode());
+        }
+
+        static::assertSame([], $this->addBlogToCart());
+    }
+
+    private function login(): int
+    {
+        $this->browser->request('POST', '/store-api/account/login', [
+            'email' => $this->email,
+            'password' => 'contena',
+        ]);
+
+        $token = $this->browser->getResponse()->headers->get(PlatformRequest::HEADER_CONTEXT_TOKEN);
+        if (\is_string($token)) {
+            $this->browser->setServerParameter('HTTP_SW_CONTEXT_TOKEN', $token);
+        }
+
+        return $this->browser->getResponse()->getStatusCode();
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    private function addBlogToCart(): array
+    {
+        $this->browser->request(
+            'POST',
+            '/store-api/checkout/cart/line-item',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json'],
+            json_encode([
+                'items' => [[
+                    'id' => $this->ids->get('blog'),
+                    'referencedId' => $this->ids->get('blog'),
+                    'quantity' => 1,
+                    'type' => 'blog',
+                ]],
+            ], \JSON_THROW_ON_ERROR)
+        );
+
+        static::assertSame(200, $this->browser->getResponse()->getStatusCode());
+
+        return $this->decodeResponse()['errors'] ?? [];
+    }
+
+    private function assertOrderIsRefused(): void
+    {
+        $before = $this->countOrders();
+
+        $this->browser->request('POST', '/store-api/checkout/order', []);
+
+        static::assertNotSame(200, $this->browser->getResponse()->getStatusCode());
+        static::assertSame($before, $this->countOrders(), 'no order may be persisted without a valid address');
+    }
+
+    private function countOrders(): int
+    {
+        return (int) $this->connection->fetchOne('SELECT COUNT(*) FROM `order`');
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function decodeResponse(): array
+    {
+        return json_decode((string) $this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+    }
+
+    private function deleteAddress(string $key): void
+    {
+        $affected = $this->connection->delete('user_address', ['id' => Uuid::fromHexToBytes($this->ids->get($key))]);
+
+        static::assertSame(1, $affected);
+    }
+
+    private function createUser(): void
+    {
+        $repository = static::getContainer()->get('user.repository');
+        static::assertInstanceOf(EntityRepository::class, $repository);
+
+        $address = [
+            'firstName' => 'Max',
+            'lastName' => 'Mustermann',
+            'street' => 'Musterstraße 1',
+            'city' => 'Schöppingen',
+            'zipcode' => '12345',
+            'salutationId' => $this->getValidSalutationId(),
+            'countryId' => $this->getValidCountryId($this->ids->get('sales-channel')),
+        ];
+
+        $repository->create([[
+            'id' => $this->ids->create('user'),
+            'channelId' => $this->ids->get('sales-channel'),
+            'defaultBillingAddress' => ['id' => $this->ids->create('billing-address')] + $address,
+            'defaultShippingAddress' => ['id' => $this->ids->create('shipping-address')] + $address,
+            'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+            'email' => $this->email,
+            'password' => 'contena',
+            'firstName' => 'Max',
+            'lastName' => 'Mustermann',
+            'salutationId' => $this->getValidSalutationId(),
+            'userNumber' => '12345',
+        ]], Context::createDefaultContext());
+    }
+
+    private function createBlog(string $type): void
+    {
+        $repository = static::getContainer()->get('blog.repository');
+        static::assertInstanceOf(EntityRepository::class, $repository);
+
+        $repository->create([[
+            'id' => $this->ids->create('blog'),
+            'blogNumber' => Uuid::randomHex(),
+            'stock' => 100,
+            'name' => 'Test blog',
+            'type' => $type,
+            'price' => [[
+                'currencyId' => Defaults::CURRENCY,
+                'gross' => 25,
+                'net' => 25,
+                'linked' => false,
+            ]],
+            'manufacturer' => ['name' => 'Test manufacturer'],
+            'tax' => ['taxRate' => 19, 'name' => 'Test tax'],
+            'active' => true,
+            'visibilities' => [[
+                'channelId' => $this->ids->get('sales-channel'),
+                'visibility' => BlogVisibilityDefinition::VISIBILITY_ALL,
+            ]],
+        ]], Context::createDefaultContext());
+    }
+}

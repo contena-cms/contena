@@ -1,0 +1,309 @@
+{% block sw_customer_card %}
+<mt-card
+    class="sw-user-card"
+    position-identifier="sw-user"
+    :title="title"
+    :is-loading="isLoading"
+>
+    {% block sw_customer_card_header_right %}
+    <template #headerRight>
+        <div class="sw-user-card__header">
+        {% block sw_customer_card_convert_guest %}
+            <sw-user-convert-guest-modal
+                v-if="showConvertCustomerModal"
+                :user="user"
+                @modal-close="onCloseConvertCustomerModal"
+            />
+        {% endblock %}
+        {% block sw_customer_card_imitate_customer_modal %}
+            <sw-user-imitate-user-modal
+                v-if="showImitateCustomerModal"
+                :user="user"
+                @modal-close="onCloseImitateCustomerModal"
+            />
+        {% endblock %}
+
+        {% block sw_customer_card_convert_customer_modal %}
+            <mt-button
+                v-if="canUseConvertCustomer"
+                variant="action"
+                @click="onOpenConvertCustomerModal"
+            >
+                {{ $t('sw-user.card.buttonConvertCustomer') }}
+            </mt-button>
+        {% endblock %}
+
+        {% block sw_customer_card_action_customer_impersonation %}
+            <mt-button
+                v-tooltip="{
+                    message: userImitationWarning,
+                    disabled: canUseCustomerImitation,
+                    showOnDisabledElements: true
+                }"
+                :disabled="!canUseCustomerImitation"
+                variant="secondary"
+                @click="onImitateCustomer"
+            >
+                <template v-if="hasSingleBoundSalesChannelUrl">
+                    {{ $t('sw-user.card.buttonImitateCustomer') }}
+                </template>
+
+                <template v-else>
+                    {{ $t('sw-user.card.buttonImitateCustomer') }}
+                </template>
+
+                <template
+                    v-if="hasSingleBoundSalesChannelUrl"
+                    #iconBack
+                >
+                    <mt-icon
+                        name="regular-external-link-s"
+                        size="12px"
+                    />
+                </template>
+            </mt-button>
+        {% endblock %}
+        </div>
+    </template>
+    {% endblock %}
+
+    {% block sw_customer_card_rows %}
+    <template #grid>
+        <sw-container rows="auto auto">
+            {% block sw_customer_card_row_primary %}
+            <sw-card-section divider="bottom">
+                {% block sw_customer_card_metadata_container %}
+                <div>
+                    {% block sw_customer_card_metadata %}
+                    <div class="sw-user-card__metadata">
+                        <div class="sw-user-card__metadata-header">
+                            {% block sw_customer_card_avatar %}
+                            <mt-avatar
+                                v-if="!editMode"
+                                size="l"
+                                :first-name="user.firstName"
+                                :last-name="user.lastName"
+                            />
+                            {% endblock %}
+
+                            <div class="sw-user-card__metadata-header-text">
+                                {% block sw_customer_card_metadata_customer_name %}
+                                {% block sw_custsomer_card_metadata_customer_name_label %}
+                                <template v-if="!editMode">
+                                    <div
+                                        v-if="user"
+                                        class="sw-user-card__metadata-user-name"
+                                    >
+                                        <span>{{ fullName }}</span>
+
+                                        <mt-badge
+                                            v-if="user.guest"
+                                            class="sw-user-card__metadata-user-guest-label"
+                                        >
+                                            {{ $t('sw-user.card.labelGuest') }}
+                                        </mt-badge>
+                                    </div>
+                                </template>
+                                {% endblock %}
+
+                                {% block sw_customer_card_metadata_customer_email %}
+                                {% block sw_customer_card_metadata_customer_email_label %}
+                                <div v-if="user.email && !editMode">
+                                    <mt-link
+                                        as="a"
+                                        role="link"
+                                        class="sw-user-card-email-link"
+                                        :to="getMailTo(user.email)"
+                                    >
+                                        {{ emailIdnFilter(user.email) }}
+                                    </mt-link>
+                                </div>
+                                {% endblock %}
+                            </div>
+                        </div>
+
+                        {% block sw_customer_card_metadata_customer_name_editor %}
+                        <div v-if="editMode">
+                            <sw-container
+                                columns="1fr 1fr"
+                                gap="10px"
+                            >
+                                {% block sw_customer_card_account_type_field %}
+                                <sw-single-select
+                                    v-model:value="user.accountType"
+                                    name="sw-field--user-accountType"
+                                    class="sw-user-card__account-type-select"
+                                    :label="$t('sw-user.userType.labelAccountType')"
+                                    :placeholder="$t('sw-user.userType.placeholderAccountType')"
+                                    :options="accountTypeOptions"
+                                />
+                                {% endblock %}
+
+                                {% block sw_customer_card_metadata_customer_name_editor_salutation %}
+                                <sw-entity-single-select
+                                    v-model:value="user.salutationId"
+                                    name="sw-field--user-salutationId"
+                                    class="sw-user-card__salutation-select"
+                                    entity="salutation"
+                                    label-property="displayName"
+                                    :label="$t('sw-user.card.labelSalutation')"
+                                    :criteria="salutationCriteria"
+                                />
+                                {% endblock %}
+
+                                {% block sw_customer_card_metadata_customer_name_editor_title %}
+                                <mt-text-field
+                                    v-model="user.title"
+                                    name="sw-field--user-title"
+                                    :label="$t('sw-user.card.labelTitle')"
+                                    :placeholder="$t('sw-user.card.placeholderTitle')"
+                                />
+                                {% endblock %}
+                            </sw-container>
+
+                            <sw-container
+                                columns="1fr 1fr"
+                                gap="10px"
+                            >
+                                {% block sw_customer_card_metadata_customer_name_editor_first_name %}
+                                <mt-text-field
+                                    v-model="user.firstName"
+                                    name="sw-field--user-firstName"
+                                    :label="$t('sw-user.card.labelFirstName')"
+                                    validation="required"
+                                    required
+                                    :error="userFirstNameError"
+                                    :placeholder="$t('sw-user.card.placeholderFirstName')"
+                                />
+                                {% endblock %}
+
+                                {% block sw_customer_card_metadata_customer_name_editor_last_name %}
+                                <mt-text-field
+                                    v-model="user.lastName"
+                                    name="sw-field--user-lastName"
+                                    :label="$t('sw-user.card.labelLastName')"
+                                    validation="required"
+                                    required
+                                    :error="userLastNameError"
+                                    :placeholder="$t('sw-user.card.placeholderLastName')"
+                                />
+                                {% endblock %}
+                            </sw-container>
+
+                            {% block sw_customer_card_metadata_customer_name_editor_company %}
+                            <mt-text-field
+                                v-model="user.company"
+                                name="sw-field--user-company"
+                                :required="isBusinessAccountType"
+                                :error="userCompanyError"
+                                :label="$t('sw-user.card.labelCompany')"
+                                :placeholder="$t('sw-user.card.placeholderCompany')"
+                            />
+                            {% endblock %}
+                        </div>
+                        {% endblock %}
+                        {% endblock %}
+
+                        {% block sw_customer_card_vat_ids %}
+                        <mt-text-field
+                            v-if="editMode && isBusinessAccountType"
+                            v-model="user.vatIds[0]"
+                            name="vatId"
+                            :label="$t('sw-user.card.labelVatId')"
+                            :placeholder="$t('sw-user.card.placeholderVatId')"
+                            :error="userVatIdsError"
+                        />
+                        {% endblock %}
+
+                        {% block sw_customer_card_metadata_customer_email_editor %}
+                        <mt-email-field
+                            v-if="editMode"
+                            v-model="user.email"
+                            name="sw-field--user-email"
+                            validation="required"
+                            required
+                            :label="$t('sw-user.card.labelEmail')"
+                            :placeholder="$t('sw-user.card.placeholderEmail')"
+                            :error="userEmailError"
+                        />
+                        {% endblock %}
+                        {% endblock %}
+
+                        {% block sw_customer_card_password %}
+                        <mt-password-field
+                            v-if="editMode"
+                            v-model="user.passwordNew"
+                            name="sw-field--user-passwordNew"
+                            autocomplete="new-password"
+                            :disabled="user.guest"
+                            :label="$t('sw-profile.index.labelNewPassword')"
+                            :placeholder="$t('sw-user.card.placeholderNewPassword')"
+                            :error="userPasswordError"
+                        />
+                        {% endblock %}
+
+                        {% block sw_customer_card_password_confirm %}
+                        <mt-password-field
+                            v-if="editMode"
+                            v-model="user.passwordConfirm"
+                            name="sw-field--user-passwordConfirm"
+                            autocomplete="new-password"
+                            :disabled="user.guest"
+                            :label="$t('sw-profile.index.labelNewPasswordConfirm')"
+                            :placeholder="$t('sw-user.card.placeholderNewPasswordConfirm')"
+                            :error="userPasswordConfirmError"
+                        />
+                        {% endblock %}
+
+                        {% block sw_customer_card_metadata_customer_tag %}
+                        <sw-entity-tag-select
+                            v-if="user.tags?.length || editMode"
+                            v-model:entity-collection="user.tags"
+                            name="sw-field--user-tags"
+                            :label="editMode ? $t('sw-user.baseForm.labelTags') : ''"
+                            :placeholder="editMode ? $t('sw-user.baseForm.placeholderTags') : ''"
+                            class="sw-user-card__tag-select"
+                            :disabled="!editMode"
+                            :size="editMode ? 'default' : 'medium'"
+                        />
+                        {% endblock %}
+
+                        {% block sw_customer_card_metadata_additional %}
+                        <slot name="metadata-additional">
+                            {% block sw_customer_card_slot_metadata_additional %}{% endblock %}
+                        </slot>
+                        {% endblock %}
+
+                        {% block sw_customer_card_actions %}
+                        <div
+                            v-if="hasActionSlot"
+                            class="sw-user-card__actions"
+                        >
+                            <slot name="actions">
+                                {% block sw_customer_card_slot_actions %}{% endblock %}
+                            </slot>
+                        </div>
+                        {% endblock %}
+                    </div>
+                    {% endblock %}
+                </div>
+                {% endblock %}
+            </sw-card-section>
+            {% endblock %}
+
+            {% block sw_customer_card_row_secondary %}
+            <sw-card-section
+                class="sw-user-card__detailed-data"
+                secondary
+                slim
+            >
+                <slot name="default">
+                    {% block sw_customer_card_slot_default %}{% endblock %}
+                </slot>
+            </sw-card-section>
+            {% endblock %}
+        </sw-container>
+    </template>
+    {% endblock %}
+</mt-card>
+{% endblock %}

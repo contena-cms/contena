@@ -1,0 +1,35 @@
+{
+  "sw-settings-units": {
+    "detail": {
+      "fieldLabels": {
+        "name": "Blog unit name",
+        "shortCode": "Short code"
+      }
+    },
+    "general": {
+      "mainMenuItemGeneral": "Blog units",
+      "placeholderSearchBar": "Search blog units...",
+      "createNewUnit": "Add blog unit",
+      "disableAddNewUnitMessage": "New blog units can only be added in the system default language."
+    },
+    "grid": {
+      "columnName": "Blog unit",
+      "columnShortCode": "Shorthand"
+    },
+    "empty-state": {
+      "title": "No blog units yet",
+      "subline": "Manage blog units here."
+    },
+    "notification": {
+      "successMessage": "Blog unit has been saved.",
+      "errorMessage": "Blog unit could not be saved. Please fill in all required fields."
+    }
+  },
+  "sw-privileges": {
+    "permissions": {
+      "scale_unit": {
+        "label": "Blog units"
+      }
+    }
+  }
+}

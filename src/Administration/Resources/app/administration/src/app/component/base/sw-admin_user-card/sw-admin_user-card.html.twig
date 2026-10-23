@@ -1,0 +1,118 @@
+{% block sw_user_card %}
+<mt-card
+    class="sw-admin_user-card"
+    position-identifier="sw-admin_user-card"
+    :title="title"
+    :is-loading="isLoading"
+>
+
+    {% block sw_user_card_rows %}
+    <template #grid>
+        <sw-container rows="auto auto">
+
+            {% block sw_user_card_row_primary %}
+            <sw-card-section divider="bottom">
+
+                {% block sw_user_card_metadata_container %}
+                <sw-container
+                    columns="80px 1fr max-content"
+                    gap="0px 30px"
+                    align="center"
+                >
+
+                    {% block sw_user_card_avatar %}
+                    <sw-avatar
+                        :color="moduleColor"
+                        size="80px"
+                        :source-context="admin_user"
+                        :first-name="admin_user.firstName"
+                        :last-name="admin_user.lastName"
+                    />
+                    {% endblock %}
+
+                    {% block sw_user_card_metadata %}
+                    <div class="sw-admin_user-card__metadata">
+
+                        {% block sw_user_card_metadata_user_name %}
+                        <div
+                            v-if="admin_user"
+                            class="sw-admin_user-card__metadata-admin_user-name"
+                        >
+                            {{ salutationFilter(admin_user) }}
+                        </div>
+                        {% endblock %}
+
+                        {% block sw_user_card_metadata_user_company %}
+                        <div
+                            v-if="admin_user.company"
+                            class="sw-admin_user-card__metadata-item"
+                        >
+                            {{ admin_user.company }}
+                        </div>
+                        {% endblock %}
+
+                        {% block sw_user_card_metadata_user_email %}
+                        <div
+                            v-if="admin_user.email"
+                            class="sw-admin_user-card__metadata-item"
+                        >
+                            Email: {{ admin_user.email }}
+                        </div>
+                        {% endblock %}
+
+                        {% block sw_user_card_metadata_additional %}
+                        <slot name="metadata-additional">
+                            {% block sw_user_card_slot_metadata_additional %}{% endblock %}
+                        </slot>
+                        {% endblock %}
+
+                        {% block sw_user_card_actions %}
+                        <div
+                            v-if="hasActionSlot"
+                            class="sw-admin_user-card__actions"
+                        >
+                            <slot name="actions">
+                                {% block sw_user_card_slot_actions %}{% endblock %}
+                            </slot>
+                        </div>
+                        {% endblock %}
+
+                    </div>
+                    {% endblock %}
+
+                    <div
+                        v-if="hasSummarySlot"
+                        align="right"
+                    >
+                        <slot name="summary">
+                            {% block sw_user_card_slot_summary%}{% endblock %}
+                        </slot>
+                    </div>
+
+                </sw-container>
+                {% endblock %}
+
+                <div v-if="hasAdditionalDataSlot">
+                    <slot name="data-additional">
+                        {% block sw_user_card_slot_data_additional %}{% endblock %}
+                    </slot>
+                </div>
+
+            </sw-card-section>
+            {% endblock %}
+
+            {% block sw_user_card_row_secondary %}
+            <sw-card-section
+                secondary
+                slim
+            >
+                <slot>
+                    {% block sw_user_card_slot_default %}{% endblock %}
+                </slot>
+            </sw-card-section>
+            {% endblock %}
+        </sw-container>
+    </template>
+    {% endblock %}
+</mt-card>
+{% endblock %}

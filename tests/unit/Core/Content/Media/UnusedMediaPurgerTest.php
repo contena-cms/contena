@@ -1,0 +1,1772 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Media;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
+use Contena\Core\Content\Media\Event\UnusedMediaSearchStartEvent;
+use Contena\Core\Content\Media\MediaCollection;
+use Contena\Core\Content\Media\MediaEntity;
+use Contena\Core\Content\Media\MediaException;
+use Contena\Core\Content\Media\UnusedMediaPurger;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
+use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\IgnoreInUnusedMediaSearch;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\CountResult;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+
+/**
+ * @internal
+ */
+#[CoversClass(UnusedMediaPurger::class)]
+class UnusedMediaPurgerTest extends TestCase
+{
+    public function testGetNotUsedMediaOnlyAppliesValidAssociationsToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                static function () {
+                    return [];
+                },
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaWithPaging(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+        $id3 = Uuid::randomHex();
+        $id4 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+        $media3 = $this->createMedia($id3);
+        $media4 = $this->createMedia($id4);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    self::assertSame(50, $criteria->getLimit());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                static function (Criteria $criteria, Context $context) use ($id3, $id4) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    self::assertSame(50, $criteria->getLimit());
+
+                    return [$id3, $id4];
+                },
+                static function (Criteria $criteria, Context $context) use ($id3, $id4, $media3, $media4) {
+                    static::assertSame([$id3, $id4], $criteria->getIds());
+
+                    return new MediaCollection([$media3, $media4]);
+                },
+                static function () {
+                    return [];
+                },
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2, $media3, $media4], $media);
+    }
+
+    public function testGetNotUsedMediaOnlyFetchesSingleResultSetIfLimitAndOffsetSupplied(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+        $id3 = Uuid::randomHex();
+        $id4 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+        $media3 = $this->createMedia($id3);
+        $media4 = $this->createMedia($id4);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $id3, $id4) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2, $id3, $id4];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $id3, $id4, $media1, $media2, $media3, $media4) {
+                    static::assertSame([$id1, $id2, $id3, $id4], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2, $media3, $media4]);
+                },
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia(4, 0)));
+
+        static::assertSame([$media1, $media2, $media3, $media4], $media);
+    }
+
+    public function testGetNotUsedMediaCorrectlyAppliesOneToOneAssociationToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new FkField('meta_id', 'metaId', 'Meta'))->addFlags(new Required()),
+                new OneToOneAssociationField('meta', 'meta_id', 'id', 'Meta', false),
+            ]),
+            'Meta' => $this->getMetaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.meta.id', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaCorrectlyAppliesOneToManyAssociationToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'BlogMedia' => $this->getBlogMediaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.blogMedia.mediaId', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaCorrectlyAppliesManyToManyAssociationToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new ManyToManyAssociationField(
+                    'galleries',
+                    'MediaGallery',
+                    'MediaGalleryMapping',
+                    'media_id',
+                    'gallery_id',
+                ),
+            ]),
+            'MediaGallery' => $this->getMediaGalleryDefinition(),
+            'MediaGalleryMapping' => $this->getMediaGalleryMappingDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.galleries.id', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaIgnoresAggregateEntities(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new OneToManyAssociationField('thumbnails', 'Thumbnail', 'media_id'))->addFlags(new ApiAware(), new CascadeDelete()),
+            ]),
+            'Thumbnail' => $this->getThumbnailDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaAppliesFolderRestrictionToCriteriaIfPresent(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsAnyFilter::class, $filters[0]);
+                    self::assertSame('media.mediaFolderId', $filters[0]->getField());
+                    self::assertSame(['id1', 'id2', 'id3', 'id4'], $filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $connection = static::createStub(Connection::class);
+
+        $connection
+            ->method('fetchOne')
+            ->willReturn('id1');
+
+        $connection
+            ->method('fetchAllAssociativeIndexed')
+            ->willReturn([
+                'id2' => ['id' => 'id2', 'parent_id' => 'id1'],
+                'id3' => ['id' => 'id3', 'parent_id' => 'id2'],
+                'id4' => ['id' => 'id4', 'parent_id' => 'id1'],
+                'id5' => ['id' => 'id4', 'parent_id' => 'some-other-parent'],
+                'id6' => ['id' => 'id4', 'parent_id' => 'id5'],
+            ]);
+
+        $purger = new UnusedMediaPurger($repo, $connection, new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia(null, null, null, 'media_gallery')));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaChecksEachAssociationInItsOwnQuery(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new FkField('meta_id', 'metaId', 'Meta'))->addFlags(new Required()),
+                new OneToOneAssociationField('meta', 'meta_id', 'id', 'Meta', false),
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'Meta' => $this->getMetaDefinition(),
+            'BlogMedia' => $this->getBlogMediaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    // one association per query: a single criteria carrying every association join is what
+                    // exceeds MySQL's max_join_size, however few ids drive it
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.meta.id', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    // $id2 is referenced here, so the next association is never asked about it
+                    return [$id1];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1) {
+                    self::assertSame([$id1], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.blogMedia.mediaId', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $media1) {
+                    static::assertSame([$id1], $criteria->getIds());
+
+                    return new MediaCollection([$media1]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1], $media);
+    }
+
+    public function testGetNotUsedMediaStopsQueryingOnceEveryCandidateIsReferenced(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new FkField('meta_id', 'metaId', 'Meta'))->addFlags(new Required()),
+                new OneToOneAssociationField('meta', 'meta_id', 'id', 'Meta', false),
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'Meta' => $this->getMetaDefinition(),
+            'BlogMedia' => $this->getBlogMediaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static fn (Criteria $criteria, Context $context) => [$id1],
+                // the whole batch is referenced, so the remaining associations are not queried at all
+                static fn (Criteria $criteria, Context $context) => [],
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([], $media);
+    }
+
+    public function testGetNotUsedMediaStillChecksEveryAssociationWhenFolderRestrictionIsPresent(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'BlogMedia' => $this->getBlogMediaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    $filters = $criteria->getFilters();
+
+                    // the folder restriction scopes which media is scanned
+                    self::assertCount(1, $filters);
+                    self::assertInstanceOf(EqualsAnyFilter::class, $filters[0]);
+                    self::assertSame('media.mediaFolderId', $filters[0]->getField());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    // folder membership says where a media file is placed, never whether something
+                    // still references it, so the association is checked even for a folder run
+                    self::assertCount(1, $filters);
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.blogMedia.mediaId', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $media1) {
+                    static::assertSame([$id1], $criteria->getIds());
+
+                    return new MediaCollection([$media1]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchOne')->willReturn('id1');
+        $connection->method('fetchAllAssociativeIndexed')->willReturn([]);
+
+        $purger = new UnusedMediaPurger($repo, $connection, new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia(null, null, null, 'media_gallery')));
+
+        static::assertSame([$media1], $media);
+    }
+
+    public function testGetNotUsedMediaSkipsAssociationIfNoFkeyFound(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'BlogMedia' => $this->getBlogMediaDefinition(false),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaSkipsNonValidAssociations(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new ManyToOneAssociationField('admin_user', 'admin_user_id', AdminUserDefinition::class, 'id'),
+            ]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaSkipsAssociationsMarkedToIgnoreUnusedMediaSearch(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new FkField('meta_id', 'metaId', 'Meta'))->addFlags(new Required()),
+                (new OneToOneAssociationField('meta', 'meta_id', 'id', 'Meta', false))->addFlags(new IgnoreInUnusedMediaSearch()),
+            ]),
+            'Meta' => $this->getMetaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $media1, $media2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return new MediaCollection([$media1, $media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media1, $media2], $media);
+    }
+
+    public function testGetNotUsedMediaDoesNotFetchMediaIfRemovedByListener(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media2 = $this->createMedia($id2);
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id2, $media2) {
+                    static::assertSame([$id2], $criteria->getIds());
+
+                    return new MediaCollection([$media2]);
+                },
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(UnusedMediaSearchEvent::class, static function (UnusedMediaSearchEvent $event) use ($id1): void {
+            $event->markAsUsed([$id1]);
+        });
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), $eventDispatcher, new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([$media2], $media);
+    }
+
+    public function testGetNotUsedMediaDoesNotFetchAnyMediaIfAllRemovedByListener(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = StaticEntityRepository::of(
+            MediaCollection::class,
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition
+        );
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(UnusedMediaSearchEvent::class, static function (UnusedMediaSearchEvent $event) use ($id1, $id2): void {
+            $event->markAsUsed([$id1, $id2]);
+        });
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), $eventDispatcher, new NativeClock());
+        $media = array_merge([], ...iterator_to_array($purger->getNotUsedMedia()));
+
+        static::assertSame([], $media);
+    }
+
+    public function testDeleteNotUsedMediaOnlyAppliesValidAssociationsToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+
+        $repo = $this->repositoryWithCounts(
+            [
+                [$id1, $id2],
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $media1->getId()],
+                    ['id' => $media2->getId()],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaWithPaging(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+        $id3 = Uuid::randomHex();
+        $id4 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+        $media2 = $this->createMedia($id2);
+        $media3 = $this->createMedia($id3);
+        $media4 = $this->createMedia($id4);
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    self::assertSame(50, $criteria->getLimit());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id3, $id4) {
+                    $filters = $criteria->getFilters();
+
+                    // the cursor moves the candidate query forward, the reference check stays unfiltered
+                    self::assertCount(1, $filters);
+                    self::assertInstanceOf(RangeFilter::class, $filters[0]);
+                    self::assertSame('id', $filters[0]->getField());
+
+                    self::assertSame(50, $criteria->getLimit());
+
+                    return [$id3, $id4];
+                },
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $media1->getId()],
+                    ['id' => $media2->getId()],
+                ],
+                [
+                    ['id' => $media3->getId()],
+                    ['id' => $media4->getId()],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaAdvancesTheCursorOverCandidatesNotOverTheUnusedSubset(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'BlogMedia' => $this->getBlogMediaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+        $id3 = Uuid::randomHex();
+        $id4 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    // every candidate in this batch is referenced, so the batch yields nothing to delete
+                    return [];
+                },
+                static function (Criteria $criteria, Context $context) use ($id2, $id3, $id4) {
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+                    self::assertInstanceOf(RangeFilter::class, $filters[0]);
+                    self::assertSame('id', $filters[0]->getField());
+
+                    // the cursor has to carry the last *candidate* of the previous batch. Advancing it over
+                    // the unused subset instead would read `end([])`, which is false, and end the iteration
+                    // here with $id3 and $id4 never scanned
+                    self::assertSame(
+                        Uuid::fromHexToBytes($id2),
+                        $filters[0]->getParameter(RangeFilter::GT)
+                    );
+
+                    return [$id3, $id4];
+                },
+                static function (Criteria $criteria, Context $context) use ($id3, $id4) {
+                    self::assertSame([$id3, $id4], $criteria->getIds());
+
+                    return [$id3];
+                },
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame([[['id' => $id3]]], $repo->deletes);
+    }
+
+    public function testDeleteNotUsedMediaOnlyDeletesSingleResultSetIfLimitAndOffsetSupplied(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+        $id3 = Uuid::randomHex();
+        $id4 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2, $id3, $id4) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2, $id3, $id4];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia(4, 0);
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                    ['id' => $id3],
+                    ['id' => $id4],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaCorrectlyAppliesOneToOneAssociationToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new FkField('meta_id', 'metaId', 'Meta'))->addFlags(new Required()),
+                new OneToOneAssociationField('meta', 'meta_id', 'id', 'Meta', false),
+            ]),
+            'Meta' => $this->getMetaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.meta.id', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaCorrectlyAppliesOneToManyAssociationToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'BlogMedia' => $this->getBlogMediaDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.blogMedia.mediaId', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaCorrectlyAppliesManyToManyAssociationToCriteria(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new ManyToManyAssociationField(
+                    'galleries',
+                    'MediaGallery',
+                    'MediaGalleryMapping',
+                    'media_id',
+                    'gallery_id',
+                ),
+            ]),
+            'MediaGallery' => $this->getMediaGalleryDefinition(),
+            'MediaGalleryMapping' => $this->getMediaGalleryMappingDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertSame([$id1, $id2], $criteria->getIds());
+
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsFilter::class, $filters[0]);
+                    self::assertSame('media.galleries.id', $filters[0]->getField());
+                    self::assertNull($filters[0]->getValue());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaIgnoresAggregateEntities(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                (new OneToManyAssociationField('thumbnails', 'Thumbnail', 'media_id'))->addFlags(new ApiAware(), new CascadeDelete()),
+            ]),
+            'Thumbnail' => $this->getThumbnailDefinition(),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaThrowsExceptionWithInvalidFolderRestriction(): void
+    {
+        $this->expectExceptionObject(MediaException::defaultMediaFolderWithEntityNotFound('blog'));
+
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $repo = $this->repositoryWithCounts(
+            [
+            ],
+            $mediaDefinition,
+            // the folder lookup throws before the candidate count runs
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+
+        try {
+            $purger->deleteNotUsedMedia(null, null, null, 'blog');
+        } finally {
+            static::assertSame([], $repo->deletes);
+        }
+    }
+
+    public function testDeleteNotUsedMediaAppliesFolderRestrictionToCriteriaIfPresent(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    $filters = $criteria->getFilters();
+
+                    self::assertCount(1, $filters);
+
+                    self::assertInstanceOf(EqualsAnyFilter::class, $filters[0]);
+                    self::assertSame('media.mediaFolderId', $filters[0]->getField());
+                    self::assertSame(['id1', 'id2', 'id3', 'id4'], $filters[0]->getValue());
+
+                    // the candidate criteria is shared with the count above, so it must come back
+                    // untouched by it: an inherited TOTAL_COUNT_MODE_EXACT would make every batch
+                    // count the whole folder, and an inherited limit of 1 would shrink the batch
+                    self::assertSame(Criteria::TOTAL_COUNT_MODE_NONE, $criteria->getTotalCountMode());
+                    self::assertSame(50, $criteria->getLimit());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10, 2]
+        );
+
+        $connection = static::createStub(Connection::class);
+
+        $connection
+            ->method('fetchOne')
+            ->willReturn('id1');
+
+        $connection
+            ->method('fetchAllAssociativeIndexed')
+            ->willReturn([
+                'id2' => ['id' => 'id2', 'parent_id' => 'id1'],
+                'id3' => ['id' => 'id3', 'parent_id' => 'id2'],
+                'id4' => ['id' => 'id4', 'parent_id' => 'id1'],
+                'id5' => ['id' => 'id4', 'parent_id' => 'some-other-parent'],
+                'id6' => ['id' => 'id4', 'parent_id' => 'id5'],
+            ]);
+
+        $purger = new UnusedMediaPurger($repo, $connection, new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia(null, null, null, 'media_gallery');
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaSkipsAssociationIfNoFkeyFound(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new OneToManyAssociationField('blogMedia', 'BlogMedia', 'media_id', 'id'),
+            ]),
+            'BlogMedia' => $this->getBlogMediaDefinition(false),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaSkipsNonValidAssociations(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([
+                new ManyToOneAssociationField('admin_user', 'admin_user_id', AdminUserDefinition::class, 'id'),
+            ]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id1],
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaDoesNotDeleteMediaIfRemovedByListener(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(UnusedMediaSearchEvent::class, static function (UnusedMediaSearchEvent $event) use ($id1): void {
+            $event->markAsUsed([$id1]);
+        });
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), $eventDispatcher, new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $id2],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaDoesNotDeleteAnyMediaIfAllRemovedByListener(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $repo = $this->repositoryWithCounts(
+            [
+                static function (Criteria $criteria, Context $context) use ($id1, $id2) {
+                    self::assertCount(0, $criteria->getFilters());
+
+                    return [$id1, $id2];
+                },
+                // fake the grace period filter
+                static fn (Criteria $criteria) => $criteria->getIds(),
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(UnusedMediaSearchEvent::class, static function (UnusedMediaSearchEvent $event) use ($id1, $id2): void {
+            $event->markAsUsed([$id1, $id2]);
+        });
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), $eventDispatcher, new NativeClock());
+        $purger->deleteNotUsedMedia();
+
+        static::assertSame(
+            [],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaIgnoresMediaUploadedWithinTheGracePeriod(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $id1 = Uuid::randomHex();
+        $id2 = Uuid::randomHex();
+
+        $media1 = $this->createMedia($id1);
+
+        $repo = $this->repositoryWithCounts(
+            [
+                [$id1, $id2],
+                // the grace period query, the only one left now that the fixture has no association
+                static function (Criteria $criteria) use ($id1, $id2) {
+                    static::assertSame([$id1, $id2], $criteria->getIds());
+
+                    return [$id1];
+                },
+                [],
+            ],
+            $mediaDefinition,
+            [10]
+        );
+
+        $purger = new UnusedMediaPurger($repo, static::createStub(Connection::class), new EventDispatcher(), new NativeClock());
+        $purger->deleteNotUsedMedia(null, null, 3);
+
+        static::assertSame(
+            [
+                [
+                    ['id' => $media1->getId()],
+                ],
+            ],
+            $repo->deletes
+        );
+    }
+
+    public function testDeleteNotUsedMediaReportsTheMediaCountAsCandidatesWithoutFolderRestriction(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        // without a folder restriction every media item is a candidate, so it is counted only once
+        $repo = $this->repositoryWithCounts([[]], $mediaDefinition, [10]);
+
+        $startEvent = $this->deleteAndCaptureStartEvent($repo, static::createStub(Connection::class));
+
+        static::assertSame(10, $startEvent->totalMedia);
+        static::assertSame(10, $startEvent->totalMediaDeletionCandidates);
+    }
+
+    public function testDeleteNotUsedMediaReportsTheCandidatesOfTheRestrictedFolder(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $repo = $this->repositoryWithCounts([[]], $mediaDefinition, [25, 7]);
+
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchOne')->willReturn('id1');
+        $connection->method('fetchAllAssociativeIndexed')->willReturn([]);
+
+        $startEvent = $this->deleteAndCaptureStartEvent($repo, $connection, 'media_gallery');
+
+        static::assertSame(25, $startEvent->totalMedia);
+        static::assertSame(7, $startEvent->totalMediaDeletionCandidates);
+    }
+
+    public function testDeleteNotUsedMediaReportsZeroWhenTheCountIsMissing(): void
+    {
+        $this->configureRegistry([
+            'Media' => $mediaDefinition = $this->getMediaDefinition([]),
+        ]);
+
+        $repo = $this->repositoryWithCounts([[]], $mediaDefinition, [null]);
+
+        $startEvent = $this->deleteAndCaptureStartEvent($repo, static::createStub(Connection::class));
+
+        static::assertSame(0, $startEvent->totalMedia);
+        static::assertSame(0, $startEvent->totalMediaDeletionCandidates);
+    }
+
+    /**
+     * @param StaticEntityRepository<MediaCollection> $repo
+     */
+    private function deleteAndCaptureStartEvent(StaticEntityRepository $repo, Connection $connection, ?string $folderEntity = null): UnusedMediaSearchStartEvent
+    {
+        $startEvent = null;
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(UnusedMediaSearchStartEvent::class, static function (UnusedMediaSearchStartEvent $event) use (&$startEvent): void {
+            $startEvent = $event;
+        });
+
+        $purger = new UnusedMediaPurger($repo, $connection, $eventDispatcher, new NativeClock());
+        $purger->deleteNotUsedMedia(folderEntity: $folderEntity);
+
+        static::assertInstanceOf(UnusedMediaSearchStartEvent::class, $startEvent);
+
+        return $startEvent;
+    }
+
+    /**
+     * @param array<EntityDefinition> $definitions
+     */
+    private function configureRegistry(array $definitions): void
+    {
+        new StaticDefinitionInstanceRegistry(
+            $definitions,
+            static::createStub(ValidatorInterface::class),
+            static::createStub(EntityWriteGatewayInterface::class)
+        );
+    }
+
+    /**
+     * @param array<Field> $fields
+     */
+    private function getMediaDefinition(array $fields): EntityDefinition
+    {
+        $instance = new class extends EntityDefinition {
+            /**
+             * @var array<Field>
+             */
+            public array $extraFields = [];
+
+            public function getEntityName(): string
+            {
+                return 'media';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
+                    (new StringField('file_extension', 'fileExtension'))->addFlags(new ApiAware()),
+
+                    ...$this->extraFields,
+                ]);
+            }
+        };
+        $instance->extraFields = $fields;
+
+        return $instance;
+    }
+
+    private function getBlogMediaDefinition(bool $withFkey = true): EntityDefinition
+    {
+        $definition = new class extends EntityDefinition {
+            public bool $withFkey;
+
+            public function getEntityName(): string
+            {
+                return 'blog_media';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                $fields = new FieldCollection([
+                    new ManyToOneAssociationField('media', 'media_id', 'Media', 'id'),
+                ]);
+
+                if ($this->withFkey) {
+                    $fields->add(new FkField('media_id', 'mediaId', 'Media'));
+                }
+
+                return $fields;
+            }
+        };
+
+        $definition->withFkey = $withFkey;
+
+        return $definition;
+    }
+
+    private function getMetaDefinition(): EntityDefinition
+    {
+        return new class extends EntityDefinition {
+            public function getEntityName(): string
+            {
+                return 'media_meta';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
+
+                    new OneToOneAssociationField('media', 'id', 'meta_id', 'Media', false),
+                ]);
+            }
+        };
+    }
+
+    private function getMediaGalleryDefinition(): EntityDefinition
+    {
+        return new class extends EntityDefinition {
+            public function getEntityName(): string
+            {
+                return 'media_gallery';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
+                    (new StringField('title', 'title'))->addFlags(new Required()),
+
+                    new ManyToManyAssociationField(
+                        'media',
+                        'Media',
+                        'MediaGalleryMapping',
+                        'gallery_id',
+                        'media_id'
+                    ),
+                ]);
+            }
+        };
+    }
+
+    private function getMediaGalleryMappingDefinition(): EntityDefinition
+    {
+        return new class extends MappingEntityDefinition {
+            public function getEntityName(): string
+            {
+                return 'media_gallery_mapping';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    (new FkField('media_id', 'mediaId', 'Media'))->addFlags(new PrimaryKey(), new Required()),
+                    (new FkField('gallery_id', 'galleryId', 'MediaGallery'))->addFlags(new PrimaryKey(), new Required()),
+                    new ManyToOneAssociationField('media', 'media_id', 'Media', 'id'),
+                    new ManyToOneAssociationField('galleries', 'gallery_id', 'MediaGallery', 'id'),
+                ]);
+            }
+        };
+    }
+
+    private function getThumbnailDefinition(): EntityDefinition
+    {
+        return new class extends EntityDefinition {
+            public function getEntityName(): string
+            {
+                return 'media_thumbnail';
+            }
+
+            protected function getParentDefinitionClass(): string
+            {
+                return 'Media';
+            }
+
+            protected function defineFields(): FieldCollection
+            {
+                return new FieldCollection([
+                    (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
+                    new ManyToOneAssociationField('media', 'media_id', 'Media', 'id', false),
+                    (new FkField('media_id', 'mediaId', 'Media'))->addFlags(new ApiAware(), new Required()),
+                ]);
+            }
+        };
+    }
+
+    /**
+     * `StaticEntityRepository` has no `aggregate()` and is `@final`, so the count queries cannot go
+     * through its search queue. Only that one method is overridden; the queue still drives the rest.
+     *
+     * Like the real repository, a count is only returned when the criteria asks for the
+     * `media-count` aggregation; `null` stands for a result without it.
+     *
+     * @param array<mixed> $searches
+     * @param list<int|null> $counts
+     *
+     * @return StaticEntityRepository<MediaCollection>&MockObject
+     */
+    private function repositoryWithCounts(array $searches, EntityDefinition $definition, array $counts): StaticEntityRepository
+    {
+        $repository = $this->getMockBuilder(StaticEntityRepository::class)
+            ->setConstructorArgs([$searches, $definition])
+            ->onlyMethods(['aggregate'])
+            ->getMock();
+
+        $repository
+            ->expects($this->exactly(\count($counts)))
+            ->method('aggregate')
+            ->willReturnCallback(static function (Criteria $criteria) use (&$counts): AggregationResultCollection {
+                $count = array_shift($counts);
+
+                if ($count === null || $criteria->getAggregation('media-count') === null) {
+                    return new AggregationResultCollection();
+                }
+
+                return new AggregationResultCollection([new CountResult('media-count', $count)]);
+            });
+
+        return $repository;
+    }
+
+    private function createMedia(string $id): MediaEntity
+    {
+        $media = new MediaEntity();
+        $media->setId($id);
+
+        return $media;
+    }
+}

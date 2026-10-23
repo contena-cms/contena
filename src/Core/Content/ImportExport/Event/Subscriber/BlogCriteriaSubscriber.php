@@ -1,0 +1,79 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\ImportExport\Event\Subscriber;
+
+use Contena\Core\Content\ImportExport\Event\EnrichExportCriteriaEvent;
+use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
+use Contena\Core\Content\ImportExport\Struct\Config;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+/**
+ * @internal
+ */
+class BlogCriteriaSubscriber implements EventSubscriberInterface
+{
+    /**
+     * @return array<string, string|array{0: string, 1: int}|list<array{0: string, 1?: int}>>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        return [
+            EnrichExportCriteriaEvent::class => 'enrich',
+        ];
+    }
+
+    public function enrich(EnrichExportCriteriaEvent $event): void
+    {
+        /** @var ImportExportProfileEntity $profile */
+        $profile = $event->getLogEntity()->getProfile();
+        if ($profile->getSourceEntity() !== BlogDefinition::ENTITY_NAME) {
+            return;
+        }
+
+        $criteria = $event->getCriteria();
+        $criteria->resetSorting();
+
+        $criteria->addSorting(new FieldSorting('autoIncrement'));
+
+        $config = Config::fromLog($event->getLogEntity());
+
+        if ($config->get('includeVariants') !== true) {
+            $criteria->addFilter(new EqualsFilter('parentId', null));
+        }
+
+        $this->excludeUnmappedDescription($criteria, $config);
+    }
+
+    /**
+     * Skips loading the heavy `description` column when the export profile never maps it. The column
+     * is exported through the `translations` association, so it is dropped there too (only when the
+     * association is already loaded — we never add it just to reduce it). Left untouched if a field
+     * selection is already set.
+     */
+    private function excludeUnmappedDescription(Criteria $criteria, Config $config): void
+    {
+        foreach ($config->getMapping() as $mapping) {
+            if (\in_array('description', explode('.', $mapping->getKey()), true)) {
+                return;
+            }
+        }
+
+        if ($criteria->getFields() === [] && $criteria->getExcludedFields() === []) {
+            $criteria->excludeFields(['description']);
+        }
+
+        if (!$criteria->hasAssociation('translations')) {
+            return;
+        }
+
+        $translations = $criteria->getAssociation('translations');
+        if ($translations->getFields() === [] && $translations->getExcludedFields() === []) {
+            $translations->excludeFields(['description']);
+        }
+    }
+}

@@ -1,0 +1,229 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\SystemConfig;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Util\UtilException;
+use Contena\Core\System\SystemConfig\SystemConfigException;
+use Contena\Core\System\SystemConfig\Util\ConfigReader;
+use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\ValidConfigPlugin\ValidConfigPlugin;
+
+/**
+ * @internal
+ */
+#[CoversClass(ConfigReader::class)]
+class ConfigReaderTest extends TestCase
+{
+    private ConfigReader $configReader;
+
+    protected function setUp(): void
+    {
+        $this->configReader = new ConfigReader();
+    }
+
+    public function testConfigReaderWithValidConfig(): void
+    {
+        $actualConfig = $this->configReader->read(__DIR__ . '/_fixtures/valid_config.xml');
+
+        static::assertSame($this->getExpectedConfig(), $actualConfig);
+    }
+
+    public function testConfigReaderWithInvalidPath(): void
+    {
+        $this->expectException(UtilException::class);
+
+        $this->configReader->read(__DIR__ . '/config.xml');
+    }
+
+    public function testConfigReaderWithInvalidConfig(): void
+    {
+        $this->expectException(UtilException::class);
+
+        $this->configReader->read(__DIR__ . '/_fixtures/invalid_config.xml');
+    }
+
+    #[TestDox('Resolves a bundle config name with or without the xml suffix, and the default without a name')]
+    #[DataProvider('bundleConfigNameProvider')]
+    public function testGetConfigFromBundleResolvesTheConfigName(?string $bundleConfigName): void
+    {
+        $bundle = $this->validConfigPlugin();
+
+        $config = $this->configReader->getConfigFromBundle($bundle, $bundleConfigName);
+
+        static::assertSame($this->configReader->read($bundle->getPath() . '/Resources/config/config.xml'), $config);
+    }
+
+    public static function bundleConfigNameProvider(): \Generator
+    {
+        yield 'default config without a name' => [null];
+        yield 'name without the suffix' => ['config'];
+        yield 'name with the suffix' => ['config.xml'];
+        yield 'name with the suffix in upper case' => ['config.XML'];
+    }
+
+    public function testGetConfigFromBundleThrowsForAnUnknownConfigName(): void
+    {
+        $this->expectExceptionObject(SystemConfigException::bundleConfigNotFound('Resources/config/missing.xml', 'ValidConfigPlugin'));
+
+        $this->configReader->getConfigFromBundle($this->validConfigPlugin(), 'missing');
+    }
+
+    public function testGetConfigFromBundleKeepsTheSuffixOfANameWithATrailingNewline(): void
+    {
+        // the suffix is only stripped at the very end of the name, so the newline keeps it and the file is not found
+        $this->expectExceptionObject(SystemConfigException::bundleConfigNotFound("Resources/config/config.xml\n.xml", 'ValidConfigPlugin'));
+
+        $this->configReader->getConfigFromBundle($this->validConfigPlugin(), "config.xml\n");
+    }
+
+    private function validConfigPlugin(): ValidConfigPlugin
+    {
+        return new ValidConfigPlugin(active: true, basePath: __DIR__ . '/Service/_fixtures/ValidConfigPlugin');
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function getExpectedConfig(): array
+    {
+        return [
+            [
+                'title' => null,
+                'name' => null,
+                'cards' => [
+                    [
+                        'title' => [
+                            'en-GB' => 'Basic configuration',
+                            'de-DE' => 'Grundeinstellungen',
+                        ],
+                        'name' => null,
+                        'elements' => [
+                            [
+                                'type' => 'text',
+                                'name' => 'email',
+                                'copyable' => true,
+                                'label' => [
+                                    'en-GB' => 'eMail',
+                                    'de-DE' => 'E-Mail',
+                                ],
+                                'placeholder' => [
+                                    'en-GB' => 'Enter your eMail address',
+                                    'de-DE' => 'Bitte gib deine E-Mail Adresse ein',
+                                ],
+                                'defaultValue' => '42',
+                            ],
+                            [
+                                'type' => 'text',
+                                'name' => 'stringWithQuoteDefaultValueRemovesQuotes',
+                                'defaultValue' => '42',
+                            ],
+                            [
+                                'type' => 'text',
+                                'name' => 'nullDefault',
+                                'defaultValue' => null,
+                            ],
+                            [
+                                'type' => 'int',
+                                'name' => 'int',
+                                'defaultValue' => 42,
+                            ],
+                            [
+                                'type' => 'float',
+                                'name' => 'float',
+                                'defaultValue' => 42.0,
+                            ],
+                            [
+                                'type' => 'float',
+                                'name' => 'floatWithStringValueExpectsValueIsCastedToFloat',
+                                'defaultValue' => 42.5,
+                            ],
+                            [
+                                'type' => 'bool',
+                                'cacheRelevant' => true,
+                                'name' => 'bool',
+                                'defaultValue' => true,
+                            ],
+                            [
+                                'type' => 'single-select',
+                                'name' => 'mailMethod',
+                                'options' => [
+                                    [
+                                        'id' => 'smtp',
+                                        'name' => [
+                                            'en-GB' => 'SMTP',
+                                        ],
+                                    ],
+                                    [
+                                        'id' => 'pop3',
+                                        'name' => [
+                                            'en-GB' => 'POP3',
+                                        ],
+                                    ],
+                                ],
+                                'label' => [
+                                    'en-GB' => 'Mailing protocol',
+                                    'de-DE' => 'E-Mail Versand Protokoll',
+                                ],
+                                'placeholder' => [
+                                    'en-GB' => 'Choose your preferred transfer method',
+                                    'de-DE' => 'Bitte wähle dein bevorzugtes Versand Protokoll',
+                                ],
+                                'defaultValue' => 'smtp',
+                            ],
+                            [
+                                'type' => 'single-select',
+                                'name' => 'period',
+                                'options' => [
+                                    [
+                                        'id' => '30',
+                                        'name' => [
+                                            'en-GB' => '1 Month',
+                                        ],
+                                    ],
+                                    [
+                                        'id' => '60',
+                                        'name' => [
+                                            'en-GB' => '2 Months',
+                                        ],
+                                    ],
+                                ],
+                                'defaultValue' => '30',
+                            ],
+                            [
+                                'componentName' => 'sw-select',
+                                'cacheRelevant' => true,
+                                'name' => 'mailMethodComponent',
+                                'disabled' => true,
+                                'options' => [
+                                    [
+                                        'id' => 'smtp',
+                                        'name' => [
+                                            'en-GB' => 'English smtp',
+                                            'de-DE' => 'German smtp',
+                                        ],
+                                    ],
+                                    [
+                                        'id' => 'pop3',
+                                        'name' => [
+                                            'en-GB' => 'English pop3',
+                                            'de-DE' => 'German pop3',
+                                        ],
+                                    ],
+                                ],
+                                'defaultValue' => 'pop3',
+                            ],
+                        ],
+                        'subtitle' => [
+                            'en-GB' => 'Basic configuration subtitle',
+                            'de-DE' => 'Grundkonfiguration Untertitel',
+                        ],
+                    ],
+                ],
+            ],
+        ];
+    }
+}

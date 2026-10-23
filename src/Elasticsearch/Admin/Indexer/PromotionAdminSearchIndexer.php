@@ -1,0 +1,195 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Elasticsearch\Admin\Indexer;
+
+use Doctrine\DBAL\ArrayParameterType;
+use Doctrine\DBAL\Connection;
+use Contena\Core\Checkout\Promotion\Aggregate\PromotionTranslation\PromotionTranslationDefinition;
+use Contena\Core\Checkout\Promotion\PromotionCollection;
+use Contena\Core\Checkout\Promotion\PromotionDefinition;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
+use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
+
+/**
+ * @final
+ */
+class PromotionAdminSearchIndexer extends AbstractAdminIndexer
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<PromotionCollection> $repository
+     */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly IteratorFactory $factory,
+        private readonly EntityRepository $repository,
+        private readonly ElasticsearchFieldBuilder $fieldBuilder,
+        private readonly int $indexingBatchSize
+    ) {
+    }
+
+    public function getDecorated(): AbstractAdminIndexer
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    public function getEntity(): string
+    {
+        return PromotionDefinition::ENTITY_NAME;
+    }
+
+    public function getName(): string
+    {
+        return 'promotion-listing';
+    }
+
+    public function getIterator(): IterableQuery
+    {
+        return $this->factory->createIterator($this->getEntity(), null, $this->indexingBatchSize);
+    }
+
+    public function getUpdatedIds(EntityWrittenContainerEvent $event): array
+    {
+        $promotionIds = $event->getPrimaryKeysWithPropertyChange($this->getEntity(), [
+            'active',
+            'code',
+            'validFrom',
+            'validUntil',
+        ]);
+
+        $translations = $event->getPrimaryKeysWithPropertyChange(PromotionTranslationDefinition::ENTITY_NAME, [
+            'name',
+        ]);
+
+        foreach ($translations as $pks) {
+            if (isset($pks['promotionId'])) {
+                $promotionIds[] = $pks['promotionId'];
+            }
+        }
+
+        return array_values(array_unique(array_filter($promotionIds, '\is_string')));
+    }
+
+    public function mapping(array $mapping): array
+    {
+        if (!Feature::isActive('ENABLE_OPENSEARCH_FOR_ADMIN_API')) {
+            return parent::mapping($mapping);
+        }
+
+        $languageFields = $this->fieldBuilder->translated(AbstractElasticsearchDefinition::KEYWORD_FIELD);
+
+        $override = [
+            'active' => AbstractElasticsearchDefinition::BOOLEAN_FIELD,
+            'code' => AbstractElasticsearchDefinition::KEYWORD_FIELD,
+            'name' => $languageFields,
+            'validFrom' => ElasticsearchFieldBuilder::datetime(),
+            'validUntil' => ElasticsearchFieldBuilder::datetime(),
+            'createdAt' => ElasticsearchFieldBuilder::datetime(),
+        ];
+
+        $mapping['properties'] ??= [];
+        $mapping['properties'] = array_merge($mapping['properties'], $override);
+
+        return $mapping;
+    }
+
+    public function globalData(array $result, Context $context): array
+    {
+        $ids = array_column($result['hits'], 'id');
+
+        return [
+            'total' => (int) $result['total'],
+            'data' => $this->repository->search(new Criteria($ids), $context)->getEntities(),
+        ];
+    }
+
+    /**
+     * @return array<string, array{
+     *      id: string,
+     *      text: string,
+     *      completion: list<string>
+     *   }>|array{
+     *     id: string,
+     *     text: string,
+     *     completion: list<string>,
+     *     name: array<string, string>,
+     *     code: mixed,
+     *     active: bool,
+     *     validFrom: string|null,
+     *     validUntil: string|null,
+     *     createdAt: string|null
+     * }
+     */
+    public function fetch(array $ids): array
+    {
+        $data = $this->connection->fetchAllAssociative(
+            <<<'SQL'
+            SELECT LOWER(HEX(promotion.id)) as id,
+                   GROUP_CONCAT(DISTINCT promotion_translation.name SEPARATOR " ") as name,
+                   JSON_ARRAYAGG(JSON_OBJECT(
+                       'languageId', LOWER(HEX(promotion_translation.language_id)),
+                       'name', promotion_translation.name
+                   )) as translatedNames,
+                   promotion.code AS code,
+                   promotion.active AS active,
+                   promotion.valid_from AS validFrom,
+                   promotion.valid_until AS validUntil,
+                   promotion.created_at as createdAt
+            FROM promotion
+                INNER JOIN promotion_translation
+                    ON promotion.id = promotion_translation.promotion_id
+            WHERE promotion.id IN (:ids)
+            GROUP BY promotion.id
+SQL,
+            [
+                'ids' => Uuid::fromHexToBytesList($ids),
+            ],
+            [
+                'ids' => ArrayParameterType::BINARY,
+            ]
+        );
+
+        $mapped = [];
+        foreach ($data as $row) {
+            $id = (string) $row['id'];
+            $text = \implode(' ', array_filter([$row['name'] ?? '', $row['code'] ?? '', $id]));
+            $translatedNames = $this->decodeTranslatedValues((string) ($row['translatedNames'] ?? ''));
+            $completion = $this->buildCompletion(array_values($translatedNames) ?: [(string) ($row['name'] ?? '')]);
+
+            if (!Feature::isActive('ENABLE_OPENSEARCH_FOR_ADMIN_API')) {
+                $mapped[$id] = [
+                    'id' => $id,
+                    'text' => \strtolower($text),
+                    'completion' => $completion,
+                ];
+
+                continue;
+            }
+
+            $mapped[$id] = [
+                'id' => $id,
+                'text' => \strtolower($text),
+                'completion' => $completion,
+                'name' => $translatedNames,
+                'code' => $row['code'] ?? null,
+                'active' => (bool) $row['active'],
+                'validFrom' => $this->formatDateTime($row, 'validFrom'),
+                'validUntil' => $this->formatDateTime($row, 'validUntil'),
+                'createdAt' => $this->formatDateTime($row, 'createdAt'),
+            ];
+        }
+
+        return $mapped;
+    }
+}

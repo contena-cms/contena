@@ -1,0 +1,19 @@
+.sw-order-detail-state-card {
+    font-size: var(--font-size-xs);
+
+    &__divider {
+        margin: var(--scale-size-32) 0;
+        border: none;
+        height: var(--scale-size-1);
+        background-color: var(--color-border-secondary-default);
+    }
+
+    &__content {
+        column-gap: var(--scale-size-32);
+        margin-bottom: calc(var(--scale-size-16) * -1);
+    }
+
+    &__state-history-text {
+        color: var(--color-text-secondary-default);
+    }
+}

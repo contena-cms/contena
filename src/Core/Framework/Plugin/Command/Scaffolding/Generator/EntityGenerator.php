@@ -1,0 +1,225 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Plugin\Command\Scaffolding\Generator;
+
+use Psr\Clock\ClockInterface;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
+use Contena\Core\Framework\Plugin\PluginException;
+use Symfony\Component\Console\Helper\QuestionHelper;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
+use Symfony\Component\Console\Question\Question;
+use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+
+/**
+ * @internal
+ */
+class EntityGenerator implements ScaffoldingGenerator
+{
+    use HasCommandOption;
+
+    public const OPTION_NAME = 'entities';
+    private const OPTION_TITLE = 'Custom Entities';
+    private const OPTION_DESCRIPTION = 'list of entities to generate (PascalCase, comma separated)';
+    private const OPTION_DESCRIPTION_LONG = 'Custom entities allow a plugin to store structured data in their own database tables using Contena\'s Data Abstraction Layer. Use it when your plugin needs a dedicated custom entity with repositories, fields, and relationships for managing complex data.';
+
+    private string $servicesPhpEntry = <<<'EOL'
+
+    $services->set(\{{ namespace }}\Core\Content\{{ entityName }}\{{ entityName }}Entity::class)
+        ->tag('contena.entity');
+
+EOL;
+
+    public function __construct(private readonly ClockInterface $clock)
+    {
+    }
+
+    public function getCommandOption(): InputOption
+    {
+        return new InputOption(self::OPTION_NAME, null, InputOption::VALUE_REQUIRED, self::OPTION_DESCRIPTION);
+    }
+
+    public function addScaffoldConfig(
+        PluginScaffoldConfiguration $config,
+        InputInterface $input,
+        OutputInterface $output
+    ): void {
+        $entities = $input->getOption(self::OPTION_NAME);
+
+        if (\is_string($entities) && $entities !== '') {
+            $this->processEntities($config, $entities);
+
+            return;
+        }
+
+        $entities = $this->askForEntities($input, $output);
+
+        if ($entities === null || $entities === '') {
+            return;
+        }
+
+        $this->processEntities($config, $entities);
+    }
+
+    public function generateStubs(
+        PluginScaffoldConfiguration $configuration,
+        StubCollection $stubCollection
+    ): void {
+        if (!$configuration->hasOption(self::OPTION_NAME)
+            || $configuration->getOption(self::OPTION_NAME) === []
+            || !\is_array($configuration->getOption(self::OPTION_NAME))
+        ) {
+            return;
+        }
+
+        foreach ($configuration->getOption(self::OPTION_NAME) as $entityName) {
+            if (!$this->migrationAlreadyExists($configuration, $entityName)) {
+                $stubCollection->add($this->createMigration($configuration, $entityName));
+            }
+
+            $stubCollection->add($this->createEntityClass($configuration, $entityName));
+            $stubCollection->add($this->createEntityCollection($configuration, $entityName));
+
+            $stubCollection->append(
+                'src/Resources/config/services.php',
+                str_replace(
+                    ['{{ namespace }}', '{{ entityName }}'],
+                    [$configuration->namespace, $entityName],
+                    $this->servicesPhpEntry
+                )
+            );
+        }
+    }
+
+    private function migrationAlreadyExists(
+        PluginScaffoldConfiguration $configuration,
+        string $entityName
+    ): bool {
+        $migrations = glob(
+            $configuration->directory . '/src/Migration/Migration*Create' . $entityName . 'Table.php'
+        );
+
+        return $migrations !== false && $migrations !== [];
+    }
+
+    private function createMigration(PluginScaffoldConfiguration $configuration, string $entityName): Stub
+    {
+        $tableName = $this->getTableName($entityName);
+        $timeStamp = (string) $this->clock->now()->getTimestamp();
+
+        $migrationPath = \sprintf(
+            'src/Migration/Migration%sCreate%sTable.php',
+            $timeStamp,
+            $entityName
+        );
+
+        return Stub::template(
+            $migrationPath,
+            self::STUB_DIRECTORY . '/migration.stub',
+            [
+                'namespace' => $configuration->namespace,
+                'entityName' => $entityName,
+                'tableName' => $tableName,
+                'timestamp' => $timeStamp,
+            ]
+        );
+    }
+
+    private function createEntityClass(PluginScaffoldConfiguration $configuration, string $entityName): Stub
+    {
+        $entityClassPath = \sprintf(
+            'src/Core/Content/%s/%sEntity.php',
+            $entityName,
+            $entityName
+        );
+
+        return Stub::template(
+            $entityClassPath,
+            self::STUB_DIRECTORY . '/entity.stub',
+            [
+                'namespace' => $configuration->namespace,
+                'entityName' => $entityName,
+                'tableName' => $this->getTableName($entityName),
+            ]
+        );
+    }
+
+    private function createEntityCollection(PluginScaffoldConfiguration $configuration, string $entityName): Stub
+    {
+        $entityCollectionPath = \sprintf(
+            'src/Core/Content/%s/%sCollection.php',
+            $entityName,
+            $entityName
+        );
+
+        return Stub::template(
+            $entityCollectionPath,
+            self::STUB_DIRECTORY . '/entity-collection.stub',
+            [
+                'namespace' => $configuration->namespace,
+                'entityName' => $entityName,
+            ]
+        );
+    }
+
+    private function getTableName(string $entityName): string
+    {
+        return (new CamelCaseToSnakeCaseNameConverter())->normalize($entityName);
+    }
+
+    private function askForEntities(InputInterface $input, OutputInterface $output): ?string
+    {
+        if (!$output instanceof ConsoleOutputInterface) {
+            throw PluginException::consoleOutputRequired();
+        }
+
+        $tempSection = $output->section();
+        $helper = new QuestionHelper();
+
+        $tempSection->writeln(\sprintf('<options=bold>%s</>', self::OPTION_TITLE));
+        $tempSection->writeln(self::OPTION_DESCRIPTION_LONG);
+        $tempSection->writeln('');
+
+        $confirmation = new ConfirmationQuestion('<fg=green>Do you want to create entities? [Y/n]:</>', true, '/^(y|j)/i');
+
+        if (!$helper->ask($input, $tempSection, $confirmation)) {
+            $tempSection->clear();
+
+            return null;
+        }
+
+        $entities = $helper->ask($input, $tempSection, new Question('<fg=green>Please provide a list of entities (PascalCase, comma separated):</>'));
+        $tempSection->clear();
+
+        return \is_string($entities) ? $entities : null;
+    }
+
+    private function processEntities(PluginScaffoldConfiguration $config, string $entities): void
+    {
+        $parsed = $this->parseEntities($entities);
+
+        if ($parsed !== []) {
+            $config->addOption(self::OPTION_NAME, $this->parseEntities($entities));
+        }
+    }
+
+    /**
+     * @return string[]
+     */
+    private function parseEntities(string $entities): array
+    {
+        $entities = str_replace([' ', '\\', '"', '\''], '', $entities);
+
+        $entities = explode(',', $entities);
+
+        return array_filter(array_map(static function (string $entity) {
+            return ucfirst(trim($entity));
+        }, $entities));
+    }
+}

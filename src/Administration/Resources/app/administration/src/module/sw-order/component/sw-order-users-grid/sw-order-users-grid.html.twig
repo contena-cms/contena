@@ -1,0 +1,235 @@
+{% block sw_order_customer_grid %}
+<mt-card
+    class="sw-order-user-grid"
+    position-identifier="sw-order-user-grid"
+    :is-loading="isSwitchingCustomer"
+>
+    <template #toolbar>
+        {% block sw_order_customer_grid_toolbar %}
+        <div class="sw-order-user-grid__toolbar">
+            {% block sw_order_customer_grid_search_input %}
+            <sw-card-filter
+                ref="userFilter"
+                @sw-card-filter-term-change="onSearch"
+            >
+                <template #filter>
+                    {% block sw_order_customer_grid_add_new_customer %}
+                    <mt-button
+                        class="sw-order-user-grid__add-user"
+                        size="small"
+                        variant="secondary"
+                        data-analytics-id="sw-order-user-grid.show-new-user-modal"
+                        @click="onShowNewCustomerModal"
+                    >
+                        {{ $t('sw-order.initialModal.userGrid.buttonAddNewCustomer') }}
+                    </mt-button>
+                    {% endblock %}
+                </template>
+            </sw-card-filter>
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </template>
+
+    <template #grid>
+        <div
+            class="sw-order-user-grid__container"
+        >
+            {% block sw_order_customer_grid_content %}
+            <sw-entity-listing
+                v-if="!showEmptyState"
+                class="sw-order-user-grid__content"
+                :show-selection="false"
+                :show-settings="false"
+                :data-source="users"
+                :columns="userColumns"
+                :repository="userRepository"
+                :is-loading="isLoading"
+                :is-record-disabled="userUnavailable"
+            >
+                {% block sw_order_customer_grid_content_column_select %}
+                <template #column-select="{ item }">
+                    <div class="sw-field__radio-input">
+                        <!-- eslint-disable-next-line vuejs-accessibility/form-control-has-label -->
+                        <input
+                            type="radio"
+                            :checked="isChecked(item)"
+                            :disabled="userUnavailable(item)"
+                            @change="onCheckCustomer(item)"
+                        >
+                        <div class="sw-field__radio-state"></div>
+                    </div>
+                </template>
+                {% endblock %}
+
+                {% block sw_order_customer_grid_content_grid_column_name %}
+                <template #column-firstName="{ item }">
+                    <router-link
+                        v-if="!userUnavailable(item)"
+                        :to="{ name: 'sw.user.detail', params: { id: item.id } }"
+                    >
+                        {{ item.firstName }} {{ item.lastName }}
+                    </router-link>
+
+                    <div
+                        v-else
+                        v-tooltip.top="{
+                            message: $t('sw-order.initialModal.tooltip.userUnavailable'),
+                            disabled: !userUnavailable(item),
+                        }"
+                    >
+                        {{ item.firstName }} {{ item.lastName }}
+                    </div>
+                </template>
+                {% endblock %}
+
+                <template #column-channel="{ item }">
+                    {{ item.boundSalesChannelId ? item?.boundSalesChannel.translated.name : $t('sw-order.initialModal.userGrid.labelAllChannel') }}
+                </template>
+
+                {% block sw_settings_product_feature_set_list_grid_columns_actions %}
+                <template #actions="{ item }">
+                    <sw-context-menu-item
+                        target="_blank"
+                        rel="noopener"
+                        :router-link="{ name: 'sw.user.detail', params: { id: item.id } }"
+                    >
+                        {{ $t('global.default.open') }}
+                    </sw-context-menu-item>
+                </template>
+                {% endblock %}
+            </sw-entity-listing>
+            {% endblock %}
+
+            {% block sw_order_customer_grid_empty_state %}
+            <mt-empty-state
+                v-if="showEmptyState"
+                class="sw-order-user-grid__empty-state"
+                centered
+                icon="regular-users"
+                :headline="emptyTitle"
+                description=""
+            />
+            {% endblock %}
+        </div>
+
+        {% block sw_order_customer_grid_new_customer_modal %}
+        <sw-order-new-user-modal
+            v-if="showNewCustomerModal"
+            @on-select-existing-user="onAddNewCustomer"
+            @close="showNewCustomerModal = false"
+        />
+        {% endblock %}
+
+        {% block sw_order_customer_grid_channel_select_modal %}
+        <sw-modal
+            v-if="showSalesChannelSelectModal"
+            class="sw-order-user-grid__sales-channel-selection-modal"
+            :title="$t('sw-order.initialModal.userGrid.titleSelectSalesChannel')"
+            @modal-close="onCloseSalesChannelSelectModal"
+        >
+            <template #default>
+                {% block sw_order_customer_grid_channel_description %}
+                <p class="sw-order-user-grid__sales-channel-selection--description">
+                    {{ $t('sw-order.initialModal.userGrid.descriptionSelectSalesChannel') }}
+                </p>
+                {% endblock %}
+
+                {% block sw_order_customer_grid_channel_select %}
+                <sw-entity-single-select
+                    class="sw-order-user-grid__sales-channel-selection"
+                    entity="channel"
+                    :criteria="channelCriteria"
+                    :label="$t('sw-order.initialModal.userGrid.labelSalesChannel')"
+                    :placeholder="$t('sw-order.initialModal.userGrid.placeholderSalesChannel')"
+                    :value="user.channelId"
+                    @update:value="onSalesChannelChange"
+                />
+                {% endblock %}
+
+                {% block sw_order_customer_grid_channel_notification_alert %}
+                <mt-banner
+                    class="sw-order-user-grid__sales-channel-selection--notification-alert"
+                    variant="attention"
+                    :show-icon="false"
+                >
+                    {{ $t('sw-order.initialModal.userGrid.alertSelectSalesChannel') }}
+                </mt-banner>
+                {% endblock %}
+            </template>
+
+            <template #modal-footer>
+                {% block sw_order_customer_grid_channel_action_close %}
+                <mt-button
+                    size="small"
+                    variant="secondary"
+                    data-analytics-id="sw-order-user-grid.close-sales-channel-select-modal"
+                    @click="onCloseSalesChannelSelectModal"
+                >
+                    {{ $t('global.default.cancel') }}
+                </mt-button>
+                {% endblock %}
+
+                {% block sw_order_customer_grid_channel_action_select %}
+                <mt-button
+                    size="small"
+                    variant="primary"
+                    :is-loading="isLoading"
+                    :disabled="isSelectSalesChannelDisabled"
+                    data-analytics-id="sw-order-user-grid.select-sales-channel"
+                    @click="onSelectSalesChannel"
+                >
+                    {{ $t('sw-order.initialModal.userGrid.buttonSelectSalesChannel') }}
+                </mt-button>
+                {% endblock %}
+            </template>
+        </sw-modal>
+        {% endblock %}
+
+        {% block sw_order_customer_grid_customer_changes_modal %}
+        <sw-modal
+            v-if="showCustomerChangesModal"
+            class="sw-order-user-grid__customer-changes-modal"
+            :title="$t('sw-order.initialModal.userGrid.titleCustomerChanges')"
+            @modal-close="onCloseSalesChannelSelectModal"
+        >
+            <template #default>
+                {% block sw_order_customer_grid_customer_changes_modal_description %}
+                <p class="sw-order-user-grid__customer-changes--description">
+                    {{ $t('sw-order.initialModal.userGrid.descriptionCustomerChanges') }}
+                </p>
+                {% endblock %}
+            </template>
+
+            <template #modal-footer>
+                {% block sw_order_customer_grid_customer_changes_modal_action_close %}
+                <mt-button
+                    size="small"
+                    variant="secondary"
+                    data-analytics-id="sw-order-user-grid.close-user-changes-modal"
+                    @click="onCloseCustomerChangesModal"
+                >
+                    {{ $t('global.default.cancel') }}
+                </mt-button>
+                {% endblock %}
+
+                {% block sw_order_customer_grid_customer_changes_modal_action_changes %}
+                <mt-button
+                    size="small"
+                    variant="primary"
+                    :is-loading="isLoading"
+                    data-analytics-id="sw-order-user-grid.change-user"
+                    @click="onChangeCustomer"
+                >
+                    {{ $t('sw-order.initialModal.userGrid.buttonChangeCustomer') }}
+                </mt-button>
+                {% endblock %}
+            </template>
+        </sw-modal>
+        {% endblock %}
+    </template>
+
+    {# @deprecated tag:v6.8.0 - Kept as extension anchor, the icon became an mt-empty-state prop. #}
+    {% block sw_order_customer_grid_empty_state_icon %}{% endblock %}
+</mt-card>
+{% endblock %}

@@ -1,0 +1,230 @@
+{%- set title = blog.translated.name|default(blog.name)|default('')|trim -%}
+{%- set description = blog.translated.description|default(title)|default('')|striptags|trim -%}
+{%- set price = blog.calculatedPrice -%}
+{%- if blog.calculatedPrices.count > 0 -%}
+    {%- set price = blog.calculatedPrices.last -%}
+{%- endif -%}
+{%- set unitPrice = price.unitPrice -%}
+{%- set regularPriceValue = unitPrice -%}
+{%- set salePriceValue = null -%}
+{%- if price.listPrice is defined and price.listPrice -%}
+    {%- set regularPriceValue = price.listPrice.price -%}
+    {%- if price.listPrice.price > unitPrice -%}
+        {%- set salePriceValue = unitPrice -%}
+    {%- endif -%}
+{%- endif -%}
+{%- set imageUrl = '' -%}
+{%- if blog.cover is defined and blog.cover and blog.cover.media is defined and blog.cover.media -%}
+    {%- set imageUrl = blog.cover.media.url -%}
+{%- endif -%}
+{%- set additionalImageUrls = [] -%}
+{%- if blog.media is defined and blog.media -%}
+    {%- for blogMedia in blog.media -%}
+        {%- if blogMedia.media is defined and blogMedia.media and blogMedia.media.url and blogMedia.id != blog.coverId -%}
+            {%- set additionalImageUrls = additionalImageUrls|merge([blogMedia.media.url]) -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- set hasVariantListing = blogExport.includeVariants and (blog.parentId or blog.childCount > 0) -%}
+{%- set blogUrl = entitySeoUrl('blog', blog.id) ~ '?referringSalesChannel=' ~ provider.referringSalesChannel -%}
+{%- if provider.affiliateCode -%}
+    {%- set blogUrl = blogUrl ~ '&affiliateCode=' ~ provider.affiliateCode|url_encode -%}
+{%- endif -%}
+{%- if provider.campaignCode -%}
+    {%- set blogUrl = blogUrl ~ '&campaignCode=' ~ provider.campaignCode|url_encode -%}
+{%- endif -%}
+
+{%- set itemId = blog.blogNumber ? blog.blogNumber : blog.id -%}
+{%- set availability = blog.available ? 'in_stock' : (blog.restockTime ? 'backorder' : 'out_of_stock') -%}
+{%- set brand = (blog.manufacturer is defined and blog.manufacturer) ? blog.manufacturer.translated.name : provider.sellerName -%}
+{%- set gtin = blog.ean|default('') -%}
+{%- set mpn = blog.manufacturerNumber|default('') -%}
+{%- set categoryPath = '' -%}
+{%- if blog.categories is defined and blog.categories and blog.categories.count > 0 -%}
+    {%- set categoryPath = blog.categories.first.getBreadCrumb|slice(1)|join(' > ') -%}
+{%- endif -%}
+
+{%- set mappedVariantOptions = {} -%}
+{%- set customVariantEntries = [] -%}
+{%- set reservedCustomGroupIds = [] -%}
+{%- if provider.variantMapping is defined and provider.variantMapping -%}
+    {%- for mappingProperty, propertyGroupIds in provider.variantMapping -%}
+        {%- if mappingProperty != 'custom_variants' and propertyGroupIds -%}
+            {%- for propertyGroupId in propertyGroupIds -%}
+                {%- if propertyGroupId and propertyGroupId not in reservedCustomGroupIds -%}
+                    {%- set reservedCustomGroupIds = reservedCustomGroupIds|merge([propertyGroupId]) -%}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+{%- if provider.variantMapping is defined and provider.variantMapping -%}
+    {%- for mappingProperty, propertyGroupIds in provider.variantMapping -%}
+        {%- if propertyGroupIds -%}
+            {%- if mappingProperty == 'custom_variants' -%}
+                {%- for customPropertyGroupId in propertyGroupIds -%}
+                    {%- if customVariantEntries|length < 3 and customPropertyGroupId not in reservedCustomGroupIds -%}
+                        {%- set customOptionName = null -%}
+                        {%- set customCategoryName = null -%}
+
+                        {%- if blog.options is defined and blog.options -%}
+                            {%- for option in blog.options -%}
+                                {%- if customOptionName is null and option.groupId and option.groupId == customPropertyGroupId -%}
+                                    {%- set optionName = option.translated.name|default(option.name)|default('') -%}
+                                    {%- if optionName -%}
+                                        {%- set customOptionName = optionName -%}
+                                    {%- endif -%}
+
+                                    {%- if option.group is defined and option.group -%}
+                                        {%- set groupName = option.group.translated.name|default(option.group.name)|default('') -%}
+                                        {%- if groupName -%}
+                                            {%- set customCategoryName = groupName -%}
+                                        {%- endif -%}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        {%- endif -%}
+
+                        {%- if (customOptionName is null or customCategoryName is null) and blog.sortedProperties is defined and blog.sortedProperties -%}
+                            {%- for group in blog.sortedProperties -%}
+                                {%- if group.id and group.id == customPropertyGroupId -%}
+                                    {%- if customCategoryName is null -%}
+                                        {%- set groupName = group.translated.name|default(group.name)|default('') -%}
+                                        {%- if groupName -%}
+                                            {%- set customCategoryName = groupName -%}
+                                        {%- endif -%}
+                                    {%- endif -%}
+
+                                    {%- if customOptionName is null and group.options is defined and group.options -%}
+                                        {%- for option in group.options -%}
+                                            {%- if customOptionName is null -%}
+                                                {%- set optionName = option.translated.name|default(option.name)|default('') -%}
+                                                {%- if optionName -%}
+                                                    {%- set customOptionName = optionName -%}
+                                                {%- endif -%}
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        {%- endif -%}
+
+                        {%- if customCategoryName and customOptionName -%}
+                            {%- set customVariantEntries = customVariantEntries|merge([{
+                                'category': customCategoryName,
+                                'option': customOptionName
+                            }]) -%}
+                        {%- endif -%}
+                    {%- endif -%}
+                {%- endfor -%}
+            {%- else -%}
+                {%- set variantPropertyOptionName = null -%}
+
+                {%- if blog.options is defined and blog.options -%}
+                    {%- for option in blog.options -%}
+                        {%- if variantPropertyOptionName is null and option.groupId and option.groupId in propertyGroupIds -%}
+                            {%- set optionName = option.translated.name|default(option.name)|default('') -%}
+                            {%- if optionName -%}
+                                {%- set variantPropertyOptionName = optionName -%}
+                            {%- endif -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                {%- endif -%}
+
+                {%- if variantPropertyOptionName is null and blog.sortedProperties is defined and blog.sortedProperties -%}
+                    {%- for group in blog.sortedProperties -%}
+                        {%- if variantPropertyOptionName is null and group.id and group.id in propertyGroupIds and group.options is defined and group.options -%}
+                            {%- for option in group.options -%}
+                                {%- if variantPropertyOptionName is null -%}
+                                    {%- set optionName = option.translated.name|default(option.name)|default('') -%}
+                                    {%- if optionName -%}
+                                        {%- set variantPropertyOptionName = optionName -%}
+                                    {%- endif -%}
+                                {%- endif -%}
+                            {%- endfor -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                {%- endif -%}
+
+                {%- if variantPropertyOptionName is not null -%}
+                    {%- set mappedVariantOptions = mappedVariantOptions|merge({
+                        (mappingProperty): variantPropertyOptionName
+                    }) -%}
+                {%- endif -%}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endfor -%}
+{%- endif -%}
+
+{# Skip rows that are missing core required Google fields. #}
+{%- if title and imageUrl and price -%}
+<item>
+    <g:id>{{ itemId|escape }}</g:id>
+    <title>{{ title|escape }}</title>
+    <description>{{ description|escape }}</description>
+    <link>{{ blogUrl|escape }}</link>
+    <g:image_link>{{ imageUrl|escape }}</g:image_link>
+    {%- for additionalImageUrl in additionalImageUrls|slice(0, 10) %}
+    <g:additional_image_link>{{ additionalImageUrl|escape }}</g:additional_image_link>
+    {%- endfor %}
+    <g:availability>{{ availability }}</g:availability>
+    <g:price>{{ regularPriceValue|number_format(context.currency.itemRounding.decimals, '.', '') }} {{ context.currency.isoCode }}</g:price>
+    {%- if salePriceValue is not null %}
+    <g:sale_price>{{ salePriceValue|number_format(context.currency.itemRounding.decimals, '.', '') }} {{ context.currency.isoCode }}</g:sale_price>
+    {%- endif %}
+    {%- if mappedVariantOptions.condition is defined and mappedVariantOptions.condition %}
+    <g:condition>{{ mappedVariantOptions.condition|escape }}</g:condition>
+    {%- else %}
+    <g:condition>new</g:condition>
+    {%- endif %}
+    <g:brand>{{ brand|escape }}</g:brand>
+    {%- if gtin %}
+    <g:gtin>{{ gtin|escape }}</g:gtin>
+    {%- endif %}
+    {%- if mpn %}
+    <g:mpn>{{ mpn|escape }}</g:mpn>
+    {%- endif %}
+    {%- if not gtin and not mpn %}
+    <g:identifier_exists>no</g:identifier_exists>
+    {%- endif %}
+    {%- if categoryPath %}
+    <g:blog_type>{{ categoryPath|escape }}</g:blog_type>
+    {%- endif %}
+    {%- if hasVariantListing %}
+    <g:item_group_id>{{ (blog.parentId ? blog.parentId : blog.id)|escape }}</g:item_group_id>
+    {%- endif %}
+    {%- if mappedVariantOptions.color is defined and mappedVariantOptions.color %}
+    <g:color>{{ mappedVariantOptions.color|escape }}</g:color>
+    {%- endif %}
+    {%- if mappedVariantOptions.size is defined and mappedVariantOptions.size %}
+    <g:size>{{ mappedVariantOptions.size|escape }}</g:size>
+    {%- endif %}
+    {%- if mappedVariantOptions.size_system is defined and mappedVariantOptions.size_system %}
+    <g:size_system>{{ mappedVariantOptions.size_system|escape }}</g:size_system>
+    {%- endif %}
+    {%- if mappedVariantOptions.gender is defined and mappedVariantOptions.gender %}
+    <g:gender>{{ mappedVariantOptions.gender|escape }}</g:gender>
+    {%- endif %}
+    {%- if mappedVariantOptions.age_group is defined and mappedVariantOptions.age_group %}
+    <g:age_group>{{ mappedVariantOptions.age_group|escape }}</g:age_group>
+    {%- endif %}
+    {%- if mappedVariantOptions.material is defined and mappedVariantOptions.material %}
+    <g:material>{{ mappedVariantOptions.material|escape }}</g:material>
+    {%- endif %}
+    {%- for customEntry in customVariantEntries %}
+        {%- set customIndex = loop.index0 %}
+        {%- if customIndex < 3 %}
+    <g:custom_label_{{ customIndex }}>{{ (customEntry.category ~ ': ' ~ customEntry.option)|escape }}</g:custom_label_{{ customIndex }}>
+        {%- endif %}
+    {%- endfor %}
+    {%- if blog.shippingFree %}
+    <g:shipping>
+        <g:country>{{ (provider.shippingCountry ?: provider.storeCountry)|escape }}</g:country>
+        {%- if provider.shippingService %}
+        <g:service>{{ provider.shippingService|escape }}</g:service>
+        {%- endif %}
+        <g:price>0.00 {{ context.currency.isoCode }}</g:price>
+    </g:shipping>
+    {%- endif %}
+</item>
+{%- endif -%}

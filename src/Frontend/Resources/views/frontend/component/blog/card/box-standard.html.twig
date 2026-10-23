@@ -1,0 +1,176 @@
+{% block component_product_box %}
+    {% if blog %}
+        {% set id = blog.id %}
+        {% set name = blog.translated.name %}
+        {% set brand = blog.manufacturer.translated.name|default('') %}
+        {% set price = blog.calculatedPrice.unitPrice %}
+        {% set sku = blog.blogNumber %}
+
+        {% set cover = blog.cover.media %}
+        {% set variation = blog.variation %}
+        {% set displayParent = blog.variantListingConfig.displayParent and blog.parentId === null %}
+        {% set headlineLevel = element.config.boxHeadlineLevel.value %}
+        {% set headlineClasses = 'blog-name-headline mb-0' %}
+
+        {% set searchTerm = page.searchTerm %}
+        {% set childCount = blog.childCount %}
+        {% set routeArguments = childCount > 0 and searchTerm ? { blogId: id, search: searchTerm } : { blogId: id } %}
+
+        {% if referrerCategoryId %}
+            {% set routeArguments = routeArguments|merge({ referrerCategoryId: referrerCategoryId }) %}
+        {% endif %}
+
+        <div class="card blog-box box-{{ layout }}" data-blog-information="{{ {id, name, brand, price, sku}|json_encode }}">
+            {% block component_product_box_content %}
+                <div class="card-body">
+                    {% block component_product_box_badges %}
+                        {% sw_include '@Frontend/frontend/component/blog/card/badges.html.twig' %}
+                    {% endblock %}
+
+                    {% block component_product_box_image %}
+                        <div class="blog-image-wrapper">
+                            {# fallback if display mode is not set #}
+                            {% set displayMode = displayMode ?: 'standard' %}
+
+                            {# set display mode 'cover' for box-image with standard display mode #}
+                            {% if layout == 'image' and displayMode == 'standard' %}
+                                {% set displayMode = 'cover' %}
+                            {% endif %}
+
+                            {% block component_product_box_image_inner %}
+                                {# @deprecated tag:v6.8.0 - Block will be removed. Use component_product_box_image_inner instead. #}
+                                {% block component_product_box_image_link_inner %}
+
+                                    {% if cover.url and cover.isSpatialObject() == false %}
+                                        {% set attributes = {
+                                            class: 'blog-image is-' ~ displayMode,
+                                            title: (cover.translated.title ?: name)
+                                        } %}
+
+                                        {% if cover.getMediaType().getName() === 'VIDEO' %}
+                                            {% if config('core.listing.autoplayVideoInListing') %}
+                                                {% set attributes = attributes|merge({
+                                                    autoplay: true,
+                                                    loop: true
+                                                }) %}
+                                            {% endif %}
+
+                                            {% block component_product_box_video %}
+                                                {% sw_include '@Frontend/frontend/utilities/video.html.twig' with {
+                                                    media: cover,
+                                                    attributes: attributes
+                                                } %}
+                                            {% endblock %}
+                                        {% else %}
+                                            {% set attributes = attributes|merge({
+                                                alt: (cover.translated.alt ?: name),
+                                                loading: 'lazy'
+                                            }) %}
+
+                                            {% if displayMode == 'cover' or displayMode == 'contain' %}
+                                                {% set attributes = attributes|merge({ 'data-object-fit': displayMode }) %}
+                                            {% endif %}
+
+                                            {% block component_product_box_image_thumbnail %}
+                                                {% sw_thumbnails 'blog-image-thumbnails' with {
+                                                    media: cover,
+                                                    sizes: sizes,
+                                                    attributes: attributes
+                                                } %}
+                                            {% endblock %}
+                                        {% endif %}
+                                    {% else %}
+                                        {% block component_product_box_image_placeholder %}
+                                            <div class="blog-image-placeholder">
+                                                {% sw_icon 'placeholder' style {
+                                                    size: 'fluid'
+                                                } %}
+                                            </div>
+                                        {% endblock %}
+                                    {% endif %}
+                                {% endblock %}
+                            {% endblock %}
+
+                            {% if config('core.cart.wishlistEnabled') %}
+                                {% block component_product_box_wishlist_action %}
+                                    {% sw_include '@Frontend/frontend/component/blog/card/wishlist.html.twig' with {
+                                        appearance: 'circle',
+                                        blogId: id
+                                    } %}
+                                {% endblock %}
+                            {% endif %}
+                        </div>
+                    {% endblock %}
+
+                    {% block component_product_box_info %}
+                        <div class="blog-info">
+                            {% block component_product_box_rating %}
+                                {% if config('core.listing.showReview') %}
+                                    <div class="blog-rating">
+                                        {% if blog.ratingAverage %}
+                                            {% sw_include '@Frontend/frontend/component/review/rating.html.twig' with {
+                                                points: blog.ratingAverage,
+                                                style: 'text-primary'
+                                            } %}
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            {% endblock %}
+
+                            {% block component_product_box_name %}
+                                {% if headlineLevel is not empty %}
+                                    {{ "<h#{headlineLevel} class=\"#{headlineClasses}\">"|raw }}
+                                        <a href="{{ seoUrl('frontend.detail.page', routeArguments) }}"
+                                           title="{{ name }}"
+                                           class="blog-name stretched-link">
+                                            {{ name }}
+                                        </a>
+                                    {{ "</h#{headlineLevel}>"|raw }}
+                                {% else %}
+                                    <a href="{{ seoUrl('frontend.detail.page', routeArguments) }}"
+                                       title="{{ name }}"
+                                       class="blog-name stretched-link">
+                                        {{ name }}
+                                    </a>
+                                {% endif %}
+                            {% endblock %}
+
+                            {% block component_product_box_variant_characteristics %}
+                                <div class="blog-variant-characteristics">
+                                    <div class="blog-variant-characteristics-text">
+                                        {% if not displayParent %}
+                                            {% for variation in blog.variation %}
+                                                {{ variation.group }}:
+                                                <span class="blog-variant-characteristics-option">
+                                                    {{ variation.option }}
+                                                </span>
+
+                                                {% if blog.variation|last != variation %}
+                                                    <span aria-hidden="true">|</span>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% endblock %}
+
+                            {% block component_product_box_description %}
+                                <p class="blog-description mb-0">
+                                    {{ (blog.translated.description ?? blog.translated.descriptionTeaser)|striptags|raw }}
+                                </p>
+                            {% endblock %}
+
+                            {% block component_product_box_price %}
+                                {% sw_include '@Frontend/frontend/component/blog/card/price-unit.html.twig' %}
+                            {% endblock %}
+
+                            {% block component_product_box_action %}
+                                {% sw_include '@Frontend/frontend/component/blog/card/action.html.twig' %}
+                            {% endblock %}
+                        </div>
+                    {% endblock %}
+                </div>
+            {% endblock %}
+        </div>
+    {% endif %}
+{% endblock %}

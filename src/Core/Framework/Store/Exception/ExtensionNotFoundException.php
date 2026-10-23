@@ -1,0 +1,13 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Store\Exception;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\StoreException;
+
+/**
+ * @codeCoverageIgnore
+ */
+class ExtensionNotFoundException extends StoreException
+{
+}

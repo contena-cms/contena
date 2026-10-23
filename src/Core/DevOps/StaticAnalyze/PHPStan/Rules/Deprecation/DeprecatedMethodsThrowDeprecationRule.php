@@ -1,0 +1,178 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation;
+
+use PhpParser\Node;
+use PhpParser\Node\Stmt\ClassMethod;
+use PHPStan\Analyser\Scope;
+use PHPStan\Reflection\ClassReflection;
+use PHPStan\Rules\IdentifierRuleError;
+use PHPStan\Rules\Rule;
+use PHPStan\Rules\RuleErrorBuilder;
+use PHPStan\Symfony\ServiceMap;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @implements Rule<ClassMethod>
+ *
+ * @internal
+ */
+class DeprecatedMethodsThrowDeprecationRule implements Rule
+{
+    /**
+     * Defaults to an empty list so PHPStan can construct this rule from a `rules:` entry.
+     *
+     * @param iterable<DeprecationPattern> $deprecationPatterns
+     */
+    public function __construct(
+        private readonly ServiceMap $serviceMap,
+        private readonly iterable $deprecationPatterns = [],
+    ) {
+    }
+
+    public function getNodeType(): string
+    {
+        return ClassMethod::class;
+    }
+
+    public function processNode(Node $node, Scope $scope): array
+    {
+        if (!($node->isPublic() || $node->isProtected()) || $node->isAbstract()) {
+            return [];
+        }
+
+        if (!$scope->isInClass()) {
+            return [];
+        }
+
+        $class = $scope->getClassReflection();
+
+        if ($class->isInterface() || $this->isTestClass($class)) {
+            return [];
+        }
+
+        $method = $class->getMethod($node->name->name, $scope);
+
+        // reading the method content requires file I/O, so only do it when a deprecation is present
+        $methodContent = fn (): string => $this->getMethodContent($node, $scope, $class);
+
+        $classDeprecation = $class->getDeprecatedDescription();
+        $methodDeprecation = $method->getDeprecatedDescription() ?? '';
+
+        // Deprecated DAL data objects are guarded at construction, not on every accessor call.
+        if ($classDeprecation && !$class->is(Entity::class) && !$class->is(EntityCollection::class) && !$this->isFrameworkConstructor($node, $class)) {
+            $errors = $this->checkDeprecationPatterns($node, $scope, $class, $classDeprecation, true, $methodContent);
+            if ($errors !== null && $errors !== []) {
+                return $errors;
+            }
+
+            if ($errors === null && !\str_contains($methodContent(), 'Feature::triggerDeprecationOrThrow(')) {
+                return [
+                    RuleErrorBuilder::message(\sprintf(
+                        'Class "%s" is marked as deprecated, but method "%s" does not call "Feature::triggerDeprecationOrThrow". All public methods of deprecated classes need to trigger a deprecation warning.',
+                        $class->getName(),
+                        $method->getName()
+                    ))
+                        ->identifier('contena.cnprecatedClass')
+                        ->build(),
+                ];
+            }
+        }
+
+        // by default deprecations from parent methods are also available on all implementing methods
+        // we will copy the deprecation to the implementing method, if they also have an affect there
+        $deprecationOfParentMethod = !str_contains($method->getDocComment() ?? '', $methodDeprecation) && !str_contains($method->getDocComment() ?? '', 'inheritdoc');
+
+        if (!$deprecationOfParentMethod && $methodDeprecation) {
+            $errors = $this->checkDeprecationPatterns($node, $scope, $class, $methodDeprecation, false, $methodContent);
+            if ($errors !== null) {
+                return $errors;
+            }
+
+            if (!\str_contains($methodContent(), 'Feature::triggerDeprecationOrThrow(')) {
+                return [
+                    RuleErrorBuilder::message(\sprintf(
+                        'Method "%s" of class "%s" is marked as deprecated, but does not call "Feature::triggerDeprecationOrThrow". All deprecated methods need to trigger a deprecation warning.',
+                        $method->getName(),
+                        $class->getName()
+                    ))
+                        ->identifier('contena.cnprecatedMethod')
+                        ->build(),
+                ];
+            }
+        }
+
+        return [];
+    }
+
+    private function getMethodContent(Node $node, Scope $scope, ClassReflection $class): string
+    {
+        $filename = $class->getFileName();
+
+        $trait = $scope->getTraitReflection();
+        if ($trait) {
+            $filename = $trait->getFileName();
+        }
+
+        if (!\is_string($filename)) {
+            return '';
+        }
+
+        $file = new \SplFileObject($filename);
+        $file->seek($node->getStartLine() - 1);
+
+        $content = '';
+        for ($i = 0; $i <= ($node->getEndLine() - $node->getStartLine()); ++$i) {
+            $content .= $file->current();
+            $file->next();
+        }
+
+        return $content;
+    }
+
+    /**
+     * @return list<IdentifierRuleError>|null
+     */
+    private function checkDeprecationPatterns(ClassMethod $node, Scope $scope, ClassReflection $class, string $deprecation, bool $isClassDeprecation, \Closure $methodContent): ?array
+    {
+        foreach ($this->deprecationPatterns as $pattern) {
+            if ($pattern->isSupported($node, $scope, $class, $deprecation, $isClassDeprecation)) {
+                return $pattern->check($node, $scope, $class, $deprecation, $isClassDeprecation, $methodContent);
+            }
+        }
+
+        return null;
+    }
+
+    private function isTestClass(ClassReflection $class): bool
+    {
+        $namespace = $class->getName();
+
+        if (\str_contains($namespace, '\\Test\\')) {
+            return true;
+        }
+
+        if (\str_contains($namespace, '\\Tests\\')) {
+            return true;
+        }
+
+        foreach ($class->getParents() as $parentClass) {
+            if ($parentClass->getName() === TestCase::class) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private function isFrameworkConstructor(ClassMethod $node, ClassReflection $class): bool
+    {
+        // DAL constructors use the separate class-level rule, which also detects inherited/missing guards.
+        return $node->name->toString() === '__construct'
+            && ($class->is(EntityDefinition::class) || $class->is(EntityCollection::class) || $this->serviceMap->getService($class->getName()) !== null);
+    }
+}

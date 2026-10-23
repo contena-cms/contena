@@ -1,0 +1,34 @@
+.blog-detail-tabs-content {
+    display: none;
+
+    .offcanvas-body {
+        overflow: initial;
+        padding: 0;
+    }
+}
+
+.blog-detail-description {
+    overflow-wrap: anywhere;
+}
+
+.blog-detail-description-text {
+    margin-bottom: $spacer-lg;
+}
+
+@include media-breakpoint-up(sm) {
+    .blog-detail-tabs-content {
+        display: block;
+    }
+
+    .blog-detail-tabs .offcanvas-close,
+    .blog-detail-tab-navigation-icon,
+    .blog-detail-tab-preview {
+        display: none;
+    }
+}
+
+@media screen and (max-width: 575px) {
+    .blog-detail-tab-preview {
+        flex-basis: 100%;
+    }
+}

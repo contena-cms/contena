@@ -1,0 +1,54 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Routing\Telemetry;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Routing\Telemetry\AreaResolver;
+use Contena\Core\PlatformRequest;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @internal
+ */
+#[CoversClass(AreaResolver::class)]
+class AreaResolverTest extends TestCase
+{
+    /**
+     * @param list<string> $scopes
+     */
+    #[DataProvider('requestProvider')]
+    public function testResolve(string $route, array $scopes, string $expected): void
+    {
+        $request = Request::create('/');
+        $request->attributes->set('_route', $route);
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, $scopes);
+
+        static::assertSame($expected, (new AreaResolver())->resolve($request));
+    }
+
+    public function testResolveDefaultsToOtherWithoutRouteOrScope(): void
+    {
+        static::assertSame('other', (new AreaResolver())->resolve(Request::create('/')));
+    }
+
+    public static function requestProvider(): \Generator
+    {
+        yield 'sync route is special-cased regardless of scope' => ['api.action.sync', [ApiRouteScope::ID], 'sync-api'];
+        yield 'payment finalize route is special-cased without scope' => ['payment.finalize.transaction', [], 'payment'];
+
+        yield 'store-api scope' => ['store-api.blog.search', [StoreApiRouteScope::ID], 'store-api'];
+        yield 'admin-api scope' => ['api.blog.search', [ApiRouteScope::ID], 'admin-api'];
+        yield 'frontend scope' => ['frontend.detail.page', ['frontend'], 'frontend'];
+        yield 'administration scope' => ['administration.index', ['administration'], 'administration'];
+        yield 'admin dashboard route with administration scope' => ['api.admin.dashboard.order-amount', ['administration'], 'administration'];
+        yield 'unknown scope is other' => ['some.route', ['unknown'], 'other'];
+
+        // store-api takes precedence when several scopes are present
+        yield 'store-api scope precedes admin-api' => ['mixed.route', [ApiRouteScope::ID, StoreApiRouteScope::ID], 'store-api'];
+    }
+}

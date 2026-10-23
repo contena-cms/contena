@@ -1,0 +1,163 @@
+{% block sw_product_detail_variants %}
+<div class="sw-blog-detail-variants">
+
+    {% block sw_product_detail_variants_sw_card_generated_variants %}
+    <mt-card
+        class="sw-blog-detail-variants__generated-variants"
+        position-identifier="sw-blog-detail-variants-generated-variants"
+        :class="{'is--loading': isLoading}"
+        :title="$t('sw-blog.variations.generatedVariationCardTitle')"
+        large
+    >
+        <template
+            v-if="!isLoading && propertiesAvailable"
+            #tabs
+        >
+            <template v-if="feature.isActive('v6.8.0.0')">
+                <mt-tabs
+                    position-identifier="sw-variant-card-tabs"
+                    :default-item="activeTab"
+                    :items="variantCardTabs"
+                    :small="true"
+                    @new-item-active="setActiveTab($event)"
+                />
+            </template>
+
+            <template v-else>
+                <sw-tabs
+                    position-identifier="sw-variant-card-tabs"
+                    :small="false"
+                    :default-item="defaultTab"
+                    @new-item-active="setActiveTab($event.name)"
+                >
+                    <sw-tabs-item
+                        name="all"
+                        :active-tab="activeTab"
+                    >
+                        {{ $t('sw-blog.variations.variationCard.tabs.allProducts') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item
+                        name="physical"
+                        :active-tab="activeTab"
+                    >
+                        {{ $t('sw-blog.variations.variationCard.tabs.physicalProducts') }}
+                    </sw-tabs-item>
+
+                    <sw-tabs-item
+                        name="digital"
+                        :active-tab="activeTab"
+                    >
+                        {{ $t('sw-blog.variations.variationCard.tabs.digitalProducts') }}
+                    </sw-tabs-item>
+                </sw-tabs>
+            </template>
+        </template>
+
+        <sw-skeleton v-if="isLoading" />
+
+        {% block sw_product_detail_variants_sw_card_empty_state %}
+        <mt-empty-state
+            v-if="!isLoading && !propertiesAvailable"
+            centered
+            icon="regular-blogs"
+            :headline="$t('sw-blog.variations.emptyStatePropertyTitle')"
+            :description="$t('sw-blog.variations.emptyStatePropertyDescription')"
+        >
+            <template #button>
+                {% block sw_product_properties_empty_state_button_property %}
+                <mt-button
+                    v-tooltip="{
+                        message: $t('sw-privileges.tooltip.warning'),
+                        disabled: acl.can('blog.editor'),
+                        showOnDisabledElements: true
+                    }"
+                    :disabled="!acl.can('blog.editor')"
+                    variant="secondary"
+                    @click="openAddPropertiesModal"
+                >
+                    {{ $t('sw-blog.properties.buttonAddProperties') }}
+                </mt-button>
+                {% endblock %}
+            </template>
+        </mt-empty-state>
+        {% endblock %}
+
+        {% block sw_product_detail_variants_sw_card_generated_variants_overview %}
+        <sw-blog-variants-overview
+            v-if="blog.id"
+            v-show="variantListHasContent && !isLoading"
+            ref="generatedVariants"
+            :blog-states="currentProductStates"
+            :blog-type="currentProductType"
+            :groups="groups"
+            :selected-groups="configSettingGroups"
+            :blog-entity="blogEntity"
+            @variants-finish-update="updateVariantListHasContent"
+            @generator-open="openModal('variantGeneration')"
+            @delivery-open="openModal('deliveryModal')"
+        />
+        {% endblock %}
+
+        {% block sw_product_detail_variants_sw_card_empty_state_variant %}
+        <mt-empty-state
+            v-if="!isLoading && propertiesAvailable && variants.length === 0"
+            centered
+            icon="regular-blogs"
+            :headline="$t('sw-blog.variations.emptyStateTitle')"
+            :description="$t('sw-blog.variations.emptyStateDescription')"
+        >
+            <template #button>
+                {% block sw_product_properties_empty_state_button %}
+                <mt-button
+                    v-tooltip="{
+                        message: $t('sw-privileges.tooltip.warning'),
+                        disabled: acl.can('blog.creator'),
+                        showOnDisabledElements: true
+                    }"
+                    class="sw-blog-detail-variants__generated-variants-empty-state-button"
+                    :disabled="!acl.can('blog.creator')"
+                    variant="secondary"
+                    @click="openModal('variantGeneration')"
+                >
+                    {{ $t('sw-blog.variations.emptyStateButton') }}
+                </mt-button>
+                {% endblock %}
+            </template>
+        </mt-empty-state>
+        {% endblock %}
+    </mt-card>
+    {% endblock %}
+
+    {% block sw_product_detail_variants_modal_variant_generation %}
+    <sw-blog-modal-variant-generation
+        v-if="activeModal === 'variantGeneration'"
+        :blog="blogEntity"
+        :groups="groups"
+        :actual-status="activeTab"
+        :selected-groups="configSettingGroups"
+        @modal-close="activeModal = ''"
+        @variations-finish-generate="updateVariations"
+    />
+    {% endblock %}
+
+    {% block sw_product_detail_variants_modal_delivery %}
+    <sw-blog-modal-delivery
+        v-if="activeModal === 'deliveryModal'"
+        :blog="blogEntity"
+        :selected-groups="configSettingGroups"
+        @configuration-close="onConfigurationClosed"
+        @modal-close="activeModal = ''"
+    />
+    {% endblock %}
+
+    {% block sw_product_properties_add_properties_modal %}
+    <sw-blog-add-properties-modal
+        v-if="showAddPropertiesModal"
+        :new-properties="newProperties"
+        @modal-cancel="onCancelAddPropertiesModal"
+        @modal-save="onSaveAddPropertiesModal"
+    />
+    {% endblock %}
+</div>
+{% endblock %}

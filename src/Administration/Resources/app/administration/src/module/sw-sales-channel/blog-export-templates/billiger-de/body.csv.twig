@@ -1,0 +1,39 @@
+"{{ blog.blogNumber }}",{#- -#}
+"{{ blog.manufacturer.translated.name ?? '' }}",{#- -#}
+"{{ blog.manufacturerNumber }}",{#- -#}
+"{{ blog.ean }}",{#- -#}
+"{{ blog.translated.name|length > 80 ? blog.translated.name|slice(0, 80) ~ '...' : blog.translated.name }}",{#- -#}
+"{{ blog.translated.description|raw|length > 900 ? blog.translated.description|raw|slice(0,900) ~ '...' : blog.translated.description|raw }}{#- -#}
+",{#- -#}
+"{%- set blogTypeCategory = blog.seoCategory ?? blog.categories.first -%}
+{%- if blogTypeCategory -%}
+    {{ blogTypeCategory.breadCrumb|slice(1)|join(' > ')|raw }}{#- -#}
+{%- endif -%}",{#- -#}
+{% set price = blog.calculatedPrice %}
+{%- if blog.calculatedPrices.count > 0 -%}
+    {% set price = blog.calculatedPrices.last %}
+{%- endif -%}
+"{{ price.unitPrice }}",{#- -#}
+"{%- if price.referencePrice is not null -%}
+    {{ price.referencePrice.price|currency }} / {{ price.referencePrice.referenceUnit }} {{ price.referencePrice.unitName }}{#- -#}
+{%- endif -%}",{#- -#}
+"{{ entitySeoUrl('blog', blog.id) }}",{#- -#}
+"{% if blog.cover is not null %}{{ blog.cover.media.url }}{% endif %}",{#- -#}
+"{%- if blog.availableStock >= blog.minPurchase and blog.deliveryTime -%}
+    {{ "detail.deliveryTimeAvailable"|trans({'%name%': blog.deliveryTime.translation('name')}) }}{#- -#}
+{%- elseif blog.availableStock < blog.minPurchase and blog.deliveryTime and blog.restockTime -%}
+    {{ "detail.deliveryTimeRestock"|trans({'%count%': blog.restockTime,'%restockTime%': blog.restockTime,'%name%': blog.deliveryTime.translation('name')}) }}{#- -#}
+{%- else -%}
+    {{ "detail.soldOut"|trans }}{#- -#}
+{%- endif -%}",{#- -#}
+"4.95",{# change your default delivery costs #}{#- -#}
+,{#- -#}
+"{% if blog.purchaseUnit and blog.unit %}{{ blog.purchaseUnit }} {{ blog.unit.shortCode }}{% endif %}",{#- -#}
+"{% if blog.referenceUnit and blog.unit %}{{ blog.referenceUnit }} {{ blog.unit.shortCode }}{% endif %}",{#- -#}
+"{{ entitySeoUrl('blog', blog.id) }}",{#- -#}
+{%- if blog.media|length > 1 -%}
+    "{%- for mediaAssociation in blog.media|slice(0, 5) -%}
+        {{ mediaAssociation.media.url }}
+        {%- if not loop.last -%},{%- endif -%}
+    {%- endfor -%}"
+{%- endif -%}{#- -#}

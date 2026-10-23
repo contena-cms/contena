@@ -1,0 +1,20 @@
+{
+  "name": "ThemeApp",
+  "author": "Contena",
+  "views": [
+    "@Frontend",
+    "@Plugins",
+    "@TestTheme"
+  ],
+  "style": [
+    "app/frontend/src/scss/overrides.scss",
+    "@Frontend",
+    "app/frontend/src/scss/base.scss"
+  ],
+  "script": [
+    "@Frontend"
+  ],
+  "asset": [
+    "app/frontend/src/assets"
+  ]
+}

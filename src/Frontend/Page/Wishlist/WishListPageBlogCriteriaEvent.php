@@ -1,0 +1,44 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Frontend\Page\Wishlist;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Event\NestedEvent;
+use Contena\Core\Framework\Event\ContenaChannelEvent;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @codeCoverageIgnore
+ */
+class WishListPageBlogCriteriaEvent extends NestedEvent implements ContenaChannelEvent
+{
+    public function __construct(
+        private readonly Criteria $criteria,
+        private readonly ChannelContext $channelContext,
+        private readonly Request $request
+    ) {
+    }
+
+    public function getCriteria(): Criteria
+    {
+        return $this->criteria;
+    }
+
+    public function getContext(): Context
+    {
+        return $this->channelContext->getContext();
+    }
+
+    public function getChannelContext(): ChannelContext
+    {
+        return $this->channelContext;
+    }
+
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+}

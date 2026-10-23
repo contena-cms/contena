@@ -1,0 +1,9 @@
+{% set canReadProduct = services.acl.can('blog:read') %}
+{% if canReadProduct %}
+    {% set criteria = {
+        'ids': [ hook.blogId ]
+    } %}
+
+    {% set blog = services.repository.search('blog', criteria).getEntities().first %}
+    {% do page.addExtension('myProduct', blog) %}
+{% endif %}

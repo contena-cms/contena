@@ -1,0 +1,118 @@
+/**
+ * @sw-package inventory
+ */
+import template from './sw-settings-number-range-create.html.twig';
+
+const utils = Contena.Utils;
+
+const {
+    Data: { Criteria },
+} = Contena;
+
+// eslint-disable-next-line sw-deprecation-rules/private-feature-declarations
+export default {
+    template,
+
+    data() {
+        return {
+            hasProductNumberRange: false,
+            isShowProductWarning: false,
+        };
+    },
+
+    beforeRouteEnter(to, from, next) {
+        if (to.name.includes('sw.settings.number.range.create') && !to.params.id) {
+            to.params.id = utils.createId();
+        }
+
+        next();
+    },
+
+    computed: {
+        blogNumberRangeCriteria() {
+            const criteria = new Criteria(1, 1);
+
+            criteria.addAssociation('type');
+            criteria.addFilter(
+                Criteria.multi('and', [
+                    Criteria.equals('type.global', true),
+                    Criteria.equals('type.technicalName', 'blog'),
+                ]),
+            );
+
+            return criteria;
+        },
+
+        numberRangeTypeCriteria() {
+            const criteria = new Criteria(1, 25);
+
+            if (this.hasProductNumberRange) {
+                criteria.addFilter(Criteria.equals('global', false));
+            }
+
+            criteria.addSorting(Criteria.sort('typeName', 'ASC'));
+
+            return criteria;
+        },
+
+        disableNumberRangeTypeSelect() {
+            return false;
+        },
+
+        showNumberRangeStateFields() {
+            return false;
+        },
+    },
+
+    methods: {
+        async createdComponent() {
+            await this.getProductNumberRanges();
+            if (!Contena.Store.get('context').isSystemDefaultLanguage) {
+                Contena.Store.get('context').resetLanguageToDefault();
+            }
+
+            if (this.$route.params.id) {
+                this.numberRange = this.numberRangeRepository.create(Contena.Context.api, this.$route.params.id);
+            } else {
+                this.numberRange = this.numberRangeRepository.create();
+            }
+            this.numberRangeId = this.numberRange.id;
+            this.numberRange.start = 1;
+            this.numberRange.global = false;
+            this.numberRange.pattern = '';
+            this.numberRange.isLoading = true;
+            this.numberRange.type = this.numberRangeTypeRepository.create();
+            this.numberRange.type.global = this.hasProductNumberRange;
+
+            this.$super('createdComponent');
+            this.splitPattern();
+            this.onChangePattern();
+            this.numberRange.isLoading = false;
+        },
+
+        saveFinish() {
+            this.isSaveSuccessful = false;
+            this.$router.push({
+                name: 'sw.settings.number.range.detail',
+                params: { id: this.numberRange.id },
+            });
+        },
+
+        onSave() {
+            this.$super('onSave');
+        },
+
+        async getProductNumberRanges() {
+            this.numberRangeRepository.search(this.blogNumberRangeCriteria).then((items) => {
+                this.hasProductNumberRange = !!items.total;
+            });
+        },
+
+        onChangeType(id, numberRange) {
+            this.isShowProductWarning = numberRange && numberRange.technicalName === 'blog';
+            this.numberRange.global = this.isShowProductWarning;
+
+            this.loadSalesChannels();
+        },
+    },
+};

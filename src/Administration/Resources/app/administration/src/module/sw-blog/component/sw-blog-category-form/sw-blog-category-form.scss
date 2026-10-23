@@ -1,0 +1,33 @@
+@import "~scss/variables";
+
+.sw-blog-category-form {
+    .sw-blog-category-form__tag-field-wrapper {
+        margin-top: var(--scale-size-8);
+    }
+
+    &__visibility-title {
+        font-weight: var(--font-weight-semibold);
+        margin-bottom: var(--scale-size-8);
+    }
+
+    &__categories-body {
+        margin-bottom: var(--scale-size-8);
+    }
+
+    &__visibility_field {
+        margin-top: var(--scale-size-20);
+
+        .sw-blog-detail__select-visibility.sw-field {
+            margin-bottom: 0;
+        }
+    }
+
+    &__visibility-link {
+        display: inline-flex;
+        column-gap: var(--scale-size-4);
+        align-items: center;
+        justify-content: flex-end;
+        width: 100%;
+        text-align: right;
+    }
+}

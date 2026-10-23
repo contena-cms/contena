@@ -1,0 +1,221 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Routing;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Routing\CanonicalRedirectService;
+use Contena\Core\Framework\Routing\Extension\CanonicalRedirectExtension;
+use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
+use Contena\Core\ChannelRequest;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[CoversClass(CanonicalRedirectService::class)]
+class CanonicalRedirectServiceTest extends TestCase
+{
+    final public const CONFIG_KEY = 'core.seo.redirectToCanonicalUrl';
+
+    #[DataProvider('requestDataProvider')]
+    public function testGetRedirect(Request $request, ?Response $response): void
+    {
+        static::assertNotNull($response);
+        $shouldRedirect = $response->getStatusCode() === Response::HTTP_MOVED_PERMANENTLY;
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService($shouldRedirect),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        /** @var RedirectResponse|null $actual */
+        $actual = $canonicalRedirectService->getRedirect($request);
+
+        if ($shouldRedirect) {
+            static::assertNotNull($actual);
+            static::assertInstanceOf(
+                RedirectResponse::class,
+                $actual
+            );
+            static::assertSame(
+                $request->attributes->get(ChannelRequest::ATTRIBUTE_CANONICAL_LINK),
+                $actual->getTargetUrl()
+            );
+            static::assertSame(
+                Response::HTTP_MOVED_PERMANENTLY,
+                $actual->getStatusCode()
+            );
+        } else {
+            static::assertNull($actual);
+        }
+    }
+
+    public function testGetRedirectWithQueryParameters(): void
+    {
+        $request = self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/lorem/ipsum/dolor-sit/amet']);
+        $request->server->set('QUERY_STRING', 'foo=bar');
+
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService(true),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $response = $canonicalRedirectService->getRedirect($request);
+
+        static::assertInstanceOf(RedirectResponse::class, $response);
+        static::assertSame('/lorem/ipsum/dolor-sit/amet?foo=bar', $response->getTargetUrl());
+    }
+
+    public function testGetRedirectWithQueryParametersAlreadyInCanonicalUrl(): void
+    {
+        $request = self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/lorem/ipsum/dolor-sit/amet?foo=bar']);
+        $request->server->set('QUERY_STRING', 'foo=bar');
+
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService(true),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $response = $canonicalRedirectService->getRedirect($request);
+
+        static::assertInstanceOf(RedirectResponse::class, $response);
+        static::assertSame('/lorem/ipsum/dolor-sit/amet?foo=bar', $response->getTargetUrl());
+    }
+
+    public function testGetRedirectWithDifferentQueryParametersInCanonicalUrl(): void
+    {
+        $request = self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/lorem/ipsum/dolor-sit/amet?foo=bar']);
+        $request->server->set('QUERY_STRING', 'baz=qux');
+
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService(true),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $response = $canonicalRedirectService->getRedirect($request);
+
+        static::assertInstanceOf(RedirectResponse::class, $response);
+        static::assertSame('/lorem/ipsum/dolor-sit/amet?foo=bar', $response->getTargetUrl());
+    }
+
+    public function testCanonicalWithExistingQueryStringPreservesStoredQuery(): void
+    {
+        $request = self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/awesome-blog?lang=en']);
+        $request->server->set('QUERY_STRING', 'test=123');
+
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService(true),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $response = $canonicalRedirectService->getRedirect($request);
+
+        static::assertInstanceOf(RedirectResponse::class, $response);
+        static::assertSame('/awesome-blog?lang=en', $response->getTargetUrl());
+    }
+
+    public function testCanonicalWithoutQueryStringAppendsRequestQuery(): void
+    {
+        $request = self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/awesome-blog']);
+        $request->server->set('QUERY_STRING', 'test=123');
+
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService(true),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $response = $canonicalRedirectService->getRedirect($request);
+
+        static::assertInstanceOf(RedirectResponse::class, $response);
+        static::assertSame('/awesome-blog?test=123', $response->getTargetUrl());
+    }
+
+    public function testExtensionIsDispatched(): void
+    {
+        $request = self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/lorem/ipsum/dolor-sit/amet']);
+
+        $dispatcher = new EventDispatcher();
+
+        $canonicalRedirectService = new CanonicalRedirectService(
+            $this->getSystemConfigService(true, read: false),
+            new ExtensionDispatcher($dispatcher),
+        );
+
+        $post = $this->createMock(CallableClass::class);
+        $post->expects($this->exactly(1))->method('__invoke');
+        $dispatcher->addListener(CanonicalRedirectExtension::onPost(), $post);
+
+        $dispatcher->addListener(
+            CanonicalRedirectExtension::onPre(),
+            static function (CanonicalRedirectExtension $extension): void {
+                $extension->stopPropagation();
+
+                $extension->result = new RedirectResponse('/overridden/url');
+            }
+        );
+
+        $response = $canonicalRedirectService->getRedirect($request);
+
+        static::assertInstanceOf(RedirectResponse::class, $response);
+        static::assertSame('/overridden/url', $response->getTargetUrl());
+    }
+
+    /**
+     * @return iterable<string, array<string, Request|Response>>
+     */
+    public static function requestDataProvider(): iterable
+    {
+        yield 'HTTP request without canonical URL returns no redirect' => [
+            'request' => self::getRequest([]),
+            'response' => new Response(),
+        ];
+        yield 'HTTP request with canonical URL redirects permanently' => [
+            'request' => self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '']),
+            'response' => new Response(),
+        ];
+        yield 'HTTPS request without canonical URL returns no redirect' => [
+            'request' => self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => true]),
+            'response' => new Response(),
+        ];
+        yield 'HTTPS request with canonical URL redirects permanently' => [
+            'request' => self::getRequest([ChannelRequest::ATTRIBUTE_CANONICAL_LINK => '/lorem/ipsum/dolor-sit/amet']),
+            'response' => (new Response())->setStatusCode(Response::HTTP_MOVED_PERMANENTLY),
+        ];
+    }
+
+    /**
+     * @param array<string, true|string> $attributes
+     */
+    private static function getRequest(array $attributes): Request
+    {
+        $appUrl = \is_string($_SERVER['APP_URL'] ?? null) ? $_SERVER['APP_URL'] : 'http://localhost';
+        $request = Request::create($appUrl, Request::METHOD_GET);
+
+        foreach ($attributes as $key => $attribute) {
+            $request->attributes->set($key, $attribute);
+        }
+
+        return $request;
+    }
+
+    private function getSystemConfigService(bool $shouldRedirect, bool $read = true): SystemConfigService
+    {
+        $service = $this->getMockBuilder(SystemConfigService::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['get'])
+            ->getMock();
+
+        $service->expects($read ? $this->once() : $this->never())->method('get')
+            ->with(self::CONFIG_KEY)
+            ->willReturn($shouldRedirect);
+
+        return $service;
+    }
+}

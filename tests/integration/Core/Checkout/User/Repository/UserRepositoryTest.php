@@ -1,0 +1,242 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\System\User\Repository;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuilder;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTermInterpreter;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Util\Random;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Test\TestDefaults;
+
+/**
+ * @internal
+ */
+class UserRepositoryTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+
+    private Connection $connection;
+
+    /**
+     * @var EntityRepository<UserCollection>
+     */
+    private EntityRepository $repository;
+
+    protected function setUp(): void
+    {
+        $this->repository = static::getContainer()->get('user.repository');
+        $this->connection = static::getContainer()->get(Connection::class);
+    }
+
+    public function testGetNoDuplicateMappingTableException(): void
+    {
+        $id = $this->createUser();
+
+        $ids = new IdsCollection();
+
+        $update = [
+            'id' => $id,
+            'tags' => [
+                ['id' => $ids->get('tag-1'), 'name' => 'tag-1'],
+                ['id' => $ids->get('tag-2'), 'name' => 'tag-2'],
+                ['id' => $ids->get('tag-3'), 'name' => 'tag-3'],
+            ],
+        ];
+
+        static::getContainer()->get('user.repository')
+            ->update([$update], Context::createDefaultContext());
+
+        static::getContainer()->get('user.repository')
+            ->update([$update], Context::createDefaultContext());
+
+        $count = (int) $this->connection->fetchOne('SELECT COUNT(*) FROM user_tag WHERE user_id = :id', ['id' => Uuid::fromHexToBytes($id)]);
+
+        static::assertSame(3, $count);
+    }
+
+    public function testSearchRanking(): void
+    {
+        $recordA = Uuid::randomHex();
+        $recordB = Uuid::randomHex();
+        $recordC = Uuid::randomHex();
+        $recordD = Uuid::randomHex();
+
+        $salutation = $this->getValidSalutationId();
+        $address = [
+            'firstName' => 'not',
+            'lastName' => 'not',
+            'city' => 'not',
+            'street' => 'not',
+            'zipcode' => 'not',
+            'salutationId' => $salutation,
+            'country' => ['name' => 'not'],
+        ];
+
+        $matchTerm = Random::getAlphanumericString(20);
+
+        $records = [
+            [
+                'id' => $recordA,
+                'channelId' => TestDefaults::CHANNEL,
+                'defaultShippingAddress' => $address,
+                'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+                'email' => Uuid::randomHex() . '@example.com',
+                'password' => TestDefaults::HASHED_PASSWORD,
+                'lastName' => 'not',
+                'firstName' => $matchTerm,
+                'salutationId' => $salutation,
+                'userNumber' => 'not',
+            ],
+            [
+                'id' => $recordB,
+                'channelId' => TestDefaults::CHANNEL,
+                'defaultShippingAddress' => $address,
+                'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+                'email' => Uuid::randomHex() . '@example.com',
+                'password' => TestDefaults::HASHED_PASSWORD,
+                'lastName' => $matchTerm,
+                'firstName' => 'not',
+                'salutationId' => $salutation,
+                'userNumber' => 'not',
+            ],
+            [
+                'id' => $recordC,
+                'channelId' => TestDefaults::CHANNEL,
+                'defaultShippingAddress' => $address,
+                'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+                'email' => Uuid::randomHex() . '@example.com',
+                'password' => TestDefaults::HASHED_PASSWORD,
+                'lastName' => 'not',
+                'firstName' => 'not',
+                'salutationId' => $salutation,
+                'userNumber' => $matchTerm,
+            ],
+            [
+                'id' => $recordD,
+                'channelId' => TestDefaults::CHANNEL,
+                'defaultShippingAddress' => $address,
+                'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+                'email' => $matchTerm . '@example.com',
+                'password' => TestDefaults::HASHED_PASSWORD,
+                'lastName' => 'not',
+                'firstName' => 'not',
+                'salutationId' => $salutation,
+                'userNumber' => 'not',
+            ],
+        ];
+
+        $this->repository->create($records, Context::createDefaultContext());
+
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+
+        $definition = static::getContainer()->get(UserDefinition::class);
+        $builder = static::getContainer()->get(EntityScoreQueryBuilder::class);
+        $pattern = static::getContainer()->get(SearchTermInterpreter::class)->interpret($matchTerm);
+        $queries = $builder->buildScoreQueries($pattern, $definition, $definition->getEntityName(), $context);
+        $criteria->addQuery(...$queries);
+
+        $result = $this->repository->searchIds($criteria, $context);
+
+        static::assertCount(4, $result->getIds());
+
+        static::assertGreaterThan(
+            $result->getDataFieldOfId($recordA, '_score'),
+            $result->getDataFieldOfId($recordB, '_score')
+        );
+
+        static::assertGreaterThan(
+            $result->getDataFieldOfId($recordD, '_score'),
+            $result->getDataFieldOfId($recordC, '_score')
+        );
+
+        static::assertGreaterThan(
+            $result->getDataFieldOfId($recordA, '_score'),
+            $result->getDataFieldOfId($recordC, '_score')
+        );
+    }
+
+    public function testDeleteUserWithTags(): void
+    {
+        $userId = Uuid::randomHex();
+        $salutation = $this->getValidSalutationId();
+        $user = [
+            'id' => $userId,
+            'channelId' => TestDefaults::CHANNEL,
+            'defaultShippingAddress' => [
+                'firstName' => 'not',
+                'lastName' => 'not',
+                'city' => 'not',
+                'street' => 'not',
+                'zipcode' => 'not',
+                'salutationId' => $salutation,
+                'country' => ['name' => 'not'],
+            ],
+            'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+            'email' => 'test@example.com',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'lastName' => 'not',
+            'firstName' => 'test',
+            'salutationId' => $salutation,
+            'userNumber' => 'not',
+            'tags' => [['name' => 'testTag']],
+        ];
+
+        $context = Context::createDefaultContext();
+        $this->repository->create([$user], $context);
+
+        $this->repository->delete([['id' => $userId]], $context);
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('id', $userId));
+        $result = $this->repository->searchIds($criteria, $context);
+
+        static::assertCount(0, $result->getIds());
+    }
+
+    private function createUser(): string
+    {
+        $userId = Uuid::randomHex();
+        $addressId = Uuid::randomHex();
+
+        $user = [
+            'id' => $userId,
+            'channelId' => TestDefaults::CHANNEL,
+            'defaultShippingAddress' => [
+                'id' => $addressId,
+                'firstName' => 'Max',
+                'lastName' => 'Mustermann',
+                'street' => 'Musterstraße 1',
+                'city' => 'Schöppingen',
+                'zipcode' => '12345',
+                'salutationId' => $this->getValidSalutationId(),
+                'countryId' => $this->getValidCountryId(),
+            ],
+            'defaultBillingAddressId' => $addressId,
+            'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+            'email' => 'foo@bar.de',
+            'password' => TestDefaults::HASHED_PASSWORD,
+            'firstName' => 'Max',
+            'lastName' => 'Mustermann',
+            'salutationId' => $this->getValidSalutationId(),
+            'userNumber' => '12345',
+        ];
+
+        $repo = static::getContainer()->get('user.repository');
+
+        $repo->create([$user], Context::createDefaultContext());
+
+        return $userId;
+    }
+}

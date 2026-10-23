@@ -1,0 +1,19 @@
+{
+  "sw.user.detail.base": {
+    "user": [
+      "salutationId",
+      "firstName",
+      "lastName",
+      "email",
+      "groupId",
+      "channelId",
+      "userNumber",
+      "password",
+      "vatIds",
+      "company",
+      "passwordNew",
+      "passwordConfirm",
+      "convert"
+    ]
+  }
+}

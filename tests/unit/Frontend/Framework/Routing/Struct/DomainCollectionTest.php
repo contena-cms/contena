@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Frontend\Framework\Routing\Struct;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Frontend\Framework\Routing\Struct\DomainCollection;
+use Contena\Frontend\Framework\Routing\Struct\DomainStruct;
+
+/**
+ * @internal
+ */
+#[CoversClass(DomainCollection::class)]
+class DomainCollectionTest extends TestCase
+{
+    public function testAddKeysTheDomainByItsUrlWithATrailingSlash(): void
+    {
+        $domain = DomainStruct::fromArray(self::row('https://example.com/de/'));
+
+        $collection = new DomainCollection();
+        $collection->add($domain);
+
+        static::assertSame($domain, $collection->get('https://example.com/de/'));
+    }
+
+    public function testFromArrayBuildsOneDomainPerRow(): void
+    {
+        $collection = DomainCollection::fromArray([
+            'https://example.com/' => self::row('https://example.com'),
+            'https://example.com/en/' => self::row('https://example.com/en'),
+        ]);
+
+        static::assertCount(2, $collection);
+        static::assertInstanceOf(DomainStruct::class, $collection->get('https://example.com/'));
+        static::assertInstanceOf(DomainStruct::class, $collection->get('https://example.com/en/'));
+    }
+
+    public function testGetApiAlias(): void
+    {
+        static::assertSame('frontend_domain_collection', (new DomainCollection())->getApiAlias());
+    }
+
+    /**
+     * @return array<string, string|null>
+     */
+    private static function row(string $url): array
+    {
+        return [
+            'url' => $url,
+            'id' => 'domain-id',
+            'channelId' => 'sales-channel-id',
+            'typeId' => 'type-id',
+            'snippetSetId' => 'snippet-set-id',
+            'currencyId' => 'currency-id',
+            'languageId' => 'language-id',
+            'maintenance' => '0',
+            'locale' => 'en-GB',
+        ];
+    }
+}

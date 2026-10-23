@@ -1,0 +1,35 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\DataAbstractionLayer\Write\Command;
+
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+trait ChangeSetAwareTrait
+{
+    protected bool $requireChangeSet = false;
+
+    protected ?ChangeSet $changeSet = null;
+
+    public function requiresChangeSet(): bool
+    {
+        return $this->requireChangeSet;
+    }
+
+    public function requestChangeSet(): void
+    {
+        $this->requireChangeSet = true;
+    }
+
+    public function getChangeSet(): ?ChangeSet
+    {
+        return $this->changeSet;
+    }
+
+    public function setChangeSet(?ChangeSet $changeSet): void
+    {
+        $this->changeSet = $changeSet;
+    }
+}

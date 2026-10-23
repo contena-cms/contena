@@ -1,0 +1,13 @@
+/*
+CMS elements
+==============================================
+Skin styling for cms elements
+*/
+
+.cms-element-blog-listing {
+    .cms-listing-row {
+        --#{$prefix}gutter-x: #{$cms-element-blog-listing-gutter-width};
+        --#{$prefix}gutter-y: #{$cms-element-blog-listing-gutter-width};
+        margin-bottom: $spacer-lg;
+    }
+}

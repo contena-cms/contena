@@ -1,0 +1,8 @@
+{
+  "name": "Simple theme",
+  "author": "Contena",
+  "configInheritance": [
+    "@Frontend",
+    "@SimpleTheme"
+  ]
+}

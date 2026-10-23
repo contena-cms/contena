@@ -1,0 +1,37 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\DataAbstractionLayer\Search\Filter;
+
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+abstract class SingleFieldFilter extends Filter
+{
+    protected bool $isPrimary = false;
+
+    protected ?string $resolved = null;
+
+    abstract public function getField(): string;
+
+    public function isPrimary(): bool
+    {
+        return $this->isPrimary;
+    }
+
+    public function setIsPrimary(bool $isPrimary): void
+    {
+        $this->isPrimary = $isPrimary;
+    }
+
+    public function getResolved(): ?string
+    {
+        return $this->resolved;
+    }
+
+    public function setResolved(string $resolved): void
+    {
+        $this->resolved = $resolved;
+    }
+}

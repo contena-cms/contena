@@ -1,0 +1,41 @@
+{
+  "openapi": "3.2.0",
+  "info": [],
+  "paths": [],
+  "components": {
+    "schemas": {
+      "BlogPurchaseLimit": {
+        "type": "object",
+        "description": "Current quantity purchase limits for a blog.",
+        "required": ["blogId", "minPurchase", "purchaseSteps", "maxPurchase", "stock", "apiAlias"],
+        "properties": {
+          "blogId": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{32}$",
+            "description": "The blog ID."
+          },
+          "minPurchase": {
+            "type": "integer",
+            "description": "Minimum quantity a user can purchase."
+          },
+          "purchaseSteps": {
+            "type": "integer",
+            "description": "Step increment for quantity selection."
+          },
+          "maxPurchase": {
+            "type": "integer",
+            "description": "Maximum quantity a user can purchase, reflecting current stock for closeout blogs."
+          },
+          "stock": {
+            "type": ["integer", "null"],
+            "description": "Current stock level of the blog."
+          },
+          "apiAlias": {
+            "type": "string",
+            "const": "blog_purchase_limit"
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,117 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\CreateGeneratorScaffoldingCommandPass;
+use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
+
+/**
+ * @internal
+ */
+#[CoversClass(CreateGeneratorScaffoldingCommandPass::class)]
+class CreateGeneratorScaffoldingCommandPassTest extends TestCase
+{
+    public function testItAddsMakerCommandForTaggedScaffoldingService(): void
+    {
+        $builder = new ContainerBuilder();
+        $builder->setDefinition(
+            DemoScaffoldingGenerator::class,
+            (new Definition(DemoScaffoldingGenerator::class))
+                ->addTag('contena.scaffold.generator')
+        );
+
+        $pass = new CreateGeneratorScaffoldingCommandPass();
+        $pass->process($builder);
+
+        static::assertTrue($builder->hasDefinition('make.auto_command.demo_scaffolding_generator'));
+    }
+
+    public function testItDoesNotAddMakerCommandForDeprecatedScaffoldingService(): void
+    {
+        $builder = new ContainerBuilder();
+        $builder->setDefinition(
+            DemoScaffoldingGenerator::class,
+            (new Definition(DemoScaffoldingGenerator::class))
+                ->addTag('contena.scaffold.generator')
+                ->setDeprecated('test', '1.0.0', '"%service_id%')
+        );
+
+        $pass = new CreateGeneratorScaffoldingCommandPass();
+        $pass->process($builder);
+
+        static::assertFalse($builder->hasDefinition('make.auto_command.demo_scaffolding_generator'));
+    }
+
+    public function testItThrowsWhenTaggedScaffoldingGeneratorDoesNotImplementScaffoldGenerator(): void
+    {
+        $builder = new ContainerBuilder();
+        $builder->setDefinition(
+            BlogDefinition::class,
+            (new Definition(BlogDefinition::class))
+                ->addTag('contena.scaffold.generator')
+        );
+
+        $pass = new CreateGeneratorScaffoldingCommandPass();
+
+        static::expectExceptionObject(
+            DependencyInjectionException::taggedServiceHasWrongType(BlogDefinition::class, 'contena.scaffold.generator', ScaffoldingGenerator::class)
+        );
+        $pass->process($builder);
+    }
+}
+
+/**
+ * @internal
+ */
+class DemoScaffoldingGenerator implements ScaffoldingGenerator
+{
+    public function hasCommandOption(): bool
+    {
+        return false;
+    }
+
+    public function getCommandOption(): ?InputOption
+    {
+        return null;
+    }
+
+    public function getCommandOptionName(): string
+    {
+        return '';
+    }
+
+    public function getCommandOptionDescription(): string
+    {
+        return '';
+    }
+
+    public function getCommandOptionTitle(): string
+    {
+        return '';
+    }
+
+    public function getCommandOptionDescriptionLong(): string
+    {
+        return '';
+    }
+
+    public function addScaffoldConfig(PluginScaffoldConfiguration $config, InputInterface $input, OutputInterface $output): void
+    {
+    }
+
+    public function generateStubs(PluginScaffoldConfiguration $configuration, StubCollection $stubCollection): void
+    {
+    }
+}

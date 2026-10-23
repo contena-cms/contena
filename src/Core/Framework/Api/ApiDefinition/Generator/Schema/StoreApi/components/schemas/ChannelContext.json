@@ -1,0 +1,229 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "ChannelContext": {
+                "type": "object",
+                "properties": {
+                    "token": {
+                        "description": "Context the admin_user session",
+                        "type": "string"
+                    },
+                    "currentCustomerGroup": {
+                        "type": "object",
+                        "description": "User group of the current admin_user",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "displayGross": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "fallbackCustomerGroup": {
+                        "description": "Fallback group if the default user group is not applicable",
+                        "type": "object",
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "displayGross": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "currency": {
+                        "$ref": "#/components/schemas/Currency"
+                    },
+                    "channel": {
+                        "$ref": "#/components/schemas/Channel"
+                    },
+                    "measurementSystem": {
+                        "$ref": "#/components/schemas/ContextMeasurementSystemInfo"
+                    },
+                    "taxRules": {
+                        "type": "array",
+                        "description": "Currently active tax rules and/or rates",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "taxRate": {
+                                    "type": "number",
+                                    "format": "float"
+                                },
+                                "name": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "user": {
+                        "oneOf": [
+                            {
+                                "type": "null"
+                            },
+                            {
+                                "$ref": "#/components/schemas/User"
+                            }
+                        ]
+                    },
+                    "paymentMethod": {
+                        "$ref": "#/components/schemas/PaymentMethod"
+                    },
+                    "shippingLocation": {
+                        "type": "object",
+                        "properties": {
+                            "apiAlias": {
+                                "type": "string",
+                                "const": "cart_delivery_shipping_location"
+                            },
+                            "country": {
+                                "$ref": "#/components/schemas/Country"
+                            },
+                            "address": {
+                                "$ref": "#/components/schemas/UserAddress"
+                            }
+                        }
+                    },
+                    "shippingMethod": {
+                        "$ref": "#/components/schemas/ShippingMethod"
+                    },
+                    "context": {
+                        "description": "Core context with general configuration values and state",
+                        "type": "object",
+                        "properties": {
+                            "versionId": {
+                                "type": "string"
+                            },
+                            "currencyId": {
+                                "type": "string"
+                            },
+                            "currencyFactor": {
+                                "type": "integer"
+                            },
+                            "currencyPrecision": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "languageIdChain": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                }
+                            },
+                            "scope": {
+                                "type": "string"
+                            },
+                            "source": {
+                                "type": "object",
+                                "required": [
+                                    "channelId",
+                                    "type"
+                                ],
+                                "properties": {
+                                    "type": {
+                                        "type": "string",
+                                        "enum": [
+                                            "sales-channel",
+                                            "shop-api"
+                                        ]
+                                    },
+                                    "channelId": {
+                                        "type": "string"
+                                    }
+                                }
+                            },
+                            "taxState": {
+                                "type": "string"
+                            },
+                            "useCache": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "itemRounding": {
+                        "type": "object",
+                        "required": [
+                            "decimals",
+                            "interval",
+                            "roundForNet",
+                            "apiAlias"
+                        ],
+                        "properties": {
+                            "apiAlias": {
+                                "type": "string",
+                                "const": "contena_core_framework_data_abstraction_layer_pricing_cash_rounding_config"
+                            },
+                            "decimals": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "interval": {
+                                "type": "number",
+                                "format": "float"
+                            },
+                            "roundForNet": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "totalRounding": {
+                        "type": "object",
+                        "required": [
+                            "decimals",
+                            "interval",
+                            "roundForNet",
+                            "apiAlias"
+                        ],
+                        "properties": {
+                            "apiAlias": {
+                                "type": "string",
+                                "const": "contena_core_framework_data_abstraction_layer_pricing_cash_rounding_config"
+                            },
+                            "decimals": {
+                                "type": "integer",
+                                "format": "int32"
+                            },
+                            "interval": {
+                                "type": "number",
+                                "format": "float"
+                            },
+                            "roundForNet": {
+                                "type": "boolean"
+                            }
+                        }
+                    },
+                    "languageInfo": {
+                        "type": "object",
+                        "required": [
+                            "localeCode",
+                            "name"
+                        ],
+                        "properties": {
+                            "name": {
+                                "type": "string"
+                            },
+                            "localeCode": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "apiAlias": {
+                        "type": "string",
+                        "const": "channel_context"
+                    }
+                },
+                "required": [
+                    "channel",
+                    "apiAlias",
+                    "itemRounding",
+                    "totalRounding",
+                    "languageInfo"
+                ]
+            }
+        }
+    }
+}

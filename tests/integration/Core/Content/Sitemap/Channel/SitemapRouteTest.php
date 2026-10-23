@@ -1,0 +1,138 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Content\Sitemap\Channel;
+
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Sitemap\Service\SitemapExporterInterface;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\System\Channel\Context\ChannelContextFactory;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+
+/**
+ * @internal
+ */
+#[Group('store-api')]
+class SitemapRouteTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+    use ChannelApiTestBehaviour;
+
+    private KernelBrowser $browser;
+
+    private IdsCollection $ids;
+
+    protected function setUp(): void
+    {
+        $this->ids = new IdsCollection();
+
+        $this->browser = $this->createCustomChannelBrowser([
+            'id' => $this->ids->create('sales-channel'),
+        ]);
+    }
+
+    public function testEmpty(): void
+    {
+        $this->browser->request('POST', '/store-api/sitemap');
+
+        static::assertNotFalse($this->browser->getResponse()->getContent());
+
+        static::assertIsString($this->browser->getResponse()->getContent());
+        $response = json_decode($this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame(200, $this->browser->getResponse()->getStatusCode());
+        static::assertCount(0, $response);
+    }
+
+    public function testSitemapListsEntries(): void
+    {
+        $context = static::getContainer()->get(ChannelContextFactory::class)->create('', $this->ids->get('sales-channel'));
+
+        $fs = static::getContainer()->get('contena.filesystem.sitemap');
+        $fs->write('sitemap/channel-' . $context->getChannelId() . '-' . $context->getLanguageId() . '/test.xml', 'some content');
+
+        $this->browser->request('POST', '/store-api/sitemap');
+
+        static::assertNotFalse($this->browser->getResponse()->getContent());
+
+        static::assertIsString($this->browser->getResponse()->getContent());
+        $response = json_decode($this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame(200, $this->browser->getResponse()->getStatusCode());
+        static::assertCount(1, $response);
+        static::assertSame('sitemap', $response[0]['apiAlias']);
+        static::assertArrayHasKey('filename', $response[0]);
+        static::assertArrayHasKey('created', $response[0]);
+        static::assertIsString($response[0]['filename']);
+        static::assertNotSame('', $response[0]['filename']);
+        static::assertIsString($response[0]['created']);
+        static::assertNotSame('', $response[0]['created']);
+    }
+
+    public function testLiveStrategyHeadlessWithoutExternalFrontendDomainReturnsEmptyList(): void
+    {
+        $browser = $this->createCustomChannelBrowser([
+            'id' => $this->ids->create('headless-sales-channel'),
+            'typeId' => Defaults::CHANNEL_TYPE_API,
+            'domains' => [[
+                'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
+                'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+                'url' => 'http://default.headless.test',
+            ]],
+        ]);
+
+        static::getContainer()->get(SystemConfigService::class)
+            ->set('core.sitemap.sitemapRefreshStrategy', SitemapExporterInterface::STRATEGY_LIVE);
+
+        $browser->request('POST', '/store-api/sitemap');
+
+        $content = $browser->getResponse()->getContent();
+        static::assertIsString($content);
+
+        $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+
+        // without an external frontend domain the generation is skipped silently instead of failing
+        static::assertSame(200, $browser->getResponse()->getStatusCode());
+        static::assertCount(0, $response);
+    }
+
+    public function testLiveStrategyHeadlessWithExternalFrontendDomainGeneratesSitemap(): void
+    {
+        $browser = $this->createCustomChannelBrowser([
+            'id' => $this->ids->create('headless-sales-channel'),
+            'typeId' => Defaults::CHANNEL_TYPE_API,
+            'domains' => [[
+                'languageId' => Defaults::LANGUAGE_SYSTEM,
+                'currencyId' => Defaults::CURRENCY,
+                'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+                'url' => 'http://frontend.test',
+                'isExternalFrontend' => true,
+            ]],
+        ]);
+
+        static::getContainer()->get(SystemConfigService::class)
+            ->set('core.sitemap.sitemapRefreshStrategy', SitemapExporterInterface::STRATEGY_LIVE);
+
+        $browser->request('POST', '/store-api/sitemap');
+
+        $content = $browser->getResponse()->getContent();
+        static::assertIsString($content);
+
+        $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame(200, $browser->getResponse()->getStatusCode());
+        static::assertIsArray($response);
+        static::assertNotCount(0, $response);
+
+        foreach ($response as $sitemap) {
+            // the external frontend does not serve the files, so the listing must not point at it
+            static::assertStringNotContainsString('frontend.test', $sitemap['filename']);
+        }
+    }
+}

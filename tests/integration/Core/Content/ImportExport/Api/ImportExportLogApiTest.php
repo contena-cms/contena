@@ -1,0 +1,394 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Content\ImportExport\Api;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFileEntity;
+use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogCollection;
+use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Util\Random;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\AdminUser\AdminUserCollection;
+use Contena\Core\Test\TestDefaults;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+class ImportExportLogApiTest extends TestCase
+{
+    use AdminApiTestBehaviour;
+    use BasicTestDataBehaviour;
+    use DatabaseTransactionBehaviour;
+    use KernelTestBehaviour;
+
+    /**
+     * @var EntityRepository<ImportExportLogCollection>
+     */
+    private EntityRepository $logRepository;
+
+    /**
+     * @var EntityRepository<EntityCollection<ImportExportProfileEntity>>
+     */
+    private EntityRepository $profileRepository;
+
+    /**
+     * @var EntityRepository<EntityCollection<ImportExportFileEntity>>
+     */
+    private EntityRepository $fileRepository;
+
+    /**
+     * @var EntityRepository<AdminUserCollection>
+     */
+    private EntityRepository $admin_userRepository;
+
+    private Connection $connection;
+
+    private Context $context;
+
+    protected function setUp(): void
+    {
+        $this->logRepository = static::getContainer()->get('import_export_log.repository');
+        $this->profileRepository = static::getContainer()->get('import_export_profile.repository');
+        $this->fileRepository = static::getContainer()->get('import_export_file.repository');
+        $this->admin_userRepository = static::getContainer()->get('admin_user.repository');
+        $this->connection = static::getContainer()->get(Connection::class);
+        $this->context = Context::createDefaultContext();
+    }
+
+    public function testImportExportLogCreateFailedWriteProtected(): void
+    {
+        $num = 3;
+        $data = $this->prepareImportExportLogTestData($num);
+
+        foreach ($data as $entry) {
+            $this->getBrowser()->jsonRequest('POST', $this->prepareRoute(), $entry);
+            $response = $this->getBrowser()->getResponse();
+            static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        }
+    }
+
+    public function testImportExportLogList(): void
+    {
+        foreach ([0, 5] as $num) {
+            $data = $this->prepareImportExportLogTestData($num);
+            if ($data !== []) {
+                $this->logRepository->create(array_values($data), $this->context);
+            }
+
+            $this->getBrowser()->jsonRequest('GET', $this->prepareRoute(), [], [
+                'HTTP_ACCEPT' => 'application/json',
+            ]);
+
+            $response = $this->getBrowser()->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+            $content = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+            $expectData = [];
+            foreach (array_values($data) as $entry) {
+                $expectData[$entry['id']] = $entry;
+            }
+
+            static::assertSame($num, $content['total']);
+            for ($i = 0; $i < $num; ++$i) {
+                $importExportLog = $content['data'][$i];
+                $expect = $expectData[$importExportLog['_uniqueIdentifier']];
+                static::assertSame($expect['activity'], $importExportLog['activity']);
+                static::assertSame($expect['state'], $importExportLog['state']);
+                static::assertSame($expect['admin_userId'], $importExportLog['admin_userId']);
+                static::assertSame($expect['profileId'], $importExportLog['profileId']);
+                static::assertSame($expect['fileId'], $importExportLog['fileId']);
+                static::assertSame($expect['username'], $importExportLog['username']);
+                static::assertSame($expect['profileName'], $importExportLog['profileName']);
+            }
+        }
+    }
+
+    public function testImportExportLogUpdateFailedWriteProtected(): void
+    {
+        $num = 3;
+        $data = $this->prepareImportExportLogTestData($num);
+        $this->logRepository->create(array_values($data), $this->context);
+
+        $ids = array_column($data, 'id');
+        $updateData = $this->rotateTestdata($data);
+
+        $expectData = [];
+        foreach ($ids as $idx => $id) {
+            $expectData[$id] = array_values($data)[$idx];
+            unset($updateData[$idx]['id']);
+
+            $this->getBrowser()->jsonRequest('PATCH', $this->prepareRoute() . $id, $updateData[$idx], [
+                'HTTP_ACCEPT' => 'application/json',
+            ]);
+            $response = $this->getBrowser()->getResponse();
+            static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+        }
+
+        $this->getBrowser()->jsonRequest('GET', $this->prepareRoute(), [], [
+            'HTTP_ACCEPT' => 'application/json',
+        ]);
+        $response = $this->getBrowser()->getResponse();
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+        $content = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame($num, $content['total']);
+        for ($i = 0; $i < $num; ++$i) {
+            $importExportLog = $content['data'][$i];
+            $expect = $expectData[$importExportLog['_uniqueIdentifier']];
+            static::assertSame($expect['activity'], $importExportLog['activity']);
+            static::assertSame($expect['state'], $importExportLog['state']);
+            static::assertSame($expect['admin_userId'], $importExportLog['admin_userId']);
+            static::assertSame($expect['profileId'], $importExportLog['profileId']);
+            static::assertSame($expect['fileId'], $importExportLog['fileId']);
+            static::assertSame($expect['username'], $importExportLog['username']);
+            static::assertSame($expect['profileName'], $importExportLog['profileName']);
+        }
+    }
+
+    public function testImportExportLogDetailSuccess(): void
+    {
+        $num = 2;
+        $data = $this->prepareImportExportLogTestData($num);
+        $this->logRepository->create(array_values($data), $this->context);
+
+        foreach (array_values($data) as $expect) {
+            $this->getBrowser()->jsonRequest('GET', $this->prepareRoute() . $expect['id'], [], [
+                'HTTP_ACCEPT' => 'application/json',
+            ]);
+            $response = $this->getBrowser()->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+            $content = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+            static::assertSame($expect['activity'], $content['data']['activity']);
+            static::assertSame($expect['state'], $content['data']['state']);
+            static::assertSame($expect['admin_userId'], $content['data']['admin_userId']);
+            static::assertSame($expect['profileId'], $content['data']['profileId']);
+            static::assertSame($expect['fileId'], $content['data']['fileId']);
+            static::assertSame($expect['username'], $content['data']['username']);
+            static::assertSame($expect['profileName'], $content['data']['profileName']);
+        }
+    }
+
+    public function testImportExportLogDetailNotFound(): void
+    {
+        $this->getBrowser()->jsonRequest('GET', $this->prepareRoute() . Uuid::randomHex(), [], [
+            'HTTP_ACCEPT' => 'application/json',
+        ]);
+        $response = $this->getBrowser()->getResponse();
+        static::assertSame(Response::HTTP_NOT_FOUND, $response->getStatusCode());
+    }
+
+    public function testImportExportLogSearch(): void
+    {
+        $data = $this->prepareImportExportLogTestData(2);
+
+        $invalidData = array_pop($data);
+
+        $this->logRepository->create(array_values($data), $this->context);
+        $searchData = array_pop($data);
+        unset($searchData['config']);
+
+        $filter = [];
+        static::assertNotNull($invalidData);
+        static::assertNotNull($searchData);
+        foreach ($searchData as $key => $value) {
+            $filter['filter'][$key] = $invalidData[$key];
+            $this->getBrowser()->jsonRequest('POST', $this->prepareRoute(true), $filter, [
+                'HTTP_ACCEPT' => 'application/json',
+            ]);
+            $response = $this->getBrowser()->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+            $content = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+            static::assertSame(0, $content['total']);
+
+            $filter['filter'][$key] = $value;
+            $this->getBrowser()->jsonRequest('POST', $this->prepareRoute(true), $filter, [
+                'HTTP_ACCEPT' => 'application/json',
+            ]);
+            $response = $this->getBrowser()->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+            $content = json_decode((string) $response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+            static::assertSame(1, $content['total']);
+        }
+    }
+
+    public function testImportExportLogDelete(): void
+    {
+        $num = 3;
+        $data = $this->prepareImportExportLogTestData($num);
+
+        $this->logRepository->create(array_values($data), $this->context);
+        $deleteId = array_column($data, 'id')[0];
+
+        $this->getBrowser()->jsonRequest('DELETE', $this->prepareRoute() . Uuid::randomHex(), [], [
+            'HTTP_ACCEPT' => 'application/json',
+        ]);
+        $response = $this->getBrowser()->getResponse();
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+        $records = $this->connection->fetchAllAssociative('SELECT * FROM import_export_log');
+        static::assertCount($num, $records);
+
+        $this->getBrowser()->jsonRequest('DELETE', $this->prepareRoute() . $deleteId, [], [
+            'HTTP_ACCEPT' => 'application/json',
+        ]);
+        $response = $this->getBrowser()->getResponse();
+        static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+
+        $records = $this->connection->fetchAllAssociative('SELECT * FROM import_export_log');
+        static::assertCount($num, $records);
+    }
+
+    protected function prepareRoute(bool $search = false): string
+    {
+        $addPath = '';
+        if ($search) {
+            $addPath = '/search';
+        }
+
+        return '/api' . $addPath . '/import-export-log/';
+    }
+
+    /**
+     * Prepare a defined number of test data.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    protected function prepareImportExportLogTestData(int $num = 1): array
+    {
+        $data = [];
+        $users = [];
+        $admin_userIds = [];
+        $fileIds = [];
+        $profiles = [];
+        $profileIds = [];
+        $activities = [];
+
+        if ($num > 0) {
+            // Dependencies
+            $users = $this->prepareUsers(2);
+            $admin_userIds = array_column($users, 'id');
+            $files = $this->prepareFiles(2);
+            $fileIds = array_column($files, 'id');
+            $profiles = $this->prepareProfiles(2);
+            $profileIds = array_column($profiles, 'id');
+            $activities = [0 => 'import', 1 => 'export'];
+        }
+
+        for ($i = 1; $i <= $num; ++$i) {
+            $uuid = Uuid::randomHex();
+            $profile = $profiles[Uuid::fromHexToBytes($profileIds[$i % 2])];
+
+            $data[Uuid::fromHexToBytes($uuid)] = [
+                'id' => $uuid,
+                'activity' => $activities[$i % 2],
+                'state' => \sprintf('state %d', $i),
+                'admin_userId' => $admin_userIds[$i % 2],
+                'profileId' => $profileIds[$i % 2],
+                'fileId' => $fileIds[$i % 2],
+                'username' => $users[Uuid::fromHexToBytes($admin_userIds[$i % 2])]['username'],
+                'profileName' => $profile['label'],
+                'records' => 10 * $i,
+                'config' => ['profile' => $profile],
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    protected function prepareUsers(int $num = 1): array
+    {
+        $data = [];
+        for ($i = 1; $i <= $num; ++$i) {
+            $uuid = Uuid::randomHex();
+
+            $data[Uuid::fromHexToBytes($uuid)] = [
+                'id' => $uuid,
+                'localeId' => $this->getLocaleIdOfSystemLanguage(),
+                'username' => \sprintf('foobar%d', $i),
+                'password' => TestDefaults::HASHED_PASSWORD,
+                'firstName' => \sprintf('Foo%d', $i),
+                'lastName' => \sprintf('Bar%d', $i),
+                'email' => \sprintf('fo%d@ob.ar', $i),
+            ];
+        }
+        $this->admin_userRepository->create(array_values($data), $this->context);
+
+        return $data;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    protected function prepareFiles(int $num = 1): array
+    {
+        $data = [];
+        for ($i = 1; $i <= $num; ++$i) {
+            $uuid = Uuid::randomHex();
+
+            $data[Uuid::fromHexToBytes($uuid)] = [
+                'id' => $uuid,
+                'originalName' => \sprintf('file%d.xml', $i),
+                'path' => \sprintf('/test/test%d', $i),
+                'expireDate' => \sprintf('2011-01-01T15:03:%02d', $i),
+                'accessToken' => Random::getBase64UrlString(32),
+            ];
+        }
+        $this->fileRepository->create(array_values($data), $this->context);
+
+        return $data;
+    }
+
+    /**
+     * @return array<string, array<string, mixed>>
+     */
+    protected function prepareProfiles(int $num = 1): array
+    {
+        $data = [];
+        for ($i = 1; $i <= $num; ++$i) {
+            $uuid = Uuid::randomHex();
+
+            $data[Uuid::fromHexToBytes($uuid)] = [
+                'id' => $uuid,
+                'technicalName' => \sprintf('test_name_%d', $i),
+                'label' => \sprintf('Test label %d', $i),
+                'systemDefault' => ($i % 2 === 0),
+                'sourceEntity' => \sprintf('Test entity %d', $i),
+                'fileType' => \sprintf('Test file type %d', $i),
+                'delimiter' => \sprintf('Test delimiter %d', $i),
+                'enclosure' => \sprintf('Test enclosure %d', $i),
+                'mapping' => ['Mapping ' . $i => 'Value ' . $i],
+            ];
+        }
+        $this->profileRepository->create(array_values($data), $this->context);
+
+        return $data;
+    }
+
+    /**
+     * @param array<string, array<string, mixed>> $data
+     *
+     * @return array<int, mixed>
+     */
+    protected function rotateTestdata(array $data): array
+    {
+        $data[] = array_shift($data);
+
+        return array_values($data);
+    }
+}

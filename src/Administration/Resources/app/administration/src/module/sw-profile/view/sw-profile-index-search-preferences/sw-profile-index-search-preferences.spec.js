@@ -1,0 +1,555 @@
+/* eslint-disable sw-test-rules/test-file-max-lines-warning */
+
+import { mount } from '@vue/test-utils';
+import { nextTick } from 'vue';
+
+/**
+ * @sw-package fundamentals@framework
+ */
+
+Contena.Service().register('contenaDiscountCampaignService', () => {
+    return {
+        isDiscountCampaignActive: jest.fn(() => true),
+    };
+});
+
+async function createWrapper() {
+    return mount(
+        await wrapTestComponent('sw-profile-index-search-preferences', {
+            sync: true,
+        }),
+        {
+            global: {
+                stubs: {
+                    'sw-ignore-class': true,
+                    'sw-container': await wrapTestComponent('sw-container'),
+                    'sw-checkbox-field': true,
+                    'sw-loader': true,
+                    'sw-extension-component-section': true,
+                    'sw-ai-copilot-badge': true,
+                    'sw-context-button': true,
+                    'router-link': true,
+                },
+                provide: {
+                    repositoryFactory: {
+                        create: () => ({
+                            create: () => {
+                                return Promise.resolve();
+                            },
+                            search: () => {
+                                return Promise.resolve();
+                            },
+                        }),
+                    },
+                    searchPreferencesService: {
+                        getDefaultSearchPreferences: () => {},
+                        getUserSearchPreferences: () => {},
+                        processSearchPreferences: () => [],
+                        createUserSearchPreferences: () => {
+                            return {
+                                key: 'search.preferences',
+                                admin_userId: 'admin_userId',
+                            };
+                        },
+                    },
+                    searchRankingService: {
+                        getMinSearchTermLength: () => Promise.resolve(2),
+                    },
+                },
+                attachTo: document.body,
+            },
+        },
+    );
+}
+
+describe('src/module/sw-profile/view/sw-profile-index-search-preferences', () => {
+    beforeAll(() => {
+        Contena.Store.get('swProfile').$reset();
+    });
+
+    beforeEach(() => {
+        Contena.Application.view.deleteReactive = () => {};
+    });
+
+    it('should get minSearchTermLength once component created', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.getMinSearchTermLength = jest.fn(() => Promise.resolve());
+
+        await wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.getMinSearchTermLength).toHaveBeenCalledTimes(1);
+        wrapper.vm.getMinSearchTermLength.mockRestore();
+    });
+
+    it('should get data source once component created', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.getDataSource = jest.fn(() => Promise.resolve());
+
+        await wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.getDataSource).toHaveBeenCalledTimes(1);
+        wrapper.vm.getDataSource.mockRestore();
+    });
+
+    it('should update data source once component created', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.updateDataSource = jest.fn(() => Promise.resolve());
+
+        await wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.updateDataSource).toHaveBeenCalled();
+        wrapper.vm.updateDataSource.mockRestore();
+    });
+
+    it('should add event listeners once component created', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.addEventListeners = jest.fn();
+
+        await wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.addEventListeners).toHaveBeenCalled();
+        wrapper.vm.addEventListeners.mockRestore();
+    });
+
+    it('should remove event listeners before component destroyed', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.removeEventListeners = jest.fn();
+
+        await wrapper.vm.beforeDestroyComponent();
+
+        expect(wrapper.vm.removeEventListeners).toHaveBeenCalledTimes(1);
+        wrapper.vm.removeEventListeners.mockRestore();
+    });
+
+    it('should get admin_user search preferences once component created', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.searchPreferencesService.getUserSearchPreferences = jest.fn(() => Promise.resolve());
+
+        await wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.searchPreferencesService.getUserSearchPreferences).toHaveBeenCalledTimes(1);
+        wrapper.vm.searchPreferencesService.getUserSearchPreferences.mockRestore();
+    });
+
+    it('should be able to select all', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        Contena.Store.get('swProfile').searchPreferences = [
+            {
+                entityName: 'blog',
+                _searchable: false,
+                fields: [
+                    {
+                        fieldName: 'name',
+                        _searchable: false,
+                        _score: 250,
+                        group: [],
+                    },
+                ],
+            },
+        ];
+        await nextTick();
+
+        await wrapper.find('.sw-profile-index-search-preferences-searchable-elements__button-select-all').trigger('click');
+
+        expect(wrapper.vm.searchPreferences).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    entityName: 'blog',
+                    _searchable: true,
+                    fields: expect.arrayContaining([
+                        expect.objectContaining({
+                            fieldName: 'name',
+                            _searchable: true,
+                        }),
+                    ]),
+                }),
+            ]),
+        );
+    });
+
+    it('should toggle the checkbox whose label was clicked', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        Contena.Store.get('swProfile').searchPreferences = [
+            {
+                entityName: 'blog',
+                _searchable: true,
+                fields: [
+                    { fieldName: 'name', _searchable: true, _score: 500, group: [] },
+                    { fieldName: 'blogNumber', _searchable: true, _score: 500, group: [] },
+                ],
+            },
+            {
+                entityName: 'user',
+                _searchable: true,
+                fields: [
+                    { fieldName: 'firstName', _searchable: true, _score: 500, group: [] },
+                    { fieldName: 'lastName', _searchable: true, _score: 500, group: [] },
+                ],
+            },
+        ];
+        await flushPromises();
+
+        const checkboxes = wrapper.findAll(
+            '.sw-profile-index-search-preferences-searchable-elements__entity-container input[type="checkbox"]',
+        );
+        const ids = checkboxes.map((checkbox) => checkbox.attributes('id'));
+        const names = checkboxes.map((checkbox) => checkbox.attributes('name'));
+
+        expect(checkboxes).toHaveLength(6);
+        expect(new Set(ids).size).toBe(6);
+        expect(new Set(names).size).toBe(6);
+
+        await wrapper.find(`label[for="${checkboxes[3].attributes('id')}"]`).trigger('click');
+        await wrapper.find(`label[for="${checkboxes[5].attributes('id')}"]`).trigger('click');
+
+        expect(checkboxes.map((checkbox) => checkbox.element.checked)).toEqual([
+            true,
+            true,
+            true,
+            false,
+            true,
+            false,
+        ]);
+    });
+
+    it('should be able to deselect all', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        Contena.Store.get('swProfile').searchPreferences = [
+            {
+                entityName: 'blog',
+                _searchable: true,
+                fields: [
+                    {
+                        fieldName: 'name',
+                        _searchable: true,
+                        _score: 250,
+                        group: [],
+                    },
+                ],
+            },
+        ];
+        await nextTick();
+
+        await wrapper.find('.sw-profile-index-search-preferences-searchable-elements__button-deselect-all').trigger('click');
+
+        expect(wrapper.vm.searchPreferences).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    entityName: 'blog',
+                    _searchable: false,
+                    fields: expect.arrayContaining([
+                        expect.objectContaining({
+                            fieldName: 'name',
+                            _searchable: false,
+                        }),
+                    ]),
+                }),
+            ]),
+        );
+    });
+
+    it('should be able to change search preference', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        Contena.Store.get('swProfile').searchPreferences = [
+            {
+                entityName: 'blog',
+                _searchable: false,
+                fields: [
+                    {
+                        fieldName: 'name',
+                        _searchable: false,
+                    },
+                    {
+                        fieldName: 'blogNumber',
+                        _searchable: false,
+                    },
+                ],
+            },
+        ];
+
+        wrapper.vm.searchPreferences[0]._searchable = true;
+        wrapper.vm.onChangeSearchPreference(wrapper.vm.searchPreferences[0]);
+
+        expect(wrapper.vm.searchPreferences).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    entityName: 'blog',
+                    _searchable: true,
+                    fields: expect.arrayContaining([
+                        expect.objectContaining({
+                            fieldName: 'name',
+                            _searchable: true,
+                        }),
+                        expect.objectContaining({
+                            fieldName: 'blogNumber',
+                            _searchable: true,
+                        }),
+                    ]),
+                }),
+            ]),
+        );
+    });
+
+    it('should not be able to change search preference', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        Contena.Store.get('swProfile').searchPreferences = [
+            {
+                entityName: 'blog',
+                _searchable: false,
+                fields: [
+                    {
+                        fieldName: 'name',
+                        _searchable: true,
+                    },
+                    {
+                        fieldName: 'blogNumber',
+                        _searchable: false,
+                    },
+                ],
+            },
+        ];
+
+        wrapper.vm.searchPreferences[0]._searchable = true;
+        wrapper.vm.onChangeSearchPreference(wrapper.vm.searchPreferences[0]);
+
+        expect(wrapper.vm.searchPreferences).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    entityName: 'blog',
+                    _searchable: true,
+                    fields: expect.arrayContaining([
+                        expect.objectContaining({
+                            fieldName: 'name',
+                            _searchable: true,
+                        }),
+                        expect.objectContaining({
+                            fieldName: 'blogNumber',
+                            _searchable: false,
+                        }),
+                    ]),
+                }),
+            ]),
+        );
+    });
+
+    it('should contain a computed property, calling: defaultSearchPreferences', async () => {
+        const wrapper = await createWrapper();
+
+        wrapper.vm.searchPreferencesService.getDefaultSearchPreferences = jest.fn(() => [
+            {
+                order: {
+                    documents: {
+                        documentNumber: { _score: 80, _searchable: false },
+                        documentInvoice: { _score: 80, _searchable: false },
+                    },
+                },
+            },
+        ]);
+
+        await flushPromises();
+
+        expect(wrapper.vm.defaultSearchPreferences).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    order: expect.objectContaining({
+                        documents: expect.objectContaining({
+                            documentNumber: expect.objectContaining({
+                                _score: 80,
+                                _searchable: false,
+                            }),
+                            documentInvoice: expect.objectContaining({
+                                _score: 80,
+                                _searchable: false,
+                            }),
+                        }),
+                    }),
+                }),
+            ]),
+        );
+
+        Contena.Store.get('swProfile').admin_userSearchPreferences = [
+            {
+                order: {
+                    documents: {
+                        documentNumber: { _score: 80, _searchable: true },
+                        documentInvoice: { _score: 80, _searchable: true },
+                    },
+                },
+            },
+        ];
+
+        expect(wrapper.vm.defaultSearchPreferences).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    order: expect.objectContaining({
+                        documents: expect.objectContaining({
+                            documentNumber: expect.objectContaining({
+                                _score: 80,
+                                _searchable: true,
+                            }),
+                            documentInvoice: expect.objectContaining({
+                                _score: 80,
+                                _searchable: true,
+                            }),
+                        }),
+                    }),
+                }),
+            ]),
+        );
+    });
+
+    it('should merge defaultSearchPreferences and admin_userSearchPreferences correctly', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.searchPreferencesService.getDefaultSearchPreferences = jest.fn(() => [
+            {
+                order: {
+                    _searchable: false,
+                    number: { _score: 80, _searchable: true },
+                    documents: {
+                        _searchable: false,
+                        documentNumber: { _score: 80, _searchable: false },
+                        documentInvoice: { _score: 80, _searchable: false },
+                    },
+                },
+            },
+            {
+                category: {
+                    _searchable: false,
+                    name: { _score: 80, _searchable: true },
+                    tags: {
+                        _searchable: false,
+                        name: { _score: 80, _searchable: true },
+                    },
+                },
+            },
+            {
+                notInUserPreferences: {
+                    _searchable: true,
+                    name: { _score: 80, _searchable: true },
+                },
+            },
+        ]);
+
+        await flushPromises();
+
+        wrapper.vm.admin_userSearchPreferences = [
+            {
+                order: {
+                    _searchable: true,
+                    number: { _score: 80, _searchable: true },
+                    documents: {
+                        _searchable: true,
+                        documentNumber: { _score: 80, _searchable: true },
+                        documentInvoice: { _score: 80, _searchable: true },
+                    },
+                },
+            },
+            {
+                category: {
+                    _searchable: true,
+                    name: { _score: 80, _searchable: false },
+                    tags: {
+                        _searchable: true,
+                        name: { _score: 80, _searchable: false },
+                    },
+                },
+            },
+            {
+                notInDefaultPreferences: {
+                    _searchable: true,
+                    name: { _score: 80, _searchable: true },
+                },
+            },
+        ];
+
+        await flushPromises();
+
+        const result = wrapper.vm.defaultSearchPreferences;
+
+        expect(result).toHaveLength(3);
+        expect(result).toEqual(
+            expect.arrayContaining([
+                expect.objectContaining({
+                    order: expect.objectContaining({
+                        _searchable: true,
+                        number: expect.objectContaining({
+                            _score: 80,
+                            _searchable: true,
+                        }),
+                        documents: expect.objectContaining({
+                            _searchable: true,
+                            documentNumber: expect.objectContaining({
+                                _score: 80,
+                                _searchable: true,
+                            }),
+                            documentInvoice: expect.objectContaining({
+                                _score: 80,
+                                _searchable: true,
+                            }),
+                        }),
+                    }),
+                }),
+                expect.objectContaining({
+                    category: expect.objectContaining({
+                        _searchable: true,
+                        name: expect.objectContaining({
+                            _score: 80,
+                            _searchable: false,
+                        }),
+                        tags: expect.objectContaining({
+                            _searchable: true,
+                            name: expect.objectContaining({
+                                _score: 80,
+                                _searchable: false,
+                            }),
+                        }),
+                    }),
+                }),
+                expect.objectContaining({
+                    notInUserPreferences: {
+                        _searchable: true,
+                        name: expect.objectContaining({
+                            _score: 80,
+                            _searchable: true,
+                        }),
+                    },
+                }),
+            ]),
+        );
+
+        expect(result).toEqual(
+            expect.not.arrayContaining([
+                {
+                    notInDefaultPreferences: {
+                        _searchable: true,
+                        name: { _score: 80, _searchable: true },
+                    },
+                },
+            ]),
+        );
+    });
+});

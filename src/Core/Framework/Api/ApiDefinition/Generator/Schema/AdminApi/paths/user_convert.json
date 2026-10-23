@@ -1,0 +1,69 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/_action/user-convert/{userId}": {
+            "post": {
+                "tags": [
+                    "User convert"
+                ],
+                "summary": "Convert guest user to registered user",
+                "description": "Converts an existing guest user into a registered user. If a password is provided, the user can immediately log in using that password. If no password is provided, a password recovery email will be sent to the user so they can set their password.",
+                "operationId": "convertGuestCustomer",
+                "parameters": [
+                    {
+                        "name": "userId",
+                        "in": "path",
+                        "description": "The id of the user that should be converted.",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "description": "Optional data for the conversion process.",
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "password": {
+                                        "type": "string",
+                                        "description": "Optional password for the user. If provided, the user can log in immediately using this password. If omitted, a password recovery email will be sent."
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "204": {
+                        "description": "User successfully converted to a registered user."
+                    },
+                    "401": {
+                        "description": "The user with the specified ID could not be found.",
+                        "content": {
+                            "application\/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/failure"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "The user is not a guest, or the sales channel domain could not be found.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/failure"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

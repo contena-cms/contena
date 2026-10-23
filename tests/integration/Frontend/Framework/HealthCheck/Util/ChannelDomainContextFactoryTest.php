@@ -1,0 +1,127 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Frontend\Framework\HealthCheck\Util;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\CartRuleLoader;
+use Contena\Core\Checkout\Cart\Event\CartCreatedEvent;
+use Contena\Core\Checkout\Cart\Extension\CheckoutCartRuleLoaderExtension;
+use Contena\Core\Checkout\Cart\LineItem\LineItem;
+use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
+use Contena\Core\Checkout\Cart\Rule\LineItemsInCartCountRule;
+use Contena\Core\Checkout\Cart\RuleLoaderResult;
+use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomain;
+use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainContextFactory;
+
+/**
+ * @internal
+ */
+class ChannelDomainContextFactoryTest extends TestCase
+{
+    use DatabaseTransactionBehaviour;
+    use KernelTestBehaviour;
+    use ChannelApiTestBehaviour;
+
+    private IdsCollection $ids;
+
+    private ChannelDomain $domain;
+
+    protected function setUp(): void
+    {
+        $this->ids = new IdsCollection();
+        $this->createChannel([
+            'id' => $this->ids->create('sales-channel'),
+            'domains' => [
+                [
+                    'id' => $this->ids->create('domain'),
+                    'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
+                    'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+                    'url' => 'http://domain-context.test',
+                ],
+            ],
+        ]);
+
+        $this->domain = ChannelDomain::create(
+            $this->ids->get('sales-channel'),
+            'http://domain-context.test',
+            $this->ids->get('domain'),
+            Defaults::LANGUAGE_SYSTEM,
+            Defaults::CURRENCY,
+        );
+    }
+
+    /**
+     * The probe request creates its new cart through the CartFactory, so an extension seeding new carts via
+     * the CartCreatedEvent changes which rules match for it. The lookup has to see the same rules.
+     */
+    public function testRulesMatchingACartSeededOnCreationAreDetected(): void
+    {
+        static::getContainer()->get('rule.repository')->create([[
+            'id' => $this->ids->create('rule'),
+            'name' => 'cart is not empty',
+            'priority' => 1,
+            'conditions' => [[
+                'type' => LineItemsInCartCountRule::RULE_NAME,
+                'value' => ['operator' => '>=', 'count' => 1],
+            ]],
+        ]], Context::createDefaultContext());
+        static::getContainer()->get(CartRuleLoader::class)->invalidate();
+
+        EventHookDispatcher::fromContainer(static::getContainer())->on(
+            CartCreatedEvent::class,
+            static function (CartCreatedEvent $event): void {
+                $lineItem = new LineItem('seeded-by-an-extension', LineItem::CUSTOM_LINE_ITEM_TYPE);
+                $lineItem->setLabel('seeded');
+                $lineItem->setPriceDefinition(new QuantityPriceDefinition(10.0, new TaxRuleCollection()));
+
+                $event->getCart()->add($lineItem);
+            }
+        );
+
+        $context = static::getContainer()->get(ChannelDomainContextFactory::class)->create($this->domain);
+
+        static::assertContains($this->ids->get('rule'), $context->getRuleIds());
+    }
+
+    /**
+     * The cart is only calculated to detect the rules. A cart processor or extension adding a line item
+     * would make the rule loader store it, under a random token nobody ever uses again, so every run of a
+     * readiness check would leave an orphaned cart behind.
+     */
+    public function testTheRuleMatchingCartIsNotStoredEvenWhenItChanges(): void
+    {
+        $cartChanged = false;
+        EventHookDispatcher::fromContainer(static::getContainer())->on(
+            ExtensionDispatcher::post(CheckoutCartRuleLoaderExtension::NAME),
+            static function (CheckoutCartRuleLoaderExtension $extension) use (&$cartChanged): void {
+                if (!$extension->result instanceof RuleLoaderResult) {
+                    return;
+                }
+
+                $extension->result->getCart()->add(new LineItem('added-by-an-extension', LineItem::CUSTOM_LINE_ITEM_TYPE));
+                $cartChanged = true;
+            }
+        );
+
+        $context = static::getContainer()->get(ChannelDomainContextFactory::class)->create($this->domain);
+
+        static::assertTrue($cartChanged);
+
+        $storedCarts = static::getContainer()->get(Connection::class)
+            ->fetchOne('SELECT COUNT(*) FROM `cart` WHERE `token` = :token', ['token' => $context->getToken()]);
+
+        static::assertSame(0, (int) $storedCarts);
+    }
+}

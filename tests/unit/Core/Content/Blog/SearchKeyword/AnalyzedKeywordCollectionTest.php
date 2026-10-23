@@ -1,0 +1,42 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Blog\SearchKeyword;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\SearchKeyword\AnalyzedKeyword;
+use Contena\Core\Content\Blog\SearchKeyword\AnalyzedKeywordCollection;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+#[CoversClass(AnalyzedKeywordCollection::class)]
+class AnalyzedKeywordCollectionTest extends TestCase
+{
+    public function testAddKeepsTheHighestRankingPerKeyword(): void
+    {
+        $collection = new AnalyzedKeywordCollection();
+        $collection->add(new AnalyzedKeyword('shoe', 100));
+        $collection->add(new AnalyzedKeyword('shoe', 500));
+        $collection->add(new AnalyzedKeyword('shoe', 200));
+
+        static::assertCount(1, $collection);
+        static::assertSame(500.0, $collection->get('shoe')?->getRanking());
+    }
+
+    public function testSetKeysByKeywordAndOverwrites(): void
+    {
+        $collection = new AnalyzedKeywordCollection();
+        $collection->set('ignored', new AnalyzedKeyword('shoe', 300));
+        $collection->set('ignored', new AnalyzedKeyword('shoe', 100));
+
+        static::assertCount(1, $collection);
+        static::assertSame(100.0, $collection->get('shoe')?->getRanking());
+    }
+
+    public function testApiAlias(): void
+    {
+        static::assertSame('blog_search_keyword_analyzed_collection', (new AnalyzedKeywordCollection())->getApiAlias());
+    }
+}

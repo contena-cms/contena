@@ -1,0 +1,37 @@
+{% block sw_settings_frontend %}
+<div class="sw-settings-frontend-configuration">
+    {% block sw_settings_frontend_settings_icon_cache %}
+    <mt-switch
+        v-model="frontendSettings['core.frontendSettings.iconCache']"
+        v-tooltip.top="{
+            message: $t('sw-settings-frontend.configuration.iconCacheToolTip'),
+            showOnDisabledElements: true
+        }"
+        bordered
+        :label="$t('sw-settings-frontend.configuration.iconCache')"
+    />
+    {% endblock %}
+    {% block sw_settings_frontend_settings_theme_async %}
+    <mt-switch
+        v-model="frontendSettings['core.frontendSettings.asyncThemeCompilation']"
+        v-tooltip.top="{
+            message: $t('sw-settings-frontend.configuration.theme.asyncTooltip'),
+            showOnDisabledElements: true
+        }"
+        bordered
+        :label="$t('sw-settings-frontend.configuration.theme.async')"
+    />
+    {% endblock %}
+    {% block sw_settings_frontend_settings_speculation_rules %}
+    <mt-switch
+        v-model="frontendSettings['core.frontendSettings.speculationRules']"
+        v-tooltip.top="{
+            message: $t('sw-settings-frontend.configuration.speculationRules.description'),
+            showOnDisabledElements: true
+        }"
+        bordered
+        :label="$t('sw-settings-frontend.configuration.speculationRules.title')"
+    />
+    {% endblock %}
+</div>
+{% endblock %}

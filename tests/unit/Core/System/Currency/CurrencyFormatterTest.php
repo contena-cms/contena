@@ -1,0 +1,141 @@
+<?php
+declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\Currency;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Context\SystemSource;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Currency\CurrencyFormatter;
+use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
+
+/**
+ * @internal
+ */
+#[CoversClass(CurrencyFormatter::class)]
+class CurrencyFormatterTest extends TestCase
+{
+    #[DataProvider('formattingParameterProvider')]
+    public function testFormatCurrencyByLanguageWillUseProvidedDecimalPlaces(float $price, int $decimalPlaces, string $localeCode, string $expectedSeparator, string $currencyISO, string $expectedCurrencySymbol): void
+    {
+        $localeProvider = $this->createMock(LanguageLocaleCodeProvider::class);
+        $localeProvider->expects($this->once())->method('getLocaleForLanguageId')->willReturn($localeCode);
+        $formatter = new CurrencyFormatter($localeProvider);
+        $pattern = \sprintf('/\%s\d{%s}/', $expectedSeparator, (string) $decimalPlaces);
+        $formattedPrice = $formatter->formatCurrencyByLanguage(
+            $price,
+            $currencyISO,
+            Uuid::randomHex(),
+            $this->createContext($decimalPlaces),
+            3
+        );
+
+        static::assertMatchesRegularExpression($pattern, $formattedPrice);
+    }
+
+    /**
+     * @param non-empty-string $expectedCurrencySymbol
+     */
+    #[DataProvider('formattingParameterProvider')]
+    public function testFormatCurrencyByLanguageWillWriteCorrectCurrencySymbol(float $price, int $decimalPlaces, string $localeCode, string $expectedSeparator, string $currencyISO, string $expectedCurrencySymbol): void
+    {
+        $localeProvider = $this->createMock(LanguageLocaleCodeProvider::class);
+        $localeProvider->expects($this->once())->method('getLocaleForLanguageId')->willReturn($localeCode);
+        $formatter = new CurrencyFormatter($localeProvider);
+        $formattedPrice = $formatter->formatCurrencyByLanguage(
+            $price,
+            $currencyISO,
+            Uuid::randomHex(),
+            $this->createContext($decimalPlaces)
+        );
+
+        static::assertThat(
+            $formattedPrice,
+            static::logicalOr(
+                static::stringStartsWith($expectedCurrencySymbol),
+                static::stringEndsWith($expectedCurrencySymbol)
+            )
+        );
+    }
+
+    /**
+     * @return iterable<string, array{price: float, decimalPlaces: int, localeCode: non-empty-string, expectedSeparator: non-empty-string, currencyISO: non-empty-string, expectedCurrencySymbol: non-empty-string}>
+     */
+    public static function formattingParameterProvider(): iterable
+    {
+        yield 'Spanish euro formatting uses comma decimals and euro symbol' => [
+            'price' => 71.01,
+            'decimalPlaces' => 2,
+            'localeCode' => 'es-ES',
+            'expectedSeparator' => ',',
+            'currencyISO' => 'EUR',
+            'expectedCurrencySymbol' => '€',
+        ];
+        yield 'Czech koruna formatting uses comma decimals and koruna symbol' => [
+            'price' => 7.10,
+            'decimalPlaces' => 2,
+            'localeCode' => 'cs-CZ',
+            'expectedSeparator' => ',',
+            'currencyISO' => 'CZK',
+            'expectedCurrencySymbol' => 'Kč',
+        ];
+        yield 'British pound formatting uses dot decimals and pound symbol' => [
+            'price' => 0.71,
+            'decimalPlaces' => 3,
+            'localeCode' => 'en-GB',
+            'expectedSeparator' => '.',
+            'currencyISO' => 'GBP',
+            'expectedCurrencySymbol' => '£',
+        ];
+    }
+
+    public function testResetDropsFormattersBuiltWithThePreviousDefaultLocale(): void
+    {
+        // An empty locale code makes ICU use the process default locale, which a long-running worker changes per request
+        $localeProvider = static::createStub(LanguageLocaleCodeProvider::class);
+        $localeProvider->method('getLocaleForLanguageId')->willReturn('');
+        $formatter = new CurrencyFormatter($localeProvider);
+        $context = $this->createContext(2);
+        $previousLocale = \Locale::getDefault();
+
+        $german = (new \NumberFormatter('de_DE', \NumberFormatter::CURRENCY))->formatCurrency(1234.5, 'EUR');
+        $english = (new \NumberFormatter('en_US', \NumberFormatter::CURRENCY))->formatCurrency(1234.5, 'EUR');
+        static::assertNotSame($german, $english);
+
+        try {
+            \Locale::setDefault('de_DE');
+            static::assertSame($german, $formatter->formatCurrencyByLanguage(1234.5, 'EUR', Uuid::randomHex(), $context));
+
+            \Locale::setDefault('en_US');
+            static::assertSame($german, $formatter->formatCurrencyByLanguage(1234.5, 'EUR', Uuid::randomHex(), $context));
+
+            $formatter->reset();
+
+            static::assertSame($english, $formatter->formatCurrencyByLanguage(1234.5, 'EUR', Uuid::randomHex(), $context));
+        } finally {
+            \Locale::setDefault($previousLocale);
+        }
+    }
+
+    private function createContext(int $decimals): Context
+    {
+        return new Context(
+            new SystemSource(),
+            [],
+            Defaults::CURRENCY,
+            [Defaults::LANGUAGE_SYSTEM],
+            Defaults::LIVE_VERSION,
+            1,
+            true,
+            CartPrice::TAX_STATE_GROSS,
+            new CashRoundingConfig($decimals, 0.01, true)
+        );
+    }
+}

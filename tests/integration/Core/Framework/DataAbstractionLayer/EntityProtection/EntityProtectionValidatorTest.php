@@ -1,0 +1,212 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\EntityProtection;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\PluginDefinition;
+use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\PluginProtectionExtension;
+use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\SystemConfigExtension;
+use Contena\Core\Framework\Test\DataAbstractionLayer\EntityProtection\_fixtures\AdminUserAccessKeyExtension;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\SystemConfig\SystemConfigDefinition;
+use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKeyDefinition;
+use Contena\Core\Test\TestDefaults;
+
+/**
+ * @internal
+ */
+class EntityProtectionValidatorTest extends TestCase
+{
+    use AdminApiTestBehaviour;
+    use DataAbstractionLayerFieldTestBehaviour;
+    use IntegrationTestBehaviour;
+
+    protected function setUp(): void
+    {
+        $this->registerDefinitionWithExtensions(PluginDefinition::class, PluginProtectionExtension::class);
+        $this->registerDefinitionWithExtensions(SystemConfigDefinition::class, SystemConfigExtension::class);
+        $this->registerDefinitionWithExtensions(AdminUserAccessKeyDefinition::class, AdminUserAccessKeyExtension::class);
+    }
+
+    #[DataProvider('blockedApiRequest')]
+    public function testItBlocksApiAccess(string $method, string $url): void
+    {
+        $this->getBrowser()
+            ->jsonRequest(
+                $method,
+                '/api/' . $url
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertSame(403, $response->getStatusCode(), $response->getContent());
+    }
+
+    /**
+     * @return array<array<string>>
+     */
+    public static function blockedApiRequest(): array
+    {
+        return [
+            ['GET', 'plugin/' . Uuid::randomHex()], // detail
+            ['GET', 'plugin'], // list
+            ['POST', 'plugin'], // create
+            ['PATCH', 'plugin/' . Uuid::randomHex()], // update
+            ['DELETE', 'plugin/' . Uuid::randomHex()], // delete
+            ['POST', 'search/plugin'], // search
+            ['POST', 'search-ids/plugin'], // search ids
+
+            // nested routes
+            ['POST', 'search/admin_user/' . Uuid::randomHex() . '/access-keys'], // search
+            ['POST', 'search-ids/admin_user/' . Uuid::randomHex() . '/access-keys'], // search ids
+        ];
+    }
+
+    public function testItAllowsReadsOnEntitiesWithWriteProtectionOnly(): void
+    {
+        $this->getBrowser()
+            ->jsonRequest(
+                'GET',
+                '/api/system-config'
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertNotSame(403, $response->getStatusCode(), $response->getContent());
+
+        $this->getBrowser()
+            ->jsonRequest(
+                'GET',
+                '/api/system-config/' . Uuid::randomHex()
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertNotSame(403, $response->getStatusCode(), $response->getContent());
+
+        $this->getBrowser()
+            ->jsonRequest(
+                'POST',
+                '/api/system-config'
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertSame(403, $response->getStatusCode(), $response->getContent());
+    }
+
+    public function testItBlocksReadsOnForbiddenAssociations(): void
+    {
+        $this->getBrowser()
+            ->jsonRequest(
+                'POST',
+                '/api/search/admin_user',
+                [
+                    'associations' => [
+                        'accessKeys' => [],
+                    ],
+                ]
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertSame(403, $response->getStatusCode(), $response->getContent());
+
+        $this->getBrowser()
+            ->jsonRequest(
+                'POST',
+                '/api/search/admin_user',
+                [
+                    'associations' => [
+                        'avatarMedia' => [],
+                    ],
+                ]
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertNotSame(403, $response->getStatusCode(), $response->getContent());
+    }
+
+    public function testItBlocksReadsOnForbiddenNestedAssociations(): void
+    {
+        $this->getBrowser()
+            ->jsonRequest(
+                'POST',
+                '/api/search/media',
+                [
+                    'associations' => [
+                        'admin_user' => [
+                            'associations' => [
+                                'accessKeys' => [],
+                            ],
+                        ],
+                    ],
+                ]
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertSame(403, $response->getStatusCode(), $response->getContent());
+
+        $this->getBrowser()
+            ->jsonRequest(
+                'POST',
+                '/api/search/media',
+                [
+                    'associations' => [
+                        'admin_user' => [
+                            'associations' => [
+                                'avatarMedia' => [],
+                            ],
+                        ],
+                    ],
+                ]
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertNotSame(403, $response->getStatusCode(), $response->getContent());
+    }
+
+    public function testItDoesNotValidateCascadeDeletes(): void
+    {
+        /** @var EntityRepository<ChannelCollection> $channelRepository */
+        $channelRepository = static::getContainer()->get('channel.repository');
+        $countBefore = $channelRepository->search(new Criteria(), Context::createDefaultContext())->getTotal();
+
+        // system_config has a cascade delete on channel
+        $this->getBrowser()
+            ->jsonRequest(
+                'DELETE',
+                '/api/sales-channel/' . TestDefaults::CHANNEL
+            );
+
+        $response = $this->getBrowser()->getResponse();
+
+        static::assertIsString($response->getContent());
+        static::assertSame(204, $response->getStatusCode(), $response->getContent());
+
+        static::assertSame(
+            $countBefore - 1,
+            $channelRepository->search(new Criteria(), Context::createDefaultContext())->getTotal()
+        );
+    }
+}

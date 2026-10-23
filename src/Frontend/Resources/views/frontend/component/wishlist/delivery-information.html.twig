@@ -1,0 +1,61 @@
+{% block component_wishlist_delivery_information %}
+    {# @var blog \Contena\Core\Content\Blog\BlogEntity #}
+    {% if page is defined and page.blog is defined %}
+        {% set blog = page.blog %}
+    {% endif %}
+
+    <div class="blog-wishlist-delivery-information">
+        {% if blog.active and blog.stock >= blog.minPurchase and blog.deliveryTime and blog.releaseDate and blog.releaseDate|date('U') > 'now'|date('U') %}
+            {% block component_wishlist_delivery_information_pre_order %}
+                {# @deprecated tag:v6.8.0 - Availability microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                {# Bug fix: was incorrectly using InStock for pre-order blogs; corrected to PreOrder. #}
+                {% if not feature('JSON_LD_DATA') %}
+                    <link itemprop="availability" href="https://schema.org/PreOrder">
+                {% endif %}
+                <p class="delivery-information delivery-preorder">
+                    <span class="delivery-status-indicator bg-warning"></span>
+                    {{ 'wishlist.deliveryShipping'|trans|sw_sanitize }} {{ blog.releaseDate|format_date('long', locale=app.request.locale) }}
+                </p>
+            {% endblock %}
+        {% elseif blog.active and blog.stock >= blog.minPurchase and blog.deliveryTime %}
+            {% block component_wishlist_delivery_information_available %}
+                {# @deprecated tag:v6.8.0 - Availability microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                {% if not feature('JSON_LD_DATA') %}
+                    <link itemprop="availability" href="https://schema.org/InStock">
+                {% endif %}
+                <p class="delivery-information delivery-available">
+                    <span class="delivery-status-indicator bg-success"></span>
+                    {{ 'wishlist.deliveryTimeAvailable'|trans({
+                        '%name%': blog.deliveryTime.translated.name
+                    })|sw_sanitize }}
+                </p>
+            {% endblock %}
+        {% elseif blog.isCloseout and blog.stock < blog.minPurchase %}
+            {% block component_wishlist_delivery_information_soldout %}
+                {# @deprecated tag:v6.8.0 - Availability microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                {% if not feature('JSON_LD_DATA') %}
+                    <link itemprop="availability" href="https://schema.org/LimitedAvailability">
+                {% endif %}
+                <p class="delivery-information delivery-soldout">
+                    <span class="delivery-status-indicator bg-danger"></span>
+                    {{ 'wishlist.currentlyNotAvailable'|trans|sw_sanitize }}
+                </p>
+            {% endblock %}
+        {% elseif blog.stock < blog.minPurchase and blog.deliveryTime and blog.restockTime %}
+            {% block component_wishlist_delivery_information_restock %}
+                {# @deprecated tag:v6.8.0 - Availability microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                {% if not feature('JSON_LD_DATA') %}
+                    <link itemprop="availability" href="https://schema.org/LimitedAvailability">
+                {% endif %}
+                <p class="delivery-information delivery-restock">
+                    <span class="delivery-status-indicator bg-warning"></span>
+                    {{ 'wishlist.deliveryTimeRestock'|trans({
+                        '%count%': blog.restockTime,
+                        '%restockTime%': blog.restockTime,
+                        '%name%': blog.deliveryTime.translated.name
+                    })|sw_sanitize }}
+                </p>
+            {% endblock %}
+        {% endif %}
+    </div>
+{% endblock %}

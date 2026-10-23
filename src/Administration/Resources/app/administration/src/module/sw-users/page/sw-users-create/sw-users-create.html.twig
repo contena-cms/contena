@@ -1,0 +1,75 @@
+{%  block sw_customer_create %}
+<sw-page class="sw-user-create">
+    {% block sw_customer_create_header %}
+    <template #smart-bar-header>
+        <h2>{{ salutationFilter(user, $t('sw-user.general.newCustomer')) }}</h2>
+    </template>
+    {% endblock %}
+
+    {% block sw_customer_create_language_switch %}
+    <template #language-switch>
+        <sw-language-switch
+            v-tooltip="{ message: $t('sw-user.general.tooltipLanguageSwitch') }"
+            disabled
+        />
+    </template>
+    {% endblock %}
+
+    {% block sw_customer_create_actions %}
+    <template #smart-bar-actions>
+        <mt-button
+            :disabled="isLoading"
+            variant="secondary"
+            size="default"
+            @click="$router.push({ name: 'sw.user.index' })"
+        >
+            {{ $t('global.default.cancel') }}
+        </mt-button>
+
+        <sw-button-process
+            class="sw-user-create__save-action"
+            :is-loading="isLoading"
+            :disabled="isLoading"
+            :process-success="isSaveSuccessful"
+            variant="primary"
+            @update:process-success="saveFinish"
+            @click.prevent="onSave"
+        >
+            {{ $t('global.default.save') }}
+        </sw-button-process>
+    </template>
+    {% endblock %}
+
+    {% block sw_customer_create_content %}
+    <template #content>
+        <sw-card-view>
+            {% block sw_customer_create_base_form %}
+            <mt-card
+                :title="$t('sw-user.detailBase.labelAccountCard')"
+                position-identifier="sw-user-create-base-form"
+            >
+                <sw-user-base-form
+                    v-if="user"
+                    :is-loading="isLoading"
+                    :user="user"
+                    @sales-channel-change="onChangeSalesChannel"
+                />
+            </mt-card>
+            {% endblock %}
+
+            {% block sw_customer_create_adress_form %}
+            <mt-card
+                :title="$t('sw-user.detailBase.labelAddressesCard')"
+                position-identifier="sw-user-create-address-form"
+            >
+                <sw-user-address-form
+                    v-if="user"
+                    v-bind="{ user, address }"
+                />
+            </mt-card>
+            {% endblock %}
+        </sw-card-view>
+    </template>
+    {% endblock %}
+</sw-page>
+{% endblock %}

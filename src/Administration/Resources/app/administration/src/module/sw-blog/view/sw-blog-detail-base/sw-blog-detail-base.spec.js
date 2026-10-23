@@ -1,0 +1,745 @@
+/* eslint-disable sw-test-rules/test-file-max-lines-warning */
+
+/**
+ * @sw-package inventory
+ */
+
+import { mount } from '@vue/test-utils';
+import EntityCollection from 'src/core/data/entity-collection.data';
+import { nextTick } from 'vue';
+
+async function createWrapper() {
+    return mount(await wrapTestComponent('sw-blog-detail-base', { sync: true }), {
+        global: {
+            stubs: {
+                'sw-page': {
+                    template: `
+                    <div class="sw-page">
+                        <slot name="smart-bar-actions"></slot>
+                        <slot name="content">CONTENT</slot>
+                        <slot></slot>
+                    </div>`,
+                },
+                'sw-blog-detail-base__review-card': true,
+                'sw-data-grid': {
+                    props: ['dataSource'],
+                    template: `
+                    <div>
+                        <template v-for="item in dataSource">
+                            <slot name="actions" v-bind="{ item }"></slot>
+                        </template>
+                    </div>`,
+                },
+                'sw-blog-category-form': true,
+                'sw-blog-deliverability-form': true,
+                'sw-blog-deliverability-downloadable-form': true,
+                'sw-blog-download-form': {
+                    name: 'sw-blog-download-form',
+                    props: ['required'],
+                    template: '<div class="sw-blog-download-form-stub"></div>',
+                },
+                'sw-blog-price-form': true,
+                'sw-blog-basic-form': await wrapTestComponent('sw-blog-basic-form', { sync: true }),
+                'sw-blog-feature-set-form': true,
+                'sw-blog-settings-form': true,
+                'sw-inherit-wrapper': await wrapTestComponent('sw-inherit-wrapper', { sync: true }),
+                'sw-inheritance-switch': await wrapTestComponent('sw-inheritance-switch', { sync: true }),
+                'sw-empty-state': true,
+                'mt-card': {
+                    props: ['title'],
+                    template: `
+                        <div>
+                            <div
+                                v-if="title && !$slots.title"
+                                class="mt-card__title"
+                            >
+                                {{ title }}
+                            </div>
+                            <slot></slot>
+                            <slot name="title"></slot>
+                            <slot name="grid"></slot>
+                        </div>
+                    `,
+                },
+                'sw-context-menu-item': true,
+                'sw-media-modal-v2': true,
+                'sw-container': true,
+                'sw-text-editor': true,
+
+                'sw-blog-media-form': true,
+                'sw-entity-single-select': true,
+                'sw-help-text': true,
+                'sw-text-field': true,
+                'sw-select-field': true,
+                'router-link': true,
+                'sw-skeleton': true,
+                'sw-extension-teaser-popover': true,
+                'mt-text-editor': true,
+            },
+            mocks: {
+                $route: {
+                    name: 'sw.blog.detail.base',
+                    params: {
+                        id: '1234',
+                    },
+                },
+            },
+            provide: {
+                repositoryFactory: {
+                    create: () => ({
+                        search: () =>
+                            Promise.resolve({
+                                first: () => {
+                                    return {
+                                        folder: {},
+                                    };
+                                },
+                            }),
+                        get: () => Promise.resolve({}),
+                        searchIds: () =>
+                            Promise.resolve({
+                                data: [],
+                            }),
+                        create: () => ({ id: 'id' }),
+                    }),
+                },
+            },
+        },
+    });
+}
+
+describe('src/module/sw-blog/view/sw-blog-detail-base', () => {
+    beforeEach(() => {
+        jest.restoreAllMocks();
+        jest.spyOn(Contena.Service('admin_userConfigService'), 'search').mockResolvedValue({ data: {} });
+        jest.spyOn(Contena.Service('admin_userConfigService'), 'upsert').mockResolvedValue();
+
+        const store = Contena.Store.get('swProductDetail');
+        store.$reset();
+        store.parentProduct = {
+            media: [],
+            reviews: [
+                {
+                    id: '1a2b3c',
+                    entity: 'review',
+                    userId: 'd4c3b2a1',
+                    blogId: 'd4c3b2a1',
+                    channelId: 'd4c3b2a1',
+                },
+            ],
+        };
+        store.blog = {
+            id: 'blogId',
+            getEntityName: () => 'blog',
+            isNew: () => false,
+            media: new EntityCollection('', '', {}, {}, []),
+            coverId: null,
+            reviews: [
+                {
+                    id: '1a2b3c',
+                    entity: 'review',
+                    userId: 'd4c3b2a1',
+                    blogId: 'd4c3b2a1',
+                    channelId: 'd4c3b2a1',
+                },
+            ],
+            purchasePrices: [
+                {
+                    currencyId: '1',
+                    linked: true,
+                    gross: 0,
+                    net: 0,
+                },
+            ],
+            price: [
+                {
+                    currencyId: '1',
+                    linked: true,
+                    gross: 100,
+                    net: 84.034,
+                },
+            ],
+        };
+        store.modeSettings = [
+            'general_information',
+            'prices',
+            'deliverability',
+            'visibility_structure',
+            'media',
+            'labelling',
+        ];
+        store.advancedModeSetting = {
+            value: {
+                settings: [
+                    {
+                        key: 'general_information',
+                        label: 'sw-blog.detailBase.cardTitleProductInfo',
+                        enabled: true,
+                        name: 'general',
+                    },
+                    {
+                        key: 'prices',
+                        label: 'sw-blog.detailBase.cardTitlePrices',
+                        enabled: true,
+                        name: 'general',
+                    },
+                    {
+                        key: 'deliverability',
+                        label: 'sw-blog.detailBase.cardTitleDeliverabilityInfo',
+                        enabled: true,
+                        name: 'general',
+                    },
+                    {
+                        key: 'visibility_structure',
+                        label: 'sw-blog.detailBase.cardTitleVisibilityStructure',
+                        enabled: true,
+                        name: 'general',
+                    },
+                    {
+                        key: 'labelling',
+                        label: 'sw-blog.detailBase.cardTitleSettings',
+                        enabled: true,
+                        name: 'general',
+                    },
+                ],
+                advancedMode: {
+                    enabled: true,
+                    label: 'sw-blog.general.textAdvancedMode',
+                },
+            },
+        };
+        if (!Contena.Feature.isActive('v6.8.0.0')) {
+            store.creationStates = 'is-physical';
+        }
+        store.creationType = 'physical';
+    });
+
+    it('should not show files card when blog states not includes is-download', async () => {
+        const wrapper = await createWrapper();
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            states: ['is-physical'],
+        };
+
+        await flushPromises();
+
+        const cardElement = wrapper.find('.sw-blog-detail-base__downloads');
+
+        expect(cardElement.exists()).toBeFalsy();
+    });
+
+    it('should show files card when blog states includes is-download', async () => {
+        const wrapper = await createWrapper();
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            states: ['is-download'],
+        };
+
+        await flushPromises();
+
+        const cardElement = wrapper.find('.sw-blog-detail-base__downloads');
+        expect(cardElement).toBeTruthy();
+    });
+
+    it('should render downloads card title as mt-card title', async () => {
+        const wrapper = await createWrapper();
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            states: ['is-download'],
+        };
+
+        await flushPromises();
+
+        const cardElement = wrapper.get('.sw-blog-detail-base__downloads');
+        const cardTitle = cardElement.get('.mt-card__title');
+
+        expect(cardTitle.text()).toBe('sw-blog.detailBase.cardTitleDownloads');
+    });
+
+    it('shows the missing-download error when external assignment is turned off without a file', async () => {
+        const store = Contena.Store.get('swProductDetail');
+        store.blog.type = 'digital';
+        store.blog.downloads = [];
+        store.isDownloadExternallyManaged = true;
+
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.onDownloadExternalManagementChange(false);
+
+        expect(store.isDownloadExternallyManaged).toBe(false);
+
+        const error = Contena.Store.get('error').getApiError(Contena.Store.get('swProductDetail').blog, 'downloads');
+
+        expect(error.code).toBe('SW_BLOG_DOWNLOADS_EXTERNAL_MANAGEMENT_REQUIRED');
+        expect(error.detail).toBe('sw-blog.detailBase.downloadsExternalManagementRequired');
+
+        wrapper.vm.onDownloadExternalManagementChange(true);
+
+        expect(
+            Contena.Store.get('error').getApiError(Contena.Store.get('swProductDetail').blog, 'downloads'),
+        ).toBeNull();
+    });
+
+    it('keeps the external assignment choice when an existing blog base view is reopened', async () => {
+        const store = Contena.Store.get('swProductDetail');
+        store.blog = {
+            ...store.blog,
+            id: 'existing-blog',
+            type: 'digital',
+            downloads: [],
+        };
+        store.isDownloadExternallyManaged = true;
+
+        const firstView = await createWrapper();
+        firstView.vm.onDownloadExternalManagementChange(false);
+        firstView.unmount();
+
+        const reopenedView = await createWrapper();
+
+        expect(reopenedView.vm.isDownloadExternallyManaged).toBe(false);
+    });
+
+    it('keeps external assignment on with uploaded files', async () => {
+        const store = Contena.Store.get('swProductDetail');
+        store.blog = {
+            ...store.blog,
+            id: 'existing-blog',
+            type: 'digital',
+            downloads: [{ id: 'download-id' }],
+        };
+        store.isDownloadExternallyManaged = true;
+
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.vm.isDownloadExternallyManaged).toBe(true);
+    });
+
+    it('marks the upload as optional when external download management is on', async () => {
+        const store = Contena.Store.get('swProductDetail');
+        store.blog.type = 'digital';
+        store.blog.states = ['is-download'];
+        store.isDownloadExternallyManaged = true;
+
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.getComponent({ name: 'sw-blog-download-form' }).props('required')).toBe(false);
+
+        wrapper.vm.onDownloadExternalManagementChange(false);
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.getComponent({ name: 'sw-blog-download-form' }).props('required')).toBe(true);
+    });
+
+    it('should render media card title as mt-card title', async () => {
+        const wrapper = await createWrapper();
+
+        await flushPromises();
+
+        const cardElement = wrapper.get('.sw-blog-detail-base__media');
+        const cardTitleWrapper = cardElement.get('.sw-inherit-wrapper__card-title');
+        const cardTitle = cardTitleWrapper.get('h3.mt-card__title');
+
+        expect(cardTitleWrapper.classes()).toContain('sw-inherit-wrapper__card-title');
+        expect(cardTitle.classes()).toEqual(['mt-card__title']);
+        expect(cardTitle.text()).toBe('sw-blog.detailBase.cardTitleMedia');
+    });
+
+    it('should show correct deliverability card when blog states includes is-download', async () => {
+        const wrapper = await createWrapper();
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            states: ['is-download'],
+        };
+
+        await wrapper.vm.$nextTick();
+
+        const physicalCardElement = wrapper.find('.sw-blog-detail-base__deliverability');
+        expect(physicalCardElement.exists()).toBeFalsy();
+
+        const cardElement = wrapper.find('.sw-blog-detail-base__deliverability-downloadable');
+        expect(cardElement).toBeTruthy();
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            states: ['is-physical'],
+        };
+    });
+
+    it('should get media default folder id when component got created', async () => {
+        const wrapper = await createWrapper();
+
+        wrapper.vm.getMediaDefaultFolderId = jest.fn(() => {
+            return Promise.resolve('SOME-ID');
+        });
+
+        wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.getMediaDefaultFolderId).toHaveBeenCalledTimes(1);
+        wrapper.vm.getMediaDefaultFolderId.mockRestore();
+    });
+
+    it('should able to open media modal', async () => {
+        const wrapper = await createWrapper();
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+
+        expect(mediaModal.exists()).toBe(true);
+        expect(mediaModal.attributes('entity-context')).toBe('blog');
+    });
+
+    it('should accept images, videos and 3d models in the media modal', async () => {
+        const wrapper = await createWrapper();
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+
+        expect(mediaModal.attributes('file-accept')).toBe('image/*,video/*,model/gltf-binary');
+    });
+
+    it('should able to close media modal', async () => {
+        const wrapper = await createWrapper();
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+        await mediaModal.vm.$emit('modal-close');
+
+        expect(mediaModal.exists()).toBe(false);
+    });
+
+    it('should not be able to add a null media', async () => {
+        const wrapper = await createWrapper();
+
+        const spyOnAddMedia = jest.spyOn(wrapper.vm, 'addMedia');
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+        await mediaModal.vm.$emit('media-modal-selection-change', null);
+
+        expect(spyOnAddMedia).not.toHaveBeenCalled();
+    });
+
+    it('should be able to add a new media', async () => {
+        const wrapper = await createWrapper();
+
+        const media = {
+            id: 'id',
+            fileName: 'fileName',
+            fileSize: 101,
+            url: 'http://image.jpg',
+        };
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+        await mediaModal.vm.$emit('media-modal-selection-change', [media]);
+
+        expect(wrapper.vm.blog.media).toEqual(
+            expect.arrayContaining([
+                {
+                    id: 'id',
+                    media: {
+                        id: 'id',
+                        url: 'http://image.jpg',
+                    },
+                    mediaId: 'id',
+                    position: 0,
+                },
+            ]),
+        );
+    });
+
+    it('should not be able to add a new media', async () => {
+        const wrapper = await createWrapper();
+
+        wrapper.vm.createNotificationError = jest.fn();
+
+        const media = {
+            id: 'id',
+            fileName: 'fileName',
+            fileSize: 101,
+            url: 'http://image.jpg',
+        };
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            media: new EntityCollection('', '', {}, {}, [
+                {
+                    id: 'id',
+                    media: {
+                        id: 'id',
+                        url: 'http://image.jpg',
+                    },
+                    mediaId: 'id',
+                    position: 0,
+                },
+            ]),
+        };
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+        await mediaModal.vm.$emit('media-modal-selection-change', [media]);
+
+        expect(wrapper.vm.createNotificationError).toHaveBeenCalledWith({
+            message: 'sw-blog.mediaForm.errorMediaItemDuplicated',
+        });
+
+        wrapper.vm.createNotificationError.mockRestore();
+    });
+
+    it('should set media as cover when blog media is empty and media is not glb file', async () => {
+        const wrapper = await createWrapper();
+        await wrapper.vm.$nextTick();
+
+        const media = { id: 'id', fileName: 'fileName', fileSize: 101 };
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+        await mediaModal.vm.$emit('media-modal-selection-change', [media]);
+
+        expect(wrapper.vm.blog.coverId).toBe(media.id);
+    });
+
+    it('should show Promotion Switch of General card when advanced mode is on', async () => {
+        const wrapper = await createWrapper();
+
+        const promotionSwitch = wrapper.find('.sw-blog-basic-form__promotion-switch');
+        expect(promotionSwitch.attributes().style).toBeFalsy();
+    });
+
+    it('should show Labelling card when advanced mode is on', async () => {
+        const wrapper = await createWrapper();
+
+        const labellingCardElement = wrapper.find('.sw-blog-detail-base__labelling-card');
+        expect(labellingCardElement.attributes().style).toBeFalsy();
+    });
+
+    it('should show Media card when media mode is checked', async () => {
+        const wrapper = await createWrapper();
+
+        const mediaCardElement = wrapper.find('.sw-blog-detail-base__media');
+        expect(mediaCardElement.attributes().style).toBeFalsy();
+    });
+
+    it('should hide Promotion Switch when advanced mode is off', async () => {
+        const wrapper = await createWrapper();
+        const advancedModeSetting = Contena.Store.get('swProductDetail').advancedModeSetting;
+
+        Contena.Store.get('swProductDetail').advancedModeSetting = {
+            value: {
+                ...advancedModeSetting.value,
+                advancedMode: {
+                    enabled: false,
+                    label: 'sw-blog.general.textAdvancedMode',
+                },
+            },
+        };
+
+        await wrapper.vm.$nextTick();
+
+        const promotionSwitch = wrapper.find('.sw-blog-basic-form__promotion-switch');
+        expect(promotionSwitch.attributes().style).toBe('display: none;');
+    });
+
+    it('should hide Labelling card when commit when advanced mode is off', async () => {
+        const wrapper = await createWrapper();
+        const advancedModeSetting = Contena.Store.get('swProductDetail').advancedModeSetting;
+
+        Contena.Store.get('swProductDetail').advancedModeSetting = {
+            value: {
+                ...advancedModeSetting.value,
+                advancedMode: {
+                    enabled: false,
+                    label: 'sw-blog.general.textAdvancedMode',
+                },
+            },
+        };
+
+        await wrapper.vm.$nextTick();
+
+        const labellingCardElement = wrapper.find('.sw-blog-detail-base__labelling-card');
+        expect(labellingCardElement.attributes().style).toBe('display: none;');
+    });
+
+    it('should hide Media card when media mode is unchecked', async () => {
+        const wrapper = await createWrapper();
+        const modeSettings = Contena.Store.get('swProductDetail').modeSettings;
+
+        Contena.Store.get('swProductDetail').modeSettings = [...modeSettings.filter((item) => item !== 'media')];
+
+        await wrapper.vm.$nextTick();
+
+        const mediaCardElement = wrapper.find('.sw-blog-detail-base__media');
+        expect(mediaCardElement.attributes().style).toBe('display: none;');
+    });
+
+    it('should hide General card when general_information mode is unchecked', async () => {
+        const wrapper = await createWrapper();
+        const modeSettings = Contena.Store.get('swProductDetail').modeSettings;
+
+        Contena.Store.get('swProductDetail').modeSettings = [
+            ...modeSettings.filter((item) => item !== 'general_information'),
+        ];
+
+        await wrapper.vm.$nextTick();
+
+        const infoCardElement = wrapper.find('.sw-blog-detail-base__info');
+        expect(infoCardElement.attributes().style).toBe('display: none;');
+    });
+
+    it('should hide Prices card when prices mode is unchecked', async () => {
+        const wrapper = await createWrapper();
+        const modeSettings = Contena.Store.get('swProductDetail').modeSettings;
+
+        Contena.Store.get('swProductDetail').modeSettings = [...modeSettings.filter((item) => item !== 'prices')];
+
+        await wrapper.vm.$nextTick();
+
+        const infoCardElement = wrapper.find('.sw-blog-detail-base__prices');
+        expect(infoCardElement.attributes().style).toBe('display: none;');
+    });
+
+    it('should hide Deliverability card when deliverability mode is unchecked', async () => {
+        const wrapper = await createWrapper();
+        const modeSettings = Contena.Store.get('swProductDetail').modeSettings;
+
+        Contena.Store.get('swProductDetail').modeSettings = [...modeSettings.filter((item) => item !== 'deliverability')];
+
+        await wrapper.vm.$nextTick();
+
+        const infoCardElement = wrapper.find('.sw-blog-detail-base__deliverability');
+        expect(infoCardElement.attributes().style).toBe('display: none;');
+    });
+
+    it('should hide Visibility Structure card when prices mode is unchecked', async () => {
+        const wrapper = await createWrapper();
+        const modeSettings = Contena.Store.get('swProductDetail').modeSettings;
+
+        Contena.Store.get('swProductDetail').modeSettings = [
+            ...modeSettings.filter((item) => item !== 'visibility_structure'),
+        ];
+
+        await wrapper.vm.$nextTick();
+
+        const infoCardElement = wrapper.find('.sw-blog-detail-base__visibility-structure');
+        expect(infoCardElement.attributes().style).toBe('display: none;');
+    });
+
+    it('should not set media cover when adding new glb file', async () => {
+        const wrapper = await createWrapper();
+
+        const blogMediaFrom = wrapper.findComponent('sw-blog-media-form-stub');
+        await blogMediaFrom.vm.$emit('media-open');
+
+        const media = {
+            id: '3dFileId',
+            fileName: '3DFile',
+            fileSize: 101,
+            url: 'htt://example.com/3dfile.glb',
+        };
+
+        const mediaModal = wrapper.findComponent('sw-media-modal-v2-stub');
+        await mediaModal.vm.$emit('media-modal-selection-change', [media]);
+
+        expect(wrapper.vm.blog.coverId).toBeNull();
+    });
+
+    it('should able to toggle off media inheritance', async () => {
+        const wrapper = await createWrapper();
+        const media = {
+            id: 'id',
+            media: {
+                id: 'id',
+                url: 'http://image.jpg',
+            },
+            mediaId: 'id',
+            position: 0,
+        };
+
+        Contena.Store.get('swProductDetail').parentProduct = {
+            ...Contena.Store.get('swProductDetail').parentProduct,
+            media: new EntityCollection('', '', {}, {}, [media]),
+        };
+
+        await nextTick();
+
+        expect(wrapper.vm.blog.media).toHaveLength(0);
+
+        const inheritanceSwitch = wrapper.find('.sw-inheritance-switch--is-inherited .mt-icon');
+        expect(inheritanceSwitch.exists()).toBe(true);
+
+        await inheritanceSwitch.trigger('click');
+
+        expect(wrapper.vm.blog.media.first()).toEqual({
+            id: media.id,
+            position: media.position,
+            mediaId: media.mediaId,
+            blogId: 'blogId',
+        });
+    });
+
+    it('should able to toggle on media inheritance', async () => {
+        const wrapper = await createWrapper();
+
+        const media = {
+            id: 'id',
+            media: {
+                id: 'id',
+                url: 'http://image.jpg',
+            },
+            mediaId: 'id',
+            position: 0,
+        };
+
+        Contena.Store.get('swProductDetail').parentProduct = {
+            ...Contena.Store.get('swProductDetail').parentProduct,
+            media: new EntityCollection('', '', {}, {}, [media]),
+        };
+
+        const media1 = {
+            ...media,
+            id: 'id1',
+            media: {
+                id: 'id1',
+                url: 'http://image1.jpg',
+            },
+            mediaId: 'id1',
+        };
+
+        Contena.Store.get('swProductDetail').blog = {
+            ...Contena.Store.get('swProductDetail').blog,
+            media: new EntityCollection('', '', {}, {}, [media1]),
+        };
+
+        await nextTick();
+
+        expect(wrapper.vm.blog.media.first()).toEqual(media1);
+
+        const notInheritanceSwitch = wrapper.find('.sw-inheritance-switch--is-not-inherited .mt-icon');
+        expect(notInheritanceSwitch.exists()).toBe(true);
+
+        await notInheritanceSwitch.trigger('click');
+
+        expect(wrapper.vm.blog.media).toHaveLength(0);
+    });
+});

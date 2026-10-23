@@ -1,0 +1,485 @@
+/**
+ * @sw-package inventory
+ */
+import { DOMWrapper, mount } from '@vue/test-utils';
+import uuid from 'test/_helper_/uuid';
+
+const classes = {
+    cardSeoAdditional: 'sw-seo-url__card-seo-additional',
+    inheritanceWrapper: 'sw-inherit-wrapper',
+    inheritanceSwitch: 'sw-inheritance-switch',
+    notInherited: 'sw-inheritance-switch--is-not-inherited',
+    inherited: 'sw-inheritance-switch--is-inherited',
+};
+
+const frontendId = uuid.get('frontend');
+
+const blogNotInheritedCategoryDataMock = {
+    blog: {
+        seoUrls: [
+            {
+                apiAlias: null,
+                routeName: 'frontend.detail.page',
+                channelId: frontendId,
+            },
+        ],
+        mainCategories: [
+            {
+                _isNew: true,
+                category: {},
+                categoryId: uuid.get('category A'),
+                extensions: {},
+                channelId: frontendId,
+            },
+        ],
+        categories: [{ id: uuid.get('category A') }],
+    },
+    parentProduct: {
+        id: uuid.get('parentProduct'),
+        categories: [{ id: uuid.get('category B') }],
+    },
+    currentSalesChannelId: frontendId,
+};
+
+const blogInheritedCategoryDataMock = {
+    ...blogNotInheritedCategoryDataMock,
+    blog: {
+        ...blogNotInheritedCategoryDataMock.blog,
+        categories: [],
+    },
+};
+
+const channelRepositoryMock = {
+    search: () => {
+        return Promise.resolve(
+            createEntityCollection([
+                {
+                    name: 'Frontend',
+                    translated: { name: 'Frontend' },
+                    id: frontendId,
+                },
+                {
+                    name: 'Headless',
+                    translated: { name: 'Headless' },
+                    id: uuid.get('headless'),
+                },
+            ]),
+        );
+    },
+};
+
+const seoUrlRepositoryMock = {
+    create: () => ({}),
+    search: () => Promise.resolve([]),
+    route: '/seo_url',
+    schema: {
+        entity: 'seo_url',
+    },
+};
+
+const blogRepositoryMock = {
+    search: () => Promise.resolve(createEntityCollection([])),
+};
+
+const mainCategoryRepositoryMock = {
+    create: () => ({}),
+};
+
+const repositoryMockFactory = (entity) => {
+    if (entity === 'channel') {
+        return channelRepositoryMock;
+    }
+
+    if (entity === 'seo_url') {
+        return seoUrlRepositoryMock;
+    }
+
+    if (entity === 'blog') {
+        return blogRepositoryMock;
+    }
+
+    if (entity === 'main_category') {
+        return mainCategoryRepositoryMock;
+    }
+
+    return false;
+};
+
+async function createWrapper(privileges = []) {
+    return mount(await wrapTestComponent('sw-blog-detail-seo', { sync: true }), {
+        global: {
+            provide: {
+                acl: {
+                    can: (identifier) => {
+                        if (!identifier) {
+                            return true;
+                        }
+
+                        return privileges.includes(identifier);
+                    },
+                },
+                repositoryFactory: {
+                    create: (entity) => repositoryMockFactory(entity),
+                },
+                validationService: {},
+            },
+            stubs: {
+                'mt-card': {
+                    data() {
+                        return { currentSalesChannelId: null };
+                    },
+                    template: '<div><slot name="toolbar"></slot><slot></slot></div>',
+                },
+                'sw-blog-seo-form': await wrapTestComponent('sw-blog-seo-form', { sync: true }),
+                'sw-single-select': await wrapTestComponent('sw-single-select'),
+                'sw-seo-url': await wrapTestComponent('sw-seo-url', {
+                    sync: true,
+                }),
+                'sw-seo-main-category': await wrapTestComponent('sw-seo-main-category', { sync: true }),
+                'sw-sales-channel-switch': await wrapTestComponent('sw-sales-channel-switch', { sync: true }),
+                'sw-entity-single-select': await wrapTestComponent('sw-entity-single-select'),
+                'sw-inherit-wrapper': await wrapTestComponent('sw-inherit-wrapper', { sync: true }),
+                'sw-text-field': await wrapTestComponent('sw-text-field', {
+                    sync: true,
+                }),
+                'sw-contextual-field': await wrapTestComponent('sw-contextual-field', { sync: true }),
+                'sw-block-field': await wrapTestComponent('sw-block-field', { sync: true }),
+                'sw-base-field': await wrapTestComponent('sw-base-field', {
+                    sync: true,
+                }),
+                'sw-select-base': await wrapTestComponent('sw-select-base', { sync: true }),
+                'sw-highlight-text': await wrapTestComponent('sw-highlight-text'),
+                'sw-select-result-list': await wrapTestComponent('sw-select-result-list'),
+                'sw-popover': await wrapTestComponent('sw-popover'),
+                'sw-popover-deprecated': await wrapTestComponent('sw-popover-deprecated', { sync: true }),
+                'sw-select-result': await wrapTestComponent('sw-select-result'),
+                'sw-inheritance-switch': await wrapTestComponent('sw-inheritance-switch', { sync: true }),
+                'sw-help-text': true,
+                'sw-loader': true,
+                'sw-field-error': await wrapTestComponent('sw-field-error'),
+                'sw-skeleton': true,
+                'sw-textarea-field': true,
+
+                'sw-blog-variant-info': true,
+                'sw-text-field-deprecated': true,
+                'sw-ai-copilot-badge': true,
+                'sw-media-modal-v2': true,
+                'sw-upload-listener': true,
+                'sw-media-upload-v2': true,
+            },
+        },
+    });
+}
+
+function createEntityCollection(entities = []) {
+    return new Contena.Data.EntityCollection('collection', 'collection', {}, null, entities);
+}
+
+describe('src/module/sw-blog/view/sw-blog-detail-seo', () => {
+    beforeEach(() => {
+        Contena.Store.get('swProductDetail').$reset();
+    });
+
+    it('should update blog main categories correctly', async () => {
+        Contena.Store.get('swProductDetail').blog = { mainCategories: [] };
+        const wrapper = await createWrapper();
+        await wrapper.vm.onAddMainCategory({
+            _isNew: true,
+            category: {},
+            categoryId: '9e3bd98cd39e451ba477fc306e28af7d',
+            extensions: {},
+            channelId: '6eaf45a9682d43e59dd4deb8bd116de0',
+        });
+
+        expect(wrapper.vm.blog.mainCategories).toEqual(
+            expect.arrayContaining([
+                {
+                    _isNew: true,
+                    category: {},
+                    categoryId: '9e3bd98cd39e451ba477fc306e28af7d',
+                    extensions: {},
+                    channelId: '6eaf45a9682d43e59dd4deb8bd116de0',
+                },
+            ]),
+        );
+    });
+
+    it('should update main category when restore inheritance of Seo Category from variant', async () => {
+        const wrapper = await createWrapper(['blog.editor']);
+        Contena.Store.get('swProductDetail').blog = { ...blogInheritedCategoryDataMock.blog };
+
+        Contena.Store.get('swProductDetail').parentProduct = {
+            id: '123',
+            mainCategories: blogNotInheritedCategoryDataMock.blog.mainCategories,
+        };
+        await wrapper.vm.$nextTick();
+
+        expect(wrapper.vm.blog.mainCategories).toHaveLength(1);
+
+        const channelSwitch = wrapper.find('.sw-field[label="sw-seo-url.labelSalesChannelSelect"]');
+        let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+        await channelSwitch.find('.sw-select__selection').trigger('click');
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        const selectStoreFront = new DOMWrapper(document.body).get('.sw-select-option--1');
+        expect(selectStoreFront.text()).toBe('Frontend');
+        await selectStoreFront.trigger('click');
+        await flushPromises();
+
+        selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('Frontend');
+        expect(wrapper.vm.currentSalesChannelId).toEqual(frontendId);
+
+        const inheritanceSwitch = wrapper.find(`.${classes.cardSeoAdditional} .${classes.inheritanceSwitch}`);
+        expect(inheritanceSwitch).toBeTruthy();
+
+        expect(inheritanceSwitch.classes()).toContain(classes.notInherited);
+        Contena.Store.get('swProductDetail').blog = {
+            mainCategories: [
+                {
+                    _isNew: true,
+                    category: {},
+                    categoryId: uuid.get('category A'),
+                    extensions: {},
+                    channelId: frontendId,
+                },
+            ],
+            seoUrls: [
+                {
+                    apiAlias: null,
+                    routeName: 'frontend.detail.page',
+                    channelId: frontendId,
+                },
+            ],
+            categories: [],
+        };
+        await flushPromises();
+        await inheritanceSwitch.find('.mt-icon').trigger('click');
+
+        expect(inheritanceSwitch.classes()).toContain(classes.inherited);
+
+        expect(wrapper.vm.blog.mainCategories).toHaveLength(0);
+    });
+
+    it("should not exist inheritance symbol when variant's category did not inherit parents category", async () => {
+        const wrapper = await createWrapper('blog.editor');
+
+        Contena.Store.get('swProductDetail').blog = {
+            seoUrls: [
+                {
+                    apiAlias: null,
+                    routeName: 'frontend.detail.page',
+                    channelId: frontendId,
+                },
+            ],
+            mainCategories: [
+                {
+                    _isNew: true,
+                    category: {},
+                    categoryId: uuid.get('category A'),
+                    extensions: {},
+                    channelId: frontendId,
+                },
+            ],
+            categories: [{ id: uuid.get('category A') }],
+        };
+        await flushPromises();
+
+        expect(wrapper.vm.blog.categories).toHaveLength(1);
+        expect(wrapper.vm.categories).toEqual(expect.arrayContaining(wrapper.vm.blog.categories));
+
+        const channelSwitch = wrapper.find('.sw-field[label="sw-seo-url.labelSalesChannelSelect"]');
+        let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+        await channelSwitch.find('.sw-select__selection').trigger('click');
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        const selectStoreFront = new DOMWrapper(document.body).get('.sw-select-option--1');
+        expect(selectStoreFront.text()).toBe('Frontend');
+        await selectStoreFront.trigger('click');
+        await wrapper.vm.$nextTick();
+
+        selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('Frontend');
+        expect(wrapper.vm.currentSalesChannelId).toEqual(frontendId);
+
+        const inheritanceSwitch = wrapper.find(`.${classes.cardSeoAdditional} .${classes.inheritanceSwitch}`);
+        expect(inheritanceSwitch.exists()).toBe(false);
+    });
+
+    it("should exist inheritance symbol when variant's Seo Category does not have main category", async () => {
+        const wrapper = await createWrapper('blog.editor');
+
+        Contena.Store.get('swProductDetail').blog = {
+            seoUrls: [
+                {
+                    apiAlias: null,
+                    routeName: 'frontend.detail.page',
+                    channelId: frontendId,
+                },
+            ],
+            mainCategories: [
+                {
+                    _isNew: true,
+                    category: {},
+                    categoryId: uuid.get('category A'),
+                    extensions: {},
+                    channelId: frontendId,
+                },
+            ],
+            categories: [{ id: uuid.get('category A') }],
+        };
+
+        Contena.Store.get('swProductDetail').parentProduct = {
+            id: '123',
+            categories: [{ id: uuid.get('category A') }],
+        };
+        await flushPromises();
+
+        expect(wrapper.vm.categories).toEqual(expect.arrayContaining(wrapper.vm.parentProduct.categories));
+
+        const channelSwitch = wrapper.find('.sw-field[label="sw-seo-url.labelSalesChannelSelect"]');
+        let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+        await channelSwitch.find('.sw-select__selection').trigger('click');
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        const selectHeadless = new DOMWrapper(document.body).get('.sw-select-option--2');
+        expect(selectHeadless.text()).toBe('Headless');
+        await selectHeadless.trigger('click');
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('Headless');
+        expect(wrapper.vm.currentSalesChannelId).toEqual(uuid.get('headless'));
+
+        Contena.Store.get('swProductDetail').blog = {
+            mainCategories: [
+                {
+                    _isNew: true,
+                    category: {},
+                    categoryId: uuid.get('category A'),
+                    extensions: {},
+                    channelId: frontendId,
+                },
+            ],
+            seoUrls: [
+                {
+                    apiAlias: null,
+                    routeName: 'frontend.detail.page',
+                    channelId: frontendId,
+                },
+            ],
+            categories: [],
+        };
+
+        Contena.Store.get('swProductDetail').parentProduct = {
+            id: '123',
+            mainCategories: blogNotInheritedCategoryDataMock.blog.mainCategories,
+        };
+        await flushPromises();
+        const inheritanceSwitch = wrapper.find(`.${classes.cardSeoAdditional} .${classes.inheritanceSwitch}`);
+        expect(inheritanceSwitch).toBeTruthy();
+
+        expect(inheritanceSwitch.classes()).toContain(classes.inherited);
+    });
+
+    it("should exist non-inheritance symbol when variant's Seo Category have main category", async () => {
+        const wrapper = await createWrapper(['blog.editor']);
+
+        Contena.Store.get('swProductDetail').blog = {
+            seoUrls: [
+                {
+                    apiAlias: null,
+                    routeName: 'frontend.detail.page',
+                    channelId: frontendId,
+                },
+            ],
+            mainCategories: [
+                {
+                    _isNew: true,
+                    category: {},
+                    categoryId: uuid.get('category A'),
+                    extensions: {},
+                    channelId: frontendId,
+                },
+            ],
+            categories: [],
+        };
+
+        Contena.Store.get('swProductDetail').parentProduct = {
+            id: '123',
+            categories: [{ id: uuid.get('category A') }],
+        };
+        await flushPromises();
+
+        expect(wrapper.vm.blog.mainCategories).toHaveLength(1);
+        expect(wrapper.vm.categories).toEqual(expect.arrayContaining(wrapper.vm.parentProduct.categories));
+
+        const channelSwitch = wrapper.find('.sw-field[label="sw-seo-url.labelSalesChannelSelect"]');
+        let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+        await channelSwitch.find('.sw-select__selection').trigger('click');
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        const selectStoreFront = new DOMWrapper(document.body).get('.sw-select-option--1');
+        expect(selectStoreFront.text()).toBe('Frontend');
+        await selectStoreFront.trigger('click');
+        await wrapper.vm.$nextTick();
+        await flushPromises();
+
+        selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('Frontend');
+        expect(wrapper.vm.currentSalesChannelId).toEqual(frontendId);
+
+        const inheritanceSwitch = wrapper.find(`.${classes.cardSeoAdditional} .${classes.inheritanceSwitch}`);
+        expect(inheritanceSwitch).toBeTruthy();
+
+        expect(inheritanceSwitch.classes()).toContain(classes.notInherited);
+    });
+
+    it('should create new main category when changing the value', async () => {
+        const wrapper = await createWrapper(['blog.editor']);
+
+        const blogDetailStore = Contena.Store.get('swProductDetail');
+        blogDetailStore.blog = {
+            id: 'blogId1',
+            mainCategories: createEntityCollection([
+                {
+                    channelId: 'channelId1',
+                    categoryId: 'categoryId1',
+                },
+            ]),
+        };
+
+        blogDetailStore.parentProduct = {
+            id: 'blogId2',
+            mainCategories: createEntityCollection([
+                {
+                    channelId: 'channelId1',
+                    categoryId: 'categoryId1',
+                },
+            ]),
+        };
+
+        await wrapper.vm.$nextTick();
+        wrapper.vm.currentSalesChannelId = 'channelId1';
+
+        expect(blogDetailStore.blog.mainCategories).toHaveLength(1);
+
+        wrapper.vm.blogMainCategory = {
+            channelId: 'channelId1',
+            categoryId: 'categoryId2',
+        };
+        await wrapper.vm.$nextTick();
+
+        expect(blogDetailStore.blog.mainCategories).toHaveLength(1);
+        expect(blogDetailStore.blog.mainCategories[0].categoryId).toBe('categoryId2');
+    });
+});

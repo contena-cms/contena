@@ -1,0 +1,157 @@
+{% block sw_product_basic_form %}
+<div class="blog-basic-form">
+    {% block sw_product_basic_form_title_field %}
+    <sw-inherit-wrapper
+        v-model:value="blog.name"
+        :has-parent="!!parentProduct.id"
+        :inherited-value="getInheritValue('translated', 'name')"
+    >
+        <template #content="props">
+
+            <mt-text-field
+                :model-value="props.currentValue"
+                :is-inheritance-field="props.isInheritField"
+                :is-inherited="props.isInherited"
+                :disabled="props.isInherited || !allowEdit"
+                :label="$t('sw-blog.basicForm.labelTitle')"
+                :required="isTitleRequired"
+                name="sw-field--blog-name"
+                :error="blogNameError"
+                :placeholder="placeholder(blog, 'name', $t('sw-blog.basicForm.placeholderName'))"
+                @inheritance-restore="props.restoreInheritance"
+                @inheritance-remove="props.removeInheritance"
+                @update:model-value="props.updateCurrentValue"
+            />
+
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+
+    <sw-container
+        columns="2fr 1fr"
+        gap="0 var(--scale-size-30)"
+    >
+        {% block sw_product_basic_form_manufacturer_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.manufacturerId"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.manufacturerId"
+            :label="$t('sw-blog.basicForm.labelManufacturer')"
+        >
+            <template #content="{ currentValue, updateCurrentValue, isInherited }">
+
+                <sw-entity-single-select
+                    id="manufacturerId"
+                    :key="isInherited"
+                    :value="currentValue"
+                    entity="blog_manufacturer"
+                    :disabled="isInherited || !allowEdit"
+                    class="sw-select-blog__select_manufacturer"
+                    :error="blogManufacturerIdError"
+                    :placeholder="$t('sw-blog.basicForm.placeholderManufacturer')"
+                    show-clearable-button
+                    allow-entity-creation
+                    :entity-creation-label="$t('sw-blog.basicForm.labelManufacturerCreation')"
+                    @update:value="updateCurrentValue"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_basic_form_id_field %}
+
+        <mt-text-field
+            v-model="blog.blogNumber"
+            required
+            :error="blogProductNumberError"
+            :disabled="!allowEdit"
+            :label="$t('sw-blog.basicForm.labelProductNumber')"
+            :help-text="blogNumberHelpText"
+        />
+        {% endblock %}
+    </sw-container>
+
+    {% block sw_product_basic_form_cover_image_description_hint %}
+    <mt-banner
+        v-if="!hideCoverImageDescriptionHint"
+        class="sw-blog-basic-form__cover-image-description-hint"
+        variant="info"
+        closable
+        @close="onCloseCoverImageDescriptionHint"
+    >
+        {{ $t('sw-blog.basicForm.hintCoverImageDescription') }}
+    </mt-banner>
+    {% endblock %}
+
+    {% block sw_product_basic_form_description_field %}
+    <sw-inherit-wrapper
+        v-model:value="blog.description"
+        class="sw-blog-basic-form__inheritance-wrapper-description"
+        :has-parent="!!parentProduct.id"
+        :inherited-value="getInheritValue('translated', 'description')"
+        :label="$t('sw-blog.basicForm.labelDescription')"
+    >
+        <template #content="{ currentValue, updateCurrentValue, isInherited }">
+            <sw-text-editor
+                v-if="!feature.isActive('METEOR_TEXT_EDITOR')"
+                :key="isInherited"
+                :placeholder="placeholder(blog, 'description', $t('sw-blog.basicForm.placeholderDescriptionLong'))"
+                :error="blogDescriptionError"
+                :disabled="isInherited || !allowEdit"
+                :value="currentValue"
+                sanitize-input
+                sanitize-field-name="blog_translation.description"
+                @update:value="updateCurrentValue"
+            />
+            <mt-text-editor
+                v-else
+                :key="'meteor-' + isInherited"
+                :placeholder="placeholder(blog, 'description', $t('sw-blog.basicForm.placeholderDescriptionLong'))"
+                :error="blogDescriptionError"
+                :disabled="isInherited || !allowEdit"
+                :model-value="currentValue"
+                sanitize-input
+                sanitize-field-name="blog_translation.description"
+                @update:model-value="updateCurrentValue"
+            />
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+
+    <div class="blog-basic-form__switches">
+
+        {% block sw_product_settings_form_mark_as_topseller_field %}
+        <sw-inherit-wrapper
+            v-show="showSettingsInformation"
+            v-model:value="blog.markAsTopseller"
+            class="sw-blog-basic-form__promotion-switch"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.markAsTopseller"
+        >
+            <template #content="props">
+
+                <mt-switch
+                    :error="blogMarkAsTopsellerError"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :inherited-value="parentProduct.markAsTopseller"
+                    :help-text="highlightHelpText"
+                    :label="$t('sw-blog.settingsForm.labelMarkAsTopseller')"
+                    :disabled="!allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        <sw-extension-teaser-popover
+            position-identifier="sw-blog-generated-description-button"
+        />
+    </div>
+</div>
+{% endblock %}

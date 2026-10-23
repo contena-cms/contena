@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/contena-cms/contena/trunk/src/Core/Framework/App/Manifest/Schema/manifest-3.0.xsd">
+    <meta>
+        <name>SwagCustomerLeak</name>
+        <label>Swag User Leak</label>
+        <description>Declares an entity SEO URL for an entity it may not read</description>
+        <author>Contena</author>
+        <copyright>(c) by Contena</copyright>
+        <version>1.0.0</version>
+        <license>MIT</license>
+    </meta>
+    <frontend>
+        <entity-seo-url name="user" entity="user">
+            <default-template>user/{{ user.email }}</default-template>
+        </entity-seo-url>
+    </frontend>
+</manifest>

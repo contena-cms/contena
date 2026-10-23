@@ -1,0 +1,239 @@
+{% block sw_product_deliverability_form %}
+<div class="blog-deliverability-form">
+    <sw-container
+        columns="1fr 1fr 1fr"
+        gap="0 var(--scale-size-30)"
+    >
+        {% block sw_product_deliverability_form_stock_field %}
+        <mt-number-field
+            v-model="blog.stock"
+            name="sw-field--blog-stock"
+            number-type="int"
+            :disabled="!allowEdit"
+            :label="$t('sw-blog.settingsForm.labelStock')"
+            :placeholder="$t('sw-blog.settingsForm.placeholderStock')"
+            :error="blogStockError"
+        />
+        {% endblock %}
+
+        {% block sw_product_deliverability_form_available_stock_field %}
+        <mt-number-field
+            v-model="blog.availableStock"
+            name="sw-field--blog-available-stock"
+            number-type="int"
+            :disabled="true"
+            :label="$t('sw-blog.settingsForm.labelAvailableStock')"
+        />
+        {% endblock %}
+
+        {% block sw_product_deliverability_form_is_closeout_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.isCloseout"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.isCloseout"
+        >
+            <template #content="props">
+
+                <mt-switch
+                    name="sw-field--blog-is-closeout"
+                    :error="blogIsCloseoutError"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :inherited-value="parentProduct.isCloseout"
+                    :label="$t('sw-blog.settingsForm.labelIsCloseout')"
+                    :help-text="$t('sw-blog.settingsForm.isCloseoutHelpText')"
+                    :disabled="!allowEdit"
+                    :model-value="props.currentValue"
+                    bordered
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+
+    <sw-container
+        columns="1fr 1fr 1fr"
+        gap="0 var(--scale-size-30)"
+    >
+        {% block sw_product_deliverability_form_delivery_time_field %}
+        <sw-inherit-wrapper
+            v-if="showModeSetting"
+            v-model:value="blog.deliveryTimeId"
+            :inherited-value="parentProduct.deliveryTimeId"
+            :has-parent="!!parentProduct.id"
+            :label="$t('sw-blog.settingsForm.labelDeliveryTime')"
+        >
+            <template #content="{ currentValue, updateCurrentValue, isInherited }">
+
+                <sw-entity-single-select
+                    id="deliveryTimeId"
+                    :key="isInherited"
+                    :value="currentValue"
+                    entity="delivery_time"
+                    :disabled="isInherited || !allowEdit"
+                    class="blog-deliverability-form__delivery-time"
+                    :error="blogDeliveryTimeIdError"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderDeliveryTime')"
+                    show-clearable-button
+                    @update:value="updateCurrentValue"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_deliverability_form_restock_field %}
+        <sw-inherit-wrapper
+            v-if="showModeSetting"
+            v-model:value="blog.restockTime"
+            class="sw-blog-deliverability__restock-field"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.restockTime"
+        >
+            <template #content="props">
+
+                <mt-number-field
+                    name="sw-field--blog-restock-time"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    number-type="int"
+                    allow-empty
+                    :min="0"
+                    :disabled="props.isInherited || !allowEdit"
+                    :label="$t('sw-blog.settingsForm.labelRestockTime')"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderRestockTime')"
+                    :model-value="props.currentValue"
+                    :error="blogRestockTimeError"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_deliverability_form_shipping_free_field %}
+        <sw-inherit-wrapper
+            v-if="showModeSetting"
+            v-model:value="blog.shippingFree"
+            class="sw-blog-deliverability__shipping-free"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.shippingFree"
+        >
+            <template #content="props">
+
+                <mt-switch
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :inherited-value="parentProduct.shippingFree"
+                    :error="blogShippingFreeError"
+                    :label="$t('sw-blog.settingsForm.labelShippingFree')"
+                    :disabled="!allowEdit"
+                    :model-value="props.currentValue"
+                    bordered
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+
+    <sw-container
+        columns="1fr 1fr 1fr"
+        gap="0 var(--scale-size-30)"
+    >
+        {% block sw_product_deliverability_form_min_purchase_field %}
+        <sw-inherit-wrapper
+            v-if="showModeSetting"
+            v-model:value="blog.minPurchase"
+            class="sw-blog-deliverability__min-purchase"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.minPurchase"
+        >
+            <template #content="props">
+
+                <mt-number-field
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    number-type="int"
+                    :min="1"
+                    :error="blogMinPurchaseError"
+                    :label="$t('sw-blog.settingsForm.labelMinPurchase')"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderMinPurchase')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_deliverability_form_purchase_steps_field %}
+        <sw-inherit-wrapper
+            v-if="showModeSetting"
+            v-model:value="blog.purchaseSteps"
+            class="sw-blog-deliverability__purchase-step"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.purchaseSteps"
+        >
+            <template #content="props">
+
+                <mt-number-field
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    number-type="int"
+                    :min="1"
+                    :error="blogPurchaseStepsError"
+                    :label="$t('sw-blog.settingsForm.labelPurchaseSteps')"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderPurchaseSteps')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_deliverability_form_max_purchase_field %}
+        <sw-inherit-wrapper
+            v-if="showModeSetting"
+            v-model:value="blog.maxPurchase"
+            class="sw-blog-deliverability__max-purchase"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.maxPurchase"
+        >
+            <template #content="props">
+
+                <mt-number-field
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    number-type="int"
+                    :allow-empty="true"
+                    :min="0"
+                    :error="blogMaxPurchaseError"
+                    :label="$t('sw-blog.settingsForm.labelMaxPurchase')"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderMaxPurchase')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\ContentStream;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+
+class ContentStreamHydrator extends EntityHydrator
+{
+    protected function assign(EntityDefinition $definition, Entity $entity, string $root, array $row, Context $context): Entity
+    {
+        if (isset($row[$root . '.id'])) {
+            $entity->id = Uuid::fromBytesToHex($row[$root . '.id']);
+        }
+        if (\array_key_exists($root . '.apiFilter', $row)) {
+            $entity->apiFilter = $definition->decode('apiFilter', self::value($row, $root, 'apiFilter'));
+        }
+        if (isset($row[$root . '.invalid'])) {
+            $entity->invalid = (bool) $row[$root . '.invalid'];
+        }
+        if (\array_key_exists($root . '.internal', $row)) {
+            $entity->internal = (bool) $row[$root . '.internal'];
+        }
+        if (\array_key_exists($root . '.displayAsGroup', $row)) {
+            $entity->displayAsGroup = (bool) $row[$root . '.displayAsGroup'];
+        }
+        if (isset($row[$root . '.createdAt'])) {
+            $entity->createdAt = new \DateTimeImmutable($row[$root . '.createdAt']);
+        }
+        if (isset($row[$root . '.updatedAt'])) {
+            $entity->updatedAt = new \DateTimeImmutable($row[$root . '.updatedAt']);
+        }
+
+        $this->translate($definition, $entity, $row, $root, $context, $definition->getTranslatedFields());
+        $this->hydrateFields($definition, $entity, $root, $row, $context, $definition->getExtensionFields());
+        $this->customFields($definition, $row, $root, $entity, $definition->getField('customFields'), $context);
+
+        return $entity;
+    }
+}

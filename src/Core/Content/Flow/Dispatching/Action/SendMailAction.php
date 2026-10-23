@@ -1,0 +1,344 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Flow\Dispatching\Action;
+
+use Doctrine\DBAL\Connection;
+use Psr\Log\LoggerInterface;
+use Contena\Core\Content\Flow\Dispatching\DelayableAction;
+use Contena\Core\Content\Flow\Dispatching\StorableFlow;
+use Contena\Core\Content\Flow\Events\FlowSendMailActionEvent;
+use Contena\Core\Content\Mail\Service\AbstractMailService;
+use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;
+use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeCollection;
+use Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException;
+use Contena\Core\Content\MailTemplate\MailTemplateCollection;
+use Contena\Core\Content\MailTemplate\MailTemplateEntity;
+use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
+use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
+use Contena\Core\Framework\Event\LanguageAware;
+use Contena\Core\Framework\Event\MailAware;
+use Contena\Core\Framework\Event\OrderAware;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Validation\DataBag\DataBag;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+/**
+ * @internal
+ */
+class SendMailAction extends FlowAction implements DelayableAction
+{
+    final public const ACTION_NAME = 'action.mail.send';
+    final public const MAIL_CONFIG_EXTENSION = 'mail-attachments';
+
+    private const RECIPIENT_CONFIG_ADMIN = 'admin';
+    private const RECIPIENT_CONFIG_CUSTOM = 'custom';
+    private const RECIPIENT_CONFIG_CONTACT_FORM_MAIL = 'contactFormMail';
+    private const RECIPIENT_CONFIG_REVOCATION_REQUEST_CUSTOMER_FORM_MAIL = 'revocationRequestUserFormMail';
+
+    /**
+     * @internal
+     *
+     * @param EntityRepository<MailTemplateCollection> $mailTemplateRepository
+     * @param EntityRepository<MailTemplateTypeCollection> $mailTemplateTypeRepository
+     */
+    public function __construct(
+        private readonly AbstractMailService $emailService,
+        private readonly EntityRepository $mailTemplateRepository,
+        private readonly LoggerInterface $logger,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly EntityRepository $mailTemplateTypeRepository,
+        private readonly Connection $connection,
+        private readonly JsonEntityEncoder $jsonEntityEncoder,
+        private readonly DefinitionInstanceRegistry $definitionInstanceRegistry,
+        private readonly bool $updateMailTemplate
+    ) {
+    }
+
+    public static function getName(): string
+    {
+        return self::ACTION_NAME;
+    }
+
+    /**
+     * @return array<string>
+     */
+    public function requirements(): array
+    {
+        return [MailAware::class];
+    }
+
+    /**
+     * @throws MailEventConfigurationException
+     * @throws InconsistentCriteriaIdsException
+     */
+    public function handleFlow(StorableFlow $flow): void
+    {
+        $extension = $flow->getContext()->getExtension(self::MAIL_CONFIG_EXTENSION);
+        if (!$extension instanceof MailSendSubscriberConfig) {
+            $extension = new MailSendSubscriberConfig(false, [], []);
+        }
+
+        if ($extension->skip()) {
+            return;
+        }
+
+        // Keep documentIds available for other mail actions sharing this context (cleared in MailerTransportDecorator::send())
+        $mailExtension = clone $extension;
+
+        if (!$flow->hasData(MailAware::MAIL_STRUCT) || !$flow->hasData(MailAware::CHANNEL_ID)) {
+            throw new MailEventConfigurationException('Not have data from MailAware', $flow::class);
+        }
+
+        $eventConfig = $flow->getConfig();
+        $recipient = $eventConfig['recipient'] ?? null;
+        if (!\is_array($recipient) || $recipient === []) {
+            throw new MailEventConfigurationException('The recipient value in the flow action configuration is missing.', $flow::class);
+        }
+
+        if (!isset($eventConfig['mailTemplateId'])) {
+            return;
+        }
+
+        $mailTemplate = $this->getMailTemplate($eventConfig['mailTemplateId'], $flow->getContext());
+
+        if ($mailTemplate === null) {
+            return;
+        }
+
+        $data = new DataBag();
+
+        /** @var MailRecipientStruct $mailStruct */
+        $mailStruct = $flow->getData(MailAware::MAIL_STRUCT);
+
+        $recipients = $this->getRecipients(
+            $recipient,
+            $mailStruct->getRecipients(),
+            $flow->getData(FlowMailVariables::CONTACT_FORM_DATA, []),
+            $flow->getData(FlowMailVariables::REVOCATION_REQUEST_FORM_DATA, []),
+        );
+
+        if ($recipients === []) {
+            return;
+        }
+
+        $data->set('recipients', $recipients);
+        $data->set('senderName', $mailTemplate->getTranslation('senderName'));
+        $data->set('channelId', $flow->getData(MailAware::CHANNEL_ID));
+        $data->set('languageId', $flow->getData(LanguageAware::LANGUAGE_ID));
+        $data->set('timezone', $flow->getData(MailAware::TIMEZONE));
+
+        $data->set('templateId', $mailTemplate->getId());
+        $data->set('customFields', $mailTemplate->getCustomFields());
+        $data->set('contentHtml', $mailTemplate->getTranslation('contentHtml'));
+        $data->set('contentPlain', $mailTemplate->getTranslation('contentPlain'));
+        $data->set('subject', $mailTemplate->getTranslation('subject'));
+        $data->set('mediaIds', []);
+
+        $data->set('attachmentsConfig', new MailAttachmentsConfig(
+            $flow->getContext(),
+            $mailTemplate,
+            $mailExtension,
+            $eventConfig,
+            $flow->getData(OrderAware::ORDER_ID),
+        ));
+
+        $this->setReplyTo($data, $eventConfig, $flow->getData(FlowMailVariables::CONTACT_FORM_DATA, []));
+
+        $this->eventDispatcher->dispatch(new FlowSendMailActionEvent($data, $mailTemplate, $flow));
+
+        if (!Feature::isActive('v6.8.0.0')) {
+            if ($data->has('templateId')) {
+                $this->updateMailTemplateType(
+                    $flow->getContext(),
+                    $flow->data(),
+                    $mailTemplate
+                );
+            }
+        }
+
+        $templateData = [
+            'eventName' => $flow->getName(),
+            ...$flow->data(),
+        ];
+
+        $this->send($data, $flow->getContext(), $templateData);
+    }
+
+    /**
+     * @param array<string, mixed> $templateData
+     */
+    private function send(DataBag $data, Context $context, array $templateData): void
+    {
+        try {
+            $this->emailService->send(
+                $data->all(),
+                $context,
+                $templateData
+            );
+        } catch (\Exception $e) {
+            $this->logger->error(
+                "Could not send mail:\n"
+                . $e->getMessage() . "\n"
+                . 'Error Code:' . $e->getCode() . "\n"
+                . "Template data: \n"
+                . json_encode($data->all(), \JSON_THROW_ON_ERROR) . "\n"
+            );
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $templateData
+     */
+    private function updateMailTemplateType(
+        Context $context,
+        array $templateData,
+        MailTemplateEntity $mailTemplate
+    ): void {
+        if (Feature::isActive('v6.8.0.0')) {
+            return;
+        }
+
+        if (!$mailTemplate->getMailTemplateTypeId()) {
+            return;
+        }
+
+        if (!$this->updateMailTemplate) {
+            return;
+        }
+
+        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($mailTemplate, $templateData): void {
+            $this->mailTemplateTypeRepository->update([[
+                'id' => $mailTemplate->getMailTemplateTypeId(),
+                'templateData' => $this->sanitizeMailTemplateData($templateData),
+            ]], $context);
+        });
+    }
+
+    /**
+     * @param array<string, mixed> $templateData
+     *
+     * @return array<string, mixed>
+     */
+    private function sanitizeMailTemplateData(array $templateData): array
+    {
+        foreach ($templateData as $key => $value) {
+            if (!$value instanceof Entity) {
+                continue;
+            }
+
+            $internalEntityName = $value->getInternalEntityName();
+            if ($internalEntityName === null || $internalEntityName === '') {
+                continue;
+            }
+
+            $definition = $this->definitionInstanceRegistry->getByEntityName($internalEntityName);
+
+            $templateData[$key] = $this->jsonEntityEncoder->encode(
+                new Criteria(),
+                $definition,
+                $value,
+                '/api'
+            );
+        }
+
+        return $templateData;
+    }
+
+    private function getMailTemplate(string $id, Context $context): ?MailTemplateEntity
+    {
+        $criteria = new Criteria([$id]);
+        $criteria->setTitle('send-mail::load-mail-template');
+        $criteria->addAssociation('media.media');
+        $criteria->setLimit(1);
+
+        return $this->mailTemplateRepository->search($criteria, $context)->getEntities()->first();
+    }
+
+    /**
+     * @param array<string, mixed> $recipients
+     * @param array<string, string> $mailStructRecipients
+     * @param array<int|string, mixed> $contactFormData
+     * @param array<int|string, mixed> $revocationRequestFormData
+     *
+     * @return array<int|string, string>
+     */
+    private function getRecipients(array $recipients, $mailStructRecipients, array $contactFormData, array $revocationRequestFormData): array
+    {
+        switch ($recipients['type']) {
+            case self::RECIPIENT_CONFIG_CUSTOM:
+                return $recipients['data'];
+            case self::RECIPIENT_CONFIG_ADMIN:
+                $admins = $this->connection->fetchAllAssociative(
+                    'SELECT first_name, last_name, email FROM admin_user WHERE admin = true'
+                );
+                $emails = [];
+                foreach ($admins as $admin) {
+                    $emails[$admin['email']] = $admin['first_name'] . ' ' . $admin['last_name'];
+                }
+
+                return $emails;
+            case self::RECIPIENT_CONFIG_CONTACT_FORM_MAIL:
+                return $this->createEnquiryReceiver($contactFormData);
+            case self::RECIPIENT_CONFIG_REVOCATION_REQUEST_CUSTOMER_FORM_MAIL:
+                return $this->createEnquiryReceiver($revocationRequestFormData);
+            default:
+                return $mailStructRecipients;
+        }
+    }
+
+    /**
+     * @param array<int|string, mixed> $formData
+     *
+     * @return array<int|string, string>
+     */
+    private function createEnquiryReceiver(array $formData): array
+    {
+        if ($formData === []) {
+            return [];
+        }
+
+        if (!\array_key_exists('email', $formData)) {
+            return [];
+        }
+
+        return [trim($formData['email']) => trim(($formData['firstName'] ?? '') . ' ' . ($formData['lastName'] ?? ''))];
+    }
+
+    /**
+     * @param array<string, mixed> $eventConfig
+     * @param array<int|string, mixed> $contactFormData
+     */
+    private function setReplyTo(DataBag $data, array $eventConfig, array $contactFormData): void
+    {
+        $replyTo = $eventConfig['replyTo'] ?? null;
+        if (!\is_string($replyTo) || $replyTo === '') {
+            return;
+        }
+
+        if ($replyTo !== self::RECIPIENT_CONFIG_CONTACT_FORM_MAIL) {
+            $data->set('senderMail', $replyTo);
+
+            return;
+        }
+
+        $contactFormEmail = $contactFormData['email'] ?? null;
+        if (!\is_string($contactFormEmail) || $contactFormEmail === '') {
+            return;
+        }
+
+        $data->set(
+            'senderName',
+            '{% if contactFormData.firstName is defined %}{{ contactFormData.firstName }}{% endif %} '
+            . '{% if contactFormData.lastName is defined %}{{ contactFormData.lastName }}{% endif %}'
+        );
+        $data->set('senderMail', $contactFormEmail);
+    }
+}

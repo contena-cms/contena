@@ -1,0 +1,204 @@
+{% block sw_product_category_form %}
+<div class="sw-blog-category-form">
+    <sw-container class="sw-blog-category-form__description">
+        {% block sw_product_category_form_visibility_title %}
+        <span class="sw-blog-category-form__visibility-title">
+            {{ $t('sw-blog.visibility.labelVisibility') }}
+        </span>
+        {% endblock %}
+
+        {% block sw_product_category_form_visibility_body %}
+        <p class="sw-blog-category-form__visibility-body">
+            {{ $t('sw-blog.visibility.bodyVisibility') }}
+        </p>
+        {% endblock %}
+
+        {% block sw_product_category_form_visibility_field %}
+        <sw-inherit-wrapper
+            ref="blogVisibilitiesInheritance"
+            v-model:value="blog.visibilities"
+            :has-parent="!!parentProduct.id"
+            class="sw-blog-category-form__visibility_field"
+            :inherited-value="parentProduct.visibilities"
+            :label="$t('sw-blog.visibility.labelVisibility')"
+            :custom-remove-inheritance-function="visibilitiesRemoveInheritanceFunction"
+            is-association
+        >
+            <template #content="{ currentValue, isInherited, updateCurrentValue }">
+                <sw-blog-visibility-select
+                    v-if="!loading.blog && !loading.parentProduct && multiSelectVisible"
+                    ref="blogVisibility"
+                    :key="isInherited"
+                    class="sw-blog-detail__select-visibility"
+                    :entity-collection="currentValue"
+                    :placeholder="$t('sw-blog.visibility.placeholderVisibility')"
+                    :disabled="isInherited || !allowEdit"
+                    @update:entity-collection="updateCurrentValue"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+
+    {% block sw_product_category_form_visibility_field_link %}
+    <sw-container
+        columns="repeat(auto-fit, minmax(calc(var(--scale-size-224) + var(--scale-size-26)), 1fr))"
+        align="center"
+    >
+        {% block sw_product_category_form_active_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.active"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.active"
+        >
+            <template #content="props">
+
+                <mt-switch
+                    class="sw-field--blog-active no-margin"
+                    :error="blogActiveError"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :inherited-value="parentProduct.active"
+                    :label="$t('sw-blog.settingsForm.labelActive')"
+                    :disabled="!allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+        <a
+            v-if="hasSelectedVisibilities && showModeSetting"
+            class="sw-card__quick-link advanced-visibility sw-blog-category-form__visibility-link"
+            role="button"
+            tabindex="0"
+            @click="displayAdvancedVisibility"
+            @keydown.enter="displayAdvancedVisibility"
+        >
+            {{ $t('sw-blog.visibility.linkAdvancedVisibility') }}
+            <mt-icon
+                name="regular-long-arrow-right"
+                size="var(--scale-size-16)"
+            />
+        </a>
+    </sw-container>
+
+    <sw-modal
+        v-if="displayVisibilityDetail"
+        :title="$t('sw-blog.visibility.textHeadline')"
+        class="sw-blog-category-form__visibility_modal"
+        variant="large"
+        @modal-close="closeAdvancedVisibility"
+    >
+        <p>{{ $t('sw-blog.visibility.visibilityModalDescription') }}</p>
+
+        <sw-blog-visibility-detail :disabled="!allowEdit" />
+
+        <template #modal-footer>
+            <mt-button
+                variant="primary"
+                size="small"
+                @click="closeAdvancedVisibility"
+            >
+                {{ $t('global.default.apply') }}
+            </mt-button>
+        </template>
+    </sw-modal>
+    {% endblock %}
+
+    {% block sw_product_category_form_category_field %}
+    <sw-container
+        class="sw-blog-feature-set-form__description"
+    >
+        {% block sw_product_category_form_categories_title %}
+        <span class="sw-blog-category-form__visibility-title">
+            {{ $t('sw-blog.categoryForm.categoriesTitle') }}
+        </span>
+        {% endblock %}
+
+        {% block sw_product_category_form_categories_body %}
+        <p class="sw-blog-category-form__categories-body">
+            {{ $t('sw-blog.categoryForm.descriptionCategories') }}
+        </p>
+        <p class="sw-blog-category-form__categories-body">
+            {{ $t('sw-blog.categoryForm.descriptionTags') }}
+        </p>
+        {% endblock %}
+        <sw-inherit-wrapper
+            v-model:value="blog.categories"
+            is-association
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.categories"
+            :label="$t('sw-blog.categoryForm.labelCategory')"
+        >
+            <template #content="{ currentValue, isInherited }">
+                <sw-category-tree-field
+                    :key="isInherited"
+                    class="sw-blog-detail__select-category"
+                    :categories-collection="currentValue ? currentValue : []"
+                    :disabled="isInherited || !allowEdit"
+                    :placeholder="$t('sw-blog.categoryForm.placeholderCategory')"
+                />
+            </template>
+        </sw-inherit-wrapper>
+    </sw-container>
+    {% endblock %}
+
+    {% block sw_product_category_form_tags_field %}
+    <sw-inherit-wrapper
+        v-if="showModeSetting"
+        v-model:value="blog.tags"
+        class="sw-blog-category-form__tag-field-wrapper"
+        :inherited-value="parentProduct.tags"
+        :has-parent="!!parentProduct.id"
+        is-association
+        :help-text="$t('sw-blog.categoryForm.helpTextTags')"
+        :label="$t('global.sw-tag-field.title')"
+    >
+
+        <template #content="{ currentValue, isInherited, updateCurrentValue }">
+            <sw-entity-tag-select
+                v-if="!loading.blog && !loading.parentProduct"
+                :key="isInherited"
+                class="sw-blog-category-form__tag-field"
+                :disabled="isInherited || !allowEdit"
+                :placeholder="$t('sw-blog.categoryForm.placeholderTags')"
+                :error="blogTagsError"
+                :entity-collection="currentValue ? currentValue : {}"
+                @update:entity-collection="updateCurrentValue"
+            />
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+
+    {% block sw_product_category_form_search_keyword_field %}
+    <sw-inherit-wrapper
+        v-if="showModeSetting"
+        v-model:value="blog.customSearchKeywords"
+        :help-text="$t('sw-blog.categoryForm.helpTextSearchKeyword')"
+        :inherited-value="parentProduct.customSearchKeywords"
+        :has-parent="!!parentProduct.id"
+        :label="$t('sw-blog.categoryForm.labelSearchKeyword')"
+    >
+        <template #content="{ currentValue, isInherited, updateCurrentValue }">
+            <sw-multi-tag-select
+                class="sw-blog-category-form__search-keyword-field"
+                :value="currentValue ? currentValue : []"
+                :placeholder="$t('sw-blog.categoryForm.placeholderSearchKeywords')"
+                :disabled="isInherited || !allowEdit"
+                @update:value="updateCurrentValue"
+            >
+                <template #message-add-data>
+                    <span>{{ $t('sw-blog.categoryForm.textAddSearchKeyword') }}</span>
+                </template>
+                <template #message-enter-valid-data>
+                    <span>{{ $t('sw-blog.categoryForm.textEnterValidSearchKeyword') }}</span>
+                </template>
+            </sw-multi-tag-select>
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+</div>
+{% endblock %}

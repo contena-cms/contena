@@ -1,0 +1,2342 @@
+/* eslint-disable sw-test-rules/test-file-max-lines-warning, sw-test-rules/test-file-max-lines-error */
+
+/* eslint-disable jest/no-conditional-expect */
+
+/**
+ * @sw-package framework
+ */
+import { mount } from '@vue/test-utils';
+import { computed, inject, ref } from 'vue';
+import ContenaError from 'src/core/data/ContenaError';
+import ErrorResolverSystemConfig from 'src/core/data/error-resolver.system-config.data';
+import { MtTextField, MtUrlField } from '@contena-ag/meteor-component-library';
+import kebabCase from 'lodash-es/kebabCase';
+import uuid from 'test/_helper_/uuid';
+import 'src/app/filter/media-name.filter';
+import 'src/app/filter/unicode-uri';
+
+/** @type Wrapper */
+let wrapper;
+let numberOfTabs = 1;
+let numberOfCards = 2;
+let firstCardHasCssField = false;
+
+// @deprecated tag:v6.8.0 - The legacyConfig parameter will be removed together with the config data prop.
+async function createWrapper(defaultValues = {}, config = createConfig(), slots = {}, components = {}, legacyConfig = null) {
+    // @deprecated tag:v6.8.0 - Simulates the shared base prototype a real (non-decorated) service inherits getConfig from.
+    const systemConfigApiServicePrototype = {
+        getConfig: jest.fn(() => Promise.resolve([])),
+    };
+    const systemConfigApiService = Object.assign(Object.create(systemConfigApiServicePrototype), {
+        getSchema: jest.fn(() => Promise.resolve(config)),
+        getValues: jest.fn((domain, channelId) => {
+            if (defaultValues[domain] && defaultValues[domain][channelId]) {
+                return Promise.resolve(defaultValues[domain][channelId]);
+            }
+
+            return Promise.resolve({});
+        }),
+        batchSave: jest.fn(() => Promise.resolve()),
+    });
+
+    // @deprecated tag:v6.8.0 - Only simulates an extension still overriding the deprecated getConfig method.
+    if (legacyConfig !== null) {
+        systemConfigApiService.getConfig = jest.fn(() => Promise.resolve(legacyConfig));
+    }
+
+    const wrapper = mount(await wrapTestComponent('sw-system-config'), {
+        slots,
+        props: {
+            channelSwitchable: true,
+            domain: 'ConfigRenderer.config',
+        },
+        global: {
+            components,
+            directives: {
+                tooltip: {},
+                popover: {},
+            },
+            mocks: {
+                $t: (key) => {
+                    if (key === 'global.sw-field.ariaUnlinkInheritance') {
+                        return 'Unlink inheritance';
+                    }
+
+                    if (key === 'global.sw-field.ariaLinkInheritance') {
+                        return 'Link inheritance';
+                    }
+
+                    return key;
+                },
+            },
+            renderStubDefaultSlot: true,
+            stubs: {
+                'sw-form-field-renderer': await wrapTestComponent('sw-form-field-renderer'),
+                'sw-password-field-deprecated': await wrapTestComponent('sw-password-field-deprecated'),
+                'sw-ignore-class': true,
+                'sw-sales-channel-switch': await wrapTestComponent('sw-sales-channel-switch'),
+                'sw-entity-single-select': await wrapTestComponent('sw-entity-single-select'),
+                'sw-label': await wrapTestComponent('sw-label'),
+                'sw-inherit-wrapper': await wrapTestComponent('sw-inherit-wrapper'),
+                'sw-inheritance-switch': await wrapTestComponent('sw-inheritance-switch'),
+                'sw-text-field': await wrapTestComponent('sw-text-field'),
+                'sw-text-field-deprecated': await wrapTestComponent('sw-text-field-deprecated', { sync: true }),
+                'sw-contextual-field': await wrapTestComponent('sw-contextual-field'),
+                'sw-number-field-deprecated': await wrapTestComponent('sw-number-field-deprecated', { sync: true }),
+                'sw-checkbox-field': await wrapTestComponent('sw-checkbox-field'),
+                'sw-checkbox-field-deprecated': await wrapTestComponent('sw-checkbox-field-deprecated', { sync: true }),
+                'sw-block-field': await wrapTestComponent('sw-block-field'),
+                'sw-base-field': await wrapTestComponent('sw-base-field'),
+                'sw-field-error': await wrapTestComponent('sw-field-error'),
+                'sw-single-select': await wrapTestComponent('sw-single-select'),
+                'sw-multi-select': await wrapTestComponent('sw-multi-select'),
+                'sw-entity-multi-select': await wrapTestComponent('sw-entity-multi-select'),
+                'sw-entity-multi-id-select': await wrapTestComponent('sw-entity-multi-id-select'),
+                'sw-select-base': await wrapTestComponent('sw-select-base'),
+                'sw-select-result-list': await wrapTestComponent('sw-select-result-list'),
+                'sw-select-result': await wrapTestComponent('sw-select-result'),
+                'sw-select-selection-list': await wrapTestComponent('sw-select-selection-list'),
+                'sw-popover': await wrapTestComponent('sw-popover'),
+                'sw-popover-deprecated': await wrapTestComponent('sw-popover-deprecated', { sync: true }),
+                'mt-floating-ui': {
+                    template: '<div><slot /></div>',
+                },
+                'sw-highlight-text': await wrapTestComponent('sw-highlight-text'),
+                'sw-media-field': await wrapTestComponent('sw-media-field'),
+                'sw-url-field': await wrapTestComponent('sw-url-field'),
+                'sw-url-field-deprecated': await wrapTestComponent('sw-url-field-deprecated'),
+                'sw-media-media-item': await wrapTestComponent('sw-media-media-item'),
+                'sw-media-base-item': await wrapTestComponent('sw-media-base-item'),
+                'sw-media-preview-v2': await wrapTestComponent('sw-media-preview-v2'),
+                'sw-colorpicker-deprecated': await wrapTestComponent('sw-text-field-deprecated'),
+                'sw-upload-listener': true,
+                'sw-simple-search-field': true,
+                'sw-loader': true,
+                'sw-datepicker-deprecated': await wrapTestComponent('sw-text-field-deprecated'),
+                'mt-datepicker': MtTextField,
+                'sw-text-editor': await wrapTestComponent('sw-text-field'),
+                'sw-textarea-field-deprecated': await wrapTestComponent('sw-textarea-field-deprecated', { sync: true }),
+                'sw-switch-field-deprecated': await wrapTestComponent('sw-switch-field-deprecated', { sync: true }),
+                'sw-extension-component-section': true,
+                'sw-ai-copilot-badge': true,
+                'sw-context-button': true,
+                'sw-blog-variant-info': true,
+                'sw-help-text': true,
+                'sw-field-copyable': true,
+                'sw-media-upload-v2': true,
+                'sw-pagination': true,
+                'router-link': true,
+                'sw-color-badge': true,
+                'sw-context-menu-item': true,
+                'sw-media-modal-replace': true,
+                'sw-media-modal-delete': true,
+                'sw-media-modal-move': true,
+                'sw-media-modal-v2': true,
+                'mt-url-field': MtUrlField,
+                'sw-app-action-button': true,
+                'sw-time-ago': true,
+                'mt-tabs': {
+                    name: 'mt-tabs',
+                    emits: [
+                        'new-item-active',
+                    ],
+                    props: {
+                        defaultItem: {
+                            type: String,
+                            required: false,
+                            default: undefined,
+                        },
+                        items: {
+                            type: Array,
+                            required: true,
+                        },
+                        positionIdentifier: {
+                            type: String,
+                            required: true,
+                        },
+                    },
+                    template: '<div class="mt-tabs"></div>',
+                },
+            },
+            provide: {
+                systemConfigApiService,
+                repositoryFactory: {
+                    create: (entity) => ({
+                        search: (criteria) => {
+                            if (entity === 'channel') {
+                                return Promise.resolve(
+                                    createEntityCollection([
+                                        {
+                                            name: 'Frontend',
+                                            translated: { name: 'Frontend' },
+                                            id: uuid.get('frontend'),
+                                        },
+                                        {
+                                            name: 'Headless',
+                                            translated: { name: 'Headless' },
+                                            id: uuid.get('headless'),
+                                        },
+                                    ]),
+                                );
+                            }
+
+                            if (entity === 'blog') {
+                                return Promise.resolve(
+                                    [
+                                        {
+                                            id: uuid.get('pullover'),
+                                            name: 'Pullover',
+                                        },
+                                        {
+                                            id: uuid.get('shirt'),
+                                            name: 'Shirt',
+                                        },
+                                    ].filter((blog) => {
+                                        if (criteria.ids.length <= 0) {
+                                            return true;
+                                        }
+
+                                        return criteria.ids.includes(blog.id);
+                                    }),
+                                );
+                            }
+                            if (entity === 'media') {
+                                return Promise.resolve([
+                                    {
+                                        hasFile: true,
+                                        fileName: 'good-image',
+                                        fileExtension: 'jpg',
+                                        id: uuid.get('good-image'),
+                                    },
+                                    {
+                                        hasFile: true,
+                                        fileName: 'funny-image',
+                                        fileExtension: 'jpg',
+                                        id: uuid.get('funny-image'),
+                                    },
+                                ]);
+                            }
+
+                            return Promise.resolve([]);
+                        },
+                        get: (id) => {
+                            if (entity === 'blog') {
+                                if (id === uuid.get('pullover')) {
+                                    return Promise.resolve({
+                                        id: uuid.get('pullover'),
+                                        name: 'Pullover',
+                                    });
+                                }
+
+                                if (id === uuid.get('shirt')) {
+                                    return Promise.resolve({
+                                        id: uuid.get('shirt'),
+                                        name: 'Shirt',
+                                    });
+                                }
+                            }
+
+                            if (entity === 'media') {
+                                if (id === uuid.get('funny-image')) {
+                                    return Promise.resolve({
+                                        hasFile: true,
+                                        fileName: 'funny-image',
+                                        fileExtension: 'jpg',
+                                        id: uuid.get('funny-image'),
+                                    });
+                                }
+
+                                if (id === uuid.get('good-image')) {
+                                    return Promise.resolve({
+                                        hasFile: true,
+                                        fileName: 'good-image',
+                                        fileExtension: 'jpg',
+                                        id: uuid.get('good-image'),
+                                    });
+                                }
+                            }
+
+                            return Promise.resolve({});
+                        },
+                    }),
+                },
+                validationService: {},
+                mediaService: {},
+            },
+        },
+    });
+
+    wrapper.systemConfigApiService = systemConfigApiService;
+
+    return wrapper;
+}
+
+function createConfig() {
+    const firstCardElements = [
+        {
+            name: 'ConfigRenderer.config.textField',
+            type: 'text',
+            config: {
+                required: true,
+                label: {
+                    'en-GB': 'text field',
+                },
+                defaultValue: 'Amazing field',
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: 'Awesome field',
+                childValue: 'I am a child',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input[type="text"]').setValue(afterValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.textareaField',
+            type: 'textarea',
+            config: {
+                label: {
+                    'en-GB': 'textarea field',
+                },
+                defaultValue: 'This is a textarea with much content.',
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('textarea').element.value).toBe(domValue);
+                },
+                afterValue: 'We changed the textarea with much content.',
+                childValue: 'I am a child textarea field',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('textarea').setValue(afterValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.urlField',
+            type: 'url',
+            config: {
+                defaultValue: 'https://www.contena.cn',
+                label: {
+                    'en-GB': 'url field',
+                },
+            },
+            _test: {
+                defaultValueDom: 'www.contena.cn',
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: 'https://www.contena.cn',
+                afterValueDom: 'www.contena.cn',
+                childValue: 'https://www.child.contena.cn',
+                childValueDom: 'www.child.contena.cn',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input').setValue(afterValue);
+                    await field.find('input').trigger('blur');
+                    await flushPromises();
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.passwordField',
+            type: 'password',
+            config: {
+                defaultValue: 'V3RY_S3CR3T',
+                label: {
+                    'en-GB': 'password field',
+                },
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: 'M0R3-S3CR3T_PA$$W0RD',
+                childValue: 'I-AM-A-CH!LD-VALU3',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input').setValue(afterValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.intField',
+            type: 'int',
+            config: {
+                defaultValue: 7,
+                label: {
+                    'en-GB': 'int field',
+                },
+            },
+            _test: {
+                defaultValueDom: '7',
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: 42,
+                afterValueDom: '42',
+                childValue: 987,
+                childValueDom: '987',
+                fallbackValue: '0',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input[type="text"]').setValue(afterValue);
+                    await field.find('input[type="text"]').trigger('change');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.floatField',
+            type: 'float',
+            config: {
+                defaultValue: 1.23,
+                label: {
+                    'en-GB': 'float field',
+                },
+            },
+            _test: {
+                defaultValueDom: '1.23',
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: 420.55,
+                afterValueDom: '420.55',
+                childValue: 33.25,
+                childValueDom: '33.25',
+                fallbackValue: '0',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input[type="text"]').setValue(afterValue);
+                    await field.find('input[type="text"]').trigger('change');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.boolField',
+            type: 'bool',
+            config: {
+                defaultValue: true,
+                label: {
+                    'en-GB': 'bool field',
+                },
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.checked).toBe(domValue);
+                },
+                afterValue: false,
+                childValue: false,
+                fallbackValue: false,
+                changeValueFunction: async (field) => {
+                    const currentValue = field.find('input').element.checked;
+                    // change input value
+                    await field.find('input[type="checkbox"]').setChecked(!currentValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.checkboxField',
+            type: 'checkbox',
+            config: {
+                defaultValue: true,
+                label: {
+                    'en-GB': 'checkbox field',
+                },
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.checked).toBe(domValue);
+                },
+                afterValue: false,
+                childValue: false,
+                fallbackValue: false,
+                changeValueFunction: async (field) => {
+                    // change input value
+                    await field.find('input[type="checkbox"]').trigger('click');
+                    await field.find('input[type="checkbox"]').trigger('change');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.datetimeField',
+            type: 'datetime',
+            config: {
+                defaultValue: '2000-01-01T12:00:00+00:00',
+                label: {
+                    'en-GB': 'datetime field',
+                },
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: '2222-01-01T16:00:00+00:00',
+                childValue: '2233-01-01T16:00:00+00:00',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input[type="text"]').setValue(afterValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.dateField',
+            type: 'date',
+            config: {
+                defaultValue: '2000-01-01T00:00:00+00:00',
+                label: {
+                    'en-GB': 'date field',
+                },
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: '2000-12-12T12:00:00+00:00',
+                childValue: '2020-12-12T12:00:00+00:00',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input').setValue(afterValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.timeField',
+            type: 'time',
+            config: {
+                defaultValue: '12:00:00+00:00',
+                label: {
+                    'en-GB': 'time field',
+                },
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: '18:00:00+00:00',
+                childValue: '13:00:00+00:00',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input[type="text"]').setValue(afterValue);
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.colorpickerField',
+            type: 'colorpicker',
+            config: {
+                defaultValue: '#123abc',
+                label: {
+                    'en-GB': 'colorpicker field',
+                },
+                css: firstCardHasCssField ? 'first-card-colorpicker' : undefined,
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: '#ccc444',
+                childValue: '#789ced',
+                changeValueFunction: async (field, afterValue) => {
+                    // change input value
+                    await field.find('input').setValue(afterValue);
+                    // Wait for debounced color change after 50ms
+                    await new Promise((resolve) => {
+                        setTimeout(resolve, 55);
+                    });
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.singleSelectField',
+            type: 'single-select',
+            config: {
+                defaultValue: 'blue',
+                label: {
+                    'en-GB': 'single-select field',
+                },
+                options: [
+                    {
+                        id: 'yellow',
+                        value: 'yellow',
+                        name: {
+                            'en-GB': 'yellow',
+                        },
+                    },
+                    {
+                        id: 'blue',
+                        value: 'blue',
+                        name: {
+                            'en-GB': 'blue',
+                        },
+                    },
+                    {
+                        id: 'green',
+                        value: 'green',
+                        name: {
+                            'en-GB': 'green',
+                        },
+                    },
+                ],
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: 'green',
+                childValue: 'yellow',
+                changeValueFunction: async (field, afterValue) => {
+                    // open select field
+                    await field.find('.mt-select__selection').trigger('click');
+                    await flushPromises();
+
+                    // find after value
+                    const optionChoice = field.find(`.mt-select-option--${afterValue}`);
+                    expect(optionChoice.isVisible()).toBe(true);
+
+                    // click on second option
+                    await optionChoice.trigger('click');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.multiSelectField',
+            type: 'multi-select',
+            config: {
+                defaultValue: ['blue'],
+                label: {
+                    'en-GB': 'multi-select field',
+                },
+                options: [
+                    {
+                        id: 'yellow',
+                        name: {
+                            'en-GB': 'yellow',
+                        },
+                    },
+                    {
+                        id: 'blue',
+                        name: {
+                            'en-GB': 'blue',
+                        },
+                    },
+                    {
+                        id: 'green',
+                        name: {
+                            'en-GB': 'green',
+                        },
+                    },
+                ],
+            },
+            _test: {
+                domValueCheck: (field, domValue) => {
+                    expect(Array.isArray(domValue)).toBe(true);
+                    domValue.forEach((value, index) => {
+                        expect(field.find(`.mt-select-selection-list__item-holder--${index}`).text()).toBe(value);
+                    });
+                },
+                afterValue: ['blue', 'green'],
+                childValue: ['blue', 'green'],
+                fallbackValue: [],
+                changeValueFunction: async (field) => {
+                    // open select field
+                    await field.find('.mt-select__selection').trigger('click');
+                    await flushPromises();
+
+                    // find third value
+                    const optionChoice = field.find('.mt-select-option--2');
+                    expect(optionChoice.isVisible()).toBe(true);
+
+                    // click on third option
+                    await optionChoice.trigger('click');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.entitySelectField',
+            config: {
+                defaultValue: uuid.get('pullover'),
+                componentName: 'sw-entity-single-select',
+                entity: 'blog',
+                label: {
+                    'en-GB': 'Choose a blog',
+                },
+                legacy: true,
+            },
+            _test: {
+                defaultValueDom: 'Pullover',
+                domValueCheck: async (field, domValue) => {
+                    await wrapper.vm.$forceUpdate();
+                    expect(field.find('.sw-entity-single-select__selection-text').text()).toBe(domValue);
+                },
+                afterValue: uuid.get('shirt'),
+                afterValueDom: 'Shirt',
+                childValue: uuid.get('shirt'),
+                childValueDom: 'Shirt',
+                changeValueFunction: async (field) => {
+                    // open select field
+                    await field.find('.sw-select__selection').trigger('click');
+                    await flushPromises();
+
+                    // find second value
+                    const optionChoice = field.find('.sw-select-option--1');
+                    expect(optionChoice.isVisible()).toBe(true);
+
+                    // click on second option
+                    await optionChoice.trigger('click');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.mediaField',
+            config: {
+                defaultValue: uuid.get('funny-image'),
+                componentName: 'sw-media-field',
+                label: {
+                    'en-GB': 'Upload media or choose one from the media manager',
+                },
+                legacy: true,
+            },
+            _test: {
+                defaultValueDom: 'funny-image.jpg',
+                domValueCheck: async (field, domValue) => {
+                    await wrapper.vm.$forceUpdate();
+                    await flushPromises();
+
+                    if (domValue.length > 0) {
+                        expect(field.find('.sw-media-base-item__name').text()).toBe(domValue);
+                    } else {
+                        expect(field.find('.sw-media-base-item__name').exists()).toBe(false);
+                    }
+                },
+                afterValue: uuid.get('good-image'),
+                afterValueDom: 'good-image.jpg',
+                childValue: uuid.get('good-image'),
+                childValueDom: 'good-image.jpg',
+                changeValueFunction: async (field) => {
+                    await field.find('.sw-media-field__toggle-button').trigger('click');
+                    await flushPromises();
+
+                    await field
+                        .find('.sw-media-field__suggestion-list-entry:first-child .sw-media-base-item')
+                        .trigger('click');
+                },
+            },
+        },
+        {
+            name: 'ConfigRenderer.config.textEditorField',
+            config: {
+                defaultValue: '<p>I am a paragraph</p>',
+                componentName: 'sw-text-editor',
+                label: {
+                    'en-GB': 'Write some nice text with WYSIWYG editor',
+                },
+            },
+            _test: {
+                // defaultValueDom: 'funny-image.jpg',
+                domValueCheck: async (field, domValue) => {
+                    await wrapper.vm.$forceUpdate();
+                    expect(field.find('input').element.value).toBe(domValue);
+                },
+                afterValue: '<p>Fresh and new</p>',
+                childValue: '<p>Children which is fresh and new</p>',
+                changeValueFunction: async (field, afterValue) => {
+                    await field.find('input').setValue(afterValue);
+                },
+            },
+        },
+    ];
+
+    return [
+        {
+            name: null,
+            title: null,
+            cards: [
+                {
+                    name: null,
+                    title: { 'en-GB': 'First card' },
+                    elements: firstCardElements,
+                },
+                {
+                    name: null,
+                    title: { 'en-GB': 'Card with AI badge' },
+                    elements: [],
+                    aiBadge: true,
+                },
+            ].slice(0, numberOfCards),
+        },
+        {
+            name: 'custom',
+            title: { 'en-GB': 'Custom tab' },
+            cards: [
+                {
+                    name: null,
+                    title: { 'en-GB': 'Custom card 1' },
+                    elements: [
+                        {
+                            name: 'ConfigRenderer.config.customField1',
+                            type: 'text',
+                            config: {
+                                defaultValue: 'Custom field 1',
+                                label: {
+                                    'en-GB': 'Custom field 1',
+                                },
+                            },
+                        },
+                        {
+                            name: 'ConfigRenderer.config.customField2',
+                            type: 'bool',
+                            config: {
+                                defaultValue: true,
+                                label: {
+                                    'en-GB': 'Custom field 2',
+                                },
+                            },
+                        },
+                    ],
+                },
+                {
+                    name: null,
+                    title: { 'en-GB': 'Custom card 2 with css field' },
+                    elements: [
+                        {
+                            name: 'ConfigRenderer.config.customField3',
+                            type: 'text',
+                            config: {
+                                defaultValue: 'Custom field 3',
+                                label: {
+                                    'en-GB': 'Custom field 3',
+                                },
+                            },
+                        },
+                        {
+                            name: 'ConfigRenderer.config.customField4',
+                            type: 'colorpicker',
+                            config: {
+                                defaultValue: '#bc121b',
+                                label: {
+                                    'en-GB': 'Custom field 4',
+                                },
+                                css: 'custom-field-4-color',
+                            },
+                        },
+                    ],
+                },
+            ].slice(0, numberOfCards),
+        },
+    ].slice(0, numberOfTabs);
+}
+
+function createConfigWithCacheRelevantField(fieldName) {
+    const config = createConfig();
+
+    config.forEach((tab) => {
+        tab.cards.forEach((card) => {
+            card.elements.forEach((element) => {
+                if (element.name === fieldName) {
+                    element.config.cacheRelevant = true;
+                }
+            });
+        });
+    });
+
+    return config;
+}
+
+function createEntityCollection(entities = []) {
+    return new Contena.Data.EntityCollection('collection', 'collection', {}, null, entities);
+}
+
+describe('src/module/sw-settings/component/sw-system-config/sw-system-config', () => {
+    beforeEach(() => {
+        numberOfTabs = 1;
+        numberOfCards = 2;
+        firstCardHasCssField = false;
+    });
+
+    afterEach(() => {
+        Contena.Store.get('error').resetApiErrors();
+    });
+
+    it('should show a select field for the sales channels', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const selectionText = wrapper.find('#channelSelect .sw-entity-single-select__selection-text');
+
+        expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+    });
+
+    it('should change the sales channel', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        let channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+        let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+
+        expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+
+        // open channel switch field
+        await channelSwitch.find('.sw-select__selection').trigger('click');
+        await flushPromises();
+
+        channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+
+        // select headless sales channel
+        const selectOptionTwo = channelSwitch.find('.sw-select-option--2');
+        expect(selectOptionTwo.text()).toBe('Headless');
+        await selectOptionTwo.trigger('click');
+
+        selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+        expect(selectionText.text()).toBe('Headless');
+    });
+
+    it('should allow removing inheritance from disabled Meteor switch fields', async () => {
+        const fieldName = 'ConfigRenderer.config.boolField';
+
+        wrapper = await createWrapper({
+            'ConfigRenderer.config': {
+                null: {
+                    [fieldName]: true,
+                },
+            },
+        });
+
+        await flushPromises();
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('headless'));
+        await flushPromises();
+
+        let field = wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`);
+        const switchInput = field.find('input[type="checkbox"]');
+        expect(switchInput.element.disabled).toBe(true);
+
+        let inheritanceSwitch = field.find('.mt-inheritance-switch');
+        expect(inheritanceSwitch.attributes('aria-label')).toBe('Unlink inheritance');
+        expect(inheritanceSwitch.attributes('disabled')).toBeUndefined();
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][fieldName]).toBeUndefined();
+        expect(switchInput.element.checked).toBe(true);
+
+        await inheritanceSwitch.trigger('click');
+        await flushPromises();
+
+        field = wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`);
+        inheritanceSwitch = field.find('.mt-inheritance-switch');
+        expect(inheritanceSwitch.attributes('aria-label')).toBe('Link inheritance');
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][fieldName]).toBe(true);
+    });
+
+    it('should only show the inheritance switch of Meteor checkbox fields when a sales channel is selected', async () => {
+        const fieldName = 'ConfigRenderer.config.checkboxField';
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        let field = wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`);
+        expect(field.find('input[type="checkbox"]').exists()).toBe(true);
+        expect(field.find('.mt-inheritance-switch').exists()).toBe(false);
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('headless'));
+        await flushPromises();
+
+        field = wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`);
+        expect(field.find('.mt-inheritance-switch').exists()).toBe(true);
+    });
+
+    it('should return ContenaError when has error', async () => {
+        Contena.Store.get('error').addApiError({
+            expression: 'SYSTEM_CONFIG.null.dummyKey',
+            error: new ContenaError({ code: 'dummyCode' }),
+        });
+
+        wrapper = await createWrapper({
+            SYSTEM_CONFIG: {
+                null: {
+                    dummyKey: 'Default value',
+                },
+            },
+        });
+
+        const error = wrapper.vm.getFieldError('dummyKey');
+
+        expect(error).toBeInstanceOf(ContenaError);
+    });
+
+    it('should show the error of the selected sales channel scope', async () => {
+        const fieldName = 'ConfigRenderer.config.textField';
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('headless'));
+        await flushPromises();
+
+        expect(wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`).html()).not.toContain(
+            'This value should not be blank.',
+        );
+
+        new ErrorResolverSystemConfig().handleWriteErrors([
+            {
+                code: 'scopedCode',
+                status: '400',
+                detail: 'This value should not be blank.',
+                meta: { parameters: {} },
+                source: { pointer: `/${uuid.get('headless')}/${fieldName}` },
+            },
+        ]);
+        await flushPromises();
+
+        expect(wrapper.vm.getFieldError(fieldName)).toEqual(expect.objectContaining({ code: 'scopedCode' }));
+        expect(wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`).html()).toContain(
+            'This value should not be blank.',
+        );
+
+        wrapper.vm.onSalesChannelChanged(null);
+        await flushPromises();
+
+        expect(wrapper.find(`.sw-system-config--field-${kebabCase(fieldName)}`).html()).not.toContain(
+            'This value should not be blank.',
+        );
+    });
+
+    it('should add a class based on the card name when provided', async () => {
+        wrapper = await createWrapper({}, [
+            {
+                title: null,
+                name: null,
+                cards: [
+                    {
+                        name: 'companyInformation',
+                        title: {
+                            'en-GB': 'Company information',
+                        },
+                        elements: [],
+                    },
+                ],
+            },
+        ]);
+
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__card--company-information').exists()).toBe(true);
+    });
+
+    createConfig()[0].cards[0].elements.forEach(({ name, type, config, _test }) => {
+        it(`should render field with type "${type || name}" with the default value and should be able to change it`, async () => {
+            const domValue = _test.defaultValueDom || config.defaultValue;
+            const afterValueDom = _test.afterValueDom || _test.afterValue;
+
+            wrapper = await createWrapper({
+                'ConfigRenderer.config': {
+                    null: {
+                        [name]: config.defaultValue,
+                    },
+                },
+            });
+
+            await flushPromises();
+
+            // check if value in dom is right
+            let field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, domValue);
+
+            // check if value in actualConfigData is right
+            expect(wrapper.vm.actualConfigData.null[name]).toEqual(config.defaultValue);
+
+            // change value
+            await _test.changeValueFunction(field, _test.afterValue);
+
+            // check if new value in dom is visible
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, afterValueDom);
+
+            // check if new value in actualConfigData is right
+            expect(wrapper.vm.actualConfigData.null[name]).toEqual(_test.afterValue);
+        });
+
+        it(`should render field with type "${type || name}" with the inherit value and should be able to remove the inheritance`, async () => {
+            const domValue = _test.defaultValueDom || config.defaultValue;
+            const inheritanceSwitchSelector = config.legacy ? '.sw-inheritance-switch' : '.mt-inheritance-switch';
+
+            wrapper = await createWrapper({
+                'ConfigRenderer.config': {
+                    null: {
+                        [name]: config.defaultValue,
+                    },
+                },
+            });
+
+            await flushPromises();
+
+            const channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+            let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+
+            expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+
+            // open channel switch field
+            await channelSwitch.find('.sw-select__selection').trigger('click');
+            await flushPromises();
+
+            // select headless sales channel
+            const selectOptionTwo = channelSwitch.find('.sw-select-option--2');
+            expect(selectOptionTwo.text()).toBe('Headless');
+
+            await selectOptionTwo.trigger('click');
+            await flushPromises();
+
+            // check if headless sales channel is activated
+            selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+            expect(selectionText.text()).toBe('Headless');
+
+            // check if value in dom shows the inherit value
+            let field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, domValue);
+            let inheritanceSwitch = field.find(inheritanceSwitchSelector);
+
+            // check if switch show inheritance
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Unlink inheritance');
+
+            // check if inheritance switch is visible
+            expect(inheritanceSwitch.isVisible()).toBe(true);
+
+            // check if value in actualConfigData is right (null or undefined)
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeUndefined();
+
+            // remove inheritance
+            await inheritanceSwitch.find('.mt-icon').trigger('click');
+
+            // check if inheritance switch is not inherit anymore
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            inheritanceSwitch = field.find(inheritanceSwitchSelector);
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Link inheritance');
+
+            // check if child gets parent value
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, domValue);
+
+            // check if value in actualConfigData is right (parent value)
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toEqual(config.defaultValue);
+        });
+
+        it(`should render field with type "${type || name}" with the his value and should be able to restore parent value (when parent has value)`, async () => {
+            const domValue = _test.defaultValueDom || config.defaultValue;
+            const childValue = _test.childValue;
+            const childValueDom = _test.childValueDom || childValue;
+            const inheritanceSwitchSelector = config.legacy ? '.sw-inheritance-switch' : '.mt-inheritance-switch';
+
+            wrapper = await createWrapper({
+                'ConfigRenderer.config': {
+                    [uuid.get('headless')]: {
+                        [name]: childValue,
+                    },
+                    null: {
+                        [name]: config.defaultValue,
+                    },
+                },
+            });
+
+            await flushPromises();
+
+            const channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+            let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+
+            expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+
+            // open channel switch field
+            await channelSwitch.find('.sw-select__selection').trigger('click');
+            await flushPromises();
+
+            // select headless sales channel
+            const selectOptionTwo = channelSwitch.find('.sw-select-option--2');
+            expect(selectOptionTwo.text()).toBe('Headless');
+            await selectOptionTwo.trigger('click');
+            await flushPromises();
+
+            // check if headless sales channel is activated
+            selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+            expect(selectionText.text()).toBe('Headless');
+
+            // check if value in dom shows the direct value
+            let field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, childValueDom);
+
+            // check if value in actualConfigData is right (null or undefined)
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toEqual(childValue);
+
+            // check if inheritance switch is visible
+            let inheritanceSwitch = field.find(inheritanceSwitchSelector);
+            expect(inheritanceSwitch.isVisible()).toBe(true);
+
+            // check if switch show inheritance
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Link inheritance');
+
+            // restore inheritance
+            await inheritanceSwitch.find('.mt-icon').trigger('click');
+            await flushPromises();
+
+            // check if inheritance switch is not inherit anymore
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            inheritanceSwitch = field.find(inheritanceSwitchSelector);
+
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Unlink inheritance');
+
+            // check if child gets parent value
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, domValue);
+
+            // check if value in actualConfigData is null to inherit value from parent
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeNull();
+
+            if (
+                [
+                    'single-select',
+                    'multi-select',
+                ].includes(type) ||
+                config.componentName === 'sw-entity-single-select'
+            ) {
+                await wrapper.vm.saveAll();
+
+                expect(wrapper.systemConfigApiService.batchSave).toHaveBeenCalledWith(
+                    {
+                        [uuid.get('headless')]: {
+                            [name]: null,
+                        },
+                    },
+                    {},
+                );
+            }
+        });
+
+        it(`should render field with type "${type || name}" with the his value and should be able to restore parent value (when parent has no value)`, async () => {
+            const childValue = _test.childValue;
+            const childValueDom = _test.childValueDom || childValue;
+            const fallbackValue = _test.hasOwnProperty('fallbackValue') ? _test.fallbackValue : '';
+            const inheritanceSwitchSelector = config.legacy ? '.sw-inheritance-switch' : '.mt-inheritance-switch';
+
+            wrapper = await createWrapper({
+                'ConfigRenderer.config': {
+                    [uuid.get('headless')]: {
+                        [name]: childValue,
+                    },
+                    null: {},
+                },
+            });
+
+            await flushPromises();
+
+            const channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+            let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+
+            expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+
+            // open channel switch field
+            await channelSwitch.find('.sw-select__selection').trigger('click');
+            await flushPromises();
+
+            // select headless sales channel
+            const selectOptionTwo = channelSwitch.find('.sw-select-option--2');
+            expect(selectOptionTwo.text()).toBe('Headless');
+            await selectOptionTwo.trigger('click');
+            await flushPromises();
+
+            // check if headless sales channel is activated
+            selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+            expect(selectionText.text()).toBe('Headless');
+
+            // check if value in dom shows the direct value
+            let field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, childValueDom);
+
+            // check if value in actualConfigData is right (null or undefined)
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toEqual(childValue);
+
+            // check if inheritance switch is visible
+            let inheritanceSwitch = field.find(inheritanceSwitchSelector);
+            expect(inheritanceSwitch.isVisible()).toBe(true);
+
+            // check if switch show inheritance
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Link inheritance');
+
+            // restore inheritance
+            await inheritanceSwitch.find('.mt-icon').trigger('click');
+
+            // check if inheritance switch is not inherit anymore
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            inheritanceSwitch = field.find(inheritanceSwitchSelector);
+
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Unlink inheritance');
+
+            // check if child gets fallback parent value
+            field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, fallbackValue);
+
+            // check if value in actualConfigData is null to inherit value from parent
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeNull();
+        });
+
+        it(`should render field with type "${type || name}" as disabled when inherited`, async () => {
+            const domValue = _test.defaultValueDom || config.defaultValue;
+            const inheritanceSwitchSelector = config.legacy ? '.sw-inheritance-switch' : '.mt-inheritance-switch';
+
+            // Setup with parent value only (child inherits)
+            wrapper = await createWrapper({
+                'ConfigRenderer.config': {
+                    null: {
+                        [name]: config.defaultValue,
+                    },
+                },
+            });
+
+            await flushPromises();
+
+            // Switch to child sales channel (Headless)
+            const channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+            let selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+            expect(selectionText.text()).toBe('sw-sales-channel-switch.labelDefaultOption');
+
+            // Open channel switch field
+            await channelSwitch.find('.sw-select__selection').trigger('click');
+            await flushPromises();
+
+            // Select headless sales channel
+            const selectOptionTwo = channelSwitch.find('.sw-select-option--2');
+            expect(selectOptionTwo.text()).toBe('Headless');
+            await selectOptionTwo.trigger('click');
+            await flushPromises();
+
+            // Verify headless sales channel is activated
+            selectionText = channelSwitch.find('.sw-entity-single-select__selection-text');
+            expect(selectionText.text()).toBe('Headless');
+
+            // Verify field shows inherited value in DOM
+            const field = wrapper.find(`.sw-system-config--field-${kebabCase(name)}`);
+            await _test.domValueCheck(field, domValue);
+
+            // Verify inheritance switch shows "Unlink inheritance"
+            const inheritanceSwitch = field.find(inheritanceSwitchSelector);
+            expect(inheritanceSwitch.attributes('aria-label')).toBe('Unlink inheritance');
+
+            // Verify field is disabled in DOM
+            // Check for disabled state based on field type
+            if (type === 'textarea') {
+                const textareaElement = field.find('textarea').element;
+                expect(textareaElement.disabled).toBe(true);
+            } else if (type === 'bool' || type === 'checkbox') {
+                const inputElement = field.find('input[type="checkbox"]').element;
+                expect(inputElement.disabled).toBe(true);
+            } else if (type === 'single-select' || type === 'multi-select') {
+                const inputElement = field.find('input[type="text"]').element;
+                expect(inputElement.disabled).toBe(true);
+            } else if (config.componentName === 'sw-entity-single-select') {
+                expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeUndefined();
+            } else if (config.componentName === 'sw-media-field') {
+                expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeUndefined();
+            } else if (config.componentName === 'sw-text-editor') {
+                const inputElement = field.find('input').element;
+                expect(inputElement.disabled).toBe(true);
+            } else {
+                const inputElement = field.find('input').element;
+                expect(inputElement.disabled).toBe(true);
+            }
+
+            // Verify value in actualConfigData is undefined (inheriting)
+            expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeUndefined();
+        });
+    });
+
+    async function switchToHeadless() {
+        const channelSwitch = wrapper.find('.sw-field[label="sw-settings.system-config.labelSalesChannelSelect"]');
+        await channelSwitch.find('.sw-select__selection').trigger('click');
+        await flushPromises();
+        await channelSwitch.find('.sw-select-option--2').trigger('click');
+        await flushPromises();
+    }
+
+    it('should keep an sw-entity-single-select empty after clearing a field whose inheritance was removed', async () => {
+        const name = 'ConfigRenderer.config.entitySelectField';
+        const fieldSelector = `.sw-system-config--field-${kebabCase(name)}`;
+
+        wrapper = await createWrapper({
+            'ConfigRenderer.config': {
+                null: {
+                    [name]: uuid.get('pullover'),
+                },
+            },
+        });
+        await flushPromises();
+
+        await switchToHeadless();
+
+        // Inherited: child shows the parent value and can unlink
+        let field = wrapper.find(fieldSelector);
+        expect(field.find('.sw-entity-single-select__selection-text').text()).toBe('Pullover');
+        expect(field.find('.sw-inheritance-switch').attributes('aria-label')).toBe('Unlink inheritance');
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeUndefined();
+
+        // Remove inheritance -> child takes over the parent value, becomes editable
+        await field.find('.sw-inheritance-switch .mt-icon').trigger('click');
+        await flushPromises();
+
+        field = wrapper.find(fieldSelector);
+        expect(field.find('.sw-inheritance-switch').attributes('aria-label')).toBe('Link inheritance');
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBe(uuid.get('pullover'));
+
+        // Clear the selection -> emits null
+        await field.find('.sw-select__select-indicator-clear').trigger('click');
+        await flushPromises();
+
+        // The cleared value must stick: still null, inheritance NOT restored,
+        // and the inherited value is no longer displayed.
+        field = wrapper.find(fieldSelector);
+        await wrapper.vm.$forceUpdate();
+        await flushPromises();
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeNull();
+        expect(field.find('.sw-inheritance-switch').attributes('aria-label')).toBe('Link inheritance');
+        expect(field.find('.sw-entity-single-select__selection-text').text()).not.toBe('Pullover');
+    });
+
+    it('should keep an sw-media-field empty after clearing a field whose inheritance was removed', async () => {
+        const name = 'ConfigRenderer.config.mediaField';
+        const fieldSelector = `.sw-system-config--field-${kebabCase(name)}`;
+
+        wrapper = await createWrapper({
+            'ConfigRenderer.config': {
+                null: {
+                    [name]: uuid.get('funny-image'),
+                },
+            },
+        });
+        await flushPromises();
+
+        await switchToHeadless();
+
+        // Inherited: child shows the parent media and can unlink
+        let field = wrapper.find(fieldSelector);
+        await wrapper.vm.$forceUpdate();
+        await flushPromises();
+        expect(field.find('.sw-media-base-item__name').text()).toBe('funny-image.jpg');
+        expect(field.find('.sw-inheritance-switch').attributes('aria-label')).toBe('Unlink inheritance');
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeUndefined();
+
+        // Remove inheritance -> child takes over the parent value
+        await field.find('.sw-inheritance-switch .mt-icon').trigger('click');
+        await flushPromises();
+
+        field = wrapper.find(fieldSelector);
+        expect(field.find('.sw-inheritance-switch').attributes('aria-label')).toBe('Link inheritance');
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBe(uuid.get('funny-image'));
+
+        // Unlink the media -> emits null
+        await field.find('.sw-media-field__toggle-button').trigger('click');
+        await flushPromises();
+        await field.find('.sw-media-field__action-button.is--remove').trigger('click');
+        await flushPromises();
+
+        // The cleared value must stick: still null and inheritance NOT restored.
+        field = wrapper.find(fieldSelector);
+        await wrapper.vm.$forceUpdate();
+        await flushPromises();
+        expect(wrapper.vm.actualConfigData[uuid.get('headless')][name]).toBeNull();
+        expect(field.find('.sw-inheritance-switch').attributes('aria-label')).toBe('Link inheritance');
+    });
+
+    it('should contain ai badge in second card', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__card--0 sw-ai-copilot-badge-stub').exists()).toBe(false);
+        expect(wrapper.find('.sw-system-config__card--1 sw-ai-copilot-badge-stub').exists()).toBe(true);
+    });
+
+    it('should set hideClearableButton for required single-select fields', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const element = {
+            type: 'single-select',
+            config: {
+                required: true,
+                options: [],
+            },
+        };
+
+        const bind = wrapper.vm.getMeteorElementBind(element, {});
+        expect(bind.config.hideClearableButton).toBe(true);
+    });
+
+    it('should set hideClearableButton for required multi-select fields', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const element = {
+            type: 'multi-select',
+            config: {
+                required: true,
+                options: [],
+            },
+        };
+
+        const bind = wrapper.vm.getMeteorElementBind(element, {});
+        expect(bind.config.hideClearableButton).toBe(true);
+    });
+
+    it('should not set hideClearableButton for non-required select fields', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const element = {
+            type: 'single-select',
+            config: {
+                options: [],
+            },
+        };
+
+        const bind = wrapper.vm.getMeteorElementBind(element, {});
+        expect(bind.config.hideClearableButton).toBeUndefined();
+    });
+
+    it('should not mutate source config in meteor bind path', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const element = {
+            type: 'single-select',
+            config: {
+                required: true,
+                options: [],
+            },
+        };
+
+        expect(element.config.hideClearableButton).toBeUndefined();
+
+        const bind = wrapper.vm.getMeteorElementBind(element, {});
+
+        expect(bind.config.hideClearableButton).toBe(true);
+        expect(element.config.hideClearableButton).toBeUndefined();
+    });
+
+    it('should set hideClearableButton for required select fields in legacy bind path', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const element = {
+            type: 'single-select',
+            config: {
+                required: true,
+                options: [],
+            },
+        };
+
+        const bind = wrapper.vm.getElementBind(element, {});
+        expect(bind.config.hideClearableButton).toBe(true);
+    });
+
+    it('should not set hideClearableButton for non-required select fields in legacy bind path', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const element = {
+            type: 'multi-select',
+            config: {
+                options: [],
+            },
+        };
+
+        const bind = wrapper.vm.getElementBind(element, {});
+        expect(bind.config.hideClearableButton).toBeUndefined();
+    });
+
+    it('should not save unchanged config data', async () => {
+        wrapper = await createWrapper({
+            'ConfigRenderer.config': {
+                null: {
+                    'ConfigRenderer.config.textField': 'Original value',
+                },
+            },
+        });
+        await flushPromises();
+
+        await wrapper.vm.saveAll();
+
+        expect(wrapper.vm.systemConfigApiService.batchSave).not.toHaveBeenCalled();
+    });
+
+    it('should save only changed config data without silent parameter for non cache relevant fields', async () => {
+        wrapper = await createWrapper(
+            {
+                'ConfigRenderer.config': {
+                    null: {
+                        'ConfigRenderer.config.textField': 'Original value',
+                        'ConfigRenderer.config.textareaField': 'Original textarea',
+                    },
+                },
+            },
+            createConfigWithCacheRelevantField('ConfigRenderer.config.textField'),
+        );
+        await flushPromises();
+
+        wrapper.vm.actualConfigData.null['ConfigRenderer.config.textareaField'] = 'Changed textarea';
+
+        await wrapper.vm.saveAll();
+
+        expect(wrapper.vm.systemConfigApiService.batchSave).toHaveBeenCalledWith(
+            {
+                null: {
+                    'ConfigRenderer.config.textareaField': 'Changed textarea',
+                },
+            },
+            {},
+        );
+    });
+
+    it('should save cache relevant config changes with explicit non-silent parameter', async () => {
+        wrapper = await createWrapper(
+            {
+                'ConfigRenderer.config': {
+                    null: {
+                        'ConfigRenderer.config.textField': 'Original value',
+                    },
+                },
+            },
+            createConfigWithCacheRelevantField('ConfigRenderer.config.textField'),
+        );
+        await flushPromises();
+
+        wrapper.vm.actualConfigData.null['ConfigRenderer.config.textField'] = 'Changed value';
+
+        await wrapper.vm.saveAll();
+
+        expect(wrapper.vm.systemConfigApiService.batchSave).toHaveBeenCalledWith(
+            {
+                null: {
+                    'ConfigRenderer.config.textField': 'Changed value',
+                },
+            },
+            { silent: false },
+        );
+
+        wrapper.vm.systemConfigApiService.batchSave.mockClear();
+
+        await wrapper.vm.saveAll();
+
+        expect(wrapper.vm.systemConfigApiService.batchSave).not.toHaveBeenCalled();
+    });
+
+    it('should reinitialize on domain change', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const createdSpy = jest.spyOn(wrapper.vm, 'createdComponent');
+
+        await wrapper.setProps({
+            domain: 'jest.test',
+        });
+
+        expect(createdSpy).toHaveBeenCalled();
+    });
+
+    it('should expose the current sales channel id as a card-element slot prop', async () => {
+        wrapper = await createWrapper({}, createConfig(), {
+            'card-element': `
+                <template #card-element="{ currentSalesChannelId }">
+                    <div class="test-scope-slot">{{ currentSalesChannelId === null ? 'global' : currentSalesChannelId }}</div>
+                </template>`,
+        });
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-slot').text()).toBe('global');
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('headless'));
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-slot').text()).toBe(uuid.get('headless'));
+
+        wrapper.vm.onSalesChannelChanged(null);
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-slot').text()).toBe('global');
+    });
+
+    it('should expose the current sales channel id on the beforeElements, afterElements and card-element-last slots', async () => {
+        wrapper = await createWrapper({}, createConfig(), {
+            beforeElements: `
+                <template #beforeElements="{ currentSalesChannelId }">
+                    <div class="test-scope-before">{{ currentSalesChannelId === null ? 'global' : currentSalesChannelId }}</div>
+                </template>`,
+            afterElements: `
+                <template #afterElements="{ currentSalesChannelId }">
+                    <div class="test-scope-after">{{ currentSalesChannelId === null ? 'global' : currentSalesChannelId }}</div>
+                </template>`,
+            'card-element-last': `
+                <template #card-element-last="{ currentSalesChannelId }">
+                    <div class="test-scope-last">{{ currentSalesChannelId === null ? 'global' : currentSalesChannelId }}</div>
+                </template>`,
+        });
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-before').text()).toBe('global');
+        expect(wrapper.find('.test-scope-after').text()).toBe('global');
+        expect(wrapper.find('.test-scope-last').text()).toBe('global');
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('frontend'));
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-before').text()).toBe(uuid.get('frontend'));
+        expect(wrapper.find('.test-scope-after').text()).toBe(uuid.get('frontend'));
+        expect(wrapper.find('.test-scope-last').text()).toBe(uuid.get('frontend'));
+    });
+
+    it('should provide the current sales channel id to embedded components', async () => {
+        const scopeProbe = {
+            template: '<div class="test-scope-probe">{{ label }}</div>',
+            inject: {
+                swSystemConfigCurrentSalesChannelId: { default: null },
+            },
+            computed: {
+                label() {
+                    const channelId = this.swSystemConfigCurrentSalesChannelId;
+
+                    return channelId === null ? 'global' : channelId;
+                },
+            },
+        };
+
+        wrapper = await createWrapper({}, createConfig(), {
+            'card-element': scopeProbe,
+        });
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-probe').text()).toBe('global');
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('headless'));
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-probe').text()).toBe(uuid.get('headless'));
+
+        const probeUid = wrapper.findComponent(scopeProbe).vm.$.uid;
+
+        wrapper.vm.onSalesChannelChanged(null);
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-probe').text()).toBe('global');
+        expect(wrapper.findComponent(scopeProbe).vm.$.uid).toBe(probeUid);
+    });
+
+    it('should provide the current sales channel id to components rendered through config.xml', async () => {
+        const setupProbe = {
+            template: '<div class="test-scope-setup">{{ label }}</div>',
+            setup() {
+                const channelId = inject('swSystemConfigCurrentSalesChannelId', ref(null));
+
+                return { label: computed(() => channelId.value ?? 'global') };
+            },
+        };
+
+        wrapper = await createWrapper(
+            {},
+            [
+                {
+                    title: null,
+                    name: null,
+                    cards: [
+                        {
+                            name: 'probeCard',
+                            title: { 'en-GB': 'Probe card' },
+                            elements: [
+                                {
+                                    name: 'ConfigRenderer.config.probeField',
+                                    config: {
+                                        componentName: 'test-scope-setup-probe',
+                                        label: { 'en-GB': 'probe field' },
+                                    },
+                                },
+                            ],
+                        },
+                    ],
+                },
+            ],
+            {},
+            { 'test-scope-setup-probe': setupProbe },
+        );
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-setup').text()).toBe('global');
+
+        wrapper.vm.onSalesChannelChanged(uuid.get('headless'));
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-setup').text()).toBe(uuid.get('headless'));
+
+        wrapper.vm.onSalesChannelChanged(null);
+        await flushPromises();
+
+        expect(wrapper.find('.test-scope-setup').text()).toBe('global');
+    });
+
+    it('should display one single card with implemented compile notice when css field exists', async () => {
+        numberOfCards = 1;
+        firstCardHasCssField = true;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__global-compile-notice').exists()).toBe(false);
+
+        const cards = wrapper.findAll('.mt-card');
+
+        expect(cards).toHaveLength(1);
+
+        const card = cards.at(0);
+
+        expect(card.exists()).toBe(true);
+
+        const compileNotice = card.find('.sw-system-config__compile-notice');
+
+        expect(compileNotice.exists()).toBe(true);
+        expect(compileNotice.text()).toBe('sw-settings.system-config.compileNotice');
+    });
+
+    it('should display multiple cards with global compile notice when css field exists', async () => {
+        numberOfCards = 2;
+        firstCardHasCssField = true;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__global-compile-notice').exists()).toBe(true);
+
+        const cards = wrapper.findAll('.mt-card');
+
+        expect(cards).toHaveLength(2);
+
+        cards.forEach((card) => {
+            expect(card.find('.sw-system-config__compile-notice').exists()).toBe(false);
+        });
+    });
+
+    it('should display one single card with implemented sales channel switch and compile notice', async () => {
+        numberOfCards = 1;
+        firstCardHasCssField = true;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__global-sales-channel-switch').exists()).toBe(false);
+        expect(wrapper.findComponent({ name: 'mt-tabs' }).exists()).toBe(false);
+
+        const cards = wrapper.findAll('.mt-card');
+
+        expect(cards).toHaveLength(1);
+
+        const card = cards.at(0);
+
+        expect(card.exists()).toBe(true);
+        expect(card.find('.sw-sales-channel-switch').exists()).toBe(true);
+
+        const compileNotice = card.find('.sw-system-config__compile-notice');
+
+        expect(compileNotice.exists()).toBe(true);
+        expect(compileNotice.text()).toBe('sw-settings.system-config.compileNotice');
+    });
+
+    it('should display multiple cards with global sales channel switch and compile notice', async () => {
+        numberOfCards = 2;
+        firstCardHasCssField = true;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__global-sales-channel-switch').exists()).toBe(true);
+
+        const globalCompileNotice = wrapper.find('.sw-system-config__global-compile-notice');
+
+        expect(globalCompileNotice.exists()).toBe(true);
+        expect(globalCompileNotice.text()).toBe('sw-settings.system-config.compileNotice');
+
+        expect(wrapper.findComponent({ name: 'mt-tabs' }).exists()).toBe(false);
+
+        const cards = wrapper.findAll('.mt-card');
+
+        expect(cards).toHaveLength(2);
+
+        cards.forEach((card) => {
+            expect(card.find('.sw-sales-channel-switch').exists()).toBe(false);
+            expect(card.find('.sw-system-config__compile-notice').exists()).toBe(false);
+        });
+    });
+
+    it('should display tabs with their cards', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.find('.sw-system-config__global-sales-channel-switch').exists()).toBe(true);
+
+        const tabs = wrapper.findComponent({ name: 'mt-tabs' });
+        const generalId = 'tab-0';
+        const customId = 'tab-custom';
+
+        expect(wrapper.vm.activeTab).toBe(generalId);
+        expect(tabs.exists()).toBe(true);
+        expect(tabs.props('positionIdentifier')).toBe('sw-system-config');
+        expect(tabs.props('defaultItem')).toBe(generalId);
+        expect(tabs.props('items')).toEqual([
+            {
+                label: 'sw-settings.system-config.tabGeneral',
+                name: generalId,
+            },
+            {
+                label: 'Custom tab',
+                name: customId,
+            },
+        ]);
+
+        let activeCards = wrapper.findAll('.mt-card');
+
+        expect(activeCards).toHaveLength(2);
+
+        expect(activeCards.at(0).find('.mt-card__title').text()).toBe('First card');
+        expect(activeCards.at(1).find('.mt-card__title').text()).toBe('Card with AI badge');
+
+        await tabs.vm.$emit('new-item-active', customId);
+        await flushPromises();
+
+        expect(wrapper.vm.activeTab).toBe(customId);
+
+        activeCards = wrapper.findAll('.mt-card');
+
+        expect(activeCards).toHaveLength(2);
+        expect(activeCards.at(0).find('.mt-card__title').text()).toBe('Custom card 1');
+        expect(activeCards.at(1).find('.mt-card__title').text()).toBe('Custom card 2 with css field');
+    });
+
+    it('should display global compile notice with existing css field in inactive tab', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const globalCompileNotice = wrapper.find('.sw-system-config__global-compile-notice');
+
+        expect(globalCompileNotice.exists()).toBe(true);
+        expect(globalCompileNotice.text()).toBe('sw-settings.system-config.compileNotice');
+
+        const tabs = wrapper.findComponent({ name: 'mt-tabs' });
+        const generalId = 'tab-0';
+
+        expect(wrapper.vm.activeTab).toBe(generalId);
+        expect(tabs.exists()).toBe(true);
+
+        const activeCards = wrapper.findAll('.mt-card');
+
+        expect(activeCards).toHaveLength(2);
+
+        activeCards.forEach((card) => {
+            expect(card.find('.mt-card__title').text()).not.toBe('Custom card 2 with css field');
+            expect(card.find('.sw-system-config__compile-notice').exists()).toBe(false);
+        });
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should not call the inherited default getConfig implementation when it was not overridden', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const defaultGetConfig = Object.getPrototypeOf(wrapper.vm.systemConfigApiService).getConfig;
+
+        expect(defaultGetConfig).not.toHaveBeenCalled();
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should consider custom legacy getConfig overrides when loading the schema', async () => {
+        numberOfTabs = 2;
+
+        const config = createConfig();
+        const legacyConfig = config
+            .flatMap((tab) => tab.cards)
+            .map((card) => {
+                return card.title?.['en-GB'] === 'Custom card 1'
+                    ? { ...card, title: { 'en-GB': 'Renamed via legacy override' } }
+                    : card;
+            });
+        legacyConfig.push({
+            name: null,
+            title: { 'en-GB': 'Custom card via legacy override' },
+            elements: [],
+        });
+
+        wrapper = await createWrapper({}, config, {}, {}, legacyConfig);
+        await flushPromises();
+
+        expect(wrapper.vm.systemConfigApiService.getConfig).toHaveBeenCalled();
+
+        // A card matched by its element names keeps its original tab, even without a __configId yet
+        expect(wrapper.vm.schema[1].name).toBe('custom');
+        expect(wrapper.vm.schema[1].cards.map((card) => card.title?.['en-GB'])).toContain('Renamed via legacy override');
+
+        // A brand new card without elements cannot be matched and falls back to the general tab
+        expect(wrapper.vm.schema[0].name).toBeNull();
+        expect(wrapper.vm.schema[0].cards.map((card) => card.title?.['en-GB'])).toContain('Custom card via legacy override');
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should keep a card on its original tab when a new element is added to it via a legacy getConfig override', async () => {
+        numberOfTabs = 2;
+
+        const config = createConfig();
+        const newElement = {
+            name: 'ConfigRenderer.config.customField5',
+            type: 'text',
+            config: {
+                defaultValue: 'Custom field 5',
+                label: {
+                    'en-GB': 'Custom field 5',
+                },
+            },
+        };
+        const legacyConfig = config
+            .flatMap((tab) => tab.cards)
+            .map((card) => {
+                return card.title?.['en-GB'] === 'Custom card 1'
+                    ? {
+                          ...card,
+                          elements: [
+                              ...card.elements,
+                              newElement,
+                          ],
+                      }
+                    : card;
+            });
+
+        wrapper = await createWrapper({}, config, {}, {}, legacyConfig);
+        await flushPromises();
+
+        expect(wrapper.vm.schema[1].name).toBe('custom');
+        const matchedCard = wrapper.vm.schema[1].cards.find((card) => card.title?.['en-GB'] === 'Custom card 1');
+        expect(matchedCard.elements.map((element) => element.name)).toContain(newElement.name);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should fall back to the schema when a legacy getConfig override resolves to a non-array value', async () => {
+        const config = createConfig();
+
+        wrapper = await createWrapper(
+            {},
+            config,
+            {},
+            {},
+            config.flatMap((tab) => tab.cards),
+        );
+        await flushPromises();
+
+        // Simulate a faulty extension override that forgot to return the (modified) card list
+        wrapper.vm.systemConfigApiService.getConfig = jest.fn(() => Promise.resolve(null));
+
+        const schema = await wrapper.vm.getSchemaForDomain();
+
+        expect(schema).toEqual(config);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should mirror the schema into the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.vm.config).toEqual(wrapper.vm.schema.flatMap((tab) => tab.cards));
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should keep existing tabs when the deprecated config prop is mutated', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        expect(wrapper.vm.schema).toHaveLength(2);
+
+        const generalTabCardsBefore = wrapper.vm.schema[0].cards;
+        const customTabCardsBefore = wrapper.vm.schema[1].cards;
+        const newCard = {
+            name: null,
+            title: { 'en-GB': 'New card' },
+            elements: [],
+        };
+
+        // Simulate an extension developer still writing to the deprecated flat config prop
+        wrapper.vm.config = [
+            ...wrapper.vm.config,
+            newCard,
+        ];
+        await flushPromises();
+
+        // Tabs must not collapse into a single tab
+        expect(wrapper.vm.schema).toHaveLength(2);
+        expect(wrapper.vm.schema[1].name).toBe('custom');
+
+        // Existing cards stay assigned to the tab they originally belonged to
+        expect(wrapper.vm.schema[1].cards).toEqual(customTabCardsBefore);
+
+        // Cards that cannot be matched to an existing tab are appended to the general tab (name === null)
+        expect(wrapper.vm.schema[0].cards).toEqual([
+            ...generalTabCardsBefore,
+            newCard,
+        ]);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should remove a card from its original tab when it is removed from the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const [
+            removedCard,
+            ...remainingCustomTabCards
+        ] = wrapper.vm.schema[1].cards;
+
+        wrapper.vm.config = wrapper.vm.config.filter((card) => card !== removedCard);
+        await flushPromises();
+
+        expect(wrapper.vm.schema).toHaveLength(2);
+        expect(wrapper.vm.schema[1].cards).toEqual(remainingCustomTabCards);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should keep existing tabs when a card is replaced immutably in the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const config = wrapper.vm.config;
+        const customCard = config.find((card) => card.title?.['en-GB'] === 'Custom card 1');
+
+        // Replace the card with a new object instead of mutating it in place. The internal `__configId`
+        // is copied over by the spread, so the card is still matched back to its original tab.
+        wrapper.vm.config = config.map((card) => {
+            return card === customCard ? { ...card, title: { 'en-GB': 'Renamed custom card' } } : card;
+        });
+        await flushPromises();
+
+        expect(wrapper.vm.schema).toHaveLength(2);
+        expect(wrapper.vm.schema[1].name).toBe('custom');
+        expect(wrapper.vm.schema[1].cards[0].title).toEqual({ 'en-GB': 'Renamed custom card' });
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should keep existing tabs when cards are reordered in the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        // Reverse the whole flat list, moving cards across their original tab boundaries
+        wrapper.vm.config = [...wrapper.vm.config].reverse();
+        await flushPromises();
+
+        expect(wrapper.vm.schema).toHaveLength(2);
+        expect(wrapper.vm.schema[0].cards.map((card) => card.title?.['en-GB'])).toEqual([
+            'Card with AI badge',
+            'First card',
+        ]);
+        expect(wrapper.vm.schema[1].cards.map((card) => card.title?.['en-GB'])).toEqual([
+            'Custom card 2 with css field',
+            'Custom card 1',
+        ]);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should keep a newly added card in place across further edits via the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const newCard = {
+            name: null,
+            title: { 'en-GB': 'New card' },
+            elements: [],
+        };
+
+        // Adding a card assigns it a fresh internal id and places it in the general tab
+        wrapper.vm.config = [
+            ...wrapper.vm.config,
+            newCard,
+        ];
+        await flushPromises();
+
+        const newCardId = wrapper.vm.config.at(-1).__configId;
+        expect(newCardId).toBeDefined();
+        expect(wrapper.vm.schema[0].cards.map((card) => card.__configId)).toContain(newCardId);
+
+        // Reordering afterwards must still track the new card by its id, not push it back to the general tab
+        wrapper.vm.config = [...wrapper.vm.config].reverse();
+        await flushPromises();
+
+        expect(wrapper.vm.schema[0].cards[0].__configId).toBe(newCardId);
+        expect(wrapper.vm.schema[1].cards.map((card) => card.__configId)).not.toContain(newCardId);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should change a card title on an existing tab via the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const customCard = wrapper.vm.config.find((card) => card.title?.['en-GB'] === 'Custom card 1');
+
+        customCard.title = { 'en-GB': 'Renamed custom card' };
+        await flushPromises();
+
+        expect(wrapper.vm.schema).toHaveLength(2);
+        expect(wrapper.vm.schema[1].name).toBe('custom');
+        expect(wrapper.vm.schema[1].cards[0].title).toEqual({ 'en-GB': 'Renamed custom card' });
+
+        await wrapper.vm.$forceUpdate();
+        await flushPromises();
+
+        expect(wrapper.find('.mt-card__title').text()).not.toBe('Custom card 1');
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should add an element to an existing card on an existing tab via the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const customCard = wrapper.vm.config.find((card) => card.title?.['en-GB'] === 'Custom card 1');
+        const newElement = {
+            name: 'ConfigRenderer.config.newField',
+            type: 'text',
+            config: {
+                defaultValue: 'New field value',
+                label: {
+                    'en-GB': 'New field',
+                },
+            },
+        };
+
+        customCard.elements.push(newElement);
+        await flushPromises();
+
+        expect(wrapper.vm.schema).toHaveLength(2);
+        expect(wrapper.vm.schema[1].cards[0].elements.map((element) => element.name)).toContain(newElement.name);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should change an element on an existing card via the deprecated config prop', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const firstCard = wrapper.vm.config[0];
+        const textField = firstCard.elements.find((element) => element.name === 'ConfigRenderer.config.textField');
+
+        textField.config.label = { 'en-GB': 'Renamed text field' };
+        await flushPromises();
+
+        const updatedTextField = wrapper.vm.schema[0].cards[0].elements.find(
+            (element) => element.name === 'ConfigRenderer.config.textField',
+        );
+
+        expect(updatedTextField.config.label).toEqual({ 'en-GB': 'Renamed text field' });
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should mirror an added card on the schema prop into the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const newCard = {
+            name: null,
+            title: { 'en-GB': 'New card' },
+            elements: [],
+        };
+
+        wrapper.vm.schema[1].cards.push(newCard);
+        await flushPromises();
+
+        expect(wrapper.vm.config.map((card) => card.title?.['en-GB'])).toEqual([
+            'First card',
+            'Card with AI badge',
+            'Custom card 1',
+            'Custom card 2 with css field',
+            'New card',
+        ]);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should mirror a changed card title on the schema prop into the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.schema[1].cards[0].title = { 'en-GB': 'Renamed custom card' };
+        await flushPromises();
+
+        const mirroredCard = wrapper.vm.config.find((card) => card.title?.['en-GB'] === 'Renamed custom card');
+
+        expect(mirroredCard).toBeDefined();
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should mirror a removed card on the schema prop into the deprecated config prop', async () => {
+        numberOfTabs = 2;
+
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.schema[1].cards.splice(0, 1);
+        await flushPromises();
+
+        expect(wrapper.vm.config.map((card) => card.title?.['en-GB'])).toEqual([
+            'First card',
+            'Card with AI badge',
+            'Custom card 2 with css field',
+        ]);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should mirror an added element on the schema prop into the deprecated config prop', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        const newElement = {
+            name: 'ConfigRenderer.config.newField',
+            type: 'text',
+            config: {
+                defaultValue: 'New field value',
+                label: {
+                    'en-GB': 'New field',
+                },
+            },
+        };
+
+        wrapper.vm.schema[0].cards[0].elements.push(newElement);
+        await flushPromises();
+
+        expect(wrapper.vm.config[0].elements.map((element) => element.name)).toContain(newElement.name);
+    });
+
+    // @deprecated tag:v6.8.0 - Test will be removed together with config data prop.
+    it('should mirror a changed element on the schema prop into the deprecated config prop', async () => {
+        wrapper = await createWrapper();
+        await flushPromises();
+
+        wrapper.vm.schema[0].cards[0].elements[0].config.label = { 'en-GB': 'Renamed text field' };
+        await flushPromises();
+
+        expect(wrapper.vm.config[0].elements[0].config.label).toEqual({ 'en-GB': 'Renamed text field' });
+    });
+});

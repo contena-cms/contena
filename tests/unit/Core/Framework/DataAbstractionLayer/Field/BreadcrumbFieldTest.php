@@ -1,0 +1,34 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DataAbstractionLayer\Field\BreadcrumbField;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+#[CoversClass(BreadcrumbField::class)]
+class BreadcrumbFieldTest extends TestCase
+{
+    public function testConstructorDefaults(): void
+    {
+        $field = new BreadcrumbField();
+
+        static::assertSame('breadcrumb', $field->getStorageName());
+        static::assertSame('breadcrumb', $field->getPropertyName());
+        static::assertSame([], $field->getPropertyMapping());
+        static::assertNull($field->getDefault());
+    }
+
+    public function testConstructorPassesExplicitValuesToTheParent(): void
+    {
+        $field = new BreadcrumbField('path', 'pathBreadcrumb', [], ['home']);
+
+        static::assertSame('path', $field->getStorageName());
+        static::assertSame('pathBreadcrumb', $field->getPropertyName());
+        static::assertSame(['home'], $field->getDefault());
+    }
+}

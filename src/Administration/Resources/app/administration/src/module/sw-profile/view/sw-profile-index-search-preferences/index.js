@@ -1,0 +1,216 @@
+/**
+ * @sw-package fundamentals@framework
+ */
+import template from './sw-profile-index-search-preferences.html.twig';
+import './sw-profile-index-search-preferences.scss';
+
+const { Module, Store, Mixin } = Contena;
+
+// eslint-disable-next-line sw-deprecation-rules/private-feature-declarations
+export default {
+    template,
+
+    inject: ['searchPreferencesService', 'searchRankingService'],
+
+    mixins: [Mixin.getByName('notification')],
+
+    data() {
+        return {
+            isLoading: false,
+        };
+    },
+
+    computed: {
+        minSearchTermLength: {
+            get() {
+                return Store.get('swProfile').minSearchTermLength;
+            },
+            set(minSearchTermLength) {
+                Store.get('swProfile').setMinSearchTermLength(minSearchTermLength);
+            },
+        },
+
+        searchPreferences: {
+            get() {
+                return Store.get('swProfile').searchPreferences;
+            },
+            set(searchPreferences) {
+                Store.get('swProfile').searchPreferences = searchPreferences;
+            },
+        },
+
+        admin_userSearchPreferences: {
+            get() {
+                return Store.get('swProfile').admin_userSearchPreferences;
+            },
+            set(admin_userSearchPreferences) {
+                Store.get('swProfile').admin_userSearchPreferences = admin_userSearchPreferences;
+            },
+        },
+
+        defaultSearchPreferences() {
+            const defaultSearchPreferences = this.searchPreferencesService.getDefaultSearchPreferences();
+
+            if (this.admin_userSearchPreferences === null) {
+                return defaultSearchPreferences;
+            }
+
+            const mergedPreferences = [];
+
+            defaultSearchPreferences.forEach((defaultPref) => {
+                const prefKey = Object.keys(defaultPref)[0];
+                const admin_userPref = this.admin_userSearchPreferences.find((item) => Object.keys(item)[0] === prefKey);
+
+                if (!admin_userPref) {
+                    mergedPreferences.push(defaultPref);
+                    return;
+                }
+
+                const admin_userPrefValue = admin_userPref[prefKey];
+                const defaultPrefValue = defaultPref[prefKey];
+
+                // Merge values from default into admin_user preferences
+                Object.keys(defaultPrefValue).forEach((prop) => {
+                    if (!admin_userPrefValue.hasOwnProperty(prop)) {
+                        admin_userPrefValue[prop] = defaultPrefValue[prop];
+                    }
+                });
+
+                // Remove values from admin_user preferences that are not in default
+                Object.keys(admin_userPrefValue).forEach((prop) => {
+                    if (!defaultPrefValue.hasOwnProperty(prop)) {
+                        delete admin_userPrefValue[prop];
+                    }
+                });
+
+                mergedPreferences.push({ [prefKey]: admin_userPrefValue });
+            });
+
+            return mergedPreferences;
+        },
+
+        adminEsEnable() {
+            return Contena.Context.app.adminEsEnable ?? false;
+        },
+    },
+
+    created() {
+        this.createdComponent();
+    },
+
+    beforeUnmount() {
+        this.beforeDestroyComponent();
+    },
+
+    methods: {
+        async createdComponent() {
+            await Promise.all([this.getMinSearchTermLength(), this.getDataSource()]);
+
+            this.updateDataSource();
+            this.addEventListeners();
+        },
+
+        beforeDestroyComponent() {
+            this.removeEventListeners();
+        },
+
+        async getMinSearchTermLength() {
+            this.isLoading = true;
+
+            try {
+                const minSearchTermLength = await this.searchRankingService.getMinSearchTermLength();
+                Contena.Store.get('swProfile').setMinSearchTermLength(minSearchTermLength);
+            } catch (error) {
+                this.createNotificationError({ message: error.message });
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        async getDataSource() {
+            this.isLoading = true;
+
+            try {
+                this.admin_userSearchPreferences = await this.searchPreferencesService.getUserSearchPreferences();
+                this.searchPreferences = this.searchPreferencesService.processSearchPreferences(
+                    this.defaultSearchPreferences,
+                );
+            } catch (error) {
+                this.createNotificationError({ message: error.message });
+                this.searchPreferences = [];
+                this.admin_userSearchPreferences = null;
+            } finally {
+                this.isLoading = false;
+            }
+        },
+
+        addEventListeners() {
+            Contena.Utils.EventBus.on('sw-search-preferences-modal-close', this.getDataSource);
+        },
+
+        removeEventListeners() {
+            Contena.Utils.EventBus.off('sw-search-preferences-modal-close', this.getDataSource);
+        },
+
+        updateDataSource() {
+            if (!this.adminEsEnable) {
+                return;
+            }
+
+            this.searchPreferences.forEach((searchPreference) => {
+                searchPreference.fields.forEach((field) => {
+                    field._searchable = true;
+                });
+            });
+        },
+
+        getModuleTitle(entityName) {
+            const module = Module.getModuleByEntityName(entityName);
+
+            return this.$t(module?.manifest.title);
+        },
+
+        onChangeSearchPreference(searchPreference) {
+            if (searchPreference._searchable && searchPreference.fields.every((field) => !field._searchable)) {
+                searchPreference.fields.forEach((field) => {
+                    field._searchable = true;
+                });
+            }
+        },
+
+        onSelect(event) {
+            this.searchPreferences.forEach((searchPreference) => {
+                searchPreference._searchable = event;
+
+                if (!this.adminEsEnable) {
+                    searchPreference.fields.forEach((field) => {
+                        field._searchable = event;
+                    });
+                }
+            });
+        },
+
+        onReset() {
+            const defaultSearchPreferences = this.searchPreferencesService.getDefaultSearchPreferences();
+            const toReset = this.searchPreferencesService.processSearchPreferences(defaultSearchPreferences);
+
+            this.searchPreferences.forEach((searchPreference, index) => {
+                toReset.forEach((item) => {
+                    if (item.entityName === searchPreference.entityName) {
+                        this.resetSearchPreference(item, this.searchPreferences[index]);
+                    }
+                });
+            });
+        },
+
+        resetSearchPreference(toReset, searchPreference) {
+            searchPreference._searchable = toReset._searchable;
+
+            if (!this.adminEsEnable) {
+                searchPreference.fields = searchPreference.fields.map((field) => {
+                    return toReset.fields.find((item) => item.fieldName === field.fieldName) || field;
+                });
+            }
+        },
+    },
+};

@@ -1,0 +1,34 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\DependencyInjection;
+
+use Contena\Core\Content\Cookie\Channel\CookieRoute;
+use Contena\Core\Content\Cookie\Service\CookieProvider;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Script\Execution\ScriptExecutor;
+use Contena\Frontend\Framework\Cookie\CookieProviderInterface;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
+use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
+
+return static function (ContainerConfigurator $containerConfigurator): void {
+    $services = $containerConfigurator->services();
+
+    $services->set(CookieProvider::class)
+        ->args([
+            service(EventDispatcherInterface::class),
+            service('translator'),
+            service(ScriptExecutor::class),
+            param('session.storage.options'),
+            service(CookieProviderInterface::class)->nullOnInvalid(),
+        ]);
+
+    $services->set(CookieRoute::class)
+        ->public()
+        ->args([
+            service(CookieProvider::class),
+            service(ExtensionDispatcher::class),
+        ]);
+};

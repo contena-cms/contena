@@ -1,0 +1,26 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogDetailResponse": {
+                "type": "object",
+                "description": "Represents a blog along with detailed information required to display a variant selection.",
+                "properties": {
+                    "blog": {
+                        "$ref": "#/components/schemas/Blog"
+                    },
+                    "configurator": {
+                        "type": "array",
+                        "description": "List of property groups with their corresponding options and information on how to display them.",
+                        "items": {
+                            "$ref": "#/components/schemas/PropertyGroup"
+                        }
+                    }
+                },
+                "required": ["blog"]
+            }
+        }
+    }
+}

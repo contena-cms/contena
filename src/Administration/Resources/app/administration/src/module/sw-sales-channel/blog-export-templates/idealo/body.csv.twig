@@ -1,0 +1,31 @@
+"{%- set blogTypeCategory = blog.seoCategory ?? blog.categories.first -%}
+{%- if blogTypeCategory -%}
+    {{ blogTypeCategory.breadCrumb|slice(1)|join(' > ')|raw }}{#- -#}
+{%- endif -%}",{#- -#}
+"{{ blog.manufacturer.translated.name ?? '' }}",{#- -#}
+"{{ blog.translated.name }}",{#- -#}
+{% set price = blog.calculatedPrice %}
+{%- if blog.calculatedPrices.count > 0 -%}
+    {% set price = blog.calculatedPrices.last %}
+{%- endif -%}
+"{{ price.unitPrice|currency }}",{#- -#}
+"{%- if price.referencePrice is not null -%}
+    {{ price.referencePrice.price|currency }} / {{ price.referencePrice.referenceUnit }} {{ price.referencePrice.unitName }}{#- -#}
+{%- endif -%}",{#- -#}
+"{{ blog.manufacturerNumber }}", {#- -#}
+"{{ blog.ean }}",{#- -#}
+"{{ 4.95|currency }}",{#- Change to your delivery costs -#}
+"{{ entitySeoUrl('blog', blog.id) }}",{#- -#}
+"{%- if blog.availableStock >= blog.minPurchase and blog.deliveryTime -%}
+    {{ "detail.deliveryTimeAvailable"|trans({'%name%': blog.deliveryTime.translation('name')}) }}{#- -#}
+{%- elseif blog.availableStock < blog.minPurchase and blog.deliveryTime and blog.restockTime -%}
+    {{ "detail.deliveryTimeRestock"|trans({'%count%': blog.restockTime,'%restockTime%': blog.restockTime,'%name%': blog.deliveryTime.translation('name')}) }}{#- -#}
+{%- else -%}
+    {{ "detail.soldOut"|trans }}{#- -#}
+{%- endif -%}",{#- -#}
+"{{ blog.blogNumber }}",{#- -#}
+"{% if blog.cover is not null %}{{ blog.cover.media.url }}{% endif %}",{#- -#}
+"{{ blog.translated.description|striptags|raw|length > 300 ? blog.translated.description|striptags|raw|slice(0,300) ~ '...' : blog.translated.description|striptags|raw }}",{#- -#}
+"0.00",{#- Change or add your payment methods -#}
+"0.00",{#- Change or add your payment methods -#}
+"0.00"{#- Change or add your payment methods -#}

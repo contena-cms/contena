@@ -1,0 +1,136 @@
+/**
+ * @sw-package checkout
+ */
+
+Contena.Service('privileges')
+    .addPrivilegeMappingEntry({
+        category: 'additional_permissions',
+        parent: null,
+        key: 'orders',
+        roles: {
+            create_discounts: {
+                privileges: ['order:create:discount'],
+                dependencies: [],
+            },
+        },
+    })
+    .addPrivilegeMappingEntry({
+        category: 'permissions',
+        parent: 'orders',
+        key: 'order',
+        roles: {
+            viewer: {
+                privileges: [
+                    'order:read',
+                    'order:delete',
+                    'order_address:read',
+                    'channel:read',
+                    'channel_domain:read',
+                    'channel_tracking_order:read',
+                    'order_customer:read',
+                    'salutation:read',
+                    'currency:read',
+                    'document:read',
+                    'media:read',
+                    'order_transaction:read',
+                    'order_delivery:read',
+                    'order_line_item:read',
+                    'shipping_method:read',
+                    'mail_template_type:read',
+                    'country:read',
+                    'country_state:read',
+                    'payment_method:read',
+                    'document_type:read',
+                    'tag:read',
+                    'order_tag:read',
+                    'custom_field_set:read',
+                    'custom_field:read',
+                    'custom_field_set_relation:read',
+                    'state_machine_history:read',
+                    'state_machine:read',
+                    'state_machine_state:read',
+                    'state_machine_transition:read',
+                    'admin_user:read',
+                    'integration:read',
+                    'admin_user_config:read',
+                    'admin_user_config:create',
+                    'admin_user_config:update',
+                    'user:read',
+                    'user_address:read',
+                    'version:delete',
+                    'media_default_folder:read',
+                ],
+                dependencies: [],
+            },
+            editor: {
+                privileges: [
+                    'mail_template:read',
+                    'state_machine_history:create',
+                    'document:update',
+                    'document:create',
+                    'order:update',
+                    'order_customer:update',
+                    'order_tag:update',
+                    'order_tag:create',
+                    'order_tag:delete',
+                    'tag:create',
+                    'order_address:update',
+                    'order_delivery:update',
+                    'blog:read',
+                    'blog_download:read',
+                    'property_group_option:read',
+                    'property_group:read',
+                    'blog_visibility:read',
+                    'order_line_item:update',
+                    'order_line_item:create',
+                    'order_line_item:delete',
+                    'salutation:read',
+                    'order_address:create',
+                    'number_range:read',
+                ],
+                dependencies: ['order.viewer'],
+            },
+            creator: {
+                privileges: [
+                    'user_group:read',
+                    'order:create',
+                    'order_customer:create',
+                    'order_delivery:create',
+                    'order_line_item:create',
+                    'order_transaction:create',
+                    'order_delivery_position:create',
+                    'mail_template_type:update',
+                    'user:update',
+                    'api_proxy_switch-user',
+                ],
+                dependencies: ['order.viewer', 'order.editor'],
+            },
+            deleter: {
+                privileges: ['order:delete'],
+                dependencies: ['order.viewer'],
+            },
+        },
+    })
+    .addPrivilegeMappingEntry({
+        category: 'permissions',
+        parent: 'orders',
+        key: 'order_refund',
+        roles: {
+            viewer: {
+                privileges: ['order_transaction_capture_refund:read'],
+                dependencies: [],
+            },
+            editor: {
+                privileges: ['order_transaction_capture_refund:update'],
+                dependencies: ['order_refund.viewer'],
+            },
+            creator: {
+                privileges: ['order_transaction_capture_refund:create'],
+                dependencies: ['order_refund.viewer', 'order_refund.editor'],
+            },
+            deleter: {
+                privileges: ['order_transaction_capture_refund:delete'],
+                dependencies: ['order_refund.viewer'],
+            },
+        },
+    });

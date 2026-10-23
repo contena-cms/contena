@@ -1,0 +1,52 @@
+/**
+ * @sw-package discovery
+ */
+import { mount } from '@vue/test-utils';
+import swCmsElConfigProductListingConfigDeleteModal from 'src/module/sw-cms/elements/blog-listing/config/components/sw-cms-el-config-blog-listing-config-delete-modal';
+
+Contena.Component.register(
+    'sw-cms-el-config-blog-listing-config-delete-modal',
+    swCmsElConfigProductListingConfigDeleteModal,
+);
+async function createWrapper() {
+    // Not found in componentregistry
+    return mount(await Contena.Component.build('sw-cms-el-config-blog-listing-config-delete-modal'), {
+        global: {
+            renderStubDefaultSlot: true,
+            stubs: {
+                'sw-modal': {
+                    template: '<div class="sw-modal"><slot name="modal-footer">Test</slot></div>',
+                },
+            },
+        },
+        props: {
+            blogSorting: {},
+        },
+    });
+}
+
+describe('src/module/sw-cms/elements/blog-listing/config/components/sw-cms-el-config-blog-listing-config-delete-modal', () => {
+    it('cancels the dialog', async () => {
+        const wrapper = await createWrapper();
+
+        expect(wrapper.emitted('confirm')).toBeUndefined();
+        expect(wrapper.emitted('cancel')).toBeUndefined();
+
+        wrapper.findComponent('.sw-cms-el-config-blog-listing-config-delete-modal__cancel').vm.$emit('click');
+
+        expect(wrapper.emitted('confirm')).toBeUndefined();
+        expect(wrapper.emitted('cancel')).toStrictEqual([[]]);
+    });
+
+    it('confirms the dialog', async () => {
+        const wrapper = await createWrapper();
+
+        expect(wrapper.emitted('confirm')).toBeUndefined();
+        expect(wrapper.emitted('cancel')).toBeUndefined();
+
+        wrapper.findComponent('.sw-cms-el-config-blog-listing-config-delete-modal__confirm').vm.$emit('click');
+
+        expect(wrapper.emitted('confirm')).toStrictEqual([[]]);
+        expect(wrapper.emitted('cancel')).toBeUndefined();
+    });
+});

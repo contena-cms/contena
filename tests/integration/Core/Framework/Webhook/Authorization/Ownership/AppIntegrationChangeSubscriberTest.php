@@ -1,0 +1,89 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Webhook\Authorization\Ownership;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Api\Util\AccessKeyHelper;
+use Contena\Core\Framework\App\AppEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Webhook\WebhookEntity;
+use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
+use Contena\Tests\Integration\Core\Framework\App\AppFixture;
+
+/**
+ * @internal
+ */
+class AppIntegrationChangeSubscriberTest extends TestCase
+{
+    use DatabaseTransactionBehaviour;
+    use KernelTestBehaviour;
+
+    private AppFixture $appFixture;
+
+    protected function setUp(): void
+    {
+        $appFixture = static::getContainer()->get(AppFixture::class);
+        static::assertInstanceOf(AppFixture::class, $appFixture);
+        $this->appFixture = $appFixture;
+    }
+
+    public function testAWebhookOwnedByTheAppsIntegrationMovesToTheIntegrationThatReplacesIt(): void
+    {
+        $app = $this->appFixture->createAppFromData();
+        $webhookId = WebhookBuilder::ownedByIntegration($app->getIntegrationId())
+            ->insert(static::getContainer()->get(Connection::class));
+
+        $newIntegrationId = $this->replaceIntegration($app);
+        static::getContainer()->get('integration.repository')->delete([['id' => $app->getIntegrationId()]], Context::createDefaultContext());
+
+        static::assertSame($newIntegrationId, $this->loadWebhook($webhookId)->getOwnerIntegrationId());
+    }
+
+    public function testAWebhookMovesBackWhenTheAppSwitchesBackToItsPreviousIntegration(): void
+    {
+        $app = $this->appFixture->createAppFromData();
+        $webhookId = WebhookBuilder::ownedByIntegration($app->getIntegrationId())
+            ->insert(static::getContainer()->get(Connection::class));
+        $newIntegrationId = $this->replaceIntegration($app);
+        static::assertSame($newIntegrationId, $this->loadWebhook($webhookId)->getOwnerIntegrationId());
+
+        static::getContainer()->get('app.repository')->update([[
+            'id' => $app->getId(),
+            'integrationId' => $app->getIntegrationId(),
+        ]], Context::createDefaultContext());
+        static::getContainer()->get('integration.repository')->delete([['id' => $newIntegrationId]], Context::createDefaultContext());
+
+        static::assertSame($app->getIntegrationId(), $this->loadWebhook($webhookId)->getOwnerIntegrationId());
+    }
+
+    private function replaceIntegration(AppEntity $app): string
+    {
+        static::getContainer()->get('app.repository')->update([[
+            'id' => $app->getId(),
+            'integration' => [
+                'label' => $app->getName(),
+                'accessKey' => AccessKeyHelper::generateAccessKey('integration'),
+                'secretAccessKey' => AccessKeyHelper::generateSecretAccessKey(),
+            ],
+        ]], Context::createDefaultContext());
+
+        return $this->appFixture->getApp($app->getId())->getIntegrationId();
+    }
+
+    private function loadWebhook(string $webhookId): WebhookEntity
+    {
+        $webhook = static::getContainer()->get('webhook.repository')
+            ->search(new Criteria([$webhookId]), Context::createDefaultContext())
+            ->getEntities()
+            ->first();
+
+        static::assertInstanceOf(WebhookEntity::class, $webhook);
+
+        return $webhook;
+    }
+}

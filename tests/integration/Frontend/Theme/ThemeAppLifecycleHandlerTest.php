@@ -1,0 +1,121 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Frontend\Theme;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Context\SystemSource;
+use Contena\Core\Framework\App\AppCollection;
+use Contena\Core\Framework\App\AppEntity;
+use Contena\Core\Framework\App\Lifecycle\AbstractAppLifecycle;
+use Contena\Core\Framework\App\Lifecycle\AppLifecycle;
+use Contena\Core\Framework\App\Lifecycle\AppManager;
+use Contena\Core\Framework\App\Lifecycle\Parameters\AppInstallParameters;
+use Contena\Core\Framework\App\Manifest\Manifest;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Theme\ThemeCollection;
+
+/**
+ * @internal
+ */
+class ThemeAppLifecycleHandlerTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+
+    private AbstractAppLifecycle $appLifecycle;
+
+    private AppManager $appManager;
+
+    /**
+     * @var EntityRepository<AppCollection>
+     */
+    private EntityRepository $appRepository;
+
+    /**
+     * @var EntityRepository<ThemeCollection>
+     */
+    private EntityRepository $themeRepository;
+
+    private Context $context;
+
+    protected function setUp(): void
+    {
+        $this->appRepository = static::getContainer()->get('app.repository');
+        $this->themeRepository = static::getContainer()->get('theme.repository');
+        $this->appLifecycle = static::getContainer()->get(AppLifecycle::class);
+        $this->appManager = static::getContainer()->get(AppManager::class);
+        $this->context = new Context(new SystemSource(), [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM]);
+    }
+
+    #[DataProvider('keepUserDataProvider')]
+    public function testThemeRemovedOnUninstall(bool $keepUserData): void
+    {
+        $app = $this->installThemeApp();
+
+        static::assertCount(1, $this->findThemes($app->getName()));
+
+        $this->appLifecycle->uninstall(
+            $app->getName(),
+            ['id' => $app->getId()],
+            $this->context,
+            $keepUserData
+        );
+
+        static::assertCount($keepUserData ? 1 : 0, $this->findThemes($app->getName()));
+        static::assertCount(0, $this->appRepository->searchIds(new Criteria(), $this->context)->getIds());
+    }
+
+    public function testLocalDeleteRemovesAppWithoutNotifyingAppServerAndLeavesThemeRecord(): void
+    {
+        $app = $this->installThemeApp();
+
+        static::assertCount(1, $this->findThemes($app->getName()));
+
+        // local-only delete (e.g. the uninstall-apps shop-id strategy): the app server is not notified
+        $this->appManager->delete($app, $this->context);
+
+        // the app is gone, but the theme record is intentionally left in place (matches the
+        // behaviour for copied shops); only an uninstall removes the theme record
+        static::assertCount(0, $this->appRepository->searchIds(new Criteria(), $this->context)->getIds());
+        static::assertCount(1, $this->findThemes($app->getName()));
+    }
+
+    /**
+     * @return array<string, array<int, bool>>
+     */
+    public static function keepUserDataProvider(): array
+    {
+        return [
+            'keep admin_user data' => [true],
+            'remove admin_user data' => [false],
+        ];
+    }
+
+    private function installThemeApp(): AppEntity
+    {
+        $manifest = Manifest::createFromXmlFile(__DIR__ . '/fixtures/Apps/SwagTheme/manifest.xml');
+        $this->appLifecycle->install($manifest, new AppInstallParameters(), $this->context);
+
+        $app = $this->appRepository->search(new Criteria(), $this->context)->getEntities()->first();
+        static::assertNotNull($app);
+
+        return $app;
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function findThemes(string $technicalName): array
+    {
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('technicalName', $technicalName));
+
+        return $this->themeRepository->search($criteria, $this->context)->getEntities()->getElements();
+    }
+}

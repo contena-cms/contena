@@ -1,0 +1,18 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Adapter\Cache\Message;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
+use Contena\Core\Framework\MessageQueue\DeduplicatableMessageInterface;
+
+class CleanupOldCacheFolders implements AsyncMessageInterface, DeduplicatableMessageInterface
+{
+    /**
+     * @experimental stableVersion:v6.8.0 feature:DEDUPLICATABLE_MESSAGES
+     */
+    public function deduplicationId(): ?string
+    {
+        return 'cleanup-old-cache-folders';
+    }
+}

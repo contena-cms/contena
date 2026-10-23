@@ -1,0 +1,25 @@
+{
+  "sw-settings-frontend": {
+    "general": {
+      "mainMenuItemGeneral": "Frontend",
+      "textHeadline": "Frontend",
+      "description": "Settings for the frontend",
+      "helpText": "For more information look at <a target=\"_blank\" href='https://docs.contena.cn/en/contena-6-de'>documentation</a>"
+    },
+    "configuration": {
+      "cardTitle": "Frontend configuration",
+      "iconCache": "Activate icon cache",
+      "iconCacheToolTip": "Controls whether icons are only delivered once per frontend page and additional usages will only be referenced by the icons id.",
+      "theme": {
+        "cardTitle": "Theme configuration",
+        "async": "Compile theme in the background",
+        "asyncTooltip": "Controls whether theme compilation is handled via the message queue instead of directly on changes."
+      },
+      "speculationRules": {
+        "title": "Speculation rules API (Experimental)",
+        "description": "Activate pre-rendering with eagerness mode \"moderate\" for the Frontend. This can influence your analytics data."
+      }
+    },
+    "helpText": "For more information please check out the <a target=\"_blank\", href=\"https://docs.contena.cn/en/contena-6-en\">documentation.</a>"
+  }
+}

@@ -1,0 +1,42 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Migration\Core\V6_7;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Migration\V6_7\Migration1775641887AddDoubleOptInResendInterval;
+
+/**
+ * @internal
+ */
+#[CoversClass(Migration1775641887AddDoubleOptInResendInterval::class)]
+class Migration1775641887AddDoubleOptInResendIntervalTest extends TestCase
+{
+    use KernelTestBehaviour;
+
+    public function testMigration(): void
+    {
+        $connection = self::getContainer()->get(Connection::class);
+
+        $connection->delete('system_config', ['configuration_key' => 'core.loginRegistration.doubleOptInResendInterval']);
+
+        $migration = new Migration1775641887AddDoubleOptInResendInterval();
+        $migration->update($connection);
+        $migration->update($connection);
+
+        $configValue = $connection->fetchOne(
+            'SELECT configuration_value FROM system_config WHERE configuration_key = :key',
+            ['key' => 'core.loginRegistration.doubleOptInResendInterval']
+        );
+
+        static::assertIsString($configValue);
+
+        $configValue = json_decode($configValue, true);
+        static::assertIsArray($configValue);
+        static::assertArrayHasKey('_value', $configValue);
+        static::assertSame(24, $configValue['_value']);
+    }
+}

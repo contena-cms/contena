@@ -1,0 +1,84 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "BlogReview": {
+                "description": "Added since version: 6.0.0.0",
+                "required": [
+                    "id",
+                    "blogId",
+                    "channelId",
+                    "languageId",
+                    "title",
+                    "content"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "blogId": {
+                        "description": "Unique identity of the blog.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "blogVersionId": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "channelId": {
+                        "description": "Unique identity of the sales channel.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "languageId": {
+                        "description": "Unique identity of the language.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "externalUser": {
+                        "description": "External admin_user name.",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "Title of blog review.",
+                        "type": "string"
+                    },
+                    "content": {
+                        "description": "Short description or subject of the project review.",
+                        "type": "string"
+                    },
+                    "points": {
+                        "description": "A floating point number given to rate a blog.",
+                        "type": "number",
+                        "format": "float"
+                    },
+                    "status": {
+                        "description": "When status is set, the rating is made visible.",
+                        "type": "boolean"
+                    },
+                    "comment": {
+                        "description": "Detailed review about the blog.",
+                        "type": "string"
+                    },
+                    "customFields": {
+                        "type": "object"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    }
+                },
+                "type": "object"
+            }
+        }
+    }
+}

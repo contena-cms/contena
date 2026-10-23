@@ -1,0 +1,220 @@
+{% block sw_product_seo_form %}
+<div class="sw-blog-seo-form">
+    {% block sw_product_seo_form_meta_title %}
+    <sw-inherit-wrapper
+        v-model:value="blog.metaTitle"
+        :has-parent="hasParent"
+        :label="$t('sw-blog.seoForm.labelMetaTitle')"
+        :help-text="$t('sw-blog.seoForm.helpTextMetaTitle')"
+        :inherited-value="parentProduct.metaTitle"
+    >
+        <template #content="props">
+
+            <mt-text-field
+                :placeholder="$t('sw-blog.seoForm.placeholderMetaTitle')"
+                :error="blogMetaTitleError"
+                :disabled="props.isInherited || !allowEdit"
+                :model-value="props.currentValue"
+                @update:model-value="props.updateCurrentValue"
+            >
+                {% block sw_product_seo_form_meta_title_hint %}
+                <template #hint>
+                    <span
+                        class="sw-blog-seo-form__recommended-length"
+                        :class="getRecommendedLengthClass(props.currentValue, recommendedMetaTitleLength)"
+                    >
+                        {{ getRecommendedLengthHint(props.currentValue, recommendedMetaTitleLength) }}
+                    </span>
+                </template>
+                {% endblock %}
+            </mt-text-field>
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+
+    {% block sw_product_seo_form_meta_description %}
+    <sw-inherit-wrapper
+        v-model:value="blog.metaDescription"
+        :has-parent="hasParent"
+        :label="$t('sw-blog.seoForm.labelMetaDescription')"
+        :help-text="$t('sw-blog.seoForm.helpTextMetaDescription')"
+        :inherited-value="parentProduct.metaDescription"
+    >
+        <template #content="props">
+            <mt-textarea
+                :placeholder="$t('sw-blog.seoForm.placeholderMetaDescription')"
+                :error="blogMetaDescriptionError"
+                :disabled="props.isInherited || !allowEdit"
+                :model-value="props.currentValue"
+                @update:model-value="props.updateCurrentValue"
+            >
+                {% block sw_product_seo_form_meta_description_hint %}
+                <template #hint>
+                    <span
+                        class="sw-blog-seo-form__recommended-length"
+                        :class="getRecommendedLengthClass(props.currentValue, recommendedMetaDescriptionLength)"
+                    >
+                        {{ getRecommendedLengthHint(props.currentValue, recommendedMetaDescriptionLength) }}
+                    </span>
+                </template>
+                {% endblock %}
+            </mt-textarea>
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+
+    {% block sw_product_seo_form_keywords %}
+    <sw-inherit-wrapper
+        v-model:value="blog.keywords"
+        :has-parent="hasParent"
+        :label="$t('sw-blog.seoForm.labelKeywords')"
+        :help-text="$t('sw-blog.seoForm.helpTextKeywords')"
+        :inherited-value="parentProduct.keywords"
+    >
+        <template #content="props">
+            <mt-text-field
+                :placeholder="$t('sw-blog.seoForm.placeholderKeywords')"
+                :error="blogKeywordsError"
+                :disabled="props.isInherited || !allowEdit"
+                :model-value="props.currentValue"
+                @update:model-value="props.updateCurrentValue"
+            />
+        </template>
+    </sw-inherit-wrapper>
+    {% endblock %}
+
+    {% block sw_product_seo_form_canonical_url %}
+    <template v-if="!hasParent && hasVariants">
+
+        {% block sw_product_seo_form_canonical_url_switch %}
+
+        <mt-switch
+            v-model="canonicalProductSwitchEnabled"
+            :label="$t('sw-blog.seoForm.labelCanonicalUrlMode')"
+        />
+        {% endblock %}
+
+        {% block sw_product_seo_form_canonical_url_select %}
+        <sw-single-select
+            ref="canonicalProductSelect"
+            v-model:value="blog.canonicalProductId"
+            :options="variants"
+            :disabled="!canonicalProductSwitchEnabled"
+            value-property="id"
+            :label="$t('sw-blog.seoForm.labelCanonicalProduct')"
+            :placeholder="$t('sw-blog.seoForm.placeholderCanonicalProduct')"
+            show-clearable-button
+            @search="onSearch"
+        >
+
+            <template #selection-label-property="{ item }">
+                {% block sw_product_seo_form_canonical_url_select_selection %}
+                <sw-blog-variant-info
+                    :variations="item.variation"
+                    :show-tooltip="false"
+                >
+                    {{ getItemName(item) }}
+                </sw-blog-variant-info>
+                {% endblock %}
+            </template>
+
+            <template #result-label-property="{ item }">
+                {% block sw_product_seo_form_canonical_url_select_result %}
+                <sw-blog-variant-info
+                    :variations="item.variation"
+                    :show-tooltip="false"
+                >
+                    {{ getItemName(item) }}
+                </sw-blog-variant-info>
+                {% endblock %}
+            </template>
+        </sw-single-select>
+        {% endblock %}
+    </template>
+    {% endblock %}
+
+    {% block sw_product_seo_form_open_graph %}
+    <div class="sw-blog-seo-form__open-graph">
+        <h3>{{ $t('sw-blog.seoForm.titleOpenGraph') }}</h3>
+
+        {% block sw_product_seo_form_og_title %}
+        <sw-inherit-wrapper
+            v-model:value="blog.ogTitle"
+            :has-parent="hasParent"
+            :label="$t('sw-blog.seoForm.labelOpenGraphTitle')"
+            :help-text="$t('sw-blog.seoForm.helpTextOpenGraphTitle')"
+            :inherited-value="parentProduct.ogTitle"
+        >
+            <template #content="props">
+                <mt-text-field
+                    :placeholder="$t('sw-blog.seoForm.placeholderOpenGraphTitle')"
+                    :error="blogOgTitleError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_seo_form_og_description %}
+        <sw-inherit-wrapper
+            v-model:value="blog.ogDescription"
+            :has-parent="hasParent"
+            :label="$t('sw-blog.seoForm.labelOpenGraphDescription')"
+            :help-text="$t('sw-blog.seoForm.helpTextOpenGraphDescription')"
+            :inherited-value="parentProduct.ogDescription"
+        >
+            <template #content="props">
+                <mt-textarea
+                    :placeholder="$t('sw-blog.seoForm.placeholderOpenGraphDescription')"
+                    :error="blogOgDescriptionError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_seo_form_og_image %}
+        <sw-inherit-wrapper
+            v-model:value="blog.openGraphMediaId"
+            :has-parent="hasParent"
+            :label="$t('sw-blog.seoForm.labelOpenGraphImage')"
+            :inherited-value="parentProduct.openGraphMediaId"
+        >
+            <template #content="props">
+                <sw-media-upload-v2
+                    variant="regular"
+                    :upload-tag="openGraphMediaUploadTag"
+                    :source="openGraphMediaItem"
+                    :allow-multi-select="false"
+                    :disabled="props.isInherited || !allowEdit"
+                    :caption="$t('sw-blog.seoForm.labelOpenGraphImage')"
+                    file-accept="image/*"
+                    @media-upload-sidebar-open="onOpenOgMediaModal"
+                    @media-upload-remove-image="onRemoveOgMedia(props.updateCurrentValue)"
+                />
+
+                <sw-upload-listener
+                    :upload-tag="openGraphMediaUploadTag"
+                    auto-upload
+                    @media-upload-finish="onOgMediaUploadFinish($event, props.updateCurrentValue)"
+                />
+
+                <sw-media-modal-v2
+                    v-if="showOgMediaModal"
+                    variant="regular"
+                    :caption="$t('sw-blog.seoForm.labelOpenGraphImage')"
+                    :allow-multi-select="false"
+                    @media-modal-selection-change="onOgMediaSelectionChange($event, props.updateCurrentValue)"
+                    @modal-close="onCloseOgMediaModal"
+                />
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

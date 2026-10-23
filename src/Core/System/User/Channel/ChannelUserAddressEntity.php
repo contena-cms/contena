@@ -1,0 +1,36 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\User\Channel;
+
+use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @codeCoverageIgnore
+ */
+class ChannelUserAddressEntity extends UserAddressEntity
+{
+    protected bool $isDefaultBillingAddress = false;
+
+    protected bool $isDefaultShippingAddress = false;
+
+    public function isDefaultBillingAddress(): bool
+    {
+        return $this->isDefaultBillingAddress;
+    }
+
+    public function setIsDefaultBillingAddress(bool $isDefaultBillingAddress): void
+    {
+        $this->isDefaultBillingAddress = $isDefaultBillingAddress;
+    }
+
+    public function isDefaultShippingAddress(): bool
+    {
+        return $this->isDefaultShippingAddress;
+    }
+
+    public function setIsDefaultShippingAddress(bool $isDefaultShippingAddress): void
+    {
+        $this->isDefaultShippingAddress = $isDefaultShippingAddress;
+    }
+}

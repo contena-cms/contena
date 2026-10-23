@@ -1,0 +1,18 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\App\Event;
+
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @final
+ */
+class AppInstalledEvent extends ManifestChangedEvent
+{
+    final public const NAME = 'app.installed';
+
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+}

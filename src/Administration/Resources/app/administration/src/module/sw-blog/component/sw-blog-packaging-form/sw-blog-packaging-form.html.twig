@@ -1,0 +1,186 @@
+{% block sw_product_packaging_form %}
+<div class="sw-blog-packaging-form">
+    <p class="sw-blog-packaging-form__description">
+        {{ $t('sw-blog.packagingForm.description') }}
+    </p>
+
+    <!-- @deprecated tag:v6.8.0 - <sw-container> will be removed -->
+    <sw-container
+        v-if="false"
+        columns="1fr 1fr 1fr"
+        gap="0 var(--scale-size-30)"
+    >
+        <!-- @deprecated tag:v6.8.0 - block will be removed -->
+        {% block sw_product_packaging_form_width_field %}
+        {% endblock %}
+
+        <!-- @deprecated tag:v6.8.0 - block will be removed -->
+        {% block sw_product_packaging_form_height_field %}
+        {% endblock %}
+
+        <!-- @deprecated tag:v6.8.0 - block will be removed -->
+        {% block sw_product_settings_form_length_field %}
+        {% endblock %}
+    </sw-container>
+
+    <sw-container
+        columns="1fr 1fr 1fr"
+        gap="0 var(--scale-size-32)"
+    >
+        <!-- @deprecated tag:v6.8.0 - block will be removed -->
+        {% block sw_product_settings_form_weight_field %}
+        {% endblock %}
+
+        {% block sw_product_price_form_purchase_unit_field %}
+        <sw-inherit-wrapper
+            v-show="showSettingPackaging"
+            v-model:value="blog.purchaseUnit"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.purchaseUnit"
+        >
+            <template #content="props">
+
+                <mt-number-field
+                    class="sw-blog-packaging-form__purchase-unit-field"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    number-type="float"
+                    allow-empty
+                    :min="0"
+                    :digits="3"
+                    :error="blogPurchaseUnitError"
+                    :label="$t('sw-blog.priceForm.labelPurchaseUnit')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :placeholder="$t('sw-blog.packagingForm.placeholderSellingUnit')"
+                    :help-text="$t('sw-blog.packagingForm.helpTextSellingUnit')"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_price_form_unit_field %}
+        <sw-inherit-wrapper
+            v-show="showSettingPackaging"
+            v-model:value="blog.unitId"
+            :has-parent="!!parentProduct.id"
+            :label="$t('sw-blog.packagingForm.labelProductUnit')"
+            :inherited-value="parentProduct.unitId"
+        >
+            <template #content="{ currentValue, updateCurrentValue, isInherited }">
+
+                <sw-entity-single-select
+                    :key="isInherited"
+                    :value="currentValue"
+                    entity="unit"
+                    :disabled="isInherited || !allowEdit"
+                    class="sw-select-blog__select_unit"
+                    pointer="blog.unit"
+                    :placeholder="$t('sw-blog.packagingForm.placeholderProductUnit')"
+                    show-clearable-button
+                    @update:value="updateCurrentValue"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_price_form_reference_unit_field %}
+        <sw-inherit-wrapper
+            v-show="showSettingPackaging"
+            v-model:value="blog.referenceUnit"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.referenceUnit"
+        >
+            <template #content="props">
+
+                <mt-number-field
+                    class="sw-blog-packaging-form__reference-unit-field"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    number-type="float"
+                    allow-empty
+                    :min="0"
+                    :digits="3"
+                    :error="blogReferenceUnitError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :placeholder="$t('sw-blog.packagingForm.placeholderBasicUnit')"
+                    :label="$t('sw-blog.priceForm.labelReferenceUnit')"
+                    :model-value="props.currentValue"
+                    :help-text="$t('sw-blog.packagingForm.helpTextBasicUnit')"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+
+    <sw-container
+        columns="1fr 1fr"
+        gap="0 var(--scale-size-32)"
+    >
+        {% block sw_product_price_form_pack_unit_field %}
+        <sw-inherit-wrapper
+            v-show="showSettingPackaging"
+            v-model:value="blog.packUnit"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.packUnit"
+        >
+            <template #content="props">
+
+                <mt-text-field
+                    class="sw-blog-packaging-form__pack-unit-field"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :error="blogPackUnitError"
+                    :label="$t('sw-blog.priceForm.labelPackUnit')"
+                    :placeholder="$t('sw-blog.packagingForm.placeholderPackagingUnit')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :help-text="$t('sw-blog.packagingForm.helpTextPackUnit')"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_price_form_pack_unit_plural_field %}
+        <sw-inherit-wrapper
+            v-show="showSettingPackaging"
+            v-model:value="blog.packUnitPlural"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.packUnitPlural"
+        >
+            <template #content="props">
+
+                <mt-text-field
+                    class="sw-blog-packaging-form__pack-unit-plural-field"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :error="blogPackUnitPluralError"
+                    :label="$t('sw-blog.priceForm.labelPackUnitPlural')"
+                    :placeholder="$t('sw-blog.packagingForm.placeholderPackagingUnitPlural')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :help-text="$t('sw-blog.packagingForm.helpTextPackUnitPlural')"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+</div>
+{% endblock %}

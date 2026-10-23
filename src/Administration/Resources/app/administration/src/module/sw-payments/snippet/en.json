@@ -1,0 +1,22 @@
+{
+    "global": {
+        "sw-admin-menu": {
+            "navigation": {
+                "mainMenuItemContenaPayments": "Contena Payments"
+            }
+        }
+    },
+    "sw-payments": {
+        "general": {
+            "mainMenuItemGeneral": "Contena Payments",
+            "description": "Manage Contena Payments."
+        }
+    },
+    "sw-privileges": {
+        "permissions": {
+            "sw-payments": {
+                "label": "Contena Payments"
+            }
+        }
+    }
+}

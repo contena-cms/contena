@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<container>
+    <services>
+        <service id="Contena\Core\Framework\Example\CoreServiceInCore" class="Contena\Core\Framework\Example\CoreServiceInCore"/>
+        <service id="Contena\Core\Framework\Example\XmlCoreService" class="Contena\Core\Framework\Example\XmlCoreService"/>
+        <service id="Contena\Core\Framework\Example\PhpCoreService" class="Contena\Core\Framework\Example\PhpCoreService"/>
+        <service id="Contena\Core\Framework\Example\CoreContract" class="Contena\Frontend\Framework\Example\FrontendImplementation"/>
+        <service id="Contena\Core\Framework\Example\CoreAlias" alias="Contena\Core\Framework\Example\XmlCoreService"/>
+    </services>
+</container>

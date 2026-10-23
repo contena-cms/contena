@@ -1,0 +1,241 @@
+{% block sw_customer_detail_addresses %}
+<div class="sw-user-detail-addresses">
+    {% block sw_customer_detail_addresses_card %}
+    <mt-card
+        position-identifier="sw-user-detail-addresses"
+        :title="$t('sw-user.detailAddresses.cardTitle')"
+        :is-loading="isLoading"
+        :large="true"
+    >
+        {% block sw_customer_detail_addresses_toolbar %}
+        <template #toolbar>
+            <sw-card-filter
+                :placeholder="$t('sw-user.detailAddresses.filterPlaceholder')"
+                @sw-card-filter-term-change="onChange"
+            >
+                <template #filter>
+                    {% block sw_customer_detail_addresses_add_button %}
+                    <mt-button
+                        class="sw-user-detail-addresses__add-address-action"
+                        :disabled="!userEditMode"
+                        size="small"
+                        variant="secondary"
+                        @click="onCreateNewAddress"
+                    >
+                        {{ $t('sw-user.detailAddresses.buttonAddAddress') }}
+                    </mt-button>
+                    {% endblock %}
+                </template>
+            </sw-card-filter>
+        </template>
+        {% endblock %}
+
+        {% block sw_customer_detail_addresses_add_modal %}
+        <sw-modal
+            v-if="currentAddress"
+            :title="$t('sw-user.detailAddresses.modalTitleAddress')"
+            @modal-close="onCloseAddressModal"
+        >
+            {% block sw_customer_detail_addresses_add_modal_address_form %}
+            <sw-user-address-form
+                :address="currentAddress"
+                :user="activeCustomer"
+                :disabled="!userEditMode"
+            >
+                <sw-user-address-form-options
+                    :address="currentAddress"
+                    :user="activeCustomer"
+                    :custom-field-sets="userAddressCustomFieldSets"
+                    :disabled="!userEditMode"
+                    @default-address-change="onChangeDefaultAddress"
+                />
+            </sw-user-address-form>
+            {% endblock %}
+
+            {% block sw_customer_detail_addresses_add_modal_footer %}
+            <template #modal-footer>
+                {% block sw_customer_detail_addresses_add_modal_cancel %}
+                <mt-button
+                    size="small"
+                    variant="secondary"
+                    @click="onCloseAddressModal"
+                >
+                    {{ $t('global.default.cancel') }}
+                </mt-button>
+                {% endblock %}
+
+                {% block sw_customer_detail_addresses_add_modal_apply %}
+                <mt-button
+                    variant="primary"
+                    size="small"
+                    :disabled="!userEditMode"
+                    @click="onSaveAddress"
+                >
+                    {{ $t('global.default.apply') }}
+                </mt-button>
+                {% endblock %}
+            </template>
+            {% endblock %}
+        </sw-modal>
+        {% endblock %}
+
+        {% block sw_customer_detail_addresses_grid %}
+        <template #grid>
+            <sw-one-to-many-grid
+                ref="addressGrid"
+                :collection="sortedAddresses"
+                :local-mode="false"
+                :columns="addressColumns"
+                :show-selection="false"
+                :sort-direction="addressSortDirection"
+                :sort-by="addressSortProperty"
+                :is-loading="isLoading"
+                @column-sort="setAddressSorting"
+            >
+                {% block sw_customer_detail_addresses_grid_columns %}
+                {% block sw_customer_detail_addresses_grid_columns_default_shipping_address %}
+                <template #column-defaultShippingAddress="{ item }">
+                    <sw-radio-field
+                        v-model:value="activeCustomer.defaultShippingAddressId"
+                        :disabled="!userEditMode"
+                        name="defaultShippingAddress"
+                        :options="[{ value: item.id }]"
+                        @update:value="onChangeDefaultShippingAddress"
+                    />
+                </template>
+                {% endblock %}
+
+                {% block sw_customer_detail_addresses_grid_columns_default_billing_address %}
+                <template #column-defaultBillingAddress="{ item }">
+                    <sw-radio-field
+                        v-model:value="activeCustomer.defaultBillingAddressId"
+                        :disabled="!userEditMode"
+                        name="defaultBillingAddress"
+                        :options="[{ value: item.id }]"
+                        @update:value="onChangeDefaultBillingAddress"
+                    />
+                </template>
+                {% endblock %}
+
+                {% block sw_customer_detail_addresses_grid_columns_last_name %}
+                <template #column-lastName="{ item }">
+                    <mt-link
+                        v-if="userEditMode"
+                        as="a"
+                        role="link"
+                        tabindex="0"
+                        @click="onEditAddress(item.id)"
+                        @keydown.enter="onEditAddress(item.id)"
+                    >
+                        {{ item.lastName }}
+                    </mt-link>
+
+                    <template v-else>
+                        {{ item.lastName }}
+                    </template>
+                </template>
+                {% endblock %}
+                {% endblock %}
+
+                {% block sw_customer_detail_addresses_grid_columns_actions %}
+                <template #actions="{ item }">
+                    {% block sw_customer_detail_addresses_grid_columns_actions_edit %}
+                    <sw-context-menu-item
+                        :disabled="!userEditMode"
+                        @click="onEditAddress(item.id)"
+                    >
+                        {{ $t('global.default.edit') }}
+                    </sw-context-menu-item>
+                    {% endblock %}
+
+                    {% block sw_customer_detail_addresses_grid_columns_actions_duplicate %}
+                    <sw-context-menu-item
+                        :disabled="!userEditMode"
+                        @click="onDuplicateAddress(item.id)"
+                    >
+                        {{ $t('global.default.duplicate') }}
+                    </sw-context-menu-item>
+                    {% endblock %}
+
+                    {% block sw_customer_detail_addresses_grid_columns_actions_defaultShippingAddress %}
+                    <sw-context-menu-item
+                        :disabled="!userEditMode"
+                        @click="onChangeDefaultShippingAddress(item.id)"
+                    >
+                        {{ $t('sw-user.detailAddresses.contextMenuDefaultShippingAddress') }}
+                    </sw-context-menu-item>
+                    {% endblock %}
+
+                    {% block sw_customer_detail_addresses_grid_columns_actions_defaultBillingAddress %}
+                    <sw-context-menu-item
+                        :disabled="!userEditMode"
+                        @click="onChangeDefaultBillingAddress(item.id)"
+                    >
+                        {{ $t('sw-user.detailAddresses.contextMenuDefaultBillingAddress') }}
+                    </sw-context-menu-item>
+                    {% endblock %}
+
+                    {% block sw_customer_detail_addresses_grid_columns_actions_delete %}
+                    <sw-context-menu-item
+                        variant="danger"
+                        :disabled="!userEditMode || isDefaultAddress(item.id)"
+                        @click="onDeleteAddress(item.id)"
+                    >
+                        {{ $t('global.default.delete') }}
+                    </sw-context-menu-item>
+                    {% endblock %}
+                </template>
+                {% endblock %}
+
+                {% block sw_customer_detail_addresses_grid_columns_action_modals %}
+                <template #action-modals="{ item }">
+                    {% block sw_customer_detail_addresses_delete_modal %}
+                    <sw-modal
+                        v-if="showDeleteAddressModal === item.id"
+                        :title="$t('global.default.warning')"
+                        variant="small"
+                        @modal-close="onCloseDeleteAddressModal"
+                    >
+                        {% block sw_customer_detail_addresses_delete_modal_confirm_delete_text %}
+                        <p class="sw-user-detail-addresses__confirm-delete-text">
+                            {{ $t('sw-user.detailAddresses.textDeleteAddressConfirm') }}
+                        </p>
+                        {% endblock %}
+
+                        {% block sw_customer_detail_addresses_delete_modal_address_item %}
+                        {% endblock %}
+
+                        {% block sw_customer_detail_addresses_delete_modal_footer %}
+                        <template #modal-footer>
+                            {% block sw_customer_detail_addresses_delete_modal_cancel %}
+                            <mt-button
+                                size="small"
+                                variant="secondary"
+                                @click="onCloseDeleteAddressModal"
+                            >
+                                {{ $t('global.default.cancel') }}
+                            </mt-button>
+                            {% endblock %}
+
+                            {% block sw_customer_detail_addresses_delete_modal_confirm %}
+                            <mt-button
+                                variant="critical"
+                                size="small"
+                                @click="onConfirmDeleteAddress(item.id)"
+                            >
+                                {{ $t('global.default.delete') }}
+                            </mt-button>
+                            {% endblock %}
+                        </template>
+                        {% endblock %}
+                    </sw-modal>
+                    {% endblock %}
+                </template>
+                {% endblock %}
+            </sw-one-to-many-grid>
+        </template>
+        {% endblock %}
+    </mt-card>
+    {% endblock %}
+</div>
+{% endblock %}

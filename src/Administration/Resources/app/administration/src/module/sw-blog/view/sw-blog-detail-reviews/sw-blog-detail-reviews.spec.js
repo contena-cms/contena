@@ -1,0 +1,220 @@
+/**
+ * @sw-package inventory
+ */
+
+import { mount } from '@vue/test-utils';
+
+const { Store } = Contena;
+
+async function createWrapper(privileges = []) {
+    return mount(await wrapTestComponent('sw-blog-detail-reviews', { sync: true }), {
+        global: {
+            provide: {
+                repositoryFactory: {
+                    create: () => ({
+                        search: () => {
+                            return Promise.resolve([]);
+                        },
+                        delete: () => {
+                            return Promise.resolve();
+                        },
+                    }),
+                },
+                acl: {
+                    can: (identifier) => {
+                        if (!identifier) {
+                            return true;
+                        }
+
+                        return privileges.includes(identifier);
+                    },
+                },
+            },
+            stubs: {
+                'mt-card': {
+                    template: `
+                    <div class="mt-card">
+                        <slot name="grid"></slot>
+                        <slot></slot>
+                    </div>
+                `,
+                },
+                'sw-data-grid': {
+                    props: ['dataSource'],
+                    template: `
+                    <div class="sw-data-grid">
+                        <template v-for="item in dataSource">
+                            <slot name="actions" v-bind="{ item }"></slot>
+                        </template>
+                    </div>
+                `,
+                },
+                'sw-context-menu-item': true,
+                'sw-modal': {
+                    template: `
+                    <div class="sw-modal sw-modal-stub">
+                        <slot />
+                        <slot name="content" />
+                        <slot name="modal-footer" />
+                    </div>
+`,
+                },
+                'sw-skeleton': true,
+                'sw-rating-stars': true,
+                'sw-data-grid-column-boolean': true,
+                'sw-pagination': true,
+                'sw-time-ago': true,
+            },
+            mocks: {
+                $route: {
+                    meta: {
+                        $module: {
+                            icon: 'regular-content',
+                        },
+                    },
+                },
+            },
+        },
+    });
+}
+
+describe('src/module/sw-blog/view/sw-blog-detail-reviews', () => {
+    const dataSource = [
+        { id: '101', blogId: '01', status: true, points: 4 },
+        { id: '102', blogId: '02', status: true, points: 5 },
+    ];
+
+    beforeAll(() => {
+        Store.register({
+            id: 'swProductDetail',
+            state: () => ({
+                blog: {},
+            }),
+            getters: {
+                isLoading: () => false,
+            },
+            actions: {
+                setProduct(state, newProduct) {
+                    state.blog = newProduct;
+                },
+            },
+        });
+    });
+
+    it('should be able to edit a review', async () => {
+        const wrapper = await createWrapper(['blog.editor']);
+
+        await wrapper.setData({ dataSource, total: 2 });
+
+        const editMenuItem = wrapper.find('.sw-blog-detail-reviews__action-edit');
+        expect(editMenuItem.attributes().disabled).toBeFalsy();
+    });
+
+    it('should not be able to edit a review', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setData({ dataSource, total: 2 });
+
+        const editMenuItem = wrapper.find('.sw-blog-detail-reviews__action-edit');
+        expect(editMenuItem.attributes().disabled).toBeTruthy();
+    });
+
+    it('should be able to delete a review', async () => {
+        const wrapper = await createWrapper(['blog.editor']);
+
+        await wrapper.setData({ dataSource, total: 2 });
+
+        const deleteMenuItem = wrapper.find('.sw-blog-detail-reviews__action-delete');
+        expect(deleteMenuItem.attributes().disabled).toBeFalsy();
+    });
+
+    it('should not be able to delete a review', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setData({ dataSource, total: 2 });
+
+        const deleteMenuItem = wrapper.find('.sw-blog-detail-reviews__action-delete');
+        expect(deleteMenuItem.attributes().disabled).toBeTruthy();
+    });
+
+    it('should turn on the delete modal', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.vm.onStartReviewDelete({ id: '101' });
+
+        const modal = wrapper.find('.sw-modal-stub');
+
+        expect(wrapper.vm.deleteReviewId).toBe('101');
+        expect(wrapper.vm.showReviewDeleteModal).toBe(true);
+        expect(modal.exists()).toBeTruthy();
+        expect(modal.text()).toContain('sw-blog.reviewForm.modal.confirmText');
+    });
+
+    it('should turn off the delete modal', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.vm.onCancelReviewDelete();
+
+        const modal = wrapper.find('sw-modal-stub');
+
+        expect(wrapper.vm.deleteReviewId).toBeNull();
+        expect(wrapper.vm.showReviewDeleteModal).toBe(false);
+        expect(modal.exists()).toBeFalsy();
+    });
+
+    it('should get reviews when component got created', async () => {
+        const wrapper = await createWrapper();
+        wrapper.vm.getReviews = jest.fn();
+
+        wrapper.vm.createdComponent();
+
+        expect(wrapper.vm.getReviews).toHaveBeenCalled();
+        wrapper.vm.getReviews.mockRestore();
+    });
+
+    it('should get reviews when blog id got changed', async () => {
+        const wrapper = await createWrapper();
+        wrapper.vm.getReviews = jest.fn();
+
+        Contena.Store.get('swProductDetail').blog = {
+            id: '101',
+        };
+        await flushPromises();
+
+        expect(wrapper.vm.getReviews).toHaveBeenCalled();
+        wrapper.vm.getReviews.mockRestore();
+    });
+
+    it('should get reviews after deleting a review', async () => {
+        const wrapper = await createWrapper();
+        wrapper.vm.getReviews = jest.fn();
+
+        await wrapper.vm.onConfirmReviewDelete();
+
+        expect(wrapper.vm.showReviewDeleteModal).toBe(false);
+        expect(wrapper.vm.getReviews).toHaveBeenCalled();
+        wrapper.vm.getReviews.mockRestore();
+    });
+
+    it('should get reviews after changing page', async () => {
+        const wrapper = await createWrapper();
+        wrapper.vm.getReviews = jest.fn();
+
+        await wrapper.vm.onChangePage({ page: 2, limit: 10 });
+
+        expect(wrapper.vm.page).toBe(2);
+        expect(wrapper.vm.limit).toBe(10);
+        expect(wrapper.vm.getReviews).toHaveBeenCalled();
+        wrapper.vm.getReviews.mockRestore();
+    });
+
+    it('should return filters from filter registry', async () => {
+        const wrapper = await createWrapper();
+
+        expect(wrapper.vm.assetFilter).toEqual(expect.any(Function));
+        if (!Contena.Feature.isActive('V6_8_0_0')) {
+            // eslint-disable-next-line jest/no-conditional-expect
+            expect(wrapper.vm.dateFilter).toEqual(expect.any(Function));
+        }
+    });
+});

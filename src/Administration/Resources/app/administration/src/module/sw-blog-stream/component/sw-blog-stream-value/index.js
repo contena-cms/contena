@@ -1,0 +1,575 @@
+import template from './sw-blog-stream-value.html.twig';
+import './sw-blog-stream-value.scss';
+
+const { Criteria } = Contena.Data;
+
+/**
+ * @sw-package inventory
+ * @private
+ */
+export default {
+    template,
+
+    inject: [
+        'repositoryFactory',
+        'conditionDataProviderService',
+        'blogCustomFields',
+        'blogTypes',
+        'feature',
+    ],
+
+    emits: ['empty-change', 'type-change', 'boolean-change'],
+
+    props: {
+        condition: {
+            type: Object,
+            required: true,
+        },
+
+        fieldName: {
+            type: String,
+            required: false,
+            default: null,
+        },
+
+        definition: {
+            type: Object,
+            required: true,
+        },
+
+        disabled: {
+            type: Boolean,
+            required: false,
+            default: false,
+        },
+    },
+
+    data() {
+        return {
+            value: null,
+            searchTerm: '',
+        };
+    },
+
+    computed: {
+        repository() {
+            return this.repositoryFactory.create(this.definition.entity);
+        },
+
+        entityCustomFieldRepository() {
+            return this.repositoryFactory.create(this.getCustomFieldEntityName(this.fieldName));
+        },
+
+        componentClasses() {
+            return [this.disabledClass];
+        },
+
+        disabledClass() {
+            return this.disabled ? 'is--disabled' : null;
+        },
+
+        actualCondition() {
+            if (this.condition.type === 'not') {
+                return this.condition.queries[0];
+            }
+            return this.condition;
+        },
+
+        isMultiSelectValue() {
+            return (
+                this.actualCondition.type === 'equalsAny' ||
+                this.actualCondition.type === 'equalsAll' ||
+                this.actualCondition.type === 'notEqualsAll'
+            );
+        },
+
+        filterType: {
+            get() {
+                const conditionType = this.getConditionType(this.condition);
+                if (conditionType === 'range') {
+                    return this.getRangeType(this.actualCondition);
+                }
+
+                return conditionType;
+            },
+
+            set(type) {
+                if (this.conditionDataProviderService.isRangeType(type)) {
+                    this.onChangeType('range', this.getParameters(type));
+                    return;
+                }
+                if (this.conditionDataProviderService.isRelativeTimeType(type)) {
+                    this.onChangeType(type, this.getParameters(type));
+                    return;
+                }
+
+                this.onChangeType(type, null);
+            },
+        },
+
+        fieldDefinition() {
+            const fieldDefinition = this.definition.getField(this.fieldName);
+
+            if (!fieldDefinition && this.definition.entity === 'blog' && this.fieldName) {
+                if (this.conditionDataProviderService.allowedJsonAccessors.hasOwnProperty(this.fieldName)) {
+                    return this.conditionDataProviderService.allowedJsonAccessors[this.fieldName];
+                }
+
+                return this.blogCustomFields[this.fieldName.replace('customFields.', '')] || null;
+            }
+
+            return fieldDefinition;
+        },
+
+        operators() {
+            if (this.fieldType === null) {
+                return [];
+            }
+            return this.conditionDataProviderService.getOperatorSet(this.fieldType).map((operator) => {
+                return {
+                    label: this.$t(operator.label),
+                    value: operator.identifier,
+                };
+            });
+        },
+
+        relativeTimeOperators() {
+            const secondLevelOperators = this.conditionDataProviderService.getOperator(this.filterType).operators;
+
+            return secondLevelOperators.map((operator) => {
+                const secondLevelOperator = this.conditionDataProviderService.getOperator(operator);
+
+                return {
+                    label: this.$t(secondLevelOperator.label),
+                    value: secondLevelOperator.identifier,
+                };
+            });
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - Will be removed, blog.states will be replaced by blogType
+         */
+        blogStateOptions() {
+            return [
+                {
+                    label: this.$t('sw-blog-stream.filter.values.blogStates.physical'),
+                    value: 'is-physical',
+                },
+                {
+                    label: this.$t('sw-blog-stream.filter.values.blogStates.digital'),
+                    value: 'is-download',
+                },
+            ];
+        },
+
+        blogTypeOptions() {
+            const providedTypes = this.blogTypes?.value ?? this.blogTypes;
+            const defaultTypes = ['digital', 'physical'];
+            const types = Array.isArray(providedTypes) && providedTypes.length > 0 ? providedTypes : defaultTypes;
+
+            return types.map((type) => {
+                const snippetKey = `sw-blog.type.${type}`;
+                const label = this.$te(snippetKey) ? this.$t(snippetKey) : type;
+
+                return {
+                    label,
+                    value: type,
+                };
+            });
+        },
+
+        fieldType() {
+            if (!this.fieldDefinition) {
+                return null;
+            }
+
+            if (
+                !Contena.Feature.isActive('v6.8.0.0') &&
+                this.fieldDefinition.type === 'json_list' &&
+                this.fieldName === 'states'
+            ) {
+                return 'blog_state_list';
+            }
+
+            if (this.fieldName === 'type' && this.fieldDefinition.type === 'string') {
+                return 'blog_type';
+            }
+
+            if (this.definition.isJsonField(this.fieldDefinition)) {
+                return 'object';
+            }
+
+            if (this.fieldDefinition.type === 'uuid') {
+                const isManyToOneFkField =
+                    Object.keys(
+                        this.definition.filterProperties((field) => {
+                            return field.localField === this.fieldName && field.relation === 'many_to_one';
+                        }),
+                    ).length > 0;
+
+                if (isManyToOneFkField) {
+                    return 'empty';
+                }
+            }
+
+            return this.fieldDefinition.type;
+        },
+
+        booleanOptions() {
+            return [
+                { label: this.$t('global.default.yes'), value: '1' },
+                { label: this.$t('global.default.no'), value: '0' },
+            ];
+        },
+
+        reversedEmptyOptions() {
+            return [
+                { label: this.$t('global.default.yes'), value: false },
+                { label: this.$t('global.default.no'), value: true },
+            ];
+        },
+
+        multiValue: {
+            get() {
+                if (typeof this.actualCondition.value !== 'string' || this.actualCondition.value === '') {
+                    return [];
+                }
+                return this.actualCondition.value.split('|');
+            },
+            set(values) {
+                this.actualCondition.value = values.join('|');
+            },
+        },
+
+        inputComponent() {
+            switch (this.fieldType) {
+                case 'uuid':
+                    return 'sw-entity-multi-id-select';
+                case 'float':
+                case 'int':
+                    return 'sw-number-field';
+                case 'date':
+                    return 'sw-datepicker';
+                case 'string':
+                case 'object':
+                default:
+                    return 'sw-text-field';
+            }
+        },
+
+        currentParameter: {
+            get() {
+                if (!this.actualCondition.parameters) {
+                    return null;
+                }
+                return this.actualCondition.parameters[this.getParameterName(this.filterType)];
+            },
+            set(value) {
+                const param = this.getParameterName(this.filterType);
+                this.actualCondition.parameters = { [param]: value };
+            },
+        },
+
+        gte: {
+            get() {
+                return this.actualCondition.parameters ? this.actualCondition.parameters.gte : null;
+            },
+            set(value) {
+                this.actualCondition.parameters.gte = value;
+            },
+        },
+
+        lte: {
+            get() {
+                return this.actualCondition.parameters ? this.actualCondition.parameters.lte : null;
+            },
+            set(value) {
+                this.actualCondition.parameters.lte = value;
+            },
+        },
+
+        operator: {
+            get() {
+                return this.actualCondition.parameters
+                    ? this.getParameterType(this.actualCondition.parameters.operator)
+                    : null;
+            },
+            set(value) {
+                this.actualCondition.parameters.operator = this.getParameterName(value);
+            },
+        },
+
+        emptyValue: {
+            get() {
+                return this.condition.type !== null ? this.filterType === 'equals' : null;
+            },
+            set(value) {
+                if (value === undefined || value === null) {
+                    this.$emit('empty-change', { type: null });
+
+                    return;
+                }
+
+                this.$emit('empty-change', {
+                    type: value ? 'equals' : 'notEquals',
+                });
+            },
+        },
+
+        stringValue: {
+            get() {
+                if (['int', 'float'].includes(this.fieldType)) {
+                    return Number.parseFloat(this.actualCondition.value);
+                }
+                if (typeof this.actualCondition.value !== 'string') {
+                    return null;
+                }
+                if (this.conditionDataProviderService.isRelativeTimeType(this.filterType) && this.actualCondition.value) {
+                    return this.actualCondition.value.match(/\d+/)[0];
+                }
+                return this.actualCondition.value;
+            },
+            set(value) {
+                if (this.conditionDataProviderService.isRelativeTimeType(this.filterType)) {
+                    this.actualCondition.value = `P${value}D`;
+                    return;
+                }
+                this.actualCondition.value = value.toString();
+            },
+        },
+
+        context() {
+            return { ...Contena.Context.api, inheritance: true };
+        },
+
+        blogCriteria() {
+            const criteria = new Criteria(1, 25);
+            criteria.addAssociation('options.group');
+
+            return criteria;
+        },
+
+        propertyCriteria() {
+            const criteria = new Criteria(1, 25);
+
+            if (this.definition.entity === 'property_group_option') {
+                criteria.addAssociation('group');
+
+                if (typeof this.searchTerm === 'string' && this.searchTerm.length > 0) {
+                    criteria.addQuery(Criteria.contains('group.name', this.searchTerm), 500);
+                }
+            }
+
+            return criteria;
+        },
+
+        visibilitiesCriteria() {
+            const criteria = new Criteria(1, 25);
+            criteria.addAssociation('channel');
+            criteria.addAssociation('blog');
+
+            if (typeof this.searchTerm === 'string' && this.searchTerm.length > 0) {
+                criteria.addQuery(Criteria.contains('channel.name', this.searchTerm), 400);
+                criteria.addQuery(Criteria.contains('blog.name', this.searchTerm), 500);
+            }
+
+            return criteria;
+        },
+
+        resultCriteria() {
+            const criteria = new Criteria(1, 25);
+            criteria.addAssociation('options.group');
+
+            return criteria;
+        },
+
+        customFieldCriteria() {
+            const criteria = this.isProductEntity ? Criteria.fromCriteria(this.blogCriteria) : new Criteria(1, 25);
+
+            if (typeof this.searchTerm === 'string' && this.searchTerm.length > 0) {
+                this.customFieldLabelProperties.forEach((labelProperty) => {
+                    criteria.addQuery(Criteria.contains(labelProperty, this.searchTerm), 500);
+                });
+            }
+
+            return criteria;
+        },
+
+        customFieldLabelProperty() {
+            return this.fieldDefinition?.config?.labelProperty ?? 'name';
+        },
+
+        customFieldLabelProperties() {
+            return [].concat(this.customFieldLabelProperty);
+        },
+
+        visibilitiesLabelCallback() {
+            return (item) => {
+                if (!item) {
+                    return '';
+                }
+
+                if (!item.channel || !item.blog) {
+                    return item.id;
+                }
+
+                return `${item.channel.translated.name}: ${item.blog.translated.name}`;
+            };
+        },
+
+        isProductEntity() {
+            return this.getCustomFieldEntityName(this.fieldName) === 'blog';
+        },
+    },
+
+    methods: {
+        getProductLabel(item) {
+            const name = item.translated?.name || item.name;
+
+            return item.blogNumber ? `${item.blogNumber} - ${name}` : name;
+        },
+
+        onChangeType(type, parameters) {
+            this.$emit('type-change', { type, parameters });
+        },
+
+        getConditionType(condition) {
+            if (this.condition.type === 'not') {
+                const innerType = condition.queries[0].type;
+                const type = this.conditionDataProviderService.negateOperator(innerType);
+                return type.identifier;
+            }
+
+            return this.condition.type;
+        },
+
+        getRangeType(condition) {
+            if (condition.parameters === null) {
+                return null;
+            }
+
+            const hasLte = condition.parameters.hasOwnProperty('lte');
+            const hasGte = condition.parameters.hasOwnProperty('gte');
+
+            if (hasGte && hasLte) {
+                return this.conditionDataProviderService.getOperator('range').identifier;
+            }
+
+            if (hasGte) {
+                return this.conditionDataProviderService.getOperator('greaterThanEquals').identifier;
+            }
+
+            if (hasLte) {
+                return this.conditionDataProviderService.getOperator('lessThanEquals').identifier;
+            }
+
+            if (this.condition.parameters.hasOwnProperty('lt')) {
+                return this.conditionDataProviderService.getOperator('lessThan').identifier;
+            }
+
+            if (this.condition.parameters.hasOwnProperty('gt')) {
+                return this.conditionDataProviderService.getOperator('greaterThan').identifier;
+            }
+
+            return null;
+        },
+
+        getParameters(type) {
+            if (type === 'range') {
+                return { lte: null, gte: null };
+            }
+
+            if (type === 'since' || type === 'until') {
+                return { operator: null };
+            }
+
+            const param = this.getParameterName(type);
+            return param ? { [param]: null } : null;
+        },
+
+        getParameterName(type) {
+            switch (type) {
+                case 'greaterThanEquals':
+                    return 'gte';
+                case 'lessThanEquals':
+                    return 'lte';
+                case 'lessThan':
+                    return 'lt';
+                case 'greaterThan':
+                    return 'gt';
+                case 'equals':
+                    return 'eq';
+                case 'notEquals':
+                    return 'neq';
+                default:
+                    return null;
+            }
+        },
+
+        getParameterType(name) {
+            switch (name) {
+                case 'gte':
+                    return 'greaterThanEquals';
+                case 'lte':
+                    return 'lessThanEquals';
+                case 'lt':
+                    return 'lessThan';
+                case 'gt':
+                    return 'greaterThan';
+                case 'eq':
+                    return 'equals';
+                case 'neq':
+                    return 'notEquals';
+                default:
+                    return null;
+            }
+        },
+
+        setBooleanValue(value) {
+            this.$emit('boolean-change', {
+                type: +value ? 'equals' : 'notEquals',
+                value,
+            });
+        },
+
+        setSearchTerm(value) {
+            this.searchTerm = value;
+        },
+
+        onSelectCollapsed() {
+            this.searchTerm = '';
+        },
+
+        getCategoryBreadcrumb(category) {
+            if (!category.breadcrumb || Object.keys(category.breadcrumb).length === 0) {
+                return category.name;
+            }
+
+            return Object.values(category.breadcrumb).join(' / ');
+        },
+
+        isEntityCustomField(fieldName) {
+            const strippedFieldName = fieldName?.replace(/customFields\./, '');
+            const customField = this.blogCustomFields[strippedFieldName];
+
+            return customField?.config?.customFieldType === 'entity';
+        },
+
+        getCustomFieldEntityName(fieldName) {
+            const strippedFieldName = fieldName.replace(/customFields\./, '');
+            const customField = this.blogCustomFields[strippedFieldName];
+
+            return customField.config.entity;
+        },
+
+        getCustomFieldLabel(item) {
+            const labels = [];
+
+            this.customFieldLabelProperties.forEach((labelProperty) => {
+                labels.push(item.translated?.[labelProperty] || item[labelProperty]);
+            });
+
+            return labels.join(' ');
+        },
+    },
+};

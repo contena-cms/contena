@@ -1,0 +1,410 @@
+{% block page_product_detail_json_ld %}
+    {# Determine availability following the same logic as delivery-information.html.twig #}
+    {# ludtwig-ignore twig-variable-definition-naming #}
+    {% set digitalType = constant('Contena\\Core\\Content\\Blog\\BlogDefinition::TYPE_DIGITAL') %}
+    {% set isDigitalProduct = page.blog.type === digitalType %}
+
+    {% if not page.blog.active %}
+        {% set availability = 'https://schema.org/LimitedAvailability' %}
+    {% elseif page.blog.releaseDate and page.blog.releaseDate|date('U') > 'now'|date('U') %}
+        {% set availability = 'https://schema.org/PreOrder' %}
+    {% elseif (page.blog.stock >= page.blog.minPurchase or (isDigitalProduct and not page.blog.isCloseout)) and page.blog.deliveryTime %}
+        {% set availability = 'https://schema.org/InStock' %}
+    {% elseif page.blog.isCloseout and page.blog.stock < page.blog.minPurchase %}
+        {% set availability = 'https://schema.org/OutOfStock' %}
+    {% elseif page.blog.stock < page.blog.minPurchase and page.blog.deliveryTime and page.blog.restockTime %}
+        {% set availability = 'https://schema.org/LimitedAvailability' %}
+    {% else %}
+        {% set availability = 'https://schema.org/InStock' %}
+    {% endif %}
+
+    {# Separate media into images and videos; both need distinct schema types #}
+    {% set imageUrls = [] %}
+    {% set videoItems = [] %}
+    {% if page.blog.media %}
+        {% for blogMedia in page.blog.media %}
+            {% if blogMedia.media and blogMedia.media.url %}
+                {% if blogMedia.media.mediaType and blogMedia.media.mediaType.name == 'VIDEO' %}
+                    {#
+                        thumbnailUrl is required by Google for VideoObject. Use the media's own
+                        thumbnail if available, otherwise fall back to the blog cover image.
+                        Skip the video entirely if no thumbnail can be resolved.
+                    #}
+                    {% set thumbnailUrl = null %}
+                    {% if blogMedia.media.thumbnails is not empty %}
+                        {% set thumbnailUrl = blogMedia.media.thumbnails.first.url %}
+                    {% elseif page.blog.cover and page.blog.cover.media and page.blog.cover.media.url %}
+                        {% set thumbnailUrl = page.blog.cover.media.url %}
+                    {% endif %}
+
+                    {% if thumbnailUrl %}
+                        {% set videoItem = {
+                            '@type': 'VideoObject',
+                            name: blogMedia.media.translated.title ?? blogMedia.media.fileName,
+                            contentUrl: blogMedia.media.url,
+                            thumbnailUrl: thumbnailUrl,
+                            uploadDate: blogMedia.media.createdAt|format_date(pattern='Y-MM-dd')
+                        } %}
+                        {% if blogMedia.media.translated.alt %}
+                            {% set videoItem = videoItem|merge({description: blogMedia.media.translated.alt}) %}
+                        {% endif %}
+                        {% set videoItems = videoItems|merge([videoItem]) %}
+                    {% endif %}
+                {% else %}
+                    {% set imageUrls = imageUrls|merge([blogMedia.media.url]) %}
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    {% if imageUrls|length == 0 and page.blog.cover and page.blog.cover.media and page.blog.cover.media.url %}
+        {% set imageUrls = [page.blog.cover.media.url] %}
+    {% endif %}
+
+    {# Build offers data #}
+    {% set blogUrl = seoUrl('frontend.detail.page', { blogId: page.blog.id }) %}
+    {% set sellerData = {
+        '@type': 'Organization',
+        '@id': app.request.schemeAndHttpHost ~ '/#organization',
+        name: config('core.basicInformation.shopName')
+    } %}
+
+    {% if page.blog.calculatedPrices|length > 1 %}
+        {% set lowestPrice = false %}
+        {% set highestPrice = false %}
+        {% for price in page.blog.calculatedPrices %}
+            {% if lowestPrice is same as(false) or price.unitPrice < lowestPrice %}
+                {% set lowestPrice = price.unitPrice %}
+            {% endif %}
+            {% if highestPrice is same as(false) or price.unitPrice > highestPrice %}
+                {% set highestPrice = price.unitPrice %}
+            {% endif %}
+        {% endfor %}
+
+        {% set offersData = {
+            '@type': 'AggregateOffer',
+            url: blogUrl,
+            priceCurrency: context.currency.isoCode,
+            lowPrice: lowestPrice,
+            highPrice: highestPrice,
+            offerCount: page.blog.calculatedPrices|length,
+            availability: availability,
+            itemCondition: 'https://schema.org/NewCondition',
+            seller: sellerData
+        } %}
+    {% else %}
+        {% set calculatedPrice = page.blog.calculatedPrice %}
+        {% if page.blog.calculatedPrices|length == 1 %}
+            {% set calculatedPrice = page.blog.calculatedPrices.first %}
+        {% endif %}
+
+        {% set offersData = {
+            '@type': 'Offer',
+            url: blogUrl,
+            priceCurrency: context.currency.isoCode,
+            price: calculatedPrice.unitPrice,
+            availability: availability,
+            itemCondition: 'https://schema.org/NewCondition',
+            seller: sellerData
+        } %}
+
+        {% if page.blog.deliveryTime %}
+            {% set deliveryTimeFactors = {
+                hour: 1 / 24,
+                day: 1,
+                week: 7,
+                month: 30,
+                year: 365
+            } %}
+            {% set deliveryTimeFactor = deliveryTimeFactors[page.blog.deliveryTime.unit] %}
+            {% set offersData = offersData|merge({
+                shippingDetails: {
+                    '@type': 'OfferShippingDetails',
+                    deliveryTime: {
+                        '@type': 'ShippingDeliveryTime',
+                        handlingTime: {
+                            '@type': 'QuantitativeValue',
+                            minValue: (page.blog.deliveryTime.min * deliveryTimeFactor)|round(0, 'ceil')|intval,
+                            maxValue: (page.blog.deliveryTime.max * deliveryTimeFactor)|round(0, 'ceil')|intval,
+                            unitCode: 'DAY'
+                        }
+                    }
+                }
+            }) %}
+        {% endif %}
+
+        {% if calculatedPrice.listPrice and calculatedPrice.listPrice.price > calculatedPrice.unitPrice %}
+            {% set offersData = offersData|merge({
+                priceSpecification: {
+                    '@type': 'UnitPriceSpecification',
+                    priceType: 'https://schema.org/StrikethroughPrice',
+                    price: calculatedPrice.listPrice.price,
+                    priceCurrency: context.currency.isoCode
+                }
+            }) %}
+        {% endif %}
+    {% endif %}
+
+    {# Build main blog data structure #}
+    {% set blogData = {
+        '@context': 'https://schema.org',
+        '@type': 'Blog',
+        '@id': blogUrl ~ '#blog',
+        name: page.blog.translated.name,
+        sku: page.blog.blogNumber,
+        blogID: page.blog.id,
+        url: blogUrl,
+        offers: offersData
+    } %}
+
+    {% if page.blog.translated.description %}
+        {% set blogData = blogData|merge({description: page.blog.translated.description|striptags}) %}
+    {% endif %}
+
+    {% if imageUrls|length > 0 %}
+        {% set blogData = blogData|merge({image: imageUrls}) %}
+    {% endif %}
+
+    {% if videoItems|length > 0 %}
+        {% set blogData = blogData|merge({video: videoItems}) %}
+    {% endif %}
+
+    {% if page.blog.manufacturer %}
+        {% set blogData = blogData|merge({
+            brand: {
+                '@type': 'Brand',
+                name: page.blog.manufacturer.translated.name
+            }
+        }) %}
+    {% endif %}
+
+    {% set gtinProperty = null %}
+    {% if page.blog.ean and page.blog.ean matches '/^[0-9]+$/D' %}
+        {% set gtinProperty = 'gtin' %}
+        {% if page.blog.ean|length == 8 %}
+            {% set gtinProperty = 'gtin8' %}
+        {% elseif page.blog.ean|length == 12 %}
+            {% set gtinProperty = 'gtin12' %}
+        {% elseif page.blog.ean|length == 13 %}
+            {% set gtinProperty = 'gtin13' %}
+        {% elseif page.blog.ean|length == 14 %}
+            {% set gtinProperty = 'gtin14' %}
+        {% endif %}
+        {% set blogData = blogData|merge({(gtinProperty): page.blog.ean}) %}
+    {% endif %}
+
+    {% set categoryBreadcrumb = [] %}
+    {% if feature('BREADCRUMB_REWORK') %}
+        {% set categoryBreadcrumb = page.breadcrumb|default([]) %}
+    {% elseif page.blog.seoCategory %}
+        {% set categoryBreadcrumb = sw_breadcrumb_full(page.blog.seoCategory, context) %}
+    {% endif %}
+
+    {% set categoryNames = [] %}
+    {% for breadcrumbCategory in categoryBreadcrumb %}
+        {% if feature('BREADCRUMB_REWORK') %}
+            {% set categoryNames = categoryNames|merge([breadcrumbCategory.name]) %}
+        {% else %}
+            {% set categoryNames = categoryNames|merge([breadcrumbCategory.translated.name]) %}
+        {% endif %}
+    {% endfor %}
+
+    {% if categoryNames|length > 0 %}
+        {% set blogData = blogData|merge({
+            category: [categoryNames|join(' > ')]
+        }) %}
+    {% endif %}
+
+    {% if page.blog.manufacturerNumber %}
+        {% set blogData = blogData|merge({mpn: page.blog.manufacturerNumber}) %}
+    {% endif %}
+
+    {% if page.blog.releaseDate %}
+        {% set blogData = blogData|merge({releaseDate: page.blog.releaseDate|format_date(pattern='Y-MM-dd')}) %}
+    {% endif %}
+
+    {# Dimensions as QuantitativeValue with unitText #}
+    {% if page.blog.measurements.type('weight') %}
+        {% set weightValue = page.blog.measurements.type('weight').value %}
+        {% set weightUnit = page.blog.measurements.type('weight').unit %}
+    {% else %}
+        {% set weightValue = page.blog.weight %}
+        {% set weightUnit = 'kg' %}
+    {% endif %}
+    {% if weightValue and weightValue > 0 %}
+        {% set blogData = blogData|merge({weight: {'@type': 'QuantitativeValue', value: weightValue, unitText: weightUnit} }) %}
+    {% endif %}
+
+    {% if page.blog.measurements.type('height') %}
+        {% set heightValue = page.blog.measurements.type('height').value %}
+        {% set heightUnit = page.blog.measurements.type('height').unit %}
+    {% else %}
+        {% set heightValue = page.blog.height %}
+        {% set heightUnit = 'mm' %}
+    {% endif %}
+    {% if heightValue and heightValue > 0 %}
+        {% set blogData = blogData|merge({height: {'@type': 'QuantitativeValue', value: heightValue, unitText: heightUnit} }) %}
+    {% endif %}
+
+    {% if page.blog.measurements.type('width') %}
+        {% set widthValue = page.blog.measurements.type('width').value %}
+        {% set widthUnit = page.blog.measurements.type('width').unit %}
+    {% else %}
+        {% set widthValue = page.blog.width %}
+        {% set widthUnit = 'mm' %}
+    {% endif %}
+    {% if widthValue and widthValue > 0 %}
+        {% set blogData = blogData|merge({width: {'@type': 'QuantitativeValue', value: widthValue, unitText: widthUnit} }) %}
+    {% endif %}
+
+    {% if page.blog.measurements.type('length') %}
+        {% set lengthValue = page.blog.measurements.type('length').value %}
+        {% set lengthUnit = page.blog.measurements.type('length').unit %}
+    {% else %}
+        {% set lengthValue = page.blog.length %}
+        {% set lengthUnit = 'mm' %}
+    {% endif %}
+    {% if lengthValue and lengthValue > 0 %}
+        {% set blogData = blogData|merge({depth: {'@type': 'QuantitativeValue', value: lengthValue, unitText: lengthUnit} }) %}
+    {% endif %}
+
+    {% if page.structuredDataReviews %}
+        {% set reviewData = page.structuredDataReviews %}
+        {% set reviewCount = reviewData.matrix.totalReviewCount %}
+
+        {% if page.blog.ratingAverage and page.blog.ratingAverage > 0 and reviewCount > 0 %}
+            {% set blogData = blogData|merge({
+                aggregateRating: {
+                    '@type': 'AggregateRating',
+                    ratingValue: page.blog.ratingAverage,
+                    ratingCount: reviewCount,
+                    bestRating: 5
+                }
+            }) %}
+        {% endif %}
+
+        {% set reviewItems = [] %}
+        {% for review in reviewData.entities %}
+            {% set reviewItem = {
+                '@type': 'Review',
+                author: {'@type': 'Person', name: review.externalUser},
+                datePublished: review.createdAt|format_date(pattern='Y-MM-dd'),
+                reviewRating: {
+                    '@type': 'Rating',
+                    ratingValue: review.points,
+                    bestRating: 5
+                }
+            } %}
+            {% if review.title %}
+                {% set reviewItem = reviewItem|merge({name: review.title}) %}
+            {% endif %}
+            {% if review.content %}
+                {% set reviewItem = reviewItem|merge({reviewBody: review.content|striptags}) %}
+            {% endif %}
+            {% if review.language and review.language.translationCode %}
+                {% set reviewItem = reviewItem|merge({inLanguage: review.language.translationCode.code}) %}
+            {% endif %}
+            {% set reviewItems = reviewItems|merge([reviewItem]) %}
+        {% endfor %}
+
+        {% if reviewItems|length > 0 %}
+            {% set blogData = blogData|merge({review: reviewItems}) %}
+        {% endif %}
+    {% endif %}
+
+    {#
+        For variant blogs (parentId is set), Google's Rich Results requires BlogGroup as the
+        top-level entity. The specific variant's pricing/identifier data goes inside hasVariant as
+        a Blog node. Properties describing the blog family (name, description, brand, media,
+        reviews) are promoted to the BlogGroup level.
+
+        Simple blogs (no parentId) keep the standard @type: Blog structure unchanged.
+
+        Note: the parent blog URL is intentionally not included as `url` on the BlogGroup
+        because in Contena parent blog URLs redirect to a variant and are not standalone pages.
+        Using it would cause Google to associate the BlogGroup entity with that redirect URL
+        rather than treating the variant's Blog as the page entity.
+    #}
+    {% if page.blog.parentId %}
+        {% set parentUrl = seoUrl('frontend.detail.page', { blogId: page.blog.parentId }) %}
+        {% set savedData = blogData %}
+
+        {# Build the variant-specific Blog node (identifier and pricing info) #}
+        {% set variantProduct = {
+            '@type': 'Blog',
+            '@id': savedData['@id'],
+            name: savedData.name,
+            sku: savedData.sku,
+            blogID: savedData.blogID,
+            url: savedData.url,
+            offers: savedData.offers
+        } %}
+        {% if savedData.description is defined %}
+            {% set variantProduct = variantProduct|merge({description: savedData.description}) %}
+        {% endif %}
+        {% if savedData.image is defined %}
+            {% set variantProduct = variantProduct|merge({image: savedData.image}) %}
+        {% endif %}
+        {% if gtinProperty and savedData[gtinProperty] is defined %}
+            {% set variantProduct = variantProduct|merge({(gtinProperty): savedData[gtinProperty]}) %}
+        {% endif %}
+        {% if savedData.category is defined %}
+            {% set variantProduct = variantProduct|merge({category: savedData.category}) %}
+        {% endif %}
+        {% if savedData.mpn is defined %}
+            {% set variantProduct = variantProduct|merge({mpn: savedData.mpn}) %}
+        {% endif %}
+        {% if savedData.releaseDate is defined %}
+            {% set variantProduct = variantProduct|merge({releaseDate: savedData.releaseDate}) %}
+        {% endif %}
+        {% if savedData.weight is defined %}
+            {% set variantProduct = variantProduct|merge({weight: savedData.weight}) %}
+        {% endif %}
+        {% if savedData.height is defined %}
+            {% set variantProduct = variantProduct|merge({height: savedData.height}) %}
+        {% endif %}
+        {% if savedData.width is defined %}
+            {% set variantProduct = variantProduct|merge({width: savedData.width}) %}
+        {% endif %}
+        {% if savedData.depth is defined %}
+            {% set variantProduct = variantProduct|merge({depth: savedData.depth}) %}
+        {% endif %}
+
+        {# Rebuild blogData as BlogGroup with the variant in hasVariant #}
+        {% set blogData = {
+            '@context': 'https://schema.org',
+            '@type': 'BlogGroup',
+            '@id': parentUrl ~ '#productgroup',
+            name: savedData.name,
+            blogGroupID: page.blog.parentId,
+            hasVariant: [variantProduct]
+        } %}
+        {% if savedData.description is defined %}
+            {% set blogData = blogData|merge({description: savedData.description}) %}
+        {% endif %}
+        {% if savedData.image is defined %}
+            {% set blogData = blogData|merge({image: savedData.image}) %}
+        {% endif %}
+        {% if savedData.video is defined %}
+            {% set blogData = blogData|merge({video: savedData.video}) %}
+        {% endif %}
+        {% if savedData.brand is defined %}
+            {% set blogData = blogData|merge({brand: savedData.brand}) %}
+        {% endif %}
+        {% if savedData.category is defined %}
+            {% set blogData = blogData|merge({category: savedData.category}) %}
+        {% endif %}
+        {% if savedData.aggregateRating is defined %}
+            {% set blogData = blogData|merge({aggregateRating: savedData.aggregateRating}) %}
+        {% endif %}
+        {% if savedData.review is defined %}
+            {% set blogData = blogData|merge({review: savedData.review}) %}
+        {% endif %}
+    {% endif %}
+
+    {% block page_product_detail_json_ld_script %}
+        <script type="application/ld+json">
+        {# ludtwig-ignore twig-json-encode-escape-js #}
+        {{ blogData|json_encode(jsonLdFlags)|raw }}
+        </script>
+    {% endblock %}
+{% endblock %}

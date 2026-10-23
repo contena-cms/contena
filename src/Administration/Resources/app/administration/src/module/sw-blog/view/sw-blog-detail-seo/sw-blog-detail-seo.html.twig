@@ -1,0 +1,62 @@
+{% block sw_product_detail_seo %}
+<div v-if="isLoading">
+    <sw-skeleton variant="detail-bold" />
+    <sw-skeleton />
+</div>
+
+<div v-else>
+    {% block sw_product_detail_seo_general %}
+    <mt-card
+        position-identifier="sw-blog-detail-seo"
+        :title="$t('sw-blog.seo.cardTitleSeo')"
+    >
+        {% block sw_product_detail_seo_general_content %}
+        <sw-blog-seo-form
+            ref="seoForm"
+            :allow-edit="acl.can('blog.editor')"
+        />
+        {% endblock %}
+    </mt-card>
+    {% endblock %}
+
+    {% block sw_product_detail_seo_urls %}
+    <sw-seo-url
+        v-if="blog.seoUrls"
+        :has-default-template="false"
+        :disabled="!acl.can('blog.editor')"
+        :urls="blog.seoUrls"
+        @on-change-sales-channel="onChangeSalesChannel"
+    >
+        {% block sw_product_detail_seo_urls_content %}
+        <template #seo-additional="props">
+            {% block sw_product_detail_seo_urls_content_seo_additional %}
+            <sw-inherit-wrapper
+                v-if="blog.mainCategories"
+                v-model:value="blogMainCategory"
+                :has-parent="!!parentProduct.id && !!props.currentSalesChannelId && blog.categories.length === 0"
+                :label="$t('sw-seo-url.labelMainCategory')"
+                :inherited-value="parentMainCategory"
+            >
+
+                <template #content="{ currentValue, isInherited }">
+                    {% block sw_product_detail_seo_urls_content_seo_additional_edit %}
+                    <sw-seo-main-category
+                        :current-sales-channel-id="props.currentSalesChannelId"
+                        :categories="categories"
+                        :main-categories="isInherited ? parentProduct.mainCategories : blog.mainCategories"
+                        :overwrite-label="true"
+                        :allow-edit="acl.can('blog.editor') && !isInherited"
+                        @main-category-add="onAddMainCategory"
+                        @main-category-remove="onRemoveMainCategory"
+                    />
+                    {% endblock %}
+                </template>
+
+            </sw-inherit-wrapper>
+            {% endblock %}
+        </template>
+        {% endblock %}
+    </sw-seo-url>
+    {% endblock %}
+</div>
+{% endblock %}

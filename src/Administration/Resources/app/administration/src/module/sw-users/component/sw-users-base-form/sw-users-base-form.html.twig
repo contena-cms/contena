@@ -1,0 +1,173 @@
+{% block sw_customer_base_form %}
+<div class="sw-user-base-form">
+    <sw-container
+        columns="repeat(auto-fit, minmax(250px, 1fr))"
+        gap="0px 32px"
+    >
+        {% block sw_customer_base_form_account_type_field %}
+        <sw-single-select
+            v-model:value="user.accountType"
+            name="sw-field--user-accountType"
+            class="sw-user-base-form__account-type-select"
+            :label="$t('sw-user.userType.labelAccountType')"
+            :placeholder="$t('sw-user.userType.placeholderAccountType')"
+            :options="accountTypeOptions"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_first_salutation_field %}
+        <sw-entity-single-select
+            v-model:value="user.salutationId"
+            name="sw-field--user-salutationId"
+            class="sw-user-base-form__salutation-select"
+            entity="salutation"
+            :label="$t('sw-user.baseForm.labelSalutation')"
+            :placeholder="$t('sw-user.baseForm.placeholderSalutation')"
+            :error="userSalutationIdError"
+            :criteria="salutationCriteria"
+            label-property="displayName"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_title_field %}
+        <mt-text-field
+            v-model="user.title"
+            name="sw-field--user-title"
+            :label="$t('sw-user.baseForm.labelTitle')"
+            :placeholder="$t('sw-user.baseForm.placeholderTitle')"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_first_name_field %}
+        <mt-text-field
+            v-model="user.firstName"
+            name="sw-field--user-firstName"
+            required
+            :label="$t('sw-user.baseForm.labelFirstName')"
+            :placeholder="$t('sw-user.baseForm.placeholderFirstName')"
+            :error="userFirstNameError"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_last_name_field %}
+        <mt-text-field
+            v-model="user.lastName"
+            name="sw-field--user-lastName"
+            required
+            :label="$t('sw-user.baseForm.labelLastName')"
+            :placeholder="$t('sw-user.baseForm.placeholderLastName')"
+            :error="userLastNameError"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_email_field %}
+        <mt-email-field
+            v-model="user.email"
+            name="sw-field--user-email"
+            required
+            :label="$t('sw-user.baseForm.labelEmail')"
+            :placeholder="$t('sw-user.baseForm.placeholderEmail')"
+            :error="userEmailError"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_password_field %}
+        <mt-password-field
+            v-model="user.password"
+            name="sw-field--user-password"
+            autocomplete="new-password"
+            :required="!user.guest"
+            :disabled="user.guest"
+            :label="$t('sw-user.baseForm.labelPassword')"
+            :placeholder="$t('sw-user.baseForm.placeholderPassword')"
+            :error="userPasswordError"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_vat_id_field %}
+        <mt-text-field
+            v-if="isBusinessAccountType"
+            id="vatId"
+            v-model="user.vatIds[0]"
+            name="vatId"
+            :error="userVatIdsError"
+            :label="$t('sw-user.addressForm.labelVatId')"
+            :placeholder="$t('sw-user.addressForm.placeholderVatId')"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_customer_group_field %}
+        <sw-entity-single-select
+            v-model:value="user.groupId"
+            name="sw-field--user-groupId"
+            class="sw-user-base-form__customer-group-select"
+            required
+            show-clearable-button
+            entity="user_group"
+            :label="$t('sw-user.baseForm.labelCustomerGroup')"
+            :placeholder="$t('sw-user.baseForm.placeholderCustomerGroup')"
+            :error="userGroupIdError"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_channel_field %}
+        <sw-entity-single-select
+            class="sw-user-base-form__sales-channel-select"
+            entity="channel"
+            :label="$t('sw-user.baseForm.labelSalesChannel')"
+            :placeholder="$t('sw-user.baseForm.placeholderSalesChannel')"
+            :value="user.channelId"
+            :error="userSalesChannelIdError"
+            required
+            show-clearable-button
+            @update:value="onSalesChannelChange"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_customer_number_field %}
+        <mt-text-field
+            v-model="user.userNumber"
+            name="sw-field--user-userNumber"
+            :label="$t('sw-user.baseForm.labelCustomerNumber')"
+            :placeholder="$t('sw-user.baseForm.placeholderCustomerNumber')"
+            :error="userCustomerNumberError"
+            required
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_birthday_field %}
+        <mt-datepicker
+            v-model="user.birthday"
+            type="date"
+            name="birthday"
+            hide-hint
+            :label="$t('sw-user.baseForm.labelBirthday')"
+            :placeholder="$t('sw-datepicker.date.placeholder')"
+        />
+        {% endblock %}
+
+        {% block sw_customer_base_form_language_field %}
+        <sw-entity-single-select
+            v-model:value="user.languageId"
+            name="sw-field--user-languageId"
+            class="sw-user-base-form__language-select"
+            entity="language"
+            required
+            show-clearable-button
+            :label="$t('sw-user.baseForm.labelLanguage')"
+            :placeholder="$t('sw-user.baseForm.placeholderLanguage')"
+            :criteria="languageCriteria"
+        />
+        {% endblock %}
+    </sw-container>
+
+    {% block sw_customer_base_form_tag_field %}
+    <sw-entity-tag-select
+        v-model:entity-collection="user.tags"
+        name="sw-field--user-tags"
+        :label="$t('sw-user.baseForm.labelTags')"
+        :placeholder="$t('sw-user.baseForm.placeholderTags')"
+    />
+    {% endblock %}
+</div>
+{% endblock %}

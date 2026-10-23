@@ -1,0 +1,31 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\App\Exception;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\App\Exception\AppValidationException;
+use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
+use Contena\Core\Framework\App\Validation\Error\MissingPermissionError;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ */
+#[CoversClass(AppValidationException::class)]
+class AppValidationExceptionTest extends TestCase
+{
+    #[TestDox('the message aggregates every validation error')]
+    public function testMessageAggregatesErrors(): void
+    {
+        $exception = new AppValidationException('MyApp', new ErrorCollection([
+            new MissingPermissionError(['blog:read']),
+            new MissingPermissionError(['order:read']),
+        ]));
+
+        static::assertStringContainsString('The app "MyApp" is invalid:', $exception->getMessage());
+        static::assertStringContainsString("The following permissions are missing:\n- blog:read", $exception->getMessage());
+        static::assertStringContainsString("The following permissions are missing:\n- order:read", $exception->getMessage());
+    }
+}

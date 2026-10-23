@@ -1,0 +1,314 @@
+{% block sw_customer_base_info %}
+<sw-container
+    class="sw-user-base-info"
+    columns="repeat(auto-fit, minmax(250px, 1fr))"
+    gap="0px 15px"
+>
+    {% block sw_customer_base_info_metadata %}
+    {% block sw_customer_base_info_metadata_left %}
+    <sw-loader v-if="isLoading" />
+
+    <div
+        v-else
+        class="sw-user-base-info-columns"
+    >
+        <template v-if="isBusinessAccountType && !userEditMode">
+            <sw-description-list>
+                <dt class="sw-user-base-info__label">
+                    {{ $t('sw-user.baseInfo.labelCompany') }}
+                </dt>
+
+                <dd>
+                    {{ user.company }}
+                </dd>
+            </sw-description-list>
+
+            <sw-description-list>
+                <dt class="sw-user-base-info__label">
+                    {{ $t('sw-user.baseInfo.labelVatId') }}
+                </dt>
+
+                <dd>
+                    {{ user.vatIds[0] || '-' }}
+                </dd>
+            </sw-description-list>
+        </template>
+
+        {% block sw_customer_base_metadata_customer_group %}
+        <sw-description-list>
+            {% block sw_customer_base_metadata_customer_group_label %}
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelCustomerGroup') }}
+            </dt>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_customer_group_content %}
+            <dd v-if="!userEditMode">
+                {{ user.group.translated.name }}
+            </dd>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_customer_group_editor %}
+            <dd v-else>
+                <sw-entity-single-select
+                    v-model:value="user.groupId"
+                    name="sw-field--user-groupId"
+                    entity="user_group"
+                    size="small"
+                    show-clearable-button
+                    :error="userGroupIdError"
+                />
+            </dd>
+            {% endblock %}
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_active %}
+        <sw-description-list>
+            {% block sw_customer_base_metadata_active_label %}
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelActive') }}
+            </dt>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_active_content %}
+            <dd
+                v-if="!userEditMode"
+                class="sw-user-base__label-is-active"
+            >
+                {{ $t('sw-user.baseInfo.contentActive', {}, user.active ? 1 : 2) }}
+            </dd>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_active_editor %}
+            <dd v-else>
+                <mt-checkbox
+                    v-model:checked="user.active"
+                    name="sw-field--user-active"
+                    class="sw-user-base-info__checkbox-field"
+                    :label="$t('sw-user.baseInfo.contentActive')"
+                    size="small"
+                />
+            </dd>
+            {% endblock %}
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_confirmed %}
+        <sw-description-list v-if="user.doubleOptInRegistration">
+            {% block sw_customer_base_metadata_confirmed_label %}
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelConfirmed') }}
+            </dt>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_confirmed_content %}
+            <dd
+                v-if="!userEditMode"
+                class="sw-user-base__label-is-confirmed"
+            >
+                {{ $t('sw-user.baseInfo.contentConfirmed', {}, user.doubleOptInConfirmDate ? 1 : 2) }}
+            </dd>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_confirmed_editor %}
+            <dd v-else>
+                <mt-checkbox
+                    name="sw-field--user-confirmed"
+                    class="sw-user-base-info__checkbox-field"
+                    :checked="!!user.doubleOptInConfirmDate"
+                    :label="$t('sw-user.baseInfo.contentConfirmed')"
+                    size="small"
+                    @update:checked="user.doubleOptInConfirmDate = $event ? new Date() : null"
+                />
+            </dd>
+            {% endblock %}
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_language %}
+        <sw-description-list>
+            {% block sw_customer_base_metadata_language_label %}
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelLanguage') }}
+            </dt>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_language_content %}
+            <dd
+                v-if="!userEditMode"
+                class="sw-user-base__label-language"
+            >
+                {{ userLanguageName }}
+            </dd>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_language_editor %}
+            <dd v-else>
+                <sw-entity-single-select
+                    v-model:value="user.languageId"
+                    name="sw-field--user-languageId"
+                    class="sw-user-base-info__language-select"
+                    entity="language"
+                    :criteria="languageCriteria"
+                    size="small"
+                    show-clearable-button
+                />
+            </dd>
+            {% endblock %}
+        </sw-description-list>
+        {% endblock %}
+
+        {% block ssw_customer_base_metadata_affiliate %}
+        <sw-description-list>
+            <dt>{{ $t('sw-user.baseInfo.labelAffiliateCode') }}</dt>
+            <dd v-if="!userEditMode">
+                {{ user.affiliateCode || '-' }}
+            </dd>
+            <dd v-else>
+
+                <mt-text-field
+                    v-model="user.affiliateCode"
+                    name="sw-field--user-userAffiliateCode"
+                    :placeholder="$t('sw-user.baseInfo.placeholderCustomerAffiliateCode')"
+                    size="small"
+                />
+            </dd>
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_campaign %}
+        <sw-description-list>
+            <dt>{{ $t('sw-user.baseInfo.labelCampaignCode') }}</dt>
+            <dd v-if="!userEditMode">
+                {{ user.campaignCode || '-' }}
+            </dd>
+            <dd v-else>
+
+                <mt-text-field
+                    v-model="user.campaignCode"
+                    name="sw-field--user-userCampaignCode"
+                    :placeholder="$t('sw-user.baseInfo.placeholderCustomerCampaignCode')"
+                    size="small"
+                />
+            </dd>
+        </sw-description-list>
+        {% endblock %}
+    </div>
+    {% endblock %}
+
+    {% block sw_customer_base_info_metadata_right %}
+    <div class="sw-user-base-info-columns">
+        {% block sw_customer_base_metadata_customer_number %}
+        <sw-description-list>
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelCustomerNumber') }}
+            </dt>
+            <dd class="sw-user-base__label-user-number">
+                {{ user.userNumber }}
+            </dd>
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_bound_channel %}
+        <sw-description-list>
+            {% block sw_customer_base_metadata_bound_channel_label %}
+            <dt class="sw-user-base-info__label sw-bound-sales-channel__label">
+                {{ $t('sw-user.baseInfo.labelBoundSalesChannel') }}
+                <sw-help-text :text="$t('sw-user.baseInfo.helpTextBoundSalesChannel')" />
+            </dt>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_bound_saleschannel_content %}
+            <dd class="sw-user-base__label-bound-sales-channel">
+                <template v-if="user.boundSalesChannelId">
+                    {{ user.boundSalesChannel.translated.name }}
+                </template>
+                <template v-else>
+                    {{ $t('sw-user.baseInfo.emptyBoundSalesChannel') }}
+                </template>
+            </dd>
+            {% endblock %}
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_last_login %}
+        <sw-description-list>
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelLastLogin') }}
+            </dt>
+            <dd class="sw-user-base__label-last-login">
+                <template v-if="user.lastLogin">
+                    <sw-time-ago
+                        :date="user.lastLogin"
+                        :date-time-format="{ month: '2-digit', day: '2-digit' }"
+                    />
+                </template>
+                <template v-else>
+                    {{ $t('sw-user.baseInfo.emptyTextLogin') }}
+                </template>
+            </dd>
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_turnover %}
+        <sw-description-list>
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelTurnover') }}
+            </dt>
+            <dd class="sw-user-base__label-turnover">
+                {{ currencyFilter(user.orderTotalAmount, currencyCode) }}
+            </dd>
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_orders %}
+        <sw-description-list>
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelOrders') }}
+            </dt>
+            <dd>{{ orderCount }}</dd>
+        </sw-description-list>
+        {% endblock %}
+
+        {% block sw_customer_base_metadata_birthday %}
+        <sw-description-list>
+            {% block sw_customer_base_metadata_birthday_label %}
+            <dt class="sw-user-base-info__label">
+                {{ $t('sw-user.baseInfo.labelBirthday') }}
+            </dt>
+            {% endblock %}
+
+            {% block sw_customer_base_metadata_birthday_content %}
+            <dd
+                v-if="!userEditMode"
+                class="sw-user-base__label-birthday"
+            >
+                <template v-if="user.birthday">
+                    {{ dateFilter(user.birthday, { month: '2-digit', day: '2-digit', hour: undefined, minute: undefined }) }}
+                </template>
+                <template v-else>
+                    {{ $t('sw-user.baseInfo.emptyTextBirthday') }}
+                </template>
+            </dd>
+            {% endblock %}
+
+            {% block sw_custoemr_base_metadata_birthday_editor %}
+            <dd v-else>
+                <mt-datepicker
+                    v-model="user.birthday"
+                    name="sw-field--user-birthday"
+                    size="small"
+                    date-type="date"
+                    hide-hint
+                    :placeholder="$t('sw-datepicker.date.placeholder')"
+                />
+            </dd>
+            {% endblock %}
+        </sw-description-list>
+        {% endblock %}
+    </div>
+    {% endblock %}
+    {% endblock %}
+</sw-container>
+{% endblock %}

@@ -1,0 +1,138 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\Channel\Subscriber;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWriteEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommand;
+use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Feature\FeatureException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelDefinition;
+use Contena\Core\System\Channel\Subscriber\ChannelMaintenanceIpAllowlistSyncSubscriber;
+use Contena\Core\Test\Annotation\DisabledFeatures;
+
+/**
+ * @internal
+ */
+#[CoversClass(ChannelMaintenanceIpAllowlistSyncSubscriber::class)]
+#[DisabledFeatures(['v6.8.0.0'])]
+class ChannelMaintenanceIpAllowlistSyncSubscriberTest extends TestCase
+{
+    public function testNoSubscribersInMajorMode(): void
+    {
+        Feature::withFeatureEnabled('v6.8.0.0', static function (): void {
+            static::assertSame([], ChannelMaintenanceIpAllowlistSyncSubscriber::getSubscribedEvents());
+        });
+    }
+
+    public function testSubscribesToEntityWriteEvent(): void
+    {
+        static::assertSame(
+            [EntityWriteEvent::class => 'mirrorMaintenanceIpColumns'],
+            ChannelMaintenanceIpAllowlistSyncSubscriber::getSubscribedEvents()
+        );
+    }
+
+    public function testMirrorsNewAllowlistToDeprecatedWhitelist(): void
+    {
+        $value = json_encode(['127.0.0.1'], \JSON_THROW_ON_ERROR);
+
+        $command = $this->createMock(InsertCommand::class);
+        $this->configureCommand($command, ['maintenance_ip_allowlist' => $value]);
+        $command->expects($this->once())->method('addPayload')->with('maintenance_ip_whitelist', $value);
+
+        $this->dispatch($command);
+    }
+
+    public function testMirrorsDeprecatedWhitelistToNewAllowlist(): void
+    {
+        $value = json_encode(['10.0.0.1'], \JSON_THROW_ON_ERROR);
+
+        $command = $this->createMock(UpdateCommand::class);
+        $this->configureCommand($command, ['maintenance_ip_whitelist' => $value]);
+        $command->expects($this->once())->method('addPayload')->with('maintenance_ip_allowlist', $value);
+
+        $this->dispatch($command);
+    }
+
+    public function testNewColumnWinsWhenBothArePartOfTheSameWrite(): void
+    {
+        $allowlist = json_encode(['127.0.0.1'], \JSON_THROW_ON_ERROR);
+        $whitelist = json_encode(['10.0.0.1'], \JSON_THROW_ON_ERROR);
+
+        $command = $this->createMock(UpdateCommand::class);
+        $this->configureCommand($command, [
+            'maintenance_ip_allowlist' => $allowlist,
+            'maintenance_ip_whitelist' => $whitelist,
+        ]);
+        $command->expects($this->once())->method('addPayload')->with('maintenance_ip_whitelist', $allowlist);
+
+        $this->dispatch($command);
+    }
+
+    public function testSkipsWritesWithoutMaintenanceIpColumns(): void
+    {
+        $command = $this->createMock(UpdateCommand::class);
+        $this->configureCommand($command, ['name' => 'Frontend']);
+        $command->expects($this->never())->method('addPayload');
+
+        $this->dispatch($command);
+    }
+
+    public function testSkipsDeleteCommands(): void
+    {
+        $command = $this->createMock(DeleteCommand::class);
+        $command->method('getEntityName')->willReturn(ChannelDefinition::ENTITY_NAME);
+        $command->expects($this->never())->method('hasField');
+        $command->expects($this->never())->method('addPayload');
+
+        $this->dispatch($command);
+    }
+
+    /**
+     * @deprecated tag:v6.8.0 - Remove with the major feature flag.
+     */
+    public function testThrowsWhenMajorIsActive(): void
+    {
+        Feature::withFeatureEnabled('v6.8.0.0', function (): void {
+            $this->expectException(FeatureException::class);
+            $command = $this->createMock(InsertCommand::class);
+            $this->configureCommand($command, [
+                'maintenance_ip_allowlist' => json_encode(['127.0.0.1'], \JSON_THROW_ON_ERROR),
+            ]);
+            $command->expects($this->never())->method('addPayload');
+
+            $this->dispatch($command);
+        });
+    }
+
+    /**
+     * @param array<string, mixed> $payload
+     */
+    private function configureCommand(WriteCommand&MockObject $command, array $payload): void
+    {
+        $command->method('getEntityName')->willReturn(ChannelDefinition::ENTITY_NAME);
+        $command->method('getPayload')->willReturn($payload);
+        $command->method('hasField')->willReturnCallback(
+            static fn (string $storageName): bool => \array_key_exists($storageName, $payload)
+        );
+    }
+
+    private function dispatch(WriteCommand $command): void
+    {
+        $event = EntityWriteEvent::create(
+            WriteContext::createFromContext(Context::createDefaultContext()),
+            [$command]
+        );
+
+        (new ChannelMaintenanceIpAllowlistSyncSubscriber())->mirrorMaintenanceIpColumns($event);
+    }
+}

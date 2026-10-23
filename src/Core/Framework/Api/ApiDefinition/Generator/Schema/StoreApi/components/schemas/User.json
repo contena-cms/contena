@@ -1,0 +1,285 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": [],
+    "components": {
+        "schemas": {
+            "User": {
+                "description": "Added since version: 6.0.0.0",
+                "required": [
+                    "apiAlias",
+                    "activeBillingAddress",
+                    "activeShippingAddress",
+                    "id",
+                    "groupId",
+                    "channelId",
+                    "languageId",
+                    "defaultBillingAddressId",
+                    "defaultShippingAddressId",
+                    "userNumber",
+                    "firstName",
+                    "lastName",
+                    "email"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "groupId": {
+                        "description": "Unique identity of user group.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "channelId": {
+                        "description": "Unique identity of sales channel.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "languageId": {
+                        "description": "Unique identity of language.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "lastPaymentMethodId": {
+                        "description": "Unique identity of previous payment method.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "defaultBillingAddressId": {
+                        "description": "Unique identity of default billing address.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "defaultShippingAddressId": {
+                        "description": "Unique identity of default shipping address.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "userNumber": {
+                        "description": "Unique  number assigned to identity a user.",
+                        "type": "string"
+                    },
+                    "salutationId": {
+                        "description": "Unique identity of salutation.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "firstName": {
+                        "description": "First name of the user.",
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "description": "Last name of the user.",
+                        "type": "string"
+                    },
+                    "email": {
+                        "description": "Email ID of the user.",
+                        "type": "string"
+                    },
+                    "title": {
+                        "description": "Titles or honorifics like Mr, Mrs, etc.",
+                        "type": "string"
+                    },
+                    "affiliateCode": {
+                        "description": "An affiliate code is an identification option with which website operators can mark outgoing links.",
+                        "type": "string"
+                    },
+                    "campaignCode": {
+                        "description": "A campaign code is the globally unique identifier for a campaign.",
+                        "type": "string"
+                    },
+                    "active": {
+                        "description": "To keep the status of the user active, the boolean value is set to `true`.",
+                        "type": "boolean"
+                    },
+                    "doubleOptInRegistration": {
+                        "description": "Set to `true` to allow admin_user subscriptions to an email marketing list.",
+                        "type": "boolean"
+                    },
+                    "doubleOptInEmailSentDate": {
+                        "description": "Date and time when the double opt-in email was sent.",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "doubleOptInConfirmDate": {
+                        "description": "Date and time when the double opt-in email was confirmed.",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "hash": {
+                        "description": "User registration double opt-in hash for confirming the user account.",
+                        "type": "string"
+                    },
+                    "guest": {
+                        "description": "Boolean value is `true` if it is to be a guest account.",
+                        "type": "boolean"
+                    },
+                    "firstLogin": {
+                        "description": "To capture date and time of user's first login.",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "lastLogin": {
+                        "description": "To capture date and time of user's last login.",
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "birthday": {
+                        "description": "To capture user's birthday details.",
+                        "type": "string"
+                    },
+                    "lastOrderDate": {
+                        "description": "Captures last order date.",
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "orderCount": {
+                        "description": "Captures the number of orders placed.",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "orderTotalAmount": {
+                        "description": "Sum of total amount to be paid.",
+                        "type": "number",
+                        "format": "float",
+                        "readOnly": true
+                    },
+                    "reviewCount": {
+                        "description": "Number of reviews the user has given.",
+                        "type": "integer",
+                        "format": "int64",
+                        "readOnly": true
+                    },
+                    "customFields": {
+                        "type": "object"
+                    },
+                    "tagIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        },
+                        "readOnly": true
+                    },
+                    "requestedGroupId": {
+                        "description": "Unique identity of requested group.",
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "createdById": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "updatedById": {
+                        "type": "string",
+                        "pattern": "^[0-9a-f]{32}$"
+                    },
+                    "createdAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "updatedAt": {
+                        "type": "string",
+                        "format": "date-time",
+                        "readOnly": true
+                    },
+                    "group": {
+                        "$ref": "#/components/schemas/UserGroup",
+                        "description": "User group determining pricing and permissions"
+                    },
+                    "language": {
+                        "$ref": "#/components/schemas/Language",
+                        "description": "Preferred language for user communication"
+                    },
+                    "lastPaymentMethod": {
+                        "$ref": "#/components/schemas/PaymentMethod",
+                        "description": "Last used payment method by the user"
+                    },
+                    "defaultBillingAddress": {
+                        "$ref": "#/components/schemas/UserAddress",
+                        "description": "Default billing address for the user"
+                    },
+                    "activeBillingAddress": {
+                        "$ref": "#/components/schemas/UserAddress",
+                        "description": "Currently active billing address in the session"
+                    },
+                    "defaultShippingAddress": {
+                        "$ref": "#/components/schemas/UserAddress",
+                        "description": "Default shipping address for the user"
+                    },
+                    "activeShippingAddress": {
+                        "$ref": "#/components/schemas/UserAddress",
+                        "description": "Currently active shipping address in the session"
+                    },
+                    "salutation": {
+                        "$ref": "#/components/schemas/Salutation",
+                        "description": "User salutation (e.g., Mr., Mrs., Ms.)"
+                    },
+                    "addresses": {
+                        "description": "All addresses saved for the user",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/UserAddress"
+                        }
+                    },
+                    "tags": {
+                        "description": "Tags assigned to the user for organization and segmentation",
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Tag"
+                        }
+                    },
+                    "apiAlias": {
+                        "type": "string",
+                        "const": "user"
+                    }
+                },
+                "type": "object",
+                "oneOf": [
+                    {
+                        "required": [
+                            "accountType"
+                        ],
+                        "properties": {
+                            "accountType": {
+                                "type": "string",
+                                "enum": [
+                                    "private"
+                                ]
+                            }
+                        }
+                    },
+                    {
+                        "required": [
+                            "accountType",
+                            "vatIds",
+                            "company"
+                        ],
+                        "properties": {
+                            "accountType": {
+                                "type": "string",
+                                "enum": [
+                                    "business"
+                                ]
+                            },
+                            "vatIds": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "minItems": 1
+                            },
+                            "company": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                ]
+            }
+        }
+    }
+}

@@ -1,0 +1,101 @@
+/**
+ * @sw-package buyers-experience
+ */
+import { mount } from '@vue/test-utils';
+
+async function createWrapper({
+    landingPage = {
+        cmsPageId: null,
+    },
+    customFieldSets = [],
+} = {}) {
+    Contena.Store.get('swCategoryDetail').$reset();
+    Contena.Store.get('swCategoryDetail').category = {
+        media: [],
+        name: 'Computer parts',
+        footerSalesChannels: [],
+        navigationSalesChannels: [],
+        serviceSalesChannels: [],
+        blogAssignmentType: 'blog',
+        isNew: () => false,
+    };
+    Contena.Store.get('swCategoryDetail').landingPage = landingPage;
+    Contena.Store.get('swCategoryDetail').customFieldSets = customFieldSets;
+
+    return mount(await wrapTestComponent('sw-landing-page-detail-base', { sync: true }), {
+        global: {
+            stubs: {
+                'mt-card': {
+                    template: '<div class="mt-card"><slot></slot></div>',
+                },
+                'sw-container': {
+                    template: '<div class="sw-container"><slot></slot></div>',
+                },
+                'sw-text-field': {
+                    template:
+                        '<input class="sw-text-field" :value="value" @input="$emit(\'update:value\', $event.target.value)" />',
+                    props: ['value', 'disabled'],
+                },
+                'sw-entity-tag-select': {
+                    template: '<input type="select" class="sw-entity-tag-select"/>',
+                    props: ['disabled'],
+                },
+                'sw-entity-multi-select': true,
+                'mt-banner': true,
+                'mt-textarea': true,
+                'sw-custom-field-set-renderer': {
+                    name: 'sw-custom-field-set-renderer',
+                    props: ['disabled'],
+                    template: '<div class="sw-custom-field-set-renderer"></div>',
+                },
+            },
+            computed: {
+                landingPage() {
+                    return Contena.Store.get('swCategoryDetail').landingPage;
+                },
+            },
+        },
+        props: {
+            isLoading: false,
+        },
+    });
+}
+
+describe('module/sw-category/view/sw-landing-page-detail-base.spec', () => {
+    it('should limit the seo fields to the 255 characters the database can store', async () => {
+        const wrapper = await createWrapper();
+        await flushPromises();
+
+        const seoForm = wrapper.get('.sw-landing-page-detail-base__seo-form');
+        const inputs = seoForm.findAll('input').filter((input) => !input.classes('sw-entity-tag-select'));
+        const maxLengths = inputs.map((input) => input.attributes('maxlength'));
+
+        // meta title and keywords, the url field has no limit here
+        expect(maxLengths.filter((maxLength) => maxLength === '255')).toHaveLength(2);
+        expect(seoForm.get('mt-textarea-stub').attributes('max-length')).toBe('255');
+    });
+
+    it('should return true if a layout is set', async () => {
+        const wrapper = await createWrapper({
+            landingPage: {
+                cmsPageId: '123456789',
+            },
+        });
+
+        expect(wrapper.vm.isLayoutSet).toBe(true);
+    });
+
+    it('should return false if no layout is set', async () => {
+        const wrapper = await createWrapper();
+
+        expect(wrapper.vm.isLayoutSet).toBe(false);
+    });
+
+    it('should disable the custom field renderer without landing page edit permissions', async () => {
+        global.activeAclRoles = ['landing_page.viewer'];
+
+        const wrapper = await createWrapper({ customFieldSets: [{}] });
+
+        expect(wrapper.getComponent('.sw-custom-field-set-renderer').props('disabled')).toBe(true);
+    });
+});

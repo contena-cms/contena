@@ -1,0 +1,17 @@
+{
+  "name": "SwagTheme",
+  "author": "Contena",
+  "views": [
+     "@Frontend",
+     "@Plugins",
+     "@SwagTheme"
+  ],
+  "style": [
+    "app/frontend/src/scss/overrides.scss",
+    "app/frontend/src/scss/base.scss"
+  ],
+  "script": [],
+  "iconSets": {
+    "custom-icons": "app/frontend/src/assets/icon-pack/custom-icons"
+  }
+}

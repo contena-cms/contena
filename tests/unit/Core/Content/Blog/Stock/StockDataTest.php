@@ -1,0 +1,60 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Blog\Stock;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Stock\StockData;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Struct\ArrayStruct;
+
+/**
+ * @internal
+ */
+#[CoversClass(StockData::class)]
+class StockDataTest extends TestCase
+{
+    public function testAccessors(): void
+    {
+        $stock = new StockData('12345', 10, true, 2, 5, true);
+        $stock->addArrayExtension('extraData', ['foo' => 'bar']);
+
+        static::assertSame('12345', $stock->blogId);
+        static::assertSame(10, $stock->stock);
+        static::assertTrue($stock->available);
+        static::assertSame(2, $stock->minPurchase);
+        static::assertSame(5, $stock->maxPurchase);
+        static::assertTrue($stock->isCloseout);
+
+        static::assertInstanceOf(ArrayStruct::class, $stock->getExtension('extraData'));
+        static::assertSame(['foo' => 'bar'], $stock->getExtension('extraData')->all());
+    }
+
+    public function testDefaultValues(): void
+    {
+        $stock = new StockData('12345', 10, true);
+
+        static::assertNull($stock->minPurchase);
+        static::assertNull($stock->maxPurchase);
+        static::assertNull($stock->isCloseout);
+    }
+
+    public function testFromArray(): void
+    {
+        $stock = StockData::fromArray([
+            'blogId' => '12345',
+            'stock' => 10,
+            'available' => true,
+            'minPurchase' => 2,
+            'maxPurchase' => 5,
+            'isCloseout' => true,
+        ]);
+
+        static::assertSame('12345', $stock->blogId);
+        static::assertSame(10, $stock->stock);
+        static::assertTrue($stock->available);
+        static::assertSame(2, $stock->minPurchase);
+        static::assertSame(5, $stock->maxPurchase);
+        static::assertTrue($stock->isCloseout);
+    }
+}

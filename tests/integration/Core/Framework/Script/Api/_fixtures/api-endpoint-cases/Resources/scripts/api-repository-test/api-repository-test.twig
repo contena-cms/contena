@@ -1,0 +1,5 @@
+{# @var services \Contena\Core\Framework\Script\ServiceStubs #}
+{% set blogs = services.repository.search('blog', hook.request) %}
+
+{% set response = services.response.json({ 'blogs': blogs }) %}
+{% do hook.setResponse(response) %}

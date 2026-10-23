@@ -1,0 +1,4 @@
+id;name;blog_id;active;position;limit;type;sort_by;sort_direction;assigned_products
+b168eea85f33410bba2d8dad90dec07b;Lorem;blog1;1;1;500;blogList;name;ASC;blog2|c1ace7586faa4342a4d3b33e6dd33b7c|c9a70321b66449abb54ba9306ad02835
+cross-selling-1;Ipsum;c9a70321b66449abb54ba9306ad02835;1;1;500;blogList;name;ASC;c1ace7586faa4342a4d3b33e6dd33b7c|blog2
+cross-selling-1;Ipsum;c9a70321b66449abb54ba9306ad02835;1;1;500;blogList;name;ASC;c1ace7586faa4342a4d3b33e6dd33b7c|blog2|blog1

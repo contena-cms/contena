@@ -1,0 +1,11 @@
+.blog-detail-cross-selling-form {
+    .sw-blog-cross-selling-form__links .sw-card__quick-link {
+        transition: color 0.3s ease;
+
+        &.is--disabled {
+            cursor: not-allowed;
+            color: var(--color-text-primary-disabled);
+            pointer-events: none;
+        }
+    }
+}

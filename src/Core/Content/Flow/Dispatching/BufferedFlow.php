@@ -1,0 +1,29 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Flow\Dispatching;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * Temporary buffered flow that can be converted into
+ * a {@see StorableFlow} by the {@see FlowFactory}.
+ *
+ * @internal
+ *
+ * @final
+ *
+ * @codeCoverageIgnore
+ */
+readonly class BufferedFlow
+{
+    /**
+     * @param array<string, mixed> $stored
+     */
+    public function __construct(
+        public string $eventName,
+        public Context $eventContext,
+        public array $stored,
+    ) {
+    }
+}

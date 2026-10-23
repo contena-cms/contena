@@ -1,0 +1,226 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Mcp\Tool;
+
+use Doctrine\DBAL\Connection;
+use Mcp\Capability\Attribute\McpTool;
+use Mcp\Capability\Attribute\Schema;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Mcp\Attribute\McpToolDependsOn;
+use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
+use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
+use Contena\Core\Framework\Mcp\Context\McpContextProvider;
+use Contena\Core\Framework\Mcp\Result\McpToolError;
+use Contena\Core\Framework\Uuid\Uuid;
+
+/**
+ * @experimental stableVersion:v6.8.0
+ */
+#[McpTool(
+    name: 'contena-entity-delete',
+    title: 'Entity Delete',
+    description: 'Delete Contena entities by their UUIDs. Also the way to REMOVE a many-to-many link without deleting either side: delete the mapping entity, e.g. entity "blog_category" with ids [{"blogId":"...","categoryId":"..."}] removes a category from a blog, "blog_property" with [{"blogId":"...","optionId":"..."}] removes a property option. contena-entity-upsert can only add such links. Always use dryRun=true (default) first to preview cascade effects, then set dryRun=false to execute. Returns each affected entity with its operation: delete, or update for the entities a removed link belonged to.'
+)]
+#[McpToolDependsOn('contena-entity-search')]
+#[McpToolGroup('entity')]
+#[McpToolRequires(entityParam: 'entity', operations: ['delete'])]
+class EntityDeleteTool extends McpToolResponse
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly DefinitionInstanceRegistry $registry,
+        private readonly McpContextProvider $contextProvider,
+        private readonly Connection $connection,
+    ) {
+    }
+
+    public function __invoke(
+        #[Schema(description: 'Entity name to delete from, e.g. "blog", or a mapping entity such as "blog_category" to remove a many-to-many link. See the contena://entities resource for the full list.')]
+        string $entity,
+        #[Schema(description: 'What to delete. For normal entities: a JSON array of UUIDs (["..."]) or a comma-separated list. For mapping entities with a composite primary key: a JSON array of objects naming every key field, e.g. [{"blogId":"...","categoryId":"..."}]. contena-entity-schema lists the key fields.')]
+        string $ids,
+        #[Schema(description: 'Preview without deleting. Leave true first, then call again with false to delete.')]
+        bool $dryRun = true,
+    ): string {
+        $context = $this->contextProvider->getContext();
+
+        if (!$this->registry->has($entity)) {
+            return $this->error(\sprintf('Entity "%s" not found. Use the contena://entities resource for available entity names.', $entity), McpToolError::INVALID_ARGUMENTS);
+        }
+
+        if ($error = $this->requirePrivilege($context, $entity . ':delete')) {
+            return $error;
+        }
+
+        $deletePayload = $this->buildDeletePayload($this->registry->getByEntityName($entity), $ids, $context);
+        if (\is_string($deletePayload)) {
+            return $deletePayload;
+        }
+
+        $repository = $this->registry->getRepository($entity);
+
+        if ($dryRun) {
+            return $this->executeWithDryRun($this->connection, $context, function () use ($repository, $deletePayload, $context) {
+                return $this->result($repository->delete($deletePayload, $context), \count($deletePayload), true);
+            });
+        }
+
+        return $this->result($repository->delete($deletePayload, $context), \count($deletePayload), false);
+    }
+
+    /**
+     * Rows that don't exist are reported in the event's errors, like the Admin API does: an error
+     * when none of them existed, and their keys in `_meta.notFound` when only some did.
+     */
+    private function result(EntityWrittenContainerEvent $events, int $requested, bool $dryRun): string
+    {
+        $notFound = [];
+        foreach ($events->getErrors() as $results) {
+            foreach (\is_array($results) ? $results : [] as $result) {
+                if ($result instanceof EntityWriteResult) {
+                    $notFound[] = $result->getPrimaryKey();
+                }
+            }
+        }
+
+        if ($notFound !== [] && \count($notFound) >= $requested) {
+            return $this->error(\sprintf('Nothing was deleted, none of these rows exist: %s', json_encode($notFound, \JSON_THROW_ON_ERROR)));
+        }
+
+        $meta = ['dryRun' => $dryRun];
+        if ($notFound !== []) {
+            $meta['notFound'] = $notFound;
+        }
+
+        return $this->success($this->formatDeleteEvents($events), $meta);
+    }
+
+    /**
+     * Like formatWriteEvents(), but with each event's own operation. A delete also reports the entities
+     * whose associations it changed: removing a `blog_category` row emits written events for the
+     * blog and the category next to the deleted mapping row. Labelling those "delete" tells a client,
+     * and a model reading a dry run, that the blog and the category would be deleted.
+     *
+     * @return list<array{entity: string, ids: list<string|array<string, string>>, operation: string}>
+     */
+    private function formatDeleteEvents(EntityWrittenContainerEvent $events): array
+    {
+        $result = [];
+        foreach ($events->getEvents()?->getElements() ?? [] as $event) {
+            $result[] = [
+                'entity' => $event->getEntityName(),
+                'ids' => $event->getIds(),
+                'operation' => $event instanceof EntityDeletedEvent ? 'delete' : 'update',
+            ];
+        }
+
+        return $result;
+    }
+
+    /**
+     * Builds the DAL delete payload. Entities with a single primary key take plain UUIDs.
+     * Mapping entities (for example `blog_category`) have a composite primary key, so each
+     * row is named by an object holding every key field. Version fields the caller names are kept.
+     * Otherwise they default to the live version, which is only unambiguous in a live context:
+     * `DELETE /api/blog/{id}/categories/{categoryId}` uses the context version for the parent and
+     * the live version for the referenced side, and a mapping row does not say which side is which.
+     *
+     * @return list<array<string, string>>|string the payload, or an error response
+     */
+    private function buildDeletePayload(EntityDefinition $definition, string $ids, Context $context): array|string
+    {
+        $keyFields = [];
+        $versionFields = [];
+        foreach ($definition->getPrimaryKeys() as $field) {
+            if ($field instanceof VersionField || $field instanceof ReferenceVersionField) {
+                $versionFields[] = $field->getPropertyName();
+
+                continue;
+            }
+
+            $keyFields[] = $field->getPropertyName();
+        }
+
+        $decoded = json_decode($ids, true);
+
+        if (\count($keyFields) <= 1) {
+            $idList = \is_array($decoded) ? $decoded : array_map('trim', explode(',', $ids));
+            $idList = array_values(array_filter(
+                $idList,
+                static fn (mixed $id): bool => \is_string($id) && $id !== '',
+            ));
+
+            if ($idList === []) {
+                return $this->error('No valid IDs provided.');
+            }
+
+            return array_map(static fn (string $id): array => ['id' => $id], $idList);
+        }
+
+        $example = json_encode([array_fill_keys($keyFields, '...')], \JSON_THROW_ON_ERROR);
+        $usage = \sprintf('Entity "%s" has a composite primary key. Pass ids as a JSON array of objects with %s, e.g. %s.', $definition->getEntityName(), implode(' and ', $keyFields), $example);
+
+        if (!\is_array($decoded) || $decoded === [] || !array_is_list($decoded)) {
+            return $this->error($usage);
+        }
+
+        $payload = [];
+        foreach ($decoded as $row) {
+            if (!\is_array($row)) {
+                return $this->error($usage);
+            }
+
+            $keys = [];
+            foreach ($keyFields as $keyField) {
+                $value = $row[$keyField] ?? null;
+                if (!\is_string($value) || $value === '') {
+                    return $this->error($usage);
+                }
+                if (!Uuid::isValid($value)) {
+                    return $this->error(\sprintf('"%s" must be a UUID. %s', $keyField, $usage));
+                }
+
+                $keys[$keyField] = $value;
+            }
+
+            foreach ($versionFields as $versionField) {
+                $version = $row[$versionField] ?? null;
+                if ($version !== null) {
+                    if (!\is_string($version) || !Uuid::isValid($version)) {
+                        return $this->error(\sprintf('"%s" must be a version UUID.', $versionField));
+                    }
+
+                    $keys[$versionField] = $version;
+
+                    continue;
+                }
+
+                if ($context->getVersionId() !== Defaults::LIVE_VERSION) {
+                    return $this->error(\sprintf(
+                        'This request runs in version %s. Name every version field (%s) in each ids object, for example the live version %s for a side that is not being edited.',
+                        $context->getVersionId(),
+                        implode(', ', $versionFields),
+                        Defaults::LIVE_VERSION,
+                    ));
+                }
+
+                $keys[$versionField] = Defaults::LIVE_VERSION;
+            }
+
+            $payload[] = $keys;
+        }
+
+        return $payload;
+    }
+}

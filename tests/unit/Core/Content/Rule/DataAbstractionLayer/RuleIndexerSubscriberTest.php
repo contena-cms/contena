@@ -1,0 +1,43 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Rule\DataAbstractionLayer;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Statement;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\CartRuleLoader;
+use Contena\Core\Content\Rule\DataAbstractionLayer\RuleIndexerSubscriber;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\Clock\MockClock;
+
+/**
+ * @internal
+ */
+#[CoversClass(RuleIndexerSubscriber::class)]
+class RuleIndexerSubscriberTest extends TestCase
+{
+    public function testRefreshPlugin(): void
+    {
+        $connection = $this->createMock(Connection::class);
+        $cartRuleLoader = static::createStub(CartRuleLoader::class);
+        $clock = new MockClock('2026-01-13 12:00:00');
+
+        $statement = $this->createMock(Statement::class);
+
+        $statement->expects($this->once())
+            ->method('bindValue')
+            ->with('updatedAt', $clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT));
+        $statement->expects($this->once())->method('executeStatement')->willReturn(1);
+
+        $connection->expects($this->once())
+            ->method('prepare')
+            ->with('UPDATE `rule` SET `payload` = null, `invalid` = 0, `updated_at` = :updatedAt')
+            ->willReturn($statement);
+
+        $subscriber = new RuleIndexerSubscriber($connection, $cartRuleLoader, $clock);
+
+        $subscriber->refreshPlugin();
+    }
+}

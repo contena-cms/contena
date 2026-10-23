@@ -1,0 +1,24 @@
+{% sw_extends '@Frontend/frontend/base.html.twig' %}
+
+{% block base_head %}
+    {% sw_include '@Frontend/frontend/page/wishlist/meta.html.twig' %}
+{% endblock %}
+
+{% block base_content %}
+    {% block page_wishlist %}
+        <div class="cms-page wishlist-page">
+            {% set searchResult = page.wishlist.blogListing %}
+
+            {% if context.user and not context.user.guest %}
+                {% sw_include '@Frontend/frontend/page/wishlist/wishlist-pagelet.html.twig' with { searchResult: searchResult } %}
+            {% else %}
+                {% set guestWishlistPageOptions = {
+                    pageletRouter: {
+                        path: path('frontend.wishlist.guestPage.pagelet'),
+                    }
+                } %}
+                <div class="row mh-100" data-guest-wishlist-page="true" data-guest-wishlist-page-options="{{ guestWishlistPageOptions|json_encode }}"></div>
+            {% endif %}
+        </div>
+    {% endblock %}
+{% endblock %}

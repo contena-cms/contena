@@ -1,0 +1,130 @@
+{% block sw_channel_detail_base %}
+<div class="sw-sales-channel-detail-blog-comparison">
+
+    {% block sw_channel_detail_product_comparison %}
+    <mt-card
+        key="edit"
+        position-identifier="sw-sales-channel-detail-blog-comparison"
+        :is-loading="isLoading"
+        :title="$t('sw-sales-channel.detail.titleProductComparisonTemplate')"
+    >
+
+        {% block sw_channel_detail_product_comparison_header %}
+        <sw-container>
+            {% block sw_channel_detail_product_comparison_input_header %}
+            <sw-code-editor
+                v-model:value="blogExport.headerTemplate"
+                :label="$t('sw-sales-channel.detail.blogComparison.inputHeaderLabel')"
+                :completer-function="outerCompleterFunctionHeader"
+                :editor-config="editorConfig"
+                completion-mode="entity"
+                mode="twig"
+                :soft-wraps="true"
+                :set-focus="false"
+                :disabled="!acl.can('channel.editor')"
+                @update:value="resetValid"
+                @blur="resetValid"
+            />
+            {% endblock %}
+        </sw-container>
+        {% endblock %}
+
+        {% block sw_channel_detail_product_comparison_body %}
+        <sw-container>
+            {% block sw_channel_detail_product_comparison_input_body %}
+            <sw-code-editor
+                v-model:value="blogExport.bodyTemplate"
+                :label="$t('sw-sales-channel.detail.blogComparison.inputBodyLabel')"
+                :completer-function="outerCompleterFunctionBody"
+                :editor-config="editorConfig"
+                completion-mode="entity"
+                mode="twig"
+                :soft-wraps="true"
+                :set-focus="false"
+                :disabled="!acl.can('channel.editor')"
+                @update:value="resetValid"
+                @blur="resetValid"
+            />
+            {% endblock %}
+        </sw-container>
+        {% endblock %}
+
+        {% block sw_channel_detail_product_comparison_footer %}
+        <sw-container>
+            {% block sw_channel_detail_product_comparison_input_footer %}
+            <sw-code-editor
+                v-model:value="blogExport.footerTemplate"
+                :label="$t('sw-sales-channel.detail.blogComparison.inputFooterLabel')"
+                :completer-function="outerCompleterFunctionFooter"
+                :editor-config="editorConfig"
+                completion-mode="entity"
+                mode="twig"
+                :soft-wraps="true"
+                :set-focus="false"
+                :disabled="!acl.can('channel.editor')"
+                @update:value="resetValid"
+                @blur="resetValid"
+            />
+            {% endblock %}
+        </sw-container>
+        {% endblock %}
+
+        {% block sw_channel_detail_product_comparison_actions %}
+        <div class="sw-sales-channel-detail-blog-comparison__button-group">
+            {% block sw_channel_detail_product_comparison_actions_test_button %}
+            <sw-button-process
+                size="small"
+                variant="primary"
+                ghost
+                class="sw-sales-channel-detail-blog-comparison__button sw-sales-channel-detail-blog-comparison__test-action"
+                :is-loading="isLoadingValidate"
+                :disabled="isLoadingValidate || !acl.can('channel.editor') || (!blogExport.headerTemplate && !blogExport.bodyTemplate && !blogExport.footerTemplate)"
+                :process-success="isValidateSuccessful"
+                @click="validateTemplate"
+            >
+                {{ $t('sw-sales-channel.detail.blogComparison.buttonTestLabel') }}
+            </sw-button-process>
+            {% endblock %}
+
+            {% block sw_channel_detail_product_comparison_actions_preview_button %}
+            <sw-button-process
+                size="small"
+                variant="primary"
+                ghost
+                class="sw-sales-channel-detail-blog-comparison__button sw-sales-channel-detail-blog-comparison__preview-action"
+                :is-loading="isLoadingPreview"
+                :disabled="isLoadingPreview || !acl.can('channel.editor') || (!blogExport.headerTemplate && !blogExport.bodyTemplate && !blogExport.footerTemplate)"
+                :process-success="isPreviewSuccessful"
+                @click="preview"
+            >
+                {{ $t('sw-sales-channel.detail.blogComparison.buttonPreviewLabel') }}
+            </sw-button-process>
+            {% endblock %}
+
+            {% block sw_channel_detail_product_comparison_actions_reset_button %}
+            <mt-button
+                v-if="isAgenticCommerce"
+                size="small"
+                variant="secondary"
+                class="sw-sales-channel-detail-blog-comparison__reset-action"
+                :is-loading="isLoadingReset"
+                :disabled="isLoadingReset || !acl.can('channel.editor')"
+                @click="resetToDefault"
+            >
+                {{ $t('sw-sales-channel.detail.agenticCommerce.buttonResetTemplate') }}
+            </mt-button>
+            {% endblock %}
+
+            {% block sw_channel_detail_product_comparison_actions_preview_component %}
+            <sw-sales-channel-detail-blog-comparison-preview
+                :content="previewContent"
+                :errors="previewErrors"
+                @close="onPreviewClose"
+            />
+            {% endblock %}
+        </div>
+        {% endblock %}
+    </mt-card>
+    {% endblock %}
+</div>
+{% endblock %}

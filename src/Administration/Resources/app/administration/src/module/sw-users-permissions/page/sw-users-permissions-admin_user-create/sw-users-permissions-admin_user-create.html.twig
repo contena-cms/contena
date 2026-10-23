@@ -1,0 +1,14 @@
+{% block sw_settings_user_detail_content_password %}
+<mt-password-field
+    v-model="admin_user.password"
+    name="sw-field--admin_user-password"
+    :label="$t('sw-users-permissions.users.admin_user-detail.labelPassword')"
+    class="sw-settings-admin_user-detail__grid-password"
+    :error="admin_userPasswordError"
+    required
+    :password-toggle-able="true"
+    autocomplete="new-password"
+/>
+{% endblock %}
+
+{% block sw_settings_user_detail_grid_change_password %}{% endblock %}

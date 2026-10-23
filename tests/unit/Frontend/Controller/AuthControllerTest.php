@@ -1,0 +1,337 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Frontend\Controller;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\System\User\UserEntity;
+use Contena\Core\System\User\Exception\BadCredentialsException;
+use Contena\Core\System\User\Channel\AbstractConvertGuestRoute;
+use Contena\Core\System\User\Channel\AbstractImitateUserRoute;
+use Contena\Core\System\User\Channel\AbstractLoginRoute;
+use Contena\Core\System\User\Channel\AbstractLogoutRoute;
+use Contena\Core\System\User\Channel\AbstractResetPasswordRoute;
+use Contena\Core\System\User\Channel\AbstractSendPasswordRecoveryMailRoute;
+use Contena\Core\System\User\Channel\ConvertGuestRoute;
+use Contena\Core\System\User\Channel\ImitateUserRoute;
+use Contena\Core\System\User\Channel\LoginRoute;
+use Contena\Core\System\User\Channel\ResetPasswordRoute;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
+use Contena\Core\Framework\Validation\DataBag\DataBag;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\Framework\Validation\DataValidationDefinition;
+use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Test\Generator;
+use Contena\Frontend\Checkout\Cart\Channel\FrontendCartFacade;
+use Contena\Frontend\Controller\AuthController;
+use Contena\Frontend\Page\Account\Login\AccountGuestLoginPageLoadedHook;
+use Contena\Frontend\Page\Account\Login\AccountLoginPage;
+use Contena\Frontend\Page\Account\Login\AccountLoginPageLoadedHook;
+use Contena\Frontend\Page\Account\Login\AccountLoginPageLoader;
+use Contena\Frontend\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
+use Contena\Tests\Unit\Frontend\Controller\Stub\AuthControllerStub;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Validation;
+
+/**
+ * @internal
+ */
+#[CoversClass(AuthController::class)]
+class AuthControllerTest extends TestCase
+{
+    private AuthControllerStub $controller;
+
+    private AccountLoginPageLoader&Stub $accountLoginPageLoader;
+
+    private AbstractSendPasswordRecoveryMailRoute&Stub $passwordRecoveryPageLoader;
+
+    protected function setUp(): void
+    {
+        $this->accountLoginPageLoader = static::createStub(AccountLoginPageLoader::class);
+        $this->passwordRecoveryPageLoader = static::createStub(AbstractSendPasswordRecoveryMailRoute::class);
+
+        $this->controller = $this->createController();
+    }
+
+    public function testAccountRegister(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+        $request = new Request();
+        $request->attributes->set('_route', 'frontend.account.login.page');
+        $dataBag = new RequestDataBag();
+        $page = new AccountLoginPage();
+
+        $accountLoginPageLoader = $this->createMock(AccountLoginPageLoader::class);
+        $accountLoginPageLoader->expects($this->once())
+            ->method('load')
+            ->with($request, $context)
+            ->willReturn($page);
+        $controller = $this->createController($accountLoginPageLoader);
+
+        $controller->loginPage($request, $dataBag, $context);
+
+        static::assertSame($page, $controller->recorder()->renderFrontendParameters['page']);
+        static::assertSame($dataBag, $controller->recorder()->renderFrontendParameters['data']);
+        static::assertSame('frontend.account.home.page', $controller->recorder()->renderFrontendParameters['redirectTo'] ?? '');
+        static::assertSame('[]', $controller->recorder()->renderFrontendParameters['redirectParameters'] ?? '');
+        static::assertSame('frontend.account.login.page', $controller->recorder()->renderFrontendParameters['errorRoute'] ?? '');
+        static::assertInstanceOf(AccountLoginPageLoadedHook::class, $controller->recorder()->calledHook);
+    }
+
+    public function testGuestLoginPageWithoutRedirectParametersRedirects(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+
+        $request = new Request();
+
+        $this->controller->guestLoginPage($request, $context);
+
+        static::assertArrayHasKey('frontend.account.login.page', $this->controller->recorder()->redirected);
+        static::assertArrayHasKey('danger', $this->controller->recorder()->flashBag);
+        static::assertArrayHasKey(0, $this->controller->recorder()->flashBag['danger']);
+        static::assertSame('account.orderGuestLoginWrongCredentials', $this->controller->recorder()->flashBag['danger'][0]);
+    }
+
+    public function testGuestLoginPageWithoutRedirectParametersRendersEmptyArray(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+
+        $request = new Request();
+        $request->query->set('redirectTo', 'frontend.account.order.single.page');
+
+        $page = new AccountLoginPage();
+        $accountLoginPageLoader = $this->createMock(AccountLoginPageLoader::class);
+        $accountLoginPageLoader->expects($this->once())
+            ->method('load')
+            ->willReturn($page);
+        $controller = $this->createController($accountLoginPageLoader);
+
+        $controller->guestLoginPage($request, $context);
+
+        static::assertSame('@Frontend/frontend/page/account/guest-auth.html.twig', $controller->recorder()->renderFrontendView);
+        static::assertSame([], $controller->recorder()->renderFrontendParameters['redirectParameters'] ?? null);
+        static::assertSame('frontend.account.order.single.page', $controller->recorder()->renderFrontendParameters['redirectTo'] ?? null);
+        static::assertInstanceOf(AccountGuestLoginPageLoadedHook::class, $controller->recorder()->calledHook);
+    }
+
+    public function testGuestLoginPageNormalizesNonArrayRedirectParameters(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+
+        $request = new Request();
+        $request->query->set('redirectTo', 'frontend.account.order.single.page');
+        $request->query->set('redirectParameters', 'not-an-array');
+
+        $this->accountLoginPageLoader->method('load')->willReturn(new AccountLoginPage());
+
+        $this->controller->guestLoginPage($request, $context);
+
+        static::assertSame([], $this->controller->recorder()->renderFrontendParameters['redirectParameters'] ?? null);
+    }
+
+    public function testGuestLoginPageKeepsArrayRedirectParameters(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+
+        $request = new Request();
+        $request->query->set('redirectTo', 'frontend.account.order.single.page');
+        $request->query->set('redirectParameters', ['deepLinkCode' => 'abc']);
+
+        $this->accountLoginPageLoader->method('load')->willReturn(new AccountLoginPage());
+
+        $this->controller->guestLoginPage($request, $context);
+
+        static::assertSame(['deepLinkCode' => 'abc'], $this->controller->recorder()->renderFrontendParameters['redirectParameters'] ?? null);
+    }
+
+    public function testGuestUserOnLoginPageShouldBeLoggedOut(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->getUser()?->setGuest(true);
+
+        $this->controller->loginPage(new Request(), new RequestDataBag(), $context);
+
+        static::assertArrayHasKey('frontend.account.logout.page', $this->controller->recorder()->redirected);
+    }
+
+    #[DataProvider('loginRedirectProvider')]
+    public function testLoginWithBadCredentialsForwardsToCorrectRoute(?string $redirectTo, string $expectedRoute): void
+    {
+        $loginRoute = static::createStub(AbstractLoginRoute::class);
+        $loginRoute->method('login')->willThrowException(new BadCredentialsException());
+
+        $controller = $this->createController(loginRoute: $loginRoute);
+
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+
+        $request = new Request();
+        if ($redirectTo !== null) {
+            $request->request->set('redirectTo', $redirectTo);
+        }
+
+        $controller->login($request, new RequestDataBag(), $context);
+
+        static::assertSame($expectedRoute, $controller->recorder()->forwardToRoute);
+        static::assertTrue($controller->recorder()->forwardToRouteAttributes['loginError']);
+    }
+
+    /**
+     * @return array<string, array{0: string|null, 1: string}>
+     */
+    public static function loginRedirectProvider(): array
+    {
+        return [
+            'from checkout' => ['frontend.checkout.confirm.page', 'frontend.checkout.register.page'],
+            'unexpected route (wishlist)' => ['frontend.account.wishlist.page', 'frontend.account.login.page'],
+            'external url attack' => ['https://www.contena.cn', 'frontend.account.login.page'],
+            'empty/null fallback' => [null, 'frontend.account.login.page'],
+        ];
+    }
+
+    public function testLogoutOptsTheResponseIntoClearSiteData(): void
+    {
+        $request = new Request();
+
+        $this->controller->logout($request, Generator::generateChannelContext(), new RequestDataBag());
+
+        static::assertTrue($request->attributes->getBoolean(PlatformRequest::ATTRIBUTE_CLEAR_SITE_DATA));
+        static::assertArrayHasKey('frontend.account.login.page', $this->controller->recorder()->redirected);
+    }
+
+    public function testLogoutWithoutUserDoesNotOptIntoClearSiteData(): void
+    {
+        $context = Generator::generateChannelContext();
+        $context->assign(['user' => null]);
+
+        $request = new Request();
+
+        $this->controller->logout($request, $context, new RequestDataBag());
+
+        static::assertFalse($request->attributes->has(PlatformRequest::ATTRIBUTE_CLEAR_SITE_DATA));
+    }
+
+    public function testGenerateAccountRecoveryThrowsConstraintException(): void
+    {
+        $request = new Request();
+        $request->attributes->set('_route', 'frontend.account.recover.page');
+
+        $dataBag = new RequestDataBag();
+        $data = new DataBag();
+        $data->set('email', 'test@test');
+        $dataBag->set('email', $data);
+
+        $validation = new DataValidationDefinition('user.email.recover');
+        $validation->add('email', new Email());
+
+        $dataValidator = new DataValidator(Validation::createValidatorBuilder()->getValidator());
+
+        $violations = $dataValidator->getViolations(['email' => 'test@test'], $validation);
+
+        $exception = new ConstraintViolationException($violations, ['email' => 'test@test']);
+
+        $passwordRecoveryPageLoader = $this->createMock(AbstractSendPasswordRecoveryMailRoute::class);
+        $passwordRecoveryPageLoader
+            ->expects($this->once())
+            ->method('sendRecoveryMail')
+            ->willThrowException($exception);
+        $controller = $this->createController(passwordRecoveryPageLoader: $passwordRecoveryPageLoader);
+
+        $controller->generateAccountRecovery($request, $dataBag, Generator::generateChannelContext());
+
+        static::assertSame('frontend.account.recover.page', $controller->recorder()->forwardToRoute);
+
+        /** @var ConstraintViolationException $formViolations */
+        $formViolations = $controller->recorder()->forwardToRouteAttributes['formViolations'];
+
+        static::assertSame('Caught 1 violation errors.', $formViolations->getMessage());
+        static::assertSame('This value is not a valid email address.', $formViolations->getViolations()->get(1)->getMessage());
+    }
+
+    public function testConvertSetsInfoFlashOnRateLimitExceeded(): void
+    {
+        $convertGuestRoute = static::createStub(ConvertGuestRoute::class);
+
+        $convertGuestRoute->method('convertGuest')
+            ->willThrowException(
+                new RateLimitExceededException(60)
+            );
+
+        $this->controller = new AuthControllerStub(
+            static::createStub(AccountLoginPageLoader::class),
+            static::createStub(AbstractSendPasswordRecoveryMailRoute::class),
+            static::createStub(ResetPasswordRoute::class),
+            static::createStub(LoginRoute::class),
+            static::createStub(AbstractLogoutRoute::class),
+            static::createStub(ImitateUserRoute::class),
+            static::createStub(FrontendCartFacade::class),
+            static::createStub(AccountRecoverPasswordPageLoader::class),
+            $convertGuestRoute,
+            static::createStub(SystemConfigService::class),
+        );
+
+        $data = new RequestDataBag([
+            'password' => 'password',
+        ]);
+
+        $user = new UserEntity();
+        $user->setGuest(true);
+
+        $context = static::createStub(ChannelContext::class);
+        $context->method('getUser')->willReturn($user);
+
+        $this->controller->convert($data, $context);
+
+        static::assertSame('frontend.account.convert.page', $this->controller->recorder()->forwardToRoute);
+    }
+
+    private function createController(
+        ?AccountLoginPageLoader $accountLoginPageLoader = null,
+        ?AbstractSendPasswordRecoveryMailRoute $passwordRecoveryPageLoader = null,
+        ?AbstractLoginRoute $loginRoute = null,
+    ): AuthControllerStub {
+        $resetPasswordRoute = static::createStub(AbstractResetPasswordRoute::class);
+        $loginRoute ??= static::createStub(AbstractLoginRoute::class);
+        $logoutRoute = static::createStub(AbstractLogoutRoute::class);
+        $imitateUserRoute = static::createStub(AbstractImitateUserRoute::class);
+        $cartFacade = static::createStub(FrontendCartFacade::class);
+        $recoverPasswordRoute = static::createStub(AccountRecoverPasswordPageLoader::class);
+
+        $abstractConvertGuestRoute = static::createStub(AbstractConvertGuestRoute::class);
+        $systemConfigService = static::createStub(SystemConfigService::class);
+
+        $controller = new AuthControllerStub(
+            $accountLoginPageLoader ?? $this->accountLoginPageLoader,
+            $passwordRecoveryPageLoader ?? $this->passwordRecoveryPageLoader,
+            $resetPasswordRoute,
+            $loginRoute,
+            $logoutRoute,
+            $imitateUserRoute,
+            $cartFacade,
+            $recoverPasswordRoute,
+            $abstractConvertGuestRoute,
+            $systemConfigService
+        );
+
+        $containerBuilder = new ContainerBuilder();
+        $containerBuilder->set('request_stack', new RequestStack());
+        $controller->setContainer($containerBuilder);
+
+        return $controller;
+    }
+}

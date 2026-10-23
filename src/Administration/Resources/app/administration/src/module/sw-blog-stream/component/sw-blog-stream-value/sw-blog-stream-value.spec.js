@@ -1,0 +1,444 @@
+/**
+ * @sw-package inventory
+ */
+
+import { DOMWrapper, mount } from '@vue/test-utils';
+
+async function createWrapper(
+    privileges = [],
+    fieldType = null,
+    conditionType = '',
+    entity = '',
+    render = false,
+    conditionValue = undefined,
+) {
+    let stubs = {
+        'sw-container': {
+            template: '<div class="sw-container"><slot></slot></div>',
+        },
+        'sw-single-select': true,
+        'sw-text-field': true,
+        'sw-entity-single-select': true,
+        'sw-entity-multi-id-select': true,
+        'sw-blog-variant-info': true,
+        'sw-select-result': true,
+        'sw-multi-tag-select': true,
+        'sw-inheritance-switch': true,
+        'sw-loader': true,
+        'sw-ai-copilot-badge': true,
+        'sw-help-text': true,
+    };
+
+    if (render) {
+        stubs = {
+            ...stubs,
+            'sw-single-select': await wrapTestComponent('sw-single-select'),
+            'sw-select-base': await wrapTestComponent('sw-select-base'),
+            'sw-block-field': await wrapTestComponent('sw-block-field'),
+            'sw-base-field': await wrapTestComponent('sw-base-field'),
+            'sw-select-result': await wrapTestComponent('sw-select-result'),
+            'sw-select-result-list': await wrapTestComponent('sw-select-result-list'),
+            'sw-popover': await wrapTestComponent('sw-popover'),
+            'sw-popover-deprecated': await wrapTestComponent('sw-popover-deprecated', { sync: true }),
+            'sw-highlight-text': await wrapTestComponent('sw-highlight-text'),
+            'sw-field-error': await wrapTestComponent('sw-field-error'),
+            'sw-multi-tag-select': await wrapTestComponent('sw-multi-tag-select'),
+            'sw-select-selection-list': await wrapTestComponent('sw-select-selection-list'),
+            'sw-label': await wrapTestComponent('sw-label'),
+        };
+    }
+
+    return mount(await wrapTestComponent('sw-blog-stream-value', { sync: true }), {
+        props: {
+            definition: {
+                type: fieldType,
+                entity,
+                getField: () => {
+                    return fieldType === '' ? null : { type: fieldType };
+                },
+                isJsonField: () => false,
+                filterProperties: () => {
+                    return {};
+                },
+            },
+            condition: {
+                type: conditionType,
+                value: conditionValue,
+            },
+        },
+        global: {
+            renderStubDefaultSlot: true,
+            provide: {
+                repositoryFactory: {
+                    create: () => ({
+                        search: () => {},
+                    }),
+                },
+                conditionDataProviderService: {
+                    getOperatorSet: () => [],
+                    allowedJsonAccessors: {
+                        'json.test': {
+                            value: 'json.test',
+                            type: 'string',
+                        },
+                    },
+                },
+                acl: {
+                    can: (identifier) => {
+                        if (!identifier) {
+                            return true;
+                        }
+
+                        return privileges.includes(identifier);
+                    },
+                },
+                blogCustomFields: {
+                    test: {
+                        value: 'customFields.test',
+                        config: {
+                            customFieldType: 'entity',
+                            entity: 'blog',
+                        },
+                    },
+                    countryTest: {
+                        value: 'customFields.test',
+                        config: {
+                            customFieldType: 'entity',
+                            entity: 'country',
+                        },
+                    },
+                },
+
+                blogTypes: ['physical', 'digital'],
+            },
+            stubs,
+        },
+    });
+}
+
+describe('src/module/sw-blog-stream/component/sw-blog-stream-value', () => {
+    it('should have disabled prop', async () => {
+        const wrapper = await createWrapper();
+        expect(wrapper.vm.disabled).toBe(false);
+
+        await wrapper.setProps({ disabled: true });
+        expect(wrapper.vm.disabled).toBe(true);
+    });
+
+    it.each([
+        ['boolean', 'equals', 'sw-single-select-stub'],
+        ['empty', 'equals', 'sw-single-select-stub'],
+        [
+            'uuid',
+            'equals',
+            'sw-entity-single-select-stub',
+            'blog',
+        ],
+        ['uuid', 'equals', 'sw-entity-single-select-stub'],
+        ['string', 'equalsAny', 'sw-multi-tag-select-stub'],
+    ])('should have a disabled input with %s field type', async (fieldType, actualCondition, element, entity = '') => {
+        const wrapper = await createWrapper(['content_stream.viewer'], fieldType, actualCondition, entity, false);
+        await wrapper.setProps({ disabled: true });
+
+        const targetElement = wrapper.get(element);
+
+        expect(targetElement.attributes('disabled')).toBe('true');
+    });
+
+    it('should have a disabled input with json_list field type', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], 'json_list', 'equals', '', true);
+        await wrapper.setProps({ disabled: true, fieldName: 'states' });
+
+        const targetElement = wrapper.get('.sw-single-select');
+
+        expect(targetElement.attributes('disabled')).toBe('true');
+    });
+
+    it('should render if is a json field', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], 'testingType', 'equals', '');
+        await wrapper.setProps({
+            disabled: true,
+            definition: {
+                type: 'testingType',
+                entity: '',
+                getField: () => ({ type: 'testingType' }),
+                isJsonField: () => true,
+                filterProperties: () => {
+                    return {};
+                },
+            },
+        });
+        const targetElement = wrapper.get('sw-single-select-stub');
+
+        expect(targetElement.attributes('disabled')).toBe('true');
+    });
+
+    it('should render placeholder if no definition exists', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], '', 'equals', '');
+        await wrapper.setProps({
+            disabled: true,
+            fieldType: 'uuid',
+        });
+
+        expect(wrapper.get('.sw-blog-stream-value__placeholder').exists()).toBe(true);
+    });
+
+    it('should return correct fieldDefinition', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setProps({
+            fieldName: 'customFields.test',
+            definition: {
+                entity: 'blog',
+                getField: () => undefined,
+                isJsonField: () => false,
+            },
+        });
+
+        await flushPromises();
+
+        expect(wrapper.vm.fieldDefinition).toStrictEqual({
+            value: 'customFields.test',
+            config: {
+                customFieldType: 'entity',
+                entity: 'blog',
+            },
+        });
+    });
+
+    it('should fire event when trigger value for boolean type', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], 'boolean', 'equals', '', true);
+        await flushPromises();
+
+        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        await flushPromises();
+
+        await new DOMWrapper(document.body).get('.sw-select-option--1').trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('boolean-change')).toBeTruthy();
+    });
+
+    it('should fire event with type `equals` when trigger value for boolean type YES', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], 'boolean', 'equals', '', true);
+        await flushPromises();
+
+        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        await flushPromises();
+
+        const contentStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(0);
+
+        expect(contentStreamValueYes.text()).toBe('global.default.yes');
+        await contentStreamValueYes.trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('boolean-change')).toBeTruthy();
+        expect(wrapper.emitted('boolean-change')[0][0].type).toBe('equals');
+        expect(wrapper.emitted('boolean-change')[0][0].value).toBe('1');
+    });
+
+    it('should fire event with type `not` when trigger value for boolean type No', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], 'boolean', 'equals', '', true);
+        await flushPromises();
+
+        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        await flushPromises();
+
+        const contentStreamValueNo = new DOMWrapper(document.body).findAll('.sw-select-result').at(1);
+
+        expect(contentStreamValueNo.text()).toBe('global.default.no');
+        await contentStreamValueNo.trigger('click');
+
+        expect(wrapper.emitted('boolean-change')).toBeTruthy();
+        expect(wrapper.emitted('boolean-change')[0][0].type).toBe('notEquals');
+        expect(wrapper.emitted('boolean-change')[0][0].value).toBe('0');
+    });
+
+    it('should fire events with correct types when trigger value for empty type changes', async () => {
+        const wrapper = await createWrapper(['content_stream.viewer'], 'empty', 'equals', '', true);
+        await flushPromises();
+
+        const contentStreamValueSwitch = wrapper.get('.sw-blog-stream-value');
+        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        await flushPromises();
+
+        let contentStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(0);
+
+        expect(contentStreamValueYes.text()).toBe('global.default.yes');
+        await contentStreamValueYes.trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('empty-change')).toBeTruthy();
+        expect(wrapper.emitted('empty-change')[0][0].type).toBe('notEquals');
+
+        await contentStreamValueSwitch.get('.sw-select__selection').trigger('click');
+        await flushPromises();
+
+        contentStreamValueYes = new DOMWrapper(document.body).findAll('.sw-select-result').at(1);
+
+        expect(contentStreamValueYes.text()).toBe('global.default.no');
+        await contentStreamValueYes.trigger('click');
+        await flushPromises();
+
+        expect(wrapper.emitted('empty-change')[1][0].type).toBe('equals');
+    });
+
+    it('should return correct fieldDefinition with json accessor', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setProps({
+            fieldName: 'json.test',
+            definition: {
+                entity: 'blog',
+                getField: () => undefined,
+                isJsonField: () => false,
+            },
+        });
+        await flushPromises();
+
+        expect(wrapper.vm.fieldDefinition).toEqual({
+            value: 'json.test',
+            type: 'string',
+        });
+    });
+
+    it('should return empty filterType for foreign key field of manyToOne relation', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setProps({
+            fieldName: 'fkField',
+            definition: {
+                entity: 'blog',
+                getField: () => {
+                    return {
+                        type: 'uuid',
+                    };
+                },
+                isJsonField: () => false,
+                filterProperties: (filter) => {
+                    if (typeof filter !== 'function') {
+                        return {};
+                    }
+
+                    const properties = {
+                        fkField: {
+                            localField: 'fkField',
+                            relation: 'many_to_one',
+                        },
+                    };
+
+                    const result = {};
+                    Object.keys(properties).forEach((propertyName) => {
+                        if (filter(properties[propertyName]) === true) {
+                            result[propertyName] = properties[propertyName];
+                        }
+                    });
+
+                    return result;
+                },
+            },
+        });
+        await flushPromises();
+
+        expect(wrapper.vm.fieldType).toBe('empty');
+    });
+
+    it('should able to show variant name if condition type is equalsAll and definition entity is blog', async () => {
+        const wrapper = await createWrapper([], 'uuid', 'equalsAll', 'blog');
+
+        const entityMultiIdSelect = wrapper.find('sw-entity-multi-id-select-stub');
+        expect(entityMultiIdSelect.exists()).toBe(true);
+        expect(entityMultiIdSelect.attributes().criteria).toBeDefined();
+        expect(entityMultiIdSelect.attributes()['advanced-selection-component']).toBe('sw-advanced-selection-blog');
+    });
+
+    it('should able to show variant name if condition type is equalsAll and definition entity is property value', async () => {
+        const wrapper = await createWrapper([], 'uuid', 'equalsAll', 'property_group_option');
+
+        const entityMultiIdSelect = wrapper.find('sw-entity-multi-id-select-stub');
+        expect(entityMultiIdSelect.exists()).toBe(true);
+        expect(entityMultiIdSelect.attributes().criteria).toBeDefined();
+        expect(entityMultiIdSelect.attributes()['advanced-selection-component']).toBeUndefined();
+    });
+
+    it('should render a single entity select component', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setProps({
+            fieldName: 'customFields.countryTest',
+            definition: {
+                entity: 'blog',
+                getField: () => undefined,
+                isJsonField: () => false,
+            },
+        });
+
+        await wrapper.setData({
+            searchTerm: 'test',
+        });
+
+        await flushPromises();
+
+        const entitySingleSelect = wrapper.find('sw-entity-single-select-stub');
+        expect(entitySingleSelect.exists()).toBe(true);
+    });
+
+    it('should render a multiple entity select component', async () => {
+        const wrapper = await createWrapper();
+
+        await wrapper.setProps({
+            fieldName: 'customFields.countryTest',
+            definition: {
+                entity: 'blog',
+                getField: () => undefined,
+                isJsonField: () => false,
+            },
+            condition: {
+                type: 'equalsAny',
+            },
+        });
+
+        await wrapper.setData({
+            searchTerm: 'test',
+        });
+
+        await flushPromises();
+
+        const entitySingleSelect = wrapper.find('sw-entity-multi-id-select-stub');
+        expect(entitySingleSelect.exists()).toBe(true);
+    });
+
+    it('should show the values of an equalsAny condition as tags', async () => {
+        const wrapper = await createWrapper(['content_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
+        await flushPromises();
+
+        const tags = wrapper.findAll('.sw-select-selection-list__item');
+        expect(tags.map((tag) => tag.text())).toEqual([
+            'foo',
+            'bar',
+        ]);
+    });
+
+    it('should add a value to an equalsAny condition', async () => {
+        const wrapper = await createWrapper(['content_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
+        await flushPromises();
+
+        const input = wrapper.get('.sw-select-selection-list__input');
+        await input.setValue('baz');
+        await input.trigger('keydown.enter');
+
+        expect(wrapper.props('condition').value).toBe('foo|bar|baz');
+    });
+
+    it('should remove a value from an equalsAny condition', async () => {
+        const wrapper = await createWrapper(['content_stream.editor'], 'string', 'equalsAny', '', true, 'foo|bar');
+        await flushPromises();
+
+        await wrapper.get('.sw-select-selection-list__item-holder--0 .sw-label__dismiss').trigger('click');
+
+        expect(wrapper.props('condition').value).toBe('bar');
+    });
+});

@@ -1,0 +1,97 @@
+parameters:
+    contenaLegacyStoreApiRouteMethods:
+        # Endpoints that publish no extension event on purpose: infrastructure and test routes.
+        # New store-api routes must follow the ADR, do not add them here.
+        - Contena\Core\Content\BlogExport\Channel\ExportController::index
+        - Contena\Core\Content\Test\TestNavigationSeoUrlRoute::route
+        - Contena\Core\Content\Test\TestProductSeoUrlRoute::route
+        - Contena\Core\Framework\App\Api\AppJWTGenerateRoute::generate
+        - Contena\Core\Framework\Mcp\Controller\StoreApiMcpServerController::handle
+        - Contena\Core\Framework\Script\Api\ScriptStoreApiRoute::execute
+        - Contena\Core\System\Channel\Channel\StoreApiInfoController::getRoutes
+        - Contena\Core\System\Channel\Channel\StoreApiInfoController::info
+        - Contena\Core\System\Channel\Channel\StoreApiInfoController::openApiSchema
+        - Contena\Core\System\Channel\Channel\StoreApiInfoController::stoplightIoInfoHtml
+
+    # Route methods that keep their abstract route class for backwards compatibility.
+    # They publish extension events like every other route. Remove an entry together with its abstract route class.
+    contenaStoreApiRouteMethodsWithAbstractContract:
+        - Contena\Core\Checkout\Cart\Channel\CartDeleteRoute::delete
+        - Contena\Core\Checkout\Cart\Channel\CartItemAddRoute::add
+        - Contena\Core\Checkout\Cart\Channel\CartItemRemoveRoute::remove
+        - Contena\Core\Checkout\Cart\Channel\CartItemUpdateRoute::change
+        - Contena\Core\Checkout\Cart\Channel\CartLoadRoute::load
+        - Contena\Core\Checkout\Cart\Channel\CartOrderRoute::order
+        - Contena\Core\Checkout\Cart\Channel\BlogShippingCostRoute::shippingCostsByProduct
+        - Contena\Core\Checkout\Cart\Channel\ShippingCostRoute::shippingCostsCart
+        - Contena\Core\Checkout\User\Channel\AccountNewsletterRecipientRoute::load
+        - Contena\Core\Checkout\User\Channel\AddWishlistProductRoute::add
+        - Contena\Core\Checkout\User\Channel\ChangeCustomerProfileRoute::change
+        - Contena\Core\Checkout\User\Channel\ChangeEmailRoute::change
+        - Contena\Core\Checkout\User\Channel\ChangeLanguageRoute::change
+        - Contena\Core\Checkout\User\Channel\ChangePasswordRoute::change
+        - Contena\Core\Checkout\User\Channel\ConvertGuestRoute::convertGuest
+        - Contena\Core\Checkout\User\Channel\UserGroupRegistrationSettingsRoute::load
+        - Contena\Core\Checkout\User\Channel\UserRecoveryIsExpiredRoute::load
+        - Contena\Core\Checkout\User\Channel\UserRoute::load
+        - Contena\Core\Checkout\User\Channel\DeleteAddressRoute::delete
+        - Contena\Core\Checkout\User\Channel\DeleteCustomerRoute::delete
+        - Contena\Core\Checkout\User\Channel\DownloadRoute::load
+        - Contena\Core\Checkout\User\Channel\ImitateCustomerRoute::imitateCustomerLogin
+        - Contena\Core\Checkout\User\Channel\ListAddressRoute::load
+        - Contena\Core\Checkout\User\Channel\LoadWishlistRoute::load
+        - Contena\Core\Checkout\User\Channel\LoginRoute::login
+        - Contena\Core\Checkout\User\Channel\LogoutRoute::logout
+        - Contena\Core\Checkout\User\Channel\MergeWishlistProductRoute::merge
+        - Contena\Core\Checkout\User\Channel\RegisterConfirmRoute::confirm
+        - Contena\Core\Checkout\User\Channel\RegisterRoute::register
+        - Contena\Core\Checkout\User\Channel\RemoveWishlistProductRoute::delete
+        - Contena\Core\Checkout\User\Channel\ResetPasswordRoute::resetPassword
+        - Contena\Core\Checkout\User\Channel\SendPasswordRecoveryMailRoute::sendRecoveryMail
+        - Contena\Core\Checkout\User\Channel\SwitchDefaultAddressRoute::swap
+        - Contena\Core\Checkout\User\Channel\UpsertAddressRoute::upsert
+        - Contena\Core\Checkout\DocumentV2\Channel\DocumentRoute::download
+        - Contena\Core\Checkout\Gateway\Channel\CheckoutGatewayRoute::load
+        - Contena\Core\Checkout\Order\Channel\CancelOrderRoute::cancel
+        - Contena\Core\Checkout\Order\Channel\OrderRoute::load
+        - Contena\Core\Checkout\Order\Channel\SetPaymentOrderRoute::setPayment
+        - Contena\Core\Checkout\Payment\Channel\HandlePaymentMethodRoute::load
+        - Contena\Core\Checkout\Payment\Channel\PaymentMethodRoute::load
+        - Contena\Core\Checkout\Shipping\Channel\ShippingMethodRoute::load
+        - Contena\Core\Content\Breadcrumb\Channel\BreadcrumbRoute::load
+        - Contena\Core\Content\Category\Channel\CategoryListRoute::load
+        - Contena\Core\Content\Category\Channel\CategoryRoute::load
+        - Contena\Core\Content\Category\Channel\NavigationRoute::load
+        - Contena\Core\Content\Cms\Channel\CmsRoute::load
+        - Contena\Core\Content\ContactForm\Channel\ContactFormRoute::load
+        - Contena\Core\Content\Cookie\Channel\CookieRoute::getCookieGroups
+        - Contena\Core\Content\LandingPage\Channel\LandingPageRoute::load
+        - Contena\Core\Content\LegalGuaranteeNotice\Channel\LegalGuaranteeNoticeRoute::load
+        - Contena\Core\Content\Media\Channel\MediaRoute::load
+        - Contena\Core\Content\Newsletter\Channel\NewsletterConfirmRoute::confirmWithResponse
+        - Contena\Core\Content\Newsletter\Channel\NewsletterSubscribeRoute::subscribeWithResponse
+        - Contena\Core\Content\Newsletter\Channel\NewsletterUnsubscribeRoute::unsubscribeWithResponse
+        - Contena\Core\Content\Blog\Channel\CrossSelling\BlogCrossSellingRoute::load
+        - Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute::load
+        - Contena\Core\Content\Blog\Channel\FindVariant\FindProductVariantRoute::load
+        - Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute::load
+        - Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute::load
+        - Contena\Core\Content\Blog\Channel\BlogListRoute::load
+        - Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute::readProductsPurchaseLimit
+        - Contena\Core\Content\Blog\Channel\Review\BlogReviewRoute::load
+        - Contena\Core\Content\Blog\Channel\Review\BlogReviewSaveRoute::save
+        - Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute::load
+        - Contena\Core\Content\Blog\Channel\Suggest\BlogSuggestRoute::load
+        - Contena\Core\Content\RevocationRequest\Channel\RevocationRequestRoute::request
+        - Contena\Core\Content\Seo\Channel\SeoUrlRoute::load
+        - Contena\Core\Content\Sitemap\Channel\SitemapRoute::load
+        - Contena\Core\Framework\Gateway\Context\Channel\ContextGatewayRoute::load
+        - Contena\Core\System\Country\Channel\CountryRoute::load
+        - Contena\Core\System\Country\Channel\CountryStateRoute::load
+        - Contena\Core\System\Currency\Channel\CurrencyRoute::load
+        - Contena\Core\System\Language\Channel\LanguageRoute::load
+        - Contena\Core\System\Channel\Channel\ContextRoute::load
+        - Contena\Core\System\Channel\Channel\ContextSwitchRoute::switchContext
+        - Contena\Core\System\Salutation\Channel\SalutationRoute::load
+        - Contena\Core\System\Snippet\Channel\SnippetRoute::load
+        - Contena\Core\System\SystemConfig\Channel\ShopSettingsRoute::load

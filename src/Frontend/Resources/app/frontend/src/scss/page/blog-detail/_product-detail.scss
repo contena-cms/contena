@@ -1,0 +1,118 @@
+.blog-detail-headline {
+    margin-bottom: $spacer-xl;
+}
+
+.blog-detail-content {
+    margin-bottom: $spacer-lg;
+
+    .blog-breadcrumb {
+        padding: 0;
+        margin: $spacer 0;
+    }
+}
+
+.blog-detail-name-container {
+    display: flex;
+    align-items: center;
+
+    .blog-detail-variant-characteristics {
+        padding-left: $spacer-sm;
+        font-size: $font-size-lg;
+        font-weight: $font-weight-bold;
+        color: $gray-500;
+    }
+}
+
+.blog-detail-buy {
+    margin-bottom: $spacer;
+}
+
+.blog-detail-price {
+    @include font-size(28px);
+}
+
+.blog-detail-price-unit {
+    font-size: $font-size-sm;
+}
+
+.blog-detail-tax {
+    font-size: $font-size-base;
+}
+
+.blog-detail-delivery-information {
+    margin-bottom: $spacer-lg;
+}
+
+.blog-detail-form-container {
+    margin-bottom: $spacer;
+}
+
+.blog-detail-ordernumber-container {
+    margin-bottom: $spacer;
+}
+
+.blog-detail-garan-label {
+    margin-bottom: $spacer;
+
+    svg {
+        width: 100%;
+        max-width: 200px;
+        height: auto;
+    }
+}
+
+.blog-detail-garan-label-show-link {
+    display: inline-flex;
+    align-items: center;
+    gap: $spacer-xs;
+    margin-bottom: $spacer;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: $link-color;
+    text-decoration: underline;
+}
+
+.blog-detail-garan-label-full {
+    margin-bottom: $spacer;
+
+    svg {
+        width: 100%;
+        max-width: 320px;
+        height: auto;
+    }
+}
+
+.blog-block-prices-grid {
+    thead {
+        background-color: $gray-100;
+    }
+
+    th {
+        font-weight: $font-weight-base;
+    }
+
+    td {
+        font-weight: $font-weight-bold;
+    }
+
+    .blog-block-prices-cell {
+        border: 0 none;
+        padding: 10px 0 10px 16px;
+        line-height: 20px;
+
+        &.blog-block-prices-cell-thin {
+            font-weight: $font-weight-normal;
+            font-size: $font-size-sm;
+            line-height: 22px;
+        }
+    }
+
+    .blog-block-prices-body .blog-block-prices-row {
+        border-top: 1px solid $gray-200;
+
+        &:first-of-type {
+            border-top: 0 none;
+        }
+    }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "SwagTheme",
+  "author": "Contena",
+  "views": [
+     "@Frontend",
+     "@Plugins",
+     "@SwagTheme"
+  ],
+  "style": [
+  ],
+  "script": [],
+  "iconSets": {
+  }
+}

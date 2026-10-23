@@ -1,0 +1,12 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Frontend\Page\Navigation\Error;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+
+interface ErrorPageLoaderInterface
+{
+    public function load(string $cmsErrorLayoutId, Request $request, ChannelContext $context): ErrorPage;
+}

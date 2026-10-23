@@ -1,0 +1,19 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Test;
+
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageFactoryInterface;
+use Symfony\Component\HttpFoundation\Session\Storage\SessionStorageInterface;
+
+/**
+ * @internal
+ */
+class TestSessionStorageFactory implements SessionStorageFactoryInterface
+{
+    public function createStorage(?Request $request): SessionStorageInterface
+    {
+        return new TestSessionStorage();
+    }
+}

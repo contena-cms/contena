@@ -1,0 +1,12 @@
+{
+    "name": "swag/dependent-plugin",
+    "description": "Plugin install command test fixture",
+    "version": "1.0.0",
+    "type": "contena-platform-plugin",
+    "require": {
+        "swag/base-plugin": "*"
+    },
+    "extra": {
+        "contena-plugin-class": "DependentPlugin\\DependentPlugin"
+    }
+}

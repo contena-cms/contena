@@ -1,0 +1,150 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Administration\Framework\Adapter\Cache\Http;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Administration\Controller\AdministrationController;
+use Contena\Administration\Framework\Adapter\Cache\Http\AdministrationCacheControlListener;
+use Contena\Administration\Framework\Routing\AdministrationRouteScope;
+use Contena\Core\Framework\Adapter\Cache\Http\Event\BeforeCacheControlEvent;
+use Contena\Core\Framework\Feature\FeatureException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\PlatformRequest;
+use Contena\Core\Test\Annotation\DisabledFeatures;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ *
+ * @deprecated tag:v6.8.0 - Will be removed together with the AdministrationCacheControlListener.
+ */
+#[CoversClass(AdministrationCacheControlListener::class)]
+class AdministrationCacheControlListenerTest extends TestCase
+{
+    /**
+     * @deprecated tag:v6.8.0 - Remove with the major feature flag.
+     */
+    public function testDirectInvocationThrowsInMajorMode(): void
+    {
+        $listener = new AdministrationCacheControlListener();
+
+        $this->expectException(FeatureException::class);
+        $listener(new BeforeCacheControlEvent(new Request(), new Response()));
+    }
+
+    #[DataProvider('shouldSkipCacheControlProvider')]
+    #[DisabledFeatures(['v6.8.0.0'])]
+    public function testShouldSkipCacheControl(
+        Request $request,
+        Response $response,
+        bool $expectedSkip
+    ): void {
+        $listener = new AdministrationCacheControlListener();
+
+        $event = new BeforeCacheControlEvent($request, $response);
+
+        $listener->__invoke($event);
+
+        static::assertSame($expectedSkip, $event->shouldSkipCacheControl());
+    }
+
+    /**
+     * @return iterable<string, array{request: Request, response: Response, expectedSkip: bool}>
+     */
+    public static function shouldSkipCacheControlProvider(): iterable
+    {
+        yield 'administration cache ID header' => [
+            'request' => new Request(),
+            'response' => new Response('', 200, [
+                AdministrationController::CACHE_ID_HEADER => AdministrationController::CACHE_ID_ADMINISTRATION,
+            ]),
+            'expectedSkip' => true,
+        ];
+
+        yield 'administration route scope' => [
+            'request' => new Request(
+                attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [AdministrationRouteScope::ID]]
+            ),
+            'response' => new Response(),
+            'expectedSkip' => true,
+        ];
+
+        yield 'administration route name' => [
+            'request' => new Request(
+                attributes: ['_route' => 'administration.index']
+            ),
+            'response' => new Response(),
+            'expectedSkip' => true,
+        ];
+
+        yield 'administration route name with prefix' => [
+            'request' => new Request(
+                attributes: ['_route' => 'administration.plugin.index']
+            ),
+            'response' => new Response(),
+            'expectedSkip' => true,
+        ];
+
+        yield 'multiple administration markers present' => [
+            'request' => new Request(
+                attributes: [
+                    PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [AdministrationRouteScope::ID],
+                    '_route' => 'administration.index',
+                ]
+            ),
+            'response' => new Response('', 200, [
+                AdministrationController::CACHE_ID_HEADER => AdministrationController::CACHE_ID_ADMINISTRATION,
+            ]),
+            'expectedSkip' => true,
+        ];
+
+        yield 'no administration markers' => [
+            'request' => new Request(),
+            'response' => new Response(),
+            'expectedSkip' => false,
+        ];
+
+        yield 'non-administration route scope' => [
+            'request' => new Request(
+                attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => ['some-other-scope']]
+            ),
+            'response' => new Response(),
+            'expectedSkip' => false,
+        ];
+
+        yield 'non-administration route name' => [
+            'request' => new Request(
+                attributes: ['_route' => 'frontend.page']
+            ),
+            'response' => new Response(),
+            'expectedSkip' => false,
+        ];
+
+        yield 'wrong cache ID header value' => [
+            'request' => new Request(),
+            'response' => new Response('', 200, [
+                AdministrationController::CACHE_ID_HEADER => 'different-value',
+            ]),
+            'expectedSkip' => false,
+        ];
+
+        yield 'non-string route name' => [
+            'request' => new Request(
+                attributes: ['_route' => 123]
+            ),
+            'response' => new Response(),
+            'expectedSkip' => false,
+        ];
+
+        yield 'empty route scope array' => [
+            'request' => new Request(
+                attributes: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => []]
+            ),
+            'response' => new Response(),
+            'expectedSkip' => false,
+        ];
+    }
+}

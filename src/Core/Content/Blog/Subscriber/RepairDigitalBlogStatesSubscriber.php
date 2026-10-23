@@ -1,0 +1,135 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\Subscriber;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\ParameterType;
+use Psr\Log\LoggerInterface;
+use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Update\Event\UpdatePostFinishEvent;
+use Contena\Core\Framework\Uuid\Uuid;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
+/**
+ * @internal
+ *
+ * @deprecated tag:v6.8.0 - temporary one-time digital blog states regression
+ */
+final readonly class RepairDigitalBlogStatesSubscriber implements EventSubscriberInterface
+{
+    /**
+     * @deprecated tag:v6.8.0 - temporary one-time repair marker
+     */
+    public const REPAIRED_DIGITAL_BLOG_STATES = 'core.repaired_digital_product_states';
+
+    private const BATCH_SIZE = 500;
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private Connection $connection,
+        private ?StatesUpdater $statesUpdater,
+        private AbstractKeyValueStorage $storage,
+        private LoggerInterface $logger,
+    ) {
+    }
+
+    /**
+     * @return array<class-string, string>
+     */
+    public static function getSubscribedEvents(): array
+    {
+        if (Feature::isActive('v6.8.0.0')) {
+            return [];
+        }
+
+        return [
+            UpdatePostFinishEvent::class => 'repair',
+        ];
+    }
+
+    /**
+     * @deprecated tag:v6.8.0 - temporary one-time repair for 6.7.8.0 digital blog states regression
+     */
+    public function repair(UpdatePostFinishEvent $event): void
+    {
+        Feature::throwIfActive('v6.8.0.0', Feature::deprecatedClassMessage(self::class, 'v6.8.0.0'));
+
+        if ($this->storage->has(self::REPAIRED_DIGITAL_BLOG_STATES)) {
+            return;
+        }
+
+        if ($this->statesUpdater === null) {
+            $this->storage->set(self::REPAIRED_DIGITAL_BLOG_STATES, '1');
+
+            return;
+        }
+
+        try {
+            $repaired = 0;
+            $previousChunk = null;
+
+            while (true) {
+                /** @var list<string> $ids */
+                $ids = $this->connection->fetchFirstColumn(
+                    <<<'SQL'
+                    SELECT LOWER(HEX(`id`)) AS id
+                    FROM `blog`
+                    WHERE `version_id` = :versionId
+                      AND `type` = :type
+                      AND `states` IS NULL
+                    LIMIT :limit
+                    SQL,
+                    [
+                        'type' => BlogDefinition::TYPE_DIGITAL,
+                        'limit' => self::BATCH_SIZE,
+                        'versionId' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
+                    ],
+                    [
+                        'limit' => ParameterType::INTEGER,
+                    ]
+                );
+
+                if ($ids === []) {
+                    break;
+                }
+
+                if ($previousChunk === $ids) {
+                    $this->logger->error('Aborting digital blog states repair because the same blog chunk was fetched repeatedly', [
+                        'chunkSize' => \count($ids),
+                        'blogIds' => $ids,
+                    ]);
+
+                    break;
+                }
+
+                $previousChunk = $ids;
+
+                $this->statesUpdater->update($ids, $event->getContext());
+                $repaired += \count($ids);
+
+                if (\count($ids) < self::BATCH_SIZE) {
+                    break;
+                }
+            }
+
+            $this->storage->set(self::REPAIRED_DIGITAL_BLOG_STATES, '1');
+
+            if ($repaired > 0) {
+                $event->appendPostUpdateMessage(\sprintf(
+                    'Repaired blog states for %d digital blog(s) with missing legacy states.',
+                    $repaired
+                ));
+            }
+        } catch (\Throwable $exception) {
+            // Must not break update flow.
+            $this->logger->error('Failed to repair digital blog states', ['exception' => $exception]);
+        }
+    }
+}

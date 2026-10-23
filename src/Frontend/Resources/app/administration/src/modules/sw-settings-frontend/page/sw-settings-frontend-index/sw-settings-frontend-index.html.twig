@@ -1,0 +1,135 @@
+{% block sw_settings_frontend_index %}
+<sw-page class="sw-settings-frontend">
+
+    {% block sw_settings_frontend_smart_bar_header %}
+    <template #smart-bar-header>
+        {% block sw_settings_frontend_smart_bar_header_title %}
+        <h2>
+            {% block sw_settings_frontend_smart_bar_header_title_text %}
+            {{ $t('sw-settings.index.title') }}
+            <mt-icon
+                name="regular-chevron-right-xs"
+                size="12px"
+            />
+            {{ $t('sw-settings-frontend.general.textHeadline') }}
+            {% endblock %}
+        </h2>
+        {% endblock %}
+    </template>
+    {% endblock %}
+
+    {% block sw_settings_frontend_smart_bar_actions %}
+    <template #smart-bar-actions>
+        {% block sw_settings_frontend_actions_save %}
+        <sw-button-process
+            v-model:process-success="isSaveSuccessful"
+            :is-loading="isLoading"
+            variant="primary"
+            @click="saveFrontendSettings"
+        >
+            {{ $t('global.default.save') }}
+        </sw-button-process>
+        {% endblock %}
+    </template>
+    {% endblock %}
+
+    {% block sw_settings_frontend_content %}
+    <template #content>
+        <sw-card-view>
+            <sw-skeleton v-if="isLoading" />
+
+            {% block sw_settings_frontend %}
+            <mt-card
+                position-identifier="sw-settings-frontend--settings"
+                :title="$t('sw-settings-frontend.configuration.cardTitle')"
+                class="sw-settings-frontend__input-fields"
+            >
+                <template #toolbar>
+                    {% block sw_settings_frontend_channel_switch %}
+                    <div class="sw-settings-frontend__sales-channel-switch">
+                        <sw-sales-channel-switch
+                            label=""
+                            @change-sales-channel-id="onSalesChannelChanged"
+                        />
+                    </div>
+                    {% endblock %}
+                </template>
+
+                {# @deprecated tag:v6.8.0 - Block will be removed. Use `sw_settings_frontend_settings_icon_cache` and `sw_settings_frontend_settings_speculation_rules` instead. #}
+                {% block sw_settings_frontend_smtp_settings %}
+                {% block sw_settings_frontend_settings_icon_cache %}
+                <sw-inherit-wrapper
+                    v-model:value="currentSalesChannelFrontendSettings['core.frontendSettings.iconCache']"
+                    :inherited-value="frontendSettings['core.frontendSettings.iconCache']"
+                    :has-parent="!isGlobalConfig"
+                >
+                    <template #content="{ currentValue, updateCurrentValue, isInherited, isInheritField, restoreInheritance, removeInheritance }">
+                        <mt-switch
+                            :model-value="currentValue"
+                            :inherited-value="frontendSettings['core.frontendSettings.iconCache']"
+                            :disabled="isInherited"
+                            :is-inheritance-field="isInheritField"
+                            :is-inherited="isInherited"
+                            bordered
+                            :label="$t('sw-settings-frontend.configuration.iconCache')"
+                            :help-text="$t('sw-settings-frontend.configuration.iconCacheToolTip')"
+                            @update:model-value="updateCurrentValue"
+                            @inheritance-restore="restoreInheritance"
+                            @inheritance-remove="removeInheritance"
+                        />
+                    </template>
+                </sw-inherit-wrapper>
+                {% endblock %}
+
+                {% block sw_settings_frontend_settings_speculation_rules %}
+                <sw-inherit-wrapper
+                    v-model:value="currentSalesChannelFrontendSettings['core.frontendSettings.speculationRules']"
+                    :inherited-value="frontendSettings['core.frontendSettings.speculationRules']"
+                    :has-parent="!isGlobalConfig"
+                >
+                    <template #content="{ currentValue, updateCurrentValue, isInherited, isInheritField, restoreInheritance, removeInheritance }">
+                        <mt-switch
+                            :model-value="currentValue"
+                            :inherited-value="frontendSettings['core.frontendSettings.speculationRules']"
+                            :disabled="isInherited"
+                            :is-inheritance-field="isInheritField"
+                            :is-inherited="isInherited"
+                            bordered
+                            :label="$t('sw-settings-frontend.configuration.speculationRules.title')"
+                            :help-text="$t('sw-settings-frontend.configuration.speculationRules.description')"
+                            @update:model-value="updateCurrentValue"
+                            @inheritance-restore="restoreInheritance"
+                            @inheritance-remove="removeInheritance"
+                        />
+                    </template>
+                </sw-inherit-wrapper>
+                {% endblock %}
+                {% endblock %}
+
+            </mt-card>
+            {% endblock %}
+
+            {% block sw_settings_frontend_global %}
+            <mt-card
+                position-identifier="sw-settings-frontend--global-settings"
+                :title="$t('sw-settings-frontend.configuration.theme.cardTitle')"
+                class="sw-settings-frontend__input-fields"
+            >
+                {% block sw_settings_frontend_settings_theme_async %}
+                <mt-switch
+                    v-model="frontendSettings['core.frontendSettings.asyncThemeCompilation']"
+                    v-tooltip.top="{
+                        message: $t('sw-settings-frontend.configuration.theme.asyncTooltip'),
+                        showOnDisabledElements: true
+                    }"
+                    bordered
+                    :label="$t('sw-settings-frontend.configuration.theme.async')"
+                />
+                {% endblock %}
+            </mt-card>
+            {% endblock %}
+        </sw-card-view>
+    </template>
+    {% endblock %}
+</sw-page>
+{% endblock %}

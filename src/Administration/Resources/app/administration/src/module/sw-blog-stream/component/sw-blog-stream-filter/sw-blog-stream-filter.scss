@@ -1,0 +1,27 @@
+.sw-blog-stream-filter__fields {
+    display: flex;
+    gap: var(--scale-size-4);
+    align-items: center;
+    height: 100%;
+}
+
+.sw-condition .sw-condition__container:has(> .sw-blog-stream-filter__fields) {
+    grid-template-columns: minmax(var(--scale-size-256), auto) minmax(var(--scale-size-256), 1fr) auto;
+}
+
+.sw-condition .sw-condition__container {
+    > .sw-condition__value-content:has(.sw-blog-stream-value),
+    > .sw-blog-stream-filter__fields {
+        max-height: none;
+    }
+
+    .sw-condition__value-content > .sw-blog-stream-value,
+    .sw-blog-stream-value .sw-block-field__block {
+        max-height: none;
+    }
+
+    .sw-blog-stream-value .sw-select-selection-list {
+        flex-wrap: wrap;
+        overflow: visible;
+    }
+}

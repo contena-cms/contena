@@ -1,0 +1,24 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\Aggregate\BlogSearchConfig;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @extends EntityCollection<BlogSearchConfigEntity>
+ *
+ * @codeCoverageIgnore
+ */
+class BlogSearchConfigCollection extends EntityCollection
+{
+    public function getApiAlias(): string
+    {
+        return 'blog_search_config_collection';
+    }
+
+    protected function getExpectedClass(): string
+    {
+        return BlogSearchConfigEntity::class;
+    }
+}

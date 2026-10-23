@@ -1,0 +1,17 @@
+{% block component_product_feature_list_item_base %}
+    <div class="{% block component_product_feature_list_item_class %}{{ 'blog-feature-feature blog-feature-%s'|format(type) }}{% endblock %}">
+        {% block component_product_feature_list_item_base_content %}
+            <span class="blog-feature-label">
+                {% block component_product_feature_list_item_base_content_label %}
+                    {{ label|sw_sanitize }}
+                {% endblock %}
+            </span>
+
+            <span class="blog-feature-value">
+                {% block component_product_feature_list_item_base_content_value %}
+                    {{ value|sw_sanitize }}
+                {% endblock %}
+            </span>
+        {% endblock %}
+    </div>
+{% endblock %}

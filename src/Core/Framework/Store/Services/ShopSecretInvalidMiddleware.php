@@ -1,0 +1,58 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Store\Services;
+
+use Doctrine\DBAL\Connection;
+use GuzzleHttp\Promise\PromiseInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
+use Contena\Core\Framework\Store\StoreException;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+
+/**
+ * @internal
+ */
+class ShopSecretInvalidMiddleware implements MiddlewareInterface
+{
+    private const INVALID_SHOP_SECRET = 'ContenaPlatformException-68';
+
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly SystemConfigService $systemConfigService
+    ) {
+    }
+
+    public function __invoke(callable $handler): callable
+    {
+        return function (RequestInterface $request, array $options) use ($handler) {
+            /** @var PromiseInterface $promise */
+            $promise = $handler($request, $options);
+
+            return $promise->then(function (ResponseInterface $response) {
+                if ($response->getStatusCode() !== 401) {
+                    return $response;
+                }
+
+                $body = json_decode($response->getBody()->getContents(), true, 512, \JSON_THROW_ON_ERROR);
+                $code = $body['code'] ?? null;
+
+                if ($code !== self::INVALID_SHOP_SECRET) {
+                    $response->getBody()->rewind();
+
+                    return $response;
+                }
+
+                $this->connection->executeStatement('UPDATE admin_user SET store_token = NULL');
+
+                $this->systemConfigService->delete(StoreRequestOptionsProvider::CONFIG_KEY_STORE_SHOP_SECRET, null, true);
+
+                throw StoreException::shopSecretInvalid();
+            });
+        };
+    }
+}

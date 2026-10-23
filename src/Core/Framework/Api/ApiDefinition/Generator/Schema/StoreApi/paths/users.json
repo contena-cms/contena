@@ -1,0 +1,259 @@
+{
+    "openapi": "3.2.0",
+    "info": [],
+    "paths": {
+        "/user/wishlist/add/{blogId}": {
+            "post": {
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Add a blog to a wishlist",
+                "description": "Adds a blog to a users wishlist.\n\n    **Important constraints**\n\n    * Anonymous (not logged-in) users can not have wishlists.\n    * The wishlist feature has to be activated.",
+                "operationId": "addProductOnWishlist",
+                "parameters": [
+                    {
+                        "name": "blogId",
+                        "in": "path",
+                        "description": "Identifier of the blog to be added.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns a success response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "No blog exists for the given `blogId` in this sales channel."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `sw-access-key` header is missing."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "No user is logged in, the logged in user is a guest, or the wishlist feature is disabled for this sales channel."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": [],
+                        "ContextToken": []
+                    }
+                ]
+            }
+        },
+        "/user/wishlist": {
+            "post": {
+                "tags": [
+                    "Wishlist",
+                    "Endpoints supporting Criteria "
+                ],
+                "summary": "Fetch a wishlist",
+                "description": "Fetch a user's wishlist. Blogs on the wishlist can be filtered using a criteria object.\n\n    **Important constraints**\n\n    * Anonymous (not logged-in) users can not have wishlists.\n    * The wishlist feature has to be activated.",
+                "operationId": "readCustomerWishlist",
+                "parameters": [
+                    {
+                        "name": "sw-include-search-info",
+                        "in": "header",
+                        "description": "Controls whether API search information is included in the response. Default is 1 (enabled), will be 0 (disabled) in the next major version.",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "0",
+                                "1"
+                            ],
+                            "default": "1"
+                        }
+                    },
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Criteria"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/WishlistLoadRouteResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "The `Criteria` sent with the request is invalid, e.g. an unknown filter field, sorting field or association."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `sw-access-key` header is missing."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "No user is logged in, the logged in user is a guest, or the wishlist feature is disabled for this sales channel."
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/404",
+                        "description": "The logged in user has no wishlist yet."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": [],
+                        "ContextToken": []
+                    }
+                ]
+            }
+        },
+        "/user/wishlist/merge": {
+            "post": {
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Create a wishlist for a user",
+                "description": "Create a new wishlist for a logged in user or extend the existing wishlist given a set of blogs.\n\n    **Important constraints**\n\n    * Anonymous (not logged-in) users can not have wishlists.\n    * A user can only have a single wishlist.\n    * The wishlist feature has to be activated.",
+                "operationId": "mergeProductOnWishlist",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "blogIds": {
+                                        "description": "List blog id",
+                                        "type": "array",
+                                        "items": {
+                                            "description": "blog id",
+                                            "type": "string",
+                                            "pattern": "^[0-9a-f]{32}$"
+                                        }
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Returns a success response.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/400",
+                        "description": "The `blogIds` parameter is missing."
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `sw-access-key` header is missing."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "No user is logged in, the logged in user is a guest, or the wishlist feature is disabled for this sales channel."
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": [],
+                        "ContextToken": []
+                    }
+                ],
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/swLanguageId"
+                    }
+                ]
+            }
+        },
+        "/user/wishlist/delete/{blogId}": {
+            "delete": {
+                "tags": [
+                    "Wishlist"
+                ],
+                "summary": "Remove a blog from a wishlist",
+                "description": "Removes a blog from a user's wishlist.\n\n    **Important constraints**\n\n    * Anonymous (not logged-in) users can not have wishlists.\n    * The wishlist feature has to be activated.",
+                "operationId": "deleteProductOnWishlist",
+                "parameters": [
+                    {
+                        "name": "blogId",
+                        "in": "path",
+                        "description": "The identifier of the blog to be removed from the wishlist.",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "pattern": "^[0-9a-f]{32}$"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Returns a success response indicating a successful removal.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/SuccessResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/401",
+                        "description": "The `sw-access-key` header is missing."
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/403",
+                        "description": "No user is logged in, the logged in user is a guest, or the wishlist feature is disabled for this sales channel."
+                    },
+                    "404": {
+                        "description": "The removal of the blog failed. Probably because the blog could not be found on the wishlist.",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/failure"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKey": [],
+                        "ContextToken": []
+                    }
+                ]
+            }
+        }
+    }
+}

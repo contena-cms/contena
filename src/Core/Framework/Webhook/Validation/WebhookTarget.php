@@ -1,0 +1,20 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Webhook\Validation;
+
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ *
+ * @codeCoverageIgnore
+ */
+final readonly class WebhookTarget
+{
+    public function __construct(
+        public string $host,
+        public int $port,
+        public ?string $ip,
+    ) {
+    }
+}

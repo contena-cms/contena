@@ -1,0 +1,20 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\App\Api\DTO;
+
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @internal only for use by the app-system
+ */
+class VerifyShop
+{
+    public function __construct(
+        #[Assert\NotBlank]
+        public string $runId,
+        #[Assert\NotBlank]
+        public string $token,
+    ) {
+    }
+}

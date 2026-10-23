@@ -1,0 +1,28 @@
+.sw-order-state-select-v2 {
+    .mt-field {
+        margin-bottom: var(--scale-size-24);
+    }
+
+    &__state {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--scale-size-8);
+    }
+
+    &--without-state .mt-select-selection-list .mt-select-selection-list__input::placeholder {
+        color: var(--color-text-primary-default);
+    }
+
+    &:has(&__status-dot) .mt-select {
+        .mt-field__addition.is--prefix {
+            min-width: 0;
+            padding: 0 0 0 var(--scale-size-16);
+            border: none;
+            background: none;
+        }
+
+        &.mt-select--small .mt-select__selection {
+            padding-left: 0;
+        }
+    }
+}

@@ -1,0 +1,161 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\App\Payment;
+
+use GuzzleHttp\Exception\ServerException;
+use GuzzleHttp\Psr7\Response;
+use Psr\Http\Message\RequestInterface;
+use Contena\Core\Framework\App\AppException;
+use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
+use Contena\Core\Framework\App\Payment\Response\ValidateResponse;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Struct\ArrayStruct;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\Test\Generator;
+
+/**
+ * @internal
+ */
+class AppPreparedPaymentHandlerTest extends AbstractAppPaymentHandlerTestCase
+{
+    public function testValidate(): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId('prepared');
+        $cart = Generator::createCart();
+        $this->createUser();
+        $channelContext = $this->getChannelContext($paymentMethodId);
+
+        $response = ValidateResponse::create(['preOrderPayment' => ['test' => 'response']]);
+        $this->appendNewResponse($this->signResponse($response->jsonSerialize()));
+
+        $returnValue = $this->paymentProcessor->validate($cart, new RequestDataBag(), $channelContext);
+        static::assertInstanceOf(ArrayStruct::class, $returnValue);
+        static::assertSame(['test' => 'response'], $returnValue->all());
+
+        $request = $this->getLastRequest();
+        static::assertNotNull($request);
+        $body = $request->getBody()->getContents();
+
+        $appSecret = $this->app->getAppSecret();
+        static::assertNotNull($appSecret);
+
+        static::assertTrue($request->hasHeader('contena-shop-signature'));
+        static::assertSame(hash_hmac('sha256', $body, $appSecret), $request->getHeaderLine('contena-shop-signature'));
+        static::assertNotSame('', $request->getHeaderLine('sw-version'));
+        static::assertNotSame('', $request->getHeaderLine(AuthMiddleware::CONTENA_USER_LANGUAGE));
+        static::assertNotSame('', $request->getHeaderLine(AuthMiddleware::CONTENA_CONTEXT_LANGUAGE));
+        static::assertSame('POST', $request->getMethod());
+        static::assertJson($body);
+        $content = json_decode($body, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertIsArray($content);
+        static::assertArrayHasKey('source', $content);
+        static::assertSame([
+            'url' => $this->shopUrl,
+            'shopId' => $this->shopIdProvider->getShopId()->id,
+            'appVersion' => '1.0.0',
+            'inAppPurchases' => null,
+        ], $content['source']);
+        static::assertArrayHasKey('cart', $content);
+        static::assertIsArray($content['cart']);
+        static::assertArrayHasKey('requestData', $content);
+        static::assertIsArray($content['requestData']);
+        static::assertArrayHasKey('channelContext', $content);
+        static::assertIsArray($content['channelContext']);
+        static::assertArrayHasKey('user', $content['channelContext']);
+        static::assertIsArray($content['channelContext']['user']);
+        // sensitive data is removed
+        static::assertArrayNotHasKey('password', $content['channelContext']['user']);
+        static::assertCount(4, $content);
+    }
+
+    public function testValidateWithoutUrl(): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId('sync');
+        $cart = Generator::createCart();
+        $this->createUser();
+        $channelContext = $this->getChannelContext($paymentMethodId);
+
+        $this->paymentProcessor->validate($cart, new RequestDataBag(), $channelContext);
+
+        static::assertSame(0, $this->getRequestCount());
+    }
+
+    public function testValidateWithErrorMessage(): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId('prepared');
+        $cart = Generator::createCart();
+        $this->createUser();
+        $channelContext = $this->getChannelContext($paymentMethodId);
+
+        $response = (new ValidateResponse())->assign([
+            'message' => self::ERROR_MESSAGE,
+        ]);
+        $this->appendNewResponse($this->signResponse($response->jsonSerialize()));
+
+        $this->expectException(AppException::class);
+        $this->expectExceptionMessageMatches(\sprintf('/%s/', self::ERROR_MESSAGE));
+        $this->paymentProcessor->validate($cart, new RequestDataBag(), $channelContext);
+    }
+
+    public function testValidateWithUnsignedResponse(): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId('prepared');
+        $cart = Generator::createCart();
+        $this->createUser();
+        $channelContext = $this->getChannelContext($paymentMethodId);
+
+        $response = new ValidateResponse();
+        $json = \json_encode($response, \JSON_THROW_ON_ERROR);
+        static::assertNotFalse($json);
+
+        $mockResponse = new Response(200, [], $json);
+        $this->appendNewResponse($mockResponse);
+
+        $this->expectExceptionObject(new ServerException(
+            'Could not verify the authenticity of the response',
+            static::createStub(RequestInterface::class),
+            $mockResponse
+        ));
+        $this->paymentProcessor->validate($cart, new RequestDataBag(), $channelContext);
+    }
+
+    public function testValidateWithWronglySignedResponse(): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId('prepared');
+        $cart = Generator::createCart();
+        $this->createUser();
+        $channelContext = $this->getChannelContext($paymentMethodId);
+
+        $response = new ValidateResponse();
+        $json = \json_encode($response, \JSON_THROW_ON_ERROR);
+        static::assertNotFalse($json);
+
+        $mockResponse = new Response(200, ['contena-app-signature' => 'invalid'], $json);
+        $this->appendNewResponse($mockResponse);
+
+        $this->expectExceptionObject(new ServerException(
+            'Could not verify the authenticity of the response',
+            static::createStub(RequestInterface::class),
+            $mockResponse
+        ));
+        $this->paymentProcessor->validate($cart, new RequestDataBag(), $channelContext);
+    }
+
+    public function testValidateWithErrorResponse(): void
+    {
+        $paymentMethodId = $this->getPaymentMethodId('prepared');
+        $cart = Generator::createCart();
+        $this->createUser();
+        $channelContext = $this->getChannelContext($paymentMethodId);
+
+        $mockResponse = new Response(500);
+        $this->appendNewResponse($mockResponse);
+
+        $this->expectExceptionObject(new ServerException(
+            'Could not verify the authenticity of the response',
+            static::createStub(RequestInterface::class),
+            $mockResponse
+        ));
+        $this->paymentProcessor->validate($cart, new RequestDataBag(), $channelContext);
+    }
+}

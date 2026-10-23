@@ -1,0 +1,155 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Api\OAuth;
+
+use Doctrine\DBAL\Connection;
+use League\OAuth2\Server\Entities\RefreshTokenEntityInterface;
+use League\OAuth2\Server\Repositories\RefreshTokenRepositoryInterface;
+use Psr\Clock\ClockInterface;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+
+/**
+ * OAuth integrations should rely on {@see RefreshTokenRepositoryInterface} instead of this concrete Contena class.
+ */
+#[BecomesInternal(version: 'v6.8.0')]
+class RefreshTokenRepository implements RefreshTokenRepositoryInterface
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Connection $connection,
+        private readonly ClockInterface $clock,
+    ) {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getNewRefreshToken(): RefreshTokenEntityInterface
+    {
+        return new RefreshToken();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity): void
+    {
+        // AdminUser identifier is by design null in case of authentication with integration (and no real admin_user)
+        $admin_userIdentifier = $refreshTokenEntity->getAccessToken()->getUserIdentifier();
+
+        if ($admin_userIdentifier) {
+            $familyId = $refreshTokenEntity instanceof RefreshToken ? $refreshTokenEntity->getFamilyId() : null;
+
+            $this->connection->createQueryBuilder()
+                ->insert('refresh_token')
+                ->values([
+                    'id' => ':id',
+                    'admin_user_id' => ':admin_userId',
+                    'token_id' => ':tokenId',
+                    'family_id' => ':familyId',
+                    'issued_at' => ':issuedAt',
+                    'expires_at' => ':expiresAt',
+                ])
+                ->setParameters([
+                    'id' => Uuid::randomBytes(),
+                    'admin_userId' => Uuid::fromHexToBytes($admin_userIdentifier),
+                    'tokenId' => $refreshTokenEntity->getIdentifier(),
+                    'familyId' => $familyId ?? Uuid::randomBytes(),
+                    'issuedAt' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                    'expiresAt' => $refreshTokenEntity->getExpiryDateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+                ])
+                ->executeStatement();
+        }
+
+        $this->cleanUpExpiredRefreshTokens();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function revokeRefreshToken(string $tokenId): void
+    {
+        $this->connection->createQueryBuilder()
+            ->update('refresh_token')
+            ->set('revoked_at', ':revokedAt')
+            ->where('token_id = :tokenId')
+            ->setParameters([
+                'tokenId' => $tokenId,
+                'revokedAt' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
+            ])
+            ->executeStatement();
+
+        $this->cleanUpExpiredRefreshTokens();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function isRefreshTokenRevoked(string $tokenId): bool
+    {
+        $this->cleanUpExpiredRefreshTokens();
+
+        $refreshToken = $this->connection->createQueryBuilder()
+            ->select('id', 'family_id', 'revoked_at')
+            ->from('refresh_token')
+            ->where('token_id = :tokenId')
+            ->setParameter('tokenId', $tokenId)
+            ->forUpdate()
+            ->executeQuery()
+            ->fetchAssociative();
+
+        // no token found, token is invalid
+        if (!$refreshToken) {
+            return true;
+        }
+
+        $familyId = $refreshToken['family_id'];
+        if (!\is_string($familyId)) {
+            $familyId = $refreshToken['id'];
+            $this->connection->update('refresh_token', ['family_id' => $familyId], ['token_id' => $tokenId]);
+        }
+
+        if ($refreshToken['revoked_at'] === null) {
+            return false;
+        }
+
+        $this->connection->delete('refresh_token', ['family_id' => $familyId]);
+
+        return true;
+    }
+
+    public function getRefreshTokenFamilyId(string $tokenId): ?string
+    {
+        $familyId = $this->connection->fetchOne(
+            'SELECT family_id FROM refresh_token WHERE token_id = :tokenId',
+            ['tokenId' => $tokenId]
+        );
+
+        return \is_string($familyId) ? $familyId : null;
+    }
+
+    public function revokeRefreshTokensForUser(string $admin_userId): void
+    {
+        $this->connection->createQueryBuilder()
+            ->delete('refresh_token')
+            ->where('admin_user_id = UNHEX(:admin_userId)')
+            ->setParameter('admin_userId', $admin_userId)
+            ->executeStatement();
+    }
+
+    private function cleanUpExpiredRefreshTokens(): void
+    {
+        $now = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
+
+        $this->connection->createQueryBuilder()
+            ->delete('refresh_token')
+            ->where('expires_at < :now')
+            ->setParameter('now', $now)
+            ->executeStatement();
+    }
+}

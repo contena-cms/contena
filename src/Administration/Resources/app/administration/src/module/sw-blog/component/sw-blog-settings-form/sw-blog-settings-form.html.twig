@@ -1,0 +1,87 @@
+{% block sw_product_settings_form %}
+<div class="sw-blog-settings-form">
+    {% block sw_product_settings_form_content %}
+    <sw-container
+        columns="1fr 1fr 1fr"
+        gap="0 var(--scale-size-30)"
+    >
+        {% block sw_product_settings_form_release_date_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.releaseDate"
+            class="sw-blog-settings-form__release-date"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.releaseDate"
+        >
+            <template #content="props">
+
+                <mt-datepicker
+                    date-type="datetime"
+                    :label="$t('sw-blog.settingsForm.labelReleaseDate')"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :disabled="props.isInherited || !allowEdit"
+                    :error="blogReleaseDateError"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderReleaseDate')"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_settings_form_ean_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.ean"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.ean"
+        >
+            <template #content="props">
+
+                <mt-text-field
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :error="blogEanError"
+                    :label="$t('sw-blog.settingsForm.labelEan')"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderEan')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_settings_form_manufacturer_number_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.manufacturerNumber"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.manufacturerNumber"
+        >
+            <template #content="props">
+
+                <mt-text-field
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :error="blogManufacturerNumberError"
+                    :label="$t('sw-blog.settingsForm.labelManufacturerNumber')"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderManufacturerNumber')"
+                    :disabled="props.isInherited || !allowEdit"
+                    :model-value="props.currentValue"
+                    @update:model-value="props.updateCurrentValue"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+    {% endblock %}
+</div>
+{% endblock %}

@@ -1,0 +1,470 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\NullLogger;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\ApiProtectionException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\InvalidAggregationQueryException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\RuntimeFieldInCriteriaException;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
+use Contena\Core\Framework\FrameworkException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Mcp\Controller\McpServerController;
+use Contena\Core\Framework\Mcp\Result\McpToolResultPointer;
+use Contena\Core\Framework\Mcp\Tool\McpToolResponse;
+use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
+use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\PlatformRequest;
+use Contena\Core\Test\Generator;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
+
+/**
+ * @internal
+ */
+#[CoversClass(McpToolResponse::class)]
+class McpToolResponseTest extends TestCase
+{
+    public function testTinyPayloadIsReturnedInlineWithoutResponseSizeHint(): void
+    {
+        $tool = new TestTool();
+
+        $json = $tool->callSuccess(['items' => ['a', 'b']]);
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertTrue($data['success']);
+        static::assertSame(['items' => ['a', 'b']], $data['data']);
+        static::assertArrayNotHasKey('_meta', $data);
+    }
+
+    public function testMidSizedPayloadIncludesResponseSizeHint(): void
+    {
+        $tool = new TestTool();
+
+        $payload = ['items' => array_fill(0, 1000, str_repeat('x', 30))];
+        $json = $tool->callSuccess($payload);
+
+        static::assertGreaterThanOrEqual(20_000, \strlen($json));
+        static::assertLessThanOrEqual(100_000, \strlen($json));
+
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertTrue($data['success']);
+        static::assertArrayHasKey('_meta', $data);
+        static::assertArrayHasKey('responseSize', $data['_meta']);
+        static::assertGreaterThanOrEqual(20_000, $data['_meta']['responseSize']);
+        static::assertArrayNotHasKey('resourceUri', $data['_meta']);
+    }
+
+    public function testOversizedPayloadWithSessionIsCachedAndReturnsResourceUri(): void
+    {
+        $cache = $this->createMock(ToolResultCacheStorage::class);
+        $cache->expects($this->once())
+            ->method('storeFor')
+            ->with('admin:integration-id:', static::isString(), 'session-abc')
+            ->willReturn($this->pointer('cached-token-123'));
+
+        $request = $this->authenticatedRequest();
+        $request->headers->set('Mcp-Session-Id', 'session-abc');
+
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $payload = ['items' => array_fill(0, 5_000, str_repeat('x', 30))];
+        $json = $tool->callSuccess($payload);
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertTrue($data['success']);
+        static::assertNull($data['data']);
+        static::assertSame('contena://tool-result/cached-token-123', $data['_meta']['resourceUri']);
+        static::assertSame('2026-09-28T11:00:00+00:00', $data['_meta']['expiresAt']);
+        static::assertGreaterThan(100_000, $data['_meta']['responseSize']);
+        static::assertArrayHasKey('note', $data['_meta']);
+    }
+
+    public function testOversizedPayloadIncludesQueryWhenJsonRpcBodyIsPresent(): void
+    {
+        $cache = static::createStub(ToolResultCacheStorage::class);
+        $cache->method('storeFor')->willReturn($this->pointer('cached-token'));
+
+        $request = $this->authenticatedRequest();
+        $request->headers->set('Mcp-Session-Id', 'session-abc');
+        $request->attributes->set(McpServerController::ATTRIBUTE_JSONRPC_BODY, [
+            'method' => 'tools/call',
+            'params' => [
+                'name' => 'contena-entity-search',
+                'arguments' => ['entity' => 'blog'],
+            ],
+        ]);
+
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $json = $tool->callSuccess(['items' => array_fill(0, 5_000, str_repeat('x', 30))]);
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame('contena-entity-search', $data['_meta']['query']['tool']);
+        static::assertSame(['entity' => 'blog'], $data['_meta']['query']['arguments']);
+    }
+
+    public function testOversizedPayloadWithoutARequestFallsBackToInline(): void
+    {
+        $cache = $this->createMock(ToolResultCacheStorage::class);
+        $cache->expects($this->never())->method('storeFor');
+
+        $requestStack = new RequestStack();
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $json = $tool->callSuccess(['items' => array_fill(0, 5_000, str_repeat('x', 30))]);
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertTrue($data['success']);
+        static::assertIsArray($data['data']['items']);
+        static::assertArrayNotHasKey('resourceUri', $data['_meta'] ?? []);
+    }
+
+    public function testOversizedPayloadOfAnAnonymousStoreCallStaysInline(): void
+    {
+        // Without `sw-context-token` the stored result could never be read back, so it is not stored.
+        $cache = $this->createMock(ToolResultCacheStorage::class);
+        $cache->expects($this->never())->method('storeFor');
+
+        $request = new Request();
+        $request->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, 'minted-for-this-request');
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_CHANNEL_CONTEXT_OBJECT, Generator::generateChannelContext(token: 'minted-for-this-request'));
+
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $data = json_decode($tool->callSuccess(['items' => array_fill(0, 5_000, str_repeat('x', 30))]), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertIsArray($data['data']['items']);
+        static::assertArrayNotHasKey('resourceUri', $data['_meta'] ?? []);
+    }
+
+    public function testSuccessWithMetaIncludesMetaKey(): void
+    {
+        $tool = new TestTool();
+
+        $data = json_decode($tool->callSuccess(['x' => 1], ['total' => 5]), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame(5, $data['_meta']['total']);
+    }
+
+    public function testErrorReturnsCorrectStructure(): void
+    {
+        $tool = new TestTool();
+
+        $data = json_decode($tool->callError('Something broke'), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertFalse($data['success']);
+        static::assertSame('Something broke', $data['error']);
+        static::assertArrayNotHasKey('data', $data);
+    }
+
+    public function testOversizedPayloadIsCachedWithoutAnMcpSession(): void
+    {
+        $cache = $this->createMock(ToolResultCacheStorage::class);
+        $cache->expects($this->once())
+            ->method('storeFor')
+            ->with('admin:integration-id:', static::isString(), '')
+            ->willReturn($this->pointer('cached-token'));
+
+        $requestStack = new RequestStack();
+        $requestStack->push($this->authenticatedRequest());
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $data = json_decode($tool->callSuccess(['items' => array_fill(0, 5_000, str_repeat('x', 30))]), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertNull($data['data']);
+        static::assertSame('contena://tool-result/cached-token', $data['_meta']['resourceUri']);
+    }
+
+    public function testOversizedPayloadFallsBackToInlineWithoutAnAuthenticatedPrincipal(): void
+    {
+        $cache = $this->createMock(ToolResultCacheStorage::class);
+        $cache->expects($this->never())->method('storeFor');
+
+        $requestStack = new RequestStack();
+        $requestStack->push(new Request());
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $json = $tool->callSuccess(['items' => array_fill(0, 5_000, str_repeat('x', 30))]);
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertTrue($data['success']);
+        static::assertIsArray($data['data']['items']);
+        static::assertArrayNotHasKey('_meta', $data);
+    }
+
+    /**
+     * @return iterable<string, array{array<string, mixed>|null}>
+     */
+    public static function bodyWithoutAToolCallProvider(): iterable
+    {
+        yield 'no JSON-RPC body on the request at all' => [null];
+        yield 'a method other than tools/call' => [['method' => 'resources/read', 'params' => ['uri' => 'contena://something']]];
+        yield 'a tools/call without a tool name' => [['method' => 'tools/call', 'params' => ['arguments' => ['entity' => 'blog']]]];
+    }
+
+    /**
+     * @param array<string, mixed>|null $body
+     */
+    #[DataProvider('bodyWithoutAToolCallProvider')]
+    #[TestDox('_meta.query is omitted for $_dataName, because there is no call to echo back')]
+    public function testOversizedPayloadOmitsQueryWhenTheBodyIsNotAToolCall(?array $body): void
+    {
+        $cache = static::createStub(ToolResultCacheStorage::class);
+        $cache->method('storeFor')->willReturn($this->pointer('cached-token'));
+
+        $request = $this->authenticatedRequest();
+        $request->headers->set('Mcp-Session-Id', 'session-abc');
+        if ($body !== null) {
+            $request->attributes->set(McpServerController::ATTRIBUTE_JSONRPC_BODY, $body);
+        }
+
+        $requestStack = new RequestStack();
+        $requestStack->push($request);
+
+        $tool = new TestTool();
+        $tool->setToolResultCache($cache, $requestStack, new NullLogger());
+
+        $json = $tool->callSuccess(['items' => array_fill(0, 5_000, str_repeat('x', 30))]);
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertArrayHasKey('resourceUri', $data['_meta']);
+        static::assertArrayNotHasKey('query', $data['_meta']);
+    }
+
+    public function testDecodeJsonOrErrorReturnsArrayOnValidInput(): void
+    {
+        $result = (new TestTool())->callDecodeJsonOrError('{"key":"value"}', 'criteria');
+
+        static::assertSame(['key' => 'value'], $result);
+    }
+
+    public function testDecodeJsonOrErrorReturnsErrorJsonOnMalformedInput(): void
+    {
+        $result = (new TestTool())->callDecodeJsonOrError('not-json', 'criteria');
+
+        static::assertIsString($result);
+        $data = json_decode($result, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertFalse($data['success']);
+        static::assertStringContainsString('criteria', $data['error']);
+        static::assertStringContainsString('Invalid JSON', $data['error']);
+    }
+
+    public function testDecodeJsonOrErrorReturnsErrorJsonWhenNotAnArray(): void
+    {
+        $result = (new TestTool())->callDecodeJsonOrError('"just-a-string"', 'payload');
+
+        static::assertIsString($result);
+        $data = json_decode($result, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertFalse($data['success']);
+        static::assertStringContainsString('payload', $data['error']);
+    }
+
+    public function testDryRunReturnsErrorOnRollbackFailure(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('rollBack')->willThrowException(new \RuntimeException('rollback failed'));
+
+        $json = (new TestTool())->callDryRun($connection, $this->createContext(), fn () => '{"success":true}');
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertFalse($data['success']);
+        static::assertStringContainsString('Dry-run rollback failed', $data['error']);
+        static::assertStringContainsString('rollback failed', $data['error']);
+    }
+
+    public function testDryRunReturnsErrorWhenOperationThrows(): void
+    {
+        $connection = static::createStub(Connection::class);
+
+        $json = (new TestTool())->callDryRun(
+            $connection,
+            $this->createContext(),
+            fn (): string => throw new \RuntimeException('boom inside operation'),
+        );
+        $data = json_decode($json, true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertFalse($data['success']);
+        static::assertSame('boom inside operation', $data['error']);
+    }
+
+    #[TestDox('The pointer of each rejected element is named, because the caller cannot infer which one was wrong')]
+    public function testInvalidCriteriaErrorNamesThePointerOfEachRejectedElement(): void
+    {
+        $exception = new SearchRequestException();
+        $exception->add(
+            new InvalidAggregationQueryException('The aggregation should contain a "field".'),
+            '/aggregations/0/avg/field'
+        );
+        $exception->add(
+            DataAbstractionLayerException::invalidFilterQuery('The filter should contain a "field".', '/filter/1/equals/field'),
+            '/filter/1/equals/field'
+        );
+
+        $data = json_decode(
+            (new TestTool())->callInvalidCriteriaError($exception),
+            true,
+            512,
+            \JSON_THROW_ON_ERROR
+        );
+
+        static::assertFalse($data['success']);
+        static::assertStringContainsString('/aggregations/0/avg/field', $data['error']);
+        static::assertStringContainsString('The aggregation should contain a "field".', $data['error']);
+        static::assertStringContainsString('/filter/1/equals/field', $data['error']);
+    }
+
+    /**
+     * `RequestCriteriaBuilder::fromArray()` does not funnel every bad payload through
+     * `SearchRequestException`; several classes are thrown directly. Each one already names
+     * the offending part of the payload, so its own message is what the caller needs.
+     *
+     * @return iterable<string, array{ContenaHttpException, list<string>}>
+     */
+    public static function directThrowProvider(): iterable
+    {
+        yield 'InvalidAggregationQueryException from the aggregation parser' => [
+            new InvalidAggregationQueryException('The aggregations parameter has to be a list of aggregations.'),
+            ['The aggregations parameter has to be a list of aggregations.'],
+        ];
+        yield 'the DataAbstractionLayerException base class, e.g. for {"includes":"id"}' => [
+            DataAbstractionLayerException::expectedArrayWithType('includes', 'string'),
+            ['includes', 'array'],
+        ];
+        yield 'FrameworkException for an association that does not exist' => [
+            FrameworkException::associationNotFound('lineItem'),
+            ['lineItem'],
+        ];
+        yield 'ApiProtectionException from the ApiCriteriaValidator' => [
+            new ApiProtectionException('blog.internalNote'),
+            ['blog.internalNote', 'not allowed'],
+        ];
+        yield 'RuntimeFieldInCriteriaException from the ApiCriteriaValidator' => [
+            new RuntimeFieldInCriteriaException('blog.variation'),
+            ['blog.variation', 'Runtime field'],
+        ];
+    }
+
+    /**
+     * @param list<string> $expectedFragments
+     */
+    #[DataProvider('directThrowProvider')]
+    #[TestDox('$_dataName is rendered by its own message instead of the SDK\'s generic error')]
+    public function testInvalidCriteriaErrorCarriesTheMessageOfADirectThrow(ContenaHttpException $exception, array $expectedFragments): void
+    {
+        $data = json_decode(
+            (new TestTool())->callInvalidCriteriaError($exception),
+            true,
+            512,
+            \JSON_THROW_ON_ERROR
+        );
+
+        static::assertFalse($data['success']);
+        static::assertStringNotContainsString('Invalid criteria: ', $data['error']);
+
+        foreach ($expectedFragments as $fragment) {
+            static::assertStringContainsString($fragment, $data['error']);
+        }
+    }
+
+    public function testInvalidCriteriaErrorFallsBackToTheMessageWhenThereAreNoDetails(): void
+    {
+        $data = json_decode(
+            (new TestTool())->callInvalidCriteriaError(new SearchRequestException()),
+            true,
+            512,
+            \JSON_THROW_ON_ERROR
+        );
+
+        static::assertFalse($data['success']);
+        static::assertNotSame('', $data['error']);
+        static::assertStringNotContainsString('Invalid criteria: ', $data['error']);
+    }
+
+    private function createContext(): Context
+    {
+        return new Context(new AdminApiSource(null, null), [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM]);
+    }
+
+    private function authenticatedRequest(): Request
+    {
+        $request = new Request();
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, new Context(new AdminApiSource(null, 'integration-id')));
+
+        return $request;
+    }
+
+    private function pointer(string $token): McpToolResultPointer
+    {
+        return new McpToolResultPointer($token, new \DateTimeImmutable('2026-09-28T11:00:00+00:00'));
+    }
+}
+
+/**
+ * @internal
+ */
+class TestTool extends McpToolResponse
+{
+    /**
+     * @param array<string, mixed>|list<mixed> $data
+     * @param array<string, mixed> $meta
+     */
+    public function callSuccess(array $data, array $meta = []): string
+    {
+        return $this->success($data, $meta);
+    }
+
+    public function callError(string $message): string
+    {
+        return $this->error($message);
+    }
+
+    /**
+     * @return array<mixed>|string
+     */
+    public function callDecodeJsonOrError(string $json, string $fieldName = 'input'): array|string
+    {
+        return $this->decodeJsonOrError($json, $fieldName);
+    }
+
+    /**
+     * @param callable(): string $operation
+     */
+    public function callDryRun(Connection $connection, Context $context, callable $operation): string
+    {
+        return $this->executeWithDryRun($connection, $context, $operation);
+    }
+
+    public function callInvalidCriteriaError(ContenaHttpException $e): string
+    {
+        return $this->invalidCriteriaError($e);
+    }
+}

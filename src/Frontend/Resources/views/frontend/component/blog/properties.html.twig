@@ -1,0 +1,32 @@
+{% block component_product_properties_inner %}
+    <div class="blog-detail-properties">
+        {% block component_product_properties_container %}
+            <div class="row blog-detail-properties-container">
+                <div class="col-md-10 col-lg-6">
+                    {% block component_product_properties_table %}
+                        <table class="table table-striped blog-detail-properties-table">
+                            <tbody>
+                            {# @var blog \Contena\Core\Content\Blog\Channel\ChannelProductEntity #}
+                            {% for group in blog.sortedProperties %}
+                                {% block component_product_properties_table_row %}
+                                    <tr class="properties-row">
+                                        {% block component_product_properties_item_label %}
+                                            <th class="properties-label">{{ group.translated.name|e }}:</th>
+                                        {% endblock %}
+
+                                        {% block component_product_properties_item_value %}
+                                            <td class="properties-value">
+                                                <span>{{ group.options|map(option => "#{option.translated.name}")|join(', ') }}</span>
+                                            </td>
+                                        {% endblock %}
+                                    </tr>
+                                {% endblock %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    {% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+    </div>
+{% endblock %}

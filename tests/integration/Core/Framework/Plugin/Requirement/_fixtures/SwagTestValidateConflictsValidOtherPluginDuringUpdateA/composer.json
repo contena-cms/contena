@@ -1,0 +1,21 @@
+{
+    "name": "swag/test-validate-conflicts-valid-other-plugin-during-update-a",
+    "description": "Test conflict handling",
+    "version": "v2.0.0",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Contena",
+            "role": "Manufacturer"
+        }
+    ],
+    "extra": {
+        "contena-plugin-class": "SwagTestValidateConflictsValidOtherPluginDuringUpdateA\\SwagTestValidateConflictsValidOtherPluginDuringUpdateA",
+        "copyright": "(c) by Contena",
+        "label": {
+            "de-DE": "Test für Konflikte-Handling",
+            "en-GB": "Test for conflict handling"
+        }
+    }
+}

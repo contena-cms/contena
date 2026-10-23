@@ -1,0 +1,85 @@
+{% block sw_product_download_form %}
+<div
+    class="sw-blog-download-form"
+    :class="{ 'is--disabled': disabled }"
+>
+    <sw-upload-listener
+        v-if="!isLoading"
+        :upload-tag="`downloads-${blog.id}`"
+        auto-upload
+        @media-upload-finish="successfulUpload"
+        @media-upload-fail="onUploadFailed"
+    />
+
+    <sw-media-upload-v2
+        v-if="!isLoading && acl.can('blog.editor')"
+        :class="swFieldClasses"
+        variant="regular"
+        :upload-tag="`downloads-${blog.id}`"
+        :private-filesystem="true"
+        :extension-accept="fileAccept"
+        :extension-mime-types-by-extension="fileAcceptedMimeTypesByExtension"
+        default-folder="blog_download"
+        v-bind="$attrs"
+    />
+
+    <sw-field-error :error="error" />
+
+    <div
+        v-if="!isLoading"
+        class="sw-blog-download-form__previews sw-blog-download-form__grid"
+    >
+        <div
+            v-for="download in blogDownloads"
+            :key="download.id"
+            class="sw-blog-download-form__row"
+        >
+            <span
+                v-tooltip="{
+                    message: getFileName(download),
+                    disabled: false,
+                    width: 'auto'
+                }"
+                class="sw-blog-download-form-row__name"
+            >
+                {{ getFileName(download) }}
+            </span>
+
+            <div class="sw-blog-download-form-row__info">
+                <span class="sw-blog-download-form-row__mime">
+                    {{ download.media.mimeType }}
+                </span>
+
+                <span class="sw-blog-download-form-row__size">
+                    {{ getFileSize(download) }}
+                </span>
+
+                <span class="sw-blog-download-form-row__changed-date">
+                    {{ createdAt(download) }}
+                </span>
+            </div>
+
+            <sw-context-button class="sw-blog-download-form-row__context">
+                <sw-context-menu-item
+                    class="sw-blog-download-form-row__context-download"
+                    :disabled="isLoading || !acl.can('media.viewer')"
+                    @click="downloadMedia(download)"
+                >
+                    {{ $t('sw-blog.detailBase.downloadsContextMenuDownloadFile') }}
+                </sw-context-menu-item>
+
+                <sw-context-menu-item
+                    class="sw-blog-download-form-row__context-remove"
+                    variant="danger"
+                    :disabled="isLoading || !acl.can('blog.editor')"
+                    @click="onRemoveDownload(download)"
+                >
+                    {{ $t('global.default.remove') }}
+                </sw-context-menu-item>
+            </sw-context-button>
+
+        </div>
+    </div>
+    <sw-loader v-else />
+</div>
+{% endblock %}

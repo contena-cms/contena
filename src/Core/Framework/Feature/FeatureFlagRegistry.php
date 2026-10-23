@@ -1,0 +1,132 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Feature;
+
+use Doctrine\DBAL\Exception as DBALException;
+use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Feature\Event\BeforeFeatureFlagToggleEvent;
+use Contena\Core\Framework\Feature\Event\FeatureFlagToggledEvent;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+/**
+ * @final
+ *
+ * @phpstan-import-type FeatureFlagConfig from Feature
+ */
+class FeatureFlagRegistry
+{
+    public const STORAGE_KEY = 'feature.flags';
+
+    /**
+     * @var array<string, FeatureFlagConfig>
+     */
+    private readonly array $staticFeatureFlags;
+
+    /**
+     * @param array<string, FeatureFlagConfig> $staticFeatureFlags
+     *
+     * @internal
+     */
+    public function __construct(
+        private readonly AbstractKeyValueStorage $keyValueStorage,
+        private readonly EventDispatcherInterface $dispatcher,
+        array $staticFeatureFlags = [],
+        private readonly bool $enabledFeatureToggle = false
+    ) {
+        $normalized = [];
+        foreach ($staticFeatureFlags as $name => $flag) {
+            $normalized[Feature::normalizeName($name)] = $flag;
+        }
+
+        $this->staticFeatureFlags = $normalized;
+    }
+
+    public function register(): void
+    {
+        $static = $this->staticFeatureFlags;
+
+        if (!$this->enabledFeatureToggle) {
+            Feature::registerFeatures($static);
+
+            return;
+        }
+
+        try {
+            $stored = $this->keyValueStorage->get(self::STORAGE_KEY, []);
+
+            if (\is_string($stored) && $stored !== '') {
+                $stored = \json_decode($stored, true, 512, \JSON_THROW_ON_ERROR);
+            }
+
+            // Version flags are never persisted. Keep filtering old unversioned `major: true`
+            // entries unless a current static flag supersedes their stale metadata.
+            $stored = array_filter($stored, static function (array $flag, string $name) use ($static): bool {
+                return !Feature::isMajorVersionFlag($name)
+                    && (isset($static[$name]) || ($flag['major'] ?? null) !== true);
+            }, \ARRAY_FILTER_USE_BOTH);
+
+            foreach ($stored as $name => $flag) {
+                if (!\is_string($flag['major'] ?? null)) {
+                    unset($stored[$name]['major']);
+                }
+
+                if (!isset($static[$name])) {
+                    continue;
+                }
+
+                // Static metadata may have changed since this flag was persisted; only the toggle is admin_user state.
+                $stored[$name] = [...$static[$name], ...array_intersect_key($flag, ['active' => true, 'static' => true])];
+            }
+
+            $flags = array_merge($static, $stored);
+        } catch (DBALException) {
+            // We don't have a database connection
+            $flags = $static;
+        }
+
+        Feature::registerFeatures($flags);
+    }
+
+    public function enable(string $feature): void
+    {
+        $this->toggle($feature, true);
+    }
+
+    public function disable(string $feature): void
+    {
+        $this->toggle($feature, false);
+    }
+
+    private function toggle(string $feature, bool $active): void
+    {
+        if (!$this->enabledFeatureToggle) {
+            throw FeatureException::featureCannotBeToggled($feature);
+        }
+
+        /** @var array<string, FeatureFlagConfig> $registeredFlags */
+        $registeredFlags = Feature::getRegisteredFeatures();
+
+        if (!\array_key_exists($feature, $registeredFlags)) {
+            throw FeatureException::featureNotRegistered($feature);
+        }
+
+        if (!\array_key_exists('toggleable', $registeredFlags[$feature]) || !$registeredFlags[$feature]['toggleable']) {
+            throw FeatureException::featureCannotBeToggled($feature);
+        }
+
+        $registeredFlags[$feature] = [
+            ...$registeredFlags[$feature],
+            'static' => \array_key_exists($feature, $this->staticFeatureFlags),
+            'active' => $active,
+        ];
+
+        $this->dispatcher->dispatch(new BeforeFeatureFlagToggleEvent($feature, $active));
+
+        $this->keyValueStorage->set(self::STORAGE_KEY, $registeredFlags);
+        Feature::setActive($feature, $active);
+
+        $this->dispatcher->dispatch(new FeatureFlagToggledEvent($feature, $active));
+    }
+}

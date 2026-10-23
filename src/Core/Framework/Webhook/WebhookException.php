@@ -1,0 +1,172 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Webhook;
+
+use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
+use Contena\Core\Framework\HttpException;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\HttpFoundation\Response;
+
+class WebhookException extends HttpException
+{
+    public const WEBHOOK_FAILED = 'FRAMEWORK__WEBHOOK_FAILED';
+    public const APP_WEBHOOK_FAILED = 'FRAMEWORK__APP_WEBHOOK_FAILED';
+    public const UNSUPPORTED_MESSAGE = 'FRAMEWORK__WEBHOOK_UNSUPPORTED_MESSAGE';
+    public const INVALID_DATA_MAPPING = 'FRAMEWORK__WEBHOOK_INVALID_DATA_MAPPING';
+    public const UNKNOWN_DATA_TYPE = 'FRAMEWORK__WEBHOOK_UNKNOWN_DATA_TYPE';
+    public const DUPLICATE_DESCRIBED_EVENT = 'FRAMEWORK__WEBHOOK_DUPLICATE_DESCRIBED_EVENT';
+    public const TARGET_NOT_ALLOWED = 'FRAMEWORK__WEBHOOK_TARGET_NOT_ALLOWED';
+    public const REDIRECT_TARGET_NOT_ALLOWED = 'FRAMEWORK__WEBHOOK_REDIRECT_TARGET_NOT_ALLOWED';
+    public const MAXIMUM_REDIRECTS_EXCEEDED = 'FRAMEWORK__WEBHOOK_MAXIMUM_REDIRECTS_EXCEEDED';
+    public const WEBHOOK_OWNER_MISSING = 'FRAMEWORK__WEBHOOK_OWNER_MISSING';
+    public const APP_WEBHOOK_NOT_MODIFIABLE = 'FRAMEWORK__APP_WEBHOOK_NOT_MODIFIABLE';
+    public const WEBHOOK_NOT_OWNED = 'FRAMEWORK__WEBHOOK_NOT_OWNED';
+    public const WEBHOOK_EVENT_NOT_PERMITTED = 'FRAMEWORK__WEBHOOK_EVENT_NOT_PERMITTED';
+    public const WEBHOOK_EVENT_PRIVILEGES_MISSING = 'FRAMEWORK__WEBHOOK_EVENT_PRIVILEGES_MISSING';
+
+    public static function webhookFailedException(string $webhookId, \Throwable $e): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::WEBHOOK_FAILED,
+            'Webhook "{{ webhookId }}" failed with error: {{ error }}.',
+            ['webhookId' => $webhookId, 'error' => $e->getMessage()],
+            $e
+        );
+    }
+
+    public static function unsupportedMessage(string $actualClass): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::UNSUPPORTED_MESSAGE,
+            'The webhook transport only supports WebhookEventMessage, got "{{ class }}".',
+            ['class' => $actualClass]
+        );
+    }
+
+    public static function appWebhookFailedException(string $webhookId, string $appId, \Throwable $e): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::APP_WEBHOOK_FAILED,
+            'Webhook "{{ webhookId }}" from "{{ appId }}" failed with error: {{ error }}.',
+            ['webhookId' => $webhookId, 'appId' => $appId, 'error' => $e->getMessage()],
+            $e
+        );
+    }
+
+    public static function targetNotAllowed(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::TARGET_NOT_ALLOWED,
+            'Webhook target is not allowed.'
+        );
+    }
+
+    public static function redirectTargetNotAllowed(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::REDIRECT_TARGET_NOT_ALLOWED,
+            'Redirect target is not allowed.'
+        );
+    }
+
+    public static function maximumRedirectsExceeded(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::MAXIMUM_REDIRECTS_EXCEEDED,
+            'Maximum redirects exceeded.'
+        );
+    }
+
+    public static function webhookOwnerMissing(): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::WEBHOOK_OWNER_MISSING,
+            'A webhook without an app can only be created by a admin_user or an integration, which becomes its owner.'
+        );
+    }
+
+    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
+    public static function invalidDataMapping(string $propertyName, string $className): self|\RuntimeException
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::INVALID_DATA_MAPPING,
+            'Invalid available DataMapping, could not get property "{{ propertyName }}" on instance of {{ class }}',
+            ['propertyName' => $propertyName, 'class' => $className]
+        );
+    }
+
+    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
+    public static function unknownEventDataType(string $type): self|\RuntimeException
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::UNKNOWN_DATA_TYPE,
+            'Unknown EventDataType: {{ type }}',
+            ['type' => $type]
+        );
+    }
+
+    public static function appWebhookNotModifiable(string $webhookId): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::APP_WEBHOOK_NOT_MODIFIABLE,
+            'Webhook "{{ webhookId }}" belongs to an app and can only be changed by that app.',
+            ['webhookId' => $webhookId]
+        );
+    }
+
+    public static function webhookNotOwned(string $webhookId): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::WEBHOOK_NOT_OWNED,
+            'Webhook "{{ webhookId }}" can only be changed by its owner.',
+            ['webhookId' => $webhookId]
+        );
+    }
+
+    public static function webhookEventNotPermitted(string $eventName): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::WEBHOOK_EVENT_NOT_PERMITTED,
+            'Subscribing to event "{{ eventName }}" is not permitted.',
+            ['eventName' => $eventName]
+        );
+    }
+
+    /**
+     * @param list<string> $privileges
+     */
+    public static function webhookEventPrivilegesMissing(string $eventName, array $privileges): self
+    {
+        return new self(
+            Response::HTTP_BAD_REQUEST,
+            self::WEBHOOK_EVENT_PRIVILEGES_MISSING,
+            'Subscribing to event "{{ eventName }}" requires the privileges: {{ privileges }}.',
+            ['eventName' => $eventName, 'privileges' => implode(', ', $privileges)]
+        );
+    }
+
+    public static function duplicateDescribedEvent(string $eventName, string $describer): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::DUPLICATE_DESCRIBED_EVENT,
+            'Duplicate hookable event "{{ eventName }}" described by "{{ describer }}".',
+            [
+                'eventName' => $eventName,
+                'describer' => $describer,
+            ]
+        );
+    }
+}

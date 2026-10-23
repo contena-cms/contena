@@ -1,0 +1,160 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Blog\Garan;
+
+use Contena\Core\Content\Blog\BlogCollection;
+use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Twig\Extension\AbstractExtension;
+use Twig\TwigFilter;
+
+class GaranLabelTwigFilter extends AbstractExtension
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<BlogCollection> $blogRepository
+     */
+    public function __construct(
+        private readonly GaranLabelDurationFormatter $durationFormatter,
+        private readonly EntityRepository $blogRepository,
+        private readonly GaranLabelResolver $resolver,
+        private readonly GaranLabelInlineImage $inlineImage,
+    ) {
+    }
+
+    /**
+     * @return list<TwigFilter>
+     */
+    public function getFilters(): array
+    {
+        return [
+            new TwigFilter('sw_garan_label_duration', $this->formatDuration(...)),
+            new TwigFilter('sw_garan_label', $this->render(...), ['is_safe' => ['html']]),
+            new TwigFilter('sw_garan_label_nested', $this->renderNestedLabel(...), ['is_safe' => ['html']]),
+            new TwigFilter('sw_garan_label_data_uri', $this->renderAsDataUri(...)),
+            new TwigFilter('sw_garan_label_nested_uri', $this->renderNestedAsDataUri(...)),
+            new TwigFilter('sw_garan_label_text_length', $this->fitTextLength(...)),
+            new TwigFilter('sw_garan_label_duration_text_length', $this->fitDurationTextLength(...)),
+            // @deprecated tag:v6.8.0 - remove together with `resolveMailLabel()`
+            new TwigFilter('sw_garan_label_mail', $this->resolveMailLabel(...)),
+        ];
+    }
+
+    public function formatDuration(?int $guaranteeMonths): ?string
+    {
+        return $this->durationFormatter->formatMonths($guaranteeMonths);
+    }
+
+    /**
+     * The label templates are also included directly, so the fit has to be available to the
+     * templates themselves rather than only to `GaranLabelRenderer`.
+     */
+    public function fitTextLength(?string $value, float $clearWidth, float $fontSize, float $letterSpacing = 0.0): ?float
+    {
+        return GaranLabelTextFitter::fitTextLength($value, $clearWidth, $fontSize, $letterSpacing);
+    }
+
+    public function fitDurationTextLength(?string $value, float $clearWidth, float $fontSize, float $letterSpacing = 0.0): ?float
+    {
+        return GaranLabelTextFitter::fitDurationTextLength($value, $clearWidth, $fontSize, $letterSpacing);
+    }
+
+    public function render(?string $blogId, Context $context): ?string
+    {
+        $blog = $this->loadBlog($blogId, $context);
+
+        if ($blog === null) {
+            return null;
+        }
+
+        return $this->resolver->resolve($blog, GaranLabelResolver::LABEL_TYPE_FULL);
+    }
+
+    public function renderNestedLabel(?string $blogId, Context $context): ?string
+    {
+        $blog = $this->loadBlog($blogId, $context);
+
+        if ($blog === null) {
+            return null;
+        }
+
+        return $this->resolver->resolve($blog, GaranLabelResolver::LABEL_TYPE_NESTED);
+    }
+
+    /**
+     * Email clients strip or garble inline <svg> markup, so mail templates need the label
+     * embedded as an <img> data URI instead of raw SVG.
+     */
+    public function renderAsDataUri(?string $blogId, Context $context): ?string
+    {
+        $svg = $this->render($blogId, $context);
+
+        if ($svg === null) {
+            return null;
+        }
+
+        return 'data:image/svg+xml;base64,' . base64_encode($svg);
+    }
+
+    public function renderNestedAsDataUri(?string $blogId, Context $context): ?string
+    {
+        $svg = $this->renderNestedLabel($blogId, $context);
+
+        if ($svg === null) {
+            return null;
+        }
+
+        return 'data:image/svg+xml;base64,' . base64_encode($svg);
+    }
+
+    /**
+     * @deprecated tag:v6.8.0 - Will be removed, mail templates read the label from the `garanLabels` template data instead
+     *
+     * @return array{cid: string|null, duration: string}|null
+     */
+    public function resolveMailLabel(?string $blogId, Context $context): ?array
+    {
+        Feature::triggerDeprecationOrThrow(
+            'v6.8.0.0',
+            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0', 'the `garanLabels` mail template data'),
+        );
+
+        $blog = $this->loadBlog($blogId, $context);
+
+        if ($blog === null) {
+            return null;
+        }
+
+        $duration = $this->resolver->resolveDuration($blog);
+
+        if ($duration === null) {
+            return null;
+        }
+
+        $name = $this->inlineImage->getName((int) $blog->getGuaranteeMonths());
+
+        return [
+            'cid' => $name !== null ? 'cid:' . $name : null,
+            'duration' => $duration,
+        ];
+    }
+
+    private function loadBlog(?string $blogId, Context $context): ?BlogEntity
+    {
+        if ($blogId === null) {
+            return null;
+        }
+
+        $criteria = new Criteria([$blogId]);
+        $criteria->addAssociation('manufacturer');
+
+        $blog = $this->blogRepository->search($criteria, $context)->getEntities()->first();
+
+        return $blog instanceof BlogEntity ? $blog : null;
+    }
+}

@@ -1,0 +1,46 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition;
+
+use Contena\Core\Content\Blog\BlogDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
+use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Language\LanguageDefinition;
+
+/**
+ * @internal
+ */
+class ExtendedBlogDefinition extends EntityDefinition
+{
+    public function getEntityName(): string
+    {
+        return 'extended_product';
+    }
+
+    public function since(): ?string
+    {
+        return '6.0.0.0';
+    }
+
+    protected function defineFields(): FieldCollection
+    {
+        return new FieldCollection([
+            (new IdField('id', 'id'))->addFlags(new ApiAware(), new Required(), new PrimaryKey()),
+            new StringField('name', 'name'),
+            new FkField('blog_id', 'blogId', BlogDefinition::class),
+            new FkField('language_id', 'languageId', LanguageDefinition::class),
+            new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false),
+            new OneToOneAssociationField('toOne', 'blog_id', 'id', BlogDefinition::class),
+            new ManyToOneAssociationField('manyToOne', 'blog_id', BlogDefinition::class, 'id'),
+        ]);
+    }
+}

@@ -1,0 +1,375 @@
+{% block buy_widget %}
+    <div class="blog-detail-buy{% if elementId %}-{{ elementId }}{% endif %} js-magnifier-zoom-image-container">
+        {% block buy_widget_rich_snippets %}
+            {# @deprecated tag:v6.8.0 - Blog microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+            {% if not feature('JSON_LD_DATA') %}
+                {% block buy_widget_rich_snippets_brand %}
+                    {% if blog.manufacturer %}
+                        <div itemprop="brand" itemtype="https://schema.org/Brand" itemscope>
+                            <meta itemprop="name" content="{{ blog.manufacturer.translated.name }}">
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_gtin13 %}
+                    {% if blog.ean %}
+                        <meta itemprop="gtin13"
+                              content="{{ blog.ean }}">
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_mpn %}
+                    {% if blog.manufacturerNumber %}
+                        <meta itemprop="mpn"
+                              content="{{ blog.manufacturerNumber }}">
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_weight %}
+                    {% if blog.measurements.type('weight') %}
+                        {% set weightUnit = blog.measurements.type('weight').unit %}
+                        {% set weightValue = blog.measurements.type('weight').value %}
+                    {% else %}
+                        {% set weightUnit = 'kg' %}
+                        {% set weightValue = blog.weight %}
+                    {% endif %}
+                    {% if weightValue and weightValue > 0 %}
+                        <meta itemprop="weight"
+                              content="{{ weightValue }} {{ weightUnit }}">
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_height %}
+                    {% if blog.measurements.type('height') %}
+                        {% set heightUnit = blog.measurements.type('height').unit %}
+                        {% set heightValue = blog.measurements.type('height').value %}
+                    {% else %}
+                        {% set heightUnit = 'mm' %}
+                        {% set heightValue = blog.height %}
+                    {% endif %}
+
+                    {% if heightValue and heightValue > 0 %}
+                        <meta itemprop="height"
+                              content="{{ heightValue }} {{ heightUnit }}">
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_width %}
+                    {% if blog.measurements.type('width') %}
+                        {% set widthUnit = blog.measurements.type('width').unit %}
+                        {% set widthValue = blog.measurements.type('width').value %}
+                    {% else %}
+                        {% set widthUnit = 'mm' %}
+                        {% set widthValue = blog.width %}
+                    {% endif %}
+
+                    {% if widthValue and widthValue > 0 %}
+                        <meta itemprop="width"
+                              content="{{ widthValue }} {{ widthUnit }}">
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_depth %}
+                    {% if blog.measurements.type('length') %}
+                        {% set lengthUnit = blog.measurements.type('length').unit %}
+                        {% set lengthValue = blog.measurements.type('length').value %}
+                    {% else %}
+                        {% set lengthUnit = 'mm' %}
+                        {% set lengthValue = blog.length %}
+                    {% endif %}
+
+                    {% if lengthValue and lengthValue > 0 %}
+                        <meta itemprop="depth"
+                              content="{{ lengthValue }} {{ lengthUnit }}">
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_rich_snippets_release_date %}
+                    {% if blog.releaseDate %}
+                        <meta itemprop="releaseDate"
+                              content="{{ blog.releaseDate|format_date(pattern='Y-MM-dd') }}">
+                    {% endif %}
+                {% endblock %}
+            {% endif %}
+        {% endblock %}
+
+        {% block buy_widget_buy_container %}
+            {# @deprecated tag:v6.8.0 - Offer microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+            <div {% if not feature('JSON_LD_DATA') %}
+                 itemprop="offers"
+                 itemscope
+                 itemtype="{% if blog.calculatedPrices|length > 1 %}https://schema.org/AggregateOffer{% else %}https://schema.org/Offer{% endif %}"
+                 {% endif %}>
+                {% block buy_widget_data %}
+                    {% block buy_widget_data_rich_snippet_url %}
+                        {# @deprecated tag:v6.8.0 - Offer url microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                        {% if not feature('JSON_LD_DATA') %}
+                            <meta itemprop="url"
+                                  content="{{ seoUrl('frontend.detail.page', { blogId: blog.id }) }}">
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block buy_widget_data_rich_snippet_price_range %}
+                        {# @deprecated tag:v6.8.0 - AggregateOffer price range microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                        {% if not feature('JSON_LD_DATA') %}
+                            {% if blog.calculatedPrices|length > 1 %}
+                                {% set lowestPrice = false %}
+                                {% set highestPrice = false %}
+
+                                {% for price in blog.calculatedPrices %}
+                                    {% if not lowestPrice or price.unitPrice < lowestPrice %}
+                                        {% set lowestPrice = price.unitPrice %}
+                                    {% endif %}
+                                    {% if not highestPrice or price.unitPrice > highestPrice %}
+                                        {% set highestPrice = price.unitPrice %}
+                                    {% endif %}
+                                {% endfor %}
+
+                                <meta itemprop="lowPrice" content="{{ lowestPrice }}">
+                                <meta itemprop="highPrice" content="{{ highestPrice }}">
+                                <meta itemprop="offerCount" content="{{ blog.calculatedPrices|length }}">
+                            {% endif %}
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block buy_widget_data_rich_snippet_price_currency %}
+                        {# @deprecated tag:v6.8.0 - Offer priceCurrency microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                        {% if not feature('JSON_LD_DATA') %}
+                            <meta itemprop="priceCurrency"
+                                  content="{{ context.currency.translated.shortName }}">
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block buy_widget_price %}
+                        <div class="blog-detail-price-container">
+                            {% sw_include '@Frontend/frontend/component/buy-widget/buy-widget-price.html.twig' %}
+                        </div>
+                    {% endblock %}
+
+                    {% if blog.purchaseUnit %}
+                        {% block buy_widget_price_unit %}
+                            <div class="blog-detail-price-unit">
+                                {% block buy_widget_price_unit_label %}
+                                    <span class="price-unit-label">
+                                        {{ 'detail.priceUnitName'|trans|sw_sanitize }}
+                                    </span>
+                                {% endblock %}
+
+                                {% block buy_widget_price_unit_content %}
+                                    <span class="price-unit-content">
+                                        {{ blog.purchaseUnit }} {{ blog.unit.translated.name }}
+                                    </span>
+                                {% endblock %}
+
+                                {% set price = blog.calculatedPrice %}
+
+                                {% if blog.calculatedPrices|length == 1 %}
+                                    {% set price = blog.calculatedPrices.first %}
+                                {% endif %}
+
+                                {% if blog.calculatedPrices|length <= 1 %}
+                                    {% if price.referencePrice is not null %}
+                                        {% block buy_widget_price_unit_reference_content %}
+                                            <span class="price-unit-reference-content">
+                                                ({{ price.referencePrice.price|currency }} / {{ price.referencePrice.referenceUnit }} {{ price.referencePrice.unitName }})
+                                            </span>
+                                        {% endblock %}
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                        {% endblock %}
+                    {% endif %}
+
+                    {% block buy_widget_tax %}
+                        <div class="blog-detail-tax-container">
+                            {% if context.taxState == 'gross' %}
+                                {% set taxText = 'general.grossTaxInformation'|trans|sw_sanitize %}
+                            {% else %}
+                                {% set taxText = 'general.netTaxInformation'|trans|sw_sanitize %}
+                            {% endif %}
+
+                            <p class="blog-detail-tax">
+                                {% block buy_widget_tax_link %}
+                                    {% set cmsPath = path('frontend.cms.page', { id: config('core.basicInformation.shippingPaymentInfoPage') }) %}
+
+                                    <button class="btn btn-link-inline blog-detail-tax-link"
+                                            type="button"
+                                            data-ajax-modal="true"
+                                            data-url="{{ cmsPath }}"
+                                            aria-haspopup="dialog">
+                                        {{ taxText }}
+                                    </button>
+                                {% endblock %}
+                            </p>
+                        </div>
+                    {% endblock %}
+
+                    {% block buy_widget_reviews %}
+                        {% if blog.ratingAverage > 0 and totalReviews > 0 and config('core.listing.showReview') %}
+
+                            {% if remoteClickOptions is not defined %}
+                                {% set remoteClickOptions = {
+                                    selector: '#review-tab-' ~ blog.id,
+                                    scrollToElement: true,
+                                    excludedViewports: ['XS']
+                                } %}
+                            {% endif %}
+
+                            {% if reviewTabHref is not defined %}
+                                {% set reviewTabHref = '#review-tab-' ~ blog.id ~ '-pane' %}
+                            {% endif %}
+
+                            {% set reviewTabContent = 'review-tab-' ~ blog.id ~ '-pane' %}
+
+                            <div class="blog-detail-reviews">
+
+                                {% sw_include '@Frontend/frontend/component/review/rating.html.twig' with {
+                                    points: blog.ratingAverage,
+                                    style: 'text-primary'
+                                } %}
+                                <a
+                                    class="blog-detail-reviews-link"
+                                    data-off-canvas-tabs="true"
+                                    data-remote-click="true"
+                                    data-remote-click-options="{{ remoteClickOptions|json_encode }}"
+                                    href="{{ reviewTabHref }}"
+                                    aria-controls="{{ reviewTabContent }}"
+                                >
+                                    {{ totalReviews }}
+                                    {{ 'detail.reviewLinkText'|trans({'%count%': totalReviews})|sw_sanitize }}
+                                </a>
+                            </div>
+                        {% endif %}
+                    {% endblock %}
+
+                    {% block buy_widget_delivery_informations %}
+                        <div class="blog-detail-delivery-information">
+                            {% sw_include '@Frontend/frontend/component/delivery-information.html.twig' %}
+                        </div>
+                    {% endblock %}
+                {% endblock %}
+
+                {% block buy_widget_configurator_include %}
+                    {% if blog.parentId and configuratorSettings|length > 0 %}
+                        <div class="blog-detail-configurator-container">
+                            {% sw_include '@Frontend/frontend/component/buy-widget/configurator.html.twig' %}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+
+                {% block buy_widget_buy_form %}
+                    {% if blog.active %}
+                        <div class="blog-detail-form-container">
+                            {% sw_include '@Frontend/frontend/component/buy-widget/buy-widget-form.html.twig' %}
+                        </div>
+                    {% endif %}
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+        {% if config('core.cart.wishlistEnabled') %}
+            {% block buy_widget_wishlist %}
+                {% sw_include '@Frontend/frontend/component/blog/card/wishlist.html.twig' with {
+                    showText: true,
+                    size: 'sm',
+                    blogId: blog.id
+                } %}
+            {% endblock %}
+        {% endif %}
+
+        {% block buy_widget_ordernumber_container %}
+            {% if blog.blogNumber %}
+                <div class="blog-detail-ordernumber-container">
+                    {% block buy_widget_ordernumber_label %}
+                        <span class="blog-detail-ordernumber-label">
+                            {{ 'detail.blogNumberLabel'|trans|sw_sanitize }}
+                        </span>
+                    {% endblock %}
+
+                    {% block buy_widget_ordernumber %}
+                        {# @deprecated tag:v6.8.0 - blogID and sku microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                        {% if not feature('JSON_LD_DATA') %}
+                            <meta itemprop="blogID"
+                                  content="{{ blog.id }}">
+                        {% endif %}
+                        <span class="blog-detail-ordernumber"
+                              {% if not feature('JSON_LD_DATA') %}itemprop="sku"{% endif %}>
+                            {{ blog.blogNumber }}
+                        </span>
+                    {% endblock %}
+                </div>
+            {% endif %}
+        {% endblock %}
+
+        {% block buy_widget_garan_label %}
+            {% set garanGuaranteeMonths = blog.guaranteeMonths %}
+            {% set garanGuarantee = garanGuaranteeMonths|sw_garan_label_duration %}
+            {% set garanManufacturer = blog.manufacturer.translated.name ?? blog.manufacturer.name ?? null %}
+            {% set garanModelIdentifier = blog.manufacturerNumber %}
+
+            {% if blog.guaranteeConfirmed and garanGuarantee and garanManufacturer and garanModelIdentifier %}
+                {% block buy_widget_garan_label_wrapper %}
+                    <div class="blog-detail-garan-label-wrapper" data-garan-label-toggle="true">
+                        {% block buy_widget_garan_label_preview %}
+                            <div class="blog-detail-garan-label">
+                                <button type="button"
+                                        class="garan-label-button"
+                                        aria-label="{{ 'detail.garanLabelTitle'|trans|striptags }}">
+                                    {% sw_include '@Framework/garan/nested-label.svg.twig' with {
+                                        guarantee: garanGuarantee
+                                    } only %}
+                                </button>
+                            </div>
+                        {% endblock %}
+
+                        {% block buy_widget_garan_label_full %}
+                            <div class="blog-detail-garan-label-full d-none">
+                                <a href="{{ context.languageId|sw_garan_label_link }}"
+                                   target="_blank"
+                                   rel="noopener">
+                                    {% sw_include '@Framework/garan/label.svg.twig' with {
+                                        manufacturer: garanManufacturer,
+                                        blogNumber: garanModelIdentifier,
+                                        guarantee: garanGuarantee
+                                    } only %}
+                                    <span class="visually-hidden">{{ 'detail.garanLabelYourEuropeLink'|trans|sw_sanitize }}</span>
+                                </a>
+                            </div>
+                        {% endblock %}
+
+                        {% block buy_widget_garan_label_show_link %}
+                            <button type="button"
+                                    class="blog-detail-garan-label-show-link"
+                                    data-garan-label-toggle-trigger="true"
+                                    data-garan-label-show-text="{{ 'detail.garanLabelShowLink'|trans|striptags }}"
+                                    data-garan-label-hide-text="{{ 'detail.garanLabelHideLink'|trans|striptags }}">
+                                <span class="blog-detail-garan-label-show-link-text">
+                                    {{ 'detail.garanLabelShowLink'|trans|sw_sanitize }}
+                                </span>
+                                <span class="blog-detail-garan-label-show-link-icon-show">
+                                    {% sw_icon 'expand' style { pack: 'solid', size: 'xs' } %}
+                                </span>
+                                <span class="blog-detail-garan-label-show-link-icon-hide d-none">
+                                    {% sw_icon 'collapse' style { pack: 'solid', size: 'xs' } %}
+                                </span>
+                            </button>
+                        {% endblock %}
+
+                        {% block buy_widget_garan_label_terms_link %}
+                            {% set garanTermsUrl = blog.guaranteeTermsUrl ?: (blog.guaranteeTermsMedia.url ?? null) %}
+
+                            {% if garanTermsUrl %}
+                                <a href="{{ garanTermsUrl }}"
+                                   class="blog-detail-garan-terms-link d-block mb-3"
+                                   target="_blank"
+                                   rel="noopener">
+                                    {{ 'detail.garanTermsLink'|trans|sw_sanitize }}
+                                </a>
+                            {% endif %}
+                        {% endblock %}
+                    </div>
+                {% endblock %}
+            {% endif %}
+        {% endblock %}
+    </div>
+{% endblock %}

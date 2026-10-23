@@ -1,0 +1,127 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Telemetry;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
+use Contena\Core\Framework\Telemetry\Instrumentation\ElapsedTimer;
+use Contena\Core\Framework\Telemetry\Instrumentation\Span;
+use Contena\Core\Framework\Telemetry\Metrics\Meter;
+use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use Contena\Core\Profiling\Profiler;
+
+/**
+ * High-level facade combining metric emission and profiler spans behind a single DI-injectable
+ * service. Use `emit()` for regular pre-computed metrics and `instrument()` to measure operation
+ * duration and/or create a profiler span around a callback.
+ *
+ * @final
+ *
+ * @experimental feature:TELEMETRY_METRICS stableVersion:v6.8.0
+ */
+class Telemetry
+{
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly Meter $meter,
+        private readonly string $environment,
+    ) {
+    }
+
+    public function emit(ConfiguredMetric $metric): void
+    {
+        $this->meter->emit($metric);
+    }
+
+    /**
+     * Whether a metric would actually be emitted (global switch/per-metric `enabled` config). Use it to skip
+     * a measurement whose setup is too expensive to run for a discarded metric.
+     */
+    public function isMetricEnabled(string $metric): bool
+    {
+        return $this->meter->isEnabled($metric);
+    }
+
+    /**
+     * Execute the callback and optionally record its duration as a histogram metric and/or wrap it
+     * in a profiler span. Duration is always emitted in milliseconds.
+     *
+     * The duration is metric is emitted both on success and on throw (to separately measure slow success/failure cases).
+     *
+     * When the metric's labels are a closure, it receives the measured callback's outcome (result and exception),
+     * so sites can derive labels from it. A disabled metric skips the whole measurement logic (minimal overhead).
+     *
+     * Span and metric are measured independently: the profiler span captures only the callback
+     * execution (not the metric emission), and the duration timer captures only the callback
+     * (not the profiler start/stop overhead).
+     *
+     * @template T
+     *
+     * @param \Closure(): T $callback
+     * @param DurationMetric<T>|null $metric
+     *
+     * @return T
+     */
+    public function instrument(
+        \Closure $callback,
+        ?DurationMetric $metric = null,
+        ?Span $span = null,
+    ): mixed {
+        if ($metric === null && $span === null) {
+            if ($this->environment === 'dev' || $this->environment === 'test') {
+                throw TelemetryException::instrumentWithoutMetricOrSpan();
+            }
+
+            return $callback();
+        }
+
+        if ($metric !== null && !$this->isMetricEnabled($metric->name)) {
+            $metric = null; // skip further metric calculations
+
+            if ($span === null) {
+                return $callback();
+            }
+        }
+
+        // Profiler::start/stop is used instead of Profiler::trace() so that span and metric
+        // remain orthogonal: the span brackets only the callback (metric emission stays outside
+        // the span), and the duration timer brackets only the callback (profiler overhead stays
+        // outside the metric). Wrapping the callback in Profiler::trace() would couple the two.
+        if ($span !== null) {
+            Profiler::start($span->name, $span->category, $span->tags);
+        }
+
+        $timer = $metric !== null ? ElapsedTimer::start() : null;
+        $durationMs = null;
+        $result = null;
+        $exception = null;
+
+        try {
+            return $result = $callback();
+        } catch (\Throwable $e) {
+            $exception = $e;
+
+            throw $e;
+        } finally {
+            if ($timer !== null) {
+                $durationMs = $timer->getElapsedMs();
+            }
+
+            if ($span !== null) {
+                Profiler::stop($span->name);
+            }
+
+            if ($metric !== null && $durationMs !== null) {
+                $labels = $metric->labels;
+                $this->meter->emit(new ConfiguredMetric(
+                    name: $metric->name,
+                    value: $durationMs,
+                    // wrap outcome closure into argument-less one so `Meter` can work with it
+                    labels: $labels instanceof \Closure ? static fn (): array => $labels($result, $exception) : $labels,
+                ));
+            }
+        }
+    }
+}

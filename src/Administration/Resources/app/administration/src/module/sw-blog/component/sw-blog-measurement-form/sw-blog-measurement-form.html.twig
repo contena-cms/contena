@@ -1,0 +1,167 @@
+{% block sw_product_measurement_form %}
+<div class="sw-blog-measurement-form">
+
+    {% block sw_product_measurement_form_extra_field_before %}
+    {% endblock %}
+    <div class="sw-blog-measurement-form__description-group">
+        <i18n-t
+            tag="p"
+            keypath="sw-blog.measurementForm.description"
+            scope="local"
+        >
+            <template #link>
+                <router-link
+                    :to="{ name: 'sw.sales.channel.list' }"
+                >
+                    {{ $t('sw-blog.measurementForm.linkText') }}
+                </router-link>
+            </template>
+        </i18n-t>
+    </div>
+
+    {% block sw_product_measurement_form_width_height_container %}
+    <sw-container
+        columns="1fr 1fr"
+        gap="0 var(--scale-size-32)"
+    >
+        {% block sw_product_measurement_form_width_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.width"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.width"
+        >
+            <template #content="props">
+
+                <mt-unit-field
+                    measurement-type="length"
+                    :model-value="props.currentValue"
+                    :default-unit="lengthUnit"
+                    :label="$t('sw-blog.settingsForm.labelWidth')"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderWidth')"
+                    :min="0"
+                    :step="1"
+                    :digits="3"
+                    :error="blogWidthError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :allow-empty="true"
+                    @update:model-value="props.updateCurrentValue"
+                    @update:default-unit="onUpdateLengthUnit($event, 'width')"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_measurement_form_height_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.height"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.height"
+        >
+            <template #content="props">
+
+                <mt-unit-field
+                    measurement-type="length"
+                    :model-value="props.currentValue"
+                    :default-unit="lengthUnit"
+                    :label="$t('sw-blog.settingsForm.labelHeight')"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderHeight')"
+                    :min="0"
+                    :step="1"
+                    :digits="3"
+                    :error="blogHeightError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :allow-empty="true"
+                    @update:model-value="props.updateCurrentValue"
+                    @update:default-unit="onUpdateLengthUnit($event, 'height')"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+    {% endblock %}
+
+    {% block sw_product_measurement_form_length_weight_container %}
+    <sw-container
+        columns="1fr 1fr"
+        gap="0 var(--scale-size-32)"
+    >
+        {% block sw_product_measurement_form_length_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.length"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.length"
+        >
+            <template #content="props">
+
+                <mt-unit-field
+                    measurement-type="length"
+                    :model-value="props.currentValue"
+                    :default-unit="lengthUnit"
+                    :label="$t('sw-blog.settingsForm.labelLength')"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderLength')"
+                    :min="0"
+                    :step="1"
+                    :digits="3"
+                    :error="blogLengthError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :allow-empty="true"
+                    @update:model-value="props.updateCurrentValue"
+                    @update:default-unit="onUpdateLengthUnit($event, 'length')"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+
+        {% block sw_product_measurement_form_weight_field %}
+        <sw-inherit-wrapper
+            v-model:value="blog.weight"
+            :has-parent="!!parentProduct.id"
+            :inherited-value="parentProduct.weight"
+        >
+            <template #content="props">
+
+                <mt-unit-field
+                    measurement-type="mass"
+                    :model-value="props.currentValue"
+                    :default-unit="weightUnit"
+                    :label="$t('sw-blog.settingsForm.labelWeight')"
+                    :is-inheritance-field="props.isInheritField"
+                    :is-inherited="props.isInherited"
+                    :placeholder="$t('sw-blog.settingsForm.placeholderWeight')"
+                    :min="0"
+                    :step="1"
+                    :digits="3"
+                    :error="blogWeightError"
+                    :disabled="props.isInherited || !allowEdit"
+                    :allow-empty="true"
+                    @update:model-value="props.updateCurrentValue"
+                    @update:default-unit="onUpdateWeightUnit"
+                    @inheritance-restore="props.restoreInheritance"
+                    @inheritance-remove="props.removeInheritance"
+                />
+
+            </template>
+        </sw-inherit-wrapper>
+        {% endblock %}
+    </sw-container>
+    {% endblock %}
+
+    {% block sw_product_measurement_form_extra_field_after %}
+    {% endblock %}
+</div>
+{% endblock %}

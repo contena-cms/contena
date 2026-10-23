@@ -1,0 +1,31 @@
+{% sw_extends '@Frontend/frontend/utilities/offcanvas.html.twig' %}
+
+{% block utilities_offcanvas_content %}
+    {% block component_product_description_container %}
+        <div class="blog-detail-description tab-pane-container">
+            {% block component_product_description_title %}
+                <h2 class="blog-detail-description-title">
+                    {{ 'detail.descriptionTitle'|trans|sw_sanitize }} "{{ blog.translated.name }}"
+                </h2>
+            {% endblock %}
+
+            {% block component_product_description_content %}
+                {% block component_product_description_content_text %}
+                    {# @deprecated tag:v6.8.0 - Blog description microdata replaced by JSON-LD in json-ld-blog.html.twig. Will be removed. #}
+                    <div class="blog-detail-description-text"
+                         {% if not feature('JSON_LD_DATA') %}
+                         itemprop="description"
+                         {% endif %}>
+                        {{ blog.translated.description|raw }}
+                    </div>
+                {% endblock %}
+
+                {% block component_product_description_content_properties %}
+                    {% if blog.sortedProperties|length > 0 %}
+                        {% sw_include '@Frontend/frontend/component/blog/properties.html.twig' %}
+                    {% endif %}
+                {% endblock %}
+            {% endblock %}
+        </div>
+    {% endblock %}
+{% endblock %}

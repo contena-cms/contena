@@ -1,0 +1,359 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Content\ImportExport\Api;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogEntity;
+use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
+use Contena\Core\Framework\Uuid\Uuid;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+class ImportExportActionControllerTest extends TestCase
+{
+    use AdminApiTestBehaviour;
+    use DatabaseTransactionBehaviour;
+    use KernelTestBehaviour;
+
+    /**
+     * @var EntityRepository<EntityCollection<ImportExportProfileEntity>>
+     */
+    private EntityRepository $repository;
+
+    private Context $context;
+
+    protected function setUp(): void
+    {
+        $this->repository = static::getContainer()->get('import_export_profile.repository');
+        $this->context = Context::createDefaultContext();
+    }
+
+    public function testUploadingFileWithUnexpectedMimeTypeFails(): void
+    {
+        $data = $this->prepareImportExportActionControllerTestData(2);
+        $this->repository->create(array_values($data), $this->context);
+
+        foreach ($data as $entry) {
+            $client = $this->getBrowser();
+            $client->request(
+                'POST',
+                '/api/_action/import-export/prepare',
+                ['profileId' => $entry['id'], 'expireDate' => date('Y-m-d H:i:s')],
+                ['file' => $this->getUploadFile('text/html', 'test.xml')],
+                ['Content-Type' => 'multipart/formdata']
+            );
+
+            $response = $client->getResponse();
+
+            static::assertSame(Response::HTTP_BAD_REQUEST, $response->getStatusCode());
+        }
+    }
+
+    public function testUploadingFileSuccess(): void
+    {
+        $data = $this->prepareImportExportActionControllerTestData(2);
+
+        $this->repository->create(array_values($data), $this->context);
+
+        foreach ($data as $entry) {
+            $client = $this->getBrowser();
+            $client->request(
+                'POST',
+                '/api/_action/import-export/prepare',
+                ['profileId' => $entry['id'], 'expireDate' => date('Y-m-d H:i:s')],
+                ['file' => $this->getUploadFile($entry['fileType'])],
+                ['Content-Type' => 'multipart/formdata']
+            );
+
+            $response = $client->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        }
+    }
+
+    public function testExportReadPrivileges(): void
+    {
+        $data = $this->prepareImportExportActionControllerTestData();
+
+        $this->repository->create(array_values($data), $this->context);
+
+        foreach ($data as $entry) {
+            $client = $this->getBrowser();
+            TestUser::createNewTestUser(
+                $client->getContainer()->get(Connection::class),
+                []
+            )->authorizeBrowser($client);
+            $client->request(
+                'POST',
+                '/api/_action/import-export/prepare',
+                ['profileId' => $entry['id'], 'expireDate' => date('Y-m-d H:i:s')],
+                [],
+                ['Content-Type' => 'multipart/formdata']
+            );
+
+            $response = $client->getResponse();
+            static::assertSame(Response::HTTP_FORBIDDEN, $response->getStatusCode());
+            $content = $response->getContent();
+            static::assertIsString($content);
+            $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+            static::assertSame('CONTENT__IMPORT_EXPORT__MISSING_PRIVILEGE', $response['errors'][0]['code'] ?? null);
+            static::assertStringContainsString('blog:read', $response['errors'][0]['detail']);
+            static::assertStringContainsString('tax:read', $response['errors'][0]['detail']);
+            static::assertStringContainsString('blog_category:read', $response['errors'][0]['detail']);
+            static::assertStringContainsString('media:read', $response['errors'][0]['detail']);
+
+            $client = $this->getBrowser();
+            TestUser::createNewTestUser(
+                $client->getContainer()->get(Connection::class),
+                ['import_export_file:create', 'blog:read', 'tax:read', 'blog_category:read', 'blog_media:read', 'media:read']
+            )->authorizeBrowser($client);
+            $client->request(
+                'POST',
+                '/api/_action/import-export/prepare',
+                ['profileId' => $entry['id'], 'expireDate' => date('Y-m-d H:i:s')],
+                [],
+                ['Content-Type' => 'multipart/formdata']
+            );
+
+            $response = $client->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        }
+    }
+
+    public function testStartingDryRunImport(): void
+    {
+        $data = $this->prepareImportExportActionControllerTestData(1);
+
+        $this->repository->create(array_values($data), $this->context);
+
+        foreach ($data as $entry) {
+            $client = $this->getBrowser();
+            $client->request(
+                'POST',
+                '/api/_action/import-export/prepare',
+                ['profileId' => $entry['id'], 'expireDate' => date('Y-m-d H:i:s'), 'dryRun' => true],
+                ['file' => $this->getUploadFile($entry['fileType'])],
+                ['Content-Type' => 'multipart/formdata']
+            );
+
+            $response = $client->getResponse();
+            static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+
+            $content = $response->getContent();
+            static::assertIsString($content);
+            $content = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+            static::assertSame(ImportExportLogEntity::ACTIVITY_DRYRUN, $content['log']['activity']);
+        }
+    }
+
+    /**
+     * @param list<array{key: string, mappedKey: string}> $expectedMapping
+     */
+    #[DataProvider('mappingFromProvider')]
+    public function testMappingFromTemplate(string $sourceEntity, string $fileContent, array $expectedMapping, ?int $expectedErrorCode = null, ?string $expectedErrorMessage = null): void
+    {
+        $file = [];
+        if ($fileContent !== '') {
+            $file = ['file' => $this->getUploadFile('text/csv', '', $fileContent)];
+        }
+
+        $parameters = [];
+        if ($sourceEntity !== '') {
+            $parameters = ['sourceEntity' => $sourceEntity];
+        }
+
+        $client = $this->getBrowser();
+        $client->request(
+            'POST',
+            '/api/_action/import-export/mapping-from-template',
+            $parameters,
+            $file,
+            ['Content-Type' => 'multipart/formdata']
+        );
+
+        $response = $client->getResponse();
+        $content = $response->getContent();
+        static::assertIsString($content);
+        $content = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+
+        if ($expectedErrorCode !== null) {
+            static::assertSame($expectedErrorCode, $response->getStatusCode());
+        }
+
+        if ($expectedErrorMessage !== null) {
+            static::assertSame($expectedErrorMessage, $content['errors'][0]['detail']);
+        }
+
+        if ($expectedErrorCode !== null || $expectedErrorMessage !== null) {
+            return;
+        }
+
+        static::assertSame(Response::HTTP_OK, $response->getStatusCode());
+        $result = array_map(static fn ($mapping) => ['key' => $mapping['key'], 'mappedKey' => $mapping['mappedKey']], $content);
+        static::assertSame($expectedMapping, $result);
+    }
+
+    public static function mappingFromProvider(): \Generator
+    {
+        yield 'Blog entity with mapped keys' => [
+            'sourceEntity' => 'blog',
+            'fileContent' => 'id;blogNumber;foo;bar;manufacturer_id',
+            'expectedMapping' => [
+                ['key' => 'id', 'mappedKey' => 'id'],
+                ['key' => 'blogNumber', 'mappedKey' => 'blogNumber'],
+                ['key' => '', 'mappedKey' => 'foo'],
+                ['key' => '', 'mappedKey' => 'bar'],
+                ['key' => 'manufacturer.id', 'mappedKey' => 'manufacturer_id'],
+            ],
+        ];
+
+        yield 'Blog entity without mapped keys' => [
+            'sourceEntity' => 'blog',
+            'fileContent' => 'test;noValid;foo;bar;lastOne',
+            'expectedMapping' => [
+                ['key' => '', 'mappedKey' => 'test'],
+                ['key' => '', 'mappedKey' => 'noValid'],
+                ['key' => '', 'mappedKey' => 'foo'],
+                ['key' => '', 'mappedKey' => 'bar'],
+                ['key' => '', 'mappedKey' => 'lastOne'],
+            ],
+        ];
+
+        yield 'Not existing source entity' => [
+            'sourceEntity' => 'invalid-entity',
+            'fileContent' => 'test;noValid;foo;bar;lastOne',
+            'expectedMapping' => [],
+            'expectedErrorCode' => 500,
+            'expectedErrorMessage' => 'Definition for entity "invalid-entity" does not exist.',
+        ];
+
+        yield 'Invalid source entity parameter' => [
+            'sourceEntity' => '',
+            'fileContent' => 'test;noValid;foo;bar;lastOne',
+            'expectedMapping' => [],
+            'expectedErrorCode' => 400,
+            'expectedErrorMessage' => 'The parameter "sourceEntity" is invalid.',
+        ];
+
+        yield 'Invalid file parameter' => [
+            'sourceEntity' => 'blog',
+            'fileContent' => '',
+            'expectedMapping' => [],
+            'expectedErrorCode' => 400,
+            'expectedErrorMessage' => 'The parameter "file" is invalid.',
+        ];
+    }
+
+    /**
+     * Prepare a defined number of test data.
+     *
+     * @return array<string, array<string, mixed>>
+     */
+    protected function prepareImportExportActionControllerTestData(int $num = 1): array
+    {
+        $data = [];
+        for ($i = 1; $i <= $num; ++$i) {
+            $uuid = Uuid::randomHex();
+
+            $mimetypes = $this->getValidMimeTypes();
+
+            $data[Uuid::fromHexToBytes($uuid)] = [
+                'id' => $uuid,
+                'technicalName' => 'foobar' . $i,
+                'label' => 'Foobar' . $i,
+                'systemDefault' => ($i % 2 === 0),
+                'sourceEntity' => 'blog',
+                'fileType' => $mimetypes[$i % \count($mimetypes)],
+                'delimiter' => ';',
+                'enclosure' => '"',
+                'createdAt' => date('Y-m-d H:i:s'),
+                'mapping' => [
+                    [
+                        'key' => 'id',
+                        'mappedKey' => 'id',
+                        'position' => 0,
+                    ],
+                    [
+                        'key' => 'translations.DEFAULT.name',
+                        'mappedKey' => 'name',
+                        'position' => 1,
+                    ],
+                    [
+                        'key' => 'price.DEFAULT.net',
+                        'mappedKey' => 'price_net',
+                        'position' => 2,
+                    ],
+                    [
+                        'key' => 'tax.id',
+                        'mappedKey' => 'tax_id',
+                        'position' => 3,
+                    ],
+                    [
+                        'key' => 'categories',
+                        'mappedKey' => 'categories',
+                        'position' => 4,
+                    ],
+                    [
+                        'key' => 'cover.media.translations.DEFAULT.title',
+                        'mappedKey' => 'cover_media_title',
+                        'position' => 5,
+                    ],
+                ],
+            ];
+        }
+
+        return $data;
+    }
+
+    /**
+     * @return list<string>
+     */
+    protected function getValidMimeTypes(): array
+    {
+        return ['text/csv'];
+    }
+
+    private function getUploadFile(string $type = 'text/csv', string $forceFileName = '', ?string $content = null): UploadedFile
+    {
+        $fileSystem = new Filesystem();
+        $file = $fileSystem->tempnam(sys_get_temp_dir(), 'upl');
+        static::assertIsString($file);
+
+        switch ($type) {
+            case 'text/html':
+                $content ??= '<!DOCTYPE html><html><body></body></html>';
+                $fileName = 'test.html';
+
+                break;
+            case 'text/xml':
+                $content ??= '<?xml version="1.0" ?><foo></foo>';
+                $fileName = 'test.xml';
+
+                break;
+            case 'text/csv':
+            default:
+                $content ??= '"foo";"bar";"123"';
+                $fileName = 'test.csv';
+        }
+        $fileSystem->dumpFile($file, $content);
+
+        if ($forceFileName !== '') {
+            $fileName = $forceFileName;
+        }
+
+        return new UploadedFile($file, $fileName, $type);
+    }
+}

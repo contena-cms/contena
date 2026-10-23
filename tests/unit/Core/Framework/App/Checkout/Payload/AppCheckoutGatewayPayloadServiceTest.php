@@ -1,0 +1,188 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\App\Checkout\Payload;
+
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Handler\MockHandler;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\ResponseInterface;
+use Contena\Core\Framework\App\AppEntity;
+use Contena\Core\Framework\App\Checkout\Gateway\AppCheckoutGatewayResponse;
+use Contena\Core\Framework\App\Checkout\Payload\AppCheckoutGatewayPayload;
+use Contena\Core\Framework\App\Checkout\Payload\AppCheckoutGatewayPayloadService;
+use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
+use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
+use Contena\Core\Framework\App\Payload\AppPayloadStruct;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\ExceptionLogger;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Util\Exception\JsonDecodingException;
+use Contena\Core\Test\Generator;
+
+/**
+ * @internal
+ */
+#[CoversClass(AppCheckoutGatewayPayloadService::class)]
+class AppCheckoutGatewayPayloadServiceTest extends TestCase
+{
+    public function testRequest(): void
+    {
+        $context = Generator::generateChannelContext();
+        $cart = Generator::createCart();
+        $paymentMethods = ['paymentMethod-1', 'paymentMethod-2'];
+        $shippingMethods = ['shippingMethod-1', 'shippingMethod-2'];
+
+        $app = new AppEntity();
+        $app->setVersion('1.0.0');
+        $app->setAppSecret('devsecret');
+
+        $payload = new AppCheckoutGatewayPayload($context, $cart, $paymentMethods, $shippingMethods);
+        $encodedPayload = \json_encode($this->encodePayload($payload), \JSON_THROW_ON_ERROR);
+
+        $helper = $this->createMock(AppPayloadServiceHelper::class);
+        $helper
+            ->expects($this->once())
+            ->method('createRequestOptions')
+            ->with($payload, $app, $context->getContext())
+            ->willReturn($this->buildTestPayload($context->getContext(), $encodedPayload));
+
+        $response = [
+            [
+                'command' => 'test-command',
+                'payload' => ['test-payload'],
+            ],
+        ];
+
+        $handler = new MockHandler();
+        $handler->append($this->buildResponse($response));
+
+        $client = new Client(['handler' => $handler]);
+
+        $service = new AppCheckoutGatewayPayloadService(
+            $helper,
+            $client,
+            static::createStub(ExceptionLogger::class),
+        );
+
+        $gatewayResponse = $service->request('https://example.com', $payload, $app);
+
+        static::assertInstanceOf(AppCheckoutGatewayResponse::class, $gatewayResponse);
+        static::assertSame($response, $gatewayResponse->getCommands());
+    }
+
+    public function testRequestAppThrowsException(): void
+    {
+        $context = Generator::generateChannelContext();
+        $cart = Generator::createCart();
+        $paymentMethods = ['paymentMethod-1', 'paymentMethod-2'];
+        $shippingMethods = ['shippingMethod-1', 'shippingMethod-2'];
+
+        $app = new AppEntity();
+        $app->setVersion('1.0.0');
+        $app->setAppSecret('devsecret');
+
+        $payload = new AppCheckoutGatewayPayload($context, $cart, $paymentMethods, $shippingMethods);
+
+        $e = new BadResponseException('Bad', new Request('POST', 'https://example.com'), new Response());
+
+        $handler = new MockHandler();
+        $handler->append($e);
+
+        $client = new Client(['handler' => $handler]);
+
+        $logger = $this->createMock(ExceptionLogger::class);
+        $logger
+            ->expects($this->once())
+            ->method('logOrThrowException')
+            ->with($e);
+
+        $service = new AppCheckoutGatewayPayloadService(
+            static::createStub(AppPayloadServiceHelper::class),
+            $client,
+            $logger,
+        );
+
+        $gatewayResponse = $service->request('https://example.com', $payload, $app);
+
+        static::assertNull($gatewayResponse);
+    }
+
+    public function testRequestWithMalformedJsonReturnsNull(): void
+    {
+        $context = Generator::generateChannelContext();
+        $cart = Generator::createCart();
+        $paymentMethods = ['paymentMethod-1'];
+        $shippingMethods = ['shippingMethod-1'];
+
+        $app = new AppEntity();
+        $app->setVersion('1.0.0');
+        $app->setAppSecret('devsecret');
+
+        $payload = new AppCheckoutGatewayPayload($context, $cart, $paymentMethods, $shippingMethods);
+
+        $helper = $this->createMock(AppPayloadServiceHelper::class);
+        $helper
+            ->expects($this->once())
+            ->method('createRequestOptions')
+            ->willReturn($this->buildTestPayload($context->getContext(), '[]'));
+
+        $handler = new MockHandler();
+        $handler->append(new Response(200, [], '{'));
+
+        $logger = $this->createMock(ExceptionLogger::class);
+        $logger
+            ->expects($this->once())
+            ->method('logOrThrowException')
+            ->with(static::isInstanceOf(JsonDecodingException::class));
+
+        $service = new AppCheckoutGatewayPayloadService(
+            $helper,
+            new Client(['handler' => $handler]),
+            $logger,
+        );
+
+        $gatewayResponse = $service->request('https://example.com', $payload, $app);
+
+        static::assertNull($gatewayResponse);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function encodePayload(AppCheckoutGatewayPayload $payload): array
+    {
+        return [
+            'channelContext' => $payload->getChannelContext()->jsonSerialize(),
+            'cart' => $payload->getCart()->jsonSerialize(),
+            'paymentMethods' => $payload->getPaymentMethods(),
+            'shippingMethods' => $payload->getShippingMethods(),
+        ];
+    }
+
+    /**
+     * @param array<array-key, mixed> $body
+     */
+    private function buildResponse(array $body): ResponseInterface
+    {
+        return new Response(200, [], \json_encode($body, \JSON_THROW_ON_ERROR));
+    }
+
+    private function buildTestPayload(Context $context, string $payload): AppPayloadStruct
+    {
+        return new AppPayloadStruct([
+            AuthMiddleware::APP_REQUEST_CONTEXT => $context,
+            AuthMiddleware::APP_REQUEST_TYPE => [
+                AuthMiddleware::APP_SECRET => 'some-secret',
+                AuthMiddleware::VALIDATED_RESPONSE => true,
+            ],
+            'headers' => [
+                'Content-Type' => 'application/json',
+            ],
+            'body' => $payload,
+        ]);
+    }
+}

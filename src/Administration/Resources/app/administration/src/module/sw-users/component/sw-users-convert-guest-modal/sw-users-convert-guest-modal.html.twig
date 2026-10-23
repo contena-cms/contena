@@ -1,0 +1,62 @@
+{% block sw_customer_guest_convert_customer_modal %}
+<sw-modal
+    :title="$t('sw-user.convertGuest.modalTitle')"
+    class="sw-user-guest-convert-user-modal"
+    @modal-close="onCancel"
+>
+    {% block sw_customer_guest_convert_customer_modal_content %}
+    <div class="sw-user-guest-convert-user-modal__content">
+        {% block sw_customer_guest_convert_customer_modal_option_reset %}
+        <div class="sw-user-guest-convert-user-modal__option sw-user-guest-convert-user-modal__option--reset">
+            <p class="sw-user-guest-convert-user-modal__title">
+                {{ $t('sw-user.convertGuest.mail.title') }}
+            </p>
+            <p class="sw-user-guest-convert-user-modal__description">
+                {{ $t('sw-user.convertGuest.mail.description') }}
+            </p>
+            <mt-button
+                class="sw-user-guest-convert-user-modal__action"
+                size="default"
+                variant="primary"
+                @click="sendRecoveryEmail"
+            >
+                {{ $t('sw-user.convertGuest.mail.button') }}
+            </mt-button>
+        </div>
+        {% endblock %}
+
+        {% block sw_customer_guest_convert_customer_modal_option_manual %}
+        <div class="sw-user-guest-convert-user-modal__option sw-user-guest-convert-user-modal__option--manual">
+            <p class="sw-user-guest-convert-user-modal__title">
+                {{ $t('sw-user.convertGuest.manual.title') }}
+            </p>
+            <p class="sw-user-guest-convert-user-modal__description">
+                {{ $t('sw-user.convertGuest.manual.description') }}
+            </p>
+
+            <div class="sw-user-guest-convert-user-modal__manual-form">
+                <form @submit.prevent="convert">
+                    <mt-password-field
+                        v-model="password"
+                        class="sw-user-guest-convert-user-modal__input"
+                        :label="$t('sw-user.convertGuest.manual.passwordLabel')"
+                        type="password"
+                        :error="userConvertError"
+                    />
+                    <mt-button
+                        class="sw-user-guest-convert-user-modal__action"
+                        size="default"
+                        variant="secondary"
+                        type="submit"
+                        :disabled="!password"
+                    >
+                        {{ $t('sw-user.convertGuest.manual.button') }}
+                    </mt-button>
+                </form>
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock %}
+</sw-modal>
+{% endblock %}

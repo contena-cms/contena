@@ -1,0 +1,34 @@
+.sw-order-detail {
+    &__header {
+        display: flex;
+        align-items: center;
+        gap: var(--scale-size-6);
+    }
+
+    &__alert {
+        max-width: 60rem;
+
+        @media screen and (max-width: 85rem) {
+            max-width: 48rem;
+        }
+    }
+
+    &__tabs.has-warning .sw-tabs__slider {
+        background-color: var(--color-border-attention-default);
+    }
+
+    &__tabs-tab-documents {
+        display: flex;
+        align-items: center;
+
+        &.has-warning,
+        &.has-warning.sw-tabs-item--active {
+            color: var(--color-text-attention-default);
+        }
+    }
+
+    &__tab-warning-badge {
+        color: var(--color-icon-attention-default);
+        margin-left: var(--scale-size-6);
+    }
+}

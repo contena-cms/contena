@@ -1,0 +1,23 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Adapter\Twig;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Adapter\Twig\BackwardCompatibleIntlExtension;
+use Contena\Core\Framework\Log\Package;
+use Twig\Extra\Intl\IntlExtension;
+
+/**
+ * @internal
+ */
+#[CoversClass(BackwardCompatibleIntlExtension::class)]
+class BackwardCompatibleIntlExtensionTest extends TestCase
+{
+    public function testDoesNotRegisterFiltersWhenV6800IsActive(): void
+    {
+        $extension = new BackwardCompatibleIntlExtension(new IntlExtension());
+
+        static::assertSame([], $extension->getFilters());
+    }
+}

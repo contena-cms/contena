@@ -1,0 +1,81 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Mcp\Controller;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlist;
+use Contena\Core\Framework\Routing\ApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Integration\IntegrationCollection;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+
+/**
+ * @experimental stableVersion:v6.8.0
+ *
+ * Saves the per-integration MCP allowlist (tools, resources, prompts).
+ *
+ * Requires `api_action_integration_mcp-allowlist` and `integration:update`. The entity privilege
+ * was already enforced by AclWriteValidator on the write; naming it on the route turns the DAL
+ * exception into a plain 403 and matches {@see AdminUserMcpAllowlistController}.
+ */
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
+class IntegrationMcpAllowlistController
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<IntegrationCollection> $integrationRepository
+     */
+    public function __construct(
+        private readonly EntityRepository $integrationRepository,
+    ) {
+    }
+
+    #[Route(
+        path: '/api/_action/integration/{integrationId}/mcp-allowlist',
+        name: 'api.action.integration.mcp-allowlist',
+        defaults: [
+            'auth_required' => true,
+            PlatformRequest::ATTRIBUTE_ACL => ['api_action_integration_mcp-allowlist', 'integration:update'],
+        ],
+        methods: ['POST'],
+    )]
+    public function save(string $integrationId, Request $request, Context $context): Response
+    {
+        $integration = $this->integrationRepository
+            ->search(new Criteria([$integrationId]), $context)
+            ->getEntities()
+            ->first();
+
+        if ($integration === null) {
+            return new Response(null, Response::HTTP_NOT_FOUND);
+        }
+
+        $body = $request->toArray();
+
+        if (!\array_key_exists('allowlist', $body)) {
+            return new Response(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        $allowlist = $body['allowlist'];
+
+        if ($allowlist !== null && !\is_array($allowlist)) {
+            return new Response(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($allowlist !== null && !McpAllowlist::isValidPayload($allowlist)) {
+            return new Response(null, Response::HTTP_BAD_REQUEST);
+        }
+
+        $this->integrationRepository->update([
+            ['id' => $integrationId, 'mcpAllowlist' => $allowlist],
+        ], $context);
+
+        return new Response(null, Response::HTTP_NO_CONTENT);
+    }
+}

@@ -1,0 +1,240 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Frontend\Controller;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\MockObject\Stub;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Contena\Core\Test\Generator;
+use Contena\Frontend\Controller\StorybookController;
+use Contena\Frontend\Storybook\StorybookService;
+use Contena\Tests\Unit\Frontend\Controller\Stub\StorybookTwigEnvironmentStub;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
+
+/**
+ * @internal
+ */
+#[CoversClass(StorybookController::class)]
+class StorybookControllerTest extends TestCase
+{
+    use EnvTestBehaviour;
+
+    private const STORYBOOK_ORIGIN = 'http://localhost:6006';
+
+    private StorybookTwigEnvironmentStub $twig;
+
+    private StorybookService&Stub $storybookService;
+
+    protected function setUp(): void
+    {
+        $this->twig = new StorybookTwigEnvironmentStub();
+        $this->storybookService = static::createStub(StorybookService::class);
+    }
+
+    public function testStorybookRendersComponentSuccessfully(): void
+    {
+        $channelContext = Generator::generateChannelContext();
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')
+            ->willReturn('theme-id-123');
+
+        $this->storybookService->method('resolveComponentProps')
+            ->willReturn(['label' => 'Click me']);
+
+        $this->twig->renderOutput = '<div>rendered component</div>';
+
+        $response = $this->createController()->storybook('my-button', $this->createStorybookRequest());
+
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame('<div>rendered component</div>', $response->getContent());
+        static::assertSame('http://localhost:6006', $response->headers->get('Access-Control-Allow-Origin'));
+    }
+
+    public function testStorybookSetsThemeIdAndChannelIdOnRequestAttributes(): void
+    {
+        $channelContext = Generator::generateChannelContext();
+        $channelId = $channelContext->getChannelId();
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')
+            ->willReturn('theme-id-123');
+
+        $request = $this->createStorybookRequest();
+
+        $this->createController()->storybook('my-button', $request);
+
+        static::assertSame('theme-id-123', $request->attributes->get('theme-id'));
+        static::assertSame($channelId, $request->attributes->get('sw-sales-channel-id'));
+    }
+
+    public function testStorybookPassesContextAndThemeIdViaRenderContext(): void
+    {
+        $channelContext = Generator::generateChannelContext();
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')
+            ->willReturn('theme-id-123');
+
+        $this->createController()->storybook('my-button', $this->createStorybookRequest());
+
+        static::assertSame($channelContext, $this->twig->renderContext['context']);
+        static::assertSame('theme-id-123', $this->twig->renderContext['themeId']);
+    }
+
+    public function testStorybookDoesNotLeakContextAndThemeIdIntoTwigGlobalsAcrossRequests(): void
+    {
+        $firstContext = Generator::generateChannelContext();
+        $secondContext = Generator::generateChannelContext();
+
+        $storybookService = $this->createMock(StorybookService::class);
+        $storybookService->expects($this->exactly(2))
+            ->method('createChannelContext')
+            ->willReturnOnConsecutiveCalls($firstContext, $secondContext);
+
+        $storybookService->expects($this->exactly(2))
+            ->method('getThemeId')
+            ->willReturnOnConsecutiveCalls('theme-id-1', 'theme-id-2');
+
+        $storybookService->expects($this->exactly(2))
+            ->method('resolveComponentProps')
+            ->willReturn([]);
+
+        $controller = $this->createController($storybookService);
+        $controller->storybook('my-button', $this->createStorybookRequest());
+        $controller->storybook('my-button', $this->createStorybookRequest());
+
+        static::assertArrayNotHasKey('context', $this->twig->globals);
+        static::assertArrayNotHasKey('themeId', $this->twig->globals);
+        static::assertSame($secondContext, $this->twig->renderContext['context']);
+        static::assertSame('theme-id-2', $this->twig->renderContext['themeId']);
+    }
+
+    public function testStorybookReturns500OnTwigRuntimeError(): void
+    {
+        $channelContext = Generator::generateChannelContext();
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')->willReturn(null);
+        $this->storybookService->method('resolveComponentProps')->willReturn([]);
+
+        $this->twig->renderException = new RuntimeError('Template rendering failed');
+
+        $response = $this->createController()->storybook('my-button', $this->createStorybookRequest());
+
+        $content = $response->getContent();
+        static::assertSame(500, $response->getStatusCode());
+        static::assertIsString($content);
+        static::assertStringContainsString('Template error:', $content);
+        static::assertStringContainsString('Template rendering failed', $content);
+        static::assertSame('http://localhost:6006', $response->headers->get('Access-Control-Allow-Origin'));
+    }
+
+    public function testStorybookReturns500OnTwigSyntaxError(): void
+    {
+        $channelContext = Generator::generateChannelContext();
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')->willReturn(null);
+        $this->storybookService->method('resolveComponentProps')->willReturn([]);
+
+        $this->twig->createTemplateException = new SyntaxError('Unexpected token');
+
+        $response = $this->createController()->storybook('my-button', $this->createStorybookRequest());
+
+        $content = $response->getContent();
+        static::assertSame(500, $response->getStatusCode());
+        static::assertIsString($content);
+        static::assertStringContainsString('Template error:', $content);
+        static::assertStringContainsString('Unexpected token', $content);
+    }
+
+    public function testStorybookPassesResolvedPropsToTemplate(): void
+    {
+        $channelContext = Generator::generateChannelContext();
+        $expectedProps = ['label' => 'Click me', 'disabled' => 'true'];
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')->willReturn(null);
+
+        $this->storybookService->method('resolveComponentProps')
+            ->willReturn($expectedProps);
+
+        $capturedProps = [];
+        $this->twig->renderCallback = static function (mixed $template, array $context) use (&$capturedProps): string {
+            $capturedProps = $context['componentProps'] ?? [];
+
+            return '';
+        };
+
+        $this->createController()->storybook('my-button', $this->createStorybookRequest());
+
+        static::assertSame($expectedProps, $capturedProps);
+    }
+
+    public function testStorybookUsesCustomDomainFromEnvVariable(): void
+    {
+        $customDomain = 'http://my-dev-store.example.com:6006';
+        $this->setEnvVars(['STORYBOOK_DOMAIN' => $customDomain]);
+
+        $channelContext = Generator::generateChannelContext();
+
+        $this->storybookService->method('createChannelContext')
+            ->willReturn($channelContext);
+
+        $this->storybookService->method('getThemeId')->willReturn(null);
+        $this->storybookService->method('resolveComponentProps')->willReturn([]);
+
+        $request = new Request();
+        $request->headers->set('Origin', $customDomain);
+
+        $response = $this->createController()->storybook('my-button', $request);
+
+        static::assertSame(200, $response->getStatusCode());
+        static::assertSame($customDomain, $response->headers->get('Access-Control-Allow-Origin'));
+    }
+
+    public function testStorybookRejectsRequestWhenOriginDoesNotMatchCustomDomain(): void
+    {
+        $this->setEnvVars(['STORYBOOK_DOMAIN' => 'http://my-dev-store.example.com:6006']);
+
+        $controller = $this->createController();
+
+        $this->expectException(NotFoundHttpException::class);
+
+        $controller->storybook('my-button', $this->createStorybookRequest());
+    }
+
+    private function createStorybookRequest(): Request
+    {
+        $request = new Request();
+        $request->headers->set('Origin', self::STORYBOOK_ORIGIN);
+
+        return $request;
+    }
+
+    private function createController(?StorybookService $storybookService = null): StorybookController
+    {
+        return new StorybookController(
+            $this->twig,
+            $storybookService ?? $this->storybookService,
+        );
+    }
+}

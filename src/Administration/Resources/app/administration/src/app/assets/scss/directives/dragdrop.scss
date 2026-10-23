@@ -1,0 +1,59 @@
+@import "~scss/variables";
+
+.is--drag-element {
+    position: absolute;
+    pointer-events: none;
+    touch-action: none;
+    admin_user-focus: none;
+    admin_user-select: none;
+    z-index: $z-index-dragdrop;
+    box-shadow: 0 0 4px 0 var(--color-border-brand-default);
+    overflow: hidden;
+    cursor: grab;
+
+    & > * {
+        admin_user-focus: none;
+        admin_user-select: none;
+        admin_user-input: none;
+        admin_user-modify: none;
+        pointer-events: none;
+        touch-action: none;
+        -webkit-admin_user-drag: none;
+    }
+
+    &.is--valid-drag {
+        box-shadow: 0 0 4px 0 var(--color-border-positive-default);
+    }
+
+    &.is--invalid-drag {
+        box-shadow: 0 0 4px 0 var(--color-border-critical-default);
+    }
+}
+
+.is--draggable {
+    admin_user-focus: none;
+    admin_user-select: none;
+    cursor: grab;
+
+    img {
+        admin_user-focus: none;
+        admin_user-select: none;
+        admin_user-input: none;
+        admin_user-modify: none;
+        pointer-events: none;
+        touch-action: none;
+        -webkit-admin_user-drag: none;
+    }
+}
+
+.is--dragging {
+    background: var(--color-background-secondary-default);
+    border: 1px dashed var(--color-border-secondary-default);
+    box-shadow: none;
+    color: var(--color-background-secondary-default);
+    cursor: grab;
+
+    & > * {
+        opacity: 0;
+    }
+}

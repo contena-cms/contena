@@ -1,0 +1,701 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Content\Category\Channel;
+
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Group;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
+use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Util\Base64;
+use Contena\Core\System\Channel\ChannelCollection;
+use Contena\Core\System\Channel\ChannelException;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Tests\Integration\Core\Content\Category\Channel\fixtures\CategoryRouteInheritanceFixtures;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ *
+ * @phpstan-type CmsInheritanceDataProviderActual array{
+ *      activeLanguageCode: string,
+ *      hasTemplate: list<string>,
+ *      hasSlotOverride: list<string>,
+ *  }
+ * @phpstan-type CmsInheritanceDataProviderIterator iterable<array{
+ *      actual: CmsInheritanceDataProviderActual,
+ *      expected: string
+ *  }>
+ */
+#[Group('store-api')]
+class CategoryRouteTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+    use ChannelApiTestBehaviour;
+
+    private const LANGUAGE_IDS = [
+        'en' => Defaults::LANGUAGE_SYSTEM,
+        'de' => '20354d7ae4fe47af8ff6187bc0dedede',
+        'at' => '20354d7ae4fe47af8ff6187bc0aaaaaa',
+    ];
+
+    private KernelBrowser $browser;
+
+    private IdsCollection $ids;
+
+    protected function setUp(): void
+    {
+        $this->ids = new IdsCollection();
+    }
+
+    public function testCmsPageResolved(): void
+    {
+        $this->createListingData();
+
+        $this->browser->request(
+            'GET',
+            '/store-api/category/' . $this->ids->get('category')
+        );
+
+        $this->assertListingCmsPage($this->ids->get('category'), $this->ids->get('cms-page'));
+    }
+
+    public function testIncludesConsidered(): void
+    {
+        $this->createListingData();
+
+        $this->browser->request(
+            'POST',
+            '/store-api/category/' . $this->ids->get('category'),
+            [
+                'includes' => [
+                    'blog_manufacturer' => ['id', 'name', 'options'],
+                    'blog' => ['id', 'name', 'manufacturer', 'tax'],
+                    'blog_listing' => ['aggregations', 'elements'],
+                    'tax' => ['id', 'name'],
+                ],
+            ]
+        );
+
+        static::assertIsString($this->browser->getResponse()->getContent());
+        $response = json_decode($this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        $listing = $response['cmsPage']['sections'][0]['blocks'][0]['slots'][0]['data']['listing'];
+
+        static::assertArrayNotHasKey('sortings', $listing);
+        static::assertArrayNotHasKey('page', $listing);
+        static::assertArrayNotHasKey('limit', $listing);
+
+        static::assertArrayHasKey('manufacturer', $listing['aggregations']);
+        $manufacturers = $listing['aggregations']['manufacturer'];
+
+        foreach ($manufacturers['entities'] as $manufacturer) {
+            static::assertSame(['name', 'id', 'apiAlias'], array_keys($manufacturer));
+        }
+
+        foreach ($listing['elements'] as $blog) {
+            static::assertSame(['name', 'tax', 'manufacturer', 'id', 'apiAlias'], array_keys($blog));
+            static::assertSame(['name', 'id', 'apiAlias'], array_keys($blog['tax']));
+        }
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    #[DataProvider('requestParameterProvider')]
+    public function testCompressedCriteriaIsReadLikeTheRequestBody(array $parameters): void
+    {
+        $this->createListingData();
+        $url = '/store-api/category/' . $this->ids->get('category');
+
+        $this->browser->request('POST', $url);
+        $withoutParameters = $this->decodeResponse();
+
+        $this->browser->request('POST', $url, $parameters);
+        $expected = $this->decodeResponse();
+        static::assertNotSame($withoutParameters, $expected, 'The parameters have to change the response');
+
+        $this->browser->request('GET', $url, ['_criteria' => self::compress($parameters)]);
+
+        static::assertSame($expected, $this->decodeResponse());
+    }
+
+    /**
+     * @return iterable<string, array{parameters: array<string, mixed>}>
+     */
+    public static function requestParameterProvider(): iterable
+    {
+        yield 'limit of the blog listing' => [
+            'parameters' => ['limit' => 1],
+        ];
+
+        yield 'included fields of the response' => [
+            'parameters' => ['includes' => ['category' => ['id', 'name']]],
+        ];
+
+        yield 'excluded fields of the response' => [
+            'parameters' => ['excludes' => ['category' => ['cmsPage']]],
+        ];
+
+        yield 'slots of the CMS page, no slot has the given id' => [
+            'parameters' => ['slots' => '0198c5a1f2d97c3e9b4a6d5e7f801234'],
+        ];
+    }
+
+    public function testIncludesThatAreNotAnArrayAreRejected(): void
+    {
+        $this->createListingData();
+
+        $this->browser->request(
+            'GET',
+            '/store-api/category/' . $this->ids->get('category'),
+            ['includes' => '{"category":["id"]}']
+        );
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $this->browser->getResponse()->getStatusCode());
+        static::assertSame(ChannelException::INVALID_TYPE, $this->decodeResponse()['errors'][0]['code']);
+    }
+
+    public function testHome(): void
+    {
+        $this->createListingData();
+
+        $this->browser->request(
+            'POST',
+            '/store-api/category/home'
+        );
+
+        $this->assertListingCmsPage($this->ids->get('home-category'), $this->ids->get('home-cms-page'));
+    }
+
+    public function testCategoryOfTypeFolder(): void
+    {
+        $this->createListingData();
+
+        $id = $this->ids->get('folder');
+        $this->browser->request(
+            'POST',
+            '/store-api/category/' . $id
+        );
+
+        $this->assertError($id);
+    }
+
+    public function testCategoryOfTypeLink(): void
+    {
+        $this->createListingData();
+
+        $id = $this->ids->get('link');
+        $this->browser->request(
+            'POST',
+            '/store-api/category/' . $id
+        );
+
+        $this->assertLinkCategory($this->ids->get('link'));
+    }
+
+    public function testHomeWithChannelOverride(): void
+    {
+        $this->createListingData();
+
+        /** @var EntityRepository<ChannelCollection> $channelRepository */
+        $channelRepository = $this->getContainer()->get('channel.repository');
+        $channelRepository->upsert([[
+            'id' => $this->ids->get('sales-channel'),
+            'homeCmsPageId' => $this->ids->get('cms-page'),
+        ]], Context::createDefaultContext());
+
+        $this->browser->request(
+            'POST',
+            '/store-api/category/home'
+        );
+
+        $this->assertListingCmsPage($this->ids->get('home-category'), $this->ids->get('cms-page'));
+    }
+
+    /**
+     * @return CmsInheritanceDataProviderIterator
+     */
+    public static function categoryCmsPageInheritanceDataProvider(): iterable
+    {
+        yield from CategoryRouteInheritanceFixtures::noOverridesDataProvider();
+        yield from CategoryRouteInheritanceFixtures::mixedOverridesDataProvider();
+        yield from CategoryRouteInheritanceFixtures::allOverridesDataProvider();
+
+        yield from CategoryRouteInheritanceFixtures::enOverridesDataProvider();
+        yield from CategoryRouteInheritanceFixtures::deOverridesDataProvider();
+        yield from CategoryRouteInheritanceFixtures::atOverridesDataProvider();
+    }
+
+    /**
+     *  Testing CMS slot inheritance with category overrides.
+     *  - EN is System Default language
+     *  - DE is without parent
+     *  - AT inherits from DE
+     *  Expected hierarchy: Category overrides via explicit parents only (AT > DE), then templates via normal fallback (AT > DE > EN)
+     *
+     * @param CmsInheritanceDataProviderActual $actual
+     */
+    #[DataProvider('categoryCmsPageInheritanceDataProvider')]
+    public function testCategoryCmsPageInheritance(array $actual, string $expected): void
+    {
+        $context = Context::createDefaultContext();
+        $this->createLanguages($context);
+        $this->createTranslatedData($actual, $context);
+        $this->createDomains($context);
+
+        $this->browser->request(
+            'POST',
+            '/store-api/category/' . $this->ids->get('category'),
+        );
+
+        $this->assertLandingPageCmsPage(
+            $this->ids->get('category'),
+            $this->ids->get('cms-page'),
+            $expected,
+        );
+    }
+
+    /**
+     * @return CmsInheritanceDataProviderIterator
+     */
+    public static function categoryCmsPageInheritanceWithDuplicatesInLanguageChainDataProvider(): iterable
+    {
+        yield from CategoryRouteInheritanceFixtures::duplicatesInLanguageChainDataProviderNoOverrides();
+        yield from CategoryRouteInheritanceFixtures::duplicatesInLanguageChainDataProviderEnOverrides();
+        yield from CategoryRouteInheritanceFixtures::duplicatesInLanguageChainDataProviderDeOverrides();
+        yield from CategoryRouteInheritanceFixtures::duplicatesInLanguageChainDataProviderAllOverrides();
+    }
+
+    /**
+     *  Testing CMS slot inheritance with category overrides, with multiple EN occurrences in language chain.
+     *  - EN is System Default language
+     *  - DE inherits from EN
+     *  Expected hierarchy: Overrides of categories (DE > EN) > Templates of categories (DE > EN)
+     *  Actual language chain hierarchy: DE > EN > EN
+     *
+     * @param CmsInheritanceDataProviderActual $actual
+     */
+    #[DataProvider('categoryCmsPageInheritanceWithDuplicatesInLanguageChainDataProvider')]
+    public function testCategoryCmsPageInheritanceWithDuplicatesInLanguageChain(array $actual, string $expected): void
+    {
+        $context = Context::createDefaultContext();
+        $this->createLanguageWithSystemDefaultParent($context);
+        $this->createTranslatedData($actual, $context, [self::LANGUAGE_IDS['en'], self::LANGUAGE_IDS['de']]);
+        $this->createDomainsWithSystemDefaultParent($context);
+
+        $this->browser->request(
+            'POST',
+            '/store-api/category/' . $this->ids->get('category'),
+        );
+
+        $this->assertLandingPageCmsPage(
+            $this->ids->get('category'),
+            $this->ids->get('cms-page'),
+            $expected,
+        );
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function createBlogs(): array
+    {
+        $blog = [
+            'name' => 'test',
+            'stock' => 10,
+            'price' => [
+                ['currencyId' => Defaults::CURRENCY, 'gross' => 15, 'net' => 10, 'linked' => false],
+            ],
+            'tax' => ['name' => 'test', 'taxRate' => 15],
+            'active' => true,
+        ];
+
+        $blogs = [];
+        for ($i = 0; $i < 5; ++$i) {
+            $blogs[] = array_merge([
+                'id' => $this->ids->create('blog' . $i),
+                'manufacturer' => ['id' => $this->ids->create('manufacturer-' . $i), 'name' => 'test-' . $i],
+                'blogNumber' => $this->ids->get('blog' . $i),
+            ], $blog);
+        }
+
+        return $blogs;
+    }
+
+    private function createLanguages(Context $context): void
+    {
+        $languages = [[
+            'id' => self::LANGUAGE_IDS['de'],
+            'name' => 'TestGerman',
+            'locale' => [
+                'id' => $this->ids->create('locale-de'),
+                'name' => 'TestGerman',
+                'territory' => 'TestGermany',
+                'code' => 'de-DE-test',
+            ],
+            'active' => true,
+            'translationCodeId' => $this->ids->get('locale-de'),
+        ], [
+            'id' => self::LANGUAGE_IDS['at'],
+            'name' => 'TestAustrian',
+            'parentId' => self::LANGUAGE_IDS['de'],
+            'locale' => [
+                'id' => $this->ids->create('locale-at'),
+                'name' => 'TestAustrian',
+                'territory' => 'TestAustria',
+                'code' => 'de-AT-test',
+            ],
+            'active' => true,
+            'translationCodeId' => $this->ids->get('locale-at'),
+        ]];
+
+        $this->getContainer()->get('language.repository')->create($languages, $context);
+    }
+
+    private function createLanguageWithSystemDefaultParent(Context $context): void
+    {
+        $languages = [[
+            'id' => self::LANGUAGE_IDS['de'],
+            'name' => 'TestGerman',
+            'parentId' => self::LANGUAGE_IDS['en'],
+            'active' => true,
+            'locale' => [
+                'id' => $this->ids->create('locale-de'),
+                'name' => 'TestGerman',
+                'territory' => 'TestGermany',
+                'code' => 'de-DE-test',
+            ],
+            'translationCodeId' => $this->ids->get('locale-de'),
+        ]];
+
+        $this->getContainer()->get('language.repository')->create($languages, $context);
+    }
+
+    private function createDomains(Context $context): void
+    {
+        $basicDomainData = [
+            'channelId' => $this->ids->get('sales-channel'),
+            'currencyId' => Defaults::CURRENCY,
+            'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+        ];
+
+        $url = 'http://localhost:8000';
+        $this->getContainer()->get('channel_domain.repository')->create([[
+            ...$basicDomainData,
+            'id' => $this->ids->create('domain-en'),
+            'languageId' => self::LANGUAGE_IDS['de'],
+            'url' => $url . '/de',
+        ], [
+            ...$basicDomainData,
+            'id' => $this->ids->create('domain-at'),
+            'languageId' => self::LANGUAGE_IDS['at'],
+            'url' => $url . '/at',
+        ]], $context);
+    }
+
+    private function createDomainsWithSystemDefaultParent(Context $context): void
+    {
+        $basicDomainData = [
+            'channelId' => $this->ids->get('sales-channel'),
+            'currencyId' => Defaults::CURRENCY,
+            'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+        ];
+
+        $url = 'http://localhost:8000';
+        $this->getContainer()->get('channel_domain.repository')->create([[
+            ...$basicDomainData,
+            'id' => $this->ids->create('domain-en'),
+            'languageId' => self::LANGUAGE_IDS['de'],
+            'url' => $url . '/de',
+        ]], $context);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function decodeResponse(): array
+    {
+        $content = $this->browser->getResponse()->getContent();
+        static::assertIsString($content);
+
+        return json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    private static function compress(array $parameters): string
+    {
+        $compressed = gzencode(json_encode($parameters, \JSON_THROW_ON_ERROR));
+        static::assertNotFalse($compressed, 'Gzip compressing failed');
+
+        return Base64::urlEncode($compressed);
+    }
+
+    private function assertError(string $categoryId): void
+    {
+        static::assertIsString($this->browser->getResponse()->getContent());
+        $response = json_decode($this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+        $error = new CategoryNotFoundException($categoryId);
+        $expectedError = [
+            'status' => (string) $error->getStatusCode(),
+            'message' => $error->getMessage(),
+        ];
+
+        static::assertSame($expectedError['status'], $response['errors'][0]['status']);
+        static::assertSame($expectedError['message'], $response['errors'][0]['detail']);
+    }
+
+    private function assertListingCmsPage(string $categoryId, string $cmsPageId): void
+    {
+        static::assertIsString($this->browser->getResponse()->getContent());
+        $response = \json_decode($this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame($categoryId, $response['id'], 'CategoryId does not match');
+        static::assertIsArray($response['cmsPage']);
+        static::assertSame('blog_list', $response['cmsPage']['type']);
+
+        static::assertSame($cmsPageId, $response['cmsPage']['id'], 'CmsPage.id does not match');
+        static::assertSame($cmsPageId, $response['cmsPageId'], 'CmsPageId does not match');
+        static::assertCount(1, $response['cmsPage']['sections']);
+
+        static::assertCount(1, $response['cmsPage']['sections'][0]['blocks']);
+
+        $block = $response['cmsPage']['sections'][0]['blocks'][0];
+
+        static::assertSame('blog-listing', $block['type']);
+        static::assertCount(1, $block['slots']);
+
+        $slot = $block['slots'][0];
+        static::assertSame('blog-listing', $slot['type']);
+        static::assertArrayHasKey('listing', $slot['data']);
+
+        $listing = $slot['data']['listing'];
+        static::assertArrayHasKey('aggregations', $listing);
+        static::assertArrayHasKey('elements', $listing);
+    }
+
+    private function assertLinkCategory(string $expectedCategoryId): void
+    {
+        $response = $this->browser->getResponse();
+        static::assertIsString($response->getContent());
+        $response = \json_decode($response->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame($expectedCategoryId, $response['id'], 'CategoryIds do not match');
+        static::assertSame($this->ids->get('linked-category-name'), $response['name']);
+        static::assertSame(CategoryDefinition::TYPE_LINK, $response['type']);
+        static::assertSame(CategoryDefinition::LINK_TYPE_BLOG, $response['linkType']);
+        static::assertSame($this->ids->get('linked-blog'), $response['internalLink'], 'Internal Link Ids do not match');
+
+        static::assertSame('/detail/' . $this->ids->get('linked-blog'), $response['seoUrl'], 'SEO URLs do not match');
+        static::assertTrue($response['linkNewTab']);
+    }
+
+    private function assertLandingPageCmsPage(string $categoryId, string $cmsPageId, string $expected): void
+    {
+        static::assertIsString($this->browser->getResponse()->getContent());
+        $response = \json_decode($this->browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
+
+        static::assertSame($categoryId, $response['id'], 'CategoryId does not match');
+        static::assertIsArray($response['cmsPage']);
+        static::assertSame('landingpage', $response['cmsPage']['type']);
+
+        static::assertSame($cmsPageId, $response['cmsPage']['id'], 'CmsPage.id does not match');
+        static::assertSame($cmsPageId, $response['cmsPageId'], 'CmsPageId does not match');
+        static::assertCount(1, $response['cmsPage']['sections']);
+
+        static::assertCount(1, $response['cmsPage']['sections'][0]['blocks']);
+
+        $block = $response['cmsPage']['sections'][0]['blocks'][0];
+
+        static::assertSame('text-teaser', $block['type']);
+        static::assertCount(1, $block['slots']);
+
+        $slot = $block['slots'][0];
+        static::assertSame('text', $slot['type']);
+
+        $config = $slot['config']['content'];
+        static::assertSame('static', $config['source']);
+        static::assertSame($expected, $config['value']);
+    }
+
+    /**
+     * @param CmsInheritanceDataProviderActual $actualData
+     * @param array<string> $languageIds
+     */
+    private function createTranslatedData(array $actualData, Context $context, array $languageIds = self::LANGUAGE_IDS): void
+    {
+        $slotId = $this->ids->create('slot');
+        $templates = array_reduce($actualData['hasTemplate'], static function (array $accumulator, string $languageCode) {
+            $accumulator[$languageCode] = [
+                'languageId' => self::LANGUAGE_IDS[$languageCode],
+                'config' => [
+                    'content' => [
+                        'source' => 'static',
+                        'value' => $languageCode . ' Template',
+                    ],
+                ],
+            ];
+
+            return $accumulator;
+        }, []);
+
+        $overrides = array_reduce($actualData['hasSlotOverride'], static function (array $accumulator, string $languageCode) use ($slotId) {
+            $accumulator[$languageCode] = [
+                'languageId' => self::LANGUAGE_IDS[$languageCode],
+                'slotConfig' => [
+                    $slotId => [
+                        'content' => [
+                            'source' => 'static',
+                            'value' => $languageCode . ' Override',
+                        ],
+                    ],
+                ],
+            ];
+
+            return $accumulator;
+        }, []);
+
+        $category = [
+            'id' => $this->ids->create('home-category'),
+            'name' => 'Test',
+            'type' => 'folder',
+            'cmsPage' => [
+                'id' => $this->ids->create('home-cms-page'),
+                'type' => 'landingpage',
+                'sections' => [[
+                    'position' => 0,
+                    'type' => 'default',
+                    'blocks' => [[
+                        'type' => 'text-teaser',
+                        'position' => 1,
+                        'slots' => [[
+                            'id' => $slotId,
+                            'type' => 'text',
+                            'slot' => 'content',
+                            'config' => [ // System Default will always be provided
+                                'content' => [
+                                    'source' => 'static',
+                                    'value' => 'en Template',
+                                ],
+                            ],
+                            'translations' => \array_values($templates) ?: null,
+                        ]],
+                    ]],
+                ]],
+            ],
+            'slotConfig' => $overrides['en']['slotConfig'] ?? null,
+            'translations' => \array_values($overrides) ?: null,
+        ];
+
+        $childCategory = [
+            ...$category,
+            'id' => $this->ids->create('category'),
+            'parentId' => $category['id'],
+            'type' => 'page',
+            'cmsPage' => [
+                ...$category['cmsPage'],
+                'id' => $this->ids->create('cms-page'),
+            ],
+        ];
+
+        $this->getContainer()->get('category.repository')->create([$category, $childCategory], $context);
+
+        $this->browser = $this->createCustomChannelBrowser([
+            'id' => $this->ids->create('sales-channel'),
+            'navigationCategoryId' => $this->ids->get('home-category'),
+            'languageId' => self::LANGUAGE_IDS[$actualData['activeLanguageCode']],
+            'languages' => \array_map(static fn ($id) => ['id' => $id], $languageIds),
+        ]);
+    }
+
+    private function createListingData(): void
+    {
+        $blogs = $this->createBlogs();
+        $homeCategory = [
+            'id' => $this->ids->create('home-category'),
+            'name' => 'Test',
+            'type' => 'folder',
+            'cmsPage' => [
+                'id' => $this->ids->create('home-cms-page'),
+                'type' => 'blog_list',
+                'sections' => [
+                    [
+                        'position' => 0,
+                        'type' => 'sidebar',
+                        'blocks' => [
+                            [
+                                'type' => 'blog-listing',
+                                'position' => 1,
+                                'slots' => [
+                                    ['type' => 'blog-listing', 'slot' => 'content'],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+            'blogs' => $blogs,
+        ];
+
+        $childCategory = [
+            ...$homeCategory,
+            'id' => $this->ids->create('category'),
+            'parentId' => $homeCategory['id'],
+            'type' => 'page',
+            'cmsPage' => [
+                ...$homeCategory['cmsPage'],
+                'id' => $this->ids->create('cms-page'),
+            ],
+        ];
+
+        $folderData = $childCategory;
+        $folderData['id'] = $this->ids->create('folder');
+        $folderData['type'] = 'folder';
+        unset($folderData['cmsPage']);
+
+        $linkData = $childCategory;
+        $linkData['id'] = $this->ids->create('link');
+        $linkData['name'] = $this->ids->create('linked-category-name');
+        $linkData['type'] = 'link';
+        $linkData['linkType'] = CategoryDefinition::LINK_TYPE_BLOG;
+        $linkData['internalLink'] = $this->ids->create('linked-blog');
+        $linkData['linkNewTab'] = true;
+        unset($linkData['cmsPage']);
+
+        $this->getContainer()->get('category.repository')
+            ->create([$homeCategory, $childCategory, $folderData, $linkData], Context::createDefaultContext());
+
+        $this->browser = $this->createCustomChannelBrowser([
+            'id' => $this->ids->create('sales-channel'),
+            'navigationCategoryId' => $this->ids->get('home-category'),
+        ]);
+
+        $this->setVisibilities();
+    }
+
+    private function setVisibilities(): void
+    {
+        $blogs = [];
+        for ($i = 0; $i < 5; ++$i) {
+            $blogs[] = [
+                'id' => $this->ids->get('blog' . $i),
+                'visibilities' => [
+                    ['channelId' => $this->ids->get('sales-channel'), 'visibility' => BlogVisibilityDefinition::VISIBILITY_ALL],
+                ],
+            ];
+        }
+
+        $this->getContainer()->get('blog.repository')
+            ->update($blogs, Context::createDefaultContext());
+    }
+}

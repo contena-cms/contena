@@ -1,0 +1,19 @@
+{
+  "sw.blog.detail.base": {
+    "blog": [
+      "taxId",
+      "price",
+      "stock",
+      "manufacturerId",
+      "name",
+      "downloads"
+    ]
+  },
+  "sw.blog.detail.cross.selling": {
+    "blog_cross_selling": [
+      "name",
+      "type",
+      "position"
+    ]
+  }
+}

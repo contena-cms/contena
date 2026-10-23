@@ -1,0 +1,21 @@
+{
+  "name": "SwagApp",
+  "author": "Contena",
+  "views": [
+    "@Frontend",
+    "@Plugins",
+    "@TestTheme"
+  ],
+  "style": [
+    "app/frontend/src/scss/overrides.scss",
+    "@Frontend",
+    "app/frontend/src/scss/base.scss"
+  ],
+  "script": [
+    "@Frontend",
+    "app/frontend/dist/frontend/js/swag-app.js"
+  ],
+  "asset": [
+    "app/frontend/src/assets"
+  ]
+}

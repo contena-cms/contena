@@ -1,0 +1,172 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Integration;
+
+use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
+use Contena\Core\Framework\App\AppEntity;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Webhook\WebhookCollection;
+use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
+
+/**
+ * @codeCoverageIgnore
+ *
+ * @see \Contena\Tests\Integration\Core\Framework\Adapter\Twig\TwigFieldVisibilityTest
+ */
+class IntegrationEntity extends Entity
+{
+    use EntityCustomFieldsTrait;
+    use EntityIdTrait;
+
+    protected string $label;
+
+    protected string $accessKey;
+
+    protected string $secretAccessKey;
+
+    protected bool $admin;
+
+    /**
+     * @var array{tools: list<string>|null, resources: list<string>|null, prompts: list<string>|null}|null
+     */
+    protected ?array $mcpAllowlist = null;
+
+    protected ?\DateTimeInterface $lastUsageAt = null;
+
+    protected ?AppEntity $app = null;
+
+    protected ?AclRoleCollection $aclRoles = null;
+
+    protected ?\DateTimeInterface $deletedAt = null;
+
+    protected ?StateMachineHistoryCollection $stateMachineHistoryEntries = null;
+
+    protected ?WebhookCollection $webhooks = null;
+
+    public function getLabel(): string
+    {
+        return $this->label;
+    }
+
+    public function setLabel(string $label): void
+    {
+        $this->label = $label;
+    }
+
+    public function getAccessKey(): string
+    {
+        return $this->accessKey;
+    }
+
+    public function setAccessKey(string $accessKey): void
+    {
+        $this->accessKey = $accessKey;
+    }
+
+    public function getSecretAccessKey(): string
+    {
+        return $this->secretAccessKey;
+    }
+
+    public function setSecretAccessKey(string $secretAccessKey): void
+    {
+        $this->secretAccessKey = $secretAccessKey;
+    }
+
+    public function getLastUsageAt(): ?\DateTimeInterface
+    {
+        return $this->lastUsageAt;
+    }
+
+    public function setLastUsageAt(\DateTimeInterface $lastUsageAt): void
+    {
+        $this->lastUsageAt = $lastUsageAt;
+    }
+
+    public function getApp(): ?AppEntity
+    {
+        return $this->app;
+    }
+
+    public function setApp(?AppEntity $app): void
+    {
+        $this->app = $app;
+    }
+
+    public function getAclRoles(): ?AclRoleCollection
+    {
+        return $this->aclRoles;
+    }
+
+    public function setAclRoles(AclRoleCollection $aclRoles): void
+    {
+        $this->aclRoles = $aclRoles;
+    }
+
+    public function getAdmin(): bool
+    {
+        return $this->admin;
+    }
+
+    public function setAdmin(bool $admin): void
+    {
+        $this->admin = $admin;
+    }
+
+    /**
+     * @return array{tools: list<string>|null, resources: list<string>|null, prompts: list<string>|null}|null
+     */
+    public function getMcpAllowlist(): ?array
+    {
+        return $this->mcpAllowlist;
+    }
+
+    /**
+     * @param array{tools: list<string>|null, resources: list<string>|null, prompts: list<string>|null}|null $mcpAllowlist
+     */
+    public function setMcpAllowlist(?array $mcpAllowlist): void
+    {
+        $this->mcpAllowlist = $mcpAllowlist;
+    }
+
+    public function getDeletedAt(): ?\DateTimeInterface
+    {
+        return $this->deletedAt;
+    }
+
+    public function setDeletedAt(\DateTimeInterface $deletedAt): void
+    {
+        $this->deletedAt = $deletedAt;
+    }
+
+    public function getStateMachineHistoryEntries(): ?StateMachineHistoryCollection
+    {
+        return $this->stateMachineHistoryEntries;
+    }
+
+    public function setStateMachineHistoryEntries(StateMachineHistoryCollection $stateMachineHistoryEntries): void
+    {
+        $this->stateMachineHistoryEntries = $stateMachineHistoryEntries;
+    }
+
+    /**
+     * @internal
+     */
+    public function getWebhooks(): ?WebhookCollection
+    {
+        $this->checkIfPropertyAccessIsAllowed('webhooks');
+
+        return $this->webhooks;
+    }
+
+    /**
+     * @internal
+     */
+    public function setWebhooks(WebhookCollection $webhooks): void
+    {
+        $this->webhooks = $webhooks;
+    }
+}

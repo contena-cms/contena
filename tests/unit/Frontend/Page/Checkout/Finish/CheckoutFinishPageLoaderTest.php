@@ -1,0 +1,327 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Frontend\Page\Checkout\Finish;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\CartException;
+use Contena\Core\Checkout\Order\OrderDefinition;
+use Contena\Core\Checkout\Order\OrderEntity;
+use Contena\Core\Checkout\Order\OrderException;
+use Contena\Core\Checkout\Order\Channel\OrderRoute;
+use Contena\Core\Checkout\Order\Channel\OrderRouteResponse;
+use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Routing\RoutingException;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Test\Generator;
+use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
+use Contena\Frontend\Checkout\Order\OrderBlogAvailabilityResolver;
+use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPage;
+use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPageLoader;
+use Contena\Frontend\Page\GenericPageLoader;
+use Contena\Frontend\Page\MetaInformation;
+use Contena\Frontend\Page\Page;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @internal
+ */
+#[CoversClass(CheckoutFinishPageLoader::class)]
+class CheckoutFinishPageLoaderTest extends TestCase
+{
+    public function testRobotsMetaNotSetIfGiven(): void
+    {
+        $orderId = Uuid::randomHex();
+
+        $page = new CheckoutFinishPage();
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn($page);
+
+        $request = new Request([
+            'orderId' => $orderId,
+            'changedPayment' => false,
+            'paymentFailed' => false,
+        ]);
+
+        $page = $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId))->load(
+            $request,
+            Generator::generateChannelContext(),
+        );
+
+        static::assertNull($page->getMetaInformation());
+    }
+
+    public function testRobotsMetaSetIfGiven(): void
+    {
+        $orderId = Uuid::randomHex();
+
+        $page = new CheckoutFinishPage();
+        $page->setMetaInformation(new MetaInformation());
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn($page);
+
+        $request = new Request([
+            'orderId' => $orderId,
+            'changedPayment' => false,
+            'paymentFailed' => false,
+        ]);
+
+        $page = $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId))->load(
+            $request,
+            Generator::generateChannelContext(),
+        );
+        static::assertNotNull($page->getMetaInformation());
+        static::assertSame('noindex,follow', $page->getMetaInformation()->getRobots());
+    }
+
+    public function testCheckoutFinishPageReturned(): void
+    {
+        $orderId = Uuid::randomHex();
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn(new Page());
+
+        $request = new Request([
+            'orderId' => $orderId,
+            'changedPayment' => false,
+            'paymentFailed' => false,
+        ]);
+
+        $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId))->load(
+            $request,
+            Generator::generateChannelContext(),
+        );
+    }
+
+    #[DataProvider('provideGuestLogoutConstellations')]
+    public function testLogoutUserSetCorrectly(bool $isGuest, bool $guestLogoutSetting, bool $expected): void
+    {
+        $orderId = Uuid::randomHex();
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn(new Page());
+
+        $request = new Request([
+            'orderId' => $orderId,
+            'changedPayment' => false,
+            'paymentFailed' => false,
+        ]);
+
+        $context = Generator::generateChannelContext();
+        $context->getUser()?->setGuest($isGuest);
+        $config = [
+            $context->getChannelId() => ['core.cart.logoutGuestAfterCheckout' => $guestLogoutSetting],
+        ];
+
+        $page = $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId), $config)->load($request, $context);
+
+        static::assertSame($expected, $page->isLogoutUser());
+    }
+
+    public function testRoundingIsSetInContext(): void
+    {
+        $orderId = Uuid::randomHex();
+        $itemRounding = new CashRoundingConfig(2, 2.0, false);
+        $totalRounding = new CashRoundingConfig(4, 4.0, false);
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn(new Page());
+
+        $request = new Request([
+            'orderId' => $orderId,
+            'changedPayment' => false,
+            'paymentFailed' => false,
+        ]);
+
+        $channelContext = Generator::generateChannelContext();
+        $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId, $itemRounding, $totalRounding))->load(
+            $request,
+            $channelContext,
+        );
+
+        static::assertSame($channelContext->getItemRounding(), $itemRounding);
+        static::assertSame($channelContext->getTotalRounding(), $totalRounding);
+    }
+
+    public function testNoUserLoggedInException(): void
+    {
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn(new Page());
+
+        $this->expectException(CartException::class);
+
+        $this->createLoader($pageLoader, static::createStub(OrderRoute::class))->load(
+            new Request(),
+            static::createStub(ChannelContext::class),
+        );
+    }
+
+    public function testMissingOrderIdException(): void
+    {
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn(new Page());
+
+        $this->expectException(RoutingException::class);
+
+        $this->createLoader($pageLoader, static::createStub(OrderRoute::class))->load(
+            new Request(),
+            Generator::generateChannelContext(),
+        );
+    }
+
+    public function testOrderNotFoundException(): void
+    {
+        $orderId = Uuid::randomHex();
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')
+            ->willReturn(new Page());
+
+        $request = new Request([
+            'orderId' => 'invalid-order-id',
+        ]);
+
+        try {
+            $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId, criteriaOrderId: 'invalid-order-id'))->load(
+                $request,
+                Generator::generateChannelContext(),
+            );
+        } catch (OrderException) {
+        } catch (\Exception) {
+            static::fail('Not an expected Exception');
+        }
+    }
+
+    public static function provideGuestLogoutConstellations(): \Generator
+    {
+        yield 'Guest user, setting off' => [true, false, false];
+        yield 'Logged in user, setting on' => [false, true, false];
+        yield 'Guest user, setting on' => [true, true, true];
+    }
+
+    public function testTheBlogAvailabilityOfTheOrderIsResolved(): void
+    {
+        $orderId = Uuid::randomHex();
+
+        $pageLoader = static::createStub(GenericPageLoader::class);
+        $pageLoader->method('load')->willReturn(new Page());
+
+        $resolver = static::createMock(OrderBlogAvailabilityResolver::class);
+        $resolver
+            ->expects($this->once())
+            ->method('addAvailability')
+            ->with(static::callback(static function (array $orders) use ($orderId): bool {
+                static::assertCount(1, $orders);
+
+                $order = $orders[0];
+                static::assertInstanceOf(OrderEntity::class, $order);
+                static::assertSame($orderId, $order->getId());
+
+                return true;
+            }));
+
+        $this->createLoader($pageLoader, $this->getOrderRouteWithValidOrder($orderId), [], $resolver)->load(
+            new Request(['orderId' => $orderId]),
+            Generator::generateChannelContext(),
+        );
+    }
+
+    /**
+     * @param array<string, mixed> $systemConfig
+     */
+    private function createLoader(
+        GenericPageLoader $pageLoader,
+        OrderRoute $getOrderRouteWithValidOrder,
+        array $systemConfig = [],
+        ?OrderBlogAvailabilityResolver $blogAvailabilityResolver = null
+    ): CheckoutFinishPageLoader {
+        return new CheckoutFinishPageLoader(
+            static::createStub(EventDispatcher::class),
+            $pageLoader,
+            $getOrderRouteWithValidOrder,
+            static::createStub(AbstractTranslator::class),
+            new StaticSystemConfigService($systemConfig),
+            $blogAvailabilityResolver ?? static::createStub(OrderBlogAvailabilityResolver::class),
+        );
+    }
+
+    private function getOrderRouteWithValidOrder(
+        string $orderId,
+        ?CashRoundingConfig $itemRounding = null,
+        ?CashRoundingConfig $totalRounding = null,
+        ?string $criteriaOrderId = null,
+    ): OrderRoute {
+        $order = new OrderEntity();
+        $order->setId($orderId);
+
+        if ($itemRounding instanceof CashRoundingConfig) {
+            $order->setItemRounding($itemRounding);
+        }
+
+        if ($totalRounding instanceof CashRoundingConfig) {
+            $order->setTotalRounding($totalRounding);
+        }
+
+        $searchResult = new EntitySearchResult(
+            OrderDefinition::ENTITY_NAME,
+            1,
+            new EntityCollection([$order]),
+            null,
+            new Criteria(),
+            Context::createDefaultContext(),
+        );
+
+        $orderRouteResponse = $this->createMock(OrderRouteResponse::class);
+        $orderRouteResponse->expects($this->once())
+            ->method('getOrders')
+            ->willReturn($searchResult);
+
+        $expectedCriteria = (new Criteria([$criteriaOrderId ?? $orderId]))
+            ->addFilter(new EqualsFilter('order.orderUser.userId', Generator::CUSTOMER))
+            ->addAssociation('primaryOrderDelivery.shippingMethod')
+            ->addAssociation('primaryOrderDelivery.shippingOrderAddress.salutation')
+            ->addAssociation('primaryOrderDelivery.shippingOrderAddress.country')
+            ->addAssociation('primaryOrderDelivery.shippingOrderAddress.countryState')
+            ->addAssociation('primaryOrderTransaction.paymentMethod')
+            ->addAssociation('lineItems.cover')
+            ->addAssociation('billingAddress.salutation')
+            ->addAssociation('billingAddress.country')
+            ->addAssociation('billingAddress.countryState')
+            ->addAssociation('currency');
+
+        $orderRoute = $this->createMock(OrderRoute::class);
+        $orderRoute->expects($this->once())
+            ->method('load')
+            ->with(
+                static::isInstanceOf(Request::class),
+                static::isInstanceOf(ChannelContext::class),
+                static::callback(static function (Criteria $criteria) use ($expectedCriteria): bool {
+                    static::assertSame((string) $expectedCriteria, (string) $criteria);
+
+                    return true;
+                }),
+            )
+            ->willReturn($orderRouteResponse);
+
+        return $orderRoute;
+    }
+}

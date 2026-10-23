@@ -1,0 +1,6 @@
+{% set blogId = hook.request['blogId'] %}
+
+{% set response = services.response.redirect('api.blog.detail', { 'path': blogId }) %}
+{% set inner = response.inner %}
+
+{% do hook.setResponse(response) %}

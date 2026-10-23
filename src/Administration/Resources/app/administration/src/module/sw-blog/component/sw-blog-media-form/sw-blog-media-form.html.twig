@@ -1,0 +1,84 @@
+{% block sw_product_media_form %}
+<div
+    class="sw-blog-media-form"
+    :class="{ 'is--disabled': disabled }"
+>
+    {% block sw_product_media_form_upload %}
+    <sw-upload-listener
+        v-if="!isLoading"
+        :upload-tag="blog.id"
+        auto-upload
+        @media-upload-finish="successfulUpload"
+        @media-upload-fail="onUploadFailed"
+    />
+
+    <sw-media-upload-v2
+        v-if="!isLoading && acl.can('blog.editor')"
+        variant="regular"
+        default-folder="blog"
+        :upload-tag="blog.id"
+        :file-accept="fileAccept"
+        @media-upload-sidebar-open="onOpenMedia"
+    />
+    {% endblock %}
+
+    {% block sw_product_media_form_grid %}
+    <div class="sw-blog-media-form__previews">
+        <div class="sw-blog-media-form__cover-container sw-blog-media-form__column">
+            {% block sw_product_media_form_cover_preview %}
+            <div
+                v-if="blog.cover || cover"
+                class="sw-blog-media-form__preview-cover"
+            >
+                <div class="preview-cover">
+                    {% block sw_product_media_form_cover_image %}
+                    <sw-media-preview-v2
+                        :key="cover ? cover.media?.url : blog.cover.media?.url"
+                        class="sw-blog-media-form__cover-image"
+                        :source="cover ? cover.mediaId : blog.cover.mediaId"
+                    />
+                    {% endblock %}
+                    <span>{{ $t('sw-blog.mediaForm.coverSubline') }}</span>
+                </div>
+            </div>
+            <div
+                v-else
+                class="sw-blog-media-form__cover-image is--placeholder"
+            >
+                {{ $t('sw-blog.mediaForm.coverSubline') }}
+            </div>
+            {% endblock %}
+        </div>
+
+        <div
+            v-if="!isLoading"
+            class="sw-blog-media-form__grid sw-blog-media-form__column"
+            :style="gridAutoRows"
+        >
+            {% block sw_product_media_form_grid_items %}
+            <template
+                v-for="mediaItem in mediaItems"
+                :key="mediaItem.id"
+            >
+                {% block sw_product_media_form_grid_item %}
+                <sw-blog-image
+                    v-draggable="{ dragGroup: 'blog-media', data: mediaItem, onDragEnter: onMediaItemDragSort }"
+                    v-droppable="{ dragGroup: 'blog-media', data: mediaItem }"
+                    :is-cover="isCover(mediaItem)"
+                    :is-spatial="isSpatial(mediaItem)"
+                    :is-ar-ready="isArReady(mediaItem)"
+                    :is-placeholder="mediaItem.isPlaceholder"
+                    :media-id="mediaItem.mediaId"
+                    :show-cover-label="showCoverLabel"
+                    @sw-blog-image-delete="removeFile(mediaItem)"
+                    @sw-blog-image-cover="markMediaAsCover(mediaItem)"
+                />
+                {% endblock %}
+            </template>
+            {% endblock %}
+        </div>
+        <sw-loader v-else />
+    </div>
+    {% endblock %}
+</div>
+{% endblock %}

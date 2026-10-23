@@ -1,0 +1,26 @@
+{% block sw_category_entry_point_overwrite_modal %}
+<sw-confirm-modal
+    class="sw-category-entry-point-overwrite-modal"
+    @cancel="onCancel"
+    @close="onCancel"
+    @confirm="onConfirm"
+>
+
+    <p class="sw-confirm-modal__text">
+        {{ $t('sw-category.entry-point-overwrite-modal.textBefore', {}, channels.length) }}
+    </p>
+
+    <ul>
+        <li
+            v-for="channel in channels"
+            :key="channel.translated.name"
+        >
+            {{ channel.translated.name }}
+        </li>
+    </ul>
+
+    <p class="sw-confirm-modal__text">
+        {{ $t('sw-category.entry-point-overwrite-modal.textAfter', {}, channels.length) }}
+    </p>
+</sw-confirm-modal>
+{% endblock %}

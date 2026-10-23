@@ -1,0 +1,180 @@
+{% block component_product_box_price_info %}
+    {% set cheapest = blog.calculatedCheapestPrice %}
+
+    {% set real = blog.calculatedPrice %}
+    {% if blog.calculatedPrices.count > 0 %}
+        {% set real = blog.calculatedPrices.last %}
+    {% endif %}
+
+    {% set referencePrice = real.referencePrice %}
+
+    {% set displayFrom = blog.calculatedPrices.count > 1 %}
+    {% set displayParent = blog.variantListingConfig.displayParent and blog.parentId === null %}
+
+    {% if displayParent %}
+        {% set displayFromVariants = displayParent and real.unitPrice !== cheapest.unitPrice %}
+        {% set real = cheapest %}
+        {% set totalVariants = blog.cheapestPriceContainer.value %}
+        {% set hasDifferentPrice = totalVariants|filter(variant => variant.default != null)|length > 0 %}
+        {% set hasRange = blog.cheapestPrice.hasRange %}
+    {% endif %}
+
+    <div class="blog-price-info">
+        {% block component_product_box_price_unit %}
+            <p class="blog-price-unit">
+                {# Price is based on the purchase unit #}
+                {% block component_product_box_price_purchase_unit %}
+                    {% if referencePrice and referencePrice.unitName %}
+                        <span class="blog-unit-label">
+                            {{ 'listing.boxUnitLabel'|trans|sw_sanitize }}
+                        </span>
+                        <span class="price-unit-content">
+                            {{ referencePrice.purchaseUnit }} {{ referencePrice.unitName }}
+                        </span>
+                    {% endif %}
+                {% endblock %}
+
+                {# Item price is based on a reference unit #}
+                {% block component_product_box_price_reference_unit %}
+                    {% if referencePrice is not null %}
+                        <span class="price-unit-reference">
+                            ({{ referencePrice.price|currency }} / {{ referencePrice.referenceUnit }} {{ referencePrice.unitName }})
+                        </span>
+                    {% endif %}
+                {% endblock %}
+            </p>
+        {% endblock %}
+
+        {% block component_product_box_price %}
+            <div class="blog-price-wrapper">
+                {% set price = real %}
+                {% set isRegulationPrice = price.regulationPrice != null %}
+                {# A regulation price replaces the list price as the reference for the displayed saving. #}
+                {% set isListPrice = price.listPrice.percentage > 0 and not isRegulationPrice %}
+                {% set isRegulationPriceSaving = price.regulationPrice.percentage > 0 %}
+                {% set displaySalePrice = (isListPrice or isRegulationPriceSaving) and not displayFrom and not displayFromVariants %}
+
+                {#
+                    Cheapest price display for variants. Used when the blog is a single variant that is directly buy-able from the listing.
+                    Example: "Variants from $120.00"
+                #}
+                {% block component_product_box_cheapest_price %}
+                    <div class="blog-cheapest-price{% if isRegulationPrice %}{% if displayFrom %} with-from-price{% elseif displayFromVariants %} with-regulation-price{% else %} with-list-price{% endif %}{% endif %}">
+                        {% if cheapest.unitPrice != real.unitPrice and cheapest.variantId != blog.id %}
+                            {{ 'listing.cheapestPriceLabel'|trans|sw_sanitize }}<span class="blog-cheapest-price-price"> {{ cheapest.unitPrice|currency }}</span>
+                        {% endif %}
+                    </div>
+                {% endblock %}
+
+                {#
+                    Price label for screen readers.
+                    Example with regular price: "Regular price:"
+                    Example with list price: "Sale price:"
+                #}
+                {% block component_product_box_price_label %}
+                    <span class="visually-hidden blog-price-label">
+                        {% if displaySalePrice %}
+                            {{ 'listing.listPriceLabel'|trans|sw_sanitize }}
+                        {% else %}
+                            {{ 'listing.regularPriceLabel'|trans|sw_sanitize }}
+                        {% endif %}
+                    </span>
+                {% endblock %}
+
+                {#
+                    "From" price display. Used for advanced pricing tables or variants when the frontend presentation is set to "main variant".
+                    The blog is not directly buy-able from the listing.
+                    Example: "From $120.00"
+                #}
+                {% block component_product_box_from_price %}
+                    {% if displayFrom or (displayParent and hasDifferentPrice and hasRange and totalVariants|length > 1) %}
+                        {{ 'listing.listingTextFrom'|trans|sw_sanitize }}
+                    {% endif %}
+                {% endblock %}
+
+                {#
+                    Main price display. Always used, can also include list prices.
+                    Example: $150.00"
+                    Example with list price: €400.00 <s>€500.00</s> (20% saved)"
+                #}
+                {% block component_product_box_main_price %}
+                    <span class="blog-price{% if displaySalePrice %} with-list-price{% endif %}">
+                        {{ price.unitPrice|currency }}
+
+                        {% if isListPrice and not displayFrom and not displayFromVariants %}
+                            {% set afterListPriceSnippetExists = false %}
+                            {% set beforeListPriceSnippetExists = false %}
+                            {% if not feature('v6.8.0.0') %}
+                                {# @deprecated tag:v6.8.0 - Snippets listing.beforeListPrice and listing.afterListPrice will be removed. Use twig blocks instead. #}
+                                {% set afterListPriceSnippetExists = 'listing.afterListPrice'|trans|length > 0 %}
+                                {% set beforeListPriceSnippetExists = 'listing.beforeListPrice'|trans|length > 0 %}
+                            {% endif %}
+
+                            {# @deprecated tag:v6.8.0 - The conditional "list-price-no-line-through" class will be removed. #}
+                            <span class="list-price{% if beforeListPriceSnippetExists or afterListPriceSnippetExists %} list-price-no-line-through{% endif %}">
+                                {% block component_product_box_main_price_before %}
+                                    {% sw_include '@Frontend/frontend/component/blog/list-price-affix.html.twig' with {
+                                        position: 'before'
+                                    } %}
+                                {% endblock %}
+
+                                {# @deprecated tag:v6.8.0 - Snippet listing.beforeListPrice output will be removed. Use twig blocks instead. #}
+                                {% if beforeListPriceSnippetExists %}{{ 'listing.beforeListPrice'|trans|trim|sw_sanitize }}{% endif %}
+
+                                <span class="visually-hidden list-price-label">{{ 'listing.regularPriceLabel'|trans|sw_sanitize }}</span>
+
+                                <span class="list-price-price">{{ price.listPrice.price|currency }}</span>
+
+                                {% block component_product_box_main_price_after %}
+                                    {% sw_include '@Frontend/frontend/component/blog/list-price-affix.html.twig' with {
+                                        position: 'after'
+                                    } %}
+                                {% endblock %}
+
+                                {# @deprecated tag:v6.8.0 - Snippet listing.afterListPrice output will be removed. Use twig blocks instead. #}
+                                {% if afterListPriceSnippetExists %}{{ 'listing.afterListPrice'|trans|trim|sw_sanitize }}{% endif %}
+
+                                <span class="list-price-percentage">{{ 'detail.listPricePercentage'|trans({'%price%': price.listPrice.percentage })|sw_sanitize }}</span>
+                            </span>
+                        {% endif %}
+                    </span>
+                {% endblock %}
+
+                {#
+                    Display for the lowest price of the last 30 days (regulation price)
+                    Example: "Lowest price (last 30 days): €300.00 (10% saved)"
+                #}
+                {% block component_product_box_regulation_price %}
+                    {% if isRegulationPrice %}
+                        <span class="blog-price with-regulation-price">
+                            <br aria-hidden="true"><span class="regulation-price">{{ 'general.listPricePreviously'|trans({'%price%': price.regulationPrice.price|currency }) }}</span>
+                            {% if isRegulationPriceSaving and not displayFrom and not displayFromVariants %}<span class="list-price-percentage">{{ 'detail.listPricePercentage'|trans({'%price%': price.regulationPrice.percentage })|sw_sanitize }}</span>{% endif %}
+                        </span>
+                    {% endif %}
+                {% endblock %}
+            </div>
+        {% endblock %}
+
+        {#
+            If a blog can be added to the shipping directly from the listing,
+            we need to display information about taxes and shipping.
+        #}
+        {% if config('core.listing.allowBuyInListing') %}
+            {% block component_product_box_price_tax_info %}
+                {% set cmsPath = 'frontend.cms.page' %}
+
+                <button class="blog-price-tax-link btn btn-link-inline fs-6"
+                        type="button"
+                        data-ajax-modal="true"
+                        data-url="{{ path(cmsPath, { id: config('core.basicInformation.shippingPaymentInfoPage') }) }}"
+                        aria-haspopup="dialog">
+                    {% if context.taxState == 'gross' %}
+                        {{ 'general.grossTaxInformation'|trans|sw_sanitize }}
+                    {% else %}
+                        {{ 'general.netTaxInformation'|trans|sw_sanitize }}
+                    {% endif %}
+                </button>
+            {% endblock %}
+        {% endif %}
+    </div>
+{% endblock %}

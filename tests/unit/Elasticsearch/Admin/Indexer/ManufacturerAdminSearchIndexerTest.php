@@ -1,0 +1,168 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Elasticsearch\Admin\Indexer;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
+use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\Framework\Event\NestedEventCollection;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Elasticsearch\Admin\Indexer\ManufacturerAdminSearchIndexer;
+use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
+
+/**
+ * @internal
+ */
+#[CoversClass(ManufacturerAdminSearchIndexer::class)]
+class ManufacturerAdminSearchIndexerTest extends TestCase
+{
+    private ManufacturerAdminSearchIndexer $searchIndexer;
+
+    protected function setUp(): void
+    {
+        $this->searchIndexer = new ManufacturerAdminSearchIndexer(
+            static::createStub(Connection::class),
+            static::createStub(IteratorFactory::class),
+            static::createStub(EntityRepository::class),
+            static::createStub(ElasticsearchFieldBuilder::class),
+            100
+        );
+    }
+
+    public function testGetUpdatedIds(): void
+    {
+        $indexer = new ManufacturerAdminSearchIndexer(
+            static::createStub(Connection::class),
+            static::createStub(IteratorFactory::class),
+            static::createStub(EntityRepository::class),
+            static::createStub(ElasticsearchFieldBuilder::class),
+            100
+        );
+
+        $mId = Uuid::randomHex();
+
+        $event = new EntityWrittenContainerEvent(
+            Context::createDefaultContext(),
+            new NestedEventCollection([
+                new EntityWrittenEvent('blog_manufacturer_translation', [
+                    new EntityWriteResult(['blogManufacturerId' => $mId], ['name' => 'M'], 'blog_manufacturer_translation', EntityWriteResult::OPERATION_UPDATE),
+                ], Context::createDefaultContext()),
+            ]),
+            []
+        );
+
+        static::assertSame([$mId], $indexer->getUpdatedIds($event));
+    }
+
+    public function testGetEntity(): void
+    {
+        static::assertSame(BlogManufacturerDefinition::ENTITY_NAME, $this->searchIndexer->getEntity());
+    }
+
+    public function testGetName(): void
+    {
+        static::assertSame('manufacturer-listing', $this->searchIndexer->getName());
+    }
+
+    public function testGetDecoratedShouldThrowException(): void
+    {
+        static::expectException(DecorationPatternException::class);
+        $this->searchIndexer->getDecorated();
+    }
+
+    public function testGlobalData(): void
+    {
+        $context = Context::createDefaultContext();
+        $repository = static::createStub(EntityRepository::class);
+        $blogManufacturer = new BlogManufacturerEntity();
+        $blogManufacturer->setUniqueIdentifier(Uuid::randomHex());
+        $repository->method('search')->willReturn(
+            new EntitySearchResult(
+                'blog_manufacturer',
+                1,
+                new EntityCollection([$blogManufacturer]),
+                null,
+                new Criteria(),
+                $context
+            )
+        );
+
+        $indexer = new ManufacturerAdminSearchIndexer(
+            static::createStub(Connection::class),
+            static::createStub(IteratorFactory::class),
+            $repository,
+            static::createStub(ElasticsearchFieldBuilder::class),
+            100
+        );
+
+        $result = [
+            'total' => 1,
+            'hits' => [
+                ['id' => '809c1844f4734243b6aa04aba860cd45'],
+            ],
+        ];
+
+        $data = $indexer->globalData($result, $context);
+
+        static::assertSame($result['total'], $data['total']);
+    }
+
+    public function testFetching(): void
+    {
+        $connection = $this->getConnection();
+
+        $indexer = new ManufacturerAdminSearchIndexer(
+            $connection,
+            static::createStub(IteratorFactory::class),
+            static::createStub(EntityRepository::class),
+            static::createStub(ElasticsearchFieldBuilder::class),
+            100
+        );
+
+        $id = '809c1844f4734243b6aa04aba860cd45';
+        $documents = $indexer->fetch([$id]);
+
+        static::assertArrayHasKey($id, $documents);
+
+        /** @var array<string, mixed> $document */
+        $document = $documents[$id];
+
+        static::assertSame($id, $document['id']);
+        static::assertSame('manufacturer 809c1844f4734243b6aa04aba860cd45', $document['text']);
+        static::assertIsArray($document['name']);
+    }
+
+    private function getConnection(): Connection
+    {
+        $connection = static::createStub(Connection::class);
+
+        $languageId = 'b7d2554b0ce847cd82f3ac9bd1c0dfca';
+        $connection->method('fetchAllAssociative')->willReturn(
+            [
+                [
+                    'id' => '809c1844f4734243b6aa04aba860cd45',
+                    'name' => 'Manufacturer',
+                    'translatedNames' => json_encode([
+                        ['languageId' => $languageId, 'name' => 'Manufacturer'],
+                    ]),
+                    'createdAt' => '2024-01-01 00:00:00.000',
+                ],
+            ],
+        );
+
+        return $connection;
+    }
+}

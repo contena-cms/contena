@@ -1,0 +1,31 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Dbal\Exception;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\Exception\InvalidSortingDirectionException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Test\Annotation\DisabledFeatures;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ *
+ * @deprecated tag:v6.8.0 - Will be removed, use DataAbstractionLayerException::invalidSortingDirection() instead
+ */
+#[CoversClass(InvalidSortingDirectionException::class)]
+#[DisabledFeatures(['v6.8.0.0'])]
+class InvalidSortingDirectionExceptionTest extends TestCase
+{
+    public function testException(): void
+    {
+        $direction = 'foo';
+        $exception = new InvalidSortingDirectionException($direction);
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
+        static::assertSame('FRAMEWORK__INVALID_SORT_DIRECTION', $exception->getErrorCode());
+        static::assertSame('The given sort direction "' . $direction . '" is invalid.', $exception->getMessage());
+        static::assertSame(['direction' => $direction], $exception->getParameters());
+    }
+}

@@ -1,0 +1,5 @@
+{% sw_extends '@Frontend/frontend/base.html.twig' %}
+
+{% block base_content %}
+    <h1>{{ example }}</h1>
+{% endblock %}

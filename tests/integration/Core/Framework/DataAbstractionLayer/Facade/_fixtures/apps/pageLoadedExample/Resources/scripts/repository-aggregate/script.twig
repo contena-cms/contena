@@ -1,0 +1,14 @@
+{% set page = hook.page %}
+{# @var page \Contena\Frontend\Page\Page #}
+
+{% set criteria = {
+    'aggregations': [
+        { 'name': 'sumOfPrices', 'type': 'sum', 'field': 'price.gross' }
+    ]
+} %}
+
+{% set sumResult = services.repository.aggregate('blog', criteria).get('sumOfPrices') %}
+
+{% do page.addArrayExtension('myProductAggregations', {
+    'sum': sumResult.getSum
+}) %}

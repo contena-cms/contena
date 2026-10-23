@@ -1,0 +1,91 @@
+<!-- eslint-disable vuejs-accessibility/click-events-have-key-events -->
+{% block sw_customer_imitate_customer_modal %}
+<sw-modal
+    :title="modalTitle"
+    :is-loading="isLoading"
+    class="sw-user-imitate-user-modal"
+    @modal-close="onCancel"
+>
+    {% block sw_customer_imitate_customer_modal_alert %}
+    <mt-banner
+        v-if="!isLoading && hasSalesChannelDomains"
+        variant="attention"
+    >
+        <i18n-t
+            keypath="sw-user.imitateCustomerModal.modalInfo"
+            tag="p"
+            scope="local"
+        >
+            <template #logout>
+                <b>{{ $t('sw-user.imitateCustomerModal.modalInfoLogout') }}</b>
+            </template>
+        </i18n-t>
+    </mt-banner>
+
+    <mt-banner
+        v-else-if="!isLoading"
+        variant="info"
+    >
+        {{ $t('sw-user.imitateCustomerModal.modalInfoNoDomains') }}
+    </mt-banner>
+    {% endblock %}
+
+    {% block sw_customer_imitate_customer_modal_description %}
+    <div
+        v-if="!isLoading && hasSalesChannelDomains"
+        class="imitate-user-modal-description"
+    >
+        {{ modalDescription }}
+    </div>
+    {% endblock %}
+
+    {% block sw_customer_imitate_customer_modal_body %}
+    <div
+        v-if="!isLoading && hasSalesChannelDomains"
+        class="imitate-user-modal-container"
+    >
+        {% block sw_customer_imitate_customer_modal_channel_domain_items %}
+        <div
+            v-for="channelDomain of channelDomains"
+            :key="channelDomain.id"
+            class="imitate-user-modal-item"
+            @click="onSalesChannelDomainMenuItemClick(channelDomain.channelId, channelDomain.url)"
+        >
+            <div class="imitate-user-modal-item-content">
+                <div class="imitate-user-modal-item-title">
+                    <div class="imitate-user-modal-item-header">
+                        {{ channelDomain.channel.translated.name }}
+                    </div>
+
+                    <div class="imitate-user-modal-item-url">
+                        {{ channelDomain.url }}
+                    </div>
+                </div>
+
+                <mt-icon
+                    name="regular-external-link-s"
+                    size="14px"
+                />
+            </div>
+        </div>
+        {% endblock %}
+    </div>
+    {% endblock %}
+
+    {% block sw_customer_imitate_customer_modal_footer %}
+    <template #modal-footer>
+        <div>
+            {% block sw_customer_imitate_customer_modal_footer_cancel %}
+            <mt-button
+                size="small"
+                variant="secondary"
+                @click="onCancel"
+            >
+                {{ $t('global.default.close') }}
+            </mt-button>
+            {% endblock %}
+        </div>
+    </template>
+    {% endblock %}
+</sw-modal>
+{% endblock %}

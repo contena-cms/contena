@@ -1,0 +1,63 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Category\Extension;
+
+use Contena\Core\Content\Category\Channel\NavigationRouteResponse;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Extensions\Extension;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Channel\ChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+
+/**
+ * @public This class is used as type-hint for all event listeners, so the class string is "public consumable" API
+ *
+ * @title Loads the navigation categories for the store-api navigation route
+ *
+ * @description Wraps the `/store-api/navigation` loading. A listener on the `.pre` event may resolve the categories itself — e.g. a user-group filtered tree, custom child counts, or an external source — by assigning `$extension->result` and stopping propagation, short-circuiting the core. `.post` may enrich the loaded categories.
+ *
+ * @codeCoverageIgnore
+ *
+ * @extends Extension<NavigationRouteResponse>
+ */
+final class NavigationRouteExtension extends Extension
+{
+    public const NAME = 'navigation-route.load';
+
+    /**
+     * @internal Contena owns the __constructor, but the properties are public API
+     */
+    public function __construct(
+        /**
+         * @public
+         *
+         * @description The active category id
+         */
+        public readonly string $activeId,
+        /**
+         * @public
+         *
+         * @description The root category id of the requested navigation
+         */
+        public readonly string $rootId,
+        /**
+         * @public
+         *
+         * @description The current store-api request
+         */
+        public readonly Request $request,
+        /**
+         * @public
+         *
+         * @description Allows access to the current sales-channel context
+         */
+        public readonly ChannelContext $context,
+        /**
+         * @public
+         *
+         * @description The criteria used to load the categories
+         */
+        public readonly Criteria $criteria,
+    ) {
+    }
+}

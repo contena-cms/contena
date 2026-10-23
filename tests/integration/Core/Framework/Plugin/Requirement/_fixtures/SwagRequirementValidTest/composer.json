@@ -1,0 +1,24 @@
+{
+    "name": "swag/requirement-valid-test",
+    "description": "Test requirement validator",
+    "version": "v1.0.0",
+    "type": "contena-platform-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Contena",
+            "role": "Manufacturer"
+        }
+    ],
+    "require": {
+        "ext-json": "*"
+    },
+    "extra": {
+        "contena-plugin-class": "SwagRequirement\\SwagRequirement",
+        "copyright": "(c) by Contena",
+        "label": {
+            "de-DE": "Test für Requirement Validator",
+            "en-GB": "Test for requirement validator"
+        }
+    }
+}

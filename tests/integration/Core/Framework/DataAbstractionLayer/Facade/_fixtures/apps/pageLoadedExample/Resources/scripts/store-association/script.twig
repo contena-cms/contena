@@ -1,0 +1,14 @@
+{% set page = hook.page %}
+{# @var page \Contena\Frontend\Page\Page #}
+
+{% set criteria = {
+    'ids': [ hook.blogId ],
+    'associations': {
+        'manufacturer': {}
+    }
+} %}
+
+{% set blog = services.store.search('blog', criteria).getEntities().first %}
+
+{% do page.addExtension('myProduct', blog) %}
+{% do page.addExtension('myManufacturer', blog.manufacturer) %}
