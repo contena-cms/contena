@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\System\Tag\TagCollection;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 
 /**
  * @internal
@@ -47,7 +46,6 @@ class RuleEntityTest extends TestCase
         $cartPromotions = new PromotionCollection();
         $flowSequences = new FlowSequenceCollection();
         $tags = new TagCollection();
-        $taxProviders = new TaxProviderCollection();
 
         $rule = new RuleEntity();
         $rule->setName('Cart above 100');
@@ -69,7 +67,6 @@ class RuleEntityTest extends TestCase
         $rule->setCartPromotions($cartPromotions);
         $rule->setFlowSequences($flowSequences);
         $rule->setTags($tags);
-        $rule->setTaxProviders($taxProviders);
 
         static::assertSame('Cart above 100', $rule->getName());
         static::assertSame('Applies to big carts', $rule->getDescription());
@@ -90,7 +87,6 @@ class RuleEntityTest extends TestCase
         static::assertSame($cartPromotions, $rule->getCartPromotions());
         static::assertSame($flowSequences, $rule->getFlowSequences());
         static::assertSame($tags, $rule->getTags());
-        static::assertSame($taxProviders, $rule->getTaxProviders());
     }
 
     public function testPayloadIsReadableOutsideTwig(): void

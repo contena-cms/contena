@@ -151,21 +151,6 @@ class ManifestFixture extends Manifest
         return $this;
     }
 
-    public function withTaxProvider(?TaxProvider $taxProvider = null): self
-    {
-        $taxProviders = $this->tax?->getTaxProviders() ?? [];
-        $taxProviders[] = $taxProvider ?? TaxProvider::fromArray([
-            'identifier' => 'test-tax-provider',
-            'name' => 'Test tax provider',
-            'processUrl' => 'https://example.com/provide-taxes',
-            'priority' => 1,
-        ]);
-
-        $this->tax = Tax::fromArray(['taxProviders' => $taxProviders]);
-
-        return $this;
-    }
-
     public function withWebhook(?Webhook $webhook = null): self
     {
         return $this->withWebhooks($webhook ?? Webhook::fromArray([

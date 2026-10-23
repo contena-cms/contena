@@ -19,7 +19,6 @@ use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\Integration\IntegrationEntity;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 
 /**
  * @internal
@@ -107,7 +106,6 @@ class AppEntityTest extends TestCase
         $templates = new TemplateCollection();
         $scripts = new ScriptCollection();
         $paymentMethods = new AppPaymentMethodCollection();
-        $taxProviders = new TaxProviderCollection();
         $scriptConditions = new AppScriptConditionCollection();
         $cmsBlocks = new AppCmsBlockCollection();
         $flowActions = new AppFlowActionCollection();
@@ -123,7 +121,6 @@ class AppEntityTest extends TestCase
         $app->setTemplates($templates);
         $app->setScripts($scripts);
         $app->setPaymentMethods($paymentMethods);
-        $app->setTaxProviders($taxProviders);
         $app->setScriptConditions($scriptConditions);
         $app->setCmsBlocks($cmsBlocks);
         $app->setFlowActions($flowActions);
@@ -139,7 +136,6 @@ class AppEntityTest extends TestCase
         static::assertSame($templates, $app->getTemplates());
         static::assertSame($scripts, $app->getScripts());
         static::assertSame($paymentMethods, $app->getPaymentMethods());
-        static::assertSame($taxProviders, $app->getTaxProviders());
         static::assertSame($scriptConditions, $app->getScriptConditions());
         static::assertSame($cmsBlocks, $app->getCmsBlocks());
         static::assertSame($flowActions, $app->getFlowActions());

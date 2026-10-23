@@ -12,7 +12,6 @@ test(
         await ShopAdmin.expects(AdminRuleDetail.paymentMethodsAvailabilityRulesCardEmptyState).toHaveText(
             'This rule is not in use',
         );
-        await ShopAdmin.expects(AdminRuleDetail.taxProviderRulesCardEmptyState).toHaveText('This rule is not in use');
         await ShopAdmin.expects(AdminRuleDetail.promotionOrderRulesCardEmptyState).toHaveText('This rule is not in use');
         await ShopAdmin.expects(AdminRuleDetail.promotionCustomerRulesCardEmptyState).toHaveText('This rule is not in use');
         await ShopAdmin.expects(AdminRuleDetail.promotionCartRulesCardEmptyState).toHaveText('This rule is not in use');
