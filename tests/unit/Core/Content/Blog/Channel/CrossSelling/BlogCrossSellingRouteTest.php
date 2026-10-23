@@ -568,10 +568,6 @@ class BlogCrossSellingRouteTest extends TestCase
             ->willReturnCallback(static function (Criteria $criteria) use ($blogId, $crossSellingBlog): EntitySearchResult {
                 static::assertEquals(
                     [
-                        new NotFilter(NotFilter::CONNECTION_OR, [
-                            new EqualsFilter('blog.id', $blogId),
-                            new EqualsFilter('blog.parentId', $blogId),
-                        ]),
                     ],
                     $criteria->getFilters()
                 );
@@ -747,28 +743,4 @@ class BlogCrossSellingRouteTest extends TestCase
         );
     }
 
-    private function stubStreamCrossSelling(string $blogId, string $streamId): BlogCrossSellingEntity
-    {
-        $crossSelling = new BlogCrossSellingEntity();
-        $crossSelling->setUniqueIdentifier(Uuid::randomHex());
-        $crossSelling->setType(BlogCrossSellingDefinition::TYPE_CONTENT_STREAM);
-        $crossSelling->setBlogStreamId($streamId);
-        $crossSelling->setBlogId($blogId);
-        $crossSelling->setLimit(10);
-        $crossSelling->setSortBy('name');
-        $crossSelling->setSortDirection('ASC');
-
-        $this->crossSellingRepository->method('search')->willReturn(
-            new EntitySearchResult(
-                'blog_cross_selling',
-                1,
-                new BlogCrossSellingCollection([$crossSelling]),
-                null,
-                new Criteria(),
-                Context::createDefaultContext()
-            )
-        );
-
-        return $crossSelling;
-    }
 }

@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class PluginEntity extends Entity
 {

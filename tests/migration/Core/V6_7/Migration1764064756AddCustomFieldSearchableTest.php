@@ -17,7 +17,6 @@ class Migration1764064756AddCustomFieldSearchableTest extends TestCase
 {
     private readonly Connection $connection;
 
-    private readonly Migration1764064756AddCustomFieldSearchable $migration;
 
     protected function setUp(): void
     {

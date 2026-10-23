@@ -7,13 +7,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Order\Channel\AbstractOrderRoute;
-use Contena\Core\Checkout\Order\Channel\OrderRouteResponse;
 use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Annotation\DisabledFeatures;
@@ -43,7 +39,6 @@ class AccountOrderDetailPageLoaderTest extends TestCase
 
     private GenericPageLoaderInterface&MockObject $genericPageLoader;
 
-    private AccountOrderDetailPageLoader $pageLoader;
 
     protected function setUp(): void
     {
@@ -166,17 +161,4 @@ class AccountOrderDetailPageLoaderTest extends TestCase
         yield 'route attribute takes precedence over query' => [$fromBothBags, $attributeId];
     }
 
-    private function orderResponse(OrderCollection $orders): OrderRouteResponse
-    {
-        return new OrderRouteResponse(
-            new EntitySearchResult(
-                OrderDefinition::ENTITY_NAME,
-                $orders->count(),
-                $orders,
-                null,
-                new Criteria(),
-                Context::createDefaultContext(),
-            ),
-        );
-    }
 }

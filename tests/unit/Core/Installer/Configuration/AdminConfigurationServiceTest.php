@@ -44,7 +44,7 @@ class AdminConfigurationServiceTest extends TestCase
             new FakeQueryBuilder($connection, [[$localeId]])
         );
 
-        $admin_user = [
+        $adminUser = [
             'username' => 'admin',
             'password' => 'contena',
             'name' => 'first',
@@ -53,6 +53,6 @@ class AdminConfigurationServiceTest extends TestCase
         ];
 
         $service = new AdminConfigurationService(new NativeClock());
-        $service->createAdmin($admin_user, $connection);
+        $service->createAdmin($adminUser, $connection);
     }
 }

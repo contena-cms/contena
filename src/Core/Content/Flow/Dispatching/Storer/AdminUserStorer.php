@@ -19,12 +19,12 @@ class AdminUserStorer extends FlowStorer
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserRecoveryCollection> $admin_userRecoveryRepository
+     * @param EntityRepository<AdminUserRecoveryCollection> $adminUserRecoveryRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRecoveryRepository,
+        private readonly EntityRepository $adminUserRecoveryRepository,
         private readonly EventDispatcherInterface $dispatcher,
-        private readonly AdminUserRecoveryProvider $admin_userRecoveryProvider,
+        private readonly AdminUserRecoveryProvider $adminUserRecoveryProvider,
     ) {
     }
 
@@ -69,10 +69,10 @@ class AdminUserStorer extends FlowStorer
 
             $this->dispatcher->dispatch($event, $event->getName());
 
-            $admin_userRecovery = $this->admin_userRecoveryRepository->search($criteria, $storableFlow->getContext())->getEntities()->get($id);
+            $adminUserRecovery = $this->admin_userRecoveryRepository->search($criteria, $storableFlow->getContext())->getEntities()->get($id);
 
-            if ($admin_userRecovery) {
-                return $admin_userRecovery;
+            if ($adminUserRecovery) {
+                return $adminUserRecovery;
             }
 
             return null;

@@ -10,11 +10,11 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\User\UserEntity;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
-use Contena\Frontend\Page\Account\Overview\AccountOverviewPageLoadedHook;
 use Contena\Frontend\Page\Account\Profile\AccountProfilePageLoadedHook;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
 /**
  * @internal
@@ -23,24 +23,6 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class AccountProfileController extends FrontendController
 {
-
-    #[Route(
-        path: '/account',
-        name: 'frontend.account.home.page',
-        defaults: [
-            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
-            PlatformRequest::ATTRIBUTE_NO_STORE => true,
-        ],
-        methods: [Request::METHOD_GET]
-    )]
-    public function index(Request $request, ChannelContext $context, UserEntity $user): Response
-    {
-        $page = $this->overviewPageLoader->load($request, $context, $user);
-
-        $this->hook(new AccountOverviewPageLoadedHook($page, $context));
-
-        return $this->renderFrontend('@Frontend/frontend/page/account/index.html.twig', ['page' => $page]);
-    }
 
     #[Route(
         path: '/account/profile',

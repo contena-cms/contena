@@ -4,6 +4,7 @@ namespace Contena\Core\System\Channel;
 
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Struct\VariablesAccessTrait;
 
 /**
  * @template TResponseObject of Struct

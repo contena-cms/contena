@@ -8,6 +8,7 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\CustomFieldType;
 use Symfony\Component\Validator\Constraint;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @phpstan-import-type CustomFieldTypeArray from CustomFieldType

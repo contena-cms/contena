@@ -10,6 +10,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\Structs\MailTemplateCreateStruct;
 use Contena\Core\Migration\Structs\MailTemplateTypeCreateStruct;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Migration\Traits\CreateMailTemplateTrait;
 
 /**
  * @internal

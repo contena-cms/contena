@@ -17,7 +17,6 @@ class Migration1700746995ReplaceSortingOptionKeysWithSortingOptionIdsTest extend
 {
     use MigrationTestTrait;
 
-    private Migration1700746995ReplaceSortingOptionKeysWithSortingOptionIds $migration;
 
     private Connection $connection;
 

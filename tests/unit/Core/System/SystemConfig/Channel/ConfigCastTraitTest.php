@@ -5,6 +5,7 @@ namespace Contena\Tests\Unit\Core\System\SystemConfig\Channel;
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\System\SystemConfig\Channel\ConfigCastTrait;
 
 /**
  * @internal

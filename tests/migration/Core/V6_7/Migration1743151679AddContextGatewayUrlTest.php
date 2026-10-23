@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_6\Migration1696515133AddCheckoutGatewayUrl;
 use Contena\Core\Migration\V6_7\Migration1743151679AddContextGatewayUrl;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

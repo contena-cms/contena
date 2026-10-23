@@ -8,6 +8,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Maintenance\MaintenanceException;
 use Contena\Core\Maintenance\System\Struct\DatabaseConnectionInformation;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

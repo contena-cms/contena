@@ -19,7 +19,6 @@ class Migration1782906166RepairUserActiveDefaultTest extends TestCase
 {
     private Connection $connection;
 
-    private Migration1782906166RepairUserActiveDefault $migration;
 
     protected function setUp(): void
     {
@@ -36,25 +35,25 @@ class Migration1782906166RepairUserActiveDefaultTest extends TestCase
     {
         $originalDefault = $this->activeColumnDefault();
         $inactiveUserIds = $this->fetchInactiveUserIds();
-        $admin_userId = null;
+        $adminUserId = null;
 
         try {
             $this->setActiveColumnDefault(0);
-            $admin_userId = $this->createUser();
+            $adminUserId = $this->createUser();
 
             static::assertSame('0', $this->activeColumnDefault());
-            static::assertFalse($this->isUserActive($admin_userId));
+            static::assertFalse($this->isUserActive($adminUserId));
 
             $this->migration->update($this->connection);
             $this->migration->update($this->connection);
 
             static::assertSame('1', $this->activeColumnDefault());
-            static::assertTrue($this->isUserActive($admin_userId));
+            static::assertTrue($this->isUserActive($adminUserId));
         } finally {
             $this->restoreInactiveUsers($inactiveUserIds);
 
-            if ($admin_userId !== null) {
-                $this->deleteUser($admin_userId);
+            if ($adminUserId !== null) {
+                $this->deleteUser($adminUserId);
             }
 
             $this->setActiveColumnDefault((int) $originalDefault);
@@ -64,19 +63,19 @@ class Migration1782906166RepairUserActiveDefaultTest extends TestCase
     public function testMigrationDoesNothingWhenDefaultIsAlreadyTrue(): void
     {
         $originalDefault = $this->activeColumnDefault();
-        $admin_userId = null;
+        $adminUserId = null;
 
         try {
             $this->setActiveColumnDefault(1);
-            $admin_userId = $this->createUser(active: 0);
+            $adminUserId = $this->createUser(active: 0);
 
             $this->migration->update($this->connection);
 
             static::assertSame('1', $this->activeColumnDefault());
-            static::assertFalse($this->isUserActive($admin_userId));
+            static::assertFalse($this->isUserActive($adminUserId));
         } finally {
-            if ($admin_userId !== null) {
-                $this->deleteUser($admin_userId);
+            if ($adminUserId !== null) {
+                $this->deleteUser($adminUserId);
             }
 
             $this->setActiveColumnDefault((int) $originalDefault);
@@ -153,16 +152,16 @@ class Migration1782906166RepairUserActiveDefaultTest extends TestCase
         return $localeId;
     }
 
-    private function isUserActive(string $admin_userId): bool
+    private function isUserActive(string $adminUserId): bool
     {
         return (bool) $this->connection->fetchOne(
             'SELECT `active` FROM `admin_user` WHERE `id` = :id',
-            ['id' => $admin_userId]
+            ['id' => $adminUserId]
         );
     }
 
-    private function deleteUser(string $admin_userId): void
+    private function deleteUser(string $adminUserId): void
     {
-        $this->connection->delete('admin_user', ['id' => $admin_userId]);
+        $this->connection->delete('admin_user', ['id' => $adminUserId]);
     }
 }

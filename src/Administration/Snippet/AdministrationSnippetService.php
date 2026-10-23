@@ -4,6 +4,7 @@ namespace Contena\Administration\Snippet;
 
 use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Symfony\Component\HttpFoundation\Request;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
  * @internal

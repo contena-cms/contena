@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Property\Aggregate\PropertyGroupOptionTranslation
 
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

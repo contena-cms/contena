@@ -4,6 +4,8 @@ namespace Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -13,7 +15,7 @@ class AdminUserAccessKeyEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected string $admin_userId;
+    protected string $adminUserId;
 
     protected string $accessKey;
 
@@ -21,16 +23,16 @@ class AdminUserAccessKeyEntity extends Entity
 
     protected ?\DateTimeInterface $lastUsageAt = null;
 
-    protected ?AdminUserEntity $admin_user = null;
+    protected ?AdminUserEntity $adminUser = null;
 
     public function getUserId(): string
     {
         return $this->admin_userId;
     }
 
-    public function setUserId(string $admin_userId): void
+    public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $admin_userId;
+        $this->admin_userId = $adminUserId;
     }
 
     public function getAccessKey(): string
@@ -68,8 +70,8 @@ class AdminUserAccessKeyEntity extends Entity
         return $this->admin_user;
     }
 
-    public function setUser(AdminUserEntity $admin_user): void
+    public function setUser(AdminUserEntity $adminUser): void
     {
-        $this->admin_user = $admin_user;
+        $this->admin_user = $adminUser;
     }
 }

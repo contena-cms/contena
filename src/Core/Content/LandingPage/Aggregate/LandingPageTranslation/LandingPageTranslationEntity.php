@@ -6,6 +6,7 @@ use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 class LandingPageTranslationEntity extends TranslationEntity
 {

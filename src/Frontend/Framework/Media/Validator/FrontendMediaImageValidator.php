@@ -5,6 +5,7 @@ namespace Contena\Frontend\Framework\Media\Validator;
 use Contena\Frontend\Framework\FrontendFrameworkException;
 use Contena\Frontend\Framework\Media\FrontendMediaValidatorInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Contena\Frontend\Framework\Media\Validator\MimeTypeValidationTrait;
 
 class FrontendMediaImageValidator implements FrontendMediaValidatorInterface
 {

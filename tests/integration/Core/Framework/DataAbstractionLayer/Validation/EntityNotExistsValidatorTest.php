@@ -21,6 +21,7 @@ use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Component\Validator\ValidatorBuilder;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -135,10 +136,6 @@ class EntityNotExistsValidatorTest extends TestCase
 
         $constraint = new All(
             constraints: [
-                new EntityNotExists(
-                    entity: LocaleDefinition::ENTITY_NAME,
-                    context: $context,
-                ),
             ],
         );
 

@@ -139,32 +139,6 @@ class CheapestPriceUpdaterTest extends TestCase
         yield 'variant without visibility rows' => [[]];
     }
 
-    /**
-     * @param array<int, array<string, mixed>> $dataResults
-     * @param array<int, array<string, mixed>> $visibilityResults
-     */
-    private function createMockedUpdater(array $dataResults, array $visibilityResults, ?EventDispatcherInterface $dispatcher = null): CheapestPriceUpdater
-    {
-        $result1 = static::createStub(Result::class);
-        $result1->method('fetchAllAssociative')->willReturn($dataResults);
-
-        $result2 = static::createStub(Result::class);
-        $result2->method('fetchAllAssociative')->willReturn([]);
-
-        $this->queryBuilder->method('executeQuery')->willReturnOnConsecutiveCalls($result1, $result2);
-
-        $this->connection->method('fetchAllAssociative')
-            ->willReturnCallback(
-                // the accessor pre-load query has its own row shape; only the visibility query gets rows
-                static fn (string $sql): array => str_contains($sql, 'cheapest_price_accessor') ? [] : $visibilityResults
-            );
-
-        return new CheapestPriceUpdater(
-            $this->connection,
-            $this->quantitySelector,
-            $dispatcher ?? static::createStub(EventDispatcherInterface::class)
-        );
-    }
 
     /**
      * @return array<string, mixed>

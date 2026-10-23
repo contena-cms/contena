@@ -35,6 +35,9 @@ use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

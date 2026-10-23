@@ -32,6 +32,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
+use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

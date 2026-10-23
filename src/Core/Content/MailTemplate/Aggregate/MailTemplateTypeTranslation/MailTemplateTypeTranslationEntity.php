@@ -4,6 +4,7 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailTemplateTypeTranslatio
 
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

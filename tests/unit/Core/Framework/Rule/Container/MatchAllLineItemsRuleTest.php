@@ -339,11 +339,4 @@ class MatchAllLineItemsRuleTest extends TestCase
         static::assertInstanceOf(Type::class, $constraints['types'][0]);
     }
 
-    /**
-     * @param array<string> $categoryIds
-     */
-    private function createLineItemWithCategories(array $categoryIds): LineItem
-    {
-        return CartRuleFixture::createLineItem()->setPayloadValue('categoryIds', $categoryIds);
-    }
 }

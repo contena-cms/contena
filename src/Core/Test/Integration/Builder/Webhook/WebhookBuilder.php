@@ -12,7 +12,7 @@ use Contena\Core\Framework\Uuid\Uuid;
  * An app-less webhook is only loaded for delivery when it has an owner.
  *
  * How to use:
- * $webhookId = WebhookBuilder::ownedByUser($admin_userId)
+ * $webhookId = WebhookBuilder::ownedByUser($adminUserId)
  *          ->subscribe('blog.written', 'https://example.com/hook')
  *          ->insert($connection);
  */
@@ -43,9 +43,9 @@ class WebhookBuilder
         $this->id = Uuid::randomHex();
     }
 
-    public static function ownedByUser(string $admin_userId): self
+    public static function ownedByUser(string $adminUserId): self
     {
-        return new self(ownerUserId: $admin_userId);
+        return new self(ownerUserId: $adminUserId);
     }
 
     public static function ownedByIntegration(string $integrationId): self

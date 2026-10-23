@@ -9,6 +9,7 @@ use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingUpdater;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -19,7 +20,6 @@ class VariantListingUpdaterTest extends TestCase
 
     private Connection $connection;
 
-    private VariantListingUpdater $updater;
 
     protected function setUp(): void
     {

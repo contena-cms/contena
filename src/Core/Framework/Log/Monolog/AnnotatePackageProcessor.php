@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\Log\Monolog;
 use Monolog\LogRecord;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Log\PackageService;
+use Monolog\Processor\ProcessorInterface;
 
 /**
  * @internal

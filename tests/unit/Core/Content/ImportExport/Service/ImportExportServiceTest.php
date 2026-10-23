@@ -69,13 +69,13 @@ class ImportExportServiceTest extends TestCase
         $logRepo = new StaticEntityRepository([], new ImportExportLogDefinition());
 
         /** @var StaticEntityRepository<AdminUserCollection> */
-        $admin_userRepo = new StaticEntityRepository([], new AdminUserDefinition());
+        $adminUserRepo = new StaticEntityRepository([], new AdminUserDefinition());
 
         $profileRepo = new StaticEntityRepository([new EntityCollection([$profile])], new ImportExportProfileDefinition());
 
         return new ImportExportService(
             $logRepo,
-            $admin_userRepo,
+            $adminUserRepo,
             $profileRepo,
             static::createStub(FileService::class),
         );

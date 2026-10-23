@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Validation\DataBag;
 
 use Symfony\Component\HttpFoundation\ParameterBag;
+use Symfony\Component\HttpFoundation\Exception\BadRequestException;
 
 class DataBag extends ParameterBag
 {

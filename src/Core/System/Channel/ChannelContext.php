@@ -12,6 +12,7 @@ use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\UserEntity;
+use Contena\Core\Framework\Struct\StateAwareTrait;
 
 class ChannelContext extends Struct
 {

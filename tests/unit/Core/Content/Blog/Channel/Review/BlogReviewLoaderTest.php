@@ -5,20 +5,14 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Channel\Review;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewEntity;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewLoader;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewRoute;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewRouteResponse;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
-use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
@@ -221,51 +215,8 @@ class BlogReviewLoaderTest extends TestCase
         static::assertCount(1, $result->getEntities());
     }
 
-    private function getReviewEntity(string $reviewId): BlogReviewEntity
-    {
-        $user = new UserEntity();
-        $user->setId(Uuid::randomHex());
-        $review = new BlogReviewEntity();
-        $review->setId($reviewId);
-        $review->setUniqueIdentifier($reviewId);
-        $review->setUser($user);
 
-        return $review;
-    }
 
-    private function getBlogReviewLoader(
-        BlogReviewRoute $blogReviewRoute
-    ): BlogReviewLoader {
-        return new BlogReviewLoader(
-            $blogReviewRoute,
-            $this->systemConfigService,
-            static::createStub(EventDispatcherInterface::class)
-        );
-    }
-
-    /**
-     * @return EntitySearchResult<BlogReviewCollection>
-     */
-    private function getDefaultResult(
-        BlogReviewCollection $reviews,
-        Request $request,
-        ChannelContext $channelContext
-    ): EntitySearchResult {
-        $criteria = $this->createCriteria($request, $channelContext);
-
-        return new EntitySearchResult(
-            BlogReviewDefinition::ENTITY_NAME,
-            1,
-            $reviews,
-            new AggregationResultCollection(
-                [
-                    'ratingMatrix' => new TermsResult('ratingMatrix', []),
-                ],
-            ),
-            $criteria,
-            Context::createDefaultContext()
-        );
-    }
 
     private function getChannelContext(bool $setUser = true): ChannelContext
     {
@@ -322,7 +273,6 @@ class BlogReviewLoaderTest extends TestCase
                 'user-login-filter',
                 new TermsAggregation('ratingMatrix', 'points'),
                 [
-                    new MultiFilter(MultiFilter::CONNECTION_OR, $reviewFilters),
                 ]
             ),
             new FilterAggregation(
@@ -330,7 +280,6 @@ class BlogReviewLoaderTest extends TestCase
                 new TermsAggregation('languageMatrix', 'languageId'),
                 [
                     new EqualsFilter('languageId', $context->getLanguageId()),
-                    new MultiFilter(MultiFilter::CONNECTION_OR, $reviewFilters),
                 ]
             )
         );

@@ -25,13 +25,13 @@ class AdminUserRecoveryControllerTest extends TestCase
         $ip = '10.0.0.1';
         $expectedUsernameKey = strtolower($username);
 
-        $admin_user = new AdminUserEntity();
-        $admin_user->setUsername($username);
-        $admin_user->setEmail($email);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setUsername($username);
+        $adminUser->setEmail($email);
 
-        $admin_userRecoveryService = $this->createMock(AdminUserRecoveryService::class);
-        $admin_userRecoveryService->expects($this->once())->method('getUserByHash')->willReturn($admin_user);
-        $admin_userRecoveryService->expects($this->once())->method('updatePassword')->willReturn(true);
+        $adminUserRecoveryService = $this->createMock(AdminUserRecoveryService::class);
+        $adminUserRecoveryService->expects($this->once())->method('getUserByHash')->willReturn($adminUser);
+        $adminUserRecoveryService->expects($this->once())->method('updatePassword')->willReturn(true);
 
         $resetCalls = [];
         $resetIfConfiguredCalls = [];
@@ -48,7 +48,7 @@ class AdminUserRecoveryControllerTest extends TestCase
                 $resetIfConfiguredCalls[] = [$route, $key];
             });
 
-        $controller = new AdminUserRecoveryController($admin_userRecoveryService, $rateLimiter);
+        $controller = new AdminUserRecoveryController($adminUserRecoveryService, $rateLimiter);
 
         $request = new Request(server: ['REMOTE_ADDR' => $ip]);
         $request->request->set('hash', 'some-hash');
@@ -72,13 +72,13 @@ class AdminUserRecoveryControllerTest extends TestCase
 
     public function testCreateUserRecoveryIsSilentNoOpWhenDisabled(): void
     {
-        $admin_userRecoveryService = $this->createMock(AdminUserRecoveryService::class);
-        $admin_userRecoveryService->expects($this->never())->method('generateUserRecovery');
+        $adminUserRecoveryService = $this->createMock(AdminUserRecoveryService::class);
+        $adminUserRecoveryService->expects($this->never())->method('generateUserRecovery');
 
         $rateLimiter = $this->createMock(RateLimiter::class);
         $rateLimiter->expects($this->never())->method('ensureAccepted');
 
-        $controller = new AdminUserRecoveryController($admin_userRecoveryService, $rateLimiter, false);
+        $controller = new AdminUserRecoveryController($adminUserRecoveryService, $rateLimiter, false);
 
         $request = new Request();
         $request->request->set('email', 'admin@example.com');
@@ -90,11 +90,11 @@ class AdminUserRecoveryControllerTest extends TestCase
 
     public function testCheckUserRecoveryIsRejectedWhenDisabled(): void
     {
-        $admin_userRecoveryService = $this->createMock(AdminUserRecoveryService::class);
-        $admin_userRecoveryService->expects($this->never())->method('checkHash');
+        $adminUserRecoveryService = $this->createMock(AdminUserRecoveryService::class);
+        $adminUserRecoveryService->expects($this->never())->method('checkHash');
 
         $controller = new AdminUserRecoveryController(
-            $admin_userRecoveryService,
+            $adminUserRecoveryService,
             static::createStub(RateLimiter::class),
             false,
         );
@@ -109,15 +109,15 @@ class AdminUserRecoveryControllerTest extends TestCase
 
     public function testUpdateUserPasswordIsRejectedWhenDisabled(): void
     {
-        $admin_userRecoveryService = $this->createMock(AdminUserRecoveryService::class);
-        $admin_userRecoveryService->expects($this->never())->method('getUserByHash');
-        $admin_userRecoveryService->expects($this->never())->method('updatePassword');
+        $adminUserRecoveryService = $this->createMock(AdminUserRecoveryService::class);
+        $adminUserRecoveryService->expects($this->never())->method('getUserByHash');
+        $adminUserRecoveryService->expects($this->never())->method('updatePassword');
 
         $rateLimiter = $this->createMock(RateLimiter::class);
         $rateLimiter->expects($this->never())->method('reset');
         $rateLimiter->expects($this->never())->method('resetIfConfigured');
 
-        $controller = new AdminUserRecoveryController($admin_userRecoveryService, $rateLimiter, false);
+        $controller = new AdminUserRecoveryController($adminUserRecoveryService, $rateLimiter, false);
 
         $request = new Request();
         $request->request->set('hash', 'some-hash');
@@ -152,14 +152,14 @@ class AdminUserRecoveryControllerTest extends TestCase
 
     public function testRateLimitersNotResetWhenUserNotFound(): void
     {
-        $admin_userRecoveryService = $this->createMock(AdminUserRecoveryService::class);
-        $admin_userRecoveryService->expects($this->once())->method('getUserByHash')->willReturn(null);
+        $adminUserRecoveryService = $this->createMock(AdminUserRecoveryService::class);
+        $adminUserRecoveryService->expects($this->once())->method('getUserByHash')->willReturn(null);
 
         $rateLimiter = $this->createMock(RateLimiter::class);
         $rateLimiter->expects($this->never())->method('reset');
         $rateLimiter->expects($this->never())->method('resetIfConfigured');
 
-        $controller = new AdminUserRecoveryController($admin_userRecoveryService, $rateLimiter);
+        $controller = new AdminUserRecoveryController($adminUserRecoveryService, $rateLimiter);
 
         $request = new Request();
         $request->request->set('hash', 'some-hash');

@@ -43,9 +43,6 @@ class DangerConfigChangedTest extends TestCase
     public function testSingleNoticeForMultipleMatches(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('.danger.php'),
-            new StubFile('src/Core/DevOps/StaticAnalyze/Danger/Rules/MissingUnitTests.php'),
-            new StubFile('vendor-bin/danger-php/composer.json'),
         ])));
 
         (new DangerConfigChanged())($context);

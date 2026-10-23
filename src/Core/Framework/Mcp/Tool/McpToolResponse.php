@@ -14,6 +14,7 @@ use Contena\Core\Framework\Mcp\ToolResultCacheStorage;
 use Contena\Core\Framework\Util\Json;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Contena\Core\Framework\DataAbstractionLayer\Exception\SearchRequestException;
 
 /**
  * @experimental stableVersion:v6.8.0

@@ -13,6 +13,7 @@ use SwagTestPlugin\SwagTestPlugin;
 use SwagTestWithBundle\SwagTestWithBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
+use Contena\Core\Framework\Test\Plugin\PluginIntegrationTestBehaviour;
 
 /**
  * @internal

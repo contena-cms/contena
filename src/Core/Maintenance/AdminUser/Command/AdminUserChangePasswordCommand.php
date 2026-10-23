@@ -28,9 +28,9 @@ use Symfony\Component\Validator\Validation;
 class AdminUserChangePasswordCommand extends Command
 {
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
-    public function __construct(private readonly EntityRepository $admin_userRepository)
+    public function __construct(private readonly EntityRepository $adminUserRepository)
     {
         parent::__construct();
     }
@@ -60,8 +60,8 @@ class AdminUserChangePasswordCommand extends Command
             $password = $io->askQuestion($passwordQuestion);
         }
 
-        $admin_userId = $this->getUserId($username, $context);
-        if ($admin_userId === null) {
+        $adminUserId = $this->getUserId($username, $context);
+        if ($adminUserId === null) {
             $io->error(\sprintf('The admin_user "%s" does not exist.', $username));
 
             return self::FAILURE;
@@ -69,7 +69,7 @@ class AdminUserChangePasswordCommand extends Command
 
         $this->admin_userRepository->update([
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'password' => $password,
             ],
         ], $context);

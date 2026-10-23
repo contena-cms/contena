@@ -17,6 +17,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerF
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\BlogExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendedBlogDefinition;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

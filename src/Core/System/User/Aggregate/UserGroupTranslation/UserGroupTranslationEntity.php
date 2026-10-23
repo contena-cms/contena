@@ -4,6 +4,8 @@ namespace Contena\Core\System\User\Aggregate\UserGroupTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

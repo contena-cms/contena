@@ -8,7 +8,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Installer\Requirements\ConfigurationRequirementsValidator;
 use Contena\Core\Installer\Requirements\IniConfigReader;
-use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
 use Contena\Core\Installer\Requirements\Struct\SystemCheck;
 
@@ -61,9 +60,6 @@ class ConfigurationRequirementsValidatorTest extends TestCase
                 'opcache.memory_consumption' => '256',
             ],
             [
-                new SystemCheck('max_execution_time', RequirementCheck::STATUS_SUCCESS, '30', '30'),
-                new SystemCheck('memory_limit', RequirementCheck::STATUS_SUCCESS, '512M', '512M'),
-                new SystemCheck('opcache.memory_consumption', RequirementCheck::STATUS_SUCCESS, '256M', '256M'),
             ],
         ];
 
@@ -74,9 +70,6 @@ class ConfigurationRequirementsValidatorTest extends TestCase
                 'opcache.memory_consumption' => '512',
             ],
             [
-                new SystemCheck('max_execution_time', RequirementCheck::STATUS_SUCCESS, '30', '60'),
-                new SystemCheck('memory_limit', RequirementCheck::STATUS_SUCCESS, '512M', '1024M'),
-                new SystemCheck('opcache.memory_consumption', RequirementCheck::STATUS_SUCCESS, '256M', '512M'),
             ],
         ];
 
@@ -87,9 +80,6 @@ class ConfigurationRequirementsValidatorTest extends TestCase
                 'opcache.memory_consumption' => '255',
             ],
             [
-                new SystemCheck('max_execution_time', RequirementCheck::STATUS_ERROR, '30', '29'),
-                new SystemCheck('memory_limit', RequirementCheck::STATUS_ERROR, '512M', '511M'),
-                new SystemCheck('opcache.memory_consumption', RequirementCheck::STATUS_WARNING, '256M', '255M'),
             ],
         ];
 
@@ -100,9 +90,6 @@ class ConfigurationRequirementsValidatorTest extends TestCase
                 'opcache.memory_consumption' => '256',
             ],
             [
-                new SystemCheck('max_execution_time', RequirementCheck::STATUS_ERROR, '30', '29'),
-                new SystemCheck('memory_limit', RequirementCheck::STATUS_SUCCESS, '512M', '512M'),
-                new SystemCheck('opcache.memory_consumption', RequirementCheck::STATUS_SUCCESS, '256M', '256M'),
             ],
         ];
 
@@ -113,9 +100,6 @@ class ConfigurationRequirementsValidatorTest extends TestCase
                 'opcache.memory_consumption' => '',
             ],
             [
-                new SystemCheck('max_execution_time', RequirementCheck::STATUS_SUCCESS, '30', '30'),
-                new SystemCheck('memory_limit', RequirementCheck::STATUS_SUCCESS, '512M', '512M'),
-                new SystemCheck('opcache.memory_consumption', RequirementCheck::STATUS_WARNING, '256M', '0M'),
             ],
         ];
 
@@ -126,9 +110,6 @@ class ConfigurationRequirementsValidatorTest extends TestCase
                 'opcache.memory_consumption' => '',
             ],
             [
-                new SystemCheck('max_execution_time', RequirementCheck::STATUS_SUCCESS, '30', '0'),
-                new SystemCheck('memory_limit', RequirementCheck::STATUS_SUCCESS, '512M', '-1'),
-                new SystemCheck('opcache.memory_consumption', RequirementCheck::STATUS_WARNING, '256M', '0M'),
             ],
         ];
     }

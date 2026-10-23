@@ -5,6 +5,12 @@ namespace Contena\Tests\Integration\Frontend\Controller;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\RequestStackTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

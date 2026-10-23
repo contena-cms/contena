@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\Script\Execution;
 
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
+use Twig\Error\LoaderError;
 
 /**
  * @internal only for use by the app-system

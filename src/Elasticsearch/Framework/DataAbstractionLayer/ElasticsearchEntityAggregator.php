@@ -13,6 +13,7 @@ use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEnti
 use Contena\Elasticsearch\Framework\DataAbstractionLayer\Event\ElasticsearchEntityAggregatorSearchEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Elasticsearch\Framework\Exception\EmptyQueryException;
 
 class ElasticsearchEntityAggregator implements EntityAggregatorInterface
 {

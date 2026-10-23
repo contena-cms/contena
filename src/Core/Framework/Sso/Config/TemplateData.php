@@ -9,6 +9,7 @@ namespace Contena\Core\Framework\Sso\Config;
 final class TemplateData implements \JsonSerializable
 {
     use JsonSerializableTrait;
+use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     public function __construct(
         public readonly bool $useDefault,

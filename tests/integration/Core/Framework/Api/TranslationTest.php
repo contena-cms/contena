@@ -13,6 +13,7 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\Language\TranslationValidator;
 use Contena\Core\System\Locale\LocaleEntity;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

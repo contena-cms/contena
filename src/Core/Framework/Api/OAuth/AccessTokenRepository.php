@@ -17,11 +17,11 @@ class AccessTokenRepository implements AccessTokenRepositoryInterface
     /**
      * {@inheritdoc}
      *
-     * @param non-empty-string|null $admin_userIdentifier
+     * @param non-empty-string|null $adminUserIdentifier
      */
-    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, ?string $admin_userIdentifier = null): AccessTokenEntityInterface
+    public function getNewToken(ClientEntityInterface $clientEntity, array $scopes, ?string $adminUserIdentifier = null): AccessTokenEntityInterface
     {
-        $token = new AccessToken($clientEntity, $scopes, $admin_userIdentifier);
+        $token = new AccessToken($clientEntity, $scopes, $adminUserIdentifier);
 
         if ($clientEntity instanceof ApiClient && $clientEntity->getIdentifier() === 'administration') {
             $token->setIdentifier('administration');

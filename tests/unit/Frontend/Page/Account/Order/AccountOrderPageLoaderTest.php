@@ -36,7 +36,6 @@ class AccountOrderPageLoaderTest extends TestCase
 
     private OrderRoute&MockObject $orderRoute;
 
-    private AccountOrderPageLoader $pageLoader;
 
     private AbstractTranslator&MockObject $translator;
 

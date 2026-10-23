@@ -13,7 +13,6 @@ use Contena\Core\Content\Blog\Channel\Review\MatrixElement;
 #[CoversClass(MatrixElement::class)]
 class MatrixElementTest extends TestCase
 {
-    private MatrixElement $element;
 
     protected function setUp(): void
     {

@@ -14,6 +14,8 @@ use Contena\Core\Content\Media\Thumbnail\ThumbnailService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Content\Test\Media\MediaFixtures;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

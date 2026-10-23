@@ -20,6 +20,7 @@ use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeService;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal

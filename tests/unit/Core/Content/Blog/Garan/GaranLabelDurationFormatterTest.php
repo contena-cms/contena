@@ -13,7 +13,6 @@ use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
 #[CoversClass(GaranLabelDurationFormatter::class)]
 class GaranLabelDurationFormatterTest extends TestCase
 {
-    private GaranLabelDurationFormatter $formatter;
 
     protected function setUp(): void
     {

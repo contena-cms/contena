@@ -18,6 +18,7 @@ use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryE
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -28,17 +29,17 @@ class AdminUserRecoveryServiceTest extends TestCase
 
     private const VALID_EMAIL = AdminUserProvisioner::USER_EMAIL_FALLBACK;
 
-    private AdminUserRecoveryService $admin_userRecoveryService;
+    private AdminUserRecoveryService $adminUserRecoveryService;
 
     /**
      * @var EntityRepository<AdminUserRecoveryCollection>
      */
-    private EntityRepository $admin_userRecoveryRepo;
+    private EntityRepository $adminUserRecoveryRepo;
 
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepo;
+    private EntityRepository $adminUserRepo;
 
     private Context $context;
 
@@ -73,32 +74,32 @@ class AdminUserRecoveryServiceTest extends TestCase
     {
         $this->createRecovery(self::VALID_EMAIL);
 
-        $admin_userRecovery = $this->admin_userRecoveryRepo->search(new Criteria(), $this->context)->getEntities()->first();
-        static::assertInstanceOf(AdminUserRecoveryEntity::class, $admin_userRecovery);
+        $adminUserRecovery = $this->admin_userRecoveryRepo->search(new Criteria(), $this->context)->getEntities()->first();
+        static::assertInstanceOf(AdminUserRecoveryEntity::class, $adminUserRecovery);
     }
 
     public function testGenerateUserRecoveryWithoutExistingUser(): void
     {
         $this->createRecovery('foo@bar.com');
 
-        $admin_userRecovery = $this->admin_userRecoveryRepo->search(new Criteria(), $this->context)->getEntities()->first();
-        static::assertNull($admin_userRecovery);
+        $adminUserRecovery = $this->admin_userRecoveryRepo->search(new Criteria(), $this->context)->getEntities()->first();
+        static::assertNull($adminUserRecovery);
     }
 
     #[DataProvider('dataProviderTestCheckHash')]
     public function testCheckHash(\DateInterval $timeInterval, string $hash, bool $expectedResult): void
     {
-        $admin_user = $this->admin_userRepo->search(new Criteria(), $this->context)->getEntities()->first();
+        $adminUser = $this->admin_userRepo->search(new Criteria(), $this->context)->getEntities()->first();
 
-        static::assertInstanceOf(AdminUserEntity::class, $admin_user);
+        static::assertInstanceOf(AdminUserEntity::class, $adminUser);
 
         $createdTime = (new \DateTime())->sub($timeInterval);
 
-        $admin_userId = $admin_user->getId();
+        $adminUserId = $adminUser->getId();
         $creatData = [
             'createdAt' => $createdTime,
             'hash' => $hash,
-            'admin_userId' => $admin_userId,
+            'admin_userId' => $adminUserId,
         ];
 
         $this->admin_userRecoveryRepo->create([$creatData], $this->context);
@@ -153,17 +154,17 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $hash = $recovery->getHash();
 
-        $admin_user = $this->admin_userRepo->search(new Criteria(), $this->context)->getEntities()->first();
-        static::assertInstanceOf(AdminUserEntity::class, $admin_user);
+        $adminUser = $this->admin_userRepo->search(new Criteria(), $this->context)->getEntities()->first();
+        static::assertInstanceOf(AdminUserEntity::class, $adminUser);
 
-        $passwordBefore = $admin_user->getPassword();
+        $passwordBefore = $adminUser->getPassword();
 
         $this->admin_userRecoveryService->updatePassword($hash, 'newPassword', $this->context);
 
-        $admin_userAfter = $this->admin_userRepo->search(new Criteria(), $this->context)->getEntities()->first();
-        static::assertInstanceOf(AdminUserEntity::class, $admin_userAfter);
+        $adminUserAfter = $this->admin_userRepo->search(new Criteria(), $this->context)->getEntities()->first();
+        static::assertInstanceOf(AdminUserEntity::class, $adminUserAfter);
 
-        $passwordAfter = $admin_userAfter->getPassword();
+        $passwordAfter = $adminUserAfter->getPassword();
 
         static::assertNotSame($passwordBefore, $passwordAfter);
     }

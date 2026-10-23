@@ -25,9 +25,9 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AdminUserMcpAllowlistController::class)]
 class AdminUserMcpAllowlistControllerTest extends TestCase
 {
-    private string $admin_userId;
+    private string $adminUserId;
 
-    private AdminUserEntity $admin_user;
+    private AdminUserEntity $adminUser;
 
     /**
      * @var EntityRepository<AdminUserCollection>&MockObject

@@ -24,7 +24,6 @@ class DownloadControllerTest extends TestCase
 {
     private Stub&DownloadRoute $downloadRouteMock;
 
-    private DownloadController $controller;
 
     protected function setUp(): void
     {

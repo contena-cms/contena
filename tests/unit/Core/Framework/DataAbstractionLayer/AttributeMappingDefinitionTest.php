@@ -53,8 +53,6 @@ class AttributeMappingDefinitionTest extends TestCase
         new StaticDefinitionInstanceRegistry(
             [
                 $definition,
-                AttributeMappingTestSourceDefinition::class,
-                AttributeMappingTestReferenceDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

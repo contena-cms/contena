@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Write\Command;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSetAwareTrait;
 
 /**
  * @phpstan-ignore-next-line cannot be final, as it is extended, also designed to be used directly

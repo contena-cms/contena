@@ -10,6 +10,7 @@ use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 use Contena\Core\Framework\Util\Json;
 use Symfony\Component\Uid\Uuid;
+use Contena\Core\Framework\Util\Exception\JsonDecodingException;
 
 /**
  * @experimental stableVersion:v6.8.0

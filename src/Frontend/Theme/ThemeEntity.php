@@ -8,6 +8,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ThemeEntity extends Entity
 {

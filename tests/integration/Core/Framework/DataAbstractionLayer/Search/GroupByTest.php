@@ -23,6 +23,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Search\Definition\GroupByTestDefinition;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -39,7 +40,6 @@ class GroupByTest extends TestCase
 
     private GroupByTestDefinition $definition;
 
-    private TestData $testData;
 
     public static function tearDownAfterClass(): void
     {

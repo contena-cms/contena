@@ -7,6 +7,8 @@ use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterCollection;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamTranslation\ContentStreamTranslationCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

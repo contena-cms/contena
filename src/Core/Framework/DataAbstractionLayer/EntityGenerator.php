@@ -5,8 +5,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\CalculatedPriceField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\CartPriceField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CronIntervalField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\DateField;
@@ -26,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PasswordField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\PriceDefinitionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\RemoteAddressField;
@@ -36,6 +33,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\CronInterval;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @final
@@ -47,7 +47,6 @@ class EntityGenerator
 
 namespace #domain#;
 
-use Contena\Core\Framework\DataAbstractionLayer\Entity;
 #uses#
 
 class #entity#Entity extends Entity
@@ -84,7 +83,6 @@ EOF;
 
 namespace #domain#;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 
 /**
  * @package framework
@@ -219,21 +217,6 @@ EOF;
                     $definition,
                     EntityDefinitionQueryHelper::getTranslatedField($definition, $field)
                 );
-            case $field instanceof CartPriceField:
-                $type = 'CartPrice';
-                $uses[] = $this->getUsage(CartPrice::class);
-
-                break;
-            case $field instanceof CalculatedPriceField:
-                $type = 'CalculatedPrice';
-                $uses[] = $this->getUsage(CalculatedPrice::class);
-
-                break;
-            case $field instanceof PriceDefinitionField:
-                $type = 'QuantityPriceDefinition';
-                $uses[] = $this->getUsage(QuantityPriceDefinition::class);
-
-                break;
             case $field instanceof PriceField:
                 $type = 'Price';
                 $uses[] = $this->getUsage(Price::class);

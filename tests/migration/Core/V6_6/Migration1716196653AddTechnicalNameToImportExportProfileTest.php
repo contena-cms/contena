@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_6\Migration1716196653AddTechnicalNameToImportExportProfile;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

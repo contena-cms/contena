@@ -7,6 +7,8 @@ use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOptionTranslation\PropertyGroupOptionTranslationCollection;
 use Contena\Core\Content\Property\PropertyGroupEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

@@ -21,7 +21,6 @@ class InvalidFileNameCharactersTest extends TestCase
     public function testFileNameValidation(string $fileName, string $status, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status),
         ])));
 
         (new InvalidFileNameCharacters())($context);

@@ -26,7 +26,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Group('rules')]
 class OrderTagRuleTest extends TestCase
 {
-    private OrderTagRule $rule;
 
     protected function setUp(): void
     {

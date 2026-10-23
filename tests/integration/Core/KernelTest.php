@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Core;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * Covers the artifacts `Contena\Core\Kernel::dumpContainer()` writes next to the generated cache

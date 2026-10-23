@@ -7,7 +7,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartException;
-use Contena\Core\Checkout\Cart\Channel\CartReorderRoute;
 use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\Error\GenericCartError;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
@@ -26,7 +25,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\ChannelContext;
@@ -45,7 +43,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[CoversClass(CartLineItemController::class)]
 class CartLineItemControllerTest extends TestCase
 {
-    private CartLineItemController $controller;
 
     private LineItemFactoryRegistry&Stub $lineItemRegistryMock;
 
@@ -874,28 +871,6 @@ class CartLineItemControllerTest extends TestCase
         static::assertArrayHasKey('danger', $session->getFlashBag()->peekAll());
     }
 
-    private function getController(
-        ?CartService $cartService = null,
-        ?BlogLineItemFactory $blogLineItemFactory = null,
-        ?AbstractBlogListRoute $blogListRoute = null,
-        ?LineItemFactoryRegistry $lineItemRegistry = null,
-        ?CartReorderRoute $cartReorderRoute = null
-    ): CartLineItemController {
-        $controller = new CartLineItemController(
-            $cartService ?? $this->cartService,
-            $blogLineItemFactory ?? $this->blogLineItemFactoryMock,
-            static::createStub(HtmlSanitizer::class),
-            $blogListRoute ?? $this->blogListRouteMock,
-            $lineItemRegistry ?? $this->lineItemRegistryMock,
-            $cartReorderRoute ?? static::createStub(CartReorderRoute::class),
-        );
-
-        if (isset($this->container)) {
-            $controller->setContainer($this->container);
-        }
-
-        return $controller;
-    }
 
     private function translatorCallback(?Session $session = null): void
     {

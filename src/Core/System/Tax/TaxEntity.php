@@ -4,6 +4,9 @@ namespace Contena\Core\System\Tax;
 
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -12,7 +15,6 @@ class TaxEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 
     protected float $taxRate;
 

@@ -10,7 +10,6 @@ use Contena\Core\Checkout\Cart\Price\Struct\ListPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\ReferencePrice;
 use Contena\Core\Checkout\Cart\Price\Struct\RegulationPrice;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Framework\Context;
@@ -76,7 +75,6 @@ class CalculatedPriceFieldSerializerTest extends TestCase
         $calculatedPrice = new CalculatedPrice(
             100,
             100,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection([new TaxRule(19, 50), new TaxRule(7, 50)]),
             1,
             new ReferencePrice(100, 100, 100, 'reference unit'),
@@ -168,7 +166,6 @@ class CalculatedPriceFieldSerializerTest extends TestCase
         $calculatedPrice = new CalculatedPrice(
             50,
             50,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection([new TaxRule(19, 100)]),
             1,
             null,
@@ -194,7 +191,6 @@ class CalculatedPriceFieldSerializerTest extends TestCase
         $calculatedPrice = new CalculatedPrice(
             50,
             50,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection([new TaxRule(19, 100)]),
             1,
             null,
@@ -220,7 +216,6 @@ class CalculatedPriceFieldSerializerTest extends TestCase
         $calculatedPrice = new CalculatedPrice(
             75,
             75,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection([new TaxRule(19, 100)]),
             1,
             null,
@@ -247,7 +242,6 @@ class CalculatedPriceFieldSerializerTest extends TestCase
         $calculatedPrice = new CalculatedPrice(
             100,
             100,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection([new TaxRule(19, 50), new TaxRule(7, 50)]),
             1,
             new ReferencePrice(100, 100, 100, 'reference unit'),

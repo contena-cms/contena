@@ -108,14 +108,14 @@ class WebhookLoader
         SQL;
 
         $rows = $this->connection->fetchAllAssociative($sql);
-        $admin_userRoles = $this->aclRoleLoader->getUserRoles(array_values(array_filter(array_column($rows, 'ownerUserId'))));
+        $adminUserRoles = $this->aclRoleLoader->getUserRoles(array_values(array_filter(array_column($rows, 'ownerUserId'))));
         $integrationRoles = $this->aclRoleLoader->getIntegrationRoles(array_values(array_filter(array_column($rows, 'ownerIntegrationId'))));
 
         $webhooks = [];
         foreach ($rows as $row) {
             $roles = $row['ownerIntegrationId'] !== null
                 ? $integrationRoles[$row['ownerIntegrationId']] ?? null
-                : $admin_userRoles[$row['ownerUserId']] ?? null;
+                : $adminUserRoles[$row['ownerUserId']] ?? null;
             if ($roles === null) {
                 continue;
             }

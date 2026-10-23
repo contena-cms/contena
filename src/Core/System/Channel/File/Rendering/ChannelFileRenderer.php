@@ -48,11 +48,11 @@ class ChannelFileRenderer
         $parameters = $this->buildParameters($file, $context);
         $templateName = $this->getRenderTemplateName($file, $templates);
 
-        $admin_userProvidedContent = $this->getUserProvidedContent($templateOverrides);
-        if ($admin_userProvidedContent !== null) {
+        $adminUserProvidedContent = $this->getUserProvidedContent($templateOverrides);
+        if ($adminUserProvidedContent !== null) {
             $parentTemplateName = $templateName;
             $templateName = \sprintf(self::USER_PROVIDED_CONTENT_TEMPLATE, $file->templatePath);
-            $overrideTemplates[$templateName] = $this->buildUserProvidedContentTemplate($admin_userProvidedContent, $parentTemplateName);
+            $overrideTemplates[$templateName] = $this->buildUserProvidedContentTemplate($adminUserProvidedContent, $parentTemplateName);
         }
 
         $content = $this->templateOverrideLoader->withTemplateOverrides(
@@ -123,18 +123,18 @@ class ChannelFileRenderer
      */
     private function getUserProvidedContent(array $templateOverrides): ?string
     {
-        $admin_userProvidedContent = $templateOverrides[self::USER_PROVIDED_CONTENT_OVERRIDE_KEY] ?? null;
+        $adminUserProvidedContent = $templateOverrides[self::USER_PROVIDED_CONTENT_OVERRIDE_KEY] ?? null;
 
-        if (!\is_string($admin_userProvidedContent) || trim($admin_userProvidedContent) === '') {
+        if (!\is_string($adminUserProvidedContent) || trim($adminUserProvidedContent) === '') {
             return null;
         }
 
-        return $admin_userProvidedContent;
+        return $adminUserProvidedContent;
     }
 
-    private function buildUserProvidedContentTemplate(string $admin_userProvidedContent, string $parentTemplateName): string
+    private function buildUserProvidedContentTemplate(string $adminUserProvidedContent, string $parentTemplateName): string
     {
-        $encodedContent = json_encode($admin_userProvidedContent, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
+        $encodedContent = json_encode($adminUserProvidedContent, \JSON_THROW_ON_ERROR | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE);
         \assert(\is_string($encodedContent));
 
         // The generated override namespace is not part of the normal namespace hierarchy.

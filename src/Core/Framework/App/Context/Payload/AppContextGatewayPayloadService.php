@@ -9,6 +9,9 @@ use Contena\Core\Framework\App\Context\Gateway\AppContextGatewayResponse;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Gateway\Context\Command\Struct\ContextGatewayPayloadStruct;
 use Contena\Core\Framework\Util\Json;
+use Contena\Core\Framework\Util\Exception\JsonDecodingException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * @internal only for use by the app-system

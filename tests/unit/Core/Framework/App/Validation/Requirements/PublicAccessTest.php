@@ -16,6 +16,7 @@ use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
 use Contena\Core\Framework\App\Validation\Requirements\PublicAccess;
 use Contena\Core\Framework\App\Validation\Requirements\SecureUrlValidator;
 use Symfony\Component\HttpFoundation\Response as HttpResponse;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

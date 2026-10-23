@@ -9,7 +9,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\AclPrivilegeCollection;
@@ -90,14 +89,6 @@ class HookableEntityWrittenEventTest extends TestCase
         return new EntityWrittenEvent(
             BlogDefinition::ENTITY_NAME,
             [
-                new EntityWriteResult(
-                    $entityId,
-                    $payload,
-                    BlogDefinition::ENTITY_NAME,
-                    EntityWriteResult::OPERATION_DELETE,
-                    null,
-                    null
-                ),
             ],
             $context
         );

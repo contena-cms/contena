@@ -7,6 +7,7 @@ use Contena\Core\Framework\Util\Database\TableHelperException;
 use Symfony\Component\HttpFoundation\Response;
 use Contena\Core\Framework\Util\Exception\Base64DecodingException;
 use Contena\Core\Framework\Util\Exception\UtilXmlParsingException;
+use Contena\Core\Framework\Util\Exception\JsonDecodingException;
 
 /**
  * @codeCoverageIgnore

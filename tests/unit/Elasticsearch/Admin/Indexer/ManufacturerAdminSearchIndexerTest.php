@@ -11,9 +11,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Event\NestedEventCollection;
@@ -28,7 +26,6 @@ use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
 #[CoversClass(ManufacturerAdminSearchIndexer::class)]
 class ManufacturerAdminSearchIndexerTest extends TestCase
 {
-    private ManufacturerAdminSearchIndexer $searchIndexer;
 
     protected function setUp(): void
     {
@@ -56,9 +53,6 @@ class ManufacturerAdminSearchIndexerTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent('blog_manufacturer_translation', [
-                    new EntityWriteResult(['blogManufacturerId' => $mId], ['name' => 'M'], 'blog_manufacturer_translation', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createDefaultContext()),
             ]),
             []
         );

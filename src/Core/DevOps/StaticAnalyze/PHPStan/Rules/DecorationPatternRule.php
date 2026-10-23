@@ -24,6 +24,7 @@ use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;
 use Contena\Core\Framework\Store\Services\AbstractExtensionStoreLicensesService;
 use Contena\Core\Framework\Store\Services\AbstractStoreAppLifecycleService;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @internal

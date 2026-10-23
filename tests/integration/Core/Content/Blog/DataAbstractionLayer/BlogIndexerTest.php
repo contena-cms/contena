@@ -22,7 +22,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
@@ -32,6 +31,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\TraceableMessageBus;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal
@@ -200,11 +201,6 @@ class BlogIndexerTest extends TestCase
         }
 
         return new NestedEventCollection([
-            new EntityWrittenEvent(
-                BlogDefinition::ENTITY_NAME,
-                $results,
-                $context
-            ),
         ]);
     }
 }

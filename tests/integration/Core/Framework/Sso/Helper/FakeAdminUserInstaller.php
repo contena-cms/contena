@@ -26,13 +26,13 @@ class FakeUserInstaller
         $this->connection->executeStatement($sql, [$id, $email, $email, $email, $email, $byteLocaleId]);
     }
 
-    public function installTokenUser(string $admin_userId, string $subject): void
+    public function installTokenUser(string $adminUserId, string $subject): void
     {
         $id = Uuid::randomBytes();
-        $admin_userId = Uuid::fromHexToBytes($admin_userId);
+        $adminUserId = Uuid::fromHexToBytes($adminUserId);
 
         $sql = 'INSERT INTO `oauth_user` (`id`, `admin_user_id`, `admin_user_sub`, `token`, `expiry`, `created_at`, `updated_at`) VALUES
                 (?, ?, ?, \'{"token": "invalid", "refreshToken": "invalid"}\', \'2024-01-01 08:00:00.000\', \'2024-01-01 08:00:00.000\', NULL);';
-        $this->connection->executeStatement($sql, [$id, $admin_userId, $subject]);
+        $this->connection->executeStatement($sql, [$id, $adminUserId, $subject]);
     }
 }

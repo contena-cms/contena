@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Migration;
 
 use Doctrine\DBAL\Connection;
+use Contena\Core\Framework\Migration\ColumnExistsTrait;
 
 trait AddColumnTrait
 {

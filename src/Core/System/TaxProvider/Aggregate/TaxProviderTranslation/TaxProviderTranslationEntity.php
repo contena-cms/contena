@@ -4,6 +4,7 @@ namespace Contena\Core\System\TaxProvider\Aggregate\TaxProviderTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\TaxProvider\TaxProviderEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

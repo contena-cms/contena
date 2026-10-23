@@ -6,21 +6,14 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\Order\OrderPersister;
-use Contena\Core\Checkout\Cart\Order\OrderPersisterInterface;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Processor;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
@@ -47,7 +40,6 @@ use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CalculatedPriceFieldTestDefinition;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
@@ -57,6 +49,10 @@ use Contena\Core\Test\Integration\PaymentHandler\TestPaymentHandler;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\Stub\Rule\TrueRule;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\CountryAddToChannelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 
 /**
  * @internal
@@ -94,7 +90,6 @@ class VersioningTest extends TestCase
 
     private Processor $processor;
 
-    private OrderPersisterInterface $orderPersister;
 
     private Context $context;
 
@@ -391,13 +386,7 @@ class VersioningTest extends TestCase
         $price = new CalculatedPrice(
             100.20,
             100.30,
-            new CalculatedTaxCollection([
-                new CalculatedTax(0.19, 10, 10),
-                new CalculatedTax(0.19, 5, 10),
-            ]),
             new TaxRuleCollection([
-                new TaxRule(10.0, 50),
-                new TaxRule(5, 50),
             ])
         );
 
@@ -426,13 +415,7 @@ class VersioningTest extends TestCase
         $newPrice = new CalculatedPrice(
             500.20,
             500.30,
-            new CalculatedTaxCollection([
-                new CalculatedTax(3.50, 15, 500.20),
-                new CalculatedTax(3.50, 30, 500.20),
-            ]),
             new TaxRuleCollection([
-                new TaxRule(15, 30),
-                new TaxRule(30, 70),
             ])
         );
 
@@ -2126,41 +2109,6 @@ class VersioningTest extends TestCase
             );
     }
 
-    private function createDemoCart(ChannelContext $channelContext): Cart
-    {
-        $cart = new Cart('a-b-c');
-
-        $id = Uuid::randomHex();
-
-        $blog = [
-            'id' => $id,
-            'name' => 'test',
-            'price' => [
-                ['currencyId' => Defaults::CURRENCY, 'gross' => 119.99, 'net' => 99.99, 'linked' => false],
-            ],
-            'blogNumber' => Uuid::randomHex(),
-            'manufacturer' => ['name' => 'test'],
-            'tax' => ['id' => Uuid::randomHex(), 'taxRate' => 19, 'name' => 'test'],
-            'stock' => 10,
-            'active' => true,
-            'visibilities' => [
-                ['channelId' => TestDefaults::CHANNEL, 'visibility' => BlogVisibilityDefinition::VISIBILITY_ALL],
-            ],
-        ];
-
-        static::getContainer()->get('blog.repository')
-            ->create([$blog], Context::createDefaultContext());
-
-        $this->addTaxDataToChannel($channelContext, $blog['tax']);
-
-        $cart->add(
-            (new LineItem($id, LineItem::BLOG_LINE_ITEM_TYPE, $id, 1))
-                ->setStackable(true)
-                ->setRemovable(true)
-        );
-
-        return $cart;
-    }
 
     private function createUser(): string
     {

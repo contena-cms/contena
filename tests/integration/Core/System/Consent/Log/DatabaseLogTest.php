@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\Log\DatabaseLog;
 use Symfony\Component\Clock\NativeClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

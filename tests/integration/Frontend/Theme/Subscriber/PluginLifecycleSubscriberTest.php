@@ -21,6 +21,8 @@ use Contena\Frontend\Theme\Subscriber\PluginLifecycleSubscriber;
 use Contena\Frontend\Theme\ThemeLifecycleHandler;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use SwagTestPlugin\SwagTestPlugin;
+use Contena\Core\Framework\Test\Plugin\PluginTestsHelper;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

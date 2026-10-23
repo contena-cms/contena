@@ -16,12 +16,12 @@ class AdminUserCollection extends EntityCollection
      */
     public function getLocaleIds(): array
     {
-        return $this->fmap(static fn (AdminUserEntity $admin_user) => $admin_user->getLocaleId());
+        return $this->fmap(static fn (AdminUserEntity $adminUser) => $adminUser->getLocaleId());
     }
 
     public function filterByLocaleId(string $id): self
     {
-        return $this->filter(static fn (AdminUserEntity $admin_user) => $admin_user->getLocaleId() === $id);
+        return $this->filter(static fn (AdminUserEntity $adminUser) => $adminUser->getLocaleId() === $id);
     }
 
     public function getApiAlias(): string

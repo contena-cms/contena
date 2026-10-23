@@ -12,6 +12,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\CustomField\CustomFieldCollection;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

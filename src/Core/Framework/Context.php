@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Struct\Struct;
 use Symfony\Component\Serializer\Attribute\Ignore;
+use Contena\Core\Framework\Struct\StateAwareTrait;
 
 class Context extends Struct
 {

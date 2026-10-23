@@ -8,6 +8,8 @@ use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal

@@ -5,6 +5,8 @@ namespace Contena\Tests\Integration\Core\Content\Media\File;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Framework\Context;
+use Contena\Core\Content\Test\Media\MediaFixtures;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -4,6 +4,8 @@ namespace Contena\Core\Content\Seo\SeoUrlTemplate;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

@@ -6,6 +6,7 @@ use Contena\Core\Framework\DependencyInjection\DependencyInjectionException;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\CompilerPassConfigTrait;
 
 #[BecomesInternal(version: 'v6.8.0')]
 class DefaultTransportCompilerPass implements CompilerPassInterface

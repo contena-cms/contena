@@ -15,11 +15,8 @@ use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\System\User\Channel\AbstractConvertGuestRoute;
-use Contena\Core\System\User\Channel\AbstractImitateUserRoute;
 use Contena\Core\System\User\Channel\AbstractLoginRoute;
 use Contena\Core\System\User\Channel\AbstractLogoutRoute;
-use Contena\Core\System\User\Channel\AbstractResetPasswordRoute;
 use Contena\Core\System\User\Channel\AbstractSendPasswordRecoveryMailRoute;
 use Contena\Core\System\User\Channel\ConvertGuestRoute;
 use Contena\Core\System\User\Channel\ImitateUserRoute;
@@ -47,7 +44,6 @@ use Symfony\Component\Validator\Validation;
 #[CoversClass(AuthController::class)]
 class AuthControllerTest extends TestCase
 {
-    private AuthControllerStub $controller;
 
     private AccountLoginPageLoader&Stub $accountLoginPageLoader;
 
@@ -298,38 +294,4 @@ class AuthControllerTest extends TestCase
         static::assertSame('frontend.account.convert.page', $this->controller->recorder()->forwardToRoute);
     }
 
-    private function createController(
-        ?AccountLoginPageLoader $accountLoginPageLoader = null,
-        ?AbstractSendPasswordRecoveryMailRoute $passwordRecoveryPageLoader = null,
-        ?AbstractLoginRoute $loginRoute = null,
-    ): AuthControllerStub {
-        $resetPasswordRoute = static::createStub(AbstractResetPasswordRoute::class);
-        $loginRoute ??= static::createStub(AbstractLoginRoute::class);
-        $logoutRoute = static::createStub(AbstractLogoutRoute::class);
-        $imitateUserRoute = static::createStub(AbstractImitateUserRoute::class);
-        $cartFacade = static::createStub(FrontendCartFacade::class);
-        $recoverPasswordRoute = static::createStub(AccountRecoverPasswordPageLoader::class);
-
-        $abstractConvertGuestRoute = static::createStub(AbstractConvertGuestRoute::class);
-        $systemConfigService = static::createStub(SystemConfigService::class);
-
-        $controller = new AuthControllerStub(
-            $accountLoginPageLoader ?? $this->accountLoginPageLoader,
-            $passwordRecoveryPageLoader ?? $this->passwordRecoveryPageLoader,
-            $resetPasswordRoute,
-            $loginRoute,
-            $logoutRoute,
-            $imitateUserRoute,
-            $cartFacade,
-            $recoverPasswordRoute,
-            $abstractConvertGuestRoute,
-            $systemConfigService
-        );
-
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->set('request_stack', new RequestStack());
-        $controller->setContainer($containerBuilder);
-
-        return $controller;
-    }
 }

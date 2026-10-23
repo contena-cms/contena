@@ -24,12 +24,12 @@ class AccessToken implements AccessTokenEntityInterface
      * @internal
      *
      * @param ScopeEntityInterface[] $scopes
-     * @param non-empty-string|null $admin_userIdentifier
+     * @param non-empty-string|null $adminUserIdentifier
      */
     public function __construct(
         private ClientEntityInterface $client,
         private array $scopes,
-        private ?string $admin_userIdentifier = null
+        private ?string $adminUserIdentifier = null
     ) {
     }
 

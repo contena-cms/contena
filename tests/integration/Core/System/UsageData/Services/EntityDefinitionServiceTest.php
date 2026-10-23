@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\System\UsageData\Services\EntityDefinitionService;
 use Contena\Core\System\UsageData\Services\UsageDataAllowListService;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

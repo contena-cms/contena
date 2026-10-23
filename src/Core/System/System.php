@@ -46,9 +46,9 @@ class System extends Bundle
         $phpLoader->load('configuration.php');
         $phpLoader->load('number_range.php');
         $phpLoader->load('tag.php');
+        $phpLoader->load('user.php');
 
         $phpLoader->load('consent.php');
-        $phpLoader->load('usage_data.php');
 
         if ($container->getParameter('kernel.environment') === 'test') {
             $phpLoader->load('services_test.php');

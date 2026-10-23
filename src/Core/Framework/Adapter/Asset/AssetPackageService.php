@@ -9,6 +9,7 @@ use Symfony\Component\Asset\Package as AssetPackage;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\VersionStrategyInterface;
+use Symfony\Component\Asset\Exception\InvalidArgumentException;
 
 class AssetPackageService
 {

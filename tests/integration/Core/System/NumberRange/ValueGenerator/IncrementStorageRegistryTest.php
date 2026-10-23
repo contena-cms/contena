@@ -9,6 +9,7 @@ use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\Incr
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\IncrementStorageRegistry;
 use Contena\Core\Test\Stub\System\NumberRange\ValueGenerator\IncrementArrayStorage;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

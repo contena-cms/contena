@@ -16,9 +16,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -100,9 +100,6 @@ class BlogVisibilityEntityTest extends TestCase
             new MultiFilter(
                 MultiFilter::CONNECTION_AND,
                 [
-                    new RangeFilter('blog.visibilities.visibility', [
-                        RangeFilter::GTE => BlogVisibilityDefinition::VISIBILITY_LINK,
-                    ]),
                     new EqualsFilter('blog.visibilities.channelId', $this->channelId1),
                 ]
             )

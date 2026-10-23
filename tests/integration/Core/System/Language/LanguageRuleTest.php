@@ -13,6 +13,8 @@ use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\Rule\LanguageRule;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

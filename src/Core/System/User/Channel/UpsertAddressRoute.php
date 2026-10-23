@@ -30,20 +30,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\System\User\Channel\UserAddressDataNormalizerTrait;
+use Contena\Core\System\User\Channel\UserAddressValidationTrait;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class UpsertAddressRoute extends AbstractUpsertAddressRoute
 {
     use UserAddressDataNormalizerTrait;
     use UserAddressValidationTrait;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @internal
      *
      * @param EntityRepository<UserAddressCollection> $addressRepository
      * @param ChannelRepository<UserAddressCollection> $channelAddressRepository
-     * @param EntityRepository<SalutationCollection> $salutationRepository
      */
     public function __construct(
         private readonly EntityRepository $addressRepository,
@@ -53,7 +54,6 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         private readonly DataValidationFactoryInterface $addressValidationFactory,
         private readonly SystemConfigService $systemConfigService,
         private readonly StoreApiCustomFieldMapper $storeApiCustomFieldMapper,
-        private readonly EntityRepository $salutationRepository,
         private readonly ExtensionDispatcher $extensions,
     ) {
     }
@@ -109,16 +109,12 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
             $isCreate = false;
         }
 
-        if (!$data->get('salutationId')) {
-            $data->set('salutationId', $this->getDefaultSalutationId($context));
-        }
 
         $accountType = $data->get('accountType', UserEntity::ACCOUNT_TYPE_PRIVATE);
         $definition = $this->getValidationDefinition($data, $accountType, $isCreate, $context);
         $this->validator->validate(array_merge(['id' => $addressId], $data->all()), $definition);
 
         $addressData = [
-            'salutationId' => $data->get('salutationId'),
             'name' => $data->get('name'),
             'street' => $data->get('street'),
             'city' => $data->get('city'),
@@ -186,12 +182,4 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         return $validation;
     }
 
-    private function getDefaultSalutationId(ChannelContext $context): ?string
-    {
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('salutationKey', SalutationDefinition::NOT_SPECIFIED));
-
-        return $this->salutationRepository->searchIds($criteria, $context->getContext())->firstId();
-    }
 }

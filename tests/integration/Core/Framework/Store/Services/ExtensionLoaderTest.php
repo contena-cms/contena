@@ -19,6 +19,8 @@ use Contena\Core\Framework\Store\Struct\ImageCollection;
 use Contena\Core\Framework\Store\Struct\PermissionCollection;
 use Contena\Core\Framework\Store\Struct\PermissionStruct;
 use Contena\Core\Framework\Store\Struct\VariantCollection;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

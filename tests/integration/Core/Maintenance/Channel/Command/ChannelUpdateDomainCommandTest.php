@@ -13,6 +13,8 @@ use Contena\Core\Maintenance\Channel\Command\ChannelUpdateDomainCommand;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

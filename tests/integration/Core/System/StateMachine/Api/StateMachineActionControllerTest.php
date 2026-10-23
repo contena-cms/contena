@@ -12,9 +12,7 @@ use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Checkout\Cart\Rule\AlwaysValidRule;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Defaults;
@@ -33,6 +31,10 @@ use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\CountryAddToChannelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 
 /**
  * @internal

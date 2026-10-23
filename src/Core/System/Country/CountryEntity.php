@@ -9,6 +9,9 @@ use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Core\System\Country\Aggregate\CountryTranslation\CountryTranslationCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -17,7 +20,6 @@ class CountryEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 
     protected ?string $name = null;
 

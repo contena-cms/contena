@@ -2,6 +2,7 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Field;
 
+use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\WasModifiedByAdminUserFieldSerializer;
 
 class WasModifiedByAdminUserField extends BoolField
 {
@@ -12,6 +13,6 @@ class WasModifiedByAdminUserField extends BoolField
 
     protected function getSerializerClass(): string
     {
-        return WasModifiedByUserFieldSerializer::class;
+        return WasModifiedByAdminUserFieldSerializer::class;
     }
 }

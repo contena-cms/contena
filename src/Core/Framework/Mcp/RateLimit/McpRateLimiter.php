@@ -7,6 +7,7 @@ use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 
 /**
  * @experimental stableVersion:v6.8.0

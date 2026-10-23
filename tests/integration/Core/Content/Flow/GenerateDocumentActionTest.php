@@ -10,46 +10,35 @@ use Monolog\LogRecord;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Document\DocumentConfigurationFactory;
 use Contena\Core\Checkout\Document\FileGenerator\FileTypes;
 use Contena\Core\Checkout\Document\Renderer\AbstractDocumentRenderer;
 use Contena\Core\Checkout\Document\Renderer\CreditNoteRenderer;
 use Contena\Core\Checkout\Document\Renderer\DeliveryNoteRenderer;
-use Contena\Core\Checkout\Document\Renderer\DocumentRendererConfig;
 use Contena\Core\Checkout\Document\Renderer\DocumentRendererRegistry;
 use Contena\Core\Checkout\Document\Renderer\InvoiceRenderer;
-use Contena\Core\Checkout\Document\Renderer\RendererResult;
 use Contena\Core\Checkout\Document\Renderer\StornoRenderer;
 use Contena\Core\Checkout\Document\Service\DocumentGenerator;
 use Contena\Core\Checkout\Document\Struct\DocumentGenerateOperation;
 use Contena\Core\Checkout\DocumentV2\Generation\DocumentGenerator as DocumentV2Generator;
-use Contena\Core\Checkout\DocumentV2\Struct\RenderedDocument;
 use Contena\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderEntity;
-use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Flow\Dispatching\Action\GenerateDocumentAction;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 
 /**
  * @internal
@@ -71,9 +60,7 @@ class GenerateDocumentActionTest extends TestCase
      */
     private EntityRepository $orderRepository;
 
-    private DocumentGenerator $documentGenerator;
 
-    private DocumentV2Generator $documentV2Generator;
 
     private Logger $logger;
 
@@ -414,69 +401,6 @@ class GenerateDocumentActionTest extends TestCase
         return $versionId;
     }
 
-    private function createOrder(string $userId, Context $context): OrderEntity
-    {
-        $orderId = Uuid::randomHex();
-        $stateId = static::getContainer()->get(InitialStateIdLoader::class)->get(OrderStates::STATE_MACHINE);
-        $billingAddressId = Uuid::randomHex();
-
-        $order = [
-            'id' => $orderId,
-            'itemRounding' => json_decode(json_encode(new CashRoundingConfig(2, 0.01, true), \JSON_THROW_ON_ERROR), true, 512, \JSON_THROW_ON_ERROR),
-            'totalRounding' => json_decode(json_encode(new CashRoundingConfig(2, 0.01, true), \JSON_THROW_ON_ERROR), true, 512, \JSON_THROW_ON_ERROR),
-            'orderNumber' => Uuid::randomHex(),
-            'orderDateTime' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-            'price' => new CartPrice(10, 10, 10, new CalculatedTaxCollection(), new TaxRuleCollection(), CartPrice::TAX_STATE_NET),
-            'shippingCosts' => new CalculatedPrice(10, 10, new CalculatedTaxCollection(), new TaxRuleCollection()),
-            'orderUser' => [
-                'userId' => $userId,
-                'email' => 'test@example.com',
-                'salutationId' => $this->getValidSalutationId(),
-                'name' => 'Max',
-                'lastName' => 'Mustermann',
-            ],
-            'stateId' => $stateId,
-            'paymentMethodId' => $this->getValidPaymentMethodId(),
-            'currencyId' => Defaults::CURRENCY,
-            'currencyFactor' => 1.0,
-            'channelId' => TestDefaults::CHANNEL,
-            'billingAddressId' => $billingAddressId,
-            'addresses' => [
-                [
-                    'id' => $billingAddressId,
-                    'salutationId' => $this->getValidSalutationId(),
-                    'name' => 'Max',
-                    'lastName' => 'Mustermann',
-                    'street' => 'Ebbinghoff 10',
-                    'zipcode' => '48624',
-                    'city' => 'Schöppingen',
-                    'countryId' => $this->getValidCountryId(),
-                ],
-            ],
-            'lineItems' => [
-                [
-                    'id' => Uuid::randomHex(),
-                    'identifier' => Uuid::randomHex(),
-                    'quantity' => 1,
-                    'label' => 'label',
-                    'type' => LineItem::CREDIT_LINE_ITEM_TYPE,
-                    'price' => new CalculatedPrice(200, 200, new CalculatedTaxCollection(), new TaxRuleCollection()),
-                    'priceDefinition' => new QuantityPriceDefinition(200, new TaxRuleCollection(), 2),
-                ],
-            ],
-            'deliveries' => [
-            ],
-            'context' => '{}',
-            'payload' => '{}',
-        ];
-
-        $this->orderRepository->upsert([$order], $context);
-        $order = $this->orderRepository->search(new Criteria([$orderId]), $context)->getEntities()->first();
-
-        static::assertInstanceOf(OrderEntity::class, $order);
-
-        return $order;
-    }
 
     private function insertRange(): void
     {
@@ -600,22 +524,5 @@ class CustomDocRenderer extends AbstractDocumentRenderer
         return self::TYPE;
     }
 
-    public function getDecorated(): AbstractDocumentRenderer
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
-    public function render(array $operations, Context $context, DocumentRendererConfig $rendererConfig): RendererResult
-    {
-        $result = new RendererResult();
-
-        foreach ($operations as $operation) {
-            $rendered = new RenderedDocument();
-            $rendered->setName('custom.pdf');
-
-            $result->addSuccess($operation->getOrderId(), $rendered);
-        }
-
-        return $result;
-    }
 }

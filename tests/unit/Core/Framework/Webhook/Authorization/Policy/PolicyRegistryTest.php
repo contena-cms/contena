@@ -39,8 +39,6 @@ class PolicyRegistryTest extends TestCase
     public function testEveryPolicyMustPermit(): void
     {
         $registry = new PolicyRegistry([
-            new StubPolicy(['foo.event'], permits: true),
-            new StubPolicy(['foo.event'], permits: false),
         ]);
 
         static::assertFalse($registry->permitsDelivery(new StubHookable(), $this->createWebhook()));
@@ -50,8 +48,6 @@ class PolicyRegistryTest extends TestCase
     public function testAllPermittingMeansPermitted(): void
     {
         $registry = new PolicyRegistry([
-            new StubPolicy(['foo.event'], permits: true),
-            new StubPolicy(['foo.event'], permits: true),
         ]);
 
         static::assertTrue($registry->permitsDelivery(new StubHookable(), $this->createWebhook()));

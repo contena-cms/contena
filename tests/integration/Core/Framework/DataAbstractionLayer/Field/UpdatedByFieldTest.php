@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
@@ -18,6 +17,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -39,8 +40,8 @@ class UpdatedByFieldTest extends TestCase
 
     public function testUpdatedByNotUpdateWithWrongScope(): void
     {
-        $admin_userId = $this->fetchFirstIdFromTable('admin_user');
-        $context = $this->getAdminContext($admin_userId);
+        $adminUserId = $this->fetchFirstIdFromTable('admin_user');
+        $context = $this->getAdminContext($adminUserId);
 
         $payload = $this->createOrderPayload();
         $this->orderRepository->create([$payload], $context);
@@ -90,8 +91,8 @@ class UpdatedByFieldTest extends TestCase
     public function testCreateUpdatedBy(): void
     {
         $orderRepository = $this->orderRepository;
-        $admin_userId = $this->fetchFirstIdFromTable('admin_user');
-        $context = $this->getAdminContext($admin_userId);
+        $adminUserId = $this->fetchFirstIdFromTable('admin_user');
+        $context = $this->getAdminContext($adminUserId);
 
         $payload = $this->createOrderPayload();
         $orderRepository->create([$payload], $context);
@@ -111,13 +112,13 @@ class UpdatedByFieldTest extends TestCase
         )->getEntities()->first();
 
         static::assertNotNull($result);
-        static::assertSame($admin_userId, $result->getUpdatedById());
+        static::assertSame($adminUserId, $result->getUpdatedById());
     }
 
     public function testUpdatedByUpdateWithCrudScope(): void
     {
-        $admin_userId = $this->fetchFirstIdFromTable('admin_user');
-        $context = $this->getAdminContext($admin_userId);
+        $adminUserId = $this->fetchFirstIdFromTable('admin_user');
+        $context = $this->getAdminContext($adminUserId);
 
         $payload = $this->createOrderPayload();
         $this->orderRepository->create([$payload], $context);
@@ -137,7 +138,7 @@ class UpdatedByFieldTest extends TestCase
         )->getEntities()->first();
 
         static::assertNotNull($result);
-        static::assertSame($admin_userId, $result->getUpdatedById());
+        static::assertSame($adminUserId, $result->getUpdatedById());
     }
 
     public function testUpdatedByChangesToLastCrudUser(): void
@@ -172,9 +173,9 @@ class UpdatedByFieldTest extends TestCase
         static::assertSame($secondUserId, $result->getUpdatedById());
     }
 
-    private function getAdminContext(string $admin_userId): Context
+    private function getAdminContext(string $adminUserId): Context
     {
-        $source = new AdminApiSource($admin_userId);
+        $source = new AdminApiSource($adminUserId);
         $source->setPermissions([
             'order:list',
             'order:create',

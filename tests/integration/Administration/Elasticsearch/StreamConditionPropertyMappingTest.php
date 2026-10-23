@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Elasticsearch\Blog\ElasticsearchBlogDefinition;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -10,6 +10,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileCollection;
 use Contena\Core\System\Channel\File\Discovery\ChannelFileDiscovery;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

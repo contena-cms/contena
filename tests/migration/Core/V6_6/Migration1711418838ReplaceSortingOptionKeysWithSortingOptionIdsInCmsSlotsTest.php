@@ -18,7 +18,6 @@ class Migration1711418838ReplaceSortingOptionKeysWithSortingOptionIdsInCmsSlotsT
 {
     use MigrationTestTrait;
 
-    private Migration1711418838ReplaceSortingOptionKeysWithSortingOptionIdsInCmsSlots $migration;
 
     private Connection $connection;
 

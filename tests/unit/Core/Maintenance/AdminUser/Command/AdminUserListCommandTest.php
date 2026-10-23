@@ -51,18 +51,18 @@ class AdminUserListCommandTest extends TestCase
 
     public function testAclRolesNotLoadedException(): void
     {
-        $admin_userName = 'guy';
-        $admin_userId = Uuid::randomHex();
+        $adminUserName = 'guy';
+        $adminUserId = Uuid::randomHex();
         $repo = new StaticEntityRepository([
             new AdminUserCollection([
-                $this->createUser('guy@contena.cn', $admin_userName, 'Guy', 'Marbello', id: $admin_userId),
+                $this->createUser('guy@contena.cn', $adminUserName, 'Guy', 'Marbello', id: $adminUserId),
             ]),
         ]);
 
         $command = new AdminUserListCommand($repo);
         $commandTester = new CommandTester($command);
 
-        $this->expectExceptionObject(MaintenanceException::aclRolesNotLoaded($admin_userId, $admin_userName));
+        $this->expectExceptionObject(MaintenanceException::aclRolesNotLoaded($adminUserId, $adminUserName));
         $commandTester->execute([]);
     }
 
@@ -133,18 +133,18 @@ class AdminUserListCommandTest extends TestCase
         ?array $roles = null,
         ?string $id = null,
     ): AdminUserEntity {
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId($id ?? Uuid::randomHex());
-        $admin_user->setEmail($email);
-        $admin_user->setActive(true);
-        $admin_user->setUsername($username);
-        $admin_user->setName($firstName);
-        $admin_user->setLastName($secondName);
-        $admin_user->setAdmin($isAdmin);
-        $admin_user->setCreatedAt(new \DateTime());
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId($id ?? Uuid::randomHex());
+        $adminUser->setEmail($email);
+        $adminUser->setActive(true);
+        $adminUser->setUsername($username);
+        $adminUser->setName($firstName);
+        $adminUser->setLastName($secondName);
+        $adminUser->setAdmin($isAdmin);
+        $adminUser->setCreatedAt(new \DateTime());
 
         if ($roles) {
-            $admin_user->setAclRoles(new AclRoleCollection(array_map(static function (string $role): AclRoleEntity {
+            $adminUser->setAclRoles(new AclRoleCollection(array_map(static function (string $role): AclRoleEntity {
                 $aclRole = new AclRoleEntity();
                 $aclRole->setId(Uuid::randomHex());
                 $aclRole->setName($role);
@@ -153,6 +153,6 @@ class AdminUserListCommandTest extends TestCase
             }, $roles)));
         }
 
-        return $admin_user;
+        return $adminUser;
     }
 }

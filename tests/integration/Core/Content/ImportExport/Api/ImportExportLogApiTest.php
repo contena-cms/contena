@@ -15,6 +15,10 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -44,7 +48,7 @@ class ImportExportLogApiTest extends TestCase
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepository;
+    private EntityRepository $adminUserRepository;
 
     private Connection $connection;
 
@@ -265,7 +269,7 @@ class ImportExportLogApiTest extends TestCase
     {
         $data = [];
         $users = [];
-        $admin_userIds = [];
+        $adminUserIds = [];
         $fileIds = [];
         $profiles = [];
         $profileIds = [];
@@ -274,7 +278,7 @@ class ImportExportLogApiTest extends TestCase
         if ($num > 0) {
             // Dependencies
             $users = $this->prepareUsers(2);
-            $admin_userIds = array_column($users, 'id');
+            $adminUserIds = array_column($users, 'id');
             $files = $this->prepareFiles(2);
             $fileIds = array_column($files, 'id');
             $profiles = $this->prepareProfiles(2);
@@ -290,10 +294,10 @@ class ImportExportLogApiTest extends TestCase
                 'id' => $uuid,
                 'activity' => $activities[$i % 2],
                 'state' => \sprintf('state %d', $i),
-                'admin_userId' => $admin_userIds[$i % 2],
+                'admin_userId' => $adminUserIds[$i % 2],
                 'profileId' => $profileIds[$i % 2],
                 'fileId' => $fileIds[$i % 2],
-                'username' => $users[Uuid::fromHexToBytes($admin_userIds[$i % 2])]['username'],
+                'username' => $users[Uuid::fromHexToBytes($adminUserIds[$i % 2])]['username'],
                 'profileName' => $profile['label'],
                 'records' => 10 * $i,
                 'config' => ['profile' => $profile],

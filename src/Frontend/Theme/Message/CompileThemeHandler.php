@@ -19,6 +19,7 @@ use Contena\Frontend\Theme\ThemeRuntimeConfigService;
 use Contena\Frontend\Theme\ThemeService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 /**
  * @internal

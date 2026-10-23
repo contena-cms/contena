@@ -11,6 +11,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Feature\Triggerer;
 use Contena\Core\Test\Annotation\DisabledFeatures;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

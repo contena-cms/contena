@@ -3,6 +3,8 @@
 namespace Contena\Core\Framework\Webhook\EventLog;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class WebhookEventLogEntity extends Entity
 {

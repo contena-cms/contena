@@ -9,6 +9,7 @@ use Contena\Core\Framework\Webhook\Service\WebhookHealthService;
 use Contena\Core\Framework\Webhook\WebhookFailureStrategy;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

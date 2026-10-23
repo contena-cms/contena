@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Validation\ConfigValidator;
 use Contena\Core\Framework\App\Validation\Error\ConfigurationError;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

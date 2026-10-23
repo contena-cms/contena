@@ -31,6 +31,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\System\User\Channel\UserVatIdNormalizerTrait;
 
 #[Route(
     defaults: [
@@ -41,13 +43,11 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 class ChangeUserProfileRoute extends AbstractChangeUserProfileRoute
 {
     use UserVatIdNormalizerTrait;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @internal
      *
      * @param EntityRepository<UserCollection> $userRepository
-     * @param EntityRepository<SalutationCollection> $salutationRepository
      */
     public function __construct(
         private readonly EntityRepository $userRepository,
@@ -55,7 +55,6 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         private readonly DataValidator $validator,
         private readonly DataValidationFactoryInterface $userProfileValidationFactory,
         private readonly StoreApiCustomFieldMapper $storeApiCustomFieldMapper,
-        private readonly EntityRepository $salutationRepository,
         private readonly ExtensionDispatcher $extensions,
     ) {
     }
@@ -114,15 +113,12 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
             $data->set('vatIds', $vatIds === [] ? null : $vatIds);
         }
 
-        if (!$data->get('salutationId')) {
-            $data->set('salutationId', $this->getDefaultSalutationId($context));
-        }
 
         $this->dispatchValidationEvent($validation, $data, $context->getContext());
 
         $this->validator->validate($data->all(), $validation);
 
-        $userData = $data->only('firstName', 'lastName', 'salutationId', 'title', 'company', 'accountType');
+        $userData = $data->only('firstName', 'lastName', 'title', 'company', 'accountType');
 
         if (!$keepsAccountType || $data->has('vatIds')) {
             $vatIds = $data->get('vatIds');
@@ -199,12 +195,4 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         ));
     }
 
-    private function getDefaultSalutationId(ChannelContext $context): ?string
-    {
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('salutationKey', SalutationDefinition::NOT_SPECIFIED));
-
-        return $this->salutationRepository->searchIds($criteria, $context->getContext())->firstId();
-    }
 }

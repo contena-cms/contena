@@ -9,6 +9,8 @@ use Contena\Core\Service\Permission\PermissionsConsent;
 use Contena\Core\Service\Permission\PermissionsService;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

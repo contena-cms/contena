@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_8\Migration1755497870RemoveLabelTranslationOfImportExportProfile;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

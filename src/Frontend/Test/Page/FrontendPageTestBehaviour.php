@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
@@ -27,6 +26,7 @@ use Contena\Frontend\Pagelet\PageletLoadedEvent;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\EventDispatcher\Event;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 
 /**
  * @internal
@@ -34,6 +34,7 @@ use Symfony\Contracts\EventDispatcher\Event;
 trait FrontendPageTestBehaviour
 {
     use TaxAddToChannelTestBehaviour;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
     /**
      * @template TEvent of PageLoadedEvent
@@ -80,21 +81,6 @@ trait FrontendPageTestBehaviour
     protected function expectParamMissingException(string $paramName): void
     {
         $this->expectExceptionObject(RoutingException::missingRequestParameter($paramName));
-    }
-
-    protected function placeRandomOrder(ChannelContext $context): string
-    {
-        $blog = $this->getRandomBlog($context);
-
-        $lineItem = (new LineItem($blog->getId(), LineItem::BLOG_LINE_ITEM_TYPE, $blog->getId()))
-            ->setRemovable(true)
-            ->setStackable(true);
-
-        $cartService = static::getContainer()->get(CartService::class);
-        $cart = $cartService->getCart($context->getToken(), $context);
-        $cart->add($lineItem);
-
-        return $cartService->order($cart, $context, new RequestDataBag());
     }
 
     /**
@@ -294,7 +280,6 @@ trait FrontendPageTestBehaviour
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
                 'zipcode' => '12345',
-                'salutationId' => $this->getValidSalutationId(),
                 'country' => ['id' => $this->getValidCountryId()],
             ],
             'defaultBillingAddressId' => $addressId,
@@ -303,7 +288,6 @@ trait FrontendPageTestBehaviour
             'password' => 'password',
             'name' => 'Max',
             'lastName' => 'Mustermann',
-            'salutationId' => $this->getValidSalutationId(),
             'userNumber' => $userId,
         ];
 
@@ -334,9 +318,6 @@ trait FrontendPageTestBehaviour
         $channelRepository->create([$channel], Context::createDefaultContext());
 
         $context = $factory->create(Uuid::randomHex(), $channelId, $options);
-
-        $ruleLoader = static::getContainer()->get(CartRuleLoader::class);
-        $ruleLoader->loadByToken($context, $context->getToken());
 
         return $context;
     }

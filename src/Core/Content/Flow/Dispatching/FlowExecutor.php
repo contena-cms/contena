@@ -15,7 +15,6 @@ use Contena\Core\Content\Flow\Rule\UserRuleScope;
 use Contena\Core\Framework\App\Event\AppFlowActionEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\Event\ChannelContextAware;
-use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\System\Channel\ChannelContext;
@@ -216,36 +215,26 @@ class FlowExecutor
     {
         $baseContextEvaluation = \in_array($ruleId, $event->getContext()->getRuleIds(), true);
 
-        if (!$event->hasData(OrderAware::ORDER) && !$event->hasData(UserAware::CUSTOMER)) {
+        if (!$event->hasData(UserAware::CUSTOMER)) {
             return $baseContextEvaluation;
         }
 
         $context = $event->getData(ChannelContextAware::CHANNEL_CONTEXT);
 
-        if ($event->hasData(OrderAware::ORDER)) {
-            $entity = $event->getData(OrderAware::ORDER);
-
-            if (!$entity instanceof OrderEntity) {
-                return $baseContextEvaluation;
-            }
-        } elseif (!$context instanceof ChannelContext || $context->getUser() !== null) {
+        if (!$context instanceof ChannelContext || $context->getUser() !== null) {
             return $baseContextEvaluation;
-        } else {
-            $entity = $event->getData(UserAware::CUSTOMER);
+        }
 
-            if (!$entity instanceof UserEntity) {
-                return $baseContextEvaluation;
-            }
+        $entity = $event->getData(UserAware::CUSTOMER);
+
+        if (!$entity instanceof UserEntity) {
+            return $baseContextEvaluation;
         }
 
         $rule = $this->ruleLoader->load($event->getContext())->filterForFlow()->get($ruleId);
 
         if (!$rule || !$rule->getPayload() instanceof Rule) {
             return $baseContextEvaluation;
-        }
-
-        if ($entity instanceof OrderEntity) {
-            return $rule->getPayload()->match($this->scopeBuilder->build($entity, $event->getContext()));
         }
 
         return $rule->getPayload()->match(new UserRuleScope($entity, $context));

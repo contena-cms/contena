@@ -23,6 +23,7 @@ use Contena\Core\Framework\Plugin\Util\PluginFinder;
 use Contena\Core\Framework\Plugin\Requirement\Exception\ComposerNameMissingException;
 use Contena\Core\Framework\Plugin\Requirement\Exception\ConflictingPackageException;
 use Contena\Core\Framework\Plugin\Requirement\Exception\MissingRequirementException;
+use Contena\Core\Framework\Plugin\Requirement\Exception\VersionMismatchException;
 
 class RequirementsValidator
 {

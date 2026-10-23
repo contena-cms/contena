@@ -15,6 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\EnumField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @internal

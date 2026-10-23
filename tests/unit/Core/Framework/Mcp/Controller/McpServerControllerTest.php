@@ -635,9 +635,9 @@ class McpServerControllerTest extends TestCase
         static::assertInstanceOf(\stdClass::class, $data->result);
         static::assertInstanceOf(\stdClass::class, $data->result->_meta);
         static::assertInstanceOf(\stdClass::class, $data->result->_meta->contena);
-        $admin_userMeta = $data->result->_meta->contena->admin_user;
-        static::assertInstanceOf(\stdClass::class, $admin_userMeta);
-        static::assertSame('admin_user-id-123', $admin_userMeta->id ?? null);
+        $adminUserMeta = $data->result->_meta->contena->admin_user;
+        static::assertInstanceOf(\stdClass::class, $adminUserMeta);
+        static::assertSame('admin_user-id-123', $adminUserMeta->id ?? null);
     }
 
     public function testInitializeEnrichmentSkippedWhenContextMissing(): void

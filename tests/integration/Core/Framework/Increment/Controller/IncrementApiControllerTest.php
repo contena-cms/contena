@@ -10,6 +10,8 @@ use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -21,7 +23,7 @@ class IncrementApiControllerTest extends TestCase
 
     private AbstractIncrementer $gateway;
 
-    private string $admin_userId;
+    private string $adminUserId;
 
     protected function setUp(): void
     {

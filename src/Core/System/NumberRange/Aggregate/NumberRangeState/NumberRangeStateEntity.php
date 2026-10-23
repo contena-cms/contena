@@ -4,6 +4,7 @@ namespace Contena\Core\System\NumberRange\Aggregate\NumberRangeState;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\NumberRange\NumberRangeEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

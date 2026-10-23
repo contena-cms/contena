@@ -3,6 +3,7 @@
 namespace Contena\Core\System\SystemConfig\Channel;
 
 use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\System\SystemConfig\Channel\ConfigCastTrait;
 
 /**
  * Login, registration and address form settings (core.loginRegistration).

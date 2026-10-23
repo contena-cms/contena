@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Frontend\Controller;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Checkout\Order\Channel\OrderRoute;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\ContactForm\Channel\AbstractContactFormRoute;
 use Contena\Core\Content\ContactForm\Channel\ContactFormRoute;
 use Contena\Core\Content\Newsletter\Channel\AbstractNewsletterSubscribeRoute;
@@ -16,7 +15,6 @@ use Contena\Core\Content\RevocationRequest\Channel\RevocationRequestRoute;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
@@ -60,6 +58,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use Contena\Core\Framework\Test\RateLimiter\RateLimiterTestTrait;
+use Contena\Core\Test\Integration\Traits\UserTestTrait;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal
@@ -471,35 +472,6 @@ class ControllerRateLimiterTest extends TestCase
         return $request;
     }
 
-    private function createUserWithOrder(): OrderEntity
-    {
-        $orderId = Uuid::randomHex();
-        $userId = $this->createUser('orderTest@example.com', true);
-
-        static::getContainer()->get('user.repository')->update([
-            [
-                'id' => $userId,
-                'channelId' => $this->ids->get('sales-channel'),
-            ],
-        ], $this->context);
-
-        $orderData = $this->getOrderData($orderId, $this->context);
-        $orderData[0]['orderUser']['user'] = ['id' => $userId];
-        $orderData[0]['orderUser']['email'] = 'orderTest@example.com';
-        $orderData[0]['orderUser']['addresses'][0]['zipcode'] = '12345';
-        $orderData[0]['addresses'][0]['zipcode'] = '12345';
-        $orderData[0]['channelId'] = $this->ids->get('sales-channel');
-
-        $orderRepository = static::getContainer()->get('order.repository');
-        $orderRepository->create($orderData, $this->context);
-
-        $order = $orderRepository->search(new Criteria([$orderId]), $this->context)->getEntities()->first();
-
-        static::assertNotNull($order);
-        static::assertInstanceOf(OrderEntity::class, $order);
-
-        return $order;
-    }
 
     private function queryFromString(string $url, string $param): string
     {

@@ -5,14 +5,10 @@ namespace Contena\Tests\Unit\Core\System\Currency\Rule;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Rule\CartRuleScope;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfUuid;
-use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Currency\Rule\CurrencyRule;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -211,20 +207,6 @@ class CurrencyRuleTest extends TestCase
         ];
     }
 
-    private function getCartRuleScope(string $currencyId): CartRuleScope
-    {
-        $context = Context::createDefaultContext();
-        $context->assign(['currencyId' => $currencyId]);
-
-        $channelContext = static::createStub(ChannelContext::class);
-        $channelContext
-            ->method('getContext')
-            ->willReturn($context);
-
-        $cart = new Cart('bar');
-
-        return new CartRuleScope($cart, $channelContext);
-    }
 
     private function validateConstraint(string $field, mixed $value): ConstraintViolationListInterface
     {

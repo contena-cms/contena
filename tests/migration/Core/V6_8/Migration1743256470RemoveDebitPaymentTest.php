@@ -10,6 +10,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_8\Migration1743256470RemoveDebitPayment;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -21,13 +21,13 @@ class AclRoleLoader
     }
 
     /**
-     * @param list<string> $admin_userIds
+     * @param list<string> $adminUserIds
      *
      * @return array<string, AclRoles> keyed by admin_user id
      */
-    public function getUserRoles(array $admin_userIds): array
+    public function getUserRoles(array $adminUserIds): array
     {
-        if ($admin_userIds === []) {
+        if ($adminUserIds === []) {
             return [];
         }
 
@@ -36,7 +36,7 @@ class AclRoleLoader
              FROM admin_user u
              LEFT JOIN acl_user_role ur ON ur.admin_user_id = u.id
              WHERE u.id IN (:ids)',
-            ['ids' => Uuid::fromHexToBytesList(array_values(array_unique($admin_userIds)))],
+            ['ids' => Uuid::fromHexToBytesList(array_values(array_unique($adminUserIds)))],
             ['ids' => ArrayParameterType::BINARY]
         ));
     }

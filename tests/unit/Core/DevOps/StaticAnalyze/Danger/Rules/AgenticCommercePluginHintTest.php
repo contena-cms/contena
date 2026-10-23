@@ -18,9 +18,6 @@ class AgenticCommercePluginHintTest extends TestCase
     public function testWarnsForAgenticCommerceFiles(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Content/BlogExport/Tracking/TrackingEventRoute.php'),
-            new StubFile('src/Core/Content/BlogExport/Provider/OpenAiBlogFeedProvider.php'),
-            new StubFile('src/Core/Content/BlogExport/BlogExportEntity.php'),
         ])));
 
         (new AgenticCommercePluginHint())($context);
@@ -38,8 +35,6 @@ class AgenticCommercePluginHintTest extends TestCase
     public function testSilentForUnrelatedFiles(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Content/BlogExport/BlogExportEntity.php'),
-            new StubFile('src/Administration/Resources/app/administration/src/module/sw-sales-channel/index.js'),
         ])));
 
         (new AgenticCommercePluginHint())($context);

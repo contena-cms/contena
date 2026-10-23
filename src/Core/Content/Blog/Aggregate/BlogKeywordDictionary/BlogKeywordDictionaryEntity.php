@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogKeywordDictionary;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

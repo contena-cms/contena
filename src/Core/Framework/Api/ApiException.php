@@ -21,6 +21,8 @@ use Contena\Core\Framework\Api\Exception\NoEntityClonedException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\DefinitionNotFoundException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingReverseAssociation;
 use Contena\Core\Framework\Routing\Exception\ChannelNotFoundException;
+use Contena\Core\Framework\Api\Exception\ExpectationFailedException;
+use Contena\Core\Framework\Api\Exception\ResourceNotFoundException;
 
 class ApiException extends HttpException
 {

@@ -19,6 +19,7 @@ use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -45,7 +46,7 @@ class ImportExportLogRepositoryTest extends TestCase
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepository;
+    private EntityRepository $adminUserRepository;
 
     private Connection $connection;
 
@@ -381,7 +382,7 @@ class ImportExportLogRepositoryTest extends TestCase
     {
         $data = [];
         $users = [];
-        $admin_userIds = [];
+        $adminUserIds = [];
         $fileIds = [];
         $profiles = [];
         $profileIds = [];
@@ -390,7 +391,7 @@ class ImportExportLogRepositoryTest extends TestCase
         if ($num > 0) {
             // Dependencies
             $users = $this->prepareUsers(2);
-            $admin_userIds = array_column($users, 'id');
+            $adminUserIds = array_column($users, 'id');
             $files = $this->prepareFiles(2);
             $fileIds = array_column($files, 'id');
             $profiles = $this->prepareProfiles(2);
@@ -407,10 +408,10 @@ class ImportExportLogRepositoryTest extends TestCase
                 'id' => $uuid,
                 'activity' => ($activities[$i % 2] ?? '') . $add,
                 'state' => \sprintf('state %d', $i),
-                'admin_userId' => $admin_userIds[$i % 2],
+                'admin_userId' => $adminUserIds[$i % 2],
                 'profileId' => $profileIds[$i % 2],
                 'fileId' => $fileIds[$i % 2],
-                'username' => $users[Uuid::fromHexToBytes($admin_userIds[$i % 2])]['username'] . $add,
+                'username' => $users[Uuid::fromHexToBytes($adminUserIds[$i % 2])]['username'] . $add,
                 'profileName' => $profile['label'] . $add,
                 'records' => 10 * $i,
                 'config' => ['profile' => $profile],

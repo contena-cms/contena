@@ -6,6 +6,9 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

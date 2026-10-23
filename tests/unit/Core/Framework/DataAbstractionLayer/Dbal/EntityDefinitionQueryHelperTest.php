@@ -6,8 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturerTranslation\BlogManufacturerTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
@@ -174,8 +172,6 @@ class EntityDefinitionQueryHelperTest extends TestCase
                 BlogCategoryDefinition::class,
                 CategoryTranslationDefinition::class,
                 CategoryDefinition::class,
-                BlogManufacturerDefinition::class,
-                BlogManufacturerTranslationDefinition::class,
                 BlogTranslationDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),

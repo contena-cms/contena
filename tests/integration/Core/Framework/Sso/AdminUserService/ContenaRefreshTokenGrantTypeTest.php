@@ -28,6 +28,8 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -70,7 +72,7 @@ class ContenaRefreshTokenGrantTypeTest extends TestCase
         $request = $this->createRefreshGrantRequest($refreshToken);
 
         $connection = $this->getContainer()->get(Connection::class);
-        $admin_userId = Uuid::fromBytesToHex(
+        $adminUserId = Uuid::fromBytesToHex(
             $connection->createQueryBuilder()
                 ->select('id')
                 ->from('admin_user')
@@ -80,7 +82,7 @@ class ContenaRefreshTokenGrantTypeTest extends TestCase
                 ->fetchOne()
         );
 
-        (new FakeUserInstaller($connection))->installTokenUser($admin_userId, Uuid::randomHex());
+        (new FakeUserInstaller($connection))->installTokenUser($adminUserId, Uuid::randomHex());
 
         $psrHttpFactory = $this->getContainer()->get(PsrHttpFactory::class);
         $psr7Request = $psrHttpFactory->createRequest($request);
@@ -108,7 +110,7 @@ class ContenaRefreshTokenGrantTypeTest extends TestCase
             ->select('token')
             ->from('oauth_user')
             ->where('admin_user_id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($admin_userId))
+            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchOne();
 
@@ -126,7 +128,7 @@ class ContenaRefreshTokenGrantTypeTest extends TestCase
     public function testRespondToAccessTokenRequestWithOAuthUserWithNullToken(): void
     {
         $connection = $this->getContainer()->get(Connection::class);
-        $admin_userId = Uuid::fromBytesToHex(
+        $adminUserId = Uuid::fromBytesToHex(
             $connection->createQueryBuilder()
                 ->select('id')
                 ->from('admin_user')
@@ -136,7 +138,7 @@ class ContenaRefreshTokenGrantTypeTest extends TestCase
                 ->fetchOne()
         );
 
-        (new FakeUserInstaller($connection))->installTokenUser($admin_userId, Uuid::randomHex());
+        (new FakeUserInstaller($connection))->installTokenUser($adminUserId, Uuid::randomHex());
 
         $refreshToken = $this->createRefreshToken();
         $request = $this->createRefreshGrantRequest($refreshToken);
@@ -167,7 +169,7 @@ class ContenaRefreshTokenGrantTypeTest extends TestCase
             ->select('token')
             ->from('oauth_user')
             ->where('admin_user_id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($admin_userId))
+            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchOne();
 

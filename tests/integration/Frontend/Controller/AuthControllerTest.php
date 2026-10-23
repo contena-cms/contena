@@ -16,8 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
-use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Random;
@@ -36,7 +34,6 @@ use Contena\Core\System\User\Channel\ImitateUserRoute;
 use Contena\Core\System\User\Channel\LoginRoute;
 use Contena\Core\System\User\Channel\ResetPasswordRoute;
 use Contena\Core\System\User\Channel\SendPasswordRecoveryMailRoute;
-use Contena\Core\System\User\Event\UserAccountRecoverRequestEvent;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
@@ -59,6 +56,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal
@@ -436,9 +435,6 @@ class AuthControllerTest extends TestCase
         $logger = static::getContainer()->get('monolog.logger.business_events');
         $handlers = $logger->getHandlers();
         $logger->setHandlers([
-            new ExcludeFlowEventHandler(static::getContainer()->get(DoctrineSQLHandler::class), [
-                UserAccountRecoverRequestEvent::EVENT_NAME,
-            ]),
         ]);
         $testSubscriber = new AuthTestSubscriber();
 

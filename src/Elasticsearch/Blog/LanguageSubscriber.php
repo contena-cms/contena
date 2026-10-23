@@ -11,6 +11,8 @@ use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
 use Contena\Elasticsearch\Framework\Indexing\IndexMappingUpdater;
 use Contena\Elasticsearch\Framework\SystemUpdateListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @internal

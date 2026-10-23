@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\Channel\BlogAvailableFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Test\TestDefaults;
 
 /**
@@ -28,7 +27,6 @@ class BlogAvailableFilterTest extends TestCase
         static::assertSame($visibility, $filter->getVisibility());
         static::assertCount(3, $filter->getQueries());
         static::assertSame([
-            (new RangeFilter('blog.visibilities.visibility', [RangeFilter::GTE => $visibility]))->jsonSerialize(),
             (new EqualsFilter('blog.visibilities.channelId', $channelId))->jsonSerialize(),
             (new EqualsFilter('blog.active', true))->jsonSerialize(),
         ], array_map(

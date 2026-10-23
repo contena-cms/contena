@@ -37,20 +37,20 @@ class ImitateUserTokenGenerator extends JWTGenerator
     /**
      * @deprecated tag:v6.8.0 - will be removed, use `encode` method instead
      */
-    public function generate(string $channelId, string $userId, string $admin_userId): string
+    public function generate(string $channelId, string $userId, string $adminUserId): string
     {
         Feature::triggerDeprecationOrThrow('v6.8.0.0', Feature::deprecatedMethodMessage(ImitateUserTokenGenerator::class, 'generate', 'v6.8.0.0', 'parse'));
 
         $tokenData = [
             'channelId' => $channelId,
             'userId' => $userId,
-            'admin_userId' => $admin_userId,
+            'admin_userId' => $adminUserId,
         ];
 
         $data = json_encode($tokenData);
 
         if ($data === false) {
-            throw UserException::invalidImitationToken($channelId . ':' . $userId . ':' . $admin_userId);
+            throw UserException::invalidImitationToken($channelId . ':' . $userId . ':' . $adminUserId);
         }
 
         return $this->encrypt(hash_hmac(self::HMAC_HASH_ALGORITHM, $data, $this->appSecret) . '.' . $this->clock->now()->getTimestamp());
@@ -59,7 +59,7 @@ class ImitateUserTokenGenerator extends JWTGenerator
     /**
      * @deprecated tag:v6.8.0 - will be removed, use `decode` method instead
      */
-    public function validate(string $givenToken, string $channelId, string $userId, string $admin_userId): void
+    public function validate(string $givenToken, string $channelId, string $userId, string $adminUserId): void
     {
         Feature::triggerDeprecationOrThrow('v6.8.0.0', Feature::deprecatedMethodMessage(ImitateUserTokenGenerator::class, 'validate', 'v6.8.0.0', 'parse'));
 
@@ -81,7 +81,7 @@ class ImitateUserTokenGenerator extends JWTGenerator
         $givenTokenData = [
             'channelId' => $channelId,
             'userId' => $userId,
-            'admin_userId' => $admin_userId,
+            'admin_userId' => $adminUserId,
         ];
 
         $data = json_encode($givenTokenData);

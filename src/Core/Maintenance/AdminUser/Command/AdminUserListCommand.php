@@ -18,6 +18,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Contena\Core\Framework\Console\OutputFormatTrait;
 
 /**
  * @internal should be used over the CLI only
@@ -31,9 +32,9 @@ class AdminUserListCommand extends Command
     use OutputFormatTrait;
 
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
-    public function __construct(private readonly EntityRepository $admin_userRepository)
+    public function __construct(private readonly EntityRepository $adminUserRepository)
     {
         parent::__construct();
     }
@@ -102,12 +103,12 @@ class AdminUserListCommand extends Command
      */
     private function mapUsersToJson(AdminUserCollection $users): array
     {
-        return array_values($users->map(function (AdminUserEntity $admin_user) {
+        return array_values($users->map(function (AdminUserEntity $adminUser) {
             return [
-                ...$this->mapUser($admin_user),
-                'active' => $admin_user->getActive(),
-                'roles' => $this->roles($admin_user),
-                'created' => $admin_user->getCreatedAt()?->format(Defaults::STORAGE_DATE_TIME_FORMAT) ?? '',
+                ...$this->mapUser($adminUser),
+                'active' => $adminUser->getActive(),
+                'roles' => $this->roles($adminUser),
+                'created' => $adminUser->getCreatedAt()?->format(Defaults::STORAGE_DATE_TIME_FORMAT) ?? '',
             ];
         }));
     }
@@ -125,12 +126,12 @@ class AdminUserListCommand extends Command
      */
     private function mapUsersToConsole(AdminUserCollection $users): array
     {
-        return array_values($users->map(function (AdminUserEntity $admin_user) {
+        return array_values($users->map(function (AdminUserEntity $adminUser) {
             return [
-                ...$this->mapUser($admin_user),
-                'active' => $admin_user->getActive(),
-                'roles' => implode(', ', $this->roles($admin_user)),
-                'created' => $admin_user->getCreatedAt()?->format('M j, Y, H:i') ?? '',
+                ...$this->mapUser($adminUser),
+                'active' => $adminUser->getActive(),
+                'roles' => implode(', ', $this->roles($adminUser)),
+                'created' => $adminUser->getCreatedAt()?->format('M j, Y, H:i') ?? '',
             ];
         }));
     }
@@ -143,27 +144,27 @@ class AdminUserListCommand extends Command
      *     'name': string,
      * }
      */
-    private function mapUser(AdminUserEntity $admin_user): array
+    private function mapUser(AdminUserEntity $adminUser): array
     {
         return [
-            'id' => $admin_user->getId(),
-            'email' => $admin_user->getEmail(),
-            'username' => $admin_user->getUsername(),
-            'name' => $admin_user->getName(),
+            'id' => $adminUser->getId(),
+            'email' => $adminUser->getEmail(),
+            'username' => $adminUser->getUsername(),
+            'name' => $adminUser->getName(),
         ];
     }
 
     /**
      * @return list<string>
      */
-    private function roles(AdminUserEntity $admin_user): array
+    private function roles(AdminUserEntity $adminUser): array
     {
-        if ($admin_user->isAdmin()) {
+        if ($adminUser->isAdmin()) {
             return ['admin'];
         }
-        $aclRoles = $admin_user->getAclRoles();
+        $aclRoles = $adminUser->getAclRoles();
         if ($aclRoles === null) {
-            throw MaintenanceException::aclRolesNotLoaded($admin_user->getId(), $admin_user->getUsername());
+            throw MaintenanceException::aclRolesNotLoaded($adminUser->getId(), $adminUser->getUsername());
         }
 
         return array_values($aclRoles->map(static fn (AclRoleEntity $role) => $role->getName()));

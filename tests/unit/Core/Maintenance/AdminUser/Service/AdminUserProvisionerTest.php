@@ -44,7 +44,7 @@ class AdminUserProvisionerTest extends TestCase
             new FakeQueryBuilder($connection, [[$localeId]])
         );
 
-        $admin_user = [
+        $adminUser = [
             'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
@@ -52,7 +52,7 @@ class AdminUserProvisionerTest extends TestCase
         ];
 
         $provisioner = new AdminUserProvisioner($connection, new NativeClock());
-        $provisioner->provision('admin', 'contena', $admin_user);
+        $provisioner->provision('admin', 'contena', $adminUser);
     }
 
     public function testProvisionThrowsIfUserAlreadyExists(): void
@@ -65,7 +65,7 @@ class AdminUserProvisionerTest extends TestCase
             new FakeQueryBuilder($connection, [[Uuid::randomBytes()]]),
         );
 
-        $admin_user = [
+        $adminUser = [
             'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
@@ -74,7 +74,7 @@ class AdminUserProvisionerTest extends TestCase
 
         $provisioner = new AdminUserProvisioner($connection, new NativeClock());
         $this->expectExceptionObject(new \RuntimeException('AdminUser with username "admin" already exists.'));
-        $provisioner->provision('admin', 'contena', $admin_user);
+        $provisioner->provision('admin', 'contena', $adminUser);
     }
 
     public function testProvisionThrowsIfPasswordTooShort(): void
@@ -89,7 +89,7 @@ class AdminUserProvisionerTest extends TestCase
 
         $connection->expects($this->once())->method('fetchOne')->willReturn(json_encode(['_value' => 8], \JSON_THROW_ON_ERROR));
 
-        $admin_user = [
+        $adminUser = [
             'name' => 'first',
             'lastName' => 'last',
             'email' => 'test@test.com',
@@ -98,6 +98,6 @@ class AdminUserProvisionerTest extends TestCase
 
         $provisioner = new AdminUserProvisioner($connection, new NativeClock());
         $this->expectExceptionObject(MaintenanceException::passwordTooShort(8));
-        $provisioner->provision('admin', 'short', $admin_user);
+        $provisioner->provision('admin', 'short', $adminUser);
     }
 }

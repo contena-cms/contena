@@ -17,6 +17,7 @@ use Contena\Core\Framework\App\Exception\AppRegistrationRejectedException;
 use Contena\Core\Framework\App\Exception\InvalidAppFlowActionVariableException;
 use Contena\Core\Framework\App\Exception\ShopIdChangeStrategyNotFoundException;
 use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 
 /**
  * @internal

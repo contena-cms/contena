@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Test\Seo\Twig\LastLetterBigTwigFilter;
 use Twig\Environment;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -46,7 +46,7 @@ class AdminUserProvisioner
             throw MaintenanceException::passwordTooShort($minPasswordLength);
         }
 
-        $admin_userPayload = [
+        $adminUserPayload = [
             'id' => Uuid::randomBytes(),
             'first_name' => $additionalData['firstName'] ?? '',
             'last_name' => $additionalData['lastName'] ?? $username,
@@ -59,7 +59,7 @@ class AdminUserProvisioner
             'created_at' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ];
 
-        $this->connection->insert('admin_user', $admin_userPayload);
+        $this->connection->insert('admin_user', $adminUserPayload);
 
         return $password;
     }

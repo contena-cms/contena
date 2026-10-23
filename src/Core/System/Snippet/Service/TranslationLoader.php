@@ -25,6 +25,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Contracts\Service\ResetInterface;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * @internal

@@ -30,6 +30,7 @@ use Contena\Core\Framework\Mcp\Tool\MediaUploadTool;
 use Contena\Core\Framework\Mcp\Tool\OrderStateTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigReadTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigWriteTool;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

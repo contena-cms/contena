@@ -6,14 +6,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\CartFactory;
 use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\Event\CartCreatedEvent;
 use Contena\Core\Checkout\Cart\RuleLoaderResult;
 use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
@@ -42,7 +39,6 @@ class ChannelDomainContextFactoryTest extends TestCase
 
     private ?string $contextChannelId = null;
 
-    private ?Cart $createdCart = null;
 
     protected function setUp(): void
     {
@@ -101,24 +97,4 @@ class ChannelDomainContextFactoryTest extends TestCase
         static::assertSame([$this->ids->get('always-valid-rule')], $context->getRuleIds());
     }
 
-    private function createFactory(CartRuleLoader $ruleLoader): ChannelDomainContextFactory
-    {
-        $contextFactory = static::createStub(ChannelContextFactory::class);
-        $contextFactory->method('create')->willReturnCallback(
-            function (string $token, string $channelId, array $options = []): ChannelContext {
-                $this->contextToken = $token;
-                $this->contextChannelId = $channelId;
-                $this->contextOptions = $options;
-
-                return $this->context;
-            }
-        );
-
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(CartCreatedEvent::class, function (CartCreatedEvent $event): void {
-            $this->createdCart = $event->getCart();
-        });
-
-        return new ChannelDomainContextFactory($contextFactory, $ruleLoader, new CartFactory($dispatcher));
-    }
 }

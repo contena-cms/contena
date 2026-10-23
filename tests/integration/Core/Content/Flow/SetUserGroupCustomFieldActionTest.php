@@ -13,6 +13,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\Event\UserGroupRegistrationAccepted;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
 
 /**
  * @internal

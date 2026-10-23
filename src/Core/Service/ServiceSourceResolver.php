@@ -13,6 +13,7 @@ use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Service\ServiceRegistry\Client;
 use Symfony\Component\Filesystem\Filesystem as Io;
 use Symfony\Component\Filesystem\Path;
+use Contena\Core\Framework\App\Exception\AppArchiveValidationFailure;
 
 /**
  * @internal

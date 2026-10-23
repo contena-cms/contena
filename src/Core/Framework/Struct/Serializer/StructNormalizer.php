@@ -7,6 +7,7 @@ use Symfony\Component\Serializer\Encoder\JsonDecode;
 use Symfony\Component\Serializer\Encoder\JsonEncode;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 
 class StructNormalizer implements DenormalizerInterface, NormalizerInterface
 {

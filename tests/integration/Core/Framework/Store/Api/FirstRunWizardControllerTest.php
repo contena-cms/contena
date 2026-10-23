@@ -19,6 +19,8 @@ use Contena\Core\Framework\Validation\DataBag\QueryDataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -206,12 +208,12 @@ class FirstRunWizardControllerTest extends TestCase
         $source = $context->getSource();
         static::assertInstanceOf(AdminApiSource::class, $source);
 
-        $admin_userId = $source->getUserId();
-        static::assertIsString($admin_userId);
+        $adminUserId = $source->getUserId();
+        static::assertIsString($adminUserId);
 
         $storeToken = static::getContainer()->get(Connection::class)->executeQuery(
             'SELECT store_token FROM admin_user WHERE `id` = :admin_userId',
-            ['admin_userId' => Uuid::fromHexToBytes($admin_userId)]
+            ['admin_userId' => Uuid::fromHexToBytes($adminUserId)]
         )->fetchOne();
 
         return $storeToken ?: null;

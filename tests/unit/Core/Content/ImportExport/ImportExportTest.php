@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use League\Flysystem\FilesystemOperator;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogKeywordDictionary\BlogKeywordDictionaryDefinition;
@@ -33,7 +32,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
@@ -558,7 +556,6 @@ class ImportExportTest extends TestCase
                 OrderDefinition::ENTITY_NAME,
                 1,
                 new EntityCollection([
-                    (new OrderEntity())->assign(['id' => Uuid::randomHex(), 'language' => new LanguageEntity()]),
                 ]),
                 null,
                 new Criteria(),

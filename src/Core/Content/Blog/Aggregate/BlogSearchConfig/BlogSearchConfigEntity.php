@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogSearchConfig;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField\BlogSearchConfigFieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

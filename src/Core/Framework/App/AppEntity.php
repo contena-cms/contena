@@ -18,6 +18,9 @@ use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\TaxProvider\TaxProviderCollection;
+use Contena\Core\System\Integration\IntegrationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @phpstan-type Module array{name: string, label: array<string, string>, parent: string, source?: string|null, position: int}
@@ -29,7 +32,6 @@ class AppEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
-use Contena\Core\System\Integration\IntegrationEntity;
 
     protected string $name;
 

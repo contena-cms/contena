@@ -9,6 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\HttpFoundation\File\Exception\FileNotFoundException;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

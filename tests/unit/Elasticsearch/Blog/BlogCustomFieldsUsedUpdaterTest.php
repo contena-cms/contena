@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingDefinition;
 use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Blog\BlogCustomFieldsUsedUpdater;
@@ -48,18 +47,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.test_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -86,12 +73,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['name' => 'Test Stream'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -139,19 +120,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.test_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                        ['field' => 'blog.name', 'order' => 'asc', 'priority' => 0, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -177,15 +145,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
 
         // Payload without 'fields' - e.g., only updating priority
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 2,
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -230,12 +189,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $contentStreamFilterId,
-                ['name' => 'Test Stream Filter'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -279,18 +232,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $contentStreamFilterId1,
-                ['name' => 'Stream Filter 1'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
-            new EntityWriteResult(
-                $contentStreamFilterId2,
-                ['name' => 'Stream Filter 2'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -321,19 +262,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'blog.name', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                        ['field' => 'blog.price', 'order' => 'desc', 'priority' => 0, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -367,12 +295,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $contentStreamFilterId,
-                ['name' => 'Test Stream Filter'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -424,30 +346,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'sorting-1',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.field1', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'sorting-2',
-                    'priority' => 2,
-                    'fields' => [
-                        ['field' => 'customFields.field2', 'order' => 'desc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -494,16 +392,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'customFields.updated_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -544,18 +432,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.nonexistent_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -601,12 +477,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $contentStreamFilterId,
-                ['name' => 'Updated Stream Filter'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -639,12 +509,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $contentStreamFilterId,
-                ['name' => 'Stream Filter without custom fields'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -691,30 +555,12 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
 
         // Process blog sorting event
         $sortingWriteResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.sorting_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $sortingEvent = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $sortingWriteResults, Context::createDefaultContext());
         $updater->blogSortingWritten($sortingEvent);
 
         $results = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['name' => 'Stream Filter with custom field'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $results, Context::createDefaultContext());
@@ -761,19 +607,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.same_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                        ['field' => 'customFields.same_field', 'order' => 'desc', 'priority' => 0, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -820,18 +653,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.combined_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -856,12 +677,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_DELETE
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -889,12 +704,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_DELETE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -995,22 +804,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.int_field', 'order' => 'asc', 'priority' => 5, 'naturalSorting' => false],
-                        ['field' => 'customFields.float_field', 'order' => 'asc', 'priority' => 4, 'naturalSorting' => false],
-                        ['field' => 'customFields.bool_field', 'order' => 'asc', 'priority' => 3, 'naturalSorting' => false],
-                        ['field' => 'customFields.datetime_field', 'order' => 'asc', 'priority' => 2, 'naturalSorting' => false],
-                        ['field' => 'customFields.json_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1054,18 +847,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'sorting-only',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.sorting_only_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1107,12 +888,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $contentStreamFilterId,
-                ['name' => 'Filter only stream filter'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1137,16 +912,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                ['id' => Uuid::randomHex(), 'versionId' => Uuid::randomHex()],
-                [
-                    'fields' => [
-                        ['field' => 'customFields.test_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1171,12 +936,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                ['id' => Uuid::randomHex(), 'versionId' => Uuid::randomHex()],
-                ['name' => 'Test Filter'],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ContentStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1224,16 +983,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'customFields.valid_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1268,16 +1017,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'customFields.some_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1314,16 +1053,6 @@ class BlogCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'blog.name', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                BlogSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(BlogSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());

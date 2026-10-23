@@ -7,6 +7,7 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Update\Struct\Version;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
  * @phpstan-import-type VersionFixedVulnerabilities from Version

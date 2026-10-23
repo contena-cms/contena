@@ -22,10 +22,6 @@ class DirectReturnStubCases extends TestCase
         static::assertSame('', $sut->run());
     }
 
-    private function getDependency(): ReturnDependency
-    {
-        return $this->createMock(ReturnDependency::class);
-    }
 }
 
 /**
@@ -42,13 +38,6 @@ class ConfiguredReturnStubCases extends TestCase
         static::assertSame('a', $sut->run());
     }
 
-    private function getDependency(): ReturnDependency
-    {
-        $dependency = $this->createMock(ReturnDependency::class);
-        $dependency->method('value')->willReturn('a');
-
-        return $dependency;
-    }
 }
 
 /**
@@ -69,10 +58,6 @@ class ChainedExpectsReturnCases extends TestCase
         static::assertSame('', $sut->run());
     }
 
-    private function getDependency(): ReturnDependency
-    {
-        return $this->createMock(ReturnDependency::class);
-    }
 }
 
 /**
@@ -90,10 +75,6 @@ class BoundExpectsReturnCases extends TestCase
         (new ReturnSut($dependency))->run();
     }
 
-    private function getDependency(): ReturnDependency
-    {
-        return $this->createMock(ReturnDependency::class);
-    }
 }
 
 /**
@@ -110,10 +91,6 @@ class EscapedReturnCases extends TestCase
         static::assertSame('a', $dependency->value());
     }
 
-    private function getDependency(): ReturnDependency
-    {
-        return $this->createMock(ReturnDependency::class);
-    }
 }
 
 /**
@@ -149,10 +126,6 @@ class OwnAssertHelperCases extends TestCase
         $this->assertDependencyWasRead($dependency);
     }
 
-    private function assertDependencyWasRead(ReturnDependency $dependency): void
-    {
-        $dependency->expects($this->once())->method('value');
-    }
 }
 
 /**
@@ -160,19 +133,12 @@ class OwnAssertHelperCases extends TestCase
  */
 class ReturnSut
 {
-    public function __construct(private readonly ReturnDependency $dependency)
-    {
-    }
 
     public function run(): string
     {
         return $this->dependency->value();
     }
 
-    public function getDependency(): ReturnDependency
-    {
-        return $this->dependency;
-    }
 }
 
 /**
@@ -180,7 +146,4 @@ class ReturnSut
  */
 class ReturnConfigurator
 {
-    public static function configure(ReturnDependency $dependency): void
-    {
-    }
 }

@@ -10,6 +10,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Framework\Util\Hasher;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @implements Rule<FuncCall>

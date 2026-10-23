@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\Blog\DataAbstractionLayer\Index
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
@@ -22,6 +21,7 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

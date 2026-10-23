@@ -17,9 +17,7 @@ use Contena\Core\Framework\Uuid\Uuid;
  */
 class BlogExportRendererBench extends AbstractBenchCase
 {
-    private BlogExportRenderer $renderer;
 
-    private BlogExportEntity $blogExport;
 
     private BlogEntity $blog;
 

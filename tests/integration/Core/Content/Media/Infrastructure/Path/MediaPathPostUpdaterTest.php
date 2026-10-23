@@ -16,6 +16,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

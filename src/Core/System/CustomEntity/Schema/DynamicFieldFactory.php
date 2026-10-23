@@ -38,6 +38,7 @@ use Contena\Core\System\CustomEntity\CustomEntityRegistrar;
 use Contena\Core\System\CustomEntity\Xml\Field\AssociationField;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * @internal

@@ -33,12 +33,12 @@ class Migration1636121186CopyChannelIdsIntoAdminUserConfig extends MigrationStep
 
         $mapping = $this->getMappedData($ids);
 
-        foreach ($mapping as $admin_userId => $channelIds) {
+        foreach ($mapping as $adminUserId => $channelIds) {
             $slicedIds = \array_slice($channelIds, 0, self::MAX_RESULTS);
 
             $connection->insert('admin_user_config', [
                 'id' => Uuid::randomBytes(),
-                'admin_user_id' => $admin_userId,
+                'admin_user_id' => $adminUserId,
                 '`key`' => self::CONFIG_KEY,
                 '`value`' => json_encode($slicedIds, \JSON_THROW_ON_ERROR),
                 'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),

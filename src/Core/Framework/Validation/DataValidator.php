@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\Validation;
 
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
 class DataValidator
 {

@@ -6,6 +6,7 @@ namespace Contena\Core\Framework\Api\Context;
 class AdminApiSource implements ContextSource, \JsonSerializable
 {
     use JsonSerializableTrait;
+use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     /**
      * Runtime privileges granted to authenticated Administration users by default.
@@ -34,7 +35,7 @@ class AdminApiSource implements ContextSource, \JsonSerializable
     private array $permissions = [];
 
     public function __construct(
-        private readonly ?string $admin_userId,
+        private readonly ?string $adminUserId,
         private readonly ?string $integrationId = null,
     ) {
     }

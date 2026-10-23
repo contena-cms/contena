@@ -15,6 +15,7 @@ use Symfony\Component\Validator\Constraints\Choice;
 use Symfony\Component\Validator\Constraints\Collection;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 
 /**
  * @internal

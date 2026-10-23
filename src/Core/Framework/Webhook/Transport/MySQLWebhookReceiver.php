@@ -17,6 +17,8 @@ use Symfony\Component\Messenger\Stamp\TransportMessageIdStamp;
 use Symfony\Component\Messenger\Transport\Receiver\KeepaliveReceiverInterface;
 use Symfony\Component\Messenger\Transport\Receiver\ReceiverInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Doctrine\DBAL\Exception\RetryableException;
+use Symfony\Component\Messenger\Exception\TransportException;
 
 /**
  * Claims one webhook-delivery partition at a time via SKIP LOCKED and yields every due

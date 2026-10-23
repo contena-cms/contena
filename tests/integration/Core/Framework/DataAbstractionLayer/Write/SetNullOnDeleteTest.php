@@ -22,6 +22,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -39,7 +40,6 @@ class SetNullOnDeleteTest extends TestCase
 
     private Connection $connection;
 
-    private SetNullOnDeleteParentDefinition $setNullOnDeleteParentDefinition;
 
     protected function setUp(): void
     {

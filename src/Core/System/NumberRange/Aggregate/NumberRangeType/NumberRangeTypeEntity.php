@@ -6,6 +6,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelEntity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeTypeTranslation\NumberRangeTypeTranslationCollection;
 use Contena\Core\System\NumberRange\NumberRangeCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

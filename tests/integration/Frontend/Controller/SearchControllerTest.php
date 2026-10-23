@@ -9,6 +9,8 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Frontend\Page\Search\SearchPageLoadedHook;
 use Contena\Frontend\Page\Search\SearchWidgetLoadedHook;
 use Contena\Frontend\Page\Suggest\SuggestPageLoadedHook;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

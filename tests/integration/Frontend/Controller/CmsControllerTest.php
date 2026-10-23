@@ -7,6 +7,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Page\Cms\CmsPageLoadedHook;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

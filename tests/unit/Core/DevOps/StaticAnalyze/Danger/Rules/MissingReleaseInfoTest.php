@@ -30,8 +30,6 @@ class MissingReleaseInfoTest extends TestCase
     public function testSilentWithReleaseInfo(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Framework/Framework.php'),
-            new StubFile('RELEASE_INFO-6.7.md'),
         ])));
 
         (new MissingReleaseInfo())($context);

@@ -8,6 +8,7 @@ use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Component\HttpFoundation\Exception\JsonException;
 
 #[BecomesInternal(version: 'v6.8.0')]
 class ServiceException extends HttpException

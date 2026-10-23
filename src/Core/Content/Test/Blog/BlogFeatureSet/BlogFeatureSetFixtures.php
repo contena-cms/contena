@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Test\Blog\BlogFeatureSet;
 
 use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Test\Integration\Traits\EntityFixturesBase;
 
 /**
  * @internal

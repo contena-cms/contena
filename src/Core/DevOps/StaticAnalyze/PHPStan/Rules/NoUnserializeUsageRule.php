@@ -10,6 +10,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Test\Assert\Serialization;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Tests\TestRuleHelper;
 
 /**
  * This rule detects usage of the unserialize() function and reports it as a security vulnerability.

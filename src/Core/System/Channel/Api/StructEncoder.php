@@ -13,6 +13,7 @@ use Contena\Core\System\Channel\ChannelException;
 use Contena\Core\System\Channel\Entity\DefinitionRegistryChain;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Contracts\Service\ResetInterface;
+use Contena\Core\Framework\App\Validation\Error\ErrorCollection;
 
 class StructEncoder implements ResetInterface
 {

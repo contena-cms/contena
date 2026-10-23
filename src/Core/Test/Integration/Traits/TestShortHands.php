@@ -11,6 +11,9 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Test\Integration\Builder\User\UserBuilder;
+use Contena\Core\Test\Integration\Helper\MailEventListener;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @codeCoverageIgnore
@@ -20,8 +23,7 @@ use Contena\Core\Test\TestDefaults;
 trait TestShortHands
 {
     use KernelTestBehaviour;
-use Contena\Core\Test\Integration\Builder\User\UserBuilder;
-use Contena\Core\Test\Integration\Helper\MailEventListener;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
     /**
      * @param array<string, mixed> $options

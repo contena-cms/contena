@@ -7,6 +7,7 @@ use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
 /**
  * @phpstan-import-type MailNameCombination from AbstractMailFactory

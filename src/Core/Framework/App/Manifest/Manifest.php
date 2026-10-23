@@ -22,6 +22,7 @@ use Contena\Core\Framework\App\Manifest\Xml\Tax\Tax;
 use Contena\Core\Framework\App\Manifest\Xml\Webhook\Webhooks;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Symfony\Component\Config\Util\XmlUtils;
+use Contena\Core\Framework\App\Exception\AppXmlParsingException;
 
 /**
  * @internal only for use by the app-system

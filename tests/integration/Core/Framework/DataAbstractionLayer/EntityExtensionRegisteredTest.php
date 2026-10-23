@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Integration\IntegrationDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

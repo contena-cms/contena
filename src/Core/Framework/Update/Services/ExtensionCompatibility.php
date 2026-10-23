@@ -13,6 +13,7 @@ use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Update\Event\ExtensionCompatibilitiesResolvedEvent;
 use Contena\Core\Framework\Update\Struct\Version;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
  * @internal

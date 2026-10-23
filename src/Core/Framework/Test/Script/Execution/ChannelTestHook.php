@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\Test\Script\Execution;
 use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 
 /**
  * @internal

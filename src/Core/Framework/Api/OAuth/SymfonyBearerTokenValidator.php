@@ -10,6 +10,7 @@ use League\OAuth2\Server\Repositories\AccessTokenRepositoryInterface;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
  * @internal
@@ -72,30 +73,30 @@ readonly class SymfonyBearerTokenValidator
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $aud);
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_SCOPES, $claims->get('scopes'));
 
-        $admin_userId = $claims->get('sub');
+        $adminUserId = $claims->get('sub');
 
         // for integrations we get the access key as "sub", we only want to set it when it is the real admin_user id
-        if ($admin_userId && Uuid::isValid($admin_userId)) {
-            $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $admin_userId);
-            $this->validateAccessTokenIssuedAt($token->claims()->get('iat', 0), $admin_userId);
+        if ($adminUserId && Uuid::isValid($adminUserId)) {
+            $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $adminUserId);
+            $this->validateAccessTokenIssuedAt($token->claims()->get('iat', 0), $adminUserId);
         }
     }
 
-    private function validateAccessTokenIssuedAt(\DateTimeImmutable $tokenIssuedAt, string $admin_userId): void
+    private function validateAccessTokenIssuedAt(\DateTimeImmutable $tokenIssuedAt, string $adminUserId): void
     {
-        $admin_user = $this->connection->createQueryBuilder()
+        $adminUser = $this->connection->createQueryBuilder()
             ->select('last_updated_password_at', 'active')
             ->from('admin_user')
             ->where('id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($admin_userId))
+            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchAssociative();
 
-        if ($admin_user === false || !(bool) $admin_user['active']) {
+        if ($adminUser === false || !(bool) $adminUser['active']) {
             throw OAuthServerException::accessDenied('Access token is invalid');
         }
 
-        $lastUpdatedPasswordAt = $admin_user['last_updated_password_at'];
+        $lastUpdatedPasswordAt = $adminUser['last_updated_password_at'];
 
         if ($lastUpdatedPasswordAt === null) {
             return;

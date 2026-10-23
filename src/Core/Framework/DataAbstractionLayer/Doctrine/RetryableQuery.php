@@ -7,6 +7,7 @@ use Doctrine\DBAL\Statement;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
 use Contena\Core\Framework\Telemetry\Metrics\MeterProvider;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use Doctrine\DBAL\Exception\RetryableException;
 
 class RetryableQuery
 {

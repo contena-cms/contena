@@ -53,11 +53,11 @@ class UpdatedByFieldSerializerTest extends TestCase
         $data = new KeyValuePair('key', null, false);
         $existence = static::createStub(EntityExistence::class);
         $existence->method('exists')->willReturn(true);
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $parameters = new WriteParameterBag(
             static::createStub(EntityDefinition::class),
-            $this->createWriteContext($admin_userId),
+            $this->createWriteContext($adminUserId),
             '/',
             new WriteCommandQueue(),
         );
@@ -69,7 +69,7 @@ class UpdatedByFieldSerializerTest extends TestCase
             $parameters
         ));
 
-        static::assertSame($admin_userId, Uuid::fromBytesToHex($result['updated_by_id'] ?? ''));
+        static::assertSame($adminUserId, Uuid::fromBytesToHex($result['updated_by_id'] ?? ''));
     }
 
     public function testEncodeWithInvalidField(): void
@@ -211,10 +211,10 @@ class UpdatedByFieldSerializerTest extends TestCase
         static::assertSame(['updated_by_id' => null], $result);
     }
 
-    private function createWriteContext(?string $admin_userId, string $versionId = Defaults::LIVE_VERSION, bool $useAdminApiSource = true): WriteContext
+    private function createWriteContext(?string $adminUserId, string $versionId = Defaults::LIVE_VERSION, bool $useAdminApiSource = true): WriteContext
     {
         if ($useAdminApiSource) {
-            $source = new AdminApiSource($admin_userId);
+            $source = new AdminApiSource($adminUserId);
         } else {
             $source = new ChannelApiSource(TestDefaults::CHANNEL);
         }

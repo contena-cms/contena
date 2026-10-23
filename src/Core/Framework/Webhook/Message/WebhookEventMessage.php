@@ -25,7 +25,7 @@ class WebhookEventMessage
         private readonly string $url,
         private readonly ?string $secret,
         private readonly string $languageId,
-        private readonly string $admin_userLocale,
+        private readonly string $adminUserLocale,
         private readonly array $webhookHeaders = [],
         /**
          * @deprecated tag:v6.8.0 - Will become non-nullable. Null only for BC with old serialized messages already in the queue.

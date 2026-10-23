@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\Generator;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Channel\Channel\StoreApiInfoController;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

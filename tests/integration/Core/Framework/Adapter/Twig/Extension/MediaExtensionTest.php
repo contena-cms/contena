@@ -8,6 +8,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

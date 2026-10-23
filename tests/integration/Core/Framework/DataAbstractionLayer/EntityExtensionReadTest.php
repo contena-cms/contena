@@ -24,6 +24,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\OneToO
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ToOneBlogExtension;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

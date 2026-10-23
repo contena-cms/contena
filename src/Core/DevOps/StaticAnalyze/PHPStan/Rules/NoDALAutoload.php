@@ -13,6 +13,7 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @implements Rule<New_>

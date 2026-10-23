@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\MessageQueue\Command\RegisterScheduledTasksCommand;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

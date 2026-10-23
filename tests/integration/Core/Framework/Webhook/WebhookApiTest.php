@@ -16,6 +16,7 @@ use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Framework\Webhook\WebhookException;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -68,8 +69,8 @@ class WebhookApiTest extends TestCase
     public function testTheUserCreatingAWebhookOwnsIt(): void
     {
         $connection = static::getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['webhook:create', 'blog:read']);
-        $admin_user->authorizeBrowser($this->getBrowser());
+        $adminUser = TestUser::createNewTestUser($connection, ['webhook:create', 'blog:read']);
+        $adminUser->authorizeBrowser($this->getBrowser());
 
         $webhookId = Uuid::randomHex();
         $this->getBrowser()->jsonRequest('POST', '/api/webhook/', [
@@ -83,7 +84,7 @@ class WebhookApiTest extends TestCase
         static::assertSame(204, $response->getStatusCode(), (string) $response->getContent());
 
         $webhook = $this->loadWebhook($webhookId);
-        static::assertSame($admin_user->getUserId(), $webhook->getOwnerUserId());
+        static::assertSame($adminUser->getUserId(), $webhook->getOwnerUserId());
         static::assertNull($webhook->getOwnerIntegrationId());
     }
 
@@ -232,12 +233,12 @@ class WebhookApiTest extends TestCase
     public function testAUserThatOwnsAWebhookCannotBeDeleted(): void
     {
         $connection = static::getContainer()->get(Connection::class);
-        $admin_userId = TestUser::createNewTestUser($connection)->getUserId();
-        WebhookBuilder::ownedByUser($admin_userId)->insert($connection);
+        $adminUserId = TestUser::createNewTestUser($connection)->getUserId();
+        WebhookBuilder::ownedByUser($adminUserId)->insert($connection);
 
         $this->expectException(RestrictDeleteViolationException::class);
 
-        static::getContainer()->get('admin_user.repository')->delete([['id' => $admin_userId]], Context::createDefaultContext());
+        static::getContainer()->get('admin_user.repository')->delete([['id' => $adminUserId]], Context::createDefaultContext());
     }
 
     public function testAnIntegrationThatOwnsAWebhookCannotBeDeleted(): void
@@ -297,10 +298,10 @@ class WebhookApiTest extends TestCase
     public function testWebhookCanBeLimitedToSomeOfItsOwnersRoles(): void
     {
         $connection = static::getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['webhook:create', 'blog:read']);
-        $admin_user->authorizeBrowser($this->getBrowser());
+        $adminUser = TestUser::createNewTestUser($connection, ['webhook:create', 'blog:read']);
+        $adminUser->authorizeBrowser($this->getBrowser());
 
-        $roleId = $admin_user->getAclRoleId();
+        $roleId = $adminUser->getAclRoleId();
 
         $webhookId = $this->createWebhookWithAclRoles('blog.written', [$roleId]);
 
@@ -312,11 +313,11 @@ class WebhookApiTest extends TestCase
     public function testAclRolesTheOwnerDoesNotHoldAreRejected(): void
     {
         $connection = static::getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['webhook:create', 'blog:read']);
-        $admin_user->authorizeBrowser($this->getBrowser());
+        $adminUser = TestUser::createNewTestUser($connection, ['webhook:create', 'blog:read']);
+        $adminUser->authorizeBrowser($this->getBrowser());
 
         $notHeldRoleId = $this->createAclRole(['blog:read']);
-        $webhookId = $this->createWebhookWithAclRoles('blog.written', [$admin_user->getAclRoleId(), $notHeldRoleId]);
+        $webhookId = $this->createWebhookWithAclRoles('blog.written', [$adminUser->getAclRoleId(), $notHeldRoleId]);
 
         $this->assertApiErrors([[
             'code' => 'FRAMEWORK__WRITE_CONSTRAINT_VIOLATION',

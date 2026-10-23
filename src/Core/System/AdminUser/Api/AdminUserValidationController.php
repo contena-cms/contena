@@ -18,7 +18,7 @@ class AdminUserValidationController extends AbstractController
     /**
      * @internal
      */
-    public function __construct(private readonly AdminUserValidationService $admin_userValidationService)
+    public function __construct(private readonly AdminUserValidationService $adminUserValidationService)
     {
     }
 

@@ -14,12 +14,13 @@ use Contena\Core\System\User\UserEntity;
 use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\System\User\Channel\UserAddressValidationTrait;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class DeleteAddressRoute extends AbstractDeleteAddressRoute
 {
     use UserAddressValidationTrait;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @param EntityRepository<UserAddressCollection> $addressRepository

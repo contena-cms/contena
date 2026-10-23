@@ -53,21 +53,11 @@ class MailTemplateSendService
             $mailPayload->mediaIds,
         );
 
-        $orderId = null;
-        if (\array_key_exists('order', $templateData)) {
-            if (\is_array($templateData['order'])) {
-                $orderId = $templateData['order']['id'] ?? null;
-            } elseif ($templateData['order'] instanceof OrderEntity) {
-                $orderId = $templateData['order']->getId();
-            }
-        }
-
         $data['attachmentsConfig'] = new MailAttachmentsConfig(
             $context,
             $mailTemplate ?? new MailTemplateEntity(),
             $extension,
             [],
-            $orderId,
         );
 
         return $this->mailService->send($data, $context, $templateData);

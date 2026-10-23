@@ -11,6 +11,9 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
+use Twig\Error\RuntimeError;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Twig\Error\SyntaxError;
 
 /**
  * @internal

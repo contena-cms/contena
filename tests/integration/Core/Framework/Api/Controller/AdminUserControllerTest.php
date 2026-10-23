@@ -12,6 +12,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -86,7 +87,7 @@ class AdminUserControllerTest extends TestCase
     {
         $ids = new IdsCollection();
 
-        $admin_user = [
+        $adminUser = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
             'name' => 'Firstname',
@@ -101,7 +102,7 @@ class AdminUserControllerTest extends TestCase
         ];
 
         static::getContainer()->get('admin_user.repository')
-            ->create([$admin_user], Context::createDefaultContext());
+            ->create([$adminUser], Context::createDefaultContext());
 
         $client = $this->getBrowser(true, [AdminUserVerifiedScope::IDENTIFIER]);
         $client->request('DELETE', '/api/admin_user/' . $ids->get('admin_user') . '/acl-roles/' . $ids->get('role-1'));
@@ -124,7 +125,7 @@ class AdminUserControllerTest extends TestCase
     {
         $ids = new IdsCollection();
 
-        $admin_user = [
+        $adminUser = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
             'name' => 'Firstname',
@@ -136,7 +137,7 @@ class AdminUserControllerTest extends TestCase
         ];
 
         static::getContainer()->get('admin_user.repository')
-            ->create([$admin_user], Context::createDefaultContext());
+            ->create([$adminUser], Context::createDefaultContext());
 
         $client = $this->getBrowser(true, [AdminUserVerifiedScope::IDENTIFIER]);
         $client->request(
@@ -296,8 +297,8 @@ class AdminUserControllerTest extends TestCase
 
         $browser->request('GET', '/api/_info/me');
         $me = json_decode((string) $browser->getResponse()->getContent(), true, 512, \JSON_THROW_ON_ERROR);
-        $admin_userId = $me['data']['id'];
-        static::assertIsString($admin_userId);
+        $adminUserId = $me['data']['id'];
+        static::assertIsString($adminUserId);
 
         // Setting the avatar through the media association (not just avatarId) must keep working.
         $mediaId = Uuid::randomHex();
@@ -309,7 +310,7 @@ class AdminUserControllerTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         static::assertSame(
             $mediaId,
-            $connection->fetchOne('SELECT LOWER(HEX(avatar_id)) FROM `admin_user` WHERE id = UNHEX(:id)', ['id' => $admin_userId]),
+            $connection->fetchOne('SELECT LOWER(HEX(avatar_id)) FROM `admin_user` WHERE id = UNHEX(:id)', ['id' => $adminUserId]),
             'The avatar media association must remain writable for self-service profile edits.'
         );
     }
@@ -352,7 +353,7 @@ class AdminUserControllerTest extends TestCase
     {
         $ids = new IdsCollection();
 
-        $admin_user = [
+        $adminUser = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
             'name' => 'Firstname',
@@ -364,7 +365,7 @@ class AdminUserControllerTest extends TestCase
         ];
 
         static::getContainer()->get('admin_user.repository')
-            ->create([$admin_user], Context::createDefaultContext());
+            ->create([$adminUser], Context::createDefaultContext());
 
         $this->authorizeBrowser($this->getBrowser(), [AdminUserVerifiedScope::IDENTIFIER], ['admin_user_change_me']);
 
@@ -399,7 +400,7 @@ class AdminUserControllerTest extends TestCase
     {
         $ids = new IdsCollection();
 
-        $admin_user = [
+        $adminUser = [
             'id' => $ids->get('admin_user'),
             'email' => 'target@example.com',
             'name' => 'Firstname',
@@ -411,7 +412,7 @@ class AdminUserControllerTest extends TestCase
         ];
 
         static::getContainer()->get('admin_user.repository')
-            ->create([$admin_user], Context::createDefaultContext());
+            ->create([$adminUser], Context::createDefaultContext());
 
         $this->authorizeBrowser($this->getBrowser(), [AdminUserVerifiedScope::IDENTIFIER], ['admin_user:create', 'admin_user:update']);
         $client = $this->getBrowser();
@@ -463,7 +464,7 @@ class AdminUserControllerTest extends TestCase
     {
         $ids = new IdsCollection();
 
-        $admin_user = [
+        $adminUser = [
             'id' => $ids->get('admin_user'),
             'email' => 'target@example.com',
             'name' => 'Firstname',
@@ -474,7 +475,7 @@ class AdminUserControllerTest extends TestCase
         ];
 
         static::getContainer()->get('admin_user.repository')
-            ->create([$admin_user], Context::createDefaultContext());
+            ->create([$adminUser], Context::createDefaultContext());
 
         $this->authorizeBrowser($this->getBrowser(), [AdminUserVerifiedScope::IDENTIFIER], ['admin_user:update']);
         $client = $this->getBrowser();
@@ -525,12 +526,12 @@ class AdminUserControllerTest extends TestCase
         $client = $this->getBrowser();
         $connection = static::getContainer()->get(Connection::class);
 
-        $admin_userId = $connection->fetchOne('SELECT LOWER(HEX(id)) FROM admin_user WHERE email = :email', ['email' => 'admin@example.com']);
-        static::assertIsString($admin_userId);
+        $adminUserId = $connection->fetchOne('SELECT LOWER(HEX(id)) FROM admin_user WHERE email = :email', ['email' => 'admin@example.com']);
+        static::assertIsString($adminUserId);
 
         $tokensBefore = (int) $connection->fetchOne(
             'SELECT COUNT(*) FROM refresh_token WHERE admin_user_id = UNHEX(:admin_userId)',
-            ['admin_userId' => $admin_userId]
+            ['admin_userId' => $adminUserId]
         );
         static::assertGreaterThan(0, $tokensBefore, 'Expected at least one refresh token before logout');
 
@@ -539,7 +540,7 @@ class AdminUserControllerTest extends TestCase
 
         $tokensAfter = (int) $connection->fetchOne(
             'SELECT COUNT(*) FROM refresh_token WHERE admin_user_id = UNHEX(:admin_userId)',
-            ['admin_userId' => $admin_userId]
+            ['admin_userId' => $adminUserId]
         );
         static::assertSame(0, $tokensAfter, 'Expected all refresh tokens to be revoked after logout');
     }

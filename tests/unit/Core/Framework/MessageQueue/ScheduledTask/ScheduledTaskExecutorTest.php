@@ -251,24 +251,7 @@ class ScheduledTaskExecutorTest extends TestCase
         });
     }
 
-    /**
-     * @param StaticEntityRepository<ScheduledTaskCollection> $repository
-     */
-    private function createHandler(EntityRepository $repository, ?MockClock $clock = null, ?\Throwable $throw = null): TestExecutorHandler
-    {
-        $handler = new TestExecutorHandler($repository, static::createStub(LoggerInterface::class), $throw);
-        $handler->setClock($clock ?? new MockClock());
 
-        return $handler;
-    }
-
-    private function createTask(): TestExecutorTask
-    {
-        $task = new TestExecutorTask();
-        $task->setTaskId(Uuid::randomHex());
-
-        return $task;
-    }
 
     private function createEntity(
         ?string $id,

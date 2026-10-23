@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Command\DataAbstractionLayerValidateCommand;
 use Contena\Core\Framework\Feature;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -5,6 +5,7 @@ namespace Contena\Frontend\Page\Cms;
 use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\PageLoadedHook;
+use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 
 /**
  * Triggered when a CmsPage is loaded

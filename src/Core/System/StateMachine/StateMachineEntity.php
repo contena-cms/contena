@@ -7,6 +7,8 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachin
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class StateMachineEntity extends Entity
 {

@@ -9,6 +9,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_6\Migration1715081559AdjustSentMailActionOnReviewSent;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -19,7 +20,6 @@ class Migration1715081559AdjustSentMailActionOnReviewSentTest extends TestCase
     use KernelTestBehaviour;
     use MigrationTestTrait;
 
-    private Migration1715081559AdjustSentMailActionOnReviewSent $migration;
 
     protected function setUp(): void
     {

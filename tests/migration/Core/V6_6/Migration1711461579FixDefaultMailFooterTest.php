@@ -19,7 +19,6 @@ class Migration1711461579FixDefaultMailFooterTest extends TestCase
 {
     use MigrationTestTrait;
 
-    private Migration1711461579FixDefaultMailFooter $migration;
 
     private Connection $connection;
 

@@ -5,6 +5,8 @@ namespace Contena\Tests\Integration\Core\Framework\Migration;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -12,7 +14,6 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 class DateTimeTest extends TestCase
 {
     use KernelTestBehaviour;
-use Contena\Core\Defaults;
 
     public function testMigrationDoesntUseDate(): void
     {

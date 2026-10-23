@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\RateLimiter;
 
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 
 /**
  * @codeCoverageIgnore

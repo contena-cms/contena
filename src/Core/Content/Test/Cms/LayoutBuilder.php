@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Test\Cms;
 
 use Contena\Core\Content\Blog\Cms\CrossSellingCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogDescriptionReviewsCmsElementResolver;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
@@ -266,23 +265,6 @@ class LayoutBuilder
         return $this;
     }
 
-    public function descriptionReviews(?string $key = null, string $section = 'main'): self
-    {
-        $this->section($section);
-        $key ??= Uuid::randomHex();
-        $this->sections[$section]['blocks'][$key] = array_merge(
-            [
-                'type' => BlogDescriptionReviewsCmsElementResolver::TYPE,
-                'position' => $this->blockPosition($section),
-                'slots' => [
-                    ['type' => BlogDescriptionReviewsCmsElementResolver::TYPE, 'slot' => 'content'],
-                ],
-            ],
-            self::margin(20, 0, 20, 0)
-        );
-
-        return $this;
-    }
 
     public function crossSelling(?string $key = null, string $section = 'main'): self
     {

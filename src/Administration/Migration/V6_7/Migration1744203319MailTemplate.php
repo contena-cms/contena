@@ -7,6 +7,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Contena\Core\Framework\Migration\MigrationException;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * @internal

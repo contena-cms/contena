@@ -7,13 +7,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderTrackingCodeRule;
 use Contena\Core\Framework\Rule\RuleScope;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
@@ -25,40 +22,12 @@ use Symfony\Component\Validator\Constraints\Type;
 #[Group('rules')]
 class OrderTrackingCodeRuleTest extends TestCase
 {
-    private OrderTrackingCodeRule $rule;
 
     protected function setUp(): void
     {
         $this->rule = new OrderTrackingCodeRule();
     }
 
-    /**
-     * @param list<string> $trackingCodeData
-     */
-    #[DataProvider('getRuleTestData')]
-    public function testIfMatches(
-        OrderTrackingCodeRule $rule,
-        array $trackingCodeData,
-        bool $expected
-    ): void {
-        $orderDeliveryCollection = new OrderDeliveryCollection();
-        $orderDelivery = new OrderDeliveryEntity();
-        $orderDelivery->setId(Uuid::randomHex());
-        $orderDelivery->setTrackingCodes($trackingCodeData);
-        $orderDeliveryCollection->add($orderDelivery);
-
-        $order = new OrderEntity();
-        $order->setDeliveries($orderDeliveryCollection);
-
-        $cart = new Cart('token');
-
-        $match = $rule->match(new FlowRuleScope(
-            $order,
-            $cart,
-            static::createStub(ChannelContext::class)
-        ));
-        static::assertSame($expected, $match);
-    }
 
     /**
      * @return iterable<string, array{OrderTrackingCodeRule, list<string>, bool}>

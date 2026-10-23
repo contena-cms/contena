@@ -27,6 +27,14 @@ use Contena\Core\System\User\Exception\UserAuthThrottledException;
 use Contena\Core\System\User\Exception\UserNotFoundByHashException;
 use Contena\Core\System\User\Exception\UserOptinNotCompletedException;
 use Contena\Core\System\User\Exception\UserRecoveryHashExpiredException;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\System\User\Exception\BadCredentialsException;
+use Contena\Core\System\User\Exception\UserNotFoundByIdException;
+use Contena\Core\System\User\Exception\UserNotFoundException;
+use Symfony\Component\Routing\Exception\InvalidParameterException;
+use Symfony\Component\Routing\Exception\MissingMandatoryParametersException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @internal

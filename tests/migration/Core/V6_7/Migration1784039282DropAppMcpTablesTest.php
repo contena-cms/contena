@@ -11,6 +11,7 @@ use Contena\Core\Migration\V6_7\Migration1773409342AppMcpPrompt;
 use Contena\Core\Migration\V6_7\Migration1773409343AppMcpResource;
 use Contena\Core\Migration\V6_7\Migration1777020096AppMcpToolRequiredPrivileges;
 use Contena\Core\Migration\V6_7\Migration1784039282DropAppMcpTables;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

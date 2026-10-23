@@ -9,15 +9,10 @@ use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCapture\OrderTransactionCaptureCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCaptureRefund\OrderTransactionCaptureRefundCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCaptureRefund\OrderTransactionCaptureRefundStates;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Checkout\Payment\Cart\PaymentRefundProcessor;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Payment\PaymentProcessor;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\AppCollection;
@@ -55,9 +50,7 @@ abstract class AbstractAppPaymentHandlerTestCase extends TestCase
 
     final public const ERROR_MESSAGE = 'testError';
 
-    protected PaymentProcessor $paymentProcessor;
 
-    protected PaymentRefundProcessor $paymentRefundProcessor;
 
     protected ShopIdProvider $shopIdProvider;
 

@@ -31,6 +31,9 @@ use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -11,6 +11,7 @@ use Contena\Core\Test\Stub\System\NumberRange\ValueGenerator\IncrementArrayStora
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ServiceLocator;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

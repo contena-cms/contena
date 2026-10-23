@@ -28,6 +28,7 @@ use Contena\Frontend\Theme\ThemeEntity;
 use Contena\Frontend\Theme\ThemeLifecycleHandler;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeService;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -25,10 +25,10 @@ class StoreRequestOptionsProvider extends AbstractStoreRequestOptionsProvider
     final public const CONTENA_SHOP_SECRET_HEADER = 'X-Contena-Shop-Secret';
 
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly SystemConfigService $systemConfigService,
         private readonly InstanceService $instanceService,
         private readonly LocaleProvider $localeProvider,
@@ -70,12 +70,12 @@ class StoreRequestOptionsProvider extends AbstractStoreRequestOptionsProvider
     private function getTokenFromAdmin(Context $context): ?string
     {
         $contextSource = $this->ensureAdminApiSource($context);
-        $admin_userId = $contextSource->getUserId();
-        if ($admin_userId === null) {
+        $adminUserId = $contextSource->getUserId();
+        if ($adminUserId === null) {
             throw StoreException::invalidContextSourceUser($contextSource::class);
         }
 
-        return $this->fetchUserStoreToken(new Criteria([$admin_userId]), $context);
+        return $this->fetchUserStoreToken(new Criteria([$adminUserId]), $context);
     }
 
     private function getTokenFromSystem(Context $context): ?string

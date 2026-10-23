@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
@@ -29,6 +28,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

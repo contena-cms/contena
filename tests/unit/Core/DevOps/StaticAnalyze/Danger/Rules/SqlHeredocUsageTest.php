@@ -21,7 +21,6 @@ class SqlHeredocUsageTest extends TestCase
     public function testHeredocDetection(string $fileName, string $status, string $patch, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status, '', $patch),
         ])));
 
         (new SqlHeredocUsage())($context);

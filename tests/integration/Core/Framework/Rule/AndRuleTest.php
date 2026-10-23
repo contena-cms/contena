@@ -13,6 +13,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Validator\Constraints\Type;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

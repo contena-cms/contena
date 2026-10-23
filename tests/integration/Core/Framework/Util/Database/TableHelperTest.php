@@ -21,6 +21,7 @@ use Contena\Core\Framework\Util\Database\Index;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Util\Database\TableHelperException;
 use Contena\Core\Framework\Util\UtilException;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -4,10 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Demodata\Command;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Promotion\PromotionDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
@@ -15,7 +11,6 @@ use Contena\Core\Content\Flow\FlowDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Content\MailTemplate\MailTemplateDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\Demodata\Command\DemodataCommand;
@@ -44,19 +39,14 @@ class DemodataCommandTest extends TestCase
         UserDefinition::class,
         PropertyGroupDefinition::class,
         CategoryDefinition::class,
-        BlogManufacturerDefinition::class,
         BlogDefinition::class,
         ContentStreamDefinition::class,
-        PromotionDefinition::class,
-        OrderDefinition::class,
-        BlogReviewDefinition::class,
         AdminUserDefinition::class,
         FlowDefinition::class,
         CustomFieldSetDefinition::class,
         MailTemplateDefinition::class,
         MailHeaderFooterDefinition::class,
         ChannelDomainDefinition::class,
-        NewsletterRecipientDefinition::class,
     ];
 
     private EventDispatcher $dispatcher;

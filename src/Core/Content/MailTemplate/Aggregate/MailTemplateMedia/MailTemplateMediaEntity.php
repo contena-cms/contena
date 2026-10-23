@@ -5,6 +5,7 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailTemplateMedia;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

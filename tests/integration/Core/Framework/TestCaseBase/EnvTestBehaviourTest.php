@@ -5,6 +5,8 @@ namespace Contena\Tests\Integration\Core\Framework\TestCaseBase;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

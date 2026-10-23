@@ -11,7 +11,6 @@ use Contena\Core\Checkout\Cart\Channel\AbstractCartLoadRoute;
 use Contena\Core\Checkout\Cart\Channel\CartResponse;
 use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\Error\ErrorCollection;
-use Contena\Core\Checkout\Cart\Error\GenericCartError;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Order\Channel\OrderService;
 use Contena\Core\Checkout\Order\OrderException;
@@ -36,8 +35,6 @@ use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPage;
 use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPageLoader;
 use Contena\Frontend\Page\Checkout\Offcanvas\OffcanvasCartPage;
 use Contena\Frontend\Page\Checkout\Offcanvas\OffcanvasCartPageLoader;
-use Contena\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
-use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,7 +47,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
 #[CoversClass(CheckoutController::class)]
 class CheckoutControllerTest extends TestCase
 {
-    private CheckoutControllerStub $controller;
 
     private CartService&Stub $cartServiceMock;
 
@@ -451,15 +447,6 @@ class CheckoutControllerTest extends TestCase
             CartException::invalidCart(
                 new ErrorCollection(
                     [
-                        new GenericCartError(
-                            Uuid::randomHex(),
-                            'message',
-                            [],
-                            1,
-                            true,
-                            false,
-                            true,
-                        ),
                     ]
                 )
             )
@@ -679,23 +666,4 @@ class CheckoutControllerTest extends TestCase
         static::assertSame('', $response->getContent());
     }
 
-    private function buildController(
-        ?OrderService $orderService = null,
-        ?PaymentProcessor $paymentProcessor = null,
-        ?AbstractLogoutRoute $logoutRoute = null,
-    ): CheckoutControllerStub {
-        return new CheckoutControllerStub(
-            $this->cartServiceMock,
-            $this->cartPageLoaderMock,
-            $this->confirmPageLoaderMock,
-            $this->finishPageLoaderMock,
-            $orderService ?? $this->orderServiceMock,
-            $paymentProcessor ?? $this->paymentProcessorMock,
-            $this->offcanvasCartPageLoaderMock,
-            $logoutRoute ?? $this->logoutRouteMock,
-            $this->cartLoadRouteMock,
-            static::createStub(HeaderPageletLoaderInterface::class),
-            static::createStub(FooterPageletLoaderInterface::class),
-        );
-    }
 }

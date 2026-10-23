@@ -17,12 +17,11 @@ class AddressHashSubscriber implements EventSubscriberInterface
     {
         return [
             UserEvents::CUSTOMER_ADDRESS_LOADED_EVENT => 'generateAddressHash',
-            OrderEvents::ORDER_ADDRESS_LOADED_EVENT => 'generateAddressHash',
         ];
     }
 
     /**
-     * @param EntityLoadedEvent<UserAddressEntity|OrderAddressEntity> $event
+     * @param EntityLoadedEvent<UserAddressEntity> $event
      */
     public function generateAddressHash(EntityLoadedEvent $event): void
     {

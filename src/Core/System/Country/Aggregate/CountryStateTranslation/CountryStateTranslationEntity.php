@@ -4,6 +4,7 @@ namespace Contena\Core\System\Country\Aggregate\CountryStateTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

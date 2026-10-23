@@ -7,6 +7,7 @@ use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\Framework\Script\Execution\InterfaceHook;
 use Contena\Core\Framework\Script\ScriptException;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
 
 /**
  * Triggered when the api endpoint /store-api/script/{hook} is called. Used to execute your logic and provide a response to the request.

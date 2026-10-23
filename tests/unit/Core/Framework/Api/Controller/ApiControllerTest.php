@@ -141,8 +141,6 @@ class ApiControllerTest extends TestCase
 
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                ParentDefinition::class,
-                ChildDefinition::class,
                 VersionDefinition::class,
                 VersionCommitDefinition::class,
             ],

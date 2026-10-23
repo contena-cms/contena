@@ -7,6 +7,7 @@ use Contena\Core\Framework\Api\Acl\Event\AclGetAdditionalPrivilegesEvent;
 use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

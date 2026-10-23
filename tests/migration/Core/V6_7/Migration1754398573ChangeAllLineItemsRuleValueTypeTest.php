@@ -8,6 +8,8 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_7\Migration1754398573ChangeAllLineItemsRuleValueType;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

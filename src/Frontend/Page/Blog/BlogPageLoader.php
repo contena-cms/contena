@@ -4,18 +4,11 @@ namespace Contena\Frontend\Page\Blog;
 
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaCollection;
 use Contena\Core\Content\Blog\Channel\Detail\AbstractBlogDetailRoute;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
-use Contena\Core\Content\Blog\Channel\Review\RatingMatrix;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsAggregation;
-use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Routing\RoutingException;
@@ -115,10 +108,6 @@ class BlogPageLoader
         $this->loadOptions($page);
         $this->loadMetaData($page);
 
-        if (Feature::isActive('JSON_LD_DATA')) {
-            $this->loadStructuredDataReviews($page, $context);
-        }
-
         $this->eventDispatcher->dispatch(
             new BlogPageLoadedEvent($page, $context, $request)
         );
@@ -183,57 +172,4 @@ class BlogPageLoader
         $metaInformation->setMetaTitle(implode(' | ', $metaTitleParts));
     }
 
-    /**
-     * Loads a small sample of approved reviews and the total approved review count directly
-     * from the repository for use in the JSON-LD Blog schema (AggregateRating + Review items).
-     *
-     * The result is stored on BlogPage::$structuredDataReviews. It intentionally contains
-     * at most MAX_REVIEWS_IN_JSON_LD items and must NOT be used to render a review list.
-     */
-    private function loadStructuredDataReviews(BlogPage $page, ChannelContext $context): void
-    {
-        // Don't add reviews to the structured data if reviews are disabled.
-        if (!$this->systemConfigService->getBool('core.listing.showReview', $context->getChannelId())) {
-            return;
-        }
-
-        $blog = $page->getBlog();
-        $blogId = $blog->getParentId() ?? $blog->getId();
-
-        $criteria = new Criteria();
-        $criteria->setLimit(self::MAX_REVIEWS_IN_JSON_LD);
-        $criteria->setOffset(0);
-        $criteria->setTotalCountMode(Criteria::TOTAL_COUNT_MODE_EXACT);
-        // Most recent first — neutral, unbiased sample (see MAX_REVIEWS_IN_JSON_LD comment).
-        // Ratings are not allowed to be sorted by points/rating.
-        $criteria->addSorting(new FieldSorting('createdAt', FieldSorting::DESCENDING));
-        $criteria->addAssociation('language.translationCode');
-
-        // Only approved reviews; also scope to this blog (or its parent for variants).
-        $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_AND, [
-            new EqualsFilter('status', true),
-        ]));
-
-        $criteria->addAggregation(
-            new FilterAggregation(
-                'json-ld-status-filter',
-                new TermsAggregation('ratingMatrix', 'points'),
-                [new EqualsFilter('status', true)]
-            )
-        );
-
-        $entityResult = $this->blogReviewRepository->search($criteria, $context->getContext());
-
-        $aggregation = $entityResult->getAggregations()->get('ratingMatrix');
-        $matrix = new RatingMatrix($aggregation instanceof TermsResult ? $aggregation->getBuckets() : []);
-
-        $reviewResult = BlogReviewResult::fromSearchResult(
-            $entityResult,
-            $matrix,
-            $blogId,
-            $entityResult->getTotal(),
-        );
-
-        $page->setStructuredDataReviews($reviewResult);
-    }
 }

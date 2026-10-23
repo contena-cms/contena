@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 
 /**
  * @codeCoverageIgnore
@@ -59,7 +58,6 @@ class BlogTranslationDefinition extends EntityTranslationDefinition
             (new StringField('name', 'name'))->addFlags(new ApiAware(), new Required()),
             (new LongTextField('keywords', 'keywords'))->addFlags(new ApiAware()),
             (new LongTextField('description', 'description'))->addFlags(new ApiAware(), new AllowHtml()),
-            (new StringField('description_teaser', 'descriptionTeaser', 512))->addFlags(new ApiAware(), new WriteProtected(Context::SYSTEM_SCOPE))->setDescription('Read-only, HTML-stripped excerpt of the description, derived on write.'),
             (new StringField('meta_title', 'metaTitle'))->addFlags(new ApiAware()),
             (new StringField('pack_unit', 'packUnit'))->addFlags(new ApiAware()),
             (new StringField('pack_unit_plural', 'packUnitPlural'))->addFlags(new ApiAware()),

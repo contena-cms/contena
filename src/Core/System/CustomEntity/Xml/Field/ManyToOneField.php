@@ -11,6 +11,7 @@ namespace Contena\Core\System\CustomEntity\Xml\Field;
 class ManyToOneField extends AssociationField
 {
     use RequiredTrait;
+use Contena\Core\System\CustomEntity\Xml\Field\Traits\RequiredTrait;
 
     protected string $type = 'many-to-one';
 }

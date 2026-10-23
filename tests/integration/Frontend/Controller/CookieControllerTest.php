@@ -9,6 +9,7 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV2;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV3;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

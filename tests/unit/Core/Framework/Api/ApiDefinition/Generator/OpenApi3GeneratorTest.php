@@ -24,7 +24,6 @@ class OpenApi3GeneratorTest extends TestCase
 
     private OpenApi3Generator $customApiGenerator;
 
-    private ContenaBundleWithName $customBundleSchemas;
 
     private StaticDefinitionInstanceRegistry $definitionRegistry;
 
@@ -55,7 +54,6 @@ class OpenApi3GeneratorTest extends TestCase
 
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                SimpleDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

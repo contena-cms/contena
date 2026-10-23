@@ -6,6 +6,7 @@ use OpenSearch\Client;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;
+use OpenSearch\Exception\BadRequestHttpException;
 
 /**
  * @internal

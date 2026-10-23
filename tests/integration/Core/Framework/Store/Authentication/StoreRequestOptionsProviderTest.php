@@ -10,6 +10,8 @@ use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvi
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -116,16 +118,16 @@ class StoreRequestOptionsProviderTest extends TestCase
     {
         /** @var AdminApiSource $contextSource */
         $contextSource = $context->getSource();
-        $admin_userId = $contextSource->getUserId();
+        $adminUserId = $contextSource->getUserId();
 
-        static::assertIsString($admin_userId);
+        static::assertIsString($adminUserId);
 
-        $criteria = (new Criteria([$admin_userId]))->addAssociation('locale');
+        $criteria = (new Criteria([$adminUserId]))->addAssociation('locale');
 
-        $admin_user = $this->getUserRepository()->search($criteria, $context)->getEntities()->first();
-        static::assertNotNull($admin_user);
-        static::assertNotNull($admin_user->getLocale());
+        $adminUser = $this->getUserRepository()->search($criteria, $context)->getEntities()->first();
+        static::assertNotNull($adminUser);
+        static::assertNotNull($adminUser->getLocale());
 
-        return $admin_user->getLocale()->getCode();
+        return $adminUser->getLocale()->getCode();
     }
 }

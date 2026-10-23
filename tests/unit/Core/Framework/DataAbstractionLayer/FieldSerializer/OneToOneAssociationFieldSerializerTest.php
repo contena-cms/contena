@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -114,15 +113,7 @@ class UserRecoveryDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             (new StringField('hash', 'hash'))->addFlags(new Required()),
-            (new FkField('user_id', 'userId', TestUserDefinition::class))->addFlags(new Required()),
 
-            new OneToOneAssociationField(
-                'user',
-                'user_id',
-                'id',
-                TestUserDefinition::class,
-                false
-            ),
         ]);
     }
 }
@@ -144,13 +135,6 @@ class TestUserDefinition extends EntityDefinition
             (new StringField('first_name', 'first_name'))->addFlags(new Required()),
             (new StringField('last_name', 'last_name'))->addFlags(new Required()),
 
-            new OneToOneAssociationField(
-                'recoveryUser',
-                'id',
-                'user_id',
-                UserRecoveryDefinition::class,
-                false
-            ),
         ]);
     }
 }

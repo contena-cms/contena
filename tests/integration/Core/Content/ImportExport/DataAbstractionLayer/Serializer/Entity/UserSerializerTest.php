@@ -13,6 +13,8 @@ use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

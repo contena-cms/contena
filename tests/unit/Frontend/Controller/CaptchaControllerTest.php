@@ -46,7 +46,6 @@ class CaptchaControllerTest extends TestCase
         $captcha->expects($this->once())
             ->method('validate')
             ->willReturn(new ConstraintViolationList([
-                new ConstraintViolation('', '', [], '', '/' . BasicCaptcha::CAPTCHA_REQUEST_PARAMETER, '', null, BasicCaptcha::INVALID_CAPTCHA_CODE),
             ]));
 
         $request = $this->createRequest();

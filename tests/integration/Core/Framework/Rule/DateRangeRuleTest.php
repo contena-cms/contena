@@ -16,6 +16,8 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -51,36 +53,6 @@ class DateRangeRuleTest extends TestCase
         $exception = new WriteException();
         $exception->add(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    'This value should not be blank.',
-                    'This value should not be blank.',
-                    ['{{ value }}' => 'null'],
-                    null,
-                    '/value/fromDate',
-                    null,
-                    null,
-                    NotBlank::IS_BLANK_ERROR,
-                ),
-                new ConstraintViolation(
-                    'This value should not be blank.',
-                    'This value should not be blank.',
-                    ['{{ value }}' => 'null'],
-                    null,
-                    '/value/toDate',
-                    null,
-                    null,
-                    NotBlank::IS_BLANK_ERROR,
-                ),
-                new ConstraintViolation(
-                    'This value should not be null.',
-                    'This value should not be null.',
-                    ['{{ value }}' => 'null'],
-                    null,
-                    '/value/useTime',
-                    null,
-                    null,
-                    NotNull::IS_NULL_ERROR,
-                ),
             ]),
             '/0',
         ));

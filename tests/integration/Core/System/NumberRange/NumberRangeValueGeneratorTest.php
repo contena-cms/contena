@@ -17,6 +17,7 @@ use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGener
 use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

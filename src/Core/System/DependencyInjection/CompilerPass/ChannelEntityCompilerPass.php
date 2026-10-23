@@ -23,6 +23,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 #[BecomesInternal(version: 'v6.8.0')]
 class ChannelEntityCompilerPass implements CompilerPassInterface

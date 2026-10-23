@@ -21,6 +21,9 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

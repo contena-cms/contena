@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\Flow\Aggregate\FlowTemplate;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

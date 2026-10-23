@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Frontend\Event\SwitchBuyBoxVariantEvent;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Page\Cms\CmsPageLoadedHook;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -148,63 +147,4 @@ class CmsController extends FrontendController
         return $response;
     }
 
-    /**
-     * Route to load the cms element buy box blog config which assigned to the provided blog id.
-     * Blog id is required to load the slot config for the buy box
-     */
-    #[Route(
-        path: '/widgets/cms/buybox/{blogId}/switch',
-        name: 'frontend.cms.buybox.switch',
-        defaults: [
-            'blogId' => null,
-            'XmlHttpRequest' => true,
-            PlatformRequest::ATTRIBUTE_HTTP_CACHE => true,
-        ],
-        methods: [Request::METHOD_GET]
-    )]
-    public function switchBuyBoxVariant(string $blogId, Request $request, ChannelContext $context): Response
-    {
-        /** @var string $elementId */
-        $elementId = $request->query->get('elementId');
-
-        /** @var string[]|null $options */
-        $options = json_decode($request->query->get('options', ''), true);
-
-        $variantRequestData = [
-            'switchedGroup' => $request->query->get('switched'),
-            'options' => $options ?? [],
-        ];
-        $variantRequest = $request->duplicate($variantRequestData);
-
-        $variantResponse = $this->findVariantRoute->load(
-            $blogId,
-            $variantRequest,
-            $context
-        );
-
-        $newBlogId = $variantResponse->getFoundCombination()->getVariantId();
-
-        $result = $this->blogRoute->load($newBlogId, $request, $context, new Criteria());
-        $blog = $result->getBlog();
-        $configurator = $result->getConfigurator();
-
-        $reviewTotal = 0;
-        if ($this->systemConfigService->getBool('core.listing.showReview', $context->getChannelId())) {
-            $reviews = $this->blogReviewLoader->load($request, $context, $blog->getId(), $blog->getParentId());
-            $reviewTotal = $reviews->getTotal();
-        }
-
-        $event = new SwitchBuyBoxVariantEvent($elementId, $blog, $configurator, $request, $context);
-        $this->eventDispatcher->dispatch($event);
-
-        $response = $this->renderFrontend('@Frontend/frontend/component/buy-widget/buy-widget.html.twig', [
-            'blog' => $blog,
-            'configuratorSettings' => $configurator,
-            'totalReviews' => $reviewTotal,
-            'elementId' => $elementId,
-        ]);
-        $response->headers->set('x-robots-tag', 'noindex');
-
-        return $response;
-    }
 }

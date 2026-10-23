@@ -14,6 +14,8 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Page\Navigation\NavigationPageLoadedHook;
 use Contena\Frontend\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoadedHook;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

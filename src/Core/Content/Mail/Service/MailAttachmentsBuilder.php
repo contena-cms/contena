@@ -2,20 +2,33 @@
 
 namespace Contena\Core\Content\Mail\Service;
 
-use Psr\Log\LoggerInterface;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
+use Contena\Core\Content\Media\MediaCollection;
+use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Util\Hasher;
 
 /**
+ * Collects the files that ride along with a mail: the media assigned to the template plus the
+ * media ids the sender asked for. Document attachments belonged to the commerce layer.
+ *
  * @internal
  *
- * @phpstan-type MailAttachments array<int, array{id?: string, documentId?: string, content: string, fileName: string, mimeType: string|null}>
+ * @phpstan-type MailAttachments array<int, array{id?: string, content: string, fileName: string, mimeType: string|null}>
  */
 class MailAttachmentsBuilder
 {
+    /**
+     * @param EntityRepository<MediaCollection> $mediaRepository
+     */
+    public function __construct(
+        private readonly MediaService $mediaService,
+        private readonly EntityRepository $mediaRepository,
+    ) {
+    }
 
     /**
      * @param array<string, mixed> $eventConfig
@@ -27,7 +40,6 @@ class MailAttachmentsBuilder
         MailTemplateEntity $mailTemplate,
         MailSendSubscriberConfig $extensions,
         array $eventConfig,
-        ?string $orderId
     ): array {
         $attachments = [];
 
@@ -40,19 +52,6 @@ class MailAttachmentsBuilder
                 $mailTemplateMedia->getMedia(),
                 $context
             );
-        }
-
-        $resolvedDocuments = $this->documentResolver->resolve(
-            $eventConfig,
-            $extensions->getDocumentIds(),
-            $orderId,
-            $context,
-        );
-
-        if ($resolvedDocuments !== []) {
-            $extensions->setDocumentIds(array_keys($resolvedDocuments));
-
-            $attachments = array_merge($attachments, $this->mapDocumentFilesByFormats($resolvedDocuments, $context));
         }
 
         if ($extensions->getMediaIds() === []) {
@@ -68,146 +67,6 @@ class MailAttachmentsBuilder
         }
 
         return $this->deduplicateAttachments($attachments);
-    }
-
-    /**
-     * @return MailAttachments
-     */
-    private function buildLegacyAttachment(string $documentId, Context $context): array
-    {
-        $document = $this->documentGenerator->readDocument($documentId, $context, fileType: null);
-
-        if ($document === null) {
-            return [];
-        }
-
-        return [[
-            'id' => $documentId,
-            'documentId' => $documentId,
-            'content' => $document->getContent(),
-            'fileName' => $document->getName(),
-            'mimeType' => $document->getContentType(),
-        ]];
-    }
-
-    /**
-     * @param array<string, array<string>|null> $requestedFormatsByDocumentId keyed by document id, null attaches every format the document was generated in
-     *
-     * @return MailAttachments
-     */
-    private function mapDocumentFilesByFormats(array $requestedFormatsByDocumentId, Context $context): array
-    {
-        $criteria = (new Criteria(array_keys($requestedFormatsByDocumentId)))->addAssociation('documentFiles.media');
-        $criteria->setTitle('send-mail::load-document-files');
-
-        $documents = $this->documentRepository->search($criteria, $context)->getEntities();
-
-        $attachments = [];
-
-        foreach ($requestedFormatsByDocumentId as $documentId => $requestedFormats) {
-            // html is surfaced as an a11y link in the mail body instead of being attached
-            $attachableFormats = $requestedFormats === null
-                ? null
-                : array_values(array_diff($requestedFormats, [DocumentFormat::HTML->value]));
-
-            if ($attachableFormats === []) {
-                continue;
-            }
-
-            $document = $documents->get($documentId);
-
-            if (!$document instanceof DocumentEntity) {
-                continue;
-            }
-
-            $documentFiles = $document->getDocumentFiles();
-
-            if ($documentFiles === null || $documentFiles->count() === 0) {
-                // Document generated before document_v2 - it only has the legacy media file, not document_files.
-                $attachments = array_merge($attachments, $this->buildLegacyAttachment($documentId, $context));
-
-                continue;
-            }
-
-            $matchedFormat = false;
-            $availableFormats = [];
-
-            foreach ($documentFiles as $documentFile) {
-                $availableFormats[] = $documentFile->getDocumentFormat();
-
-                if ($documentFile->getDocumentFormat() === DocumentFormat::HTML->value) {
-                    continue;
-                }
-
-                if ($attachableFormats !== null && !\in_array($documentFile->getDocumentFormat(), $attachableFormats, true)) {
-                    continue;
-                }
-
-                $matchedFormat = true;
-
-                $media = $documentFile->getMedia();
-
-                if (!$this->documentMediaGuard->isServable($media, $context)) {
-                    $this->logSkippedDocumentMedia($documentId, $documentFile->getId(), $media->getId());
-
-                    continue;
-                }
-
-                $content = $context->scope(
-                    Context::SYSTEM_SCOPE,
-                    fn (Context $scopedContext): string => $this->mediaService->loadFile($media->getId(), $scopedContext)
-                );
-
-                $fileExtension = $media->getFileExtension() ?? $documentFile->getDocumentFormat();
-
-                $attachments[] = [
-                    'id' => $documentFile->getId(),
-                    'documentId' => $documentId,
-                    'content' => $content,
-                    'fileName' => ($media->getFileName() ?? $documentId) . '.' . $fileExtension,
-                    'mimeType' => $media->getMimeType(),
-                ];
-            }
-
-            // The accessible html is never attached, it is linked in the mail body instead, so a document
-            // that holds nothing else contributes no attachment at all. The link replaces the attachment only for
-            // mail templates that render the a11yDocuments block, so the log is useful in case the template
-            // does not render the block and the admin_user expects an attachment to be present.
-            if (!$matchedFormat && ($requestedFormats !== null || $availableFormats !== [])) {
-                $this->logMissingDocumentFormat($documentId, $requestedFormats ?? [], array_values(array_unique($availableFormats)));
-            }
-        }
-
-        return $attachments;
-    }
-
-    /**
-     * @param array<string> $requestedFormats
-     * @param array<string> $availableFormats
-     */
-    private function logMissingDocumentFormat(string $documentId, array $requestedFormats, array $availableFormats): void
-    {
-        // Logged on the business_events channel, which is persisted to log_entry
-        $this->logger->warning(
-            'No attachable document format was generated for this document, so no attachment was added for it.',
-            [
-                'documentId' => $documentId,
-                'requestedFormats' => $requestedFormats,
-                'availableFormats' => $availableFormats,
-            ]
-        );
-    }
-
-    private function logSkippedDocumentMedia(string $documentId, string $documentFileId, string $mediaId): void
-    {
-        $this->logger->warning(
-            'The document file is linked to private media outside the document folder, so no attachment was added for it.',
-            [
-                'documentId' => $documentId,
-                'documentFileId' => $documentFileId,
-                'mediaId' => $mediaId,
-            ]
-        );
     }
 
     /**

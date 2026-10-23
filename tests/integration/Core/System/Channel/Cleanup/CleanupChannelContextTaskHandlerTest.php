@@ -9,6 +9,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Context\Cleanup\CleanupChannelContextTaskHandler;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

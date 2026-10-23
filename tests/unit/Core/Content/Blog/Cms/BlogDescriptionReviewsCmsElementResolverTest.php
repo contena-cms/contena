@@ -6,18 +6,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
-use Contena\Core\Content\Blog\Channel\Review\AbstractBlogReviewRoute;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewLoader;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
 use Contena\Core\Content\Blog\Cms\BlogDescriptionReviewsCmsElementResolver;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\Channel\Struct\BlogDescriptionReviewsStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
@@ -72,7 +68,6 @@ class BlogDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $blogId = 'blog-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -117,7 +112,6 @@ class BlogDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $blogId = 'blog-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -157,7 +151,6 @@ class BlogDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $blogId = 'blog-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -201,7 +194,6 @@ class BlogDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $blogId = 'blog-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -246,16 +238,4 @@ class BlogDescriptionReviewsCmsElementResolverTest extends TestCase
         static::assertNull($data->getBlog());
     }
 
-    private function getResolver(): BlogDescriptionReviewsCmsElementResolver
-    {
-        $blogReviewLoader = new BlogReviewLoader(
-            static::createStub(AbstractBlogReviewRoute::class),
-            $this->systemConfigService,
-            new EventDispatcher()
-        );
-
-        $scriptExecutor = static::createStub(ScriptExecutor::class);
-
-        return new BlogDescriptionReviewsCmsElementResolver($blogReviewLoader, $scriptExecutor, $this->systemConfigService);
-    }
 }

@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogVisibility;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

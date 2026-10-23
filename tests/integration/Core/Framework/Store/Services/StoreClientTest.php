@@ -19,6 +19,8 @@ use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Contracts\Cache\CacheInterface;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -201,13 +203,13 @@ class StoreClientTest extends TestCase
 
     public function testItReturnsUserInfo(): void
     {
-        $admin_userInfo = [
+        $adminUserInfo = [
             'name' => 'John Doe',
             'email' => 'john.doe@contena.cn',
             'avatarUrl' => 'https://avatar.contena.cn/john-doe.png',
         ];
 
-        $this->getStoreRequestHandler()->append(new Response(200, [], \json_encode($admin_userInfo, \JSON_THROW_ON_ERROR)));
+        $this->getStoreRequestHandler()->append(new Response(200, [], \json_encode($adminUserInfo, \JSON_THROW_ON_ERROR)));
 
         $returnedUserInfo = $this->storeClient->admin_userInfo($this->storeContext);
 
@@ -216,7 +218,7 @@ class StoreClientTest extends TestCase
 
         static::assertSame('/swplatform/userinfo', $lastRequest->getUri()->getPath());
         static::assertSame('GET', $lastRequest->getMethod());
-        static::assertSame($admin_userInfo, $returnedUserInfo);
+        static::assertSame($adminUserInfo, $returnedUserInfo);
     }
 
     public function testMissingConnectionBecauseYouAreInGermanCellularInternet(): void

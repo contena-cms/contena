@@ -18,7 +18,6 @@ class Migration1780386453EnableStateDisplayForCountriesWithStatesTest extends Te
 {
     private Connection $connection;
 
-    private Migration1780386453EnableStateDisplayForCountriesWithStates $migration;
 
     /**
      * @var list<array{id: string, displayStateInRegistration: int}>

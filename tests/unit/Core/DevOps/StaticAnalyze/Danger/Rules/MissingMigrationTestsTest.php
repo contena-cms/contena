@@ -71,8 +71,6 @@ class MissingMigrationTestsTest extends TestCase
     public function testRenamedMigrationTestCountsAsCoverage(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Migration/V6_8/Migration1752000000AddFoo.php', File::STATUS_ADDED),
-            new StubFile('tests/migration/Core/V6_8/Migration1752000000AddFooTest.php', File::STATUS_RENAMED),
         ])));
 
         (new MissingMigrationTests())($context);
@@ -84,8 +82,6 @@ class MissingMigrationTestsTest extends TestCase
     public function testRemovedMigrationTestDoesNotCount(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Migration/V6_8/Migration1752000000AddFoo.php', File::STATUS_ADDED),
-            new StubFile('tests/migration/Core/V6_8/Migration1752000000AddFooTest.php', File::STATUS_REMOVED),
         ])));
 
         (new MissingMigrationTests())($context);
@@ -97,7 +93,6 @@ class MissingMigrationTestsTest extends TestCase
     public function testModifiedMigrationIsIgnored(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Migration/V6_7/Migration1752000000AddFoo.php', File::STATUS_MODIFIED),
         ])));
 
         (new MissingMigrationTests())($context);

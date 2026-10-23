@@ -85,10 +85,10 @@ class WebhookManager implements ResetInterface
         }
 
         $languageId = $context->getLanguageId();
-        $admin_userLocale = $this->appLocaleProvider->getLocaleFromContext($context);
+        $adminUserLocale = $this->appLocaleProvider->getLocaleFromContext($context);
 
         if (Feature::isActive('WEBHOOKS_REWORK')) {
-            $messages = $this->collectMessages($webhooksForEvent, $event, $languageId, $admin_userLocale);
+            $messages = $this->collectMessages($webhooksForEvent, $event, $languageId, $adminUserLocale);
 
             if ($messages !== []) {
                 Feature::silent('v6.8.0.0', fn () => $this->webhookDeliveryService->process($messages, forceSynchronous: $event instanceof AppLifecycleEvent));
@@ -101,7 +101,7 @@ class WebhookManager implements ResetInterface
         if ($this->isAdminWorkerEnabled || $event instanceof AppLifecycleEvent) {
             Profiler::trace(
                 'webhook::dispatch-sync',
-                fn () => $this->callWebhooksSynchronous($webhooksForEvent, $event, $languageId, $admin_userLocale)
+                fn () => $this->callWebhooksSynchronous($webhooksForEvent, $event, $languageId, $adminUserLocale)
             );
 
             return;
@@ -109,7 +109,7 @@ class WebhookManager implements ResetInterface
 
         Profiler::trace(
             'webhook::dispatch-async',
-            fn () => $this->dispatchWebhooksToQueue($webhooksForEvent, $event, $languageId, $admin_userLocale)
+            fn () => $this->dispatchWebhooksToQueue($webhooksForEvent, $event, $languageId, $adminUserLocale)
         );
     }
 
@@ -118,12 +118,12 @@ class WebhookManager implements ResetInterface
      *
      * @return list<WebhookEventMessage>
      */
-    private function collectMessages(array $webhooksForEvent, Hookable $event, string $languageId, string $admin_userLocale): array
+    private function collectMessages(array $webhooksForEvent, Hookable $event, string $languageId, string $adminUserLocale): array
     {
         $messages = [];
 
         foreach ($webhooksForEvent as $webhook) {
-            $message = $this->createWebhookMessage($webhook, $event, $languageId, $admin_userLocale);
+            $message = $this->createWebhookMessage($webhook, $event, $languageId, $adminUserLocale);
             if ($message === null) {
                 continue;
             }
@@ -143,10 +143,10 @@ class WebhookManager implements ResetInterface
         array $webhooksForEvent,
         Hookable $event,
         string $languageId,
-        string $admin_userLocale
+        string $adminUserLocale
     ): void {
         foreach ($webhooksForEvent as $webhook) {
-            $message = $this->createWebhookMessage($webhook, $event, $languageId, $admin_userLocale);
+            $message = $this->createWebhookMessage($webhook, $event, $languageId, $adminUserLocale);
             if ($message === null) {
                 continue;
             }
@@ -164,14 +164,14 @@ class WebhookManager implements ResetInterface
         array $webhooksForEvent,
         Hookable $event,
         string $languageId,
-        string $admin_userLocale
+        string $adminUserLocale
     ): void {
         $requests = [];
         /** @var array<string, OutboxEntry> $entries */
         $entries = [];
 
         foreach ($webhooksForEvent as $webhook) {
-            $message = $this->createWebhookMessage($webhook, $event, $languageId, $admin_userLocale);
+            $message = $this->createWebhookMessage($webhook, $event, $languageId, $adminUserLocale);
             if ($message === null) {
                 continue;
             }
@@ -210,7 +210,7 @@ class WebhookManager implements ResetInterface
         Webhook $webhook,
         Hookable $event,
         string $languageId,
-        string $admin_userLocale
+        string $adminUserLocale
     ): ?WebhookEventMessage {
         try {
             $webhookData = $this->getPayloadForWebhook($webhook, $event);
@@ -235,7 +235,7 @@ class WebhookManager implements ResetInterface
             $webhook->url,
             $webhook->appSecret,
             $languageId,
-            $admin_userLocale,
+            $adminUserLocale,
             $webhookHeaders,
             $partitionKey,
             $webhook->appName,

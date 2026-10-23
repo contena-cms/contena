@@ -9,6 +9,7 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\InMigrationClassTrait;
 
 /**
  * @internal

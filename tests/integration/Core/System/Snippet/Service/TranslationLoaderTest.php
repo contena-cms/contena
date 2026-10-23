@@ -10,6 +10,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

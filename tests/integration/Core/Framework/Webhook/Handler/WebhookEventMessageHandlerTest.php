@@ -23,6 +23,7 @@ use Contena\Core\Framework\Webhook\Message\WebhookEventMessage;
 use Contena\Core\Framework\Webhook\Service\WebhookDeliveryService;
 use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Framework\Webhook\WebhookException;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

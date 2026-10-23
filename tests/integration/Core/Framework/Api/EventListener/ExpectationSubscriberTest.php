@@ -7,6 +7,7 @@ use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

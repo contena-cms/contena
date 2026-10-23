@@ -11,6 +11,7 @@ use Contena\Core\Framework\Mcp\Tool\ToolSearchTool;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolSearchTool;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolsetEnableTool;
 use Contena\Core\System\Channel\Mcp\Tool\StoreApiToolsetsListTool;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * Checks the tools as the MCP servers publish them: the input schema clients receive, and the class each

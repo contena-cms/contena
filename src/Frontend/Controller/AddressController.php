@@ -37,6 +37,8 @@ use Symfony\Component\HttpKernel\Attribute\MapQueryParameter;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\System\User\Exception\AddressNotFoundException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\System\User\Exception\CannotDeleteDefaultAddressException;
 
 /**
  * @internal

@@ -28,7 +28,6 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineS
 #[Group('rules')]
 class OrderTransactionStatusRuleTest extends TestCase
 {
-    private OrderTransactionStatusRule $rule;
 
     protected function setUp(): void
     {

@@ -28,6 +28,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal
@@ -569,10 +570,6 @@ class AssetServiceTest extends TestCase
         yield 'normal copy without a manifest' => [false, false];
     }
 
-    private function getBundle(): ExampleBundle
-    {
-        return new ExampleBundle(true, __DIR__ . '/_fixtures/ExampleBundle');
-    }
 
     private function createAssetService(
         FilesystemOperator $assetFilesystem,

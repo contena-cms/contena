@@ -9,6 +9,7 @@ use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginManagementService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

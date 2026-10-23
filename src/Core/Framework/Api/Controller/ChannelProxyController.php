@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Api\Controller;
 
 use Contena\Core\ChannelRequest;
-use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Content\Flow\Dispatching\Action\SendMailAction;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
@@ -49,10 +48,6 @@ class ChannelProxyController extends AbstractController
     private const CHANNEL_ID = 'channelId';
 
     private const SEARCH_ROUTE = 'search';
-
-    private const ADMIN_ORDER_PERMISSIONS = [
-        CheckoutPermissions::ALLOW_BLOG_PRICE_OVERWRITES => true,
-    ];
 
 
     #[Route(
@@ -144,8 +139,8 @@ class ChannelProxyController extends AbstractController
             throw ApiException::invalidAdminSource($source::class);
         }
 
-        $admin_userId = $source->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $source->getUserId();
+        if (!$adminUserId) {
             throw ApiException::admin_userNotLoggedIn();
         }
 
@@ -156,11 +151,11 @@ class ChannelProxyController extends AbstractController
             $token = new ImitateUserToken();
             $token->channelId = $channelId;
             $token->userId = $userId;
-            $token->iss = $admin_userId;
+            $token->iss = $adminUserId;
 
             $token = $this->imitateUserTokenGenerator->encode($token);
         } else {
-            $token = Feature::silent('v6.8.0.0', fn () => $this->imitateUserTokenGenerator->generate($channelId, $userId, $admin_userId));
+            $token = Feature::silent('v6.8.0.0', fn () => $this->imitateUserTokenGenerator->generate($channelId, $userId, $adminUserId));
         }
 
         return new JsonResponse([
@@ -434,7 +429,7 @@ class ChannelProxyController extends AbstractController
 
         $payload[ChannelContextService::PERMISSIONS] = $requestPermissions
             ? \array_fill_keys($requestPermissions, true)
-            : self::ADMIN_ORDER_PERMISSIONS;
+            : [];
 
         $this->contextPersister->save($contextToken, $payload, $channelId);
     }

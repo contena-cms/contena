@@ -4,7 +4,6 @@ namespace Contena\Frontend\DependencyInjection;
 
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\FindVariant\FindBlogVariantRoute;
-use Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
@@ -224,7 +223,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(MinimalQuickViewPageLoader::class),
             service(SeoUrlPlaceholderHandlerInterface::class),
             service(BlogPurchaseLimitRoute::class),
-            service(GaranLabelRoute::class),
         ])
         ->call('setContainer', [service('service_container')]);
 

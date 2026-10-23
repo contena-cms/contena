@@ -22,6 +22,8 @@ use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -60,7 +62,7 @@ class ContenaPasswordGrantTypeTest extends TestCase
     public function testRespondToAccessTokenWithOAuthUser(): void
     {
         $connection = $this->getContainer()->get(Connection::class);
-        $admin_userId = Uuid::fromBytesToHex(
+        $adminUserId = Uuid::fromBytesToHex(
             $connection->createQueryBuilder()
                 ->select('id')
                 ->from('admin_user')
@@ -70,7 +72,7 @@ class ContenaPasswordGrantTypeTest extends TestCase
                 ->fetchOne()
         );
 
-        (new FakeUserInstaller($connection))->installTokenUser($admin_userId, Uuid::randomHex());
+        (new FakeUserInstaller($connection))->installTokenUser($adminUserId, Uuid::randomHex());
 
         $request = $this->createRequest();
 
@@ -99,7 +101,7 @@ class ContenaPasswordGrantTypeTest extends TestCase
             ->select('token')
             ->from('oauth_user')
             ->where('admin_user_id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($admin_userId))
+            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchOne();
 

@@ -10,6 +10,7 @@ use Contena\Core\Framework\Store\InAppPurchase\Services\InAppPurchaseProvider;
 use Contena\Core\Framework\Store\InAppPurchase\Services\KeyFetcher;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Symfony\Component\Clock\NativeClock;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

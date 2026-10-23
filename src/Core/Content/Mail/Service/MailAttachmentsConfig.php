@@ -19,7 +19,6 @@ class MailAttachmentsConfig
         private MailTemplateEntity $mailTemplate,
         private MailSendSubscriberConfig $extension,
         private array $eventConfig,
-        private ?string $orderId
     ) {
     }
 
@@ -67,15 +66,5 @@ class MailAttachmentsConfig
     public function setEventConfig(array $eventConfig): void
     {
         $this->eventConfig = $eventConfig;
-    }
-
-    public function getOrderId(): ?string
-    {
-        return $this->orderId;
-    }
-
-    public function setOrderId(?string $orderId): void
-    {
-        $this->orderId = $orderId;
     }
 }

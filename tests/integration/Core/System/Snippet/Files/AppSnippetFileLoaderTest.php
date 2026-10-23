@@ -17,6 +17,10 @@ use Contena\Core\System\Snippet\Files\SnippetFileLoader;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Symfony\Component\Filesystem\Filesystem as Io;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

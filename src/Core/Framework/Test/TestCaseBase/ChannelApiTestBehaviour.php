@@ -22,6 +22,7 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
 
 trait ChannelApiTestBehaviour
 {
@@ -240,7 +241,6 @@ trait ChannelApiTestBehaviour
                 'street' => 'Musterstraße 1',
                 'city' => 'Schöppingen',
                 'zipcode' => '12345',
-                'salutationId' => $this->getValidSalutationId(),
                 'countryId' => $this->getValidCountryId(),
             ],
             'defaultBillingAddressId' => $addressId,
@@ -250,7 +250,6 @@ trait ChannelApiTestBehaviour
             'name' => 'Max',
             'lastName' => 'Mustermann',
             'guest' => $guest,
-            'salutationId' => $this->getValidSalutationId(),
             'userNumber' => '12345',
         ], $userOverride);
 
@@ -269,9 +268,6 @@ trait ChannelApiTestBehaviour
     {
         $context = static::getContainer()->get(ChannelContextFactory::class)
             ->create(Uuid::randomHex(), $channel['id'], $options);
-
-        $ruleLoader = static::getContainer()->get(CartRuleLoader::class);
-        $ruleLoader->loadByToken($context, $context->getToken());
 
         return $context;
     }

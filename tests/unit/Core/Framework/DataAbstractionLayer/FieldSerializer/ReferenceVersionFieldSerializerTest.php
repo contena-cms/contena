@@ -34,11 +34,8 @@ class ReferenceVersionFieldSerializerTest extends TestCase
 
     private DefinitionInstanceRegistry $definitionRegistry;
 
-    private ReferenceVersionRootDefinition $rootDefinition;
 
-    private ReferenceVersionChildDefinition $childDefinition;
 
-    private ReferenceVersionPlainDefinition $plainDefinition;
 
     protected function setUp(): void
     {

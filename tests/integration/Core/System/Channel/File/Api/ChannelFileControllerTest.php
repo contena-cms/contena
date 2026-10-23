@@ -9,6 +9,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

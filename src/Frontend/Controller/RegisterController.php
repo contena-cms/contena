@@ -14,7 +14,6 @@ use Contena\Core\Framework\Validation\DataValidationDefinition;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\User\UserEntity;
-use Contena\Frontend\Framework\AffiliateTracking\AffiliateTrackingListener;
 use Contena\Frontend\Framework\Routing\FrontendRouteScope;
 use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Page\Account\Register\AccountRegisterPageLoadedHook;
@@ -26,6 +25,9 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\Constraints\EqualTo;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Contena\Core\System\User\Exception\UserNotFoundByHashException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\System\User\Exception\UserAlreadyConfirmedException;
+use Contena\Frontend\Controller\Exception\FrontendException;
 
 /**
  * @internal
@@ -143,7 +145,7 @@ class RegisterController extends FrontendController
 
         $page = $this->registerPageLoader->load($request, $context);
 
-        $this->hook(new CheckoutRegisterPageLoadedHook($page, $context));
+        $this->hook(new AccountRegisterPageLoadedHook($page, $context));
 
         $header = $this->headerPageletLoader->load($request, $context);
         $footer = $this->footerPageletLoader->load($request, $context);
@@ -182,7 +184,6 @@ class RegisterController extends FrontendController
             }
 
             $data->set('frontendUrl', $this->getConfirmUrl($context, $request));
-            $data = $this->prepareAffiliateTracking($data, $request->getSession());
             $data->set('guest', !$data->getBoolean('createUserAccount'));
 
             $additionalValidationDefinitions = $this->getAdditionalRegisterValidationDefinitions($data, $context);
@@ -305,21 +306,6 @@ class RegisterController extends FrontendController
         return $definition;
     }
 
-    private function prepareAffiliateTracking(RequestDataBag $data, SessionInterface $session): RequestDataBag
-    {
-        $affiliateCode = $session->get(AffiliateTrackingListener::AFFILIATE_CODE_KEY);
-        $campaignCode = $session->get(AffiliateTrackingListener::CAMPAIGN_CODE_KEY);
-
-        if ($affiliateCode !== null) {
-            $data->set(AffiliateTrackingListener::AFFILIATE_CODE_KEY, $affiliateCode);
-        }
-
-        if ($campaignCode !== null) {
-            $data->set(AffiliateTrackingListener::CAMPAIGN_CODE_KEY, $campaignCode);
-        }
-
-        return $data;
-    }
 
     private function getConfirmUrl(ChannelContext $context, Request $request): string
     {

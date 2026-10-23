@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -146,9 +147,9 @@ class OAuthAuthorizeControllerTest extends TestCase
 
     public function testTokensCarryPermissionsOfTheApprovingUser(): void
     {
-        $admin_user = TestUser::createNewTestUser(static::getContainer()->get(Connection::class), ['blog:read']);
+        $adminUser = TestUser::createNewTestUser(static::getContainer()->get(Connection::class), ['blog:read']);
         $browser = $this->getBrowser(false);
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $redirectUri = $this->approve(approved: true, browser: $browser);
         parse_str((string) parse_url($redirectUri, \PHP_URL_QUERY), $callback);
@@ -157,7 +158,7 @@ class OAuthAuthorizeControllerTest extends TestCase
         $tokens = $this->exchangeCode($callback['code'], $this->codeVerifier);
         $accessToken = static::getContainer()->get('contena.jwt_config')->parser()->parse($tokens['access_token']);
         static::assertInstanceOf(UnencryptedToken::class, $accessToken);
-        static::assertSame($admin_user->getUserId(), $accessToken->claims()->get('sub'));
+        static::assertSame($adminUser->getUserId(), $accessToken->claims()->get('sub'));
         static::assertSame(['write'], array_values($accessToken->claims()->get('scopes')));
 
         $apiBrowser = $this->getBrowser(false);

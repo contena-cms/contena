@@ -10,6 +10,7 @@ use Contena\Core\Framework\Webhook\WebhookException;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Transport\Receiver\KeepaliveReceiverInterface;
 use Symfony\Component\Messenger\Transport\TransportInterface;
+use Symfony\Component\Messenger\Exception\TransportException;
 
 /**
  * Persists webhook deliveries to the outbox. When `WEBHOOKS_REWORK` is active the outbox

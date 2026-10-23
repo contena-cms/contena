@@ -23,6 +23,13 @@ use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\Event\ElasticsearchCustomFieldsMappingEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\FilesystemBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
+use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 
 /**
  * @internal

@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Search\P
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerCollection;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Test\Blog\BlogBuilder;
@@ -23,6 +22,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\SqlQueryParser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

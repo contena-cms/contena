@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\TokenFilter;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

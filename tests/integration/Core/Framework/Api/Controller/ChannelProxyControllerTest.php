@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\CartPersister;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountEntity;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Blog\Cart\BlogCartProcessor;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutor;
@@ -41,6 +40,7 @@ use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

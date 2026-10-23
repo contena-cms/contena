@@ -12,6 +12,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Event\ChannelContextTokenChangeEvent;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 class ChannelContextPersister
 {

@@ -9,6 +9,9 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 
 /**
  * @internal

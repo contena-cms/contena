@@ -10,9 +10,7 @@ use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
-use Contena\Core\Checkout\Order\Channel\AbstractCancelOrderRoute;
 use Contena\Core\Checkout\Order\Channel\AbstractOrderRoute;
-use Contena\Core\Checkout\Order\Channel\AbstractSetPaymentOrderRoute;
 use Contena\Core\Checkout\Order\Channel\OrderRouteResponse;
 use Contena\Core\Checkout\Order\Channel\OrderService;
 use Contena\Core\Checkout\Order\OrderCollection;
@@ -30,20 +28,15 @@ use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\Channel\Channel\AbstractContextSwitchRoute;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextService;
-use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Controller\AccountOrderController;
 use Contena\Frontend\Page\Account\Order\AccountEditOrderPageLoader;
-use Contena\Frontend\Page\Account\Order\AccountOrderDetailPageLoader;
 use Contena\Frontend\Page\Account\Order\AccountOrderPageLoader;
-use Contena\Frontend\Pagelet\Footer\FooterPageletLoaderInterface;
-use Contena\Frontend\Pagelet\Header\HeaderPageletLoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -56,7 +49,6 @@ use Symfony\Component\HttpFoundation\Response;
 #[CoversClass(AccountOrderController::class)]
 class AccountOrderControllerTest extends TestCase
 {
-    private AccountOrderControllerStub $controller;
 
     private Stub&AbstractOrderRoute $orderRouteMock;
 
@@ -375,27 +367,4 @@ class AccountOrderControllerTest extends TestCase
         ];
     }
 
-    private function createController(
-        AbstractOrderRoute $orderRoute,
-        AbstractHandlePaymentMethodRoute $handlePaymentRoute,
-        ?AbstractContextSwitchRoute $contextSwitchRoute = null,
-        ?AccountOrderPageLoader $orderPageLoader = null,
-    ): AccountOrderControllerStub {
-        return new AccountOrderControllerStub(
-            $orderPageLoader ?? static::createStub(AccountOrderPageLoader::class),
-            $this->accountEditOrderPageLoaderMock,
-            $contextSwitchRoute ?? static::createStub(AbstractContextSwitchRoute::class),
-            static::createStub(AbstractCancelOrderRoute::class),
-            static::createStub(AbstractSetPaymentOrderRoute::class),
-            $handlePaymentRoute,
-            static::createStub(EventDispatcherInterface::class),
-            static::createStub(AccountOrderDetailPageLoader::class),
-            $orderRoute,
-            static::createStub(ChannelContextServiceInterface::class),
-            static::createStub(SystemConfigService::class),
-            $this->orderServiceMock,
-            static::createStub(HeaderPageletLoaderInterface::class),
-            static::createStub(FooterPageletLoaderInterface::class),
-        );
-    }
 }

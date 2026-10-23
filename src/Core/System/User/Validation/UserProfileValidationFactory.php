@@ -49,7 +49,6 @@ class UserProfileValidationFactory implements DataValidationFactoryInterface
     private function addConstraints(DataValidationDefinition $definition, ChannelContext $context): void
     {
         $definition
-            ->add('salutationId', new EntityExists(entity: SalutationDefinition::ENTITY_NAME, context: $context->getContext()))
             ->add('title', new Length(max: UserDefinition::MAX_LENGTH_TITLE))
             ->add('name', new NotBlank(), new Length(max: UserDefinition::MAX_LENGTH_NAME))
             ->add('accountType', new Choice(choices: $this->accountTypes))

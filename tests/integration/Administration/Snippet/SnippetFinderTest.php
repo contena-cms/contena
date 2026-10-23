@@ -21,6 +21,7 @@ use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -40,7 +41,6 @@ class SnippetFinderTest extends TestCase
 
     private TranslationLoader $translationLoader;
 
-    private FakePlugin $plugin;
 
     protected function setUp(): void
     {

@@ -45,26 +45,26 @@ class LocaleProviderTest extends TestCase
     {
         $context = Context::createDefaultContext(new AdminApiSource('admin_user-id', null));
 
-        $admin_userLocale = new LocaleEntity();
-        $admin_userLocale->setCode('admin_user-locale');
+        $adminUserLocale = new LocaleEntity();
+        $adminUserLocale->setCode('admin_user-locale');
 
-        $admin_user = new AdminUserEntity();
-        $admin_user->setUniqueIdentifier('admin_user-identifier');
-        $admin_user->setLocale($admin_userLocale);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setUniqueIdentifier('admin_user-identifier');
+        $adminUser->setLocale($adminUserLocale);
 
-        $admin_userRepository = static::createMock(EntityRepository::class);
-        $admin_userRepository->expects($this->once())
+        $adminUserRepository = static::createMock(EntityRepository::class);
+        $adminUserRepository->expects($this->once())
             ->method('search')
             ->willReturn(new EntitySearchResult(
                 AdminUserDefinition::ENTITY_NAME,
                 1,
-                new AdminUserCollection([$admin_user]),
+                new AdminUserCollection([$adminUser]),
                 null,
                 new Criteria(),
                 $context
             ));
 
-        $provider = new LocaleProvider($admin_userRepository);
+        $provider = new LocaleProvider($adminUserRepository);
 
         static::assertSame('admin_user-locale', $provider->getLocaleFromContext($context));
     }
@@ -73,8 +73,8 @@ class LocaleProviderTest extends TestCase
     {
         $context = Context::createDefaultContext(new AdminApiSource('admin_user-id', null));
 
-        $admin_userRepository = static::createMock(EntityRepository::class);
-        $admin_userRepository->expects($this->once())
+        $adminUserRepository = static::createMock(EntityRepository::class);
+        $adminUserRepository->expects($this->once())
             ->method('search')
             ->willReturn(new EntitySearchResult(
                 AdminUserDefinition::ENTITY_NAME,
@@ -85,7 +85,7 @@ class LocaleProviderTest extends TestCase
                 $context
             ));
 
-        $provider = new LocaleProvider($admin_userRepository);
+        $provider = new LocaleProvider($adminUserRepository);
 
         static::expectException(EntityNotFoundException::class);
         $provider->getLocaleFromContext($context);

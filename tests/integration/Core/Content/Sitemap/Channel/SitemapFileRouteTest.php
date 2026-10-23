@@ -9,6 +9,8 @@ use Contena\Core\Content\Sitemap\Service\SitemapLister;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

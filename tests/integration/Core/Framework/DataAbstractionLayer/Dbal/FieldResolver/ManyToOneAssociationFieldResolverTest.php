@@ -5,10 +5,8 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Dbal\Fie
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeDefinition;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentDefinition;
 use Contena\Core\Checkout\DocumentV2\DocumentEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Blog\BlogCollection;
@@ -29,6 +27,7 @@ use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\Stub\Doctrine\QueryBuilderDataExtractor;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

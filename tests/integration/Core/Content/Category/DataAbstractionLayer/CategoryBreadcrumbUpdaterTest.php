@@ -11,6 +11,10 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal
@@ -326,52 +330,6 @@ class CategoryBreadcrumbUpdaterTest extends TestCase
         }
     }
 
-    private function getSetUpData(): SetUpData
-    {
-        $level1 = Uuid::randomHex();
-        $level2 = Uuid::randomHex();
-        $level3 = Uuid::randomHex();
-
-        $data = [
-            [
-                'id' => $level1,
-                'translations' => [
-                    ['name' => 'EN-A', 'languageId' => Defaults::LANGUAGE_SYSTEM],
-                    ['name' => 'DE-A', 'languageId' => $this->deLanguageId],
-                ],
-                'children' => [
-                    [
-                        'id' => $level2,
-                        'translations' => [
-                            ['name' => 'EN-B', 'languageId' => Defaults::LANGUAGE_SYSTEM],
-                            ['name' => 'DE-B', 'languageId' => $this->deLanguageId],
-                        ],
-                        'children' => [
-                            [
-                                'id' => $level3,
-                                'translations' => [
-                                    ['name' => 'EN-C', 'languageId' => Defaults::LANGUAGE_SYSTEM],
-                                    ['name' => 'DE-C', 'languageId' => $this->deLanguageId],
-                                ],
-                                'children' => [],
-                            ],
-                        ],
-                    ],
-                ],
-            ],
-        ];
-
-        $context = new Context(
-            new SystemSource(),
-            [],
-            Defaults::CURRENCY,
-            [Defaults::LANGUAGE_SYSTEM]
-        );
-
-        $this->repository->create($data, $context);
-
-        return new SetUpData($level1, $level2, $level3);
-    }
 }
 
 /**

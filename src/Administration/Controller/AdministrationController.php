@@ -40,6 +40,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [AdministrationRouteScope::ID]])]
 class AdministrationController extends AbstractController

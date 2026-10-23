@@ -24,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Struct\ArrayEntity;
@@ -63,7 +62,6 @@ class EntityHydratorTest extends TestCase
 
         $this->definitionInstanceRegistry = new StaticDefinitionInstanceRegistry(
             [
-                FkExtensionFieldTest::class,
                 CustomFieldPlainTestDefinition::class,
                 CustomFieldTestDefinition::class,
                 CustomFieldTestTranslationDefinition::class,
@@ -166,8 +164,6 @@ class EntityHydratorTest extends TestCase
         // typing "name" as a float (mirrors a rebooted test kernel with changed custom fields)
         $floatRegistry = new StaticDefinitionInstanceRegistry(
             [
-                TranslatableFloatTestDefinition::class,
-                TranslatableFloatTestTranslationDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -186,8 +182,6 @@ class EntityHydratorTest extends TestCase
     {
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                TranslatableFloatTestDefinition::class,
-                TranslatableFloatTestTranslationDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -578,7 +572,6 @@ class TranslatableFloatTestDefinition extends EntityDefinition
 
             (new TranslatedField('name'))->addFlags(new ApiAware()),
 
-            (new TranslationsAssociationField(TranslatableFloatTestTranslationDefinition::class, 'translatable_test_id'))->addFlags(new Required()),
         ]);
     }
 }

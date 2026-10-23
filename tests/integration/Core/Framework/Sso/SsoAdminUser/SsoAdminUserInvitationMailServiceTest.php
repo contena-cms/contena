@@ -14,6 +14,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -24,7 +25,6 @@ class SsoUserInvitationMailServiceTest extends TestCase
 
     private string $localeId;
 
-    private SsoUserInvitationMailService $ssoUserInvitationMailService;
 
     protected function setUp(): void
     {

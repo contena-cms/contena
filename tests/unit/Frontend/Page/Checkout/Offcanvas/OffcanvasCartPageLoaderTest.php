@@ -8,14 +8,11 @@ use Contena\Core\Checkout\Shipping\Channel\ShippingMethodRoute;
 use Contena\Core\Checkout\Shipping\Channel\ShippingMethodRouteResponse;
 use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Generator;
-use Contena\Frontend\Checkout\Cart\Channel\FrontendCartFacade;
 use Contena\Frontend\Page\Checkout\Offcanvas\OffcanvasCartPage;
 use Contena\Frontend\Page\Checkout\Offcanvas\OffcanvasCartPageLoadedEvent;
 use Contena\Frontend\Page\Checkout\Offcanvas\OffcanvasCartPageLoader;
@@ -85,8 +82,6 @@ class OffcanvasCartPageLoaderTest extends TestCase
     public function testShippingMethodsAreSetToPage(): void
     {
         $shippingMethods = new ShippingMethodCollection([
-            (new ShippingMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
-            (new ShippingMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
         ]);
 
         $shippingMethodResponse = new ShippingMethodRouteResponse(
@@ -142,16 +137,4 @@ class OffcanvasCartPageLoaderTest extends TestCase
         $loader->load(new Request(), $context);
     }
 
-    private function createLoader(
-        ?EventDispatcher $eventDispatcher = null,
-        ?GenericPageLoader $pageLoader = null,
-        ?ShippingMethodRoute $shippingMethodRoute = null,
-    ): OffcanvasCartPageLoader {
-        return new OffcanvasCartPageLoader(
-            $eventDispatcher ?? static::createStub(EventDispatcher::class),
-            static::createStub(FrontendCartFacade::class),
-            $pageLoader ?? static::createStub(GenericPageLoader::class),
-            $shippingMethodRoute ?? static::createStub(ShippingMethodRoute::class),
-        );
-    }
 }

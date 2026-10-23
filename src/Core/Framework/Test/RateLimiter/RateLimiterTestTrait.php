@@ -6,6 +6,7 @@ use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\RateLimiter\RateLimiterFactory;
 use Symfony\Component\RateLimiter\LimiterInterface;
 use Symfony\Component\RateLimiter\RateLimit;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 trait RateLimiterTestTrait
 {

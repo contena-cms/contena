@@ -29,6 +29,9 @@ use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -51,7 +51,6 @@ class StateMachineDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of state machine.'),
 
             (new StringField('technical_name', 'technicalName'))->addFlags(new Required())->setDescription('Technical name of state machine.'),
-            (new TranslatedField('name'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new TranslatedField('customFields'),
 
             (new OneToManyAssociationField('states', StateMachineStateDefinition::class, 'state_machine_id'))->addFlags(new ApiAware(), new CascadeDelete()),

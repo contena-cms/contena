@@ -9,6 +9,7 @@ use Contena\Core\Content\Seo\Exception\InvalidTemplateException;
 use Contena\Core\Content\Seo\Exception\NoEntitiesForPreviewException;
 use Contena\Core\Content\Seo\Exception\SeoUrlRouteNotFoundException;
 use Contena\Core\Framework\Api\Exception\InvalidChannelIdException;
+use Symfony\Component\HttpFoundation\File\Exception\UnexpectedTypeException;
 
 class SeoException extends HttpException
 {

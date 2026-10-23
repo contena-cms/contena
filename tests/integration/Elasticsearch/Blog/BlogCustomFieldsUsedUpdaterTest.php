@@ -17,6 +17,8 @@ use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 
 /**
  * @internal

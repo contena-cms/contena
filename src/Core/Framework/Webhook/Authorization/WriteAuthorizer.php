@@ -284,13 +284,13 @@ class WriteAuthorizer
      */
     private function loadOwnerRoles(array $written): array
     {
-        $admin_userRoles = $this->aclRoleLoader->getUserRoles(self::ownerIdsOf($written, SubscriberType::AdminUser));
+        $adminUserRoles = $this->aclRoleLoader->getUserRoles(self::ownerIdsOf($written, SubscriberType::AdminUser));
         $integrationRoles = $this->aclRoleLoader->getIntegrationRoles(self::ownerIdsOf($written, SubscriberType::Integration));
 
         $roles = [];
         foreach ($written as $webhookId => $webhook) {
             $roles[$webhookId] = $webhook->ownerType === SubscriberType::AdminUser
-                ? $admin_userRoles[$webhook->ownerId] ?? null
+                ? $adminUserRoles[$webhook->ownerId] ?? null
                 : $integrationRoles[$webhook->ownerId] ?? null;
         }
 

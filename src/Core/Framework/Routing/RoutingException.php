@@ -8,6 +8,7 @@ use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Contena\Core\Framework\Routing\Exception\InvalidRouteScopeException;
 use Contena\Core\Framework\Routing\Exception\UserNotLoggedInRoutingException;
+use Symfony\Component\HttpFoundation\File\Exception\UnexpectedTypeException;
 
 class RoutingException extends HttpException
 {

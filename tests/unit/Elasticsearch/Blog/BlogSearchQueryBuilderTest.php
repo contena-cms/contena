@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturerTranslation\BlogManufacturerTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
@@ -20,9 +18,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
@@ -62,11 +57,6 @@ class BlogSearchQueryBuilderTest extends TestCase
 
         $this->tokenQueryBuilder = new TokenQueryBuilder(
             $this->getRegistry(),
-            new CustomFieldServiceStub([
-                'evolvesInt' => new IntField('evolvesInt', 'evolvesInt'),
-                'evolvesFloat' => new FloatField('evolvesFloat', 'evolvesFloat'),
-                'evolvesText' => new StringField('evolvesText', 'evolvesText'),
-            ]),
             new ExplainFieldQueryBuilder(
                 new NestedFieldQueryBuilder(
                     new TranslatedFieldQueryBuilder(
@@ -652,8 +642,6 @@ class BlogSearchQueryBuilderTest extends TestCase
                 BlogTagDefinition::class,
                 TagDefinition::class,
                 BlogTranslationDefinition::class,
-                BlogManufacturerDefinition::class,
-                BlogManufacturerTranslationDefinition::class,
                 BlogCategoryDefinition::class,
                 CategoryDefinition::class,
                 CategoryTranslationDefinition::class,

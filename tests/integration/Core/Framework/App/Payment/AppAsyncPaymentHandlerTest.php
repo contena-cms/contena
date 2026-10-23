@@ -6,9 +6,7 @@ use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use Psr\Http\Message\RequestInterface;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
-use Contena\Core\Checkout\Payment\Cart\Token\JWTFactoryV2;
 use Contena\Core\Checkout\Payment\Cart\Token\PaymentToken;
-use Contena\Core\Checkout\Payment\Cart\Token\PaymentTokenGenerator;
 use Contena\Core\Checkout\Payment\Cart\Token\TokenStruct;
 use Contena\Core\Checkout\Payment\PaymentException;
 use Contena\Core\Framework\App\AppException;
@@ -593,38 +591,5 @@ class AppAsyncPaymentHandlerTest extends AbstractAppPaymentHandlerTestCase
         ];
     }
 
-    /**
-     * @deprecated tag:v6.8.0 - will only return `PaymentToken`
-     */
-    private function getToken(string $returnUrl): TokenStruct|PaymentToken
-    {
-        $query = \parse_url($returnUrl, \PHP_URL_QUERY);
-        static::assertIsString($query);
 
-        \parse_str($query, $params);
-
-        $token = $params['_sw_payment_token'];
-        static::assertIsString($token);
-        static::assertNotSame('', $token);
-
-        if (!Feature::isActive('v6.8.0.0')) {
-            return static::getContainer()->get(JWTFactoryV2::class)->parseToken($token);
-        }
-
-        return static::getContainer()->get(PaymentTokenGenerator::class)->decode($token);
-    }
-
-    /**
-     * @deprecated tag:v6.8.0 - remove this method
-     */
-    private function getDummyStruct(): TokenStruct
-    {
-        $tokenStruct = null;
-        Feature::silent('v6.8.0.0', static function () use (&$tokenStruct): void {
-            $tokenStruct = new TokenStruct();
-        });
-        static::assertInstanceOf(TokenStruct::class, $tokenStruct);
-
-        return $tokenStruct;
-    }
 }

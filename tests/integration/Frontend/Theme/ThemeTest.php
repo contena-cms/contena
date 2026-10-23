@@ -39,6 +39,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -557,7 +558,6 @@ class ThemeTest extends TestCase
         $scssCompilerMock = static::createStub(ScssPhpCompiler::class);
 
         $kernel = new class(static::getContainer()->get('kernel')) implements KernelInterface {
-            private readonly SimpleTheme $simpleTheme;
 
             public function __construct(private readonly Kernel $kernel)
             {

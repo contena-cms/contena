@@ -24,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Uuid\Uuid;
 
 class FieldSerializer extends AbstractFieldSerializer
@@ -55,22 +54,6 @@ class FieldSerializer extends AbstractFieldSerializer
         }
 
         if ($field instanceof AssociationField) {
-            if ($value === null || !\in_array($field->getReferenceClass(), [OrderDeliveryDefinition::class, OrderTransactionDefinition::class], true)) {
-                return;
-            }
-
-            if ($field instanceof OneToManyAssociationField) {
-                if ($value instanceof Collection) {
-                    $value = $value->first();
-                }
-
-                $definition = $field->getReferenceDefinition();
-                $entitySerializer = $this->serializerRegistry->getEntity($definition->getEntityName());
-
-                $result = $entitySerializer->serialize($config, $definition, $value);
-                yield $field->getPropertyName() => iterator_to_array($result);
-            }
-
             return;
         }
 

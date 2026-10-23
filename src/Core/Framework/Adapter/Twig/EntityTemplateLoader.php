@@ -9,6 +9,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use Twig\Loader\LoaderInterface;
 use Twig\Source;
+use Twig\Error\LoaderError;
 
 /**
  * @internal

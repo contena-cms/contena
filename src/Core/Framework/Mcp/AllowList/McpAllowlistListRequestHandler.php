@@ -21,6 +21,7 @@ use Contena\Core\Framework\Mcp\McpRequestedToolsetResolver;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\McpToolsetSessionStorage;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Mcp\Exception\InvalidCursorException;
 
 /**
  * @experimental stableVersion:v6.8.0

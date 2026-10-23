@@ -45,7 +45,7 @@ class AppPayloadServiceHelper
         int $requestTimeout,
         ?string $secret = null,
         ?string $languageId = null,
-        ?string $admin_userLocale = null,
+        ?string $adminUserLocale = null,
         array $webhookHeaders = [],
     ): WebhookRequest {
         $timestamp = $this->clock->now()->getTimestamp();
@@ -62,9 +62,9 @@ class AppPayloadServiceHelper
             $webhookHeaders
         );
 
-        if ($languageId !== null && $admin_userLocale !== null) {
+        if ($languageId !== null && $adminUserLocale !== null) {
             $headers[AuthMiddleware::CONTENA_CONTEXT_LANGUAGE] = $languageId;
-            $headers[AuthMiddleware::CONTENA_USER_LANGUAGE] = $admin_userLocale;
+            $headers[AuthMiddleware::CONTENA_USER_LANGUAGE] = $adminUserLocale;
         }
 
         $request = new Request(

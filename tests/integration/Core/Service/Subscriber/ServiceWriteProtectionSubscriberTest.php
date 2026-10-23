@@ -13,6 +13,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Service\Requirement\ServicesEnabledRequirement;
 use Contena\Core\Service\Subscriber\ServiceWriteProtectionSubscriber;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -26,7 +27,6 @@ class ServiceWriteProtectionSubscriberTest extends TestCase
      */
     private EntityRepository $appRepository;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {

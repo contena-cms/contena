@@ -8,6 +8,7 @@ use GuzzleHttp\RequestOptions;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * @internal

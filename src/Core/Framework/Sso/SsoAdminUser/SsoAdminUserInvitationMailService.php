@@ -32,7 +32,7 @@ class SsoAdminUserInvitationMailService
     /**
      * @param EntityRepository<MailTemplateCollection> $mailTemplateRepository
      * @param EntityRepository<MailTemplateTypeCollection> $mailTemplateTypeRepository
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      * @param EntityRepository<LanguageCollection> $languageRepository
      */
     public function __construct(
@@ -40,7 +40,7 @@ class SsoAdminUserInvitationMailService
         private readonly SystemConfigService $systemConfigService,
         private readonly EntityRepository $mailTemplateRepository,
         private readonly EntityRepository $mailTemplateTypeRepository,
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly EntityRepository $languageRepository,
         private readonly UrlGeneratorInterface $urlGenerator,
         private readonly string $appUrl
@@ -54,7 +54,7 @@ class SsoAdminUserInvitationMailService
             return;
         }
 
-        $admin_user = $this->getUserById($apiSource->getUserId(), $context);
+        $adminUser = $this->getUserById($apiSource->getUserId(), $context);
         $shopName = $this->systemConfigService->getString('core.basicInformation.shopName');
         $mailTemplate = $this->getMailTemplate($localeId, $context);
 
@@ -68,7 +68,7 @@ class SsoAdminUserInvitationMailService
         ];
 
         $templateVariablesArray = [
-            'nameOfInviter' => $this->createInviterName($admin_user),
+            'nameOfInviter' => $this->createInviterName($adminUser),
             'storeName' => $shopName,
             'invitedEmailAddress' => $recipientEmail,
             'signupUrl' => $this->createSignUpUrl(),
@@ -127,29 +127,29 @@ class SsoAdminUserInvitationMailService
         return $this->mailTemplateRepository->search($criteria, $newContext)->getEntities()->first();
     }
 
-    private function createInviterName(?AdminUserEntity $admin_user): string
+    private function createInviterName(?AdminUserEntity $adminUser): string
     {
-        $name = $admin_user?->getName();
-        $admin_userName = $admin_user?->getUsername();
+        $name = $adminUser?->getName();
+        $adminUserName = $adminUser?->getUsername();
 
         if ($name !== null && $name !== '') {
             return $name;
         }
 
-        if ($admin_userName !== null && $admin_userName !== '') {
-            return $admin_userName;
+        if ($adminUserName !== null && $adminUserName !== '') {
+            return $adminUserName;
         }
 
         return 'Administrator';
     }
 
-    private function getUserById(?string $admin_userId, Context $context): ?AdminUserEntity
+    private function getUserById(?string $adminUserId, Context $context): ?AdminUserEntity
     {
-        if ($admin_userId === null) {
+        if ($adminUserId === null) {
             return null;
         }
 
-        return $this->admin_userRepository->search(new Criteria([$admin_userId]), $context)->getEntities()->first();
+        return $this->admin_userRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
     }
 
     private function getLanguageForLocale(string $localeId, Context $context): ?LanguageEntity

@@ -5,6 +5,7 @@ namespace Contena\Core\System\CustomField;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchConfigField\BlogSearchConfigFieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

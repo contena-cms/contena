@@ -12,6 +12,7 @@ use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetColle
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationDefinition;
 use Contena\Core\System\CustomField\CustomFieldDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

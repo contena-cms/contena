@@ -9,6 +9,9 @@ use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
 use Contena\Core\Framework\App\ShopId\ShopId;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

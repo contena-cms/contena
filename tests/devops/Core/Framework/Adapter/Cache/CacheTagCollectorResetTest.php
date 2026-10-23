@@ -7,6 +7,7 @@ use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * The collector keeps the HTTP cache tags per request URI. Long running runtimes handle many requests with one

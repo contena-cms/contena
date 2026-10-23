@@ -28,7 +28,6 @@ use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
 #[CoversTrait(McpEntityIncludes::class)]
 class McpEntityIncludesTest extends TestCase
 {
-    private McpEntityIncludesStub $includes;
 
     protected function setUp(): void
     {

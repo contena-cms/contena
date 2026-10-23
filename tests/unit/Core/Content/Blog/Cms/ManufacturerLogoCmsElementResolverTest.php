@@ -41,7 +41,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testCollectCreatesMediaCriteria(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_STATIC, 'media-1'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -71,7 +70,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testCollectReturnsNullWithEmptyConfig(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_STATIC, null),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -87,7 +85,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testCollectionWithMediaIsEmptyAndManufacturerIsNotLoaded(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.manufacturer.media'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -118,7 +115,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testCollectionWithMediaIsEmptyAndManufacturerIsLoadedAndHasNoMedia(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.manufacturer.media'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -153,7 +149,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testCollectSkipsMappedBlogCriteriaWhenMappedMediaAlreadyLoaded(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.manufacturer.media'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -186,8 +181,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testCollectReturnsParentCriteriaWhenMediaIsMappedAndBlogIsStatic(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.manufacturer.media'),
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, 'blog-1'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -207,9 +200,7 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testEnrichStaticSlotWithManufacturerLogo(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_STATIC, 'media-1'),
             new FieldConfig('url', FieldConfig::SOURCE_STATIC, 'http://localhost'),
-            new FieldConfig('newTab', FieldConfig::SOURCE_STATIC, true),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -245,7 +236,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testEnrichMappedSlotUsesMappedBlogResult(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.manufacturer.media'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -289,7 +279,6 @@ class ManufacturerLogoCmsElementResolverTest extends TestCase
     public function testEnrichMappedSlotFallsBackToResolverContextBlogWhenMappedBlogNotResolvable(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.manufacturer.media'),
         ]);
 
         $slot = new CmsSlotEntity();

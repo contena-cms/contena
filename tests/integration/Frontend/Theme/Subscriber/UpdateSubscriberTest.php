@@ -15,6 +15,7 @@ use Contena\Frontend\Theme\Subscriber\UpdateSubscriber;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeService;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal

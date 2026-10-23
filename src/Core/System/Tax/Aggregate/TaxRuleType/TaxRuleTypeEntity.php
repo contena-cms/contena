@@ -4,6 +4,8 @@ namespace Contena\Core\System\Tax\Aggregate\TaxRuleType;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Tax\Aggregate\TaxRuleTypeTranslation\TaxRuleTypeTranslationCollection;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -11,7 +13,6 @@ use Contena\Core\System\Tax\Aggregate\TaxRuleTypeTranslation\TaxRuleTypeTranslat
 class TaxRuleTypeEntity extends Entity
 {
     use EntityIdTrait;
-use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleCollection;
 
     protected string $typeName;
 

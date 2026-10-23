@@ -39,8 +39,6 @@ class ConsentControllerTest extends TestCase
         $context = new Context($source);
 
         $consents = [
-            new ConsentState('consent-1', ConsentScope\AdminUser::NAME, $actor, ConsentStatus::ACCEPTED, $actor, '2025-12-31 23:59:59.0', '1.0.0', '1.1.0'),
-            new ConsentState('consent-2', ConsentScope\System::NAME, 'system', ConsentStatus::UNSET, null, null),
         ];
 
         $this->consentService
@@ -85,7 +83,7 @@ class ConsentControllerTest extends TestCase
 
     public function testAcceptConsent(): void
     {
-        $admin_user = 'admin_user-456';
+        $adminUser = 'admin_user-456';
         $source = new AdminApiSource('admin_user-id');
         $context = new Context($source);
 
@@ -96,9 +94,9 @@ class ConsentControllerTest extends TestCase
             ->willReturn(new ConsentState(
                 'test-consent',
                 ConsentScope\AdminUser::NAME,
-                $admin_user,
+                $adminUser,
                 ConsentStatus::ACCEPTED,
-                $admin_user,
+                $adminUser,
                 '2026-01-20 12:00:00.0',
                 '2026-02-01',
                 '2026-02-02',
@@ -117,9 +115,9 @@ class ConsentControllerTest extends TestCase
         static::assertArrayIsEqualToArrayIgnoringListOfKeys([
             'name' => 'test-consent',
             'scopeName' => 'admin_user',
-            'identifier' => $admin_user,
+            'identifier' => $adminUser,
             'status' => 'accepted',
-            'actor' => $admin_user,
+            'actor' => $adminUser,
             'updatedAt' => '2026-01-20 12:00:00.0',
             'acceptedRevision' => '2026-02-01',
             'latestRevision' => '2026-02-02',
@@ -128,8 +126,8 @@ class ConsentControllerTest extends TestCase
 
     public function testRevokeConsent(): void
     {
-        $admin_userId = 'admin_user-789';
-        $source = new AdminApiSource($admin_userId);
+        $adminUserId = 'admin_user-789';
+        $source = new AdminApiSource($adminUserId);
         $context = new Context($source);
 
         $this->consentService
@@ -139,9 +137,9 @@ class ConsentControllerTest extends TestCase
             ->willReturn(new ConsentState(
                 'test-consent',
                 ConsentScope\AdminUser::NAME,
-                $admin_userId,
+                $adminUserId,
                 ConsentStatus::REVOKED,
-                $admin_userId,
+                $adminUserId,
                 '2026-01-20 12:00:00.0'
             ));
 
@@ -158,9 +156,9 @@ class ConsentControllerTest extends TestCase
         static::assertEquals([
             'name' => 'test-consent',
             'scopeName' => 'admin_user',
-            'identifier' => $admin_userId,
+            'identifier' => $adminUserId,
             'status' => 'revoked',
-            'actor' => $admin_userId,
+            'actor' => $adminUserId,
             'updatedAt' => '2026-01-20 12:00:00.0',
             'acceptedRevision' => null,
             'latestRevision' => null,

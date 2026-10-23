@@ -54,14 +54,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             ['stock' => 10],
             ['id' => $this->ids->getBytes('blog-1')],
-            new EntityExistence(
-                BlogDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('blog-1')],
-                true,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 
@@ -118,14 +110,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             ['stock' => 10],
             ['id' => $this->ids->getBytes('blog-1')],
-            new EntityExistence(
-                BlogDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('blog-1')],
-                false,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 
@@ -152,14 +136,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             ['stock' => 10],
             ['id' => $this->ids->getBytes('blog-1')],
-            new EntityExistence(
-                BlogDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('blog-1')],
-                true,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 
@@ -186,14 +162,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             [],
             ['id' => $this->ids->getBytes('blog-1')],
-            new EntityExistence(
-                BlogDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('blog-1')],
-                true,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 

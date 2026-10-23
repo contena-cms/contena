@@ -4,6 +4,7 @@ namespace Contena\Core\System\NumberRange\Aggregate\NumberRangeTypeTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeType\NumberRangeTypeEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

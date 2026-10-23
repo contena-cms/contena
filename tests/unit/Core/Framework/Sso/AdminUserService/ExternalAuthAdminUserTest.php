@@ -162,8 +162,8 @@ class ExternalAuthUserTest extends TestCase
     public function testCreateFromDatabaseQuery(): void
     {
         $id = '01980cbe117f713088b2401b26b57275';
-        $admin_userId = '01980cbe117f713088b2401b270fd2d5';
-        $admin_userSub = 'admin_user_sub';
+        $adminUserId = '01980cbe117f713088b2401b270fd2d5';
+        $adminUserSub = 'admin_user_sub';
 
         $token = '1234567890abcdefghijklmnopqrstuvwxyz';
         $refreshToken = '0987654321zyxwvutsrqponmlkjihgfedcba';
@@ -172,8 +172,8 @@ class ExternalAuthUserTest extends TestCase
 
         $data = [
             'id' => Uuid::fromHexToBytes($id),
-            'admin_user_id' => Uuid::fromHexToBytes($admin_userId),
-            'admin_user_sub' => $admin_userSub,
+            'admin_user_id' => Uuid::fromHexToBytes($adminUserId),
+            'admin_user_sub' => $adminUserSub,
             'token' => \json_encode(['token' => $token, 'refreshToken' => $refreshToken], \JSON_THROW_ON_ERROR),
             'expiry' => $expiry,
             'email' => 'test@test.com',
@@ -182,8 +182,8 @@ class ExternalAuthUserTest extends TestCase
         $externalAuthUser = ExternalAuthUser::createFromDatabaseQuery($data);
 
         static::assertSame($id, $externalAuthUser->id);
-        static::assertSame($admin_userId, $externalAuthUser->admin_userId);
-        static::assertSame($admin_userSub, $externalAuthUser->sub);
+        static::assertSame($adminUserId, $externalAuthUser->admin_userId);
+        static::assertSame($adminUserSub, $externalAuthUser->sub);
         static::assertSame($token, $externalAuthUser->token?->token);
         static::assertSame($refreshToken, $externalAuthUser->token->refreshToken);
         static::assertSame($expiry, $externalAuthUser->expiry->format(Defaults::STORAGE_DATE_TIME_FORMAT));

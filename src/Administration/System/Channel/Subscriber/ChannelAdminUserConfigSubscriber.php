@@ -20,9 +20,9 @@ class ChannelAdminUserConfigSubscriber implements EventSubscriberInterface
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserConfigCollection> $admin_userConfigRepository
+     * @param EntityRepository<AdminUserConfigCollection> $adminUserConfigRepository
      */
-    public function __construct(private readonly EntityRepository $admin_userConfigRepository)
+    public function __construct(private readonly EntityRepository $adminUserConfigRepository)
     {
     }
 
@@ -40,8 +40,8 @@ class ChannelAdminUserConfigSubscriber implements EventSubscriberInterface
         $deletedChannelIds = $deletedEvent->getIds();
 
         $writeUserConfigs = [];
-        foreach ($this->getAllFavoriteUserConfigs($context) as $admin_userConfigEntity) {
-            $channelIds = $admin_userConfigEntity->getValue();
+        foreach ($this->getAllFavoriteUserConfigs($context) as $adminUserConfigEntity) {
+            $channelIds = $adminUserConfigEntity->getValue();
 
             if ($channelIds === null) {
                 continue;
@@ -57,7 +57,7 @@ class ChannelAdminUserConfigSubscriber implements EventSubscriberInterface
             // Removes the IDs from $matchingIds from the array
             $newUserConfigArray = array_diff($channelIds, $matchingIds);
             $writeUserConfigs[] = [
-                'id' => $admin_userConfigEntity->getId(),
+                'id' => $adminUserConfigEntity->getId(),
                 'value' => array_values($newUserConfigArray),
             ];
         }

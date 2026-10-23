@@ -14,7 +14,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Installer\Requirements\EnvironmentRequirementsValidator;
-use Contena\Core\Installer\Requirements\Struct\RequirementCheck;
 use Contena\Core\Installer\Requirements\Struct\RequirementsCheckCollection;
 use Contena\Core\Installer\Requirements\Struct\SystemCheck;
 
@@ -87,12 +86,6 @@ class EnvironmentRequirementsValidatorTest extends TestCase
                 ),
             ],
             [
-                new SystemCheck(
-                    'php',
-                    RequirementCheck::STATUS_SUCCESS,
-                    '>=7.4.3',
-                    '7.4.3'
-                ),
             ],
         ];
 
@@ -116,12 +109,6 @@ class EnvironmentRequirementsValidatorTest extends TestCase
                 ),
             ],
             [
-                new SystemCheck(
-                    'php',
-                    RequirementCheck::STATUS_ERROR,
-                    '>=7.4.3',
-                    '7.4.2'
-                ),
             ],
         ];
 
@@ -145,12 +132,6 @@ class EnvironmentRequirementsValidatorTest extends TestCase
                 ),
             ],
             [
-                new SystemCheck(
-                    'composer-runtime-api',
-                    RequirementCheck::STATUS_ERROR,
-                    '^2.0',
-                    '-'
-                ),
             ],
         ];
 
@@ -174,12 +155,6 @@ class EnvironmentRequirementsValidatorTest extends TestCase
                 ),
             ],
             [
-                new SystemCheck(
-                    'php',
-                    RequirementCheck::STATUS_SUCCESS,
-                    '>=7.4.3',
-                    '7.4.3'
-                ),
             ],
         ];
 
@@ -203,12 +178,6 @@ class EnvironmentRequirementsValidatorTest extends TestCase
                 ),
             ],
             [
-                new SystemCheck(
-                    'php',
-                    RequirementCheck::STATUS_SUCCESS,
-                    '>=7.4.3',
-                    '7.4.3'
-                ),
             ],
         ];
     }

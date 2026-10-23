@@ -12,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Currency\Rule\CurrencyRule;
 use Symfony\Component\Validator\Constraints\NotBlank;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

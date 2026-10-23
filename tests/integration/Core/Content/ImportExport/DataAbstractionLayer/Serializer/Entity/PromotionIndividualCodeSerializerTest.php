@@ -3,9 +3,7 @@
 namespace Contena\Tests\Integration\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionIndividualCode\PromotionIndividualCodeCollection;
 use Contena\Core\Checkout\Promotion\Aggregate\PromotionIndividualCode\PromotionIndividualCodeDefinition;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
 use Contena\Core\Checkout\Promotion\PromotionDefinition;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\PromotionIndividualCodeSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
@@ -13,6 +11,7 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

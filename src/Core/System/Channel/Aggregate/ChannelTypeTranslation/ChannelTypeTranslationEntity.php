@@ -4,6 +4,7 @@ namespace Contena\Core\System\Channel\Aggregate\ChannelTypeTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

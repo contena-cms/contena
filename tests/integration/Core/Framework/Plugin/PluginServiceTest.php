@@ -22,6 +22,8 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleEntity;
 use SwagTestNoDefaultLang\SwagTestNoDefaultLang;
 use SwagTestPlugin\SwagTestPlugin;
+use Contena\Core\Framework\Test\Plugin\PluginTestsHelper;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

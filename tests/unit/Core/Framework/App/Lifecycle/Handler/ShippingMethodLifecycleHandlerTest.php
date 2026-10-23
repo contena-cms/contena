@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\App\Lifecycle\Handler;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaService;
@@ -20,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
-use Contena\Core\System\DeliveryTime\DeliveryTimeEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 
@@ -79,21 +77,6 @@ class ShippingMethodLifecycleHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @param array<string, mixed> $services
-     */
-    private function createShippingMethodHandler(array $services = []): ShippingMethodLifecycleHandler
-    {
-        $deliveryTime = new DeliveryTimeEntity();
-        $deliveryTime->setId('ca565fa321ad4c87a2669161907fc4c8');
-
-        return new ShippingMethodLifecycleHandler(
-            \array_key_exists('shippingMethodRepository', $services) ? $services['shippingMethodRepository'] : $this->createShippingMethodRepositoryMock(),
-            \array_key_exists('appShippingMethodRepository', $services) ? $services['appShippingMethodRepository'] : $this->createAppShippingMethodRepositoryMock(),
-            \array_key_exists('mediaRepository', $services) ? $services['mediaRepository'] : $this->createMediaRepositoryMock(),
-            \array_key_exists('mediaService', $services) ? $services['mediaService'] : $this->createMediaServiceMock(),
-        );
-    }
 
     /**
      * @return StaticEntityRepository<ShippingMethodCollection>

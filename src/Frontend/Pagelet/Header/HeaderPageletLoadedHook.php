@@ -4,6 +4,7 @@ namespace Contena\Frontend\Pagelet\Header;
 
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\PageLoadedHook;
+use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 
 /**
  * Triggered when the HeaderPagelet is loaded

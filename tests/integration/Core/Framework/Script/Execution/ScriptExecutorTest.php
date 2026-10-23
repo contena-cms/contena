@@ -20,6 +20,8 @@ use Contena\Core\Framework\Test\Script\Execution\StoppableTestHook;
 use Contena\Core\Framework\Test\Script\Execution\TestHook;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

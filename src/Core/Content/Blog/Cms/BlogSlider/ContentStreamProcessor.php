@@ -24,6 +24,7 @@ use Contena\Core\Content\ContentStream\Exception\EmptyContentStreamException;
 use Contena\Core\Content\ContentStream\Exception\NoFilterException;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\EntityNotFoundException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Content\ContentStream\Service\AbstractContentStreamBuilder;
 
 class ContentStreamProcessor extends AbstractBlogSliderProcessor
 {

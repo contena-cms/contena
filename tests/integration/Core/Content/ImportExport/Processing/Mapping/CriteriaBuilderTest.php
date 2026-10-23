@@ -7,6 +7,7 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\ImportExport\Processing\Mapping\CriteriaBuilder;
 use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

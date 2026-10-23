@@ -144,12 +144,10 @@ trait FrontendChannelTestHelper
             'name' => 'foo',
             'lastName' => 'bar',
             'groupId' => $channel->getUserGroupId(),
-            'salutationId' => $this->getValidSalutationId(),
             'channelId' => $channel->getId(),
             'defaultBillingAddress' => [
                 'id' => $defaultBillingAddress,
                 'countryId' => $channel->getCountryId(),
-                'salutationId' => $this->getValidSalutationId(),
                 'name' => 'foo',
                 'lastName' => 'bar',
                 'zipcode' => '48599',
@@ -176,9 +174,6 @@ trait FrontendChannelTestHelper
         $factory = static::getContainer()->get(ChannelContextFactory::class);
 
         $context = $factory->create(Uuid::randomHex(), $channel->getId(), []);
-
-        $ruleLoader = static::getContainer()->get(CartRuleLoader::class);
-        $ruleLoader->loadByToken($context, $context->getToken());
 
         return $context;
     }

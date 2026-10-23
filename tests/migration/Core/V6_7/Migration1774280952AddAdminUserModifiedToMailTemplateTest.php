@@ -16,7 +16,6 @@ class Migration1774280952AddUserModifiedToMailTemplateTest extends TestCase
 {
     private readonly Connection $connection;
 
-    private readonly Migration1774280952AddUserModifiedToMailTemplate $migration;
 
     protected function setUp(): void
     {

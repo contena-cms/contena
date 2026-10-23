@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Flow\Dispatching\Action\AddOrderTagAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;

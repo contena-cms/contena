@@ -75,14 +75,14 @@ class StoreRequestOptionsProviderTest extends TestCase
 
     public function testGetAuthenticationHeaderReturnsUserToken(): void
     {
-        $admin_user = (new AdminUserEntity())->assign([
+        $adminUser = (new AdminUserEntity())->assign([
             '_uniqueIdentifier' => 'admin_user-id',
             'id' => 'admin_user-id',
             'storeToken' => 'sbp-token',
         ]);
 
         $provider = new StoreRequestOptionsProvider(
-            $this->configureUserRepositorySearchMock(new AdminUserCollection([$admin_user]), $this->once()),
+            $this->configureUserRepositorySearchMock(new AdminUserCollection([$adminUser]), $this->once()),
             static::createStub(SystemConfigService::class),
             new InstanceService('sw-version', 'instance-id'),
             static::createStub(LocaleProvider::class)
@@ -130,14 +130,14 @@ class StoreRequestOptionsProviderTest extends TestCase
 
     public function testGetAuthenticationHeaderReturnsUserTokenInSystemSourceIfAUserHasToken(): void
     {
-        $admin_user = (new AdminUserEntity())->assign([
+        $adminUser = (new AdminUserEntity())->assign([
             '_uniqueIdentifier' => 'admin_user-id',
             'id' => 'admin_user-id',
             'storeToken' => 'sbp-token',
         ]);
 
         $provider = new StoreRequestOptionsProvider(
-            $this->configureUserRepositorySearchMock(new AdminUserCollection([$admin_user]), $this->once()),
+            $this->configureUserRepositorySearchMock(new AdminUserCollection([$adminUser]), $this->once()),
             static::createStub(SystemConfigService::class),
             new InstanceService('sw-version', 'instance-id'),
             static::createStub(LocaleProvider::class)

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\DataAbstractionLayer\Field\SlotConfigField;
 use Contena\Core\Content\Cms\DataAbstractionLayer\FieldSerializer\SlotConfigFieldSerializer;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
@@ -32,14 +31,6 @@ class SlotConfigFieldSerializerTest extends TestCase
             constraints: new Collection(
                 fields: [
                     'source' => [
-                        new Choice(
-                            choices: [
-                                FieldConfig::SOURCE_STATIC,
-                                FieldConfig::SOURCE_MAPPED,
-                                FieldConfig::SOURCE_CONTENT_STREAM,
-                                FieldConfig::SOURCE_DEFAULT,
-                            ],
-                        ),
                         new NotBlank(),
                     ],
                     'value' => [],

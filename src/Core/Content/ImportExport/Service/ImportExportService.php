@@ -34,12 +34,12 @@ class ImportExportService
 {
     /**
      * @param EntityRepository<ImportExportLogCollection> $logRepository
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      * @param EntityRepository<EntityCollection<ImportExportProfileEntity>> $profileRepository
      */
     public function __construct(
         private readonly EntityRepository $logRepository,
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly EntityRepository $profileRepository,
         private readonly AbstractFileService $fileService
     ) {
@@ -217,10 +217,10 @@ class ImportExportService
         $logEntity->setConfig($this->getConfig($profile, $config));
 
         $contextSource = $context->getSource();
-        $admin_userId = $contextSource instanceof AdminApiSource ? $contextSource->getUserId() : null;
-        if ($admin_userId !== null) {
-            $logEntity->setUsername($this->findUser($context, $admin_userId)->getUsername());
-            $logEntity->setUserId($admin_userId);
+        $adminUserId = $contextSource instanceof AdminApiSource ? $contextSource->getUserId() : null;
+        if ($adminUserId !== null) {
+            $logEntity->setUsername($this->findUser($context, $adminUserId)->getUsername());
+            $logEntity->setUserId($adminUserId);
         }
 
         $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($logEntity): void {
@@ -234,12 +234,12 @@ class ImportExportService
         return $logEntity;
     }
 
-    private function findUser(Context $context, string $admin_userId): AdminUserEntity
+    private function findUser(Context $context, string $adminUserId): AdminUserEntity
     {
-        $admin_user = $this->admin_userRepository->search(new Criteria([$admin_userId]), $context)->getEntities()->first();
-        \assert($admin_user !== null);
+        $adminUser = $this->admin_userRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
+        \assert($adminUser !== null);
 
-        return $admin_user;
+        return $adminUser;
     }
 
     /**

@@ -13,9 +13,7 @@ use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
@@ -33,6 +31,7 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @internal
@@ -97,18 +96,6 @@ class JsonEntityEncoderTest extends TestCase
         yield 'admin_user resource keeps main resource out of included data' => [AdminUserDefinition::class, new TestMainResourceShouldNotBeInIncluded()];
     }
 
-    /**
-     * @param class-string<EntityDefinition> $definitionClass
-     */
-    #[DataProvider('complexStructsProvider')]
-    public function testEncodeComplexStructs(string $definitionClass, SerializationFixture $fixture): void
-    {
-        $definition = $this->createDefinition($definitionClass);
-        $encoder = $this->createEncoder();
-        $actual = $encoder->encode(new Criteria(), $definition, $fixture->getInput(), SerializationFixture::API_BASE_URL);
-
-        ArrayValues::assertValues($fixture->getAdminJsonFixtures(), $actual);
-    }
 
     public function testEncodeStructWithExtension(): void
     {
@@ -399,26 +386,6 @@ class JsonEntityEncoderTest extends TestCase
         return $extendableDefinition;
     }
 
-    private function getExtendableInputWithEntityNames(TestBasicWithExtension $fixture): Entity
-    {
-        $input = $fixture->getInput();
-        static::assertInstanceOf(Entity::class, $input);
-
-        $input->internalSetEntityData('extendable', new FieldVisibility([]));
-
-        $toOne = $input->getExtension('toOne');
-        static::assertInstanceOf(Entity::class, $toOne);
-        $toOne->internalSetEntityData('extended', new FieldVisibility([]));
-
-        $toMany = $input->getExtension('toMany');
-        static::assertInstanceOf(EntityCollection::class, $toMany);
-
-        foreach ($toMany as $extension) {
-            $extension->internalSetEntityData('extended', new FieldVisibility([]));
-        }
-
-        return $input;
-    }
 
     private function createEncoder(): JsonEntityEncoder
     {

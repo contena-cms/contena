@@ -36,6 +36,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * End-to-end dispatch coverage for the outbox transport. Two smoke tests run under

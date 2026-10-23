@@ -23,13 +23,13 @@ class WebhookSubscriptionTest extends TestCase
 
     public function testAUsersWebhookIsOwnedOnlyByThatUser(): void
     {
-        $admin_userId = Uuid::randomHex();
-        $subscription = new WebhookSubscription(Uuid::randomHex(), SubscriberType::AdminUser, $admin_userId, 'blog.written', null);
+        $adminUserId = Uuid::randomHex();
+        $subscription = new WebhookSubscription(Uuid::randomHex(), SubscriberType::AdminUser, $adminUserId, 'blog.written', null);
 
-        static::assertTrue($subscription->isOwnedBy(new AdminApiSource($admin_userId)));
+        static::assertTrue($subscription->isOwnedBy(new AdminApiSource($adminUserId)));
         static::assertFalse($subscription->isOwnedBy(new AdminApiSource(Uuid::randomHex())));
-        static::assertFalse($subscription->isOwnedBy(new AdminApiSource(null, $admin_userId)));
-        static::assertFalse($subscription->isOwnedBy(new AdminApiSource($admin_userId, Uuid::randomHex())));
+        static::assertFalse($subscription->isOwnedBy(new AdminApiSource(null, $adminUserId)));
+        static::assertFalse($subscription->isOwnedBy(new AdminApiSource($adminUserId, Uuid::randomHex())));
     }
 
     public function testAnIntegrationsWebhookIsOwnedOnlyByThatIntegration(): void

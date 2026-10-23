@@ -14,6 +14,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

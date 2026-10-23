@@ -16,6 +16,7 @@ use Twig\Node\NodeDocumentation;
 use Twig\Token;
 use Twig\TokenParser\AbstractTokenParser;
 use Twig\TokenParser\MacroTokenParser;
+use Twig\Error\SyntaxError;
 
 /**
  * @internal

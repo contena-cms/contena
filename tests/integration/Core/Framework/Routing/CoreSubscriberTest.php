@@ -7,6 +7,8 @@ use Contena\Administration\Controller\AdministrationController;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Controller\BlogController;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

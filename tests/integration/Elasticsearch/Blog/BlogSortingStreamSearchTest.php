@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\AfterClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -19,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestDefaults;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchIndexingCommand;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
@@ -29,6 +27,8 @@ use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 
 /**
  * @internal
@@ -496,46 +496,6 @@ class BlogSortingStreamSearchTest extends TestCase
         (new \ReflectionProperty(ElasticsearchIndexingUtils::class, 'customFieldsTypes'))->setValue($utils, []);
 
         $blogs = [
-            (new BlogBuilder($this->ids, 'blog-1'))
-                ->name('Blog Alpha')
-                ->visibility(TestDefaults::CHANNEL)
-                ->price(100)
-                ->stock(10)
-                ->customField('ss_test_int', 100)
-                ->customField('ss_test_float', 1.5)
-                ->customField('ss_test_text', 'alpha')
-                ->customField('ss_test_bool', true)
-                ->build(),
-            (new BlogBuilder($this->ids, 'blog-2'))
-                ->name('Blog Beta')
-                ->visibility(TestDefaults::CHANNEL)
-                ->price(200)
-                ->stock(20)
-                ->customField('ss_test_int', 200)
-                ->customField('ss_test_float', 2.5)
-                ->customField('ss_test_text', 'beta')
-                ->customField('ss_test_bool', false)
-                ->build(),
-            (new BlogBuilder($this->ids, 'blog-3'))
-                ->name('Blog Gamma')
-                ->visibility(TestDefaults::CHANNEL)
-                ->price(300)
-                ->stock(30)
-                ->customField('ss_test_int', 300)
-                ->customField('ss_test_float', 0.5)
-                ->customField('ss_test_text', 'alpha')
-                ->customField('ss_test_bool', true)
-                ->build(),
-            (new BlogBuilder($this->ids, 'blog-4'))
-                ->name('Blog Delta')
-                ->visibility(TestDefaults::CHANNEL)
-                ->price(400)
-                ->stock(40)
-                ->customField('ss_test_int', 50)
-                ->customField('ss_test_float', 3.5)
-                ->customField('ss_test_text', 'delta')
-                ->customField('ss_test_bool', false)
-                ->build(),
         ];
 
         $this->blogRepository->create($blogs, $this->context);

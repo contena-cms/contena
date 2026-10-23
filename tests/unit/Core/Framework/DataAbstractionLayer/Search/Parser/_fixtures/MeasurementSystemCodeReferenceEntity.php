@@ -2,12 +2,10 @@
 
 namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Parser\_fixtures;
 
-use Contena\Core\Content\MeasurementSystem\DataAbstractionLayer\MeasurementSystemEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\ForeignKey;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\ManyToOne;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
 
@@ -24,6 +22,4 @@ class MeasurementSystemCodeReferenceEntity extends EntityStruct
     #[ForeignKey(entity: 'measurement_system')]
     public ?string $measurementSystemId = null;
 
-    #[ManyToOne(entity: 'measurement_system', ref: 'technical_name')]
-    public ?MeasurementSystemEntity $measurementSystem = null;
 }

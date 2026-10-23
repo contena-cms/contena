@@ -30,6 +30,8 @@ use Contena\Core\System\User\Aggregate\UserGroup\UserGroupCollection;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
 use Contena\Core\System\User\UserCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ChannelEntity extends Entity
 {

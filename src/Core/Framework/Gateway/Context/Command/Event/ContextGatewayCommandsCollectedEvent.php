@@ -16,7 +16,7 @@ use Symfony\Contracts\EventDispatcher\Event;
  *
  * @codeCoverageIgnore
  */
-class ContextGatewayCommandsCollectedEvent extends Event implements CartAware
+class ContextGatewayCommandsCollectedEvent extends Event
 {
     public function __construct(
         private readonly ContextGatewayPayloadStruct $payload,

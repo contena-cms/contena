@@ -14,6 +14,7 @@ use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
+use GuzzleHttp\Exception\GuzzleException;
 
 /**
  * @internal

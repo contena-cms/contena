@@ -7,6 +7,8 @@ use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\AddScaffoldConfigDefaultBehaviour;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\HasCommandOption;
 
 /**
  * @internal

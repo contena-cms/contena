@@ -7,22 +7,13 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\CartException;
 use Contena\Core\Checkout\Order\Channel\OrderRoute;
-use Contena\Core\Checkout\Order\Channel\OrderRouteResponse;
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderException;
-use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Frontend\Checkout\Order\OrderBlogAvailabilityResolver;
 use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPage;
 use Contena\Frontend\Page\Checkout\Finish\CheckoutFinishPageLoader;
@@ -244,83 +235,5 @@ class CheckoutFinishPageLoaderTest extends TestCase
         );
     }
 
-    /**
-     * @param array<string, mixed> $systemConfig
-     */
-    private function createLoader(
-        GenericPageLoader $pageLoader,
-        OrderRoute $getOrderRouteWithValidOrder,
-        array $systemConfig = [],
-        ?OrderBlogAvailabilityResolver $blogAvailabilityResolver = null
-    ): CheckoutFinishPageLoader {
-        return new CheckoutFinishPageLoader(
-            static::createStub(EventDispatcher::class),
-            $pageLoader,
-            $getOrderRouteWithValidOrder,
-            static::createStub(AbstractTranslator::class),
-            new StaticSystemConfigService($systemConfig),
-            $blogAvailabilityResolver ?? static::createStub(OrderBlogAvailabilityResolver::class),
-        );
-    }
 
-    private function getOrderRouteWithValidOrder(
-        string $orderId,
-        ?CashRoundingConfig $itemRounding = null,
-        ?CashRoundingConfig $totalRounding = null,
-        ?string $criteriaOrderId = null,
-    ): OrderRoute {
-        $order = new OrderEntity();
-        $order->setId($orderId);
-
-        if ($itemRounding instanceof CashRoundingConfig) {
-            $order->setItemRounding($itemRounding);
-        }
-
-        if ($totalRounding instanceof CashRoundingConfig) {
-            $order->setTotalRounding($totalRounding);
-        }
-
-        $searchResult = new EntitySearchResult(
-            OrderDefinition::ENTITY_NAME,
-            1,
-            new EntityCollection([$order]),
-            null,
-            new Criteria(),
-            Context::createDefaultContext(),
-        );
-
-        $orderRouteResponse = $this->createMock(OrderRouteResponse::class);
-        $orderRouteResponse->expects($this->once())
-            ->method('getOrders')
-            ->willReturn($searchResult);
-
-        $expectedCriteria = (new Criteria([$criteriaOrderId ?? $orderId]))
-            ->addFilter(new EqualsFilter('order.orderUser.userId', Generator::CUSTOMER))
-            ->addAssociation('primaryOrderDelivery.shippingMethod')
-            ->addAssociation('primaryOrderDelivery.shippingOrderAddress.salutation')
-            ->addAssociation('primaryOrderDelivery.shippingOrderAddress.country')
-            ->addAssociation('primaryOrderDelivery.shippingOrderAddress.countryState')
-            ->addAssociation('primaryOrderTransaction.paymentMethod')
-            ->addAssociation('lineItems.cover')
-            ->addAssociation('billingAddress.salutation')
-            ->addAssociation('billingAddress.country')
-            ->addAssociation('billingAddress.countryState')
-            ->addAssociation('currency');
-
-        $orderRoute = $this->createMock(OrderRoute::class);
-        $orderRoute->expects($this->once())
-            ->method('load')
-            ->with(
-                static::isInstanceOf(Request::class),
-                static::isInstanceOf(ChannelContext::class),
-                static::callback(static function (Criteria $criteria) use ($expectedCriteria): bool {
-                    static::assertSame((string) $expectedCriteria, (string) $criteria);
-
-                    return true;
-                }),
-            )
-            ->willReturn($orderRouteResponse);
-
-        return $orderRoute;
-    }
 }

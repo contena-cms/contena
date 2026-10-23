@@ -29,6 +29,8 @@ use Symfony\Component\Routing\RouterInterface;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 use Twig\Loader\ChainLoader;
+use Contena\Core\Framework\App\Validation\Error\Error;
+use Twig\Error\SyntaxError;
 
 class SeoUrlGenerator
 {

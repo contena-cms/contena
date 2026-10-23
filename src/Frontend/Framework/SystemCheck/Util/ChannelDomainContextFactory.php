@@ -2,7 +2,6 @@
 
 namespace Contena\Frontend\Framework\SystemCheck\Util;
 
-use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\Context\ChannelContextService;
@@ -36,13 +35,6 @@ class ChannelDomainContextFactory
             ChannelContextService::LANGUAGE_ID => $domain->languageId,
             ChannelContextService::CURRENCY_ID => $domain->currencyId,
         ]);
-
-        $behavior = new CartBehavior([
-            ...$context->getPermissions(),
-            CheckoutPermissions::SKIP_CART_PERSISTENCE => true,
-        ]);
-
-        $this->cartRuleLoader->loadByCart($context, $this->cartFactory->createNew($token), $behavior, true);
 
         return $context;
     }

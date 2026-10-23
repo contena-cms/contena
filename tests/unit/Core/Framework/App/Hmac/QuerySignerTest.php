@@ -28,9 +28,9 @@ class QuerySignerTest extends TestCase
     {
         $inAppPurchase = StaticInAppPurchaseFactory::createWithFeatures(['extension-1' => ['purchase-1', 'purchase-2'], 'extension-2' => ['purchase-3']]);
 
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
-        $context = new Context(new AdminApiSource($admin_userId));
+        $context = new Context(new AdminApiSource($adminUserId));
 
         $localeProvider = $this->createMock(LocaleProvider::class);
         $localeProvider
@@ -75,7 +75,7 @@ class QuerySignerTest extends TestCase
         static::assertSame(Defaults::LANGUAGE_SYSTEM, $url['sw-context-language']);
         static::assertSame('en-GB', $url['sw-admin_user-language']);
         static::assertSame('1.0.0', $url['app-version']);
-        static::assertSame($admin_userId, $url['sw-admin_user-id']);
+        static::assertSame($adminUserId, $url['sw-admin_user-id']);
     }
 
     #[DataProvider('admin_userIdDataProvider')]
@@ -146,11 +146,11 @@ class QuerySignerTest extends TestCase
      */
     public static function admin_userIdDataProvider(): \Generator
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         yield 'admin api source with admin_user' => [
-            new Context(new AdminApiSource($admin_userId)),
-            $admin_userId,
+            new Context(new AdminApiSource($adminUserId)),
+            $adminUserId,
         ];
 
         yield 'admin api source without admin_user' => [

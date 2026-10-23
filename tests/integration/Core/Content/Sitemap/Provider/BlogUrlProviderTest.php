@@ -18,6 +18,9 @@ use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\Tax\TaxEntity;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
+use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -47,6 +47,9 @@ use Contena\Core\System\Tax\Aggregate\TaxRuleTypeTranslation\TaxRuleTypeTranslat
 use Contena\Core\System\TaxProvider\Aggregate\TaxProviderTranslation\TaxProviderTranslationCollection;
 use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationCollection;
 use Contena\Core\System\User\UserCollection;
+use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -55,7 +58,6 @@ class LanguageEntity extends Entity
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
-use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationCollection;
 
     protected ?string $parentId = null;
 

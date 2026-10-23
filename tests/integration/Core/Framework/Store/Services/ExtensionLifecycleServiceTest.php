@@ -17,6 +17,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Frontend\Theme\ThemeCollection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

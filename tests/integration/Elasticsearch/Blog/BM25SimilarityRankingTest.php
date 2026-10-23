@@ -14,6 +14,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Blog\ElasticsearchOptimizeSwitch;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\FilesystemBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
+use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 
 /**
  * Tests that the custom BM25 similarity configuration (b=0 for structured fields,

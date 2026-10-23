@@ -15,6 +15,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\Currency\CurrencyException;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

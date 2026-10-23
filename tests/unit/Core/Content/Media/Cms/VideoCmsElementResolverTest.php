@@ -11,7 +11,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\Channel\Struct\VideoStruct;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
@@ -40,7 +39,6 @@ class VideoCmsElementResolverTest extends TestCase
     public function testCollectCreatesMediaCriteria(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_STATIC, 'media-1'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -70,7 +68,6 @@ class VideoCmsElementResolverTest extends TestCase
     public function testCollectReturnsNullWithMappedConfig(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'media'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -104,7 +101,6 @@ class VideoCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'cover.media'),
         ]));
 
         $resolver = new VideoCmsElementResolver(static::createStub(AbstractDefaultMediaResolver::class));
@@ -126,7 +122,6 @@ class VideoCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroVideo'),
         ]));
 
         $resolver = new VideoCmsElementResolver(static::createStub(AbstractDefaultMediaResolver::class));
@@ -146,7 +141,6 @@ class VideoCmsElementResolverTest extends TestCase
     public function testEnrichStaticSlotWithMedia(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_STATIC, 'media-1'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -179,7 +173,6 @@ class VideoCmsElementResolverTest extends TestCase
     public function testEnrichWithDefaultMedia(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_DEFAULT, 'bundles/frontend/assets/default/cms/contena.mp4'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -206,8 +199,6 @@ class VideoCmsElementResolverTest extends TestCase
     public function testEnrichWithAriaLabel(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_STATIC, 'media-1'),
-            new FieldConfig('ariaLabel', FieldConfig::SOURCE_STATIC, 'Video description for accessibility'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -248,7 +239,6 @@ class VideoCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroVideo'),
         ]));
 
         $media = new MediaEntity();
@@ -284,7 +274,6 @@ class VideoCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroVideo'),
         ]));
 
         $resolver = new VideoCmsElementResolver(static::createStub(AbstractDefaultMediaResolver::class));

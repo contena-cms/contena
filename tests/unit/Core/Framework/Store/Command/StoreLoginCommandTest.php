@@ -28,18 +28,18 @@ class StoreLoginCommandTest extends TestCase
     #[TestDox('A successful login stores the license host and reports success')]
     public function testLoginSucceeds(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $storeClient = $this->createMock(StoreClient::class);
         $storeClient
             ->expects($this->once())
             ->method('loginWithContenaId')
-            ->willReturnCallback(function (string $contenaId, string $password, Context $context) use ($admin_userId): void {
+            ->willReturnCallback(function (string $contenaId, string $password, Context $context) use ($adminUserId): void {
                 $this->assertSame('admin_user@example.com', $contenaId);
                 $this->assertSame('secret', $password);
                 $source = $context->getSource();
                 $this->assertInstanceOf(AdminApiSource::class, $source);
-                $this->assertSame($admin_userId, $source->getUserId());
+                $this->assertSame($adminUserId, $source->getUserId());
             });
 
         $configService = $this->createMock(SystemConfigService::class);
@@ -50,7 +50,7 @@ class StoreLoginCommandTest extends TestCase
 
         $commandTester = new CommandTester(new StoreLoginCommand(
             $storeClient,
-            $this->createUserRepository([$admin_userId]),
+            $this->createUserRepository([$adminUserId]),
             $configService
         ));
 
@@ -130,13 +130,13 @@ class StoreLoginCommandTest extends TestCase
     }
 
     /**
-     * @param list<string> $admin_userIds
+     * @param list<string> $adminUserIds
      *
      * @return StaticEntityRepository<AdminUserCollection>
      */
-    private function createUserRepository(array $admin_userIds): StaticEntityRepository
+    private function createUserRepository(array $adminUserIds): StaticEntityRepository
     {
-        $repository = StaticEntityRepository::of(AdminUserCollection::class, [$admin_userIds]);
+        $repository = StaticEntityRepository::of(AdminUserCollection::class, [$adminUserIds]);
 
         return $repository;
     }

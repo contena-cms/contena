@@ -18,6 +18,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -35,7 +36,7 @@ class AdminSearcherTest extends TestCase
 
     private Context $context;
 
-    private string $admin_userId;
+    private string $adminUserId;
 
     protected function setUp(): void
     {
@@ -44,8 +45,8 @@ class AdminSearcherTest extends TestCase
         $this->searcher = static::getContainer()->get(AdminSearcher::class);
 
         $connection = static::getContainer()->get(Connection::class);
-        $admin_userId = (string) $connection->fetchOne('SELECT id FROM `admin_user` WHERE username = "admin"');
-        $this->admin_userId = Uuid::fromBytesToHex($admin_userId);
+        $adminUserId = (string) $connection->fetchOne('SELECT id FROM `admin_user` WHERE username = "admin"');
+        $this->admin_userId = Uuid::fromBytesToHex($adminUserId);
         $this->context = Context::createDefaultContext();
     }
 

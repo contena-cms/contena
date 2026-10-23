@@ -25,6 +25,7 @@ use Contena\Frontend\Page\Blog\BlogPageLoader;
 use Contena\Frontend\Page\Search\SearchPageLoader;
 use Contena\Frontend\Page\Suggest\SuggestPageLoader;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

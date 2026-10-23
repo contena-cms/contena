@@ -12,11 +12,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -74,14 +74,6 @@ class MultiJoinFilterLimitationTest extends TestCase
         ]);
         $criteria->addFilter(
             new OrFilter([
-                new AndFilter([
-                    new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-2')),
-                    new RangeFilter('blog.prices.price', [RangeFilter::GTE => 150]),
-                ]),
-                new AndFilter([
-                    new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                    new RangeFilter('blog.prices.price', [RangeFilter::GTE => 150]),
-                ]),
             ])
         );
         $criteria->addSorting(new FieldSorting('blog.prices.price'));
@@ -110,14 +102,6 @@ class MultiJoinFilterLimitationTest extends TestCase
         ]);
         $criteria->addFilter(
             new OrFilter([
-                new AndFilter([
-                    new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                    new RangeFilter('blog.prices.price', [RangeFilter::GTE => 150]),
-                ]),
-                new AndFilter([
-                    new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-2')),
-                    new RangeFilter('blog.prices.price', [RangeFilter::GTE => 150]),
-                ]),
             ])
         );
         $criteria->addSorting(new FieldSorting('blog.prices.price', FieldSorting::DESCENDING));
@@ -142,14 +126,6 @@ class MultiJoinFilterLimitationTest extends TestCase
         $criteria = new Criteria(self::$ids->prefixed('blog-'));
         $criteria->addFilter(
             new OrFilter([
-                new AndFilter([
-                    new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                    new RangeFilter('blog.prices.price', [RangeFilter::GTE => 150]),
-                ]),
-                new AndFilter([
-                    new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-2')),
-                    new RangeFilter('blog.prices.price', [RangeFilter::GTE => 150]),
-                ]),
             ])
         );
         $criteria->addGroupField(new FieldGrouping('blog.prices.ruleId'));

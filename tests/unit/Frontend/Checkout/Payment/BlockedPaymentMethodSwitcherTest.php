@@ -4,10 +4,7 @@ namespace Contena\Tests\Unit\Frontend\Checkout\Payment;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Error\ErrorCollection;
-use Contena\Core\Checkout\Payment\Cart\Error\PaymentMethodBlockedError;
 use Contena\Core\Checkout\Payment\Channel\PaymentMethodRoute;
-use Contena\Core\Checkout\Payment\Channel\PaymentMethodRouteResponse;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Defaults;
@@ -27,30 +24,13 @@ use Symfony\Component\HttpFoundation\Request;
 #[CoversClass(BlockedPaymentMethodSwitcher::class)]
 class BlockedPaymentMethodSwitcherTest extends TestCase
 {
-    private PaymentMethodCollection $paymentMethodCollection;
 
     private ChannelContext $channelContext;
 
-    private BlockedPaymentMethodSwitcher $switcher;
 
     protected function setUp(): void
     {
         $this->paymentMethodCollection = new PaymentMethodCollection([
-            (new PaymentMethodEntity())->assign([
-                'id' => 'original-payment-method-id',
-                'name' => 'original-payment-method-name',
-                'translated' => ['name' => 'original-payment-method-name'],
-            ]),
-            (new PaymentMethodEntity())->assign([
-                'id' => 'any-other-payment-method-id',
-                'name' => 'any-other-payment-method-name',
-                'translated' => ['name' => 'any-other-payment-method-name'],
-            ]),
-            (new PaymentMethodEntity())->assign([
-                'id' => 'default-payment-method-id',
-                'name' => 'default-payment-method-name',
-                'translated' => ['name' => 'default-payment-method-name'],
-            ]),
         ]);
 
         $this->channelContext = $this->getChannelContext();
@@ -286,45 +266,8 @@ class BlockedPaymentMethodSwitcherTest extends TestCase
         $switcher->switch($errors, $context);
     }
 
-    public function callbackLoadPaymentMethods(Request $request, ChannelContext $context, Criteria $criteria): PaymentMethodRouteResponse
-    {
-        $paymentMethodResponse = $this->createMock(PaymentMethodRouteResponse::class);
-        $paymentMethodResponse
-            ->expects($this->once())
-            ->method('getPaymentMethods')
-            ->willReturn($this->paymentMethodCollection);
 
-        return $paymentMethodResponse;
-    }
 
-    private function callbackLoadPaymentMethodsForAllBlocked(): PaymentMethodRouteResponse
-    {
-        $paymentMethodResponse = $this->createMock(PaymentMethodRouteResponse::class);
-        $paymentMethodResponse
-            ->expects($this->once())
-            ->method('getPaymentMethods')
-            ->willReturn(new PaymentMethodCollection());
-
-        return $paymentMethodResponse;
-    }
-
-    /**
-     * @param list<array{id: string, name: string}> $blockedPaymentMethods
-     */
-    private function getErrorCollection(array $blockedPaymentMethods = []): ErrorCollection
-    {
-        $errorCollection = new ErrorCollection();
-
-        foreach ($blockedPaymentMethods as $method) {
-            $errorCollection->add(new PaymentMethodBlockedError(
-                id: $method['id'],
-                name: $method['name'],
-                reason: 'Payment method blocked',
-            ));
-        }
-
-        return $errorCollection;
-    }
 
     private function getChannelContext(bool $dontReturnDefaultPaymentMethod = false): ChannelContext
     {
@@ -345,20 +288,4 @@ class BlockedPaymentMethodSwitcherTest extends TestCase
         return $channelContext;
     }
 
-    private function getPaymentMethodRoute(bool $dontReturnAnyOtherPaymentMethod = false): PaymentMethodRoute
-    {
-        $paymentMethodRoute = static::createStub(PaymentMethodRoute::class);
-
-        if ($dontReturnAnyOtherPaymentMethod) {
-            $paymentMethodRoute
-                ->method('load')
-                ->willReturnCallback($this->callbackLoadPaymentMethodsForAllBlocked(...));
-        } else {
-            $paymentMethodRoute
-                ->method('load')
-                ->willReturnCallback($this->callbackLoadPaymentMethods(...));
-        }
-
-        return $paymentMethodRoute;
-    }
 }

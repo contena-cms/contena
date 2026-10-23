@@ -21,7 +21,6 @@ class PhpstanBaselineGrowthTest extends TestCase
     public function testBaselineGrowth(int $additions, int $deletions, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('phpstan-baseline.php', File::STATUS_MODIFIED, '', '', $additions, $deletions),
         ])));
 
         (new PhpstanBaselineGrowth())($context);

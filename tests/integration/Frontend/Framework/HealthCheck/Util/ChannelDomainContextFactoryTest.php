@@ -19,6 +19,9 @@ use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomain;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainContextFactory;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -76,7 +79,6 @@ class ChannelDomainContextFactoryTest extends TestCase
         static::getContainer()->get(CartRuleLoader::class)->invalidate();
 
         EventHookDispatcher::fromContainer(static::getContainer())->on(
-            CartCreatedEvent::class,
             static function (CartCreatedEvent $event): void {
                 $lineItem = new LineItem('seeded-by-an-extension', LineItem::CUSTOM_LINE_ITEM_TYPE);
                 $lineItem->setLabel('seeded');

@@ -5,6 +5,7 @@ namespace Contena\Frontend\Page\Account\Register;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\Account\Login\AccountLoginPage;
 use Contena\Frontend\Page\PageLoadedHook;
+use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 
 /**
  * Triggered when the AccountLoginPage is loaded

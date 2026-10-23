@@ -20,6 +20,7 @@ use Contena\Core\System\Tax\TaxRuleType\IndividualStatesRuleTypeFilter;
 use Contena\Core\System\Tax\TaxRuleType\ZipCodeRangeRuleTypeFilter;
 use Contena\Core\System\Tax\TaxRuleType\ZipCodeRuleTypeFilter;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

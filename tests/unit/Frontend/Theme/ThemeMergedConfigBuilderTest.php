@@ -21,6 +21,7 @@ use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeEntity;
 use Contena\Frontend\Theme\ThemeMergedConfigBuilder;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

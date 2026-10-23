@@ -12,6 +12,7 @@ use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChan
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeChannel\NumberRangeChannelEntity;
 use Contena\Core\System\NumberRange\NumberRangeCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -103,6 +103,9 @@ use Contena\Frontend\Theme\Aggregate\ThemeChannelDefinition;
 use Contena\Frontend\Theme\Aggregate\ThemeMediaDefinition;
 use Contena\Frontend\Theme\Aggregate\ThemeTranslationDefinition;
 use Contena\Frontend\Theme\ThemeDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
+use Contena\Core\System\Tax\Aggregate\TaxRule\TaxRuleDefinition;
+use Contena\Core\System\Unit\UnitDefinition;
 
 /**
  * @internal
@@ -192,13 +195,6 @@ class PermissionCategorization
             CustomFieldSetDefinition::ENTITY_NAME,
             CustomFieldSetRelationDefinition::ENTITY_NAME,
         ],
-        self::CATEGORY_DOCUMENTS => [
-            DocumentDefinition::ENTITY_NAME,
-            DocumentBaseConfigDefinition::ENTITY_NAME,
-            DocumentBaseConfigChannelDefinition::ENTITY_NAME,
-            DocumentTypeDefinition::ENTITY_NAME,
-            DocumentTypeTranslationDefinition::ENTITY_NAME,
-        ],
         self::CATEGORY_GOOGLE_SHOPPING => [
             'swag_google_shopping_account',
             'swag_google_shopping_ads_account',
@@ -232,41 +228,15 @@ class PermissionCategorization
             MediaThumbnailDefinition::ENTITY_NAME,
             MediaThumbnailSizeDefinition::ENTITY_NAME,
         ],
-        self::CATEGORY_NEWSLETTER => [
-            NewsletterRecipientDefinition::ENTITY_NAME,
-            NewsletterRecipientTagDefinition::ENTITY_NAME,
-        ],
         self::CATEGORY_ORDER => [
             OrderDefinition::ENTITY_NAME,
-            OrderAddressDefinition::ENTITY_NAME,
-            OrderUserDefinition::ENTITY_NAME,
-            OrderDeliveryDefinition::ENTITY_NAME,
-            OrderDeliveryPositionDefinition::ENTITY_NAME,
-            OrderLineItemDefinition::ENTITY_NAME,
-            OrderTagDefinition::ENTITY_NAME,
-            OrderTransactionDefinition::ENTITY_NAME,
-        ],
-        self::CATEGORY_PAYMENT => [
-            PaymentMethodDefinition::ENTITY_NAME,
-            PaymentMethodTranslationDefinition::ENTITY_NAME,
         ],
         self::CATEGORY_BLOG => [
             BlogDefinition::ENTITY_NAME,
             BlogCategoryDefinition::ENTITY_NAME,
             BlogCategoryTreeDefinition::ENTITY_NAME,
-            BlogConfiguratorSettingDefinition::ENTITY_NAME,
-            BlogCrossSellingDefinition::ENTITY_NAME,
-            BlogCrossSellingAssignedBlogsDefinition::ENTITY_NAME,
-            BlogCrossSellingTranslationDefinition::ENTITY_NAME,
-            BlogExportDefinition::ENTITY_NAME,
             BlogKeywordDictionaryDefinition::ENTITY_NAME,
-            BlogManufacturerDefinition::ENTITY_NAME,
-            BlogManufacturerTranslationDefinition::ENTITY_NAME,
             BlogMediaDefinition::ENTITY_NAME,
-            BlogOptionDefinition::ENTITY_NAME,
-            BlogPriceDefinition::ENTITY_NAME,
-            BlogPropertyDefinition::ENTITY_NAME,
-            BlogReviewDefinition::ENTITY_NAME,
             BlogSearchKeywordDefinition::ENTITY_NAME,
             ContentStreamDefinition::ENTITY_NAME,
             ContentStreamFilterDefinition::ENTITY_NAME,
@@ -275,24 +245,7 @@ class PermissionCategorization
             BlogVisibilityDefinition::ENTITY_NAME,
             BlogSortingDefinition::ENTITY_NAME,
             BlogTranslationDefinition::ENTITY_NAME,
-            BlogFeatureSetDefinition::ENTITY_NAME,
-            BlogFeatureSetTranslationDefinition::ENTITY_NAME,
             BlogCustomFieldSetDefinition::ENTITY_NAME,
-        ],
-        self::CATEGORY_PROMOTION => [
-            PromotionDefinition::ENTITY_NAME,
-            PromotionTranslationDefinition::ENTITY_NAME,
-            PromotionCartRuleDefinition::ENTITY_NAME,
-            PromotionDiscountDefinition::ENTITY_NAME,
-            PromotionDiscountPriceDefinition::ENTITY_NAME,
-            PromotionDiscountRuleDefinition::ENTITY_NAME,
-            PromotionIndividualCodeDefinition::ENTITY_NAME,
-            PromotionOrderRuleDefinition::ENTITY_NAME,
-            PromotionPersonaUserDefinition::ENTITY_NAME,
-            PromotionPersonaRuleDefinition::ENTITY_NAME,
-            PromotionChannelDefinition::ENTITY_NAME,
-            PromotionSetGroupDefinition::ENTITY_NAME,
-            PromotionSetGroupRuleDefinition::ENTITY_NAME,
         ],
         self::CATEGORY_RULES => [
             RuleDefinition::ENTITY_NAME,
@@ -315,7 +268,6 @@ class PermissionCategorization
             CountryDefinition::ENTITY_NAME,
             CountryStateDefinition::ENTITY_NAME,
             CurrencyDefinition::ENTITY_NAME,
-            DeliveryTimeDefinition::ENTITY_NAME,
             LanguageDefinition::ENTITY_NAME,
             LocaleDefinition::ENTITY_NAME,
             LocaleTranslationDefinition::ENTITY_NAME,
@@ -323,8 +275,6 @@ class PermissionCategorization
             NumberRangeChannelDefinition::ENTITY_NAME,
             NumberRangeStateDefinition::ENTITY_NAME,
             NumberRangeTypeDefinition::ENTITY_NAME,
-            SalutationDefinition::ENTITY_NAME,
-            SalutationTranslationDefinition::ENTITY_NAME,
             SeoUrlDefinition::ENTITY_NAME,
             SeoUrlTemplateDefinition::ENTITY_NAME,
             StateMachineDefinition::ENTITY_NAME,

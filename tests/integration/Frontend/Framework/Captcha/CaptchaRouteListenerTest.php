@@ -6,12 +6,14 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Frontend\Framework\Captcha\BasicCaptcha;
 use Contena\Frontend\Framework\Captcha\GoogleReCaptchaV3;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

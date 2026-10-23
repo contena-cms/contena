@@ -11,6 +11,7 @@ use Doctrine\DBAL\Schema\Column as DbalColumn;
 use Doctrine\DBAL\Schema\Index as DbalIndex;
 use Doctrine\DBAL\Schema\Name\UnqualifiedName;
 use Contena\Core\Framework\Util\UtilException;
+use Doctrine\DBAL\Schema\Exception\TableDoesNotExist;
 
 /**
  * Covered by {@see \Contena\Tests\Integration\Core\Framework\Util\Database\TableHelperTest}

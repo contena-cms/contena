@@ -12,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Util\Json;
+use Contena\Core\Framework\Struct\StateAwareTrait;
 
 /**
  * @template IDStructure of string|array<string, string> = string

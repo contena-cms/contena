@@ -9,6 +9,7 @@ use Symfony\Component\DependencyInjection\Compiler\ValidateEnvPlaceholdersPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\ExtensionInterface;
 use Symfony\Component\DependencyInjection\ParameterBag\EnvPlaceholderParameterBag;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\CompilerPassConfigTrait;
 
 /**
  * @internal

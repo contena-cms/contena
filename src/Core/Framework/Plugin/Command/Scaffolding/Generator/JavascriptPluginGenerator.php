@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\Plugin\Command\Scaffolding\Generator;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Stub;
 use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\AddScaffoldConfigDefaultBehaviour;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\HasCommandOption;
 
 /**
  * @internal

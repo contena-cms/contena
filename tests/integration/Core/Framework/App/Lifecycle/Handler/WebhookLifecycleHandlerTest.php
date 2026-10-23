@@ -22,6 +22,7 @@ use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -34,7 +35,6 @@ class WebhookLifecycleHandlerTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {
@@ -214,13 +214,13 @@ class WebhookLifecycleHandlerTest extends TestCase
     {
         $app = $this->appFixture->createApp(ManifestFixture::empty());
         $appWebhookId = WebhookBuilder::ownedByIntegration($app->getIntegrationId())->insert($this->connection);
-        $admin_userWebhookId = WebhookBuilder::ownedByUser(TestUser::createNewTestUser($this->connection)->getUserId())
+        $adminUserWebhookId = WebhookBuilder::ownedByUser(TestUser::createNewTestUser($this->connection)->getUserId())
             ->insert($this->connection);
 
         $this->handler->uninstall(new AppRemovalContext($app, Context::createDefaultContext()));
 
         static::assertNull($this->findWebhook($appWebhookId));
-        static::assertTrue($this->findWebhook($admin_userWebhookId)?->isActive());
+        static::assertTrue($this->findWebhook($adminUserWebhookId)?->isActive());
     }
 
     public function testDeleteDeletesWebhooksTheAppCreatedThroughTheApi(): void

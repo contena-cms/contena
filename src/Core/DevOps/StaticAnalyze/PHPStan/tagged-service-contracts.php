@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
 use League\OAuth2\Server\Entities\ScopeEntityInterface;
-use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
+use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
+use Contena\Core\Content\Blog\Cms\BlogSlider\AbstractBlogSliderProcessor;
 use Contena\Core\Content\Cms\DataResolver\Element\CmsElementResolverInterface;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowAction;
 use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
@@ -13,9 +14,6 @@ use Contena\Core\Content\Media\Core\Application\AbstractMediaPathStrategy;
 use Contena\Core\Content\Media\File\AbstractFileContentValidator;
 use Contena\Core\Content\Media\Metadata\MetadataLoader\MetadataLoaderInterface;
 use Contena\Core\Content\Media\TypeDetector\TypeDetectorInterface;
-use Contena\Core\Content\Blog\Cms\BlogSlider\AbstractBlogSliderProcessor;
-use Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate\AbstractStockUpdateFilter;
-use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntitySeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteInterface;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteLoaderInterface;
@@ -40,11 +38,12 @@ use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\SystemCheck\BaseCheck;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\PeriodicMetricCollectorInterface;
 use Contena\Core\Framework\Telemetry\Metrics\MetricTransportInterface;
+use Contena\Core\System\Channel\Capability\AbstractChannelTypeCapabilities;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\AbstractValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;
-use Contena\Core\System\Channel\Capability\AbstractChannelTypeCapabilities;
 use Contena\Core\System\Snippet\Filter\SnippetFilterInterface;
 use Contena\Core\System\Tax\TaxRuleType\TaxRuleTypeFilterInterface;
+use Contena\Core\System\User\Password\LegacyEncoder\LegacyEncoderInterface;
 use Contena\Elasticsearch\Admin\Indexer\AbstractAdminIndexer;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Frontend\Framework\Captcha\AbstractCaptcha;
@@ -89,7 +88,6 @@ return [
             'contena.metric_transport_factory' => MetricTransportInterface::class,
             'contena.oauth.scope' => ScopeEntityInterface::class,
             'contena.path.strategy' => AbstractMediaPathStrategy::class,
-            'contena.blog.stock_filter' => AbstractStockUpdateFilter::class,
             'contena.route_scope' => AbstractRouteScope::class,
             'contena.route_scope_whitelist' => RouteScopeWhitelistInterface::class,
             'contena.rule.definition' => Rule::class,

@@ -12,6 +12,8 @@ use Contena\Core\Framework\Notification\NotificationDefinition;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Frontend\Theme\ThemeDefinition;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

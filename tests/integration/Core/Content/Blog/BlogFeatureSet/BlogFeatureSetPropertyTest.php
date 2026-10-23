@@ -6,6 +6,8 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
+use Contena\Core\Content\Test\Blog\BlogFeatureSet\BlogFeatureSetFixtures;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -13,6 +13,8 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * End-to-end enforcement of the per-principal MCP allowlist against real `admin_user` and `integration`
@@ -234,11 +236,11 @@ class McpAllowlistEnforcementTest extends TestCase
     /**
      * @param array<string, list<string>|null> $allowlist
      */
-    private function postAllowlist(KernelBrowser $browser, string $admin_userId, array $allowlist): void
+    private function postAllowlist(KernelBrowser $browser, string $adminUserId, array $allowlist): void
     {
         $browser->request(
             'POST',
-            '/api/_action/admin_user/' . $admin_userId . '/mcp-allowlist',
+            '/api/_action/admin_user/' . $adminUserId . '/mcp-allowlist',
             [],
             [],
             ['CONTENT_TYPE' => 'application/json'],
@@ -303,11 +305,11 @@ class McpAllowlistEnforcementTest extends TestCase
         $source = $context->getSource();
         static::assertInstanceOf(AdminApiSource::class, $source);
 
-        $admin_userId = $source->getUserId();
-        static::assertIsString($admin_userId);
+        $adminUserId = $source->getUserId();
+        static::assertIsString($adminUserId);
 
         // AdminApiTestBehaviour seeds the source with the raw binary id, not the hex form.
-        return \strlen($admin_userId) === 16 ? $admin_userId : Uuid::fromHexToBytes($admin_userId);
+        return \strlen($adminUserId) === 16 ? $adminUserId : Uuid::fromHexToBytes($adminUserId);
     }
 
     private function integrationId(KernelBrowser $browser): string

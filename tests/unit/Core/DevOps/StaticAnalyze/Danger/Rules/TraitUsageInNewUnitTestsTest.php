@@ -21,7 +21,6 @@ class TraitUsageInNewUnitTestsTest extends TestCase
     public function testDetection(string $fileName, string $status, string $content, ?string $expectedTrait): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status, $content),
         ])));
 
         (new TraitUsageInNewUnitTests())($context);

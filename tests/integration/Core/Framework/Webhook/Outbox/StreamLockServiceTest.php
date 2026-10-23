@@ -13,6 +13,7 @@ use Contena\Core\Framework\Webhook\Outbox\StreamLease;
 use Contena\Core\Framework\Webhook\Outbox\StreamLockService;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Symfony\Component\Clock\MockClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

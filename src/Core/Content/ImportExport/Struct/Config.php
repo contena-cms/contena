@@ -7,6 +7,7 @@ use Contena\Core\Content\ImportExport\Processing\Mapping\Mapping;
 use Contena\Core\Content\ImportExport\Processing\Mapping\MappingCollection;
 use Contena\Core\Content\ImportExport\Processing\Mapping\UpdateBy;
 use Contena\Core\Content\ImportExport\Processing\Mapping\UpdateByCollection;
+use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
 /**
  * @phpstan-import-type MappingArray from Mapping

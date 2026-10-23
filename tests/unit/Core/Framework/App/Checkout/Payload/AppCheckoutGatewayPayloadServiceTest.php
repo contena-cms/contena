@@ -149,18 +149,6 @@ class AppCheckoutGatewayPayloadServiceTest extends TestCase
         static::assertNull($gatewayResponse);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function encodePayload(AppCheckoutGatewayPayload $payload): array
-    {
-        return [
-            'channelContext' => $payload->getChannelContext()->jsonSerialize(),
-            'cart' => $payload->getCart()->jsonSerialize(),
-            'paymentMethods' => $payload->getPaymentMethods(),
-            'shippingMethods' => $payload->getShippingMethods(),
-        ];
-    }
 
     /**
      * @param array<array-key, mixed> $body

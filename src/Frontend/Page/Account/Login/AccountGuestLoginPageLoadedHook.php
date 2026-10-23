@@ -4,6 +4,7 @@ namespace Contena\Frontend\Page\Account\Login;
 
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Frontend\Page\PageLoadedHook;
+use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 
 /**
  * Triggered when the AccountGuestLoginPage is loaded

@@ -26,6 +26,8 @@ use Contena\Frontend\Theme\Validator\SCSSValidator;
 use Symfony\Component\Asset\Package as AssetPackage;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Finder\Finder;
+use Contena\Frontend\Theme\Exception\ThemeException;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 class ThemeCompiler implements ThemeCompilerInterface
 {

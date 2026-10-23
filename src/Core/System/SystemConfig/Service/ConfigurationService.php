@@ -19,6 +19,7 @@ use Contena\Core\System\SystemConfig\SystemConfigException;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
+use Contena\Core\System\SystemConfig\Exception\BundleConfigNotFoundException;
 
 class ConfigurationService
 {

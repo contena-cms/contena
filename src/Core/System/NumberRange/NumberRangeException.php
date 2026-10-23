@@ -7,6 +7,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Contena\Core\System\NumberRange\Exception\IncrementStorageNotFoundException;
+use Contena\Core\System\NumberRange\Exception\NoConfigurationException;
 
 /**
  * @codeCoverageIgnore

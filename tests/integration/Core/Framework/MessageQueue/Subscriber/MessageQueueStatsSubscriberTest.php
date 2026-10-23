@@ -9,6 +9,8 @@ use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\BarMessage;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\FooMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @deprecated tag:v6.8.0 - Test class tests increment-based stats which will be removed

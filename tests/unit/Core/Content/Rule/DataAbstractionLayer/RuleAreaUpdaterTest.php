@@ -15,18 +15,13 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
@@ -67,12 +62,6 @@ class RuleAreaUpdaterTest extends TestCase
 
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                RuleAreaDefinitionTest::class,
-                RuleAreaTestManyToMany::class,
-                RuleAreaTestOneToMany::class,
-                RuleAreaTestOneToOne::class,
-                RuleAreaTestManyToOne::class,
-                ReferenceDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -175,33 +164,6 @@ class RuleAreaUpdaterTest extends TestCase
         $idE = Uuid::randomBytes();
 
         $event = new EntityWrittenContainerEvent($context, new NestedEventCollection([
-            new EntityWrittenEvent('many_to_one', [
-                new EntityWriteResult($idA, [], 'many_to_one', EntityWriteResult::OPERATION_INSERT),
-            ], $context, []),
-            new EntityWrittenEvent('one_to_many', [
-                new EntityWriteResult($idA, ['ruleId' => $idA], 'one_to_many', EntityWriteResult::OPERATION_INSERT),
-                new EntityWriteResult($idA, [], 'one_to_many', EntityWriteResult::OPERATION_UPDATE, null, new ChangeSet(
-                    ['rule_id' => $idB],
-                    ['rule_id' => $idC],
-                    false
-                )),
-                new EntityWriteResult($idA, [], 'one_to_many', EntityWriteResult::OPERATION_DELETE, null, new ChangeSet(
-                    ['rule_id' => $idD],
-                    ['rule_id' => null],
-                    true
-                )),
-            ], $context, []),
-            new EntityWrittenEvent('mapping', [
-                new EntityWriteResult(
-                    $idA,
-                    [
-                        'ruleId' => Uuid::fromBytesToHex($idE),
-                        'referenceId' => Uuid::randomHex(),
-                    ],
-                    'mapping',
-                    EntityWriteResult::OPERATION_INSERT
-                ),
-            ], $context, []),
         ]), []);
 
         $resultStatement = $this->createMock(Result::class);
@@ -252,11 +214,6 @@ class RuleAreaDefinitionTest extends RuleDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new OneToOneAssociationField('oneToOne', 'one_to_one', 'id', RuleAreaTestOneToOne::class))->addFlags(new RuleAreas(RuleAreas::BLOG_AREA)),
-            (new OneToManyAssociationField('oneToMany', RuleAreaTestOneToMany::class, 'rule_id'))->addFlags(new RuleAreas(RuleAreas::PROMOTION_AREA)),
-            (new ManyToOneAssociationField('manyToOne', 'many_to_one', RuleAreaTestManyToOne::class))->addFlags(new RuleAreas(RuleAreas::PAYMENT_AREA)),
-            (new ManyToManyAssociationField('manyToMany', RuleAreaDefinitionTest::class, RuleAreaTestManyToMany::class, 'rule_id', 'reference_id'))->addFlags(new RuleAreas(RuleAreas::SHIPPING_AREA)),
-            new FkField('rule_id', 'ruleId', RuleAreaDefinitionTest::class),
         ]);
     }
 }
@@ -293,7 +250,6 @@ class RuleAreaTestOneToMany extends EntityDefinition
     {
         return new FieldCollection([
             new IdField('id', 'id'),
-            new FkField('rule_id', 'ruleId', RuleAreaDefinitionTest::class),
         ]);
     }
 }
@@ -329,8 +285,6 @@ class RuleAreaTestManyToMany extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new FkField('rule_id', 'ruleId', RuleAreaDefinitionTest::class),
-            new FkField('reference_id', 'referenceId', ReferenceDefinition::class),
         ]);
     }
 }
@@ -348,7 +302,6 @@ class ReferenceDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new ManyToManyAssociationField('rule', RuleAreaDefinitionTest::class, RuleAreaTestManyToMany::class, 'reference_id', 'rule_id'),
         ]);
     }
 }

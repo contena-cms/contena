@@ -11,6 +11,8 @@ use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
+use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
+use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 
 /**
  * Triggered when the api endpoint /store-api/script/{hook} is called. Used to provide the HTTP-Response.

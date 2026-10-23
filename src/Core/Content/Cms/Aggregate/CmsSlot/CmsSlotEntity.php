@@ -10,6 +10,8 @@ use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class CmsSlotEntity extends Entity
 {

@@ -49,6 +49,8 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 use Symfony\Component\Filesystem\Filesystem;
 use Contena\Administration\Controller\AdminContentStreamController;
 use Contena\Administration\System\Channel\Subscriber\ChannelAdminUserConfigSubscriber;
+use Contena\Core\Framework\Notification\Api\NotificationController;
+use Contena\Core\Framework\Notification\NotificationDefinition;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\env;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -165,6 +167,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(
         'Contena\Administration\Controller\NotificationController',
+        NotificationController::class,
     )
         ->public()
         ->deprecate('contena/administration', '6.7.15.0', 'The "%alias_id%" service alias is deprecated and will be removed in v6.8.0. Use Contena\Core\Framework\Notification\Api\NotificationController instead.');
@@ -221,6 +224,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(
         'Contena\Administration\Notification\NotificationDefinition',
+        NotificationDefinition::class,
     )->deprecate('contena/administration', '6.7.15.0', 'The "%alias_id%" service alias is deprecated and will be removed in v6.8.0. Use Contena\Core\Framework\Notification\NotificationDefinition instead.');
 
     $services->set(ChannelAdminUserConfigSubscriber::class)

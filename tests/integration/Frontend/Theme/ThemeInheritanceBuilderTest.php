@@ -10,6 +10,7 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginCon
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\Twig\ThemeInheritanceBuilder;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

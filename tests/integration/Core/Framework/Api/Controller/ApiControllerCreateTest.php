@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Extension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
@@ -26,6 +25,10 @@ use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -145,10 +148,10 @@ class ApiControllerCreateTest extends TestCase
         $data = ['id' => $id, 'name' => $id];
         $browser = $this->getBrowser();
         $connection = $this->getBrowser()->getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['country:create', 'country:read']);
+        $adminUser = TestUser::createNewTestUser($connection, ['country:create', 'country:read']);
         $admin = TestUser::getAdmin();
 
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $browser->jsonRequest('POST', '/api/country', $data);
         $response = $browser->getResponse();
@@ -187,9 +190,9 @@ class ApiControllerCreateTest extends TestCase
 
         $browser = $this->getBrowser();
         $connection = $this->getBrowser()->getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['country:update', 'country:read']);
+        $adminUser = TestUser::createNewTestUser($connection, ['country:update', 'country:read']);
 
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $data = ['name' => 'not in system language'];
         $languageId = $this->getNonSystemLanguageId();
@@ -213,10 +216,10 @@ class ApiControllerCreateTest extends TestCase
     {
         $connection = static::getContainer()->get(Connection::class);
 
-        $admin_user = TestUser::createNewTestUser($connection, ['blog:create', 'blog:delete', 'tax:create']);
+        $adminUser = TestUser::createNewTestUser($connection, ['blog:create', 'blog:delete', 'tax:create']);
 
         $browser = $this->getBrowser();
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $id = Uuid::randomHex();
         $data = [
@@ -251,9 +254,9 @@ class ApiControllerCreateTest extends TestCase
 
         $browser = $this->getBrowser();
         $connection = $this->getBrowser()->getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['country:create', 'country:read']);
+        $adminUser = TestUser::createNewTestUser($connection, ['country:create', 'country:read']);
 
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $data = ['name' => 'not in system language'];
         $languageId = $this->getNonSystemLanguageId();
@@ -329,7 +332,7 @@ class ApiControllerCreateTest extends TestCase
 
         $browser = $this->getBrowser();
         $connection = $this->getBrowser()->getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser($connection, ['blog:create', 'blog:read']);
+        $adminUser = TestUser::createNewTestUser($connection, ['blog:create', 'blog:read']);
         $admin = TestUser::getAdmin();
 
         $browser->jsonRequest('POST', '/api/blog', $data);
@@ -338,7 +341,7 @@ class ApiControllerCreateTest extends TestCase
         static::assertNotNull($response->headers->get('Location'));
         static::assertSame('http://localhost/api/blog/' . $id, $response->headers->get('Location'));
 
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $data = [
             'id' => $manufacturer,
@@ -423,13 +426,13 @@ class ApiControllerCreateTest extends TestCase
         $browser = $this->getBrowser();
 
         $connection = $this->getBrowser()->getContainer()->get(Connection::class);
-        $admin_user = TestUser::createNewTestUser(
+        $adminUser = TestUser::createNewTestUser(
             $connection,
             ['blog:create', 'blog:read', 'tax:create', 'tax:read', 'blog_manufacturer:create', 'blog_manufacturer:read', 'blog_price:create', 'blog_price:read', 'version_commit_data:create', ':version_commitcreate']
         );
         $admin = TestUser::getAdmin();
 
-        $admin_user->authorizeBrowser($browser);
+        $adminUser->authorizeBrowser($browser);
 
         $browser->jsonRequest('POST', '/api/blog', $data);
         $response = $browser->getResponse();
@@ -755,7 +758,6 @@ class ApiControllerCreateTest extends TestCase
         $criteria->addFilter(new NotFilter(
             MultiFilter::CONNECTION_AND,
             [
-                new EqualsFilter('id', Defaults::LANGUAGE_SYSTEM),
             ]
         ));
         $criteria->setLimit(1);

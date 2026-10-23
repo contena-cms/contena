@@ -13,6 +13,9 @@ use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\Intl\Currencies;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

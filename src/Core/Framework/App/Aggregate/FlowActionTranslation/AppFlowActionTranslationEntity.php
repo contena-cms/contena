@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\App\Aggregate\FlowActionTranslation;
 
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal
@@ -23,7 +24,6 @@ class StorybookControllerTest extends TestCase
 
     private const STORYBOOK_ORIGIN = 'http://localhost:6006';
 
-    private StorybookTwigEnvironmentStub $twig;
 
     private StorybookService&Stub $storybookService;
 

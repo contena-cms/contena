@@ -16,6 +16,8 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\Routing\RouteScopeCheckTrait;
 
 /**
  * @codeCoverageIgnore
@@ -25,7 +27,6 @@ use Symfony\Component\HttpFoundation\Request;
 class ApiRequestContextResolver implements RequestContextResolverInterface
 {
     use RouteScopeCheckTrait;
-use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 
     /**
      * @internal
@@ -133,17 +134,17 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
 
     private function resolveContextSource(Request $request): ContextSource
     {
-        if ($admin_userId = $request->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID)) {
+        if ($adminUserId = $request->attributes->get(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID)) {
             $appIntegrationId = strtolower((string) $request->headers->get(PlatformRequest::HEADER_APP_INTEGRATION_ID, ''));
 
             // The app integration id header is only to be used by a privileged admin_user
-            if ($appIntegrationId !== '' && $this->admin_userAppIntegrationHeaderPrivileged($admin_userId, $appIntegrationId)) {
-                $admin_userId = null;
+            if ($appIntegrationId !== '' && $this->admin_userAppIntegrationHeaderPrivileged($adminUserId, $appIntegrationId)) {
+                $adminUserId = null;
             } else {
                 $appIntegrationId = null;
             }
 
-            return $this->getAdminApiSource($admin_userId, $appIntegrationId);
+            return $this->getAdminApiSource($adminUserId, $appIntegrationId);
         }
 
         if (!$request->attributes->has(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID)) {
@@ -154,24 +155,24 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
         $keyOrigin = AccessKeyHelper::getOrigin($clientId);
 
         if ($keyOrigin === 'admin_user') {
-            $admin_userId = $this->getUserIdByAccessKey($clientId);
+            $adminUserId = $this->getUserIdByAccessKey($clientId);
 
-            return $this->getAdminApiSource($admin_userId);
+            return $this->getAdminApiSource($adminUserId);
         }
 
         if ($keyOrigin === 'integration') {
             $integrationId = $this->getIntegrationIdByAccessKey($clientId);
 
-            $admin_userId = $request->headers->get(PlatformRequest::HEADER_APP_USER_ID, '');
-            if ($admin_userId === '' || !Uuid::isValid((string) $admin_userId)) {
-                $admin_userId = null;
+            $adminUserId = $request->headers->get(PlatformRequest::HEADER_APP_USER_ID, '');
+            if ($adminUserId === '' || !Uuid::isValid((string) $adminUserId)) {
+                $adminUserId = null;
             }
 
-            if ($admin_userId !== null && $this->isAppIntegration($integrationId) && !$this->admin_userAppIntegrationHeaderPrivileged($admin_userId, $integrationId)) {
-                $admin_userId = null;
+            if ($adminUserId !== null && $this->isAppIntegration($integrationId) && !$this->admin_userAppIntegrationHeaderPrivileged($adminUserId, $integrationId)) {
+                $adminUserId = null;
             }
 
-            return $this->getAdminApiSource($admin_userId, $integrationId);
+            return $this->getAdminApiSource($adminUserId, $integrationId);
         }
 
         if ($keyOrigin === 'sales-channel') {
@@ -258,18 +259,18 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
         return Uuid::fromBytesToHex($id);
     }
 
-    private function getAdminApiSource(?string $admin_userId, ?string $integrationId = null): AdminApiSource
+    private function getAdminApiSource(?string $adminUserId, ?string $integrationId = null): AdminApiSource
     {
-        $source = new AdminApiSource($admin_userId, $integrationId);
+        $source = new AdminApiSource($adminUserId, $integrationId);
 
         // Use the permissions associated to that app, if the request is made by an integration associated to an app
         $appPermissions = $this->fetchPermissionsIntegrationByApp($integrationId);
         if ($appPermissions !== null) {
             // If both admin_userId and integrationId are provided (HEADER_APP_USER_ID case), intersect admin_user permissions with app permissions
-            if ($admin_userId !== null && !$this->isAdmin($admin_userId)) {
+            if ($adminUserId !== null && !$this->isAdmin($adminUserId)) {
                 $appPermissions = array_intersect(
                     $appPermissions,
-                    $this->fetchPermissions($admin_userId)
+                    $this->fetchPermissions($adminUserId)
                 );
             }
 
@@ -279,20 +280,20 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
             return $source;
         }
 
-        if ($admin_userId !== null && $integrationId !== null) {
+        if ($adminUserId !== null && $integrationId !== null) {
             if ($this->isAdminIntegration($integrationId)) {
-                $source->setPermissions($this->withDefaultUserPrivileges($this->fetchPermissions($admin_userId)));
-                $source->setIsAdmin($this->isAdmin($admin_userId));
+                $source->setPermissions($this->withDefaultUserPrivileges($this->fetchPermissions($adminUserId)));
+                $source->setIsAdmin($this->isAdmin($adminUserId));
 
                 return $source;
             }
 
             $permissions = $this->fetchIntegrationPermissions($integrationId);
 
-            if (!$this->isAdmin($admin_userId)) {
+            if (!$this->isAdmin($adminUserId)) {
                 $permissions = array_intersect(
                     $permissions,
-                    $this->fetchPermissions($admin_userId)
+                    $this->fetchPermissions($adminUserId)
                 );
             }
 
@@ -302,9 +303,9 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
             return $source;
         }
 
-        if ($admin_userId !== null) {
-            $source->setPermissions($this->withDefaultUserPrivileges($this->fetchPermissions($admin_userId)));
-            $source->setIsAdmin($this->isAdmin($admin_userId));
+        if ($adminUserId !== null) {
+            $source->setPermissions($this->withDefaultUserPrivileges($this->fetchPermissions($adminUserId)));
+            $source->setIsAdmin($this->isAdmin($adminUserId));
 
             return $source;
         }
@@ -332,11 +333,11 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
         ]));
     }
 
-    private function isAdmin(string $admin_userId): bool
+    private function isAdmin(string $adminUserId): bool
     {
         return (bool) $this->connection->fetchOne(
             'SELECT admin FROM `admin_user` WHERE id = :id',
-            ['id' => Uuid::fromHexToBytes($admin_userId)]
+            ['id' => Uuid::fromHexToBytes($adminUserId)]
         );
     }
 
@@ -351,14 +352,14 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
     /**
      * @return string[]
      */
-    private function fetchPermissions(string $admin_userId): array
+    private function fetchPermissions(string $adminUserId): array
     {
         $permissions = $this->connection->createQueryBuilder()
             ->select('role.privileges')
             ->from('acl_user_role', 'mapping')
             ->innerJoin('mapping', 'acl_role', 'role', 'mapping.acl_role_id = role.id')
             ->where('mapping.admin_user_id = :admin_userId')
-            ->setParameter('admin_userId', Uuid::fromHexToBytes($admin_userId))
+            ->setParameter('admin_userId', Uuid::fromHexToBytes($adminUserId))
             ->executeQuery()
             ->fetchFirstColumn();
 
@@ -467,7 +468,7 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
     /**
      * @throws RoutingException
      */
-    private function admin_userAppIntegrationHeaderPrivileged(string $admin_userId, ?string $appIntegrationId): bool
+    private function admin_userAppIntegrationHeaderPrivileged(string $adminUserId, ?string $appIntegrationId): bool
     {
         if ($appIntegrationId === null) {
             return false;
@@ -478,11 +479,11 @@ use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
             throw RoutingException::appIntegrationNotFound($appIntegrationId);
         }
 
-        if ($this->isAdmin($admin_userId)) {
+        if ($this->isAdmin($adminUserId)) {
             return true;
         }
 
-        $permissions = $this->fetchPermissions($admin_userId);
+        $permissions = $this->fetchPermissions($adminUserId);
         $allAppsPrivileged = \in_array('app.all', $permissions, true);
         $appPrivilegeName = \sprintf('app.%s', $appName);
         $specificAppPrivileged = \in_array($appPrivilegeName, $permissions, true);

@@ -14,6 +14,7 @@ use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Snippet\Service\AbstractTranslationLoader;
 use Contena\Core\System\Snippet\Service\TranslationMetadataStore;
 use Contena\Core\System\Snippet\Service\TranslationUpdater;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

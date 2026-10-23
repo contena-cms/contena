@@ -35,7 +35,6 @@ class AccountProfileControllerTest extends TestCase
 
     private ChangePasswordRoute&Stub $changePasswordRoute;
 
-    private AccountProfileControllerStub $controller;
 
     protected function setUp(): void
     {

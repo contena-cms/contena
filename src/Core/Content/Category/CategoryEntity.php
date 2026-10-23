@@ -13,6 +13,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Tag\TagCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class CategoryEntity extends Entity
 {

@@ -13,6 +13,10 @@ use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\App\Exception\AppRegistrationException;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * @internal only for use by the app-system

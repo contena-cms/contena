@@ -51,7 +51,7 @@ class ShopConfigurationController extends InstallerController
         $connection = $this->connectionFactory->getConnection($connectionInfo);
 
         $error = null;
-        $admin_userLocale = $request->attributes->get('_locale');
+        $adminUserLocale = $request->attributes->get('_locale');
 
         if ($request->getMethod() === 'POST') {
             $adminUser = [
@@ -60,7 +60,7 @@ class ShopConfigurationController extends InstallerController
                 'name' => (string) $request->request->get('config_admin_firstName'),
                 'lastName' => (string) $request->request->get('config_admin_lastName'),
                 'password' => (string) $request->request->get('config_admin_password'),
-                'localeId' => $this->resolveLocaleId($connection, $admin_userLocale),
+                'localeId' => $this->resolveLocaleId($connection, $adminUserLocale),
             ];
 
             /** @var list<string> $availableCurrencies */
@@ -135,14 +135,14 @@ class ShopConfigurationController extends InstallerController
         }
 
         if (!$request->request->has('config_shop_language')) {
-            $request->request->set('config_shop_language', $this->supportedLanguages[$admin_userLocale]['id']);
+            $request->request->set('config_shop_language', $this->supportedLanguages[$adminUserLocale]['id']);
         }
 
         /** @var array<string, array{currency: string }> $preselection */
         $preselection = $this->container->getParameter('contena.installer.configurationPreselection');
 
         $parameters = $request->request->all();
-        $parameters['config_shop_currency'] ??= $preselection[$admin_userLocale]['currency'] ?? 'EUR';
+        $parameters['config_shop_currency'] ??= $preselection[$adminUserLocale]['currency'] ?? 'EUR';
 
         $systemDefaultLanguageOptions = $this->getSystemDefaultLanguageOptions();
 
@@ -150,7 +150,7 @@ class ShopConfigurationController extends InstallerController
             '@Installer/installer/shop-configuration.html.twig',
             [
                 'error' => $error,
-                'countryIsos' => $this->getCountryIsos($connection, $admin_userLocale),
+                'countryIsos' => $this->getCountryIsos($connection, $adminUserLocale),
                 'languageIsos' => $systemDefaultLanguageOptions,
                 'allAvailableLanguages' => $this->getAllAvailableLanguages(),
                 'currencyIsos' => $this->supportedCurrencies,
@@ -238,10 +238,10 @@ class ShopConfigurationController extends InstallerController
         return $systemDefaultLanguageOptions;
     }
 
-    private function resolveLocaleId(Connection $connection, string $admin_userLocale): string
+    private function resolveLocaleId(Connection $connection, string $adminUserLocale): string
     {
-        $admin_userLocale = $this->supportedLanguages[$admin_userLocale]['id'];
+        $adminUserLocale = $this->supportedLanguages[$adminUserLocale]['id'];
 
-        return $connection->fetchOne('SELECT id FROM locale WHERE code = :locale', ['locale' => $admin_userLocale]);
+        return $connection->fetchOne('SELECT id FROM locale WHERE code = :locale', ['locale' => $adminUserLocale]);
     }
 }

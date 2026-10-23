@@ -18,6 +18,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -279,16 +280,6 @@ class NavigationLoaderTest extends TestCase
     private function createSimpleTree(): array
     {
         return [
-            new TestTreeAware('1', null),
-            new TestTreeAware('1.1', '1'),
-            new TestTreeAware('1.1.1', '1.1'),
-            new TestTreeAware('1.1.2', '1.1'),
-            new TestTreeAware('1.2', '1'),
-            new TestTreeAware('1.2.1', '1.2'),
-            new TestTreeAware('1.2.1.1', '1.2.1'),
-            new TestTreeAware('1.2.2', '1.2'),
-            new TestTreeAware('1.2.2.1', '1.2.2'),
-            new TestTreeAware('1.3', '1'),
         ];
     }
 

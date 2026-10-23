@@ -17,6 +17,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\System\Service\ShopConfigurator;
 use Contena\Core\Maintenance\System\Service\SystemLanguageChangeEvent;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

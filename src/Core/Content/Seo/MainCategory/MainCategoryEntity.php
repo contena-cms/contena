@@ -7,6 +7,7 @@ use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class MainCategoryEntity extends Entity
 {

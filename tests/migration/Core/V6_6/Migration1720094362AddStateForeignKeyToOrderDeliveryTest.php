@@ -15,6 +15,7 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineS
 use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Detail\AvailableCombinationLoader;
 use Contena\Core\Content\Blog\Stock\AbstractStockStorage;
-use Contena\Core\Content\Blog\Stock\StockData;
 use Contena\Core\Content\Blog\Stock\StockDataCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
@@ -60,7 +59,6 @@ class AvailableCombinationLoaderTest extends TestCase
         $stockStorage->expects($this->once())
             ->method('load')
             ->willReturn(new StockDataCollection([
-                new StockData('blog-1', 10, false),
             ]));
 
         $loader = $this->getAvailableCombinationLoader($stockStorage);
@@ -110,18 +108,6 @@ class AvailableCombinationLoaderTest extends TestCase
         ], $result->getCombinations());
     }
 
-    private function getAvailableCombinationLoader(
-        ?AbstractStockStorage $stockStorage = null,
-        ?SystemConfigService $systemConfigService = null
-    ): AvailableCombinationLoader {
-        $connection = $this->getMockedConnection();
-
-        return new AvailableCombinationLoader(
-            $connection,
-            $stockStorage ?? static::createStub(AbstractStockStorage::class),
-            $systemConfigService ?? static::createStub(SystemConfigService::class),
-        );
-    }
 
     private function getMockedConnection(): Connection
     {

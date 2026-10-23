@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core\System\Channel\Repository;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
@@ -20,6 +18,7 @@ use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Currency\CurrencyCollection;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

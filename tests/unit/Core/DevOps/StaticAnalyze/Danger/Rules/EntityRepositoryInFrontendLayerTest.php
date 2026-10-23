@@ -21,7 +21,6 @@ class EntityRepositoryInFrontendLayerTest extends TestCase
     public function testDetectsNewRepositoryUsage(string $fileName, string $status, string $patch, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status, '', $patch),
         ])));
 
         (new EntityRepositoryInFrontendLayer())($context);

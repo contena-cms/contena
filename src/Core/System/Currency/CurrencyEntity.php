@@ -8,6 +8,8 @@ use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

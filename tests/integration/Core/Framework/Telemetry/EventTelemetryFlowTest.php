@@ -82,7 +82,7 @@ class EventTelemetryFlowTest extends TestCase
 
     public function testDalAssociationsCountEmitted(): void
     {
-        $admin_userRepository = self::getContainer()->get('admin_user.repository');
+        $adminUserRepository = self::getContainer()->get('admin_user.repository');
         $criteria = new Criteria();
         $criteria->addAssociations(['aclRoles', 'avatarMedia']);
 
@@ -93,7 +93,7 @@ class EventTelemetryFlowTest extends TestCase
         ]);
 
         // search triggers EntitySearchedEvent, event is configured via attribute
-        $admin_userRepository->search($criteria, Context::createDefaultContext())->getEntities()->first();
+        $adminUserRepository->search($criteria, Context::createDefaultContext())->getEntities()->first();
         static::assertEquals(
             Metric::fromConfig($metricConfig, [], 2),
             $this->getEmittedMetricByName('dal.associations.count')

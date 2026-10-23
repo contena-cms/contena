@@ -120,18 +120,18 @@ class ImitateUserTokenGeneratorTest extends TestCase
         return new ImitateUserTokenGenerator(self::APP_SECRET, $this->jwtConfiguration, $dataValidator ?? $this->dataValidator, new NativeClock());
     }
 
-    private function generate(string $channelId, string $userId, string $admin_userId, int $time): string
+    private function generate(string $channelId, string $userId, string $adminUserId, int $time): string
     {
         $tokenData = [
             'channelId' => $channelId,
             'userId' => $userId,
-            'admin_userId' => $admin_userId,
+            'admin_userId' => $adminUserId,
         ];
 
         $data = json_encode($tokenData);
 
         if ($data === false) {
-            throw UserException::invalidImitationToken($channelId . ':' . $userId . ':' . $admin_userId);
+            throw UserException::invalidImitationToken($channelId . ':' . $userId . ':' . $adminUserId);
         }
 
         return $this->encrypt(hash_hmac(ImitateUserTokenGenerator::HMAC_HASH_ALGORITHM, $data, self::APP_SECRET) . '.' . $time);

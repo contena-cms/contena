@@ -12,6 +12,8 @@ use Twig\Environment;
 use Twig\Extension\CoreExtension;
 use Twig\Extension\EscaperExtension;
 use Twig\Loader\ArrayLoader;
+use Contena\Core\Framework\App\Validation\Error\Error;
+use Twig\Error\SyntaxError;
 
 /**
  * @final

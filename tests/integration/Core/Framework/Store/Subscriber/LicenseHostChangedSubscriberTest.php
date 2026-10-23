@@ -11,6 +11,7 @@ use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -27,18 +28,18 @@ class LicenseHostChangedSubscriberTest extends TestCase
         $systemConfigService->set('core.store.licenseHost', 'host');
         $systemConfigService->set('core.store.shopSecret', 'shop-s3cr3t');
 
-        /** @var EntityRepository<AdminUserCollection> $admin_userRepository */
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
+        /** @var EntityRepository<AdminUserCollection> $adminUserRepository */
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
 
-        $admin_user = $admin_userRepository->search(new Criteria(), $context)->getEntities()->first();
-        static::assertInstanceOf(AdminUserEntity::class, $admin_user);
+        $adminUser = $adminUserRepository->search(new Criteria(), $context)->getEntities()->first();
+        static::assertInstanceOf(AdminUserEntity::class, $adminUser);
 
         // We create two new admin users
         $expectedAdminUsersCount = \count($this->fetchAllAdminUsers()) + 2;
 
-        $admin_userRepository->create([
+        $adminUserRepository->create([
             [
-                'localeId' => $admin_user->getLocaleId(),
+                'localeId' => $adminUser->getLocaleId(),
                 'username' => 'admin2',
                 'password' => TestDefaults::HASHED_PASSWORD,
                 'name' => 'admin2',
@@ -47,7 +48,7 @@ class LicenseHostChangedSubscriberTest extends TestCase
                 'storeToken' => null,
             ],
             [
-                'localeId' => $admin_user->getLocaleId(),
+                'localeId' => $adminUser->getLocaleId(),
                 'username' => 'admin3',
                 'password' => TestDefaults::HASHED_PASSWORD,
                 'name' => 'admin3',

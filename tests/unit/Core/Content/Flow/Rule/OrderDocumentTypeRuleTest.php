@@ -27,7 +27,6 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 #[Group('rules')]
 class OrderDocumentTypeRuleTest extends TestCase
 {
-    private OrderDocumentTypeRule $rule;
 
     protected function setUp(): void
     {

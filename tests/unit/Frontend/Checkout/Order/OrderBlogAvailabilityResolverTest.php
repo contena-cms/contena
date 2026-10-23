@@ -5,11 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Checkout\Order;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
-use Contena\Core\Checkout\Order\OrderEntity;
-use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\Channel\AbstractBlogCloseoutFilterFactory;
 use Contena\Core\Content\Blog\Channel\BlogCloseoutFilter;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -18,7 +13,6 @@ use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Frontend\Checkout\Order\OrderBlogAvailabilityResolver;
 
 /**
@@ -146,40 +140,7 @@ class OrderBlogAvailabilityResolverTest extends TestCase
         $this->createResolver([$blogId], $route)->addAvailability([$order], Generator::generateChannelContext());
     }
 
-    private function firstExtension(OrderEntity $order): ArrayStruct
-    {
-        $lineItems = $order->getLineItems();
-        static::assertNotNull($lineItems);
 
-        $extension = $lineItems->first()?->getExtension(OrderBlogAvailabilityResolver::LINE_ITEM_EXTENSION);
-        static::assertInstanceOf(ArrayStruct::class, $extension);
-
-        return $extension;
-    }
-
-    /**
-     * @param list<string> $visibleIds
-     * @param ChannelRepository<BlogCollection>|null $route
-     */
-    private function createResolver(
-        array $visibleIds,
-        ?ChannelRepository $route = null,
-        bool $closeoutHidden = false
-    ): OrderBlogAvailabilityResolver {
-        if ($route === null) {
-            $route = static::createStub(ChannelRepository::class);
-            $route->method('searchIds')->willReturn($this->createResponse($visibleIds));
-        }
-
-        $closeoutFilterFactory = static::createStub(AbstractBlogCloseoutFilterFactory::class);
-        $closeoutFilterFactory->method('create')->willReturn(new BlogCloseoutFilter());
-
-        $config = new StaticSystemConfigService([
-            'core.listing.hideCloseoutBlogsWhenOutOfStock' => $closeoutHidden,
-        ]);
-
-        return new OrderBlogAvailabilityResolver($route, $config, $closeoutFilterFactory);
-    }
 
     /**
      * @param list<string> $visibleIds
@@ -195,33 +156,5 @@ class OrderBlogAvailabilityResolverTest extends TestCase
         return new IdSearchResult(\count($data), $data, new Criteria(), Context::createDefaultContext());
     }
 
-    /**
-     * @param list<OrderLineItemEntity> $lineItems
-     */
-    private function createOrder(array $lineItems): OrderEntity
-    {
-        $order = new OrderEntity();
-        $id = Uuid::randomHex();
-        $order->setId($id);
-        $order->setUniqueIdentifier($id);
-        $order->setLineItems(new OrderLineItemCollection($lineItems));
 
-        return $order;
-    }
-
-    private function createLineItem(string $type, ?string $blogId): OrderLineItemEntity
-    {
-        $lineItem = new OrderLineItemEntity();
-        $id = Uuid::randomHex();
-        $lineItem->setId($id);
-        $lineItem->setUniqueIdentifier($id);
-        $lineItem->setType($type);
-        $lineItem->setLabel('line item');
-        $lineItem->setQuantity(1);
-        $lineItem->setGood(true);
-        $lineItem->setBlogId($blogId);
-        $lineItem->setReferencedId($blogId);
-
-        return $lineItem;
-    }
 }

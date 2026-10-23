@@ -15,7 +15,6 @@ use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
 #[CoversClass(ChannelsReadinessCheck::class)]
 class ChannelsReadinessCheckTest extends TestCase
 {
-    private ChannelsReadinessCheck $channelReadinessCheck;
 
     protected function setUp(): void
     {

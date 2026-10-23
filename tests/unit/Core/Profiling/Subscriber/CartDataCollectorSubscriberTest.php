@@ -10,7 +10,6 @@ use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
@@ -48,7 +47,6 @@ class CartDataCollectorSubscriberTest extends TestCase
         $lineItem->setPrice(new CalculatedPrice(
             100.00,
             200.00,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection()
         ));
 
@@ -57,7 +55,6 @@ class CartDataCollectorSubscriberTest extends TestCase
             200.00,
             200.00,
             200.00,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection(),
             CartPrice::TAX_STATE_GROSS
         ));

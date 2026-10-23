@@ -28,7 +28,6 @@ class ThemeNamespaceHierarchyBuilderTest extends TestCase
 {
     private ThemeNamespaceHierarchyBuilder $builder;
 
-    private TestInheritanceBuilder $inheritanceBuilder;
 
     protected function setUp(): void
     {
@@ -46,7 +45,6 @@ class ThemeNamespaceHierarchyBuilderTest extends TestCase
         static::assertSame([
             KernelEvents::REQUEST,
             KernelEvents::EXCEPTION,
-            DocumentTemplateRendererParameterEvent::class,
             ChannelFileTemplateResolveEvent::class,
         ], array_keys($events));
     }

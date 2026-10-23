@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\UserAware;
 use Contena\Core\System\User\UserCollection;
+use Contena\Core\Content\Flow\Dispatching\Action\CustomFieldActionTrait;
 
 /**
  * @internal

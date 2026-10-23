@@ -23,14 +23,14 @@ class AdminUserRecoveryEntityTest extends TestCase
 
     public function testAccessorsRoundTrip(): void
     {
-        $admin_user = new AdminUserEntity();
+        $adminUser = new AdminUserEntity();
 
         $recovery = new AdminUserRecoveryEntity();
         $recovery->setUserId('admin_user-id');
-        $recovery->setUser($admin_user);
+        $recovery->setUser($adminUser);
 
         static::assertSame('admin_user-id', $recovery->getUserId());
-        static::assertSame($admin_user, $recovery->getUser());
+        static::assertSame($adminUser, $recovery->getUser());
     }
 
     public function testHashIsReadableOutsideTwig(): void

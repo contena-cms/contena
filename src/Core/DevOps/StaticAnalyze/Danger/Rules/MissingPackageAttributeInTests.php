@@ -7,6 +7,7 @@ use Danger\Struct\File;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\Exception\DirectoryNotFoundException;
 
 /**
  * Every test class must carry `#[Package('…')]` so failing CI jobs (especially the

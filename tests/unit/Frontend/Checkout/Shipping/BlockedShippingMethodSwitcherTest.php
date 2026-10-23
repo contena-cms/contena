@@ -4,10 +4,7 @@ namespace Contena\Tests\Unit\Frontend\Checkout\Shipping;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Error\ErrorCollection;
-use Contena\Core\Checkout\Shipping\Cart\Error\ShippingMethodBlockedError;
 use Contena\Core\Checkout\Shipping\Channel\ShippingMethodRoute;
-use Contena\Core\Checkout\Shipping\Channel\ShippingMethodRouteResponse;
 use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Defaults;
@@ -27,30 +24,13 @@ use Symfony\Component\HttpFoundation\Request;
 #[CoversClass(BlockedShippingMethodSwitcher::class)]
 class BlockedShippingMethodSwitcherTest extends TestCase
 {
-    private ShippingMethodCollection $shippingMethodCollection;
 
     private ChannelContext $channelContext;
 
-    private BlockedShippingMethodSwitcher $switcher;
 
     protected function setUp(): void
     {
         $this->shippingMethodCollection = new ShippingMethodCollection([
-            (new ShippingMethodEntity())->assign([
-                'id' => 'original-shipping-method-id',
-                'name' => 'original-shipping-method-name',
-                'translated' => ['name' => 'original-shipping-method-name'],
-            ]),
-            (new ShippingMethodEntity())->assign([
-                'id' => 'any-other-shipping-method-id',
-                'name' => 'any-other-shipping-method-name',
-                'translated' => ['name' => 'any-other-shipping-method-name'],
-            ]),
-            (new ShippingMethodEntity())->assign([
-                'id' => 'default-shipping-method-id',
-                'name' => 'default-shipping-method-name',
-                'translated' => ['name' => 'default-shipping-method-name'],
-            ]),
         ]);
 
         $this->channelContext = $this->getChannelContext();
@@ -263,27 +243,7 @@ class BlockedShippingMethodSwitcherTest extends TestCase
         static::assertCount(0, $errorCollectionFiltered);
     }
 
-    public function callbackLoadShippingMethods(Request $request, ChannelContext $context, Criteria $criteria): ShippingMethodRouteResponse
-    {
-        $shippingMethodResponse = $this->createMock(ShippingMethodRouteResponse::class);
-        $shippingMethodResponse
-            ->expects($this->once())
-            ->method('getShippingMethods')
-            ->willReturn($this->shippingMethodCollection);
 
-        return $shippingMethodResponse;
-    }
-
-    public function callbackLoadShippingMethodsForAllBlocked(Request $request, ChannelContext $context, Criteria $criteria): ShippingMethodRouteResponse
-    {
-        $shippingMethodResponse = $this->createMock(ShippingMethodRouteResponse::class);
-        $shippingMethodResponse
-            ->expects($this->once())
-            ->method('getShippingMethods')
-            ->willReturn(new ShippingMethodCollection());
-
-        return $shippingMethodResponse;
-    }
 
     public function testOnlyAvailableFlagIsSet(): void
     {
@@ -308,23 +268,6 @@ class BlockedShippingMethodSwitcherTest extends TestCase
         $switcher->switch($errors, $context);
     }
 
-    /**
-     * @param list<array{id: string, name: string}> $blockedShippingMethods
-     */
-    private function getErrorCollection(array $blockedShippingMethods = []): ErrorCollection
-    {
-        $errorCollection = new ErrorCollection();
-
-        foreach ($blockedShippingMethods as $method) {
-            $errorCollection->add(new ShippingMethodBlockedError(
-                id: $method['id'],
-                name: $method['name'],
-                reason: 'Shipping method blocked'
-            ));
-        }
-
-        return $errorCollection;
-    }
 
     private function getChannelContext(bool $dontReturnDefaultShippingMethod = false): ChannelContext
     {
@@ -345,20 +288,4 @@ class BlockedShippingMethodSwitcherTest extends TestCase
         return $channelContext;
     }
 
-    private function getShippingMethodRoute(bool $dontReturnAnyOtherShippingMethod = false): ShippingMethodRoute
-    {
-        $shippingMethodRoute = static::createStub(ShippingMethodRoute::class);
-
-        if ($dontReturnAnyOtherShippingMethod) {
-            $shippingMethodRoute
-                ->method('load')
-                ->willReturnCallback($this->callbackLoadShippingMethodsForAllBlocked(...));
-        } else {
-            $shippingMethodRoute
-                ->method('load')
-                ->willReturnCallback($this->callbackLoadShippingMethods(...));
-        }
-
-        return $shippingMethodRoute;
-    }
 }

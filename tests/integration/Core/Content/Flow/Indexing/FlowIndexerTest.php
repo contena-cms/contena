@@ -5,6 +5,8 @@ namespace Contena\Tests\Integration\Core\Content\Flow\Indexing;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Indexing\FlowIndexerSubscriber;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal

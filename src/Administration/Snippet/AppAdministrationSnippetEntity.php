@@ -3,6 +3,7 @@
 namespace Contena\Administration\Snippet;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

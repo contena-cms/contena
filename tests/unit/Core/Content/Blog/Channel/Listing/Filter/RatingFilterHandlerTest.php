@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Channel\Listing\Filter;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\RatingListingFilterHandler;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,11 +39,6 @@ class RatingFilterHandlerTest extends TestCase
             'rating',
             true,
             [
-                new FilterAggregation(
-                    'rating-exists',
-                    new MaxAggregation('rating', 'blog.ratingAverage'),
-                    [new RangeFilter('blog.ratingAverage', [RangeFilter::GTE => 0])]
-                ),
             ],
             new RangeFilter('blog.ratingAverage', [
                 RangeFilter::GTE => $input,

@@ -5,10 +5,7 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Garan;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
-use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
 use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
 use Twig\Environment;
 
@@ -178,41 +175,6 @@ class GaranLabelResolverTest extends TestCase
         );
     }
 
-    private function createResolver(): GaranLabelResolver
-    {
-        $twig = static::createStub(Environment::class);
-        $twig->method('render')->willReturnCallback(
-            static fn (string $template, array $context) => str_contains($template, 'nested-label')
-                ? \sprintf('<svg>nested %s</svg>', $context['guarantee'])
-                : \sprintf('<svg>%s %s %s</svg>', $context['manufacturer'], $context['blogNumber'], $context['guarantee'])
-        );
 
-        return new GaranLabelResolver(new GaranLabelDurationFormatter(), new GaranLabelRenderer($twig));
-    }
 
-    /**
-     * The DAL only fills `name` with the translation of the current language, while the resolved
-     * translation chain (including the parent language fallback) ends up in `translated`.
-     */
-    private static function createManufacturer(?string $name, ?string $translatedName): BlogManufacturerEntity
-    {
-        $manufacturer = new BlogManufacturerEntity();
-        $manufacturer->setId('manufacturer-id');
-        $manufacturer->setName($name);
-        $manufacturer->setTranslated(['name' => $translatedName]);
-
-        return $manufacturer;
-    }
-
-    private static function createBlog(bool $guaranteeConfirmed, ?string $manufacturerNumber, ?int $guaranteeMonths, ?BlogManufacturerEntity $manufacturer = null): BlogEntity
-    {
-        $blog = new BlogEntity();
-        $blog->setId('blog-id');
-        $blog->setManufacturer($manufacturer ?? self::createManufacturer(name: 'ACME', translatedName: 'ACME'));
-        $blog->setManufacturerNumber($manufacturerNumber);
-        $blog->setGuaranteeMonths($guaranteeMonths);
-        $blog->setGuaranteeConfirmed($guaranteeConfirmed);
-
-        return $blog;
-    }
 }

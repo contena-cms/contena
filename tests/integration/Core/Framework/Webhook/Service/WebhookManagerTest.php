@@ -10,7 +10,6 @@ use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEvents;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
 use Contena\Core\Content\Flow\Dispatching\FlowState;
@@ -27,9 +26,7 @@ use Contena\Core\Framework\App\Privileges\Privileges;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\NestedEventCollection;
@@ -56,6 +53,7 @@ use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -440,40 +438,6 @@ class WebhookManagerTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    BlogDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $id,
-                            [
-                                'id' => $id,
-                                'name' => 'testBlog',
-                                'blogNumber' => 'SWC-1000',
-                                'stock' => 100,
-                                'manufacturer' => [
-                                    'name' => 'app creator',
-                                ],
-                                'price' => [
-                                    [
-                                        'gross' => 100,
-                                        'net' => 200,
-                                        'linked' => false,
-                                        'currencyId' => Defaults::CURRENCY,
-                                    ],
-                                ],
-                                'tax' => [
-                                    'name' => 'luxury',
-                                    'taxRate' => '25',
-                                ],
-                            ],
-                            BlogDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_INSERT,
-                            null,
-                            null
-                        ),
-                    ],
-                    $context
-                ),
             ]),
             []
         );
@@ -1764,22 +1728,6 @@ class WebhookManagerTest extends TestCase
         return new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    BlogDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $entityId,
-                            [
-                                'id' => $entityId,
-                            ],
-                            BlogDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_DELETE,
-                            null,
-                            null
-                        ),
-                    ],
-                    $context
-                ),
             ]),
             []
         );

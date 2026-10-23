@@ -56,7 +56,6 @@ class ThemeDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             (new StringField('technical_name', 'technicalName'))->addFlags(new ApiAware()),
-            (new StringField('name', 'name'))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new StringField('author', 'author'))->addFlags(new ApiAware(), new Required()),
             (new TranslatedField('description'))->addFlags(new ApiAware()),
             (new TranslatedField('labels'))->addFlags(new ApiAware(), new Deprecated('v6.7.16.0', 'v6.8.0.0')),

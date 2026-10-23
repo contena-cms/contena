@@ -53,14 +53,14 @@ class MediaHydratorTest extends TestCase
         $definition = $this->definitionInstanceRegistry->get(MediaDefinition::class);
 
         $id = Uuid::randomBytes();
-        $admin_userId = Uuid::randomBytes();
+        $adminUserId = Uuid::randomBytes();
         $mediaFolderId = Uuid::randomBytes();
         $date = new \DateTime();
 
         $rows = [
             [
                 'test.id' => $id,
-                'test.admin_userId' => $admin_userId,
+                'test.admin_userId' => $adminUserId,
                 'test.mediaFolderId' => $mediaFolderId,
                 'test.mimeType' => 'image/jpeg',
                 'test.fileExtension' => 'jpg',
@@ -84,7 +84,7 @@ class MediaHydratorTest extends TestCase
         static::assertInstanceOf(MediaEntity::class, $first);
 
         static::assertSame(Uuid::fromBytesToHex($id), $first->getId());
-        static::assertSame(Uuid::fromBytesToHex($admin_userId), $first->getUserId());
+        static::assertSame(Uuid::fromBytesToHex($adminUserId), $first->getUserId());
         static::assertSame(Uuid::fromBytesToHex($mediaFolderId), $first->getMediaFolderId());
         static::assertSame('image/jpeg', $first->getMimeType());
         static::assertSame('jpg', $first->getFileExtension());

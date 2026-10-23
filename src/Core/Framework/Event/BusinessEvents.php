@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Event;
 
-use Contena\Core\Content\Blog\Channel\Review\Event\ReviewFormEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeValidateEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
@@ -55,7 +54,6 @@ final class BusinessEvents
 
     public const CONTACT_FORM = ContactFormEvent::EVENT_NAME;
 
-    public const REVIEW_FORM = ReviewFormEvent::EVENT_NAME;
 
     public const MAIL_BEFORE_SENT = MailBeforeSentEvent::EVENT_NAME;
 

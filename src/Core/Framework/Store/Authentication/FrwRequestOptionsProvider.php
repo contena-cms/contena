@@ -19,11 +19,11 @@ class FrwRequestOptionsProvider extends AbstractStoreRequestOptionsProvider
     private const CONTENA_TOKEN_HEADER = 'X-Contena-Token';
 
     /**
-     * @param EntityRepository<AdminUserConfigCollection> $admin_userConfigRepository
+     * @param EntityRepository<AdminUserConfigCollection> $adminUserConfigRepository
      */
     public function __construct(
         private readonly AbstractStoreRequestOptionsProvider $optionsProvider,
-        private readonly EntityRepository $admin_userConfigRepository,
+        private readonly EntityRepository $adminUserConfigRepository,
     ) {
     }
 
@@ -51,8 +51,8 @@ class FrwRequestOptionsProvider extends AbstractStoreRequestOptionsProvider
             new EqualsFilter('key', FirstRunWizardService::USER_CONFIG_KEY_FRW_USER_TOKEN),
         );
 
-        $admin_userConfig = $this->admin_userConfigRepository->search($criteria, $context)->getEntities()->first();
+        $adminUserConfig = $this->admin_userConfigRepository->search($criteria, $context)->getEntities()->first();
 
-        return $admin_userConfig === null ? null : $admin_userConfig->getValue()[FirstRunWizardService::USER_CONFIG_VALUE_FRW_USER_TOKEN] ?? null;
+        return $adminUserConfig === null ? null : $adminUserConfig->getValue()[FirstRunWizardService::USER_CONFIG_VALUE_FRW_USER_TOKEN] ?? null;
     }
 }

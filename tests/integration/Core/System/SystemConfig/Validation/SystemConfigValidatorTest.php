@@ -12,6 +12,7 @@ use Contena\Core\System\SystemConfig\DTO\SystemConfigElement;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigTab;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\System\SystemConfig\Validation\SystemConfigValidator;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -15,13 +15,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Routing\ApiRequestContextResolver;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\RequestContextResolverInterface;
-use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -48,10 +49,10 @@ class ApiRequestContextResolverTest extends TestCase
     #[DataProvider('admin_userRoleProvider')]
     public function testResolveAdminSourceByOAuthUserId(array $expected, array $roles, bool $isAdmin = false): void
     {
-        $admin_user = $this->createUser($roles, $isAdmin);
+        $adminUser = $this->createUser($roles, $isAdmin);
 
         $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $admin_user->getUserId());
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
         $this->resolver->resolve($request);
 
@@ -80,11 +81,11 @@ class ApiRequestContextResolverTest extends TestCase
     #[DataProvider('admin_userRoleProvider')]
     public function testResolveContextByClientId(array $expected, array $roles, bool $isAdmin = false): void
     {
-        $admin_user = $this->createUser($roles, $isAdmin);
+        $adminUser = $this->createUser($roles, $isAdmin);
 
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($admin_user->getUserId()));
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($adminUser->getUserId()));
 
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
         $this->resolver->resolve($request);
@@ -109,11 +110,11 @@ class ApiRequestContextResolverTest extends TestCase
 
     public function testEmptyLanguageAndCurrencyHeadersFallBackToDefaults(): void
     {
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($admin_user->getUserId()));
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($adminUser->getUserId()));
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $request->headers->set(PlatformRequest::HEADER_LANGUAGE_ID, '');
@@ -129,10 +130,10 @@ class ApiRequestContextResolverTest extends TestCase
 
     public function testEmptyAppIntegrationIdHeaderIsIgnored(): void
     {
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $admin_user->getUserId());
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $request->headers->set(PlatformRequest::HEADER_APP_INTEGRATION_ID, '');
@@ -221,11 +222,11 @@ class ApiRequestContextResolverTest extends TestCase
 
     public function testContextSkipTriggerFlowState(): void
     {
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($admin_user->getUserId()));
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($adminUser->getUserId()));
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -241,7 +242,7 @@ class ApiRequestContextResolverTest extends TestCase
 
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($admin_user->getUserId()));
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($adminUser->getUserId()));
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $request->headers->set(PlatformRequest::HEADER_SKIP_TRIGGER_FLOW, 'true');
@@ -269,10 +270,10 @@ class ApiRequestContextResolverTest extends TestCase
 
     public function testResolveAdminSourceAddsDefaultUserPrivileges(): void
     {
-        $admin_user = $this->createUser([], false);
+        $adminUser = $this->createUser([], false);
 
         $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $admin_user->getUserId());
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -477,11 +478,11 @@ class ApiRequestContextResolverTest extends TestCase
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('email', 'admin@example.com'));
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
-        $adminUserId = $admin_userRepository->searchIds($criteria, Context::createDefaultContext())->firstId();
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
+        $adminUserId = $adminUserRepository->searchIds($criteria, Context::createDefaultContext())->firstId();
         static::assertNotNull($adminUserId, (string) $adminUserId);
 
-        $admin_userRepository->update([
+        $adminUserRepository->update([
             [
                 'id' => $adminUserId,
                 'admin' => false,
@@ -541,11 +542,11 @@ class ApiRequestContextResolverTest extends TestCase
 
         $criteria = new Criteria();
         $criteria->addFilter(new EqualsFilter('email', 'admin@example.com'));
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
-        $adminUserId = $admin_userRepository->searchIds($criteria, Context::createDefaultContext())->firstId();
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
+        $adminUserId = $adminUserRepository->searchIds($criteria, Context::createDefaultContext())->firstId();
         static::assertNotNull($adminUserId, (string) $adminUserId);
 
-        $admin_userRepository->update([
+        $adminUserRepository->update([
             [
                 'id' => $adminUserId,
                 'admin' => false,
@@ -615,7 +616,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([
+        $adminUser = $this->createUser([
             'admin_user-role' => ['blog:read', 'blog:write', 'category:read'],
         ], false);
 
@@ -635,7 +636,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -648,7 +649,7 @@ class ApiRequestContextResolverTest extends TestCase
 
         $source = $context->getSource();
 
-        static::assertSame($admin_user->getUserId(), $source->getUserId());
+        static::assertSame($adminUser->getUserId(), $source->getUserId());
         static::assertSame($integrationId, $source->getIntegrationId());
         static::assertFalse($source->isAdmin());
 
@@ -664,7 +665,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $integrationId = $ids->create('integration');
         $integrationAccessKey = AccessKeyHelper::generateAccessKey('integration');
@@ -682,7 +683,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -695,7 +696,7 @@ class ApiRequestContextResolverTest extends TestCase
 
         $source = $context->getSource();
 
-        static::assertSame($admin_user->getUserId(), $source->getUserId());
+        static::assertSame($adminUser->getUserId(), $source->getUserId());
         static::assertSame($integrationId, $source->getIntegrationId());
         static::assertFalse($source->isAdmin());
 
@@ -749,7 +750,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([
+        $adminUser = $this->createUser([
             'admin_user-role' => ['blog:read', 'category:read'],
         ], false);
 
@@ -767,7 +768,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -780,7 +781,7 @@ class ApiRequestContextResolverTest extends TestCase
 
         $source = $context->getSource();
 
-        static::assertSame($admin_user->getUserId(), $source->getUserId());
+        static::assertSame($adminUser->getUserId(), $source->getUserId());
         static::assertSame($integrationId, $source->getIntegrationId());
         static::assertFalse($source->isAdmin());
 
@@ -795,7 +796,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $integrationId = $ids->create('integration');
         $integrationAccessKey = AccessKeyHelper::generateAccessKey('integration');
@@ -811,7 +812,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -824,7 +825,7 @@ class ApiRequestContextResolverTest extends TestCase
 
         $source = $context->getSource();
 
-        static::assertSame($admin_user->getUserId(), $source->getUserId());
+        static::assertSame($adminUser->getUserId(), $source->getUserId());
         static::assertSame($integrationId, $source->getIntegrationId());
         static::assertTrue($source->isAdmin());
 
@@ -837,7 +838,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([
+        $adminUser = $this->createUser([
             'admin_user-role' => ['blog:read', 'blog:write', 'category:read', 'app.TestApp'],
         ], false);
 
@@ -874,7 +875,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -901,7 +902,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $integrationId = $ids->create('integration');
         $integrationAccessKey = AccessKeyHelper::generateAccessKey('integration');
@@ -936,7 +937,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -964,7 +965,7 @@ class ApiRequestContextResolverTest extends TestCase
         $connection = static::getContainer()->get(Connection::class);
         $ids = new IdsCollection();
 
-        $admin_user = $this->createUser([
+        $adminUser = $this->createUser([
             'admin_user-role' => ['blog:read', 'blog:write', 'category:read', 'app.TestApp'],
         ], false);
 
@@ -1001,7 +1002,7 @@ class ApiRequestContextResolverTest extends TestCase
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $integrationAccessKey);
-        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $admin_user->getUserId());
+        $request->headers->set(PlatformRequest::HEADER_APP_USER_ID, $adminUser->getUserId());
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
 
         $this->resolver->resolve($request);
@@ -1078,43 +1079,13 @@ class ApiRequestContextResolverTest extends TestCase
         static::assertFalse($source->isAllowed('category:read'));
     }
 
-    /**
-     * @param array<string, list<string>> $roles
-     */
-    private function createUser(array $roles, bool $isAdmin): TestUser
-    {
-        $admin_user = TestUser::createNewTestUser($this->connection);
-        $this->connection->executeStatement(
-            'UPDATE `admin_user` SET admin = :admin WHERE id = :id',
-            ['admin' => $isAdmin ? 1 : 0, 'id' => Uuid::fromHexToBytes($admin_user->getUserId())]
-        );
 
-        foreach ($roles as $role => $privs) {
-            $id = Uuid::randomBytes();
-
-            $this->connection->insert('acl_role', [
-                'id' => $id,
-                'name' => $role,
-                'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_FORMAT),
-                'privileges' => \json_encode($privs, \JSON_THROW_ON_ERROR),
-            ]);
-
-            $this->connection->insert('acl_user_role', [
-                'admin_user_id' => Uuid::fromHexToBytes($admin_user->getUserId()),
-                'acl_role_id' => $id,
-                'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_FORMAT),
-            ]);
-        }
-
-        return $admin_user;
-    }
-
-    private function createAccessKey(string $admin_userId): string
+    private function createAccessKey(string $adminUserId): string
     {
         $key = AccessKeyHelper::generateAccessKey('admin_user');
 
         $data = [
-            'admin_userId' => $admin_userId,
+            'admin_userId' => $adminUserId,
             'accessKey' => $key,
             'secretAccessKey' => AccessKeyHelper::generateSecretAccessKey(),
         ];
@@ -1155,11 +1126,11 @@ class ApiRequestContextResolverTest extends TestCase
 
     private function resolveContextWithIndexingBehavior(?string $behavior = null): Context
     {
-        $admin_user = $this->createUser([], true);
+        $adminUser = $this->createUser([], true);
 
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_ACCESS_TOKEN_ID, 'test');
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($admin_user->getUserId()));
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, $this->createAccessKey($adminUser->getUserId()));
         $request->attributes->set(PlatformRequest::ATTRIBUTE_ROUTE_SCOPE, [ApiRouteScope::ID]);
         if ($behavior !== null) {
             $request->headers->set(PlatformRequest::HEADER_INDEXING_BEHAVIOR, $behavior);

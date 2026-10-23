@@ -18,6 +18,7 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleDefinition;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\System\Locale\Subscriber\LocaleValidator;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal

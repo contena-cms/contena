@@ -18,6 +18,7 @@ use Contena\Core\Framework\Webhook\Outbox\WebhookOutboxStore;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\Clock\MockClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

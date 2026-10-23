@@ -7,7 +7,6 @@ use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword\BlogSearchKeywordCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityCollection;
-use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingConfig;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\ContentStream\ContentStreamCollection;
@@ -23,13 +22,15 @@ use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tax\TaxEntity;
 use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogCollection;
 use Symfony\Component\Clock\Clock;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
+use Contena\Core\System\Unit\UnitEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class BlogEntity extends Entity implements \Stringable
 {
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
-use Contena\Core\System\Unit\UnitEntity;
 
     protected ?string $parentId = null;
 
@@ -153,7 +154,6 @@ use Contena\Core\System\Unit\UnitEntity;
      */
     protected ?array $variantRestrictions = null;
 
-    protected ?VariantListingConfig $variantListingConfig = null;
 
     /**
      * @var array<array<string>>
@@ -252,11 +252,6 @@ use Contena\Core\System\Unit\UnitEntity;
      * @var array<int, string>
      */
     protected array $states = [];
-
-    public function __construct()
-    {
-        $this->prices = new BlogPriceCollection();
-    }
 
     public function __toString(): string
     {
@@ -989,15 +984,7 @@ use Contena\Core\System\Unit\UnitEntity;
         $this->variantRestrictions = $variantRestrictions;
     }
 
-    public function getVariantListingConfig(): ?VariantListingConfig
-    {
-        return $this->variantListingConfig;
-    }
 
-    public function setVariantListingConfig(?VariantListingConfig $variantListingConfig): void
-    {
-        $this->variantListingConfig = $variantListingConfig;
-    }
 
     /**
      * @return array<array<string>>

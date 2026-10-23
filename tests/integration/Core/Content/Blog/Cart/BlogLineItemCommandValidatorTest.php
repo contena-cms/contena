@@ -7,8 +7,6 @@ use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
 use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\Exception\BlogLineItemDifferentIdException;
@@ -26,6 +24,9 @@ use Contena\Core\System\Channel\Context\AbstractChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\CountryAddToChannelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 
 /**
  * @internal
@@ -41,7 +42,6 @@ class BlogLineItemCommandValidatorTest extends TestCase
      */
     private EntityRepository $repository;
 
-    private CartService $cartService;
 
     private AbstractChannelContextFactory $contextFactory;
 

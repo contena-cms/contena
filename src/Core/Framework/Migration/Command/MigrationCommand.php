@@ -12,6 +12,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Contena\Core\Framework\Migration\Exception\UnknownMigrationSourceException;
 use Contena\Core\Framework\Migration\MigrationCollection;
+use Contena\Core\Framework\Migration\MigrationException;
 
 #[AsCommand(
     name: 'database:migrate',

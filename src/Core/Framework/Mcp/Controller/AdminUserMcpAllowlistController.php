@@ -29,10 +29,10 @@ class AdminUserMcpAllowlistController
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
     ) {
     }
 
@@ -45,14 +45,14 @@ class AdminUserMcpAllowlistController
         ],
         methods: ['POST'],
     )]
-    public function save(string $admin_userId, Request $request, Context $context): Response
+    public function save(string $adminUserId, Request $request, Context $context): Response
     {
-        $admin_user = $this->admin_userRepository
-            ->search(new Criteria([$admin_userId]), $context)
+        $adminUser = $this->admin_userRepository
+            ->search(new Criteria([$adminUserId]), $context)
             ->getEntities()
             ->first();
 
-        if ($admin_user === null) {
+        if ($adminUser === null) {
             return new Response(null, Response::HTTP_NOT_FOUND);
         }
 
@@ -76,7 +76,7 @@ class AdminUserMcpAllowlistController
         // on the same definition), and escalating the scope would skip AclWriteValidator, which is
         // what enforces `admin_user:update` on the write itself.
         $this->admin_userRepository->update([
-            ['id' => $admin_userId, 'mcpAllowlist' => $allowlist],
+            ['id' => $adminUserId, 'mcpAllowlist' => $allowlist],
         ], $context);
 
         return new Response(null, Response::HTTP_NO_CONTENT);

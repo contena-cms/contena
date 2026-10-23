@@ -22,7 +22,6 @@ class CountryStateControllerTest extends TestCase
 {
     private CountryStateDataPageletLoader&MockObject $pageletLoader;
 
-    private CountryStateControllerStub $controller;
 
     protected function setUp(): void
     {

@@ -8,6 +8,7 @@ use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

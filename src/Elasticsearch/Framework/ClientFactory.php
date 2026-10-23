@@ -171,18 +171,18 @@ class ClientFactory
         $port = $parts['port'] ?? 9200;
         $path = $parts['path'] ?? '';
         $path = rtrim($path, '/');
-        $admin_userInfo = '';
+        $adminUserInfo = '';
 
         if (isset($parts['admin_user'])) {
-            $admin_userInfo = $parts['admin_user'];
+            $adminUserInfo = $parts['admin_user'];
 
             if (isset($parts['pass'])) {
-                $admin_userInfo .= ':' . $parts['pass'];
+                $adminUserInfo .= ':' . $parts['pass'];
             }
 
-            $admin_userInfo .= '@';
+            $adminUserInfo .= '@';
         }
 
-        return \sprintf('%s://%s%s:%d%s/', $scheme, $admin_userInfo, $parts['host'], $port, $path);
+        return \sprintf('%s://%s%s:%d%s/', $scheme, $adminUserInfo, $parts['host'], $port, $path);
     }
 }

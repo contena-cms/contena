@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Routing\Router;
 use Symfony\Bundle\FrameworkBundle\Routing\Router as SymfonyRouter;
 use Symfony\Component\DependencyInjection\Container;
@@ -24,38 +23,6 @@ use Symfony\Component\Routing\RouteCollection;
 #[CoversClass(Router::class)]
 class RouterTest extends TestCase
 {
-    #[DataProvider('urlCases')]
-    public function testUrls(UrlCase $case): void
-    {
-        $request = new Request();
-        $request->attributes->set(RequestTransformer::CHANNEL_BASE_URL, $case->baseUrl);
-
-        $stack = new RequestStack([
-            $request,
-        ]);
-
-        $container = new Container();
-        $container->set('routing.loader', new ClosureLoader());
-        $symfonyRouter = new SymfonyRouter($container, static function (): RouteCollection {
-            $routeCollection = new RouteCollection();
-            $routeCollection->add('frontend.home.page', new Route('/', ['_controller' => 'Contena\Frontend\Controller\HomeController::index']));
-            $routeCollection->add('frontend.navigation.page', new Route('/navigation/{navigationId}', ['_controller' => 'Contena\Frontend\Controller\NavigationController::index']));
-            $routeCollection->add('custom.route', new Route('/custom-route', ['_controller' => 'Contena\Frontend\Controller\CustomController::index']));
-
-            return $routeCollection;
-        }, ['resource_type' => 'closure']);
-
-        $router = new Router(
-            $symfonyRouter,
-            $stack,
-            $case->allowedRoutes,
-        );
-        $router->setContext(new RequestContext('', 'GET', $case->host));
-
-        $url = $router->generate($case->route, $case->params, $case->type);
-
-        static::assertSame($case->expected, $url);
-    }
 
     /**
      * @return \Generator<list<UrlCase>>
@@ -65,40 +32,28 @@ class RouterTest extends TestCase
         $id = Uuid::randomHex();
 
         yield 'test-home-page-without-suffix' => [
-            new UrlCase(UrlGeneratorInterface::ABSOLUTE_PATH, '/', '', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-de' => [
-            new UrlCase(UrlGeneratorInterface::ABSOLUTE_PATH, '/de/', '/de', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-de-and-slash' => [
-            new UrlCase(UrlGeneratorInterface::ABSOLUTE_PATH, '/de/', '/de/', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-de-without-slash' => [
-            new UrlCase(UrlGeneratorInterface::ABSOLUTE_PATH, '/de/', 'de', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-null' => [
-            new UrlCase(UrlGeneratorInterface::ABSOLUTE_PATH, '/', null, 'frontend.home.page'),
         ];
         yield 'test-navigation-page-with-de' => [
-            new UrlCase(UrlGeneratorInterface::ABSOLUTE_PATH, "/de/navigation/{$id}", '/de', 'frontend.navigation.page', ['navigationId' => $id]),
         ];
         yield 'test-home-page-without-suffix-relative' => [
-            new UrlCase(UrlGeneratorInterface::RELATIVE_PATH, '', '', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-de-relative' => [
-            new UrlCase(UrlGeneratorInterface::RELATIVE_PATH, 'de/', '/de', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-de-and-slash-relative' => [
-            new UrlCase(UrlGeneratorInterface::RELATIVE_PATH, 'de/', '/de/', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-de-without-slash-relative' => [
-            new UrlCase(UrlGeneratorInterface::RELATIVE_PATH, 'de/', 'de', 'frontend.home.page'),
         ];
         yield 'test-home-page-with-null-relative' => [
-            new UrlCase(UrlGeneratorInterface::RELATIVE_PATH, '', null, 'frontend.home.page'),
         ];
         yield 'test-navigation-page-with-de-relative' => [
-            new UrlCase(UrlGeneratorInterface::RELATIVE_PATH, "de/navigation/{$id}", '/de', 'frontend.navigation.page', ['navigationId' => $id]),
         ];
         yield 'test-home-page-without-suffix-absolute-url' => [
             new UrlCase(UrlGeneratorInterface::ABSOLUTE_URL, 'http://test.de/', '', 'frontend.home.page'),

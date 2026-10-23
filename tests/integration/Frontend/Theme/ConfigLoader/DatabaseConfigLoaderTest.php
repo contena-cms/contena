@@ -15,6 +15,7 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -24,7 +24,7 @@ class RobotsDirectiveParser
     public function parse(string $text, Context $context, ?string $channelId = null): ParsedRobots
     {
         $lines = explode("\n", $text);
-        $admin_userAgentBlocks = [];
+        $adminUserAgentBlocks = [];
         $orphanedPathDirectives = [];
         $currentUserAgents = [];
         $currentDirectives = [];
@@ -92,8 +92,8 @@ class RobotsDirectiveParser
             if ($directiveTypeEnum === RobotsDirectiveType::USER_AGENT) {
                 // If we have a current block with directives, save it
                 if ($currentUserAgents !== [] && $currentDirectives !== []) {
-                    foreach ($currentUserAgents as $admin_userAgent) {
-                        $admin_userAgentBlocks[] = new RobotsAdminUserAgentBlock($admin_userAgent, $currentDirectives);
+                    foreach ($currentUserAgents as $adminUserAgent) {
+                        $adminUserAgentBlocks[] = new RobotsAdminUserAgentBlock($adminUserAgent, $currentDirectives);
                     }
                     // Reset for new block
                     $currentUserAgents = [];
@@ -129,12 +129,12 @@ class RobotsDirectiveParser
 
         // Save last block if any
         if ($currentUserAgents !== [] && $currentDirectives !== []) {
-            foreach ($currentUserAgents as $admin_userAgent) {
-                $admin_userAgentBlocks[] = new RobotsAdminUserAgentBlock($admin_userAgent, $currentDirectives);
+            foreach ($currentUserAgents as $adminUserAgent) {
+                $adminUserAgentBlocks[] = new RobotsAdminUserAgentBlock($adminUserAgent, $currentDirectives);
             }
         }
 
-        $parsedResult = new ParsedRobots($admin_userAgentBlocks, $orphanedPathDirectives, $issues);
+        $parsedResult = new ParsedRobots($adminUserAgentBlocks, $orphanedPathDirectives, $issues);
 
         // Dispatch parsing event to allow modifications
         $parsingEvent = new RobotsDirectiveParsingEvent($text, $parsedResult, $context, $channelId);

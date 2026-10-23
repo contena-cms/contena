@@ -16,6 +16,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

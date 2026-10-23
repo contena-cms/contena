@@ -8,6 +8,7 @@ use Contena\Core\Framework\Store\Api\ExtensionStoreLicensesController;
 use Contena\Core\Framework\Store\Services\ExtensionStoreLicensesService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

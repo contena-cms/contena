@@ -9,6 +9,7 @@ use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
 use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_7\Migration1697112044PaymentAndShippingTechnicalNameRequired;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

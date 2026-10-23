@@ -8,7 +8,6 @@ use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\Channel\Struct\TextStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Test\Generator;
@@ -43,7 +42,6 @@ class BlogNameCmsElementResolverTest extends TestCase
     public function testEnrichStaticContent(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('content', FieldConfig::SOURCE_STATIC, 'my-value'),
         ]);
 
         $slot = new CmsSlotEntity();

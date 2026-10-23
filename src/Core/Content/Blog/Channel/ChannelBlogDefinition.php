@@ -4,15 +4,11 @@ namespace Contena\Core\Content\Blog\Channel;
 
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiCriteriaAware;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Inherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Since;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
@@ -94,12 +90,6 @@ class ChannelBlogDefinition extends BlogDefinition implements ChannelDefinitionI
         );
         $fields->add(
             (new OneToOneAssociationField('seoCategory', 'seoCategory', 'id', CategoryDefinition::class))->addFlags(new ApiAware(), new Runtime())->setDescription('Main category used for SEO URL generation in the current sales channel')
-        );
-        $fields->add(
-            (new CheapestPriceField('cheapest_price', 'cheapestPrice'))->addFlags(new WriteProtected(), new Inherited(), new ApiCriteriaAware())
-        );
-        $fields->add(
-            (new ObjectField('cheapest_price_container', 'cheapestPriceContainer'))->addFlags(new Runtime())
         );
         $fields->add(
             (new ObjectField('sortedProperties', 'sortedProperties'))->addFlags(new Runtime(), new ApiAware())

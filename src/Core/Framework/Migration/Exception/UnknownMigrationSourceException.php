@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Migration\Exception;
 
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Migration\MigrationException;
 
 /**
  * @codeCoverageIgnore

@@ -8,11 +8,9 @@ use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEvents;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
@@ -35,6 +33,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Loader\InitialStateIdLoader;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal

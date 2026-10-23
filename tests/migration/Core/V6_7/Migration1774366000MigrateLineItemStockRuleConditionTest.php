@@ -9,6 +9,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Migration\IndexerQueuer;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1774366000MigrateLineItemStockRuleCondition;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

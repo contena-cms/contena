@@ -21,6 +21,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * The amount of re-indexing a single category write triggers must scale with
@@ -209,8 +210,6 @@ class CategoryIndexerQueryAmplificationTest extends TestCase
         );
 
         $events = new NestedEventCollection([
-            new EntityWrittenEvent(CategoryDefinition::ENTITY_NAME, [$categoryResult], $context),
-            new EntityWrittenEvent(CategoryTranslationDefinition::ENTITY_NAME, [$translationResult], $context),
         ]);
 
         return new EntityWrittenContainerEvent($context, $events, []);

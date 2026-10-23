@@ -21,6 +21,9 @@ use Contena\Core\Framework\FrameworkException;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Kernel;
 use Symfony\Component\Console\Command\Command;
+use Contena\Core\Migration\Traits\StateMachineMigrationImporter;
+use Contena\Core\Framework\Migration\MigrationException;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @internal
@@ -30,7 +33,6 @@ use Symfony\Component\Console\Command\Command;
 class DomainExceptionRule implements Rule
 {
     use InTestClassTrait;
-use Contena\Core\Migration\Traits\StateMachineMigrationImporter;
 
     /**
      * @var list<string>

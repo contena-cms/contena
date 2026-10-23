@@ -5,6 +5,8 @@ namespace Contena\Tests\Integration\Frontend\Theme;
 use PHPUnit\Framework\TestCase;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

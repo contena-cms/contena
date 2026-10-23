@@ -26,7 +26,7 @@ class AdminUserRecoveryRequestEvent extends Event implements AdminUserAware, Mai
     private ?MailRecipientStruct $mailRecipientStruct = null;
 
     public function __construct(
-        private readonly AdminUserRecoveryEntity $admin_userRecovery,
+        private readonly AdminUserRecoveryEntity $adminUserRecovery,
         private readonly string $resetUrl,
         private readonly Context $context
     ) {
@@ -68,11 +68,11 @@ class AdminUserRecoveryRequestEvent extends Event implements AdminUserAware, Mai
     public function getMailStruct(): MailRecipientStruct
     {
         if (!$this->mailRecipientStruct instanceof MailRecipientStruct) {
-            /** @var AdminUserEntity $admin_user */
-            $admin_user = $this->admin_userRecovery->getUser();
+            /** @var AdminUserEntity $adminUser */
+            $adminUser = $this->admin_userRecovery->getUser();
 
             $this->mailRecipientStruct = new MailRecipientStruct([
-                $admin_user->getEmail() => $admin_user->getName(),
+                $adminUser->getEmail() => $adminUser->getName(),
             ]);
         }
 

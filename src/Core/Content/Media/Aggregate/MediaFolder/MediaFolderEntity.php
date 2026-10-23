@@ -7,6 +7,8 @@ use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderCon
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class MediaFolderEntity extends Entity
 {

@@ -14,6 +14,7 @@ use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -44,11 +45,11 @@ class QuerySignerTest extends TestCase
     {
         $connection = static::getContainer()->get(Connection::class);
 
-        $admin_userId = Uuid::fromBytesToHex(
+        $adminUserId = Uuid::fromBytesToHex(
             (string) $connection->fetchOne('SELECT id FROM `admin_user` WHERE username = "admin"')
         );
 
-        $context = new Context(new AdminApiSource($admin_userId));
+        $context = new Context(new AdminApiSource($adminUserId));
 
         $signedUri = $this->querySigner->signUri('http://app.url/?foo=bar', $this->app, $context);
         parse_str($signedUri->getQuery(), $signedQuery);
@@ -79,7 +80,7 @@ class QuerySignerTest extends TestCase
         static::assertSame('1.0.0', $signedQuery['app-version']);
 
         static::assertArrayHasKey('sw-admin_user-id', $signedQuery);
-        static::assertSame($admin_userId, $signedQuery['sw-admin_user-id']);
+        static::assertSame($adminUserId, $signedQuery['sw-admin_user-id']);
 
         static::assertNotNull($this->app->getAppSecret());
 

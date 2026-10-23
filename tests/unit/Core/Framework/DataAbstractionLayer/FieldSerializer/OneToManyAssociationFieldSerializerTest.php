@@ -30,7 +30,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(OneToManyAssociationFieldSerializer::class)]
 class OneToManyAssociationFieldSerializerTest extends TestCase
 {
-    private OneToManySerializerBasketDefinition $definition;
 
     private OneToManyAssociationFieldSerializer $serializer;
 

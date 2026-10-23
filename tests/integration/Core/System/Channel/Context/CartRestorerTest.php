@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\System\Channel\Context;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\AbstractCartPersister;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartCalculator;
 use Contena\Core\Checkout\Cart\CartPersister;
@@ -12,7 +11,6 @@ use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\Event\BeforeCartMergeEvent;
 use Contena\Core\Checkout\Cart\Event\CartMergedEvent;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Defaults;
@@ -33,6 +31,7 @@ use Contena\Core\Test\TestDefaults;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\Event;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -46,9 +45,7 @@ class CartRestorerTest extends TestCase
 
     private CartRestorer $cartRestorer;
 
-    private CartService $cartService;
 
-    private AbstractCartPersister $cartPersister;
 
     /**
      * @var array<string, Event>
@@ -693,40 +690,7 @@ class CartRestorerTest extends TestCase
         return $entity;
     }
 
-    private function createLineItem(
-        ChannelContext $context,
-        ?int $quantity = null
-    ): LineItem {
-        $blogId = $this->createBlog($context->getContext());
 
-        $blogLineItem = new LineItem($blogId, LineItem::BLOG_LINE_ITEM_TYPE, $blogId);
-        $blogLineItem->setStackable(true);
-
-        if ($quantity !== null) {
-            $blogLineItem->setQuantity($quantity);
-        }
-
-        return $blogLineItem;
-    }
-
-    /**
-     * Create a new cart with the provided line items and save it to the database. The cart must contain at least one
-     * $lineItems, else it won't be saved and the included assertion will fail.
-     */
-    private function createAndSaveUnmodifiedCart(ChannelContext $context, LineItem ...$lineItems): Cart
-    {
-        $cart = new Cart($context->getToken());
-
-        $cart->addLineItems(new LineItemCollection($lineItems));
-        $cart->markUnmodified();
-
-        $this->cartPersister->save($cart, $context);
-
-        static::assertTrue($this->cartExists($context->getToken()));
-        static::assertTrue($this->contextExists($context->getToken()));
-
-        return $cart;
-    }
 
     /**
      * @return array{context:ChannelContext, cart:Cart}

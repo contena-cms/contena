@@ -68,7 +68,6 @@ class BlogBoxCmsElementResolverTest extends TestCase
         $resolverContext = new ResolverContext(static::createStub(ChannelContext::class), new Request());
 
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('blogs', FieldConfig::SOURCE_STATIC, []),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -87,7 +86,6 @@ class BlogBoxCmsElementResolverTest extends TestCase
 
         $blogId = Uuid::randomHex();
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -112,7 +110,6 @@ class BlogBoxCmsElementResolverTest extends TestCase
         $resolverContext = new ResolverContext(static::createStub(ChannelContext::class), new Request());
 
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_MAPPED, 'category.blogs'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -159,7 +156,6 @@ class BlogBoxCmsElementResolverTest extends TestCase
         $resolverContext = new EntityResolverContext($channelContext, new Request(), static::createStub(ChannelBlogDefinition::class), $blog);
         $result = new ElementDataCollection();
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_MAPPED, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();

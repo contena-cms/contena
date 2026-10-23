@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Contena\Core\Framework\Context;
 use Twig\Extension\CoreExtension;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -15,10 +15,8 @@ use Contena\Core\Checkout\Document\Renderer\DeliveryNoteRenderer;
 use Contena\Core\Checkout\Document\Renderer\InvoiceRenderer;
 use Contena\Core\Checkout\Document\Service\DocumentGenerator;
 use Contena\Core\Checkout\Document\Struct\DocumentGenerateOperation;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentEntity;
 use Contena\Core\Checkout\Order\Event\OrderStateMachineStateChangeEvent;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\ContactForm\Event\ContactFormEvent;
@@ -61,6 +59,7 @@ use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

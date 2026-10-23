@@ -121,8 +121,8 @@ class FirstRunWizardServiceTest extends TestCase
         $source = $this->context->getSource();
         static::assertInstanceOf(AdminApiSource::class, $source);
 
-        $admin_userRepository = $this->createMock(EntityRepository::class);
-        $admin_userRepository->expects($this->once())
+        $adminUserRepository = $this->createMock(EntityRepository::class);
+        $adminUserRepository->expects($this->once())
             ->method('upsert')
             ->with([
                 [
@@ -137,7 +137,7 @@ class FirstRunWizardServiceTest extends TestCase
 
         $frwService = $this->createFirstRunWizardService(
             frwClient: $frwClient,
-            admin_userConfigRepository: $admin_userRepository,
+            admin_userConfigRepository: $adminUserRepository,
         );
 
         $frwService->frwLogin(
@@ -197,21 +197,21 @@ class FirstRunWizardServiceTest extends TestCase
 
         $source = $this->context->getSource();
         static::assertInstanceOf(AdminApiSource::class, $source);
-        $admin_userId = $source->getUserId();
-        static::assertNotNull($admin_userId);
+        $adminUserId = $source->getUserId();
+        static::assertNotNull($adminUserId);
 
-        $admin_userConfigRepository = $this->createMock(EntityRepository::class);
-        $admin_userConfigRepository->expects($this->once())
+        $adminUserConfigRepository = $this->createMock(EntityRepository::class);
+        $adminUserConfigRepository->expects($this->once())
             ->method('searchIds')
             ->willReturn(
                 new IdSearchResult(
                     1,
-                    [$admin_userId => ['primaryKey' => $admin_userId, 'data' => []]],
+                    [$adminUserId => ['primaryKey' => $adminUserId, 'data' => []]],
                     new Criteria(),
                     $this->context,
                 ),
             );
-        $admin_userConfigRepository->expects($this->once())
+        $adminUserConfigRepository->expects($this->once())
             ->method('delete');
 
         $systemConfigService = $this->createMock(SystemConfigService::class);
@@ -223,7 +223,7 @@ class FirstRunWizardServiceTest extends TestCase
             storeService: $storeService,
             systemConfigService: $systemConfigService,
             frwClient: $frwClient,
-            admin_userConfigRepository: $admin_userConfigRepository,
+            admin_userConfigRepository: $adminUserConfigRepository,
         );
 
         $frwService->upgradeAccessToken($this->context);
@@ -932,7 +932,7 @@ class FirstRunWizardServiceTest extends TestCase
     }
 
     /**
-     * @param ?EntityRepository<AdminUserConfigCollection> $admin_userConfigRepository
+     * @param ?EntityRepository<AdminUserConfigCollection> $adminUserConfigRepository
      */
     private function createFirstRunWizardService(
         ?StoreService $storeService = null,
@@ -941,7 +941,7 @@ class FirstRunWizardServiceTest extends TestCase
         ?bool $autoRun = true,
         ?EventDispatcherInterface $eventDispatcher = null,
         ?FirstRunWizardClient $frwClient = null,
-        ?EntityRepository $admin_userConfigRepository = null,
+        ?EntityRepository $adminUserConfigRepository = null,
         ?TrackingEventClient $trackingEventClient = null,
     ): FirstRunWizardService {
         return new FirstRunWizardService(
@@ -951,7 +951,7 @@ class FirstRunWizardServiceTest extends TestCase
             $autoRun ?? true,
             $eventDispatcher ?? static::createStub(EventDispatcherInterface::class),
             $frwClient ?? static::createStub(FirstRunWizardClient::class),
-            $admin_userConfigRepository ?? static::createStub(EntityRepository::class),
+            $adminUserConfigRepository ?? static::createStub(EntityRepository::class),
             $trackingEventClient ?? static::createStub(TrackingEventClient::class),
         );
     }

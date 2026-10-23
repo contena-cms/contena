@@ -7,6 +7,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Contena\Core\Framework\App\Validation\Error\Error;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
  * @internal

@@ -20,6 +20,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\AdminUserEntity;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -34,7 +36,7 @@ class StoreControllerTest extends TestCase
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepository;
+    private EntityRepository $adminUserRepository;
 
     protected function setUp(): void
     {

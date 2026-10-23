@@ -6,17 +6,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
-use Contena\Core\Content\Blog\Garan\GaranLabelInlineImage;
-use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
-use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
 use Contena\Core\Content\Blog\Garan\GaranLabelTwigFilter;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Test\Annotation\DisabledFeatures;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Twig\Environment;
 
 /**
@@ -273,25 +267,6 @@ class GaranLabelTwigFilterTest extends TestCase
         );
     }
 
-    /**
-     * @param list<mixed> $searchResults
-     */
-    private function createFilter(array $searchResults): GaranLabelTwigFilter
-    {
-        $twig = static::createStub(Environment::class);
-        $twig->method('render')->willReturnCallback(
-            static fn (string $template, array $context) => str_contains($template, 'nested-label')
-                ? \sprintf('<svg>nested %s</svg>', $context['guarantee'])
-                : \sprintf('<svg>%s %s %s</svg>', $context['manufacturer'], $context['blogNumber'], $context['guarantee'])
-        );
-
-        $resolver = new GaranLabelResolver(new GaranLabelDurationFormatter(), new GaranLabelRenderer($twig));
-
-        /** @var StaticEntityRepository<BlogCollection> $blogRepository */
-        $blogRepository = new StaticEntityRepository($searchResults, new BlogDefinition());
-
-        return new GaranLabelTwigFilter(new GaranLabelDurationFormatter(), $blogRepository, $resolver, new GaranLabelInlineImage());
-    }
 
     private function createBlog(bool $guaranteeConfirmed, int $guaranteeMonths = 36): BlogEntity
     {

@@ -12,6 +12,7 @@ use Contena\Core\System\Channel\Aggregate\ChannelFile\ChannelFileEntity;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

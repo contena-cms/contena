@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Content\Flow;
 
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\Action\AddOrderAffiliateAndCampaignCodeAction;
 use Contena\Core\Content\Flow\FlowCollection;
 use Contena\Core\Framework\Context;

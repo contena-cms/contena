@@ -15,6 +15,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Extend
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendedBlogManufacturerDefinition;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

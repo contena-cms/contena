@@ -38,6 +38,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\Test\NullConnection;
 use Contena\Core\System\Currency\Rule\CurrencyRule;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -12,6 +12,7 @@ use Contena\Core\Framework\Api\OAuth\Client\PublicClientRegistry;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Uuid\Uuid;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
  * OAuth integrations should rely on {@see ClientRepositoryInterface} instead of this concrete Contena class.
@@ -93,12 +94,12 @@ class ClientRepository implements ClientRepositoryInterface
             return null;
         }
 
-        $admin_userId = $accessKey['admin_user_id'] ?? null;
+        $adminUserId = $accessKey['admin_user_id'] ?? null;
 
         return new ApiClient(
             $clientIdentifier,
             true,
-            name: $admin_userId !== null ? Uuid::fromBytesToHex($admin_userId) : $accessKey['label'] ?? '',
+            name: $adminUserId !== null ? Uuid::fromBytesToHex($adminUserId) : $accessKey['label'] ?? '',
             confidential: true
         );
     }

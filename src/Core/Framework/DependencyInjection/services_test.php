@@ -38,7 +38,6 @@ use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Test\TestSessionStorageFactory;
 use Contena\Core\Framework\Test\Webhook\StaticWebhookTargetValidatorFactory;
 use Contena\Core\Framework\Webhook\Validation\WebhookTargetValidator;
-use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\Mailer\Mailer;
 use Symfony\Component\Messenger\TraceableMessageBus;
@@ -270,15 +269,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AclTestController::class)
         ->public();
 
-    $services->set('test_payment_decoration', AppPaymentHandler::class)
-        ->decorate(AppPaymentHandler::class)
-        ->args([
-            service(StateMachineRegistry::class),
-            service('order_transaction_capture_refund.repository'),
-            service('order_transaction.repository'),
-            service('app.repository'),
-            service(Connection::class),
-        ]);
 
     $services->set(TestSessionStorageFactory::class)
         ->decorate('session.storage.factory.mock_file');

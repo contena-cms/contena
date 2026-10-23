@@ -19,7 +19,6 @@ class Migration1673249981MigrateIsNewUserRuleTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1673249981MigrateIsNewUserRule $migration;
 
     /**
      * @var array<string, mixed>

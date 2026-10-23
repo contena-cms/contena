@@ -11,6 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigCollection;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -27,12 +28,12 @@ class ChannelUserConfigSubscriberTest extends TestCase
         $channelId1 = Uuid::randomHex();
         $channelId2 = Uuid::randomHex();
 
-        /** @var EntityRepository<AdminUserConfigCollection> $admin_userConfigRepository */
-        $admin_userConfigRepository = static::getContainer()->get('admin_user_config.repository');
-        $admin_userConfigId = Uuid::randomHex();
-        $admin_userConfigRepository->create([
+        /** @var EntityRepository<AdminUserConfigCollection> $adminUserConfigRepository */
+        $adminUserConfigRepository = static::getContainer()->get('admin_user_config.repository');
+        $adminUserConfigId = Uuid::randomHex();
+        $adminUserConfigRepository->create([
             [
-                'id' => $admin_userConfigId,
+                'id' => $adminUserConfigId,
                 'admin_userId' => $admin->getUserId(),
                 'key' => ChannelUserConfigSubscriber::CONFIG_KEY,
                 'value' => [$channelId1, $channelId2],
@@ -40,7 +41,7 @@ class ChannelUserConfigSubscriberTest extends TestCase
             ],
         ], $context);
 
-        $search = $admin_userConfigRepository->search(new Criteria([$admin_userConfigId]), $context)
+        $search = $adminUserConfigRepository->search(new Criteria([$adminUserConfigId]), $context)
             ->getEntities()
             ->first();
 
@@ -54,7 +55,7 @@ class ChannelUserConfigSubscriberTest extends TestCase
         $channelRepository = static::getContainer()->get('channel.repository');
         $channelRepository->delete([['id' => $channelId1], ['id' => $channelId2]], $context);
 
-        $search = $admin_userConfigRepository->search(new Criteria([$admin_userConfigId]), $context)
+        $search = $adminUserConfigRepository->search(new Criteria([$adminUserConfigId]), $context)
             ->getEntities()
             ->first();
 

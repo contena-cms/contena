@@ -2,8 +2,6 @@
 
 namespace Contena\Frontend\Controller;
 
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewsWidgetLoadedHook;
-use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\PlatformRequest;
@@ -20,6 +18,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Content\Blog\Exception\BlogNotFoundException;
 use Contena\Core\Content\Blog\Exception\ReviewNotActiveExeption;
 use Contena\Core\Content\Blog\Exception\VariantNotFoundException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Frontend\Controller\Exception\FrontendException;
 
 /**
  * @internal
@@ -172,40 +172,6 @@ class BlogController extends FrontendController
         return $this->forwardToRoute('frontend.blog.reviews', $forwardParams, ['blogId' => $blogId]);
     }
 
-    #[Route(
-        path: '/blog/{blogId}/reviews',
-        name: 'frontend.blog.reviews',
-        defaults: ['XmlHttpRequest' => true],
-        methods: [Request::METHOD_GET, Request::METHOD_POST]
-    )]
-    public function loadReviews(string $blogId, Request $request, ChannelContext $context): Response
-    {
-        $parentId = RequestParamHelper::get($request, 'parentId');
-        if (!Feature::isActive('v6.8.0.0')) {
-            try {
-                $reviews = $this->blogReviewLoader->load($request, $context, $blogId, $parentId);
-            } catch (ReviewNotActiveExeption) {
-                throw FrontendException::reviewNotActive();
-            }
-        } else {
-            $reviews = $this->blogReviewLoader->load($request, $context, $blogId, $parentId);
-        }
-
-        $this->hook(new BlogReviewsWidgetLoadedHook($reviews, $context));
-
-        return $this->renderFrontend(
-            'frontend/component/review/review.html.twig',
-            [
-                'reviews' => $reviews,
-                'ratingSuccess' => $request->attributes->get('success'),
-                'redirectTo' => RequestParamHelper::get(
-                    $request,
-                    'redirectTo',
-                    $request->attributes->get('_route')
-                ),
-            ]
-        );
-    }
 
     #[Route(
         path: '/blog/{blogId}/purchase-limit',

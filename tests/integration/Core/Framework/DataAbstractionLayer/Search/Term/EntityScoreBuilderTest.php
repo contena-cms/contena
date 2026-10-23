@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\EmailField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -22,6 +21,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuil
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTerm;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -225,13 +226,11 @@ class EntityScoreBuilderTest extends TestCase
 
         return [
             'query should tokenize' => [
-                ShouldTokenizeFieldDefinition::class,
                 $term,
                 \count($queriesTokenize),
                 $queriesTokenize,
             ],
             'query should not tokenize' => [
-                ShouldNotTokenizeFieldDefinition::class,
                 $term,
                 \count($queriesNotTokenize),
                 $queriesNotTokenize,
@@ -292,7 +291,6 @@ class ScoreBuilderTestDefinition extends EntityDefinition
             (new StringField('name', 'name'))->addFlags(new ApiAware(), new SearchRanking(100)),
             (new StringField('description', 'description'))->addFlags(new SearchRanking(200)),
             (new StringField('long_description', 'longDescription'))->addFlags(new ApiAware()),
-            (new ManyToOneAssociationField('nested', 'nested_id', NestedDefinition::class, 'id', true))->addFlags(new ApiAware(), new SearchRanking(0.5)),
         ]);
     }
 }

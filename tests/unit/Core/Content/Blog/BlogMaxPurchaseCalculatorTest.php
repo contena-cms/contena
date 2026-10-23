@@ -17,7 +17,6 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 #[CoversClass(BlogMaxPurchaseCalculator::class)]
 class BlogMaxPurchaseCalculatorTest extends TestCase
 {
-    private BlogMaxPurchaseCalculator $service;
 
     protected function setUp(): void
     {

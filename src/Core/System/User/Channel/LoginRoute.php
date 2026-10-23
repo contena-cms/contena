@@ -15,6 +15,7 @@ use Contena\Core\System\User\UserException;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class LoginRoute extends AbstractLoginRoute

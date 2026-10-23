@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\Api\EventListener;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 /**
  * @internal

@@ -11,6 +11,7 @@ use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

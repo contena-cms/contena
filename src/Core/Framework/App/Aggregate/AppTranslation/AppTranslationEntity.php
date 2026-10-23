@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\App\Aggregate\AppTranslation;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @internal only for use by the app-system

@@ -10,6 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
 use Contena\Core\Test\Integration\App\TestAppServer;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -17,6 +17,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\TreePathField;
 use Contena\Core\Framework\DataAbstractionLayer\Util\StatementHelper;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Uuid\Exception\InvalidUuidLengthException;
 
 class TreeUpdater
 {

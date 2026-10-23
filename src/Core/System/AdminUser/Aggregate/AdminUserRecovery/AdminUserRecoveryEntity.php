@@ -4,25 +4,26 @@ namespace Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class AdminUserRecoveryEntity extends Entity
 {
     use EntityIdTrait;
 
-    protected string $admin_userId;
+    protected string $adminUserId;
 
     protected string $hash;
 
-    protected ?AdminUserEntity $admin_user = null;
+    protected ?AdminUserEntity $adminUser = null;
 
     public function getUserId(): string
     {
         return $this->admin_userId;
     }
 
-    public function setUserId(string $admin_userId): void
+    public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $admin_userId;
+        $this->admin_userId = $adminUserId;
     }
 
     public function getHash(): string
@@ -42,8 +43,8 @@ class AdminUserRecoveryEntity extends Entity
         return $this->admin_user;
     }
 
-    public function setUser(AdminUserEntity $admin_user): void
+    public function setUser(AdminUserEntity $adminUser): void
     {
-        $this->admin_user = $admin_user;
+        $this->admin_user = $adminUser;
     }
 }

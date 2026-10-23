@@ -16,6 +16,7 @@ use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Tax\TaxEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

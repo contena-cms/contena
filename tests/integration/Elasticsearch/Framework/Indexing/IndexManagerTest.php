@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Elasticsearch\Framework\Indexing;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Elasticsearch\Framework\Indexing\IndexManager;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

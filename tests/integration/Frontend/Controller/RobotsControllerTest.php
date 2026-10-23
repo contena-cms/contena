@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

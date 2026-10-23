@@ -25,7 +25,6 @@ class CartLineItemControllerBench extends AbstractBenchCase
 {
     private const SUBJECT_CUSTOMER = 'user-0';
 
-    private Cart $cart;
 
     public function setupWithLogin(): void
     {

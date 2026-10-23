@@ -6,6 +6,7 @@ use Contena\Core\Framework\App\Aggregate\CmsBlockTranslation\AppCmsBlockTranslat
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Cms\Xml\Block;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @internal

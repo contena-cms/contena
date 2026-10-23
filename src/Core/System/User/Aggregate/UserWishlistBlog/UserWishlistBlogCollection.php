@@ -14,7 +14,7 @@ class UserWishlistBlogCollection extends EntityCollection
 {
     public function getApiAlias(): string
     {
-        return 'user_wishlist_product_collection';
+        return 'user_wishlist_blog_collection';
     }
 
     public function getBlogs(): ?BlogCollection

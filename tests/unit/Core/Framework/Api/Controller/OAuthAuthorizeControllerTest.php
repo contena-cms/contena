@@ -215,7 +215,7 @@ class OAuthAuthorizeControllerTest extends TestCase
     public function testApproveCompletesRequestForUserAndReturnsRedirectUri(): void
     {
         $this->rateLimiter->expects($this->never())->method('ensureAccepted');
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $authorizationRequest = new AuthorizationRequest();
 
         $this->authorizationServer->expects($this->once())
@@ -228,9 +228,9 @@ class OAuthAuthorizeControllerTest extends TestCase
 
         $this->authorizationServer->expects($this->once())
             ->method('completeAuthorizationRequest')
-            ->willReturnCallback(function (AuthorizationRequest $request) use ($authorizationRequest, $admin_userId) {
+            ->willReturnCallback(function (AuthorizationRequest $request) use ($authorizationRequest, $adminUserId) {
                 static::assertSame($authorizationRequest, $request);
-                static::assertSame($admin_userId, $request->getUser()?->getIdentifier());
+                static::assertSame($adminUserId, $request->getUser()?->getIdentifier());
                 static::assertTrue($request->isAuthorizationApproved());
 
                 $response = new OAuthRedirectResponse();
@@ -241,7 +241,7 @@ class OAuthAuthorizeControllerTest extends TestCase
 
         $response = $this->controller->approve(
             $this->createApproveRequest(true),
-            Context::createDefaultContext(new AdminApiSource($admin_userId))
+            Context::createDefaultContext(new AdminApiSource($adminUserId))
         );
 
         static::assertSame(

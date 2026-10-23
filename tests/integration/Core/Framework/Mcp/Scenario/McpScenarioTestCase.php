@@ -20,6 +20,9 @@ use Contena\Core\Framework\Mcp\Tool\SystemConfigReadTool;
 use Contena\Core\Framework\Mcp\Tool\SystemConfigWriteTool;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -44,7 +47,6 @@ abstract class McpScenarioTestCase extends TestCase
 
     protected SystemConfigWriteTool $systemConfigWriteTool;
 
-    protected OrderStateTool $orderStateTool;
 
     protected function setUp(): void
     {

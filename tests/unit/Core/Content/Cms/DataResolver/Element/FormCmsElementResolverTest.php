@@ -8,16 +8,9 @@ use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\FormCmsElementResolver;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Salutation\AbstractSalutationsSorter;
 use Contena\Core\System\Salutation\Channel\AbstractSalutationRoute;
-use Contena\Core\System\Salutation\Channel\SalutationRouteResponse;
 use Contena\Core\System\Salutation\SalutationCollection;
-use Contena\Core\System\Salutation\SalutationDefinition;
-use Contena\Core\System\Salutation\SalutationEntity;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -104,40 +97,6 @@ class FormCmsElementResolverTest extends TestCase
         return $slot;
     }
 
-    private function getSalutationCollection(): SalutationCollection
-    {
-        return new SalutationCollection([
-            $this->createSalutationWithSalutationKey('c'),
-            $this->createSalutationWithSalutationKey('a'),
-            $this->createSalutationWithSalutationKey('d'),
-            $this->createSalutationWithSalutationKey('b'),
-        ]);
-    }
 
-    private function createSalutationWithSalutationKey(string $salutationKey): SalutationEntity
-    {
-        return (new SalutationEntity())->assign([
-            'id' => Uuid::randomHex(),
-            'salutationKey' => $salutationKey,
-        ]);
-    }
 
-    private function getSalutationRoute(SalutationCollection $salutationCollection): AbstractSalutationRoute
-    {
-        $salutationRoute = $this->createMock(AbstractSalutationRoute::class);
-        $salutationRoute->expects($this->once())
-            ->method('load')
-            ->willReturn(new SalutationRouteResponse(
-                new EntitySearchResult(
-                    SalutationDefinition::ENTITY_NAME,
-                    $salutationCollection->count(),
-                    $salutationCollection,
-                    null,
-                    new Criteria(),
-                    Context::createDefaultContext()
-                )
-            ));
-
-        return $salutationRoute;
-    }
 }

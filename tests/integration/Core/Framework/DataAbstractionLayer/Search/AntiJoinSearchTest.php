@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Search;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerCollection;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Defaults;
@@ -18,6 +17,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

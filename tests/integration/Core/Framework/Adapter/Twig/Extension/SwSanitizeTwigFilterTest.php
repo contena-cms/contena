@@ -4,6 +4,7 @@ namespace Contena\Tests\Integration\Core\Framework\Adapter\Twig\Extension;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Extension\SwSanitizeTwigFilter;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

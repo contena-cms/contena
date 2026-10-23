@@ -6,6 +6,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\User\Aggregate\UserWishlistBlog\UserWishlistBlogCollection;
 use Contena\Core\System\User\UserEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

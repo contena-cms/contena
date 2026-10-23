@@ -6,15 +6,15 @@ use League\OAuth2\Server\Entities\UserEntityInterface;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 
 /**
- * OAuth integrations should rely on {@see AdminUserEntityInterface} instead of this concrete Contena class.
+ * OAuth integrations should rely on {@see UserEntityInterface} instead of this concrete Contena class.
  */
 #[BecomesInternal(version: 'v6.8.0')]
-class AdminUser implements AdminUserEntityInterface
+class AdminUser implements UserEntityInterface
 {
     /**
-     * @param non-empty-string $admin_userId
+     * @param non-empty-string $adminUserId
      */
-    public function __construct(private readonly string $admin_userId)
+    public function __construct(private readonly string $adminUserId)
     {
     }
 

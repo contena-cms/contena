@@ -12,6 +12,7 @@ use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
 use Contena\Core\Framework\Script\ScriptException;
 use Contena\Core\Framework\Script\ServiceStubs;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
 
 /**
  * @codeCoverageIgnore

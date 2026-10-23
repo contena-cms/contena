@@ -24,9 +24,9 @@ class SsoService
         return $this->loginConfigService->getConfig() instanceof LoginConfig;
     }
 
-    public function revokeUserTokens(string $admin_userId): void
+    public function revokeUserTokens(string $adminUserId): void
     {
-        $this->refreshTokenRepository->revokeRefreshTokensForUser($admin_userId);
-        $this->authCodeRepository->revokeAuthCodesForUser($admin_userId);
+        $this->refreshTokenRepository->revokeRefreshTokensForUser($adminUserId);
+        $this->authCodeRepository->revokeAuthCodesForUser($adminUserId);
     }
 }

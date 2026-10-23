@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Routing\Exception\UserNotLoggedInRoutingException;
 
 /**
  * Session and context token handling lives in \Contena\Core\Framework\Routing\SessionContextTokenSubscriber.
@@ -131,7 +132,7 @@ class FrontendSubscriber implements EventSubscriberInterface
             return false;
         }
 
-        return $ex instanceof UserNotLoggedInRoutingException || $ex instanceof UserNotLoggedInException;
+        return $ex instanceof UserNotLoggedInRoutingException;
     }
 
     /**

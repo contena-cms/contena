@@ -11,6 +11,8 @@ use Contena\Frontend\Framework\ThemeInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Frontend\Theme\Exception\ThemeException;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 class FrontendPluginConfigurationFactory extends AbstractFrontendPluginConfigurationFactory
 {

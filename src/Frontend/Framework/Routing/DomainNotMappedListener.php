@@ -6,6 +6,7 @@ use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Event\ExceptionEvent;
+use Contena\Frontend\Framework\Routing\Exception\ChannelMappingException;
 
 /**
  * @internal

@@ -50,7 +50,6 @@ class TaxRuleDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of tax rule.'),
             (new FkField('tax_rule_type_id', 'taxRuleTypeId', TaxRuleTypeDefinition::class))->addFlags(new Required())->setDescription('Unique identity of tax rule type.'),
             (new FkField('country_id', 'countryId', CountryDefinition::class))->addFlags(new Required())->setDescription('Unique identity of country.'),
-            (new FloatField('tax_rate', 'taxRate'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING))->setDescription('Rate of tax defined for a tax rule.'),
             (new JsonField('data', 'data', [
                 new ListField('states', 'states'),
                 new StringField('zipCode', 'zipCode'),

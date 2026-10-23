@@ -9,9 +9,6 @@ use Contena\Core\Framework\Feature;
  */
 class DeprecatedDecorator
 {
-    public function __construct(private readonly DecoratedService $decoratedService)
-    {
-    }
 
     public function delegatesToInner(string $value): string
     {
@@ -40,10 +37,6 @@ class DeprecatedDecorator
         }
     }
 
-    public function getDecorated(): DecoratedService
-    {
-        throw new \RuntimeException();
-    }
 
     public function delegatesToInnerWithoutFeatureFlag(string $value): string
     {

@@ -26,6 +26,7 @@ use Contena\Core\Framework\Webhook\WebhookFailureStrategy;
 use Contena\Core\Test\Assert\Serialization;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

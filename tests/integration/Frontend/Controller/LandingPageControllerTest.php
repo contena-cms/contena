@@ -11,6 +11,8 @@ use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Page\LandingPage\LandingPageLoadedHook;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

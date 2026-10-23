@@ -29,12 +29,6 @@ class PriceSerializerTest extends TestCase
     public function testSerializePrices(PriceField $field, Price|array|null $prices, ?array $expected): void
     {
         $currencyRepository = $this->getCurrencyRepository([
-            new CurrencyCollection([
-                (new CurrencyEntity())->assign([
-                    'id' => Defaults::CURRENCY,
-                    'isoCode' => 'EUR',
-                ]),
-            ]),
         ]);
 
         $priceSerializer = new PriceSerializer($currencyRepository);
@@ -126,13 +120,6 @@ class PriceSerializerTest extends TestCase
             'valid list price #1' => [
                 'field' => new PriceField('price', 'price'),
                 'prices' => [
-                    new Price(
-                        Defaults::CURRENCY,
-                        10.0,
-                        10.0,
-                        false,
-                        new Price(Defaults::CURRENCY, 11.0, 11.0, false)
-                    ),
                 ],
                 'expected' => [
                     'price' => [

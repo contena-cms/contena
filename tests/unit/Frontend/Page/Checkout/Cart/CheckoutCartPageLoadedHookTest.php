@@ -5,9 +5,6 @@ namespace Contena\Tests\Unit\Frontend\Page\Checkout\Cart;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Generator;
-use Contena\Frontend\Page\Checkout\Cart\CheckoutCartPage;
 use Contena\Frontend\Page\Checkout\Cart\CheckoutCartPageLoadedHook;
 
 /**
@@ -29,11 +26,4 @@ class CheckoutCartPageLoadedHookTest extends TestCase
         static::assertStringEndsWith('-loaded', $this->createHook()->getName());
     }
 
-    private function createHook(): CheckoutCartPageLoadedHook
-    {
-        return new CheckoutCartPageLoadedHook(
-            (new CheckoutCartPage())->assign(['cart' => new Cart(Uuid::randomHex())]),
-            Generator::generateChannelContext(),
-        );
-    }
 }

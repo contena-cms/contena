@@ -23,11 +23,13 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\Translation\LocaleAwareInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Symfony\Contracts\Translation\TranslatorTrait;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 class Translator extends AbstractTranslator
 {
     use TranslatorTrait;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Exception\ConnectionException;
 
     public const ALL_CACHE_TAG = 'translation.catalog.all';
 

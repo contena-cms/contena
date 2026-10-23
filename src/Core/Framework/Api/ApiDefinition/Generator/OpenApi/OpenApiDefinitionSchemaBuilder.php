@@ -551,12 +551,6 @@ class OpenApiDefinitionSchemaBuilder
                 'property' => $jsonField->getPropertyName(),
                 'items' => new Schema(['ref' => '#/components/schemas/Price']),
             ]);
-        } elseif ($jsonField instanceof MeasurementUnitsField) {
-            $definition = new Property([
-                'type' => 'object',
-                'property' => $jsonField->getPropertyName(),
-                'ref' => '#/components/schemas/MeasurementUnits',
-            ]);
         } else {
             $definition = new Property([
                 'type' => 'object',

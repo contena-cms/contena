@@ -12,6 +12,7 @@ use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

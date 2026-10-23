@@ -28,15 +28,15 @@ use Symfony\Component\Routing\RouterInterface;
 class AdminUserRecoveryService
 {
     /**
-     * @param EntityRepository<AdminUserRecoveryCollection> $admin_userRecoveryRepo
-     * @param EntityRepository<AdminUserCollection> $admin_userRepo
+     * @param EntityRepository<AdminUserRecoveryCollection> $adminUserRecoveryRepo
+     * @param EntityRepository<AdminUserCollection> $adminUserRepo
      * @param EntityRepository<ChannelCollection> $channelRepository
      *
      * @internal
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRecoveryRepo,
-        private readonly EntityRepository $admin_userRepo,
+        private readonly EntityRepository $adminUserRecoveryRepo,
+        private readonly EntityRepository $adminUserRepo,
         private readonly RouterInterface $router,
         private readonly EventDispatcherInterface $dispatcher,
         private readonly ChannelContextServiceInterface $channelContextService,
@@ -45,32 +45,32 @@ class AdminUserRecoveryService
     ) {
     }
 
-    public function generateUserRecovery(string $admin_userEmail, Context $context): void
+    public function generateUserRecovery(string $adminUserEmail, Context $context): void
     {
-        $admin_user = $this->getUserByEmail($admin_userEmail, $context);
+        $adminUser = $this->getUserByEmail($adminUserEmail, $context);
 
-        if (!$admin_user) {
+        if (!$adminUser) {
             return;
         }
 
-        $admin_userId = $admin_user->getId();
+        $adminUserId = $adminUser->getId();
 
-        $admin_userIdCriteria = new Criteria();
-        $admin_userIdCriteria->addFilter(new EqualsFilter('admin_userId', $admin_userId));
-        $admin_userIdCriteria->addAssociation('admin_user');
+        $adminUserIdCriteria = new Criteria();
+        $adminUserIdCriteria->addFilter(new EqualsFilter('admin_userId', $adminUserId));
+        $adminUserIdCriteria->addAssociation('admin_user');
 
-        if ($existingRecovery = $this->getUserRecovery($admin_userIdCriteria, $context)) {
+        if ($existingRecovery = $this->getUserRecovery($adminUserIdCriteria, $context)) {
             $this->deleteRecoveryForUser($existingRecovery, $context);
         }
 
         $recoveryData = [
-            'admin_userId' => $admin_userId,
+            'admin_userId' => $adminUserId,
             'hash' => Random::getAlphanumericString(32),
         ];
 
         $this->admin_userRecoveryRepo->create([$recoveryData], $context);
 
-        $recovery = $this->getUserRecovery($admin_userIdCriteria, $context);
+        $recovery = $this->getUserRecovery($adminUserIdCriteria, $context);
 
         if (!$recovery) {
             return;
@@ -154,17 +154,17 @@ class AdminUserRecoveryService
         $criteria->addFilter(new EqualsFilter('hash', $hash));
         $criteria->addAssociation('admin_user');
 
-        $admin_user = $this->getUserRecovery($criteria, $context);
+        $adminUser = $this->getUserRecovery($criteria, $context);
 
-        return $admin_user?->getUser();
+        return $adminUser?->getUser();
     }
 
-    private function getUserByEmail(string $admin_userEmail, Context $context): ?AdminUserEntity
+    private function getUserByEmail(string $adminUserEmail, Context $context): ?AdminUserEntity
     {
         $criteria = new Criteria();
 
         $criteria->addFilter(
-            new EqualsFilter('email', $admin_userEmail)
+            new EqualsFilter('email', $adminUserEmail)
         );
 
         return $this->admin_userRepo->search($criteria, $context)->getEntities()->first();
@@ -175,10 +175,10 @@ class AdminUserRecoveryService
         return $this->admin_userRecoveryRepo->search($criteria, $context)->getEntities()->first();
     }
 
-    private function deleteRecoveryForUser(AdminUserRecoveryEntity $admin_userRecoveryEntity, Context $context): void
+    private function deleteRecoveryForUser(AdminUserRecoveryEntity $adminUserRecoveryEntity, Context $context): void
     {
         $recoveryData = [
-            'id' => $admin_userRecoveryEntity->getId(),
+            'id' => $adminUserRecoveryEntity->getId(),
         ];
 
         $this->admin_userRecoveryRepo->delete([$recoveryData], $context);

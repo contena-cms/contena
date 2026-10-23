@@ -7,6 +7,7 @@ use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ElasticsearchBlogException extends HttpException
 {

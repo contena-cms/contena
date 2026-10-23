@@ -38,7 +38,6 @@ class TestEvent extends Event implements FlowEventAware
     {
         return (new EventDataCollection())
             ->add('user', new EntityType(UserDefinition::class))
-            ->add('order', new EntityType(OrderDefinition::class))
         ;
     }
 }

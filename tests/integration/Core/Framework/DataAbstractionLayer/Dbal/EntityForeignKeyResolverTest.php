@@ -23,6 +23,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\DeliveryTime\DeliveryTimeEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

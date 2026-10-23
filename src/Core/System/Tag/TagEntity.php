@@ -9,6 +9,7 @@ use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\User\UserCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

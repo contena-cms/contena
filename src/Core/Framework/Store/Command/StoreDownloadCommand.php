@@ -19,6 +19,7 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
  * @internal
@@ -31,14 +32,14 @@ class StoreDownloadCommand extends Command
 {
     /**
      * @param EntityRepository<PluginCollection> $pluginRepo
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
         private readonly StoreClient $storeClient,
         private readonly EntityRepository $pluginRepo,
         private readonly PluginManagementService $pluginManagementService,
         private readonly PluginLifecycleService $pluginLifecycleService,
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
     ) {
         parent::__construct();
     }
@@ -56,9 +57,9 @@ class StoreDownloadCommand extends Command
         $context = Context::createCLIContext();
 
         $pluginName = (string) $input->getOption('pluginName');
-        $admin_user = $input->getOption('admin_user');
+        $adminUser = $input->getOption('admin_user');
 
-        $context = $this->getUserContextFromInput($admin_user, $context);
+        $context = $this->getUserContextFromInput($adminUser, $context);
 
         $this->validatePluginIsNotManagedByComposer($pluginName, $context);
 
@@ -84,21 +85,21 @@ class StoreDownloadCommand extends Command
         return self::SUCCESS;
     }
 
-    private function getUserContextFromInput(?string $admin_userName, Context $context): Context
+    private function getUserContextFromInput(?string $adminUserName, Context $context): Context
     {
-        if (!$admin_userName) {
+        if (!$adminUserName) {
             return $context;
         }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('admin_user.username', $admin_userName));
+        $criteria->addFilter(new EqualsFilter('admin_user.username', $adminUserName));
 
-        $admin_userEntity = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
-        if ($admin_userEntity === null) {
+        $adminUserEntity = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        if ($adminUserEntity === null) {
             return $context;
         }
 
-        return Context::createCLIContext(new AdminApiSource($admin_userEntity->getId()));
+        return Context::createCLIContext(new AdminApiSource($adminUserEntity->getId()));
     }
 
     private function validatePluginIsNotManagedByComposer(string $pluginName, Context $context): void

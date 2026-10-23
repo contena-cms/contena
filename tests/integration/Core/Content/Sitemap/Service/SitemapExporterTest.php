@@ -31,6 +31,8 @@ use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\Test\Generator;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Contena\Core\Framework\Test\Seo\FrontendChannelTestHelper;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

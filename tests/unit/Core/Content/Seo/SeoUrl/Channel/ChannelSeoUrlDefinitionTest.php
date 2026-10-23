@@ -71,7 +71,7 @@ class ChannelSeoUrlDefinitionTest extends TestCase
      * The API automatically prefixes field names with the entity name (e.g., "isCanonical" becomes "seo_url.isCanonical").
      */
     #[DataProvider('provideApiFilterOverrides')]
-    public function testProcessCriteriaRespectsApiProvidedFilter(string $field, ?bool $admin_userValue): void
+    public function testProcessCriteriaRespectsApiProvidedFilter(string $field, ?bool $adminUserValue): void
     {
         $definition = new ChannelSeoUrlDefinition();
         $criteria = new Criteria();
@@ -80,7 +80,7 @@ class ChannelSeoUrlDefinitionTest extends TestCase
         // Simulate API request - QueryStringParser adds entity prefix to field names
         $filter = QueryStringParser::fromArray(
             $definition,
-            ['type' => 'equals', 'field' => $field, 'value' => $admin_userValue],
+            ['type' => 'equals', 'field' => $field, 'value' => $adminUserValue],
             new SearchRequestException()
         );
 
@@ -111,7 +111,7 @@ class ChannelSeoUrlDefinitionTest extends TestCase
 
         $preservedFilter = reset($prefixedFilters);
         static::assertInstanceOf(EqualsFilter::class, $preservedFilter);
-        static::assertSame($admin_userValue, $preservedFilter->getValue(), "AdminUser-provided $field value should be preserved");
+        static::assertSame($adminUserValue, $preservedFilter->getValue(), "AdminUser-provided $field value should be preserved");
     }
 
     /**

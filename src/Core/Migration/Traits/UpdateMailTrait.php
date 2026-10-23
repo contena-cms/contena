@@ -6,6 +6,7 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 
 trait UpdateMailTrait
 {

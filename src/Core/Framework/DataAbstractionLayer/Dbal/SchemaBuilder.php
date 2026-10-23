@@ -6,7 +6,6 @@ use Doctrine\DBAL\Schema\PrimaryKeyConstraint;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Types\Types;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
 use Contena\Core\Content\Cms\DataAbstractionLayer\Field\SlotConfigField;
 use Contena\Core\Content\Flow\DataAbstractionLayer\Field\FlowTemplateConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
@@ -116,7 +115,6 @@ class SchemaBuilder
         ManyToManyIdField::class => Types::JSON,
         SlotConfigField::class => Types::JSON,
         FlowTemplateConfigField::class => Types::JSON,
-        CheapestPriceField::class => Types::JSON,
 
         ChildCountField::class => Types::INTEGER,
         IntField::class => Types::INTEGER,

@@ -13,8 +13,6 @@ class ExampleBundle extends Plugin
     public function getAdditionalBundles(AdditionalBundleParameters $parameters): array
     {
         return [
-            new FeatureA(),
-            new FeatureB(),
         ];
     }
 }

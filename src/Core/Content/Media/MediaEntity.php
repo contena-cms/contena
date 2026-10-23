@@ -23,6 +23,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\AdminUserEntity;
 use Contena\Core\System\Tag\TagCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @phpstan-type MediaConfig array{'spatialObject': array{'arReady': bool, 'arPlacement': string}}
@@ -32,7 +34,7 @@ class MediaEntity extends Entity
     use EntityCustomFieldsTrait;
     use EntityIdTrait;
 
-    protected ?string $admin_userId = null;
+    protected ?string $adminUserId = null;
 
     protected ?string $mimeType = null;
 
@@ -64,7 +66,7 @@ class MediaEntity extends Entity
 
     protected ?string $fileName = null;
 
-    protected ?AdminUserEntity $admin_user = null;
+    protected ?AdminUserEntity $adminUser = null;
 
     protected ?MediaTranslationCollection $translations = null;
 
@@ -151,9 +153,9 @@ class MediaEntity extends Entity
         return $this->admin_userId;
     }
 
-    public function setUserId(string $admin_userId): void
+    public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $admin_userId;
+        $this->admin_userId = $adminUserId;
     }
 
     public function getMimeType(): ?string
@@ -249,9 +251,9 @@ class MediaEntity extends Entity
         return $this->admin_user;
     }
 
-    public function setUser(AdminUserEntity $admin_user): void
+    public function setUser(AdminUserEntity $adminUser): void
     {
-        $this->admin_user = $admin_user;
+        $this->admin_user = $adminUser;
     }
 
     public function getTranslations(): ?MediaTranslationCollection

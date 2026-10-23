@@ -7,6 +7,8 @@ use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

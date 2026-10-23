@@ -23,8 +23,6 @@ class ScheduleProviderTest extends TestCase
     public function testScheduleIsBuildFromScheduledTasks(): void
     {
         $tasks = [
-            new TestTask1(),
-            new TestTask2(),
         ];
 
         $scheduleProvider = new ScheduleProvider(
@@ -58,9 +56,6 @@ class ScheduleProviderTest extends TestCase
     public function testScheduleIsOverwrittenByDatabase(): void
     {
         $tasks = [
-            new TestTask1(),
-            new TestTask2(),
-            new TestTask3(),
         ];
 
         $connection = static::createStub(Connection::class);

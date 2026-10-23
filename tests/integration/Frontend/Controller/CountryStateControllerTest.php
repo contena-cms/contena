@@ -19,6 +19,8 @@ use Contena\Frontend\Pagelet\Country\CountryStateDataPageletLoadedEvent;
 use Contena\Frontend\Pagelet\Country\CountryStateDataPageletLoadedHook;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

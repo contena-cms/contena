@@ -38,14 +38,14 @@ class UpdatedByFieldSerializer extends FkFieldSerializer
             return;
         }
 
-        $admin_userId = $context->getSource()->getUserId();
+        $adminUserId = $context->getSource()->getUserId();
 
         /** @deprecated tag:v6.8.0 - remove early return */
-        if (!$admin_userId && !Feature::isActive('v6.8.0.0')) {
+        if (!$adminUserId && !Feature::isActive('v6.8.0.0')) {
             return;
         }
 
-        $data->setValue($admin_userId);
+        $data->setValue($adminUserId);
 
         yield from parent::encode($field, $existence, $data, $parameters);
     }

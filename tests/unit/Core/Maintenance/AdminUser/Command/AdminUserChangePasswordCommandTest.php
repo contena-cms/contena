@@ -25,8 +25,8 @@ class AdminUserChangePasswordCommandTest extends TestCase
 
     public function testUnknownUser(): void
     {
-        $admin_userRepo = StaticEntityRepository::of(AdminUserCollection::class, [[]]);
-        $command = new AdminUserChangePasswordCommand($admin_userRepo);
+        $adminUserRepo = StaticEntityRepository::of(AdminUserCollection::class, [[]]);
+        $command = new AdminUserChangePasswordCommand($adminUserRepo);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -41,11 +41,11 @@ class AdminUserChangePasswordCommandTest extends TestCase
 
     public function testKnownUser(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $newPassword = Uuid::randomHex();
 
-        $admin_userRepo = StaticEntityRepository::of(AdminUserCollection::class, [[$admin_userId]]);
-        $command = new AdminUserChangePasswordCommand($admin_userRepo);
+        $adminUserRepo = StaticEntityRepository::of(AdminUserCollection::class, [[$adminUserId]]);
+        $command = new AdminUserChangePasswordCommand($adminUserRepo);
 
         $commandTester = new CommandTester($command);
         $commandTester->execute([
@@ -57,16 +57,16 @@ class AdminUserChangePasswordCommandTest extends TestCase
         static::assertStringContainsString($expected, $commandTester->getDisplay());
         static::assertSame(0, $commandTester->getStatusCode());
 
-        $updates = $admin_userRepo->updates;
+        $updates = $adminUserRepo->updates;
         $updatedData = $updates[0][0];
-        static::assertSame($admin_userId, $updatedData['id']);
+        static::assertSame($adminUserId, $updatedData['id']);
         static::assertSame($newPassword, $updatedData['password']);
     }
 
     public function testEmptyPasswordOption(): void
     {
-        $admin_userRepo = static::createStub(EntityRepository::class);
-        $command = new AdminUserChangePasswordCommand($admin_userRepo);
+        $adminUserRepo = static::createStub(EntityRepository::class);
+        $command = new AdminUserChangePasswordCommand($adminUserRepo);
 
         $commandTester = new CommandTester($command);
 

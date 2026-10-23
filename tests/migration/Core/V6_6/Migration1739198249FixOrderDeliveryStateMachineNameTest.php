@@ -12,6 +12,7 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_6\Migration1739198249FixOrderDeliveryStateMachineName;
+use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 
 /**
  * @internal

@@ -4,6 +4,7 @@ namespace Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

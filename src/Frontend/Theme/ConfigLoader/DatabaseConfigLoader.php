@@ -14,6 +14,7 @@ use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeConfigField;
 use Contena\Frontend\Theme\ThemeEntity;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 class DatabaseConfigLoader extends AbstractConfigLoader
 {

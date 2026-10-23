@@ -25,6 +25,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use Contena\Frontend\Theme\Exception\ThemeConfigException;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 class ThemeService implements ResetInterface
 {

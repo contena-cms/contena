@@ -13,6 +13,7 @@ use Contena\Core\Framework\App\Lifecycle\Handler\FlowEventLifecycleHandler;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -27,7 +28,6 @@ class FlowEventLifecycleHandlerTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {

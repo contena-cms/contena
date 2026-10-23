@@ -6,6 +6,7 @@ use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFil
 use Contena\Core\Content\ImportExport\ImportExportProfileEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -31,9 +32,9 @@ class ImportExportLogEntity extends Entity
 
     protected ?string $profileName = null;
 
-    protected ?AdminUserEntity $admin_user = null;
+    protected ?AdminUserEntity $adminUser = null;
 
-    protected ?string $admin_userId = null;
+    protected ?string $adminUserId = null;
 
     protected ?ImportExportProfileEntity $profile = null;
 
@@ -114,9 +115,9 @@ class ImportExportLogEntity extends Entity
         return $this->admin_user;
     }
 
-    public function setUser(AdminUserEntity $admin_userEntity): void
+    public function setUser(AdminUserEntity $adminUserEntity): void
     {
-        $this->admin_user = $admin_userEntity;
+        $this->admin_user = $adminUserEntity;
     }
 
     public function getUserId(): ?string
@@ -124,9 +125,9 @@ class ImportExportLogEntity extends Entity
         return $this->admin_userId;
     }
 
-    public function setUserId(string $admin_userId): void
+    public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $admin_userId;
+        $this->admin_userId = $adminUserId;
     }
 
     public function getProfile(): ?ImportExportProfileEntity

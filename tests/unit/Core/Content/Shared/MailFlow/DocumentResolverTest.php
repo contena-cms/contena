@@ -228,14 +228,6 @@ class DocumentResolverTest extends TestCase
         return new DocumentResolver($documentRepository ?? static::createStub(EntityRepository::class));
     }
 
-    private function createDocument(string $id, string $documentTypeId): DocumentEntity
-    {
-        $document = new DocumentEntity();
-        $document->setId($id);
-        $document->setDocumentTypeId($documentTypeId);
-
-        return $document;
-    }
 
     /**
      * @return EntityRepository<DocumentCollection>

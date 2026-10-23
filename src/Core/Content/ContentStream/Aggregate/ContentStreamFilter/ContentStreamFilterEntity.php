@@ -4,6 +4,8 @@ namespace Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter;
 
 use Contena\Core\Content\ContentStream\ContentStreamEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

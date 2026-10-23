@@ -3,6 +3,7 @@
 namespace Contena\Tests\Migration\Example\NoKernelInUnitTestsRule;
 
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

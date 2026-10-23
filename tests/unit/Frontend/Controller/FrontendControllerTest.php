@@ -48,7 +48,6 @@ use Twig\Error\SyntaxError;
 #[CoversClass(FrontendController::class)]
 class FrontendControllerTest extends TestCase
 {
-    private readonly TestFrontendController $controller;
 
     protected function setUp(): void
     {

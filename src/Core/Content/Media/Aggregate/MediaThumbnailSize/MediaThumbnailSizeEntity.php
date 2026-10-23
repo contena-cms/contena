@@ -5,6 +5,8 @@ namespace Contena\Core\Content\Media\Aggregate\MediaThumbnailSize;
 use Contena\Core\Content\Media\Aggregate\MediaFolderConfiguration\MediaFolderConfigurationCollection;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

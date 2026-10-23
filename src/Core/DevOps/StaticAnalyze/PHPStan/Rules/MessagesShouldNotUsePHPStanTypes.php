@@ -18,6 +18,7 @@ use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
 use Contena\Core\Framework\MessageQueue\LowPriorityMessageInterface;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @internal

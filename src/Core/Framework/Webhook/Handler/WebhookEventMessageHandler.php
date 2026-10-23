@@ -13,6 +13,7 @@ use Contena\Core\Framework\Webhook\Service\WebhookDeliveryService;
 use Contena\Core\Framework\Webhook\Service\WebhookHealthService;
 use Contena\Core\Framework\Webhook\WebhookException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use GuzzleHttp\Exception\BadResponseException;
 
 /**
  * @internal

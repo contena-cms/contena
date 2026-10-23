@@ -22,6 +22,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Content\ContentStream\Exception\EmptyContentStreamException;
 use Contena\Core\Content\ContentStream\Exception\NoFilterException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Content\ContentStream\Service\AbstractContentStreamBuilder;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class BlogListingRoute extends AbstractBlogListingRoute

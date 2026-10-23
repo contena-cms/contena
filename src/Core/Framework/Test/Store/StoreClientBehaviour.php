@@ -55,12 +55,12 @@ trait StoreClientBehaviour
 
     protected function createAdminStoreContext(): Context
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $storeToken = Uuid::randomHex();
 
         $data = [
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'localeId' => $this->getLocaleIdOfSystemLanguage(),
                 'username' => 'foobar',
                 'password' => 'asdasdasdasd',
@@ -73,7 +73,7 @@ trait StoreClientBehaviour
 
         $this->getUserRepository()->create($data, Context::createDefaultContext());
 
-        $source = new AdminApiSource($admin_userId);
+        $source = new AdminApiSource($adminUserId);
         $source->setIsAdmin(true);
 
         return Context::createDefaultContext($source);
@@ -84,23 +84,23 @@ trait StoreClientBehaviour
         /** @var AdminApiSource $source */
         $source = $context->getSource();
 
-        $admin_userId = $source->getUserId();
+        $adminUserId = $source->getUserId();
 
-        if ($admin_userId === null) {
+        if ($adminUserId === null) {
             throw new \RuntimeException('No admin_user id found in context');
         }
 
         /** @var AdminUserCollection $users */
-        $users = $this->getUserRepository()->search(new Criteria([$admin_userId]), $context)->getEntities();
+        $users = $this->getUserRepository()->search(new Criteria([$adminUserId]), $context)->getEntities();
 
         if ($users->count() === 0) {
-            throw new \RuntimeException('No admin_user found with id ' . $admin_userId);
+            throw new \RuntimeException('No admin_user found with id ' . $adminUserId);
         }
 
-        $admin_user = $users->first();
-        static::assertInstanceOf(AdminUserEntity::class, $admin_user);
+        $adminUser = $users->first();
+        static::assertInstanceOf(AdminUserEntity::class, $adminUser);
 
-        $token = $admin_user->getStoreToken();
+        $token = $adminUser->getStoreToken();
         static::assertIsString($token);
 
         return $token;

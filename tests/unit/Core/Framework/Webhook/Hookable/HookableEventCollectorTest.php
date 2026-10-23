@@ -42,7 +42,6 @@ class HookableEventCollectorTest extends TestCase
 
         $hookableEntityDefinitions = [
             $this->createBlogDefinition(),
-            new TestEntityWithAttribute(),
         ];
 
         $this->hookableEventCollector = new HookableEventCollector(
@@ -190,7 +189,6 @@ class HookableEventCollectorTest extends TestCase
             $definitionRegistry,
             new \ArrayIterator([
                 $this->createBlogDefinition(),
-                new TestEntityWithAttribute(),
             ]),
             []
         );
@@ -210,15 +208,12 @@ class HookableEventCollectorTest extends TestCase
             $this->definitionRegistry,
             [],
             new \ArrayIterator([
-                new TestHookableEventDescriber('duplicate.described.event', 'First duplicate event.', ['first:read']),
-                new TestHookableEventDescriber('duplicate.described.event', 'Second duplicate event.', ['second:read']),
             ])
         );
 
         $this->expectExceptionObject(
             WebhookException::duplicateDescribedEvent(
                 'duplicate.described.event',
-                TestHookableEventDescriber::class
             )
         );
 

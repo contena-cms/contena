@@ -21,9 +21,9 @@ class StoreService
     final public const CONFIG_KEY_STORE_LICENSE_EDITION = 'core.store.licenseEdition';
 
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
-    final public function __construct(private readonly EntityRepository $admin_userRepository)
+    final public function __construct(private readonly EntityRepository $adminUserRepository)
     {
     }
 
@@ -31,12 +31,12 @@ class StoreService
     {
         /** @var AdminApiSource $contextSource */
         $contextSource = $context->getSource();
-        $admin_userId = $contextSource->getUserId();
+        $adminUserId = $contextSource->getUserId();
 
         $storeToken = $accessToken->getShopUserToken()->getToken();
 
-        $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($admin_userId, $storeToken): void {
-            $this->admin_userRepository->update([['id' => $admin_userId, 'storeToken' => $storeToken]], $context);
+        $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($adminUserId, $storeToken): void {
+            $this->admin_userRepository->update([['id' => $adminUserId, 'storeToken' => $storeToken]], $context);
         });
     }
 
@@ -44,10 +44,10 @@ class StoreService
     {
         $contextSource = $context->getSource();
         \assert($contextSource instanceof AdminApiSource);
-        $admin_userId = $contextSource->getUserId();
+        $adminUserId = $contextSource->getUserId();
 
-        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($admin_userId): void {
-            $this->admin_userRepository->update([['id' => $admin_userId, 'storeToken' => null]], $context);
+        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($adminUserId): void {
+            $this->admin_userRepository->update([['id' => $adminUserId, 'storeToken' => null]], $context);
         });
     }
 }

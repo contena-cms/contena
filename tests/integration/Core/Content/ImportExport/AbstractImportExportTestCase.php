@@ -38,6 +38,14 @@ use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\FilesystemBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\RequestStackTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
 
 /**
  * @internal

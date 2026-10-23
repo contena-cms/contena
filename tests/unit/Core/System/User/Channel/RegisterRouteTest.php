@@ -1622,66 +1622,6 @@ class RegisterRouteTest extends TestCase
         return $repository;
     }
 
-    /**
-     * @param EntityRepository<SalutationCollection>|null $salutationRepository
-     * @param EntityRepository<UserCollection>|StaticEntityRepository<UserCollection>|null $userRepository
-     * @param ChannelRepository<CountryCollection>|null $countryRepository
-     */
-    private function createRegisterRoute(
-        ?DataValidator $dataValidator = null,
-        ?EventDispatcherInterface $eventDispatcher = null,
-        ?DataValidationFactoryInterface $addressValidationFactory = null,
-        ?StoreApiCustomFieldMapper $customFieldMapper = null,
-        ?EntityRepository $salutationRepository = null,
-        ?StaticSystemConfigService $systemConfigService = null,
-        EntityRepository|StaticEntityRepository|null $userRepository = null,
-        ?DataValidationFactoryInterface $accountValidationFactory = null,
-        ?UserNewsletterChannelsUpdater $userNewsletterChannelsUpdater = null,
-        ?DoubleOptInService $doubleOptInService = null,
-        ?ChannelRepository $countryRepository = null,
-    ): RegisterRoute {
-        $dataValidator ??= static::createStub(DataValidator::class);
-        $eventDispatcher ??= new EventDispatcher();
-        $accountValidationFactory ??= static::createStub(DataValidationFactoryInterface::class);
-        $addressValidationFactory ??= static::createStub(DataValidationFactoryInterface::class);
-        $customFieldMapper ??= static::createStub(StoreApiCustomFieldMapper::class);
-        $salutationRepository ??= static::createStub(EntityRepository::class);
-        $systemConfigService ??= new StaticSystemConfigService([
-            TestDefaults::CHANNEL => [
-                'core.loginRegistration.passwordMinLength' => '8',
-            ],
-            'core.systemWideLoginRegistration.isUserBoundToChannel' => true,
-        ]);
-        $userRepository ??= $this->createUserRepository();
-        $userNewsletterChannelsUpdater ??= static::createStub(UserNewsletterChannelsUpdater::class);
-        $countryRepository ??= static::createStub(ChannelRepository::class);
-
-        if ($doubleOptInService === null) {
-            $doubleOptInService = static::createStub(DoubleOptInService::class);
-            $doubleOptInService->method('mapUserDoubleOptInData')->willReturnArgument(0);
-        }
-
-        return new RegisterRoute(
-            $eventDispatcher,
-            static::createStub(NumberRangeValueGeneratorInterface::class),
-            $dataValidator,
-            $accountValidationFactory,
-            $addressValidationFactory,
-            $systemConfigService,
-            $userRepository,
-            static::createStub(ChannelContextPersister::class),
-            $countryRepository,
-            static::createStub(Connection::class),
-            static::createStub(ChannelContextService::class),
-            $customFieldMapper,
-            $salutationRepository,
-            static::createStub(DataValidationFactoryInterface::class),
-            $doubleOptInService,
-            $userNewsletterChannelsUpdater,
-            new NativeClock(),
-            new ExtensionDispatcher(new EventDispatcher()),
-        );
-    }
 
     /**
      * @param array<string, mixed> $overrides

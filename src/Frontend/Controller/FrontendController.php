@@ -25,6 +25,11 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Twig\Environment;
+use Contena\Frontend\Controller\Exception\FrontendException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 abstract class FrontendController extends AbstractController
 {

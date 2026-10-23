@@ -3,6 +3,7 @@
 namespace Contena\Core\System\CustomEntity;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class CustomEntityEntity extends Entity
 {

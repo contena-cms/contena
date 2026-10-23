@@ -4,6 +4,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogTranslation;
 
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

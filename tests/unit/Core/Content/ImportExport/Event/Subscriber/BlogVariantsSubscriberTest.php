@@ -172,7 +172,6 @@ class BlogVariantsSubscriberTest extends TestCase
             new EntityWrittenContainerEvent(
                 $this->context,
                 new NestedEventCollection([
-                    new EntityWrittenEvent(BlogDefinition::ENTITY_NAME, [$writeResult], $this->context),
                 ]),
                 []
             )

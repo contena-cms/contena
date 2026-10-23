@@ -4,6 +4,7 @@ namespace Contena\Core\System\Locale\Aggregate\LocaleTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\Locale\LocaleEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

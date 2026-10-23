@@ -28,6 +28,7 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\System\User\Exception\DuplicateWishlistBlogException;
 use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * @internal

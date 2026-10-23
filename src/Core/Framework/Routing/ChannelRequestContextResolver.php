@@ -11,6 +11,7 @@ use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
 use Contena\Core\System\Channel\Context\ChannelContextServiceParameters;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Routing\RouteScopeCheckTrait;
 
 class ChannelRequestContextResolver implements RequestContextResolverInterface
 {

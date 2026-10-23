@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\Subscriber\CategoryTreeMovedSubscriber;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
@@ -47,7 +46,6 @@ class CategoryTreeMovedSubscriberTest extends TestCase
         $event = new EntityWrittenEvent(
             ChannelDefinition::ENTITY_NAME,
             [
-                new EntityWriteResult('test', ['navigationCategoryId' => 'asd'], ChannelDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE),
             ],
             Context::createCLIContext()
         );

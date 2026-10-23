@@ -21,6 +21,7 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurati
 use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ScssPhpCompiler;
 use Contena\Frontend\Theme\Subscriber\ThemeCompilerEnrichScssVarSubscriber;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -121,11 +122,9 @@ SCSS;
     public function testHandlesDatabaseException(): void
     {
         $configurationService = $this->getConfigurationServiceDbException([
-            new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
         ]);
 
         $frontendPluginRegistry = $this->getFrontendPluginRegistry([
-            new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
         ]);
 
         $event = new ThemeCompilerEnrichScssVariablesEvent(

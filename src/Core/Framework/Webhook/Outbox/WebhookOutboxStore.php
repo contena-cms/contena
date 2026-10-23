@@ -10,6 +10,7 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogDefinition;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 /**
  * @internal

@@ -18,7 +18,6 @@ use Contena\Core\Framework\Uuid\Uuid;
 #[CoversClass(CheapestPriceAccessorBuilder::class)]
 class CheapestPriceAccessorBuilderTest extends TestCase
 {
-    protected CheapestPriceAccessorBuilder $builder;
 
     protected function setUp(): void
     {

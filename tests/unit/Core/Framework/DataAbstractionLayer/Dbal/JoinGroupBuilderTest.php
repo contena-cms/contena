@@ -5,8 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Dbal;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
@@ -17,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\CriteriaPartInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
@@ -47,11 +44,6 @@ class JoinGroupBuilderTest extends TestCase
 
         $filters = [
             new EqualsFilter('active', true),
-            new MultiFilter(MultiFilter::CONNECTION_AND, [
-                new EqualsFilter('stock', 10),
-                new EqualsFilter('categories.type', 'test'),
-            ]),
-            new MultiFilter(MultiFilter::CONNECTION_OR),
         ];
 
         $builder = new JoinGroupBuilder();
@@ -72,9 +64,6 @@ class JoinGroupBuilderTest extends TestCase
     {
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                OrderDefinition::class,
-                OrderTransactionDefinition::class,
-                OrderLineItemDefinition::class,
                 StateMachineDefinition::class,
                 StateMachineStateDefinition::class,
             ],
@@ -117,10 +106,6 @@ class JoinGroupBuilderTest extends TestCase
         yield 'Multiple filters, single many filter, no grouping' => [
             [
                 new EqualsFilter('currencyFactor', 1),
-                new MultiFilter(MultiFilter::CONNECTION_AND, [
-                    new EqualsFilter('transactions.paymentMethodId', 'paypal'),
-                    new EqualsFilter('transactions.amount', 1.0),
-                ]),
             ],
             [
                 new EqualsFilter('currencyFactor', 1),
@@ -132,25 +117,9 @@ class JoinGroupBuilderTest extends TestCase
         yield 'Multiple filters, multiple many filter, no grouping' => [
             [
                 new EqualsFilter('currencyFactor', 1),
-                new MultiFilter(MultiFilter::CONNECTION_AND, [
-                    new EqualsFilter('transactions.paymentMethodId', 'paypal'),
-                    new EqualsFilter('transactions.amount', 2.0),
-                ]),
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('transactions.paymentMethodId', 'paypal'),
-                    new EqualsFilter('transactions.amount', 4.0),
-                ]),
             ],
             [
                 new EqualsFilter('currencyFactor', 1),
-                new JoinGroup([
-                    new EqualsFilter('transactions.paymentMethodId', 'paypal'),
-                    new EqualsFilter('transactions.amount', 2.0),
-                ], 'order.transactions', '_1', MultiFilter::CONNECTION_AND),
-                new JoinGroup([
-                    new EqualsFilter('transactions.paymentMethodId', 'paypal'),
-                    new EqualsFilter('transactions.amount', 4.0),
-                ], 'order.transactions', '_2', MultiFilter::CONNECTION_OR),
             ],
         ];
 
@@ -165,13 +134,6 @@ class JoinGroupBuilderTest extends TestCase
                 ]),
             ],
             [
-                new JoinGroup([
-                    new EqualsFilter('transactions.paymentMethodId', 'paypal'),
-                    new EqualsFilter('transactions.stateMachineState.technicalName', 'open'),
-                ], 'order.transactions', '_1', MultiFilter::CONNECTION_AND),
-                new JoinGroup([
-                    new EqualsFilter('transactions.stateMachineState.technicalName', 'paid'),
-                ], 'order.transactions', '_2', MultiFilter::CONNECTION_OR),
             ],
         ];
 

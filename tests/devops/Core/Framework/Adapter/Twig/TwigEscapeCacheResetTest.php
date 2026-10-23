@@ -7,6 +7,7 @@ use Contena\Core\Framework\Adapter\Twig\Runtime\CachedEscaperRuntime;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;
 use Twig\Environment;
 use Twig\Runtime\EscaperRuntime;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * Drives the real `services_resetter` (not `reset()` directly), so it fails unless the reset actually runs.

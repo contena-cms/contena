@@ -198,8 +198,4 @@ class AppCheckoutGatewayTest extends TestCase
         $gateway->process(new CheckoutGatewayPayloadStruct(new Cart('hatoken'), $context, new PaymentMethodCollection(), new ShippingMethodCollection()));
     }
 
-    private function getRegistry(): CheckoutGatewayCommandRegistry
-    {
-        return new CheckoutGatewayCommandRegistry([new StubCheckoutGatewayHandler()]);
-    }
 }

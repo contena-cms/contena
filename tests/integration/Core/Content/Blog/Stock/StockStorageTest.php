@@ -9,9 +9,7 @@ use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
 use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
@@ -36,6 +34,9 @@ use Contena\Core\System\StateMachine\Transition;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\CountryAddToChannelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 
 /**
  * @internal
@@ -56,7 +57,6 @@ class StockStorageTest extends TestCase
      */
     private EntityRepository $lineItemRepository;
 
-    private CartService $cartService;
 
     /**
      * @var list<string>

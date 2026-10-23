@@ -11,6 +11,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Storer\FlowStorer;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @implements Rule<MethodCall>

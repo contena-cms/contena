@@ -7,6 +7,7 @@ use League\OAuth2\Server\Grant\AuthCodeGrant;
 use League\OAuth2\Server\RequestTypes\AuthorizationRequestInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Contena\Core\Framework\Api\ApiException;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 /**
  * Authorization code grant that only accepts the `S256` PKCE code challenge method.

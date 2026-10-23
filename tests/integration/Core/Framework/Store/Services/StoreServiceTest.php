@@ -10,6 +10,8 @@ use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\Framework\Store\Struct\AccessTokenStruct;
 use Contena\Core\Framework\Store\Struct\ShopUserTokenStruct;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -43,8 +45,8 @@ class StoreServiceTest extends TestCase
             $accessTokenStruct
         );
 
-        $admin_user = $this->fetchUser($adminStoreContext);
-        static::assertSame('updated-store-token', $admin_user?->getStoreToken());
+        $adminUser = $this->fetchUser($adminStoreContext);
+        static::assertSame('updated-store-token', $adminUser?->getStoreToken());
     }
 
     public function testRemoveStoreToken(): void
@@ -61,18 +63,18 @@ class StoreServiceTest extends TestCase
         );
         $this->storeService->removeStoreToken($adminStoreContext);
 
-        $admin_user = $this->fetchUser($adminStoreContext);
-        static::assertNotNull($admin_user);
-        static::assertNull($admin_user->getStoreToken());
+        $adminUser = $this->fetchUser($adminStoreContext);
+        static::assertNotNull($adminUser);
+        static::assertNull($adminUser->getStoreToken());
     }
 
     private function fetchUser(Context $context): ?AdminUserEntity
     {
         /** @var AdminApiSource $adminSource */
         $adminSource = $context->getSource();
-        /** @var string $admin_userId */
-        $admin_userId = $adminSource->getUserId();
-        $criteria = new Criteria([$admin_userId]);
+        /** @var string $adminUserId */
+        $adminUserId = $adminSource->getUserId();
+        $criteria = new Criteria([$adminUserId]);
 
         return $this->getUserRepository()->search($criteria, $context)->getEntities()->first();
     }

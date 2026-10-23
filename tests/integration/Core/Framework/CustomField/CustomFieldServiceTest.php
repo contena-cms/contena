@@ -17,6 +17,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldCollection;
 use Contena\Core\System\CustomField\CustomFieldService;
 use Contena\Core\System\CustomField\CustomFieldTypes;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

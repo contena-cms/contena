@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\System\Snippet\Service\TranslationConfigLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

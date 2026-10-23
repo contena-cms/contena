@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommitData\VersionCommitDataDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Version\VersionDefinition;
 use Symfony\Component\Clock\Clock;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 
 /**
  * @codeCoverageIgnore
@@ -73,7 +72,6 @@ class VersionCommitDefinition extends EntityDefinition
             new IdField('integration_id', 'integrationId'),
             new AutoIncrementField(),
             new BoolField('is_merge', 'isMerge'),
-            (new StringField('message', 'message'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new OneToManyAssociationField('data', VersionCommitDataDefinition::class, 'version_commit_id'))->addFlags(new CascadeDelete()),
             new ManyToOneAssociationField('version', 'version_id', VersionDefinition::class, 'id', false),
         ]);

@@ -13,6 +13,7 @@ use Contena\Frontend\Framework\FrontendFrameworkException;
 use Contena\Frontend\Framework\Media\FrontendMediaUploader;
 use Contena\Frontend\Framework\Media\FrontendMediaValidatorRegistry;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

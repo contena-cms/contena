@@ -12,6 +12,10 @@ use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Contena\Elasticsearch\Profiler\ClientProfiler;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
+use Contena\Elasticsearch\Test\AdminElasticsearchTestBehaviour;
 
 /**
  * @internal

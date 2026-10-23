@@ -54,7 +54,6 @@ use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Demodata\PersonalData\CleanPersonalDataCommand;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature\Command\FeatureDisableCommand;
 use Contena\Core\Framework\Feature\Command\FeatureDumpCommand;
@@ -321,14 +320,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(MigrationCollectionLoader::class),
             service('cache.object'),
             param('kernel.contena_version'),
-        ])
-        ->tag('console.command');
-
-    $services->set(CleanPersonalDataCommand::class)
-        ->args([
-            service(Connection::class),
-            service('user.repository'),
-            service(ClockInterface::class),
         ])
         ->tag('console.command');
 

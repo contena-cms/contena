@@ -20,6 +20,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 use Contena\Core\Content\Media\Exception\IllegalFileNameException;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 
 /**
  * @internal

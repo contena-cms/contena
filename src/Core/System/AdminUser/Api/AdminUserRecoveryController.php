@@ -19,9 +19,9 @@ class AdminUserRecoveryController extends AbstractController
      * @internal
      */
     public function __construct(
-        private readonly AdminUserRecoveryService $admin_userRecoveryService,
+        private readonly AdminUserRecoveryService $adminUserRecoveryService,
         private readonly RateLimiter $rateLimiter,
-        private readonly bool $admin_userRecoveryEnabled = true
+        private readonly bool $adminUserRecoveryEnabled = true
     ) {
     }
 
@@ -76,8 +76,8 @@ class AdminUserRecoveryController extends AbstractController
             return $this->getErrorResponse();
         }
 
-        $admin_user = $this->admin_userRecoveryService->getUserByHash($hash, $context);
-        if ($admin_user === null) {
+        $adminUser = $this->admin_userRecoveryService->getUserByHash($hash, $context);
+        if ($adminUser === null) {
             return $this->getErrorResponse();
         }
 
@@ -85,11 +85,11 @@ class AdminUserRecoveryController extends AbstractController
             return $this->getErrorResponse();
         }
 
-        $usernameKey = strtolower($admin_user->getUsername());
+        $usernameKey = strtolower($adminUser->getUsername());
         $this->rateLimiter->reset(RateLimiter::OAUTH, $usernameKey . '-' . $request->getClientIp());
         $this->rateLimiter->resetIfConfigured(RateLimiter::OAUTH_USER, $usernameKey);
         $this->rateLimiter->resetIfConfigured(RateLimiter::OAUTH_CLIENT, (string) $request->getClientIp());
-        $this->rateLimiter->reset(RateLimiter::USER_RECOVERY, strtolower($admin_user->getEmail()) . '-' . $request->getClientIp());
+        $this->rateLimiter->reset(RateLimiter::USER_RECOVERY, strtolower($adminUser->getEmail()) . '-' . $request->getClientIp());
 
         return new Response();
     }

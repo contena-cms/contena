@@ -23,6 +23,7 @@ use Contena\Core\Migration\V6_7\Migration1775460999AddParentNameToBlogSearchConf
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Clock\MockClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

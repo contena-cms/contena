@@ -197,7 +197,6 @@ class SearchKeywordUpdaterTest extends TestCase
         return new SearchKeywordUpdater(
             $connection ?? $this->createConnection(),
             $languageRepository ?? new StaticEntityRepository([
-                new LanguageCollection([$this->createLanguage(Defaults::LANGUAGE_SYSTEM)]),
             ]),
             $blogRepository,
             $analyzer,

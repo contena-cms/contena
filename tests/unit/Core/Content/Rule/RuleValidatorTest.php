@@ -14,8 +14,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
@@ -78,16 +76,6 @@ class RuleValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext($context),
             [
-                new UpdateCommand(
-                    $definition,
-                    $payload,
-                    ['id' => $conditionIdBytes],
-                    EntityExistence::createForEntity(
-                        RuleConditionDefinition::ENTITY_NAME,
-                        ['id' => $conditionIdBytes]
-                    ),
-                    '/0'
-                ),
             ]
         );
 

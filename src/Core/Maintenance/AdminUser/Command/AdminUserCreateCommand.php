@@ -20,7 +20,7 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 )]
 class AdminUserCreateCommand extends Command
 {
-    public function __construct(private readonly AdminUserProvisioner $admin_userProvisioner)
+    public function __construct(private readonly AdminUserProvisioner $adminUserProvisioner)
     {
         parent::__construct();
     }

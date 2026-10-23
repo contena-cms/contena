@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Framework\Twig\Extension;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Twig\Extension\NodeExtension;
@@ -185,10 +184,6 @@ class TestController extends FrontendController
         $this->templateFinder = $templateFinder;
     }
 
-    protected function addCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-        parent::addCartErrors($cart, $filter);
-    }
 
     /**
      * @param string $message

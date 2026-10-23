@@ -26,7 +26,6 @@ use Symfony\Component\Filesystem\Filesystem as Io;
 #[CoversClass(FrontendSnippetStorage::class)]
 class FrontendSnippetStorageTest extends TestCase
 {
-    private SnippetSnapshotAdapter $adapter;
 
     private Filesystem $filesystem;
 

@@ -68,7 +68,6 @@ class BlogControllerTest extends TestCase
 
     private Stub&AbstractGaranLabelRoute $garanLabelRouteMock;
 
-    private BlogControllerStub $controller;
 
     protected function setUp(): void
     {

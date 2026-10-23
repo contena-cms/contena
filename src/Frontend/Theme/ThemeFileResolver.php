@@ -6,6 +6,7 @@ use Contena\Frontend\Theme\FrontendPluginConfiguration\File;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 class ThemeFileResolver
 {

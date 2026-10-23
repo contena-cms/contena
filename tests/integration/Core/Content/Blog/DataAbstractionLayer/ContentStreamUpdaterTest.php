@@ -35,6 +35,8 @@ use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Messenger\TraceableMessageBus;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal

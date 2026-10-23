@@ -11,6 +11,7 @@ use Contena\Core\Content\ImportExport\Exception\ProcessingException;
 use Contena\Core\Content\ImportExport\Exception\ProfileNotFoundException;
 use Contena\Core\Content\ImportExport\Exception\RequiredByAdminUserException;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Content\ImportExport\Exception\FileNotFoundException;
 
 class ImportExportException extends HttpException
 {

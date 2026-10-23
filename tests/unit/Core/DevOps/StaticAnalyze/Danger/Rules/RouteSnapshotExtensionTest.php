@@ -23,7 +23,6 @@ class RouteSnapshotExtensionTest extends TestCase
     public function testSnapshotGrowth(int $additions, int $deletions, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile(self::SNAPSHOT_PATH, File::STATUS_MODIFIED, '', '', $additions, $deletions),
         ])));
 
         (new RouteSnapshotExtension())($context);

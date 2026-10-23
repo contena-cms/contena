@@ -21,7 +21,6 @@ class Migration1787205808AddNumberRangeReadAclPrivilegeTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1787205808AddNumberRangeReadAclPrivilege $migration;
 
     protected function setUp(): void
     {

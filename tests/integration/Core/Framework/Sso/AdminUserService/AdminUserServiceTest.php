@@ -13,6 +13,8 @@ use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Sso\TokenService\TokenResult;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -22,7 +24,7 @@ class AdminUserServiceTest extends TestCase
     use DatabaseTransactionBehaviour;
     use KernelTestBehaviour;
 
-    private AdminUserService $admin_userService;
+    private AdminUserService $adminUserService;
 
     private Connection $connection;
 
@@ -40,12 +42,12 @@ class AdminUserServiceTest extends TestCase
 
     public function testGetAndUpdateUserByExternalTokenWithoutTokenUser(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $email = 'test@email.com';
         $subject = Uuid::randomHex();
 
         $fakeUserInstaller = new FakeUserInstaller($this->connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, $email);
+        $fakeUserInstaller->installBaseUserData($adminUserId, $email);
 
         $idToken = (new FakeTokenGenerator())->setEmail($email)->setSubject($subject)->generate(JwksIds::KEY_ID_ONE);
         $token = Uuid::randomHex();
@@ -61,7 +63,7 @@ class AdminUserServiceTest extends TestCase
         ], \JSON_THROW_ON_ERROR));
 
         $externalAuthUser = $this->admin_userService->getAndUpdateUserByExternalToken($tokenResult);
-        static::assertSame($admin_userId, $externalAuthUser->admin_userId);
+        static::assertSame($adminUserId, $externalAuthUser->admin_userId);
         static::assertSame($refreshToken, $externalAuthUser->token?->refreshToken);
         static::assertSame($email, $externalAuthUser->email);
 
@@ -78,26 +80,26 @@ class AdminUserServiceTest extends TestCase
         static::assertSame($token, $tokenObject->token);
         static::assertSame($refreshToken, $tokenObject->refreshToken);
         static::assertSame($subject, $tokenUserData['admin_user_sub']);
-        static::assertSame($admin_userId, Uuid::fromBytesToHex($tokenUserData['admin_user_id']));
+        static::assertSame($adminUserId, Uuid::fromBytesToHex($tokenUserData['admin_user_id']));
 
         // check admin_user is activated
-        $admin_user = $this->getContainer()->get('admin_user.repository')->search(new Criteria([$externalAuthUser->admin_userId]), Context::createDefaultContext())->getEntities()->first();
-        static::assertInstanceOf(AdminUserEntity::class, $admin_user);
-        static::assertTrue($admin_user->getActive());
-        static::assertSame('given_name', $admin_user->getName());
-        static::assertSame('family_name', $admin_user->getLastName());
-        static::assertSame('preferred_username', $admin_user->getUsername());
+        $adminUser = $this->getContainer()->get('admin_user.repository')->search(new Criteria([$externalAuthUser->admin_userId]), Context::createDefaultContext())->getEntities()->first();
+        static::assertInstanceOf(AdminUserEntity::class, $adminUser);
+        static::assertTrue($adminUser->getActive());
+        static::assertSame('given_name', $adminUser->getName());
+        static::assertSame('family_name', $adminUser->getLastName());
+        static::assertSame('preferred_username', $adminUser->getUsername());
     }
 
     public function testGetAndUpdateUserByExternalTokenWithTokenUser(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $email = 'anotherFake@email.com';
         $subject = Uuid::randomHex();
 
         $fakeUserInstaller = new FakeUserInstaller($this->connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, $email);
-        $fakeUserInstaller->installTokenUser($admin_userId, $subject);
+        $fakeUserInstaller->installBaseUserData($adminUserId, $email);
+        $fakeUserInstaller->installTokenUser($adminUserId, $subject);
 
         $idToken = (new FakeTokenGenerator())->setEmail($email)->setSubject($subject)->generate(JwksIds::KEY_ID_ONE);
         $token = Uuid::randomHex();
@@ -113,7 +115,7 @@ class AdminUserServiceTest extends TestCase
         ], \JSON_THROW_ON_ERROR));
 
         $externalAuthUser = $this->admin_userService->getAndUpdateUserByExternalToken($tokenResult);
-        static::assertSame($admin_userId, $externalAuthUser->admin_userId);
+        static::assertSame($adminUserId, $externalAuthUser->admin_userId);
         static::assertSame($token, $externalAuthUser->token?->token);
         static::assertSame($refreshToken, $externalAuthUser->token->refreshToken);
         static::assertSame($email, $externalAuthUser->email);
@@ -130,7 +132,7 @@ class AdminUserServiceTest extends TestCase
         static::assertSame($token, $tokenObject->token);
         static::assertSame($refreshToken, $tokenObject->refreshToken);
         static::assertSame($subject, $tokenUserData['admin_user_sub']);
-        static::assertSame($admin_userId, Uuid::fromBytesToHex($tokenUserData['admin_user_id']));
+        static::assertSame($adminUserId, Uuid::fromBytesToHex($tokenUserData['admin_user_id']));
     }
 
     public function testUserEmailIsUpdated(): void
@@ -138,12 +140,12 @@ class AdminUserServiceTest extends TestCase
         $tokenEmail = 'token@email.com';
         $localeEmail = 'locale@email.com';
 
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $subject = Uuid::randomHex();
 
         $fakeUserInstaller = new FakeUserInstaller($this->connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, $localeEmail);
-        $fakeUserInstaller->installTokenUser($admin_userId, $subject);
+        $fakeUserInstaller->installBaseUserData($adminUserId, $localeEmail);
+        $fakeUserInstaller->installTokenUser($adminUserId, $subject);
 
         $idToken = (new FakeTokenGenerator())->setEmail($tokenEmail)->setSubject($subject)->generate(JwksIds::KEY_ID_ONE);
         $token = Uuid::randomHex();
@@ -159,14 +161,14 @@ class AdminUserServiceTest extends TestCase
         ], \JSON_THROW_ON_ERROR));
 
         $externalAuthUser = $this->admin_userService->getAndUpdateUserByExternalToken($tokenResult);
-        static::assertSame($admin_userId, $externalAuthUser->admin_userId);
+        static::assertSame($adminUserId, $externalAuthUser->admin_userId);
         static::assertSame($token, $externalAuthUser->token?->token);
         static::assertSame($refreshToken, $externalAuthUser->token->refreshToken);
         static::assertSame($localeEmail, $externalAuthUser->email);
 
-        $admin_user = $this->getContainer()->get('admin_user.repository')->search(new Criteria([$admin_userId]), Context::createDefaultContext())->getEntities()->first();
-        static::assertInstanceOf(AdminUserEntity::class, $admin_user);
-        static::assertSame($tokenEmail, $admin_user->getEmail());
+        $adminUser = $this->getContainer()->get('admin_user.repository')->search(new Criteria([$adminUserId]), Context::createDefaultContext())->getEntities()->first();
+        static::assertInstanceOf(AdminUserEntity::class, $adminUser);
+        static::assertSame($tokenEmail, $adminUser->getEmail());
     }
 
     public function testGetRefreshedExternalTokenForUserWithoutAuthUserShouldThrowException(): void
@@ -179,27 +181,27 @@ class AdminUserServiceTest extends TestCase
     public function testGetRefreshedExternalTokenForUserWithoutTokenShouldThrowException(): void
     {
         $connection = $this->connection;
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $fakeUserInstaller = new FakeUserInstaller($connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, 'test@test.com');
-        $fakeUserInstaller->installTokenUser($admin_userId, Uuid::randomHex());
+        $fakeUserInstaller->installBaseUserData($adminUserId, 'test@test.com');
+        $fakeUserInstaller->installTokenUser($adminUserId, Uuid::randomHex());
 
-        $connection->update('oauth_user', ['token' => null], ['admin_user_id' => Uuid::fromHexToBytes($admin_userId)]);
+        $connection->update('oauth_user', ['token' => null], ['admin_user_id' => Uuid::fromHexToBytes($adminUserId)]);
 
         $this->expectExceptionObject(SsoException::tokenNotFound());
 
-        $this->admin_userService->getRefreshedExternalTokenForUser($admin_userId);
+        $this->admin_userService->getRefreshedExternalTokenForUser($adminUserId);
     }
 
     public function testGetRefreshedExternalTokenForUser(): void
     {
         $connection = $this->connection;
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $fakeUserInstaller = new FakeUserInstaller($connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, 'test@test.com');
-        $fakeUserInstaller->installTokenUser($admin_userId, Uuid::randomHex());
+        $fakeUserInstaller->installBaseUserData($adminUserId, 'test@test.com');
+        $fakeUserInstaller->installTokenUser($adminUserId, Uuid::randomHex());
 
-        $result = $this->admin_userService->getRefreshedExternalTokenForUser($admin_userId);
+        $result = $this->admin_userService->getRefreshedExternalTokenForUser($adminUserId);
 
         static::assertSame('access_token', $result);
     }
@@ -207,19 +209,19 @@ class AdminUserServiceTest extends TestCase
     public function testRemoveExternalToken(): void
     {
         $connection = $this->connection;
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $fakeUserInstaller = new FakeUserInstaller($connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, 'test@test.com');
-        $fakeUserInstaller->installTokenUser($admin_userId, Uuid::randomHex());
+        $fakeUserInstaller->installBaseUserData($adminUserId, 'test@test.com');
+        $fakeUserInstaller->installTokenUser($adminUserId, Uuid::randomHex());
 
         $testSQL = 'SELECT `token` FROM `oauth_user` WHERE `admin_user_id` = ?;';
 
-        $check = $connection->executeQuery($testSQL, [Uuid::fromHexToBytes($admin_userId)])->fetchOne();
+        $check = $connection->executeQuery($testSQL, [Uuid::fromHexToBytes($adminUserId)])->fetchOne();
         static::assertSame('{"token": "invalid", "refreshToken": "invalid"}', $check);
 
-        $this->admin_userService->removeExternalToken($admin_userId);
+        $this->admin_userService->removeExternalToken($adminUserId);
 
-        $result = $connection->executeQuery($testSQL, [Uuid::fromHexToBytes($admin_userId)])->fetchOne();
+        $result = $connection->executeQuery($testSQL, [Uuid::fromHexToBytes($adminUserId)])->fetchOne();
         static::assertNull($result);
     }
 
@@ -233,29 +235,29 @@ class AdminUserServiceTest extends TestCase
     public function testSearchOAuthUserByUserId(): void
     {
         $connection = $this->connection;
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $fakeUserInstaller = new FakeUserInstaller($connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, 'test@test.com');
-        $fakeUserInstaller->installTokenUser($admin_userId, Uuid::randomHex());
+        $fakeUserInstaller->installBaseUserData($adminUserId, 'test@test.com');
+        $fakeUserInstaller->installTokenUser($adminUserId, Uuid::randomHex());
 
-        $result = $this->admin_userService->searchOAuthUserByUserId($admin_userId);
+        $result = $this->admin_userService->searchOAuthUserByUserId($adminUserId);
 
         static::assertInstanceOf(ExternalAuthUser::class, $result);
-        static::assertSame($admin_userId, $result->admin_userId);
+        static::assertSame($adminUserId, $result->admin_userId);
     }
 
     public function testUpdateOAuthUserWithNewToken(): void
     {
         $id = Uuid::randomHex();
-        $admin_userId = Uuid::randomHex();
-        $admin_userSub = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
+        $adminUserSub = Uuid::randomHex();
         $email = 'test@example.com';
         $expiryInPast = new \DateTimeImmutable('1970-01-01 00:00:00');
 
         $baseUser = ExternalAuthUser::create([
             'id' => $id,
-            'admin_user_id' => $admin_userId,
-            'admin_user_sub' => $admin_userSub,
+            'admin_user_id' => $adminUserId,
+            'admin_user_sub' => $adminUserSub,
             'token' => [
                 'token' => 'any',
                 'refreshToken' => 'any',
@@ -276,8 +278,8 @@ class AdminUserServiceTest extends TestCase
         $result = $this->admin_userService->updateOAuthUserWithNewToken($baseUser, $tokenResult);
 
         static::assertSame($id, $result->id);
-        static::assertSame($admin_userId, $result->admin_userId);
-        static::assertSame($admin_userSub, $result->sub);
+        static::assertSame($adminUserId, $result->admin_userId);
+        static::assertSame($adminUserSub, $result->sub);
         static::assertInstanceOf(Token::class, $result->token);
         static::assertSame('newAccessToken', $result->token->token);
         static::assertSame('newRefreshToken', $result->token->refreshToken);
@@ -287,19 +289,19 @@ class AdminUserServiceTest extends TestCase
 
     public function testSaveOAuthUser(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $expiry = (new \DateTimeImmutable())->add(new \DateInterval('PT1H'));
 
         $fakeUserInstaller = new FakeUserInstaller($this->connection);
-        $fakeUserInstaller->installBaseUserData($admin_userId, 'foo@bar.baz');
-        $fakeUserInstaller->installTokenUser($admin_userId, Uuid::randomHex());
+        $fakeUserInstaller->installBaseUserData($adminUserId, 'foo@bar.baz');
+        $fakeUserInstaller->installTokenUser($adminUserId, Uuid::randomHex());
 
-        $savedUser = $this->admin_userService->searchOAuthUserByUserId($admin_userId);
+        $savedUser = $this->admin_userService->searchOAuthUserByUserId($adminUserId);
         static::assertInstanceOf(ExternalAuthUser::class, $savedUser);
 
-        $admin_user = ExternalAuthUser::create([
+        $adminUser = ExternalAuthUser::create([
             'id' => $savedUser->id,
-            'admin_user_id' => $admin_userId,
+            'admin_user_id' => $adminUserId,
             'admin_user_sub' => Uuid::randomHex(),
             'token' => [
                 'token' => 'newToken',
@@ -309,12 +311,12 @@ class AdminUserServiceTest extends TestCase
             'email' => 'foo@bar.baz',
         ]);
 
-        $this->admin_userService->saveOAuthUser($admin_user);
+        $this->admin_userService->saveOAuthUser($adminUser);
 
-        $result = $this->admin_userService->searchOAuthUserByUserId($admin_userId);
+        $result = $this->admin_userService->searchOAuthUserByUserId($adminUserId);
         static::assertInstanceOf(ExternalAuthUser::class, $result);
-        static::assertSame($admin_user->id, $result->id);
-        static::assertSame($admin_user->admin_userId, $result->admin_userId);
+        static::assertSame($adminUser->id, $result->id);
+        static::assertSame($adminUser->admin_userId, $result->admin_userId);
         static::assertInstanceOf(Token::class, $result->token);
         static::assertSame('newToken', $result->token->token);
         static::assertSame('newRefreshToken', $result->token->refreshToken);

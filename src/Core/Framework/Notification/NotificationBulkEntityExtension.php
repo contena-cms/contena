@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\Notification;
 use Contena\Core\Framework\DataAbstractionLayer\BulkEntityExtension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
+use Contena\Core\System\Integration\IntegrationDefinition;
 
 /**
  * @internal

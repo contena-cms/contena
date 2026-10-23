@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Core\System\AdminUser;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -21,12 +22,12 @@ class AdminUserCrudTest extends TestCase
      */
     public function testCircurlaUserMediaReferences(): void
     {
-        $admin_userId = 'c3e61243802b4d268527194b4c6bad5c';
+        $adminUserId = 'c3e61243802b4d268527194b4c6bad5c';
 
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
 
-        $admin_userRepository->create([[
-            'id' => $admin_userId,
+        $adminUserRepository->create([[
+            'id' => $adminUserId,
             'username' => 'dummy',
             'password' => 'i am safe',
             'email' => 'some-guy@contena.cn',
@@ -48,9 +49,9 @@ class AdminUserCrudTest extends TestCase
             ],
         ]], Context::createDefaultContext());
 
-        $admin_userRepository->delete([['id' => $admin_userId]], Context::createDefaultContext());
+        $adminUserRepository->delete([['id' => $adminUserId]], Context::createDefaultContext());
 
-        $admin_user = $admin_userRepository->search(new Criteria([$admin_userId]), Context::createDefaultContext())->getEntities()->first();
-        static::assertNull($admin_user);
+        $adminUser = $adminUserRepository->search(new Criteria([$adminUserId]), Context::createDefaultContext())->getEntities()->first();
+        static::assertNull($adminUser);
     }
 }

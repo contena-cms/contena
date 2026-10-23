@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
-use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -18,6 +17,7 @@ use Symfony\Component\Config\Loader\LoaderResolverInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\Routing\Loader\PhpFileLoader;
 use Symfony\UX\TwigComponent\TwigComponentBundle;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * The container dumping side of the kernel is covered by
@@ -262,21 +262,6 @@ class KernelTest extends TestCase
         static::assertContains([$confDir . '/{routes}' . Kernel::CONFIG_EXTS, 'glob'], $captured);
     }
 
-    /**
-     * @param list<PluginInfo> $plugins
-     */
-    private function createKernel(string $environment = 'fooBar', string $projectDir = self::PROJECT_DIR, array $plugins = []): KernelStub
-    {
-        return new KernelStub(
-            $environment,
-            true,
-            new StaticKernelPluginLoader(new ClassLoader(), null, $plugins),
-            'cacheId',
-            '6.6.6',
-            static::createStub(Connection::class),
-            $projectDir,
-        );
-    }
 
     /**
      * @return PluginInfo

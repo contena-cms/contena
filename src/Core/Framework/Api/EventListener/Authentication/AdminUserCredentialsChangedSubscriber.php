@@ -66,18 +66,18 @@ class AdminUserCredentialsChangedSubscriber implements EventSubscriberInterface
         return isset($payload['password']) || (\array_key_exists('active', $payload) && $payload['active'] === false);
     }
 
-    private function updateLastUpdatedPasswordTimestamp(string $admin_userId): void
+    private function updateLastUpdatedPasswordTimestamp(string $adminUserId): void
     {
         $this->connection->update('admin_user', [
             'last_updated_password_at' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ], [
-            'id' => Uuid::fromHexToBytes($admin_userId),
+            'id' => Uuid::fromHexToBytes($adminUserId),
         ]);
     }
 
-    private function revokeUserTokens(string $admin_userId): void
+    private function revokeUserTokens(string $adminUserId): void
     {
-        $this->refreshTokenRepository->revokeRefreshTokensForUser($admin_userId);
-        $this->authCodeRepository->revokeAuthCodesForUser($admin_userId);
+        $this->refreshTokenRepository->revokeRefreshTokensForUser($adminUserId);
+        $this->authCodeRepository->revokeAuthCodesForUser($adminUserId);
     }
 }

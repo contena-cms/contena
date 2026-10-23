@@ -45,7 +45,6 @@ class CmsControllerTest extends TestCase
 
     private Stub&BlogListingRoute $blogListingRouteMock;
 
-    private CmsControllerStub $controller;
 
     protected function setUp(): void
     {

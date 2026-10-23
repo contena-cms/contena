@@ -34,15 +34,15 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
 
     public function persistNewAuthCode(AuthCodeEntityInterface $authCodeEntity): void
     {
-        $admin_userIdentifier = $authCodeEntity->getUserIdentifier();
-        if ($admin_userIdentifier === null) {
+        $adminUserIdentifier = $authCodeEntity->getUserIdentifier();
+        if ($adminUserIdentifier === null) {
             return;
         }
 
         $this->connection->insert('oauth_auth_code', [
             'id' => Uuid::randomBytes(),
             'code_id' => $authCodeEntity->getIdentifier(),
-            'admin_user_id' => Uuid::fromHexToBytes($admin_userIdentifier),
+            'admin_user_id' => Uuid::fromHexToBytes($adminUserIdentifier),
             'client_id' => $authCodeEntity->getClient()->getIdentifier(),
             'issued_at' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             'expires_at' => $authCodeEntity->getExpiryDateTime()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -70,9 +70,9 @@ class AuthCodeRepository implements AuthCodeRepositoryInterface
         return $found === false;
     }
 
-    public function revokeAuthCodesForUser(string $admin_userId): void
+    public function revokeAuthCodesForUser(string $adminUserId): void
     {
-        $this->connection->delete('oauth_auth_code', ['admin_user_id' => Uuid::fromHexToBytes($admin_userId)]);
+        $this->connection->delete('oauth_auth_code', ['admin_user_id' => Uuid::fromHexToBytes($adminUserId)]);
     }
 
     private function cleanUpExpiredAuthCodes(): void

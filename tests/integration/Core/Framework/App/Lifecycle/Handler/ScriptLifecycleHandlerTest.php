@@ -5,6 +5,9 @@ namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle\Handler;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\Store\ServiceBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

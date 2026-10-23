@@ -6,6 +6,8 @@ use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateTypeTranslation\Mail
 use Contena\Core\Content\MailTemplate\MailTemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

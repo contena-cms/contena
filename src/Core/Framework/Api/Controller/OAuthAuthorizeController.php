@@ -24,6 +24,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * Authorization endpoint of the OAuth2 authorization code grant (RFC 6749 §4.1) for public clients.
@@ -120,15 +123,15 @@ class OAuthAuthorizeController extends AbstractController
             throw ApiException::invalidAdminSource($source::class);
         }
 
-        $admin_userId = $source->getUserId();
-        if ($admin_userId === null || $admin_userId === '') {
+        $adminUserId = $source->getUserId();
+        if ($adminUserId === null || $adminUserId === '') {
             throw ApiException::admin_userNotLoggedIn();
         }
 
         $authorizationRequest = $this->authorizationServer->validateAuthorizationRequest(
             $this->createAuthorizationRequest($request->request->all())
         );
-        $authorizationRequest->setUser(new AdminUser($admin_userId));
+        $authorizationRequest->setUser(new AdminUser($adminUserId));
         $authorizationRequest->setAuthorizationApproved($request->request->getBoolean('approved'));
 
         try {

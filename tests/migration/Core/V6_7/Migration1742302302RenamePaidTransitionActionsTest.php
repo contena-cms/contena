@@ -9,6 +9,8 @@ use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionState
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1742302302RenamePaidTransitionActions;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

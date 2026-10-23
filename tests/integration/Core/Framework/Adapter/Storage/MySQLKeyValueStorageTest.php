@@ -7,6 +7,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Adapter\Storage\MySQLKeyValueStorage;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

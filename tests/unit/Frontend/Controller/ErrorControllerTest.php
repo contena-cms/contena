@@ -22,7 +22,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
 #[CoversClass(ErrorController::class)]
 class ErrorControllerTest extends TestCase
 {
-    private ErrorControllerStub $controller;
 
     private ErrorTemplateResolver $errorTemplateResolver;
 

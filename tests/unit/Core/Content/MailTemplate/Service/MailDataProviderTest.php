@@ -113,15 +113,6 @@ class MailDataProviderTest extends TestCase
         return $mailTemplate;
     }
 
-    private function createProvider(string $entityName, ?Entity $entity): TestMailFlowProvider
-    {
-        return new TestMailFlowProvider(
-            $entityName,
-            $entity,
-            static::createStub(EventDispatcherInterface::class),
-            static::createStub(ContainerInterface::class)
-        );
-    }
 }
 
 /**

@@ -11,6 +11,8 @@ use Contena\Core\Framework\Event\SystemInstallCompletedEvent;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 
 /**
  * @internal

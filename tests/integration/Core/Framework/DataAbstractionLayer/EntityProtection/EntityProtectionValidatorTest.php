@@ -16,6 +16,9 @@ use Contena\Core\System\AdminUser\Aggregate\AdminUserAccessKey\AdminUserAccessKe
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\SystemConfig\SystemConfigDefinition;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

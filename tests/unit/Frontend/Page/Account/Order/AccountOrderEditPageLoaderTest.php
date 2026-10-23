@@ -16,7 +16,6 @@ use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionColle
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\Channel\OrderRoute;
 use Contena\Core\Checkout\Order\Channel\OrderRouteResponse;
-use Contena\Core\Checkout\Order\Channel\OrderService;
 use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
@@ -24,7 +23,6 @@ use Contena\Core\Checkout\Order\OrderException;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -128,7 +126,6 @@ class AccountOrderEditPageLoaderTest extends TestCase
             ->method('load')
             ->willReturn(new CheckoutGatewayRouteResponse(
                 new PaymentMethodCollection([$filteredPaymentMethod, $remainingPaymentMethod]),
-                new ShippingMethodCollection(),
                 new ErrorCollection(),
             ));
 
@@ -186,7 +183,6 @@ class AccountOrderEditPageLoaderTest extends TestCase
             )
             ->willReturn(new CheckoutGatewayRouteResponse(
                 new PaymentMethodCollection(),
-                new ShippingMethodCollection(),
                 new ErrorCollection(),
             ));
 
@@ -406,61 +402,6 @@ class AccountOrderEditPageLoaderTest extends TestCase
         static::assertSame($orderPaymentMethod->getId(), $page->getSelectedPaymentMethodId());
     }
 
-    private function expectOrder(?string $paymentMethodId = null): OrderEntity
-    {
-        $order = new OrderEntity();
-        $order->setId(Uuid::randomHex());
 
-        if ($paymentMethodId !== null) {
-            $transaction = new OrderTransactionEntity();
-            $transaction->setId(Uuid::randomHex());
-            $transaction->setPaymentMethodId($paymentMethodId);
 
-            $order->setPrimaryOrderTransaction($transaction);
-        }
-
-        $this->orderRoute
-            ->expects($this->once())
-            ->method('load')
-            ->willReturn(new OrderRouteResponse(
-                new EntitySearchResult(
-                    OrderDefinition::ENTITY_NAME,
-                    1,
-                    new OrderCollection([$order]),
-                    null,
-                    new Criteria(),
-                    Context::createDefaultContext()
-                )
-            ));
-
-        return $order;
-    }
-
-    private function expectPaymentMethods(PaymentMethodCollection $paymentMethods): void
-    {
-        $this->checkoutGatewayRoute
-            ->method('load')
-            ->willReturn(new CheckoutGatewayRouteResponse(
-                $paymentMethods,
-                new ShippingMethodCollection(),
-                new ErrorCollection(),
-            ));
-    }
-
-    private function createPageLoader(
-        ?GenericPageLoader $genericPageLoader = null,
-        ?AbstractCheckoutGatewayRoute $checkoutGatewayRoute = null,
-        ?OrderRestorer $orderRestorer = null,
-        ?AbstractTranslator $translator = null,
-    ): AccountEditOrderPageLoader {
-        return new AccountEditOrderPageLoader(
-            $genericPageLoader ?? $this->genericPageLoader,
-            $this->eventDispatcher,
-            $this->orderRoute,
-            $checkoutGatewayRoute ?? $this->checkoutGatewayRoute,
-            $orderRestorer ?? $this->orderRestorer,
-            static::createStub(OrderService::class),
-            $translator ?? $this->translator,
-        );
-    }
 }

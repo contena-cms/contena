@@ -8,10 +8,12 @@ use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\ContenaEvent;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Contracts\EventDispatcher\Event;
+use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 
 trait MailTemplateTestBehaviour
 {
     use EventDispatcherBehaviour;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 
     /**
      * @param class-string<object> $expectedClass

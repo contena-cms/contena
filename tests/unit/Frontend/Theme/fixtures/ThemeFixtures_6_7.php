@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\fixtures;
 
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
-use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeEntity;
 
@@ -248,13 +247,6 @@ class ThemeFixtures_6_7
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'technicalName' => 'ParentTheme',
                             'parentThemeId' => $baseThemeId,
@@ -331,13 +323,6 @@ class ThemeFixtures_6_7
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'technicalName' => 'ParentTheme',
                             'parentThemeId' => $baseThemeId,
@@ -398,13 +383,6 @@ class ThemeFixtures_6_7
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'technicalName' => 'ParentTheme',
                             'parentThemeId' => $baseThemeId,
@@ -450,13 +428,6 @@ class ThemeFixtures_6_7
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'parentThemeId' => $baseThemeId,
                             '_uniqueIdentifier' => $parentThemeId,
@@ -497,13 +468,6 @@ class ThemeFixtures_6_7
                             'configValues' => [
                                 'test' => ['value' => ['no_test']],
                             ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
                         ]
                     ),
                     (new ThemeEntity())->assign(
@@ -555,13 +519,6 @@ class ThemeFixtures_6_7
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'parentThemeId' => $baseThemeId,
                             '_uniqueIdentifier' => $parentThemeId,
@@ -606,13 +563,6 @@ class ThemeFixtures_6_7
                             ],
                         ]
                     ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -645,16 +595,6 @@ class ThemeFixtures_6_7
                             'channels' => new ChannelCollection(),
                             'technicalName' => 'Test',
                             'configValues' => [],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
                         ]
                     ),
                 ]
@@ -713,14 +653,6 @@ class ThemeFixtures_6_7
                                     ],
                                 ],
                             ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                            'baseConfig' => self::getThemeJsonConfig(),
                         ]
                     ),
                 ]

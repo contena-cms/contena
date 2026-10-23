@@ -76,6 +76,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
 use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByAdminUserField;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\State;
 
 /**
  * @phpstan-type FieldArray array{
@@ -102,8 +103,6 @@ class AttributeEntityCompiler
         Password::class,
         Field::class,
         ReferenceVersion::class,
-        ListFieldAttr::class,
-        CustomFieldsAttr::class,
     ];
 
     private const ASSOCIATIONS = [

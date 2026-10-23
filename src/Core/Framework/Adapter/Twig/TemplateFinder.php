@@ -8,6 +8,7 @@ use Symfony\Contracts\Service\ResetInterface;
 use Twig\Cache\FilesystemCache;
 use Twig\Environment;
 use Twig\Loader\LoaderInterface;
+use Twig\Error\LoaderError;
 
 class TemplateFinder implements TemplateFinderInterface, ResetInterface
 {

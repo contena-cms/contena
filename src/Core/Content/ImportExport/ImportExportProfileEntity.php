@@ -6,6 +6,7 @@ use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogC
 use Contena\Core\Content\ImportExport\Processing\Mapping\Mapping;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

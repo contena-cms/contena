@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Contracts\Translation\TranslatorInterface;
 use Contena\Core\Maintenance\System\Exception\DatabaseSetupException;
+use Doctrine\DBAL\Exception\DriverException;
 
 /**
  * @internal

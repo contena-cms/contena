@@ -12,6 +12,10 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Serializer\NameConverter\CamelCaseToSnakeCaseNameConverter;
+use Contena\Core\Framework\Plugin;
+use Contena\Frontend\Framework\ThemeInterface;
+use Contena\Frontend\Theme\Exception\ThemeException;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 #[AsCommand(
     name: 'theme:create',
@@ -191,9 +195,6 @@ class ThemeCreateCommand extends Command
 
 namespace #namespace#;
 
-use Contena\Core\Framework\Plugin;
-use Contena\Frontend\Framework\ThemeInterface;
-use Contena\Frontend\Theme\Exception\ThemeException;
 
 class #class# extends Plugin implements ThemeInterface
 {

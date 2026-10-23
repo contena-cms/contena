@@ -16,7 +16,6 @@ interface PropertyDependency
  */
 class PureStubPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -44,7 +43,6 @@ class PureStubPropertyCases extends TestCase
  */
 class MixedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -71,7 +69,6 @@ class MixedPropertyCases extends TestCase
  */
 class AllExpectedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -99,7 +96,6 @@ class AllExpectedPropertyCases extends TestCase
  */
 class HelperConfiguredPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -126,7 +122,6 @@ class HelperConfiguredPropertyCases extends TestCase
  */
 class InitHelperExpectsPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -162,7 +157,6 @@ class InitHelperExpectsPropertyCases extends TestCase
  */
 class SetUpHelperExpectsPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -189,7 +183,6 @@ class SetUpHelperExpectsPropertyCases extends TestCase
  */
 class HelperForwardedMixedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -207,10 +200,6 @@ class HelperForwardedMixedPropertyCases extends TestCase
         static::assertSame('', $this->createSut()->run());
     }
 
-    private function createSut(): PropertySut
-    {
-        return new PropertySut($this->dependency);
-    }
 }
 
 /**
@@ -221,7 +210,6 @@ class HelperForwardedMixedPropertyCases extends TestCase
  */
 class HelperForwardedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -233,12 +221,6 @@ class HelperForwardedPropertyCases extends TestCase
         static::assertSame('a', $this->createSut()->run());
     }
 
-    private function createSut(): PropertySut
-    {
-        $this->dependency->method('value')->willReturn('a');
-
-        return new PropertySut($this->dependency);
-    }
 }
 
 /**
@@ -248,7 +230,6 @@ class HelperForwardedPropertyCases extends TestCase
  */
 class HelperEscapedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -275,7 +256,6 @@ class HelperEscapedPropertyCases extends TestCase
  */
 class ReCreatedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -299,7 +279,6 @@ class ReCreatedPropertyCases extends TestCase
  */
 class PartiallyReCreatedPropertyCases extends TestCase
 {
-    private PropertyDependency $dependency;
 
     protected function setUp(): void
     {
@@ -327,9 +306,6 @@ class PartiallyReCreatedPropertyCases extends TestCase
  */
 class PropertySut
 {
-    public function __construct(private readonly PropertyDependency $dependency)
-    {
-    }
 
     public function run(): string
     {
@@ -342,7 +318,4 @@ class PropertySut
  */
 class PropertyConfigurator
 {
-    public static function configure(PropertyDependency $dependency): void
-    {
-    }
 }

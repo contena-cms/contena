@@ -20,7 +20,6 @@ use Contena\Core\Content\Mail\Transport\SmtpOauthTokenProvider;
 use Contena\Core\Content\Mail\Transport\SmtpOauthTransportFactoryDecorator;
 use Contena\Core\Content\MailTemplate\Service\MailTemplateContentBuilder;
 use Contena\Core\Content\Media\MediaService;
-use Contena\Core\Content\Shared\MailFlow\DocumentResolver;
 use Contena\Core\Framework\Adapter\Translation\Translator;
 use Contena\Core\Framework\Adapter\Twig\StringTemplateRenderer;
 use Contena\Core\Framework\Telemetry\Metrics\Meter;
@@ -102,9 +101,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(MediaService::class),
             service('media.repository'),
-            service('document.repository'),
-            service('monolog.logger.business_events'),
-            service(DocumentResolver::class),
         ]);
 
     $services->set(MailPayloadFactory::class);

@@ -23,6 +23,7 @@ use Symfony\Component\Clock\Test\ClockSensitiveTrait;
 use Symfony\Component\HttpClient\MockHttpClient;
 use Symfony\Component\HttpClient\Response\MockResponse;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -149,9 +150,9 @@ class EntityDeleteSubscriberTest extends TestCase
 
         $this->setConsentState(ConsentStatus::ACCEPTED);
 
-        $admin_userId = Uuid::randomHex();
-        $admin_userData = [
-            'id' => $admin_userId,
+        $adminUserId = Uuid::randomHex();
+        $adminUserData = [
+            'id' => $adminUserId,
             'email' => 'foo@bar.com',
             'name' => 'Firstname',
             'lastName' => 'Lastname',
@@ -160,9 +161,9 @@ class EntityDeleteSubscriberTest extends TestCase
             'localeId' => static::getContainer()->get(Connection::class)->fetchOne('SELECT LOWER(HEX(id)) FROM locale LIMIT 1'),
         ];
 
-        /** @var EntityRepository<AdminUserCollection> $admin_userRepository */
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
-        $admin_userRepository->create([$admin_userData], Context::createDefaultContext());
+        /** @var EntityRepository<AdminUserCollection> $adminUserRepository */
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
+        $adminUserRepository->create([$adminUserData], Context::createDefaultContext());
 
         $aclRoleId = Uuid::randomHex();
         $aclRoleData = [
@@ -183,14 +184,14 @@ class EntityDeleteSubscriberTest extends TestCase
         $aclUserRoleRepository = static::getContainer()->get('acl_user_role.repository');
         $aclUserRoleRepository->create([
             [
-                'admin_userId' => $admin_userId,
+                'admin_userId' => $adminUserId,
                 'aclRoleId' => $aclRoleId,
             ],
         ], Context::createDefaultContext());
 
         $aclUserRoleRepository->delete([
             [
-                'admin_userId' => $admin_userId,
+                'admin_userId' => $adminUserId,
                 'aclRoleId' => $aclRoleId,
             ],
         ], Context::createDefaultContext());
@@ -205,7 +206,7 @@ class EntityDeleteSubscriberTest extends TestCase
         static::assertSame([
             'entity_name' => 'acl_user_role',
             'entity_ids' => [
-                'admin_userId' => $admin_userId,
+                'admin_userId' => $adminUserId,
                 'aclRoleId' => $aclRoleId,
             ],
             'deleted_at' => '2023-08-30 00:00:00.000',

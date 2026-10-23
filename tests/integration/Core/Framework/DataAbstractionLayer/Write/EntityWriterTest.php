@@ -40,6 +40,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Write\NonUuidFkField\TestEn
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

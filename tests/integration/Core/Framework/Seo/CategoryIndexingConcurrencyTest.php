@@ -14,6 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * Regression test for the category indexing deadlock of contena/contena#6540 (NEXT-22174).

@@ -15,16 +15,16 @@ class AdminUserValidationService
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserCollection> $admin_userRepo
+     * @param EntityRepository<AdminUserCollection> $adminUserRepo
      */
-    public function __construct(private readonly EntityRepository $admin_userRepo)
+    public function __construct(private readonly EntityRepository $adminUserRepo)
     {
     }
 
     /**
      * @throws InconsistentCriteriaIdsException
      */
-    public function checkEmailUnique(string $admin_userEmail, string $admin_userId, Context $context): bool
+    public function checkEmailUnique(string $adminUserEmail, string $adminUserId, Context $context): bool
     {
         $criteria = new Criteria();
 
@@ -32,8 +32,8 @@ class AdminUserValidationService
             new MultiFilter(
                 'AND',
                 [
-                    new EqualsFilter('email', $admin_userEmail),
-                    new NotEqualsFilter('id', $admin_userId),
+                    new EqualsFilter('email', $adminUserEmail),
+                    new NotEqualsFilter('id', $adminUserId),
                 ]
             )
         );
@@ -44,7 +44,7 @@ class AdminUserValidationService
     /**
      * @throws InconsistentCriteriaIdsException
      */
-    public function checkUsernameUnique(string $admin_userUsername, string $admin_userId, Context $context): bool
+    public function checkUsernameUnique(string $adminUserUsername, string $adminUserId, Context $context): bool
     {
         $criteria = new Criteria();
 
@@ -52,8 +52,8 @@ class AdminUserValidationService
             new MultiFilter(
                 'AND',
                 [
-                    new EqualsFilter('username', $admin_userUsername),
-                    new NotEqualsFilter('id', $admin_userId),
+                    new EqualsFilter('username', $adminUserUsername),
+                    new NotEqualsFilter('id', $adminUserId),
                 ]
             )
         );

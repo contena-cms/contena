@@ -9,6 +9,7 @@ use PHPUnit\Framework\Attributes\Before;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Store\Services\StoreClientFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

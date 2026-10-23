@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Core\Framework\FeatureFlag;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Symfony\Component\Finder\Finder;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

@@ -17,6 +17,7 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 
 trait AdminApiTestBehaviour
 {
@@ -152,12 +153,12 @@ trait AdminApiTestBehaviour
     public function authorizeBrowser(TestBrowser $browser, array $scopes = [], ?array $aclPermissions = null): void
     {
         $username = Uuid::randomHex();
-        $admin_userId = Uuid::randomBytes();
+        $adminUserId = Uuid::randomBytes();
 
         $connection = $browser->getContainer()->get(Connection::class);
 
-        $admin_user = [
-            'id' => $admin_userId,
+        $adminUser = [
+            'id' => $adminUserId,
             'first_name' => $username,
             'last_name' => '',
             'username' => $username,
@@ -169,8 +170,8 @@ trait AdminApiTestBehaviour
 
         if ($aclPermissions !== null) {
             $aclRoleId = Uuid::randomBytes();
-            $admin_user['admin'] = 0;
-            $admin_user['email'] = Hasher::hash($aclPermissions) . '@example.com';
+            $adminUser['admin'] = 0;
+            $adminUser['email'] = Hasher::hash($aclPermissions) . '@example.com';
             $aclRole = [
                 'id' => $aclRoleId,
                 'name' => 'testPermissions',
@@ -178,17 +179,17 @@ trait AdminApiTestBehaviour
                 'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ];
             $connection->insert('acl_role', $aclRole);
-            $connection->insert('admin_user', $admin_user);
+            $connection->insert('admin_user', $adminUser);
             $connection->insert('acl_user_role', [
-                'admin_user_id' => $admin_userId,
+                'admin_user_id' => $adminUserId,
                 'acl_role_id' => $aclRoleId,
                 'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ]);
         } else {
-            $admin_user['admin'] = 1;
-            $admin_user['email'] = 'admin@example.com';
+            $adminUser['admin'] = 1;
+            $adminUser['email'] = 'admin@example.com';
             $connection->executeStatement('DELETE FROM admin_user WHERE email = :mail', ['mail' => 'admin@example.com']);
-            $connection->insert('admin_user', $admin_user);
+            $connection->insert('admin_user', $adminUser);
         }
 
         $this->apiUsernames[] = $username;
@@ -225,7 +226,7 @@ trait AdminApiTestBehaviour
         $accessToken = $data['access_token'];
         \assert(\is_string($accessToken));
         $browser->setServerParameter('HTTP_Authorization', \sprintf('Bearer %s', $accessToken));
-        $browser->setServerParameter(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, new Context(new AdminApiSource($admin_userId)));
+        $browser->setServerParameter(PlatformRequest::ATTRIBUTE_CONTEXT_OBJECT, new Context(new AdminApiSource($adminUserId)));
     }
 
     /**

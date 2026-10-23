@@ -19,6 +19,7 @@ use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Validation;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
  * @internal
@@ -30,11 +31,11 @@ use Symfony\Component\Validator\Validation;
 class StoreLoginCommand extends Command
 {
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
         private readonly StoreClient $storeClient,
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly SystemConfigService $configService
     ) {
         parent::__construct();
@@ -63,7 +64,7 @@ class StoreLoginCommand extends Command
 
         $contenaId = $input->getOption('contenaId');
         $password = $input->getOption('password');
-        $admin_user = $input->getOption('admin_user');
+        $adminUser = $input->getOption('admin_user');
 
         if (!$password) {
             $passwordQuestion = new Question('Enter password');
@@ -75,17 +76,17 @@ class StoreLoginCommand extends Command
         }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('admin_user.username', $admin_user));
+        $criteria->addFilter(new EqualsFilter('admin_user.username', $adminUser));
 
-        $admin_userId = $this->admin_userRepository->searchIds($criteria, $context)->firstId();
+        $adminUserId = $this->admin_userRepository->searchIds($criteria, $context)->firstId();
 
-        if ($admin_userId === null) {
+        if ($adminUserId === null) {
             $io->error('AdminUser not found');
 
             return self::FAILURE;
         }
 
-        $admin_userContext = new Context(new AdminApiSource($admin_userId));
+        $adminUserContext = new Context(new AdminApiSource($adminUserId));
 
         if ($contenaId === null || $password === null) {
             $io->error('Contena ID and password are required.');
@@ -94,7 +95,7 @@ class StoreLoginCommand extends Command
         }
 
         try {
-            $this->storeClient->loginWithContenaId($contenaId, $password, $admin_userContext);
+            $this->storeClient->loginWithContenaId($contenaId, $password, $adminUserContext);
         } catch (ClientException $exception) {
             $io->error(\sprintf('Store login failed: %s', $exception->getMessage()));
 

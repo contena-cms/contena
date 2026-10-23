@@ -4,6 +4,7 @@ namespace Contena\Core\System\Currency\Aggregate\CurrencyTranslation;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

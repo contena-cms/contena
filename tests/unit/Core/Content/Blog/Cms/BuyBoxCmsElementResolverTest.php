@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Cms;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogCollection;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;

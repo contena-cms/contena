@@ -15,6 +15,7 @@ use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Result\McpToolError;
+use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
 
 /**
  * @experimental stableVersion:v6.8.0

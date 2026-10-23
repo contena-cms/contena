@@ -12,6 +12,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationCollection;
 use Contena\Frontend\Theme\Struct\ThemeDependencies;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 class ThemeLifecycleHandler
 {

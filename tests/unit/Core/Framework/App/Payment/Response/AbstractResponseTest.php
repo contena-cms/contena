@@ -28,9 +28,4 @@ class AbstractResponseTest extends TestCase
         static::assertSame('test message', $response->getErrorMessage());
     }
 
-    private function createResponse(): AbstractResponse
-    {
-        return new class extends AbstractResponse {
-        };
-    }
 }

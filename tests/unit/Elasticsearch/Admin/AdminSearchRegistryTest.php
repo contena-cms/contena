@@ -15,9 +15,7 @@ use Psr\Log\NullLogger;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Event\ProgressAdvancedEvent;
 use Contena\Core\Framework\Event\ProgressFinishedEvent;
@@ -476,14 +474,6 @@ class AdminSearchRegistryTest extends TestCase
         );
 
         $index->refresh(new EntityWrittenContainerEvent(Context::createDefaultContext(), new NestedEventCollection([
-            new EntityWrittenEvent('promotion', [
-                new EntityWriteResult(
-                    'c1a28776116d4431a2208eb2960ec340',
-                    [],
-                    'promotion',
-                    EntityWriteResult::OPERATION_INSERT
-                ),
-            ], Context::createDefaultContext()),
         ]), []));
     }
 
@@ -534,12 +524,6 @@ class AdminSearchRegistryTest extends TestCase
         $context = Context::createDefaultContext(new ChannelApiSource(TestDefaults::CHANNEL));
 
         $registry->refresh(new EntityWrittenContainerEvent($context, new NestedEventCollection([
-            new EntityWrittenEvent('promotion', [
-                new EntityWriteResult('c1a28776116d4431a2208eb2960ec340', [], 'promotion', EntityWriteResult::OPERATION_INSERT),
-            ], $context),
-            new EntityWrittenEvent('order', [
-                new EntityWriteResult('a1a28776116d4431a2208eb2960ec341', [], 'order', EntityWriteResult::OPERATION_INSERT),
-            ], $context),
         ]), []));
 
         static::assertSame(['promotion', 'order'], $dispatched);
@@ -623,14 +607,6 @@ class AdminSearchRegistryTest extends TestCase
         );
 
         $index->refresh(new EntityWrittenContainerEvent(Context::createDefaultContext(), new NestedEventCollection([
-            new EntityWrittenEvent('promotion', [
-                new EntityWriteResult(
-                    'c1a28776116d4431a2208eb2960ec340',
-                    [],
-                    'promotion',
-                    EntityWriteResult::OPERATION_INSERT
-                ),
-            ], Context::createDefaultContext()),
         ]), []));
     }
 
@@ -661,14 +637,6 @@ class AdminSearchRegistryTest extends TestCase
         );
 
         $index->refresh(new EntityWrittenContainerEvent(Context::createDefaultContext(), new NestedEventCollection([
-            new EntityWrittenEvent('promotion', [
-                new EntityWriteResult(
-                    'c1a28776116d4431a2208eb2960ec340',
-                    [],
-                    'promotion',
-                    EntityWriteResult::OPERATION_INSERT
-                ),
-            ], Context::createDefaultContext()),
         ]), []));
     }
 

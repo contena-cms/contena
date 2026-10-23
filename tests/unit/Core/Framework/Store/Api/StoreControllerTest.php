@@ -27,11 +27,11 @@ class StoreControllerTest extends TestCase
             ->method('logout')
             ->with($context);
 
-        $admin_userRepository = static::createStub(EntityRepository::class);
+        $adminUserRepository = static::createStub(EntityRepository::class);
 
         $storeController = new StoreController(
             $storeClient,
-            $admin_userRepository,
+            $adminUserRepository,
             static::createStub(AbstractExtensionDataProvider::class),
         );
 

@@ -16,6 +16,8 @@ use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\Migration\MigrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

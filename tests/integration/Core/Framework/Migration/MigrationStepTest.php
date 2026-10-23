@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -187,10 +188,6 @@ SQL
         static::assertTrue($step->doAddColumn($connection, 'foo', 'test_column', 'VARCHAR(255)'));
     }
 
-    private function getStep(): ExampleStep
-    {
-        return new ExampleStep();
-    }
 
     private function getConnection(): Connection
     {

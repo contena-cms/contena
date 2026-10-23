@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
@@ -26,22 +25,18 @@ class EntityTest extends TestCase
     public static function apiAliasDefaultsDataProvider(): iterable
     {
         yield [
-            FooEntity::class,
             'foo',
         ];
 
         yield [
-            FooBarEntity::class,
             'foo_bar',
         ];
 
         yield [
-            FooBar::class,
             'foo_bar',
         ];
 
         yield [
-            BlogEntityRelationEntity::class,
             'blog_entity_relation',
         ];
 
@@ -51,7 +46,6 @@ class EntityTest extends TestCase
         ];
 
         yield [
-            BlogPriceEntity::class,
             BlogPriceDefinition::ENTITY_NAME,
         ];
 

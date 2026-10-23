@@ -4,6 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

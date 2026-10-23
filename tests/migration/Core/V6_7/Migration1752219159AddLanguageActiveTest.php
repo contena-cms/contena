@@ -45,7 +45,6 @@ class Migration1752219159AddLanguageActiveTest extends TestCase
 
     private readonly Connection $connection;
 
-    private readonly Migration1752219159AddLanguageActive $migration;
 
     protected function setUp(): void
     {

@@ -8,6 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Frontend\Theme\Exception\ThemeException;
 
 class ResolvedConfigLoader extends AbstractResolvedConfigLoader
 {

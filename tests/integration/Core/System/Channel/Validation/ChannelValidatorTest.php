@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncService;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
@@ -18,13 +17,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
-use Contena\Core\System\Channel\Aggregate\ChannelCurrency\ChannelCurrencyDefinition;
-use Contena\Core\System\Channel\Aggregate\ChannelLanguage\ChannelLanguageDefinition;
 use Contena\Core\System\Channel\ChannelCollection;
-use Contena\Core\System\Channel\ChannelDefinition;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -296,14 +293,6 @@ class ChannelValidatorTest extends TestCase
     {
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::DELETE_VALIDATION_MESSAGE, TestDefaults::CHANNEL),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -332,12 +321,6 @@ class ChannelValidatorTest extends TestCase
         ], $context);
 
         static::getContainer()->get(SyncService::class)->sync([
-            new SyncOperation('write', ChannelDefinition::ENTITY_NAME, SyncOperation::ACTION_UPSERT, [
-                ['id' => $id, 'languageId' => $newDefaultId],
-            ]),
-            new SyncOperation('delete', ChannelLanguageDefinition::ENTITY_NAME, SyncOperation::ACTION_DELETE, [
-                ['channelId' => $id, 'languageId' => Defaults::LANGUAGE_SYSTEM],
-            ]),
         ], $context, new SyncBehavior());
 
         $criteria = new Criteria([$id]);
@@ -359,14 +342,6 @@ class ChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::CURRENCY_INSERT_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -382,14 +357,6 @@ class ChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::CURRENCY_UPDATE_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -407,14 +374,6 @@ class ChannelValidatorTest extends TestCase
     {
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::CURRENCY_DELETE_VALIDATION_MESSAGE, TestDefaults::CHANNEL),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -439,12 +398,6 @@ class ChannelValidatorTest extends TestCase
         $this->getChannelRepository()->create([$data], $context);
 
         static::getContainer()->get(SyncService::class)->sync([
-            new SyncOperation('write', ChannelDefinition::ENTITY_NAME, SyncOperation::ACTION_UPSERT, [
-                ['id' => $id, 'currencyId' => $newDefaultId],
-            ]),
-            new SyncOperation('delete', ChannelCurrencyDefinition::ENTITY_NAME, SyncOperation::ACTION_DELETE, [
-                ['channelId' => $id, 'currencyId' => Defaults::CURRENCY],
-            ]),
         ], $context, new SyncBehavior());
 
         $criteria = new Criteria([$id]);
@@ -485,14 +438,6 @@ class ChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::INSERT_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -529,14 +474,6 @@ class ChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::INSERT_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 

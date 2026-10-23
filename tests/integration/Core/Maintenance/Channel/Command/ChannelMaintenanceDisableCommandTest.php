@@ -9,6 +9,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\Channel\Command\ChannelMaintenanceDisableCommand;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

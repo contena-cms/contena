@@ -5,6 +5,8 @@ namespace Contena\Core\System\Snippet\Aggregate\SnippetSet;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Snippet\SnippetCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

@@ -5,14 +5,10 @@ namespace Contena\Tests\Unit\Core\Content\ContentStream\DataAbstractionLayer;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\ContentStream\Aggregate\ContentStreamFilter\ContentStreamFilterDefinition;
 use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamWriteResultHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Uuid\Uuid;
 
@@ -43,12 +39,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         $streamId = Uuid::randomHex();
 
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['contentStreamId' => $streamId],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
         ]);
 
         static::assertSame([$streamId], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -59,12 +49,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         $streamId = Uuid::randomHex();
 
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['content_stream_id' => $streamId],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
         ]);
 
         static::assertSame([$streamId], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -75,20 +59,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         $streamId = Uuid::randomHex();
 
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_DELETE,
-                new EntityExistence(
-                    ContentStreamFilterDefinition::ENTITY_NAME,
-                    ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                    true,
-                    false,
-                    false,
-                    ['content_stream_id' => Uuid::fromHexToBytes($streamId)],
-                ),
-            ),
         ]);
 
         static::assertSame([$streamId], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -109,18 +79,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         $streamId = Uuid::randomHex();
 
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                $payload,
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                $operation,
-                null,
-                new ChangeSet(
-                    array_merge(['content_stream_id' => Uuid::fromHexToBytes($streamId)], $previousState),
-                    $payload,
-                    isDelete: $operation === EntityWriteResult::OPERATION_DELETE,
-                ),
-            ),
         ]);
 
         static::assertSame([$streamId], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -159,18 +117,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         $newStreamId = Uuid::randomHex();
 
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['contentStreamId' => $newStreamId],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE,
-                null,
-                new ChangeSet(
-                    ['content_stream_id' => Uuid::fromHexToBytes($oldStreamId)],
-                    ['content_stream_id' => Uuid::fromHexToBytes($newStreamId)],
-                    isDelete: false,
-                ),
-            ),
         ]);
 
         $ids = ContentStreamWriteResultHelper::getAffectedStreamIds($event);
@@ -185,32 +131,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         $streamId = Uuid::randomHex();
 
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['contentStreamId' => $streamId],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['contentStreamId' => $streamId],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE,
-            ),
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_DELETE,
-                new EntityExistence(
-                    ContentStreamFilterDefinition::ENTITY_NAME,
-                    ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                    true,
-                    false,
-                    false,
-                    ['content_stream_id' => Uuid::fromHexToBytes($streamId)],
-                ),
-            ),
         ]);
 
         static::assertSame([$streamId], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -219,12 +139,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
     public function testIgnoresWriteResultsWithoutAnyStreamId(): void
     {
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
         ]);
 
         static::assertSame([], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -233,12 +147,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
     public function testIgnoresEmptyStringStreamId(): void
     {
         $event = $this->buildContainerEvent([
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['contentStreamId' => ''],
-                ContentStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
         ]);
 
         static::assertSame([], ContentStreamWriteResultHelper::getAffectedStreamIds($event));
@@ -252,11 +160,6 @@ class ContentStreamWriteResultHelperTest extends TestCase
         return new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ContentStreamFilterDefinition::ENTITY_NAME,
-                    $writeResults,
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         );

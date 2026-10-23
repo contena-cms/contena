@@ -16,6 +16,7 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 /**
  * @internal
@@ -66,24 +67,13 @@ class CreateHydratorCommandTest extends TestCase
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(HydratorCommandTestHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(AaaHydratorCommandTestHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 };
 
 EOF;

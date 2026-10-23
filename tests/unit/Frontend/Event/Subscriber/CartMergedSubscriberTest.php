@@ -6,9 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Event\CartMergedEvent;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
 use Contena\Frontend\Event\CartMergedSubscriber;
 use Symfony\Component\HttpFoundation\Request;
@@ -133,27 +130,4 @@ class CartMergedSubscriberTest extends TestCase
         $subscriber->addCartMergedNoticeFlash($cartMergedEvent);
     }
 
-    private function createCartMergedEvent(): CartMergedEvent
-    {
-        $currentContextToken = 'currentToken';
-        $currentContext = Generator::generateChannelContext(token: $currentContextToken);
-
-        // Create Guest cart
-        $previousCart = new Cart($currentContextToken);
-
-        $blogId1 = Uuid::randomHex();
-        $blogId2 = Uuid::randomHex();
-
-        $blogLineItem1 = new LineItem($blogId1, LineItem::BLOG_LINE_ITEM_TYPE, $blogId1);
-        $blogLineItem2 = new LineItem($blogId2, LineItem::BLOG_LINE_ITEM_TYPE, $blogId2);
-        $blogLineItem1->setStackable(true);
-        $blogLineItem2->setStackable(true);
-        $blogLineItem1->setQuantity(1);
-        $blogLineItem2->setQuantity(5);
-
-        $previousCart->addLineItems(new LineItemCollection([$blogLineItem1, $blogLineItem2]));
-        $previousCart->markUnmodified();
-
-        return new CartMergedEvent(new Cart('userToken'), $currentContext, $previousCart);
-    }
 }

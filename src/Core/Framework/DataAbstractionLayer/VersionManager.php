@@ -57,6 +57,7 @@ use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByAdminUserField;
 
 /**
  * @internal
@@ -528,7 +529,7 @@ class VersionManager
         $date = $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT);
 
         $source = $writeContext->getContext()->getSource();
-        $admin_userId = $source instanceof AdminApiSource && $source->getUserId()
+        $adminUserId = $source instanceof AdminApiSource && $source->getUserId()
             ? Uuid::fromHexToBytes($source->getUserId())
             : null;
 
@@ -536,7 +537,7 @@ class VersionManager
             $this->versionCommitDefinition,
             [
                 'id' => $commitId,
-                'admin_user_id' => $admin_userId,
+                'admin_user_id' => $adminUserId,
                 'version_id' => Uuid::fromHexToBytes($versionId),
                 'created_at' => $date,
             ],
@@ -585,7 +586,7 @@ class VersionManager
                         'entity_name' => $entityName,
                         'entity_id' => Json::encode($primary),
                         'payload' => Json::encode($payload),
-                        'admin_user_id' => $admin_userId,
+                        'admin_user_id' => $adminUserId,
                         'action' => $isClone ? 'clone' : $item->getOperation(),
                         'created_at' => $date,
                     ],

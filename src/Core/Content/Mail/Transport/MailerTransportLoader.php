@@ -11,6 +11,7 @@ use Symfony\Component\Mailer\Transport;
 use Symfony\Component\Mailer\Transport\Dsn;
 use Symfony\Component\Mailer\Transport\TransportInterface;
 use Symfony\Component\Mailer\Transport\Transports;
+use Doctrine\DBAL\Exception\DriverException;
 
 /**
  * @internal

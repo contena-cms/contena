@@ -11,6 +11,8 @@ use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\MockClock;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -22,7 +24,6 @@ class AppFeatureStorageTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     private MockClock $clock;
 

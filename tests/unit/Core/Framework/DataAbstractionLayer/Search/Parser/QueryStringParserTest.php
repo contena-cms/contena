@@ -6,8 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturerTranslation\BlogManufacturerTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTag\BlogTagDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
@@ -641,14 +639,11 @@ class QueryStringParserTest extends TestCase
                 BlogTagDefinition::class,
                 TagDefinition::class,
                 BlogTranslationDefinition::class,
-                BlogManufacturerDefinition::class,
-                BlogManufacturerTranslationDefinition::class,
                 BlogVisibilityDefinition::class,
                 ChannelDefinition::class,
                 BlogCategoryDefinition::class,
                 CategoryDefinition::class,
                 CategoryTranslationDefinition::class,
-                BlogPriceDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

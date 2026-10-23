@@ -13,6 +13,7 @@ use Contena\Core\Kernel;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
 use Twig\Cache\CacheInterface;
 use Twig\Environment;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

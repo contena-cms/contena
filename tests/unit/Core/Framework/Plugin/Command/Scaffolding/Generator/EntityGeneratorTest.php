@@ -13,6 +13,11 @@ use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\Field;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
+use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
 
 /**
  * @internal
@@ -184,11 +189,6 @@ class EntityGeneratorTest extends TestCase
 
 namespace MyNamespace\Core\Content\Test;
 
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\Field;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
-use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
 
 #[Entity('test', collectionClass: TestCollection::class)]
 class TestEntity extends EntityStruct

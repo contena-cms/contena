@@ -5,15 +5,11 @@ namespace Contena\Tests\Integration\Core\Content\Flow\Dispatching;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
-use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Checkout\Cart\Rule\CartVolumeRule;
 use Contena\Core\Checkout\Cart\Rule\LineItemRule;
 use Contena\Core\Checkout\Cart\Rule\LineItemTotalPriceRule;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Blog\BlogCollection;
@@ -43,6 +39,8 @@ use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Integration\Builder\User\UserBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -52,7 +50,6 @@ class FlowExecutorTest extends TestCase
     use IntegrationTestBehaviour;
     use ChannelApiTestBehaviour;
 
-    private CartService $cartService;
 
     /**
      * @var EntityRepository<BlogCollection>
@@ -79,7 +76,6 @@ class FlowExecutorTest extends TestCase
      */
     private EntityRepository $tagRepository;
 
-    private OrderTransactionStateHandler $orderTransactionStateHandler;
 
     /**
      * @var EntityRepository<UserCollection>
@@ -177,24 +173,6 @@ class FlowExecutorTest extends TestCase
         $ids->set('order', $this->cartService->order($cart, $this->channelContext, new RequestDataBag()));
     }
 
-    private function addBlogs(Cart $cart, IdsCollection $ids): Cart
-    {
-        $taxIds = $this->channelContext->getTaxRules()->getIds();
-        $ids->set('t1', (string) array_pop($taxIds));
-
-        $this->blogRepository->create([
-            (new BlogBuilder($ids, 'blog'))
-                ->price(100)
-                ->tax('t1')
-                ->visibility()
-                ->add('height', 3000)
-                ->add('width', 3000)
-                ->add('length', 3000)
-                ->build(),
-        ], $this->channelContext->getContext());
-
-        return $this->addBlogToCart($ids->get('blog'), 1, $cart, $this->cartService, $this->channelContext);
-    }
 
     private function changeTransactionStateToPaid(string $orderId): void
     {
@@ -356,13 +334,6 @@ class FlowExecutorTest extends TestCase
         ], $this->channelContext->getContext());
     }
 
-    private function addBlogToCart(string $blogId, int $quantity, Cart $cart, CartService $cartService, ChannelContext $context): Cart
-    {
-        $factory = new BlogLineItemFactory(new PriceDefinitionFactory());
-        $blog = $factory->create(['id' => $blogId, 'referencedId' => $blogId, 'quantity' => $quantity], $context);
-
-        return $cartService->add($cart, $blog, $context);
-    }
 
     private function createUserAwareFlow(IdsCollection $idsCollection): void
     {

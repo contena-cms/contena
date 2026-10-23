@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\Migration;
 
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Exception\DriverException;
 
 /**
  * Executes DDL, retrying once with `restrict_fk_on_non_standard_key` relaxed when MySQL 8.4

@@ -15,6 +15,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use Contena\Core\Content\Rule\RuleDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @implements Rule<MethodCall>

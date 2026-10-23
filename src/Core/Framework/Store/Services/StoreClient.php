@@ -28,6 +28,8 @@ use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
+use Contena\Core\Framework\Store\Struct\ShopAdminUserTokenStruct;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
  * @internal
@@ -62,7 +64,7 @@ class StoreClient
             throw StoreException::invalidContextSource(AdminApiSource::class, $context->getSource()::class);
         }
 
-        $admin_userId = $context->getSource()->getUserId();
+        $adminUserId = $context->getSource()->getUserId();
 
         $response = $this->client->request(
             Request::METHOD_POST,
@@ -72,20 +74,20 @@ class StoreClient
                 'json' => [
                     'contenaId' => $contenaId,
                     'password' => $password,
-                    'contenaUserId' => $admin_userId,
+                    'contenaUserId' => $adminUserId,
                 ],
             ]
         );
 
         $data = \json_decode($response->getBody()->getContents(), true, flags: \JSON_THROW_ON_ERROR);
 
-        $admin_userToken = new ShopUserTokenStruct(
+        $adminUserToken = new ShopAdminUserTokenStruct(
             $data['shopUserToken']['token'],
             new \DateTimeImmutable($data['shopUserToken']['expirationDate'])
         );
 
         $accessTokenStruct = new AccessTokenStruct(
-            $admin_userToken,
+            $adminUserToken,
             $data['shopSecret'] ?? null,
         );
 

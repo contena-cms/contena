@@ -13,6 +13,8 @@ use Contena\Core\System\User\Aggregate\UserAddress\UserAddressEntity;
 use Contena\Core\System\User\Aggregate\UserGroup\UserGroupEntity;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class UserEntity extends Entity implements \Stringable
 {
@@ -35,8 +37,6 @@ class UserEntity extends Entity implements \Stringable
     protected string $defaultShippingAddressId;
 
     protected string $userNumber;
-
-    protected ?string $salutationId = null;
 
     protected string $name;
 
@@ -232,16 +232,6 @@ class UserEntity extends Entity implements \Stringable
     public function setUserNumber(string $userNumber): void
     {
         $this->userNumber = $userNumber;
-    }
-
-    public function getSalutationId(): ?string
-    {
-        return $this->salutationId;
-    }
-
-    public function setSalutationId(string $salutationId): void
-    {
-        $this->salutationId = $salutationId;
     }
 
     public function getName(): string

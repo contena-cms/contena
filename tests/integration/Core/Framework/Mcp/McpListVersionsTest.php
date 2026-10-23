@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListVersions;
 use Symfony\Component\Clock\NativeClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * Runs the atomic increment against the real database.

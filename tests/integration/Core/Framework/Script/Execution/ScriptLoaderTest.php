@@ -4,6 +4,8 @@ namespace Contena\Tests\Integration\Core\Framework\Script\Execution;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Script\Execution\ScriptLoader;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

@@ -17,6 +17,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchPattern;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTerm;
 use Contena\Core\Framework\Util\ArrayNormalizer;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

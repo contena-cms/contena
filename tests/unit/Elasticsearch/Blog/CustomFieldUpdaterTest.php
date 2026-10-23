@@ -6,10 +6,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationDefinition;
@@ -105,7 +103,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult('test', ['name' => 'test', 'type' => 'text'], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, ['foo' => 'bar'], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -161,7 +158,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'test', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -197,12 +193,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $customFieldSetRelationId,
-                ['entityName' => 'user', 'customFieldSetId' => $customFieldSetId],
-                CustomFieldSetRelationDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldSetRelationDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -250,12 +240,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $customFieldSetRelationId,
-                ['entityName' => 'blog', 'customFieldSetId' => $customFieldSetId],
-                CustomFieldSetRelationDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldSetRelationDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -319,8 +303,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId1, ['name' => 'field1', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
-            new EntityWriteResult($customFieldId2, ['name' => 'field2', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -371,7 +353,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'nonSearchableField', 'type' => 'text', 'includeInSearch' => false], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -427,7 +408,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'searchableField', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -463,7 +443,6 @@ class CustomFieldUpdaterTest extends TestCase
 
         // An update with includeInSearch=false and active not set should not trigger indexing
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'nonSearchableField', 'type' => 'text', 'includeInSearch' => false], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, [], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -521,7 +500,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'searchableField', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, [], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -578,7 +556,6 @@ class CustomFieldUpdaterTest extends TestCase
 
         // App-owned set: include all fields even without includeInSearch (app manifest does not set it)
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'appField', 'type' => 'text', 'includeInSearch' => false], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -615,13 +592,6 @@ class CustomFieldUpdaterTest extends TestCase
 
         // Existing relation (existence->exists() returns true)
         $writeResults = [
-            new EntityWriteResult(
-                $customFieldSetRelationId,
-                ['entityName' => 'blog', 'customFieldSetId' => $customFieldSetId],
-                CustomFieldSetRelationDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE,
-                new EntityExistence(null, [], true, false, false, []) // exists = true
-            ),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldSetRelationDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -665,12 +635,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $customFieldSetRelationId,
-                ['entityName' => 'blog', 'customFieldSetId' => $customFieldSetId],
-                CustomFieldSetRelationDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldSetRelationDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -711,12 +675,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $customFieldSetRelationId,
-                ['entityName' => 'blog', 'customFieldSetId' => $customFieldSetId],
-                CustomFieldSetRelationDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldSetRelationDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -766,7 +724,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'orphanField', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -817,7 +774,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'field', 'type' => 'text'], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -855,7 +811,6 @@ class CustomFieldUpdaterTest extends TestCase
 
         // Update with 'name' change, not 'includeInSearch'
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'newName', 'type' => 'text'], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, [], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -893,7 +848,6 @@ class CustomFieldUpdaterTest extends TestCase
 
         // Write result key doesn't match getPrimaryKeysWithPropertyChange
         $writeResults = [
-            new EntityWriteResult($customFieldId1, ['name' => 'field', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, [], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -953,7 +907,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'newField', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1002,7 +955,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'field', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, [], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1063,7 +1015,6 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'fieldName', 'type' => 'text', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE, new EntityExistence(null, [], true, false, false, [])),
         ];
 
         $event = new EntityWrittenEvent(CustomFieldDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1127,16 +1078,9 @@ class CustomFieldUpdaterTest extends TestCase
         );
 
         $relationWriteResults = [
-            new EntityWriteResult(
-                $relationId,
-                ['entityName' => 'blog', 'customFieldSetId' => $relationSetId],
-                CustomFieldSetRelationDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $customFieldWriteResults = [
-            new EntityWriteResult($customFieldId, ['name' => 'newField', 'type' => 'int', 'includeInSearch' => true], CustomFieldDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
         ];
 
         $relationEvent = new EntityWrittenEvent(CustomFieldSetRelationDefinition::ENTITY_NAME, $relationWriteResults, Context::createDefaultContext());

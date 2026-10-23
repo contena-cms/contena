@@ -15,6 +15,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Integration\IntegrationCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

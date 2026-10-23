@@ -9,6 +9,7 @@ use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
+use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAwareTrait;
 
 /**
  * Triggered when the cookie consent groups are collected for the current sales channel.

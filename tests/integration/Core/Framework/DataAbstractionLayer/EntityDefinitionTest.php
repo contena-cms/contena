@@ -27,6 +27,7 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineS
 use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
 use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

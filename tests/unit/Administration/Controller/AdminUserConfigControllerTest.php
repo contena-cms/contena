@@ -29,9 +29,9 @@ class AdminUserConfigControllerTest extends TestCase
     /**
      * @var StaticEntityRepository<AdminUserConfigCollection>
      */
-    private StaticEntityRepository $admin_userConfigRepository;
+    private StaticEntityRepository $adminUserConfigRepository;
 
-    private AdminUserConfigController $admin_userConfigController;
+    private AdminUserConfigController $adminUserConfigController;
 
     private Context $context;
 
@@ -72,10 +72,10 @@ class AdminUserConfigControllerTest extends TestCase
 
     public function testGetConfigMeReturnsDataWithKeys(): void
     {
-        $admin_userConfigEntity = new AdminUserConfigEntity();
-        $admin_userConfigEntity->setUniqueIdentifier(Uuid::randomHex());
-        $admin_userConfigEntity->setKey('testKey');
-        $this->admin_userConfigRepository->addSearch(new AdminUserConfigCollection([$admin_userConfigEntity]));
+        $adminUserConfigEntity = new AdminUserConfigEntity();
+        $adminUserConfigEntity->setUniqueIdentifier(Uuid::randomHex());
+        $adminUserConfigEntity->setKey('testKey');
+        $this->admin_userConfigRepository->addSearch(new AdminUserConfigCollection([$adminUserConfigEntity]));
 
         $response = $this->admin_userConfigController->getConfigMe($this->context, new Request(['keys' => ['testKey']]));
 
@@ -94,12 +94,12 @@ class AdminUserConfigControllerTest extends TestCase
 
     public function testUpdateConfigPerformsMassUpsertEmptyWhenPostUpdateConfigs(): void
     {
-        $admin_userConfigEntity = new AdminUserConfigEntity();
-        $admin_userConfigEntity->setId(Uuid::randomHex());
-        $admin_userConfigEntity->setUniqueIdentifier(Uuid::randomHex());
-        $admin_userConfigEntity->setKey('testKey');
+        $adminUserConfigEntity = new AdminUserConfigEntity();
+        $adminUserConfigEntity->setId(Uuid::randomHex());
+        $adminUserConfigEntity->setUniqueIdentifier(Uuid::randomHex());
+        $adminUserConfigEntity->setKey('testKey');
 
-        $this->admin_userConfigRepository->addSearch(new AdminUserConfigCollection([$admin_userConfigEntity]));
+        $this->admin_userConfigRepository->addSearch(new AdminUserConfigCollection([$adminUserConfigEntity]));
 
         $response = $this->admin_userConfigController->updateConfigMe($this->context, new Request([], ['blog' => true, 'testKey' => true]));
 

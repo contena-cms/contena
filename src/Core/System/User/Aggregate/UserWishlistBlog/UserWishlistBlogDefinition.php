@@ -19,7 +19,7 @@ use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistDefinition;
  */
 class UserWishlistBlogDefinition extends EntityDefinition
 {
-    final public const ENTITY_NAME = 'user_wishlist_product';
+    final public const ENTITY_NAME = 'user_wishlist_blog';
 
     public function getEntityName(): string
     {

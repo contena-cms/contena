@@ -41,15 +41,15 @@ class AdminUserRecoveryRequestEventTest extends TestCase
 
     public function testGettersReturnTheConstructorArguments(): void
     {
-        $admin_userRecovery = new AdminUserRecoveryEntity();
-        $admin_userRecovery->setUniqueIdentifier('recovery');
-        $admin_userRecovery->setId('recovery-id');
+        $adminUserRecovery = new AdminUserRecoveryEntity();
+        $adminUserRecovery->setUniqueIdentifier('recovery');
+        $adminUserRecovery->setId('recovery-id');
         $context = Context::createDefaultContext();
 
-        $event = new AdminUserRecoveryRequestEvent($admin_userRecovery, 'my-reset-url', $context);
+        $event = new AdminUserRecoveryRequestEvent($adminUserRecovery, 'my-reset-url', $context);
 
         static::assertSame(AdminUserRecoveryRequestEvent::EVENT_NAME, $event->getName());
-        static::assertSame($admin_userRecovery, $event->getUserRecovery());
+        static::assertSame($adminUserRecovery, $event->getUserRecovery());
         static::assertSame($context, $event->getContext());
         static::assertSame('my-reset-url', $event->getResetUrl());
         static::assertSame('recovery-id', $event->getUserId());
@@ -74,32 +74,32 @@ class AdminUserRecoveryRequestEventTest extends TestCase
 
     public function testGetMailStructKeepsTheRecipientBuiltOnTheFirstCall(): void
     {
-        $admin_user = new AdminUserEntity();
-        $admin_user->setEmail('admin@example.com');
-        $admin_user->setName('Max');
-        $admin_user->setLastName('Mustermann');
+        $adminUser = new AdminUserEntity();
+        $adminUser->setEmail('admin@example.com');
+        $adminUser->setName('Max');
+        $adminUser->setLastName('Mustermann');
 
-        $admin_userRecovery = new AdminUserRecoveryEntity();
-        $admin_userRecovery->setUser($admin_user);
+        $adminUserRecovery = new AdminUserRecoveryEntity();
+        $adminUserRecovery->setUser($adminUser);
 
-        $event = new AdminUserRecoveryRequestEvent($admin_userRecovery, 'my-reset-url', Context::createDefaultContext());
+        $event = new AdminUserRecoveryRequestEvent($adminUserRecovery, 'my-reset-url', Context::createDefaultContext());
         $event->getMailStruct();
 
-        $admin_user->setEmail('changed@example.com');
+        $adminUser->setEmail('changed@example.com');
 
         static::assertSame(['admin@example.com' => 'Max Mustermann'], $event->getMailStruct()->getRecipients());
     }
 
     private static function eventWithUser(): AdminUserRecoveryRequestEvent
     {
-        $admin_user = new AdminUserEntity();
-        $admin_user->setEmail('admin@example.com');
-        $admin_user->setName('Max');
-        $admin_user->setLastName('Mustermann');
+        $adminUser = new AdminUserEntity();
+        $adminUser->setEmail('admin@example.com');
+        $adminUser->setName('Max');
+        $adminUser->setLastName('Mustermann');
 
-        $admin_userRecovery = new AdminUserRecoveryEntity();
-        $admin_userRecovery->setUser($admin_user);
+        $adminUserRecovery = new AdminUserRecoveryEntity();
+        $adminUserRecovery->setUser($adminUser);
 
-        return new AdminUserRecoveryRequestEvent($admin_userRecovery, 'my-reset-url', Context::createDefaultContext());
+        return new AdminUserRecoveryRequestEvent($adminUserRecovery, 'my-reset-url', Context::createDefaultContext());
     }
 }

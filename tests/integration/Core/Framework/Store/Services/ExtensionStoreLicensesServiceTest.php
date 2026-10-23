@@ -14,6 +14,8 @@ use Contena\Core\Framework\Store\Struct\ReviewStruct;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -73,11 +75,11 @@ class ExtensionStoreLicensesServiceTest extends TestCase
 
     private function getContextWithStoreToken(): Context
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $data = [
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'localeId' => $this->getLocaleIdOfSystemLanguage(),
                 'username' => 'foobar',
                 'password' => TestDefaults::HASHED_PASSWORD,
@@ -91,7 +93,7 @@ class ExtensionStoreLicensesServiceTest extends TestCase
         ];
 
         static::getContainer()->get('admin_user.repository')->create($data, Context::createDefaultContext());
-        $source = new AdminApiSource($admin_userId);
+        $source = new AdminApiSource($adminUserId);
         $source->setIsAdmin(true);
 
         return Context::createDefaultContext($source);

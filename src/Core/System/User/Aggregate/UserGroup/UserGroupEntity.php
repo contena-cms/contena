@@ -6,6 +6,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\User\Aggregate\UserGroupTranslation\UserGroupTranslationCollection;
 use Contena\Core\System\User\UserCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

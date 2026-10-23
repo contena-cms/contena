@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionC
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit\VersionCommitEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -32,7 +33,7 @@ class VersionCommitDataEntity extends Entity
 
     protected ?VersionCommitEntity $commit = null;
 
-    protected ?string $admin_userId = null;
+    protected ?string $adminUserId = null;
 
     protected ?string $integrationId = null;
 
@@ -123,9 +124,9 @@ class VersionCommitDataEntity extends Entity
         return $this->admin_userId;
     }
 
-    public function setUserId(string $admin_userId): void
+    public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $admin_userId;
+        $this->admin_userId = $adminUserId;
     }
 
     public function getIntegrationId(): ?string

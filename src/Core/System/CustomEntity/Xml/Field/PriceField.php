@@ -9,6 +9,7 @@ namespace Contena\Core\System\CustomEntity\Xml\Field;
 class PriceField extends Field
 {
     use RequiredTrait;
+use Contena\Core\System\CustomEntity\Xml\Field\Traits\RequiredTrait;
 
     protected string $type = 'price';
 }

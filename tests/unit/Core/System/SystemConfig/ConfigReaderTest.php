@@ -78,10 +78,6 @@ class ConfigReaderTest extends TestCase
         $this->configReader->getConfigFromBundle($this->validConfigPlugin(), "config.xml\n");
     }
 
-    private function validConfigPlugin(): ValidConfigPlugin
-    {
-        return new ValidConfigPlugin(active: true, basePath: __DIR__ . '/Service/_fixtures/ValidConfigPlugin');
-    }
 
     /**
      * @return array<mixed>

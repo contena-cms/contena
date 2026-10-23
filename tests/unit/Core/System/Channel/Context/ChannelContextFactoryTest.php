@@ -86,8 +86,6 @@ class ChannelContextFactoryTest extends TestCase
             new UserGroupEntity(),
             new TaxCollection(),
             $basePaymentMethod,
-            new ShippingMethodEntity(),
-            new ShippingLocation($country, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),
@@ -95,7 +93,6 @@ class ChannelContextFactoryTest extends TestCase
         );
 
         $paymentMethodRepository = StaticEntityRepository::of(
-            PaymentMethodCollection::class,
             [
                 static function (Criteria $criteria, Context $context) use ($baseContext) {
                     static::assertCount(2, $criteria->getFilters());
@@ -214,8 +211,6 @@ class ChannelContextFactoryTest extends TestCase
             new UserGroupEntity(),
             new TaxCollection(),
             $basePaymentMethod,
-            new ShippingMethodEntity(),
-            new ShippingLocation($country, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),
@@ -319,8 +314,6 @@ class ChannelContextFactoryTest extends TestCase
             new UserGroupEntity(),
             new TaxCollection(),
             $basePaymentMethod,
-            new ShippingMethodEntity(),
-            new ShippingLocation($country, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),
@@ -441,7 +434,6 @@ class ChannelContextFactoryTest extends TestCase
             $currency,
             new UserGroupEntity(),
             new TaxCollection(),
-            new PaymentMethodEntity(),
             new ShippingMethodEntity(),
             $baseShippingLocation,
             new CashRoundingConfig(2, 0.01, true),
@@ -683,9 +675,6 @@ class ChannelContextFactoryTest extends TestCase
             $currency,
             new UserGroupEntity(),
             new TaxCollection(),
-            new PaymentMethodEntity(),
-            new ShippingMethodEntity(),
-            new ShippingLocation($channelCountry, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),

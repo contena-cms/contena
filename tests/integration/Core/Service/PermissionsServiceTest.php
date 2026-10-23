@@ -11,6 +11,7 @@ use Contena\Core\Service\Permission\PermissionsService;
 use Contena\Core\Service\ServiceException;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpKernel\Debug\TraceableEventDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -44,7 +44,6 @@ class PaymentPayloadServiceTest extends TestCase
 
     private AppPayloadServiceHelper&MockObject $helper;
 
-    private PaymentPayloadService $service;
 
     private IdsCollection $ids;
 
@@ -108,7 +107,6 @@ class PaymentPayloadServiceTest extends TestCase
             'https://example.com',
             $payload,
             $app,
-            PaymentResponse::class,
             Context::createDefaultContext()
         );
 
@@ -153,7 +151,6 @@ class PaymentPayloadServiceTest extends TestCase
             'http://example.com',
             $payload,
             $app,
-            PaymentResponse::class,
             $context,
         );
 
@@ -186,7 +183,6 @@ class PaymentPayloadServiceTest extends TestCase
                 'http://example.com',
                 $payload,
                 $app,
-                PaymentResponse::class,
                 $context,
             );
             static::fail('Expected malformed payment gateway JSON to be wrapped.');

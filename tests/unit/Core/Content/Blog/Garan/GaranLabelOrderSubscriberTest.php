@@ -6,22 +6,14 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\CartBehavior;
 use Contena\Core\Checkout\Cart\Order\CartConvertedEvent;
-use Contena\Core\Checkout\Cart\Order\OrderConversionContext;
-use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
 use Contena\Core\Content\Blog\Garan\GaranLabelOrderSubscriber;
-use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
-use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Twig\Environment;
 
 /**
@@ -114,38 +106,7 @@ class GaranLabelOrderSubscriberTest extends TestCase
         static::assertSame(self::PLACED_WITH, $event->getConvertedCart()['lineItems'][1]['payload']['garanLabel']);
     }
 
-    /**
-     * @param list<mixed> $searchResults
-     */
-    private function createSubscriber(array $searchResults): GaranLabelOrderSubscriber
-    {
-        /** @var StaticEntityRepository<BlogCollection> $blogRepository */
-        $blogRepository = new StaticEntityRepository($searchResults, new BlogDefinition());
 
-        return new GaranLabelOrderSubscriber(
-            $blogRepository,
-            new GaranLabelResolver(
-                new GaranLabelDurationFormatter(),
-                new GaranLabelRenderer(static::createStub(Environment::class)),
-            ),
-        );
-    }
-
-    /**
-     * @param list<array{blogId: string|null, payload: array<string, mixed>}> $lineItems
-     */
-    private static function createEvent(array $lineItems, bool $isExistingOrder): CartConvertedEvent
-    {
-        $cart = new Cart('test');
-        $cart->setBehavior(new CartBehavior([CheckoutPermissions::SKIP_BLOG_RECALCULATION => $isExistingOrder]));
-
-        return new CartConvertedEvent(
-            $cart,
-            ['lineItems' => $lineItems],
-            Generator::generateChannelContext(),
-            new OrderConversionContext(),
-        );
-    }
 
     private static function createBlog(string $id): BlogEntity
     {

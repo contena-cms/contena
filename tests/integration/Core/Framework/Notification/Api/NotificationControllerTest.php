@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Notification\NotificationCollection;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
 
 /**
  * @internal
@@ -110,13 +111,13 @@ class NotificationControllerTest extends TestCase
 
     /**
      * @param array<string> $requiredPrivileges
-     * @param array<string>|null $admin_userPrivileges
+     * @param array<string>|null $adminUserPrivileges
      */
     #[DataProvider('getNotificationProvider')]
     public function testGetNotifications(
         bool $adminOnly,
         array $requiredPrivileges,
-        ?array $admin_userPrivileges,
+        ?array $adminUserPrivileges,
         int $resultQuantity
     ): void {
         $data = [
@@ -127,8 +128,8 @@ class NotificationControllerTest extends TestCase
         ];
         $this->notificationRepository->create([$data], $this->context);
 
-        if (\is_array($admin_userPrivileges)) {
-            $this->authorizeBrowser($this->getBrowser(), [], $admin_userPrivileges);
+        if (\is_array($adminUserPrivileges)) {
+            $this->authorizeBrowser($this->getBrowser(), [], $adminUserPrivileges);
         }
 
         $this->getBrowser()->request('GET', '/api/notification/message');

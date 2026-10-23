@@ -12,6 +12,8 @@ use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
 use Contena\Frontend\Page\Page;
+use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
+use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 
 /**
  * Triggered when the frontend endpoint /frontend/script/{hook} is called

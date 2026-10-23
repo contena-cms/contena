@@ -8,6 +8,7 @@ use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinit
 use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -20,7 +20,6 @@ class Migration1781703825AddChannelFileAclPrivilegesTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1781703825AddChannelFileAclPrivileges $migration;
 
     protected function setUp(): void
     {

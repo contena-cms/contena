@@ -3,6 +3,7 @@
 namespace Contena\Core\Test\Stub\Framework\Util;
 
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 /**
  * In-memory Symfony {@see Filesystem} double: the write methods a unit test needs, backed by an array, so

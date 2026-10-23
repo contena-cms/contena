@@ -4,6 +4,8 @@ namespace Contena\Core\System\Snippet;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

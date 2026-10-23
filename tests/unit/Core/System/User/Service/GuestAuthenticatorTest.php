@@ -133,19 +133,4 @@ class GuestAuthenticatorTest extends TestCase
         ];
     }
 
-    private function createGuestOrder(string $zipcode): OrderEntity
-    {
-        $order = new OrderEntity();
-        $orderUser = new OrderUserEntity();
-        $user = new UserEntity();
-        $user->setGuest(true);
-        $orderUser->setUser($user);
-        $orderUser->setEmail('test@example.com');
-        $order->setOrderUser($orderUser);
-        $billingAddress = new OrderAddressEntity();
-        $billingAddress->setZipcode($zipcode);
-        $order->setBillingAddress($billingAddress);
-
-        return $order;
-    }
 }

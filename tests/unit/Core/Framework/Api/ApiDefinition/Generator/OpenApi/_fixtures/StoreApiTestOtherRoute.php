@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\OpenApi\
 
 use OpenApi\Annotations as OA;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\Routing\Annotation\Entity;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Channel\ChannelContext;

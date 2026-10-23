@@ -23,7 +23,6 @@ class MissingIntegrationTestInSplitSuiteTest extends TestCase
     public function testSplitSuiteCoverage(string $fileName, bool $expectFailure, string $expectedMissingEntry = ''): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, File::STATUS_ADDED),
         ])));
 
         (new MissingIntegrationTestInSplitSuite(self::FIXTURE_CONFIG))($context);
@@ -69,7 +68,6 @@ class MissingIntegrationTestInSplitSuiteTest extends TestCase
     public function testFailsForUnloadablePhpunitConfig(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('tests/integration/Core/Framework/Api/Controller/SyncControllerTest.php', File::STATUS_ADDED),
         ])));
 
         // DOMDocument::load() emits an E_WARNING for the missing file; swallow it locally
@@ -99,8 +97,6 @@ class MissingIntegrationTestInSplitSuiteTest extends TestCase
             XML;
 
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('tests/integration/Core/Framework/Webhook/WebhookDispatchTest.php', File::STATUS_ADDED),
-            new StubFile('phpunit.xml.dist', File::STATUS_MODIFIED, $prConfig),
         ])));
 
         (new MissingIntegrationTestInSplitSuite(self::FIXTURE_CONFIG))($context);

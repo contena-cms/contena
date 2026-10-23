@@ -9,6 +9,11 @@ use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Frontend\Event\FrontendRenderEvent;
 use Contena\Frontend\Page\Navigation\NavigationPage;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\RequestStackTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

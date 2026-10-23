@@ -36,14 +36,14 @@ class ImitateUserRouteTest extends TestCase
     public function testImitateUserOld(): void
     {
         $userId = Uuid::randomHex();
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $token = 'testToken';
 
         $imitateUserTokenGenerator = $this->createMock(ImitateUserTokenGenerator::class);
         $imitateUserTokenGenerator
             ->expects($this->once())
             ->method('validate')
-            ->with($token, TestDefaults::CHANNEL, $userId, $admin_userId);
+            ->with($token, TestDefaults::CHANNEL, $userId, $adminUserId);
 
         $accountService = static::createStub(AccountService::class);
         $accountService->method('loginById')->willReturn('newToken');
@@ -64,7 +64,7 @@ class ImitateUserRouteTest extends TestCase
         $dataBag = new RequestDataBag([
             ImitateUserRoute::TOKEN => $token,
             ImitateUserRoute::CUSTOMER_ID => $userId,
-            ImitateUserRoute::USER_ID => $admin_userId,
+            ImitateUserRoute::USER_ID => $adminUserId,
         ]);
 
         $response = $route->imitateUserLogin($dataBag, $channelContext);

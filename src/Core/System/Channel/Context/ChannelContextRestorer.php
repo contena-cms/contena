@@ -4,55 +4,25 @@ namespace Contena\Core\System\Channel\Context;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
 use Contena\Core\System\Channel\ChannelException;
-use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 class ChannelContextRestorer
 {
-
     /**
-     * @deprecated tag:v6.8.0 - Will be removed, load the order and use `OrderConverter::assembleChannelContext()` instead. Pass the result to `CartRuleLoader::loadByCart()` if the rules have to be re-evaluated.
-     *
-     * @param array<string, string|array<string,bool>|null> $overrideOptions
-     *
-     * @throws InconsistentCriteriaIdsException
+     * @internal
      */
-    public function restoreByOrder(string $orderId, Context $context, array $overrideOptions = []): ChannelContext
-    {
-        Feature::triggerDeprecationOrThrow(
-            'v6.8.0.0',
-            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0', OrderConverter::class . '::assembleChannelContext')
-        );
-
-        $order = $this->getOrderById($orderId, $context);
-        if ($order === null) {
-            throw ChannelException::orderNotFound($orderId);
-        }
-
-        if ($order->getOrderUser() === null) {
-            throw ChannelException::missingAssociation('orderUser');
-        }
-
-        $channelContext = $this->orderConverter->assembleChannelContext($order, $context, $overrideOptions);
-
-        $cart = $this->orderConverter->convertToCart($order, $channelContext->getContext());
-        $this->cartRuleLoader->loadByCart(
-            $channelContext,
-            $cart,
-            new CartBehavior($channelContext->getPermissions()),
-            true
-        );
-
-        return $channelContext;
+    public function __construct(
+        private readonly AbstractChannelContextFactory $factory,
+        private readonly Connection $connection,
+    ) {
     }
 
     /**
      * @param array<string> $overrideOptions
      *
-     * @throws Exception
+     * @throws ChannelException
      */
     public function restoreByUser(string $userId, Context $context, array $overrideOptions = []): ChannelContext
     {
@@ -89,10 +59,8 @@ class ChannelContextRestorer
             $options
         );
 
-        $this->cartRuleLoader->loadByToken($channelContext, $token);
         $channelContext->getContext()->addState(...$context->getStates());
 
         return $channelContext;
     }
-
 }

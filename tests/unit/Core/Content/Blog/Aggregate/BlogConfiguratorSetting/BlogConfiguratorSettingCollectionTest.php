@@ -5,8 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Aggregate\BlogConfiguratorSetting
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogConfiguratorSetting\BlogConfiguratorSettingEntity;
-use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
 use Contena\Core\Content\Property\PropertyGroupEntity;
 
 /**
@@ -70,30 +68,5 @@ class BlogConfiguratorSettingCollectionTest extends TestCase
         static::assertSame(['option-red'], $collection->getOptions()->getKeys());
     }
 
-    private function createSetting(string $id, string $groupId, string $optionId): BlogConfiguratorSettingEntity
-    {
-        $group = new PropertyGroupEntity();
-        $group->setId($groupId);
 
-        $option = new PropertyGroupOptionEntity();
-        $option->setId($optionId);
-        $option->setGroupId($groupId);
-        $option->setGroup($group);
-
-        $setting = new BlogConfiguratorSettingEntity();
-        $setting->setId($id);
-        $setting->setOptionId($optionId);
-        $setting->setOption($option);
-
-        return $setting;
-    }
-
-    private function createSettingWithoutOption(string $id): BlogConfiguratorSettingEntity
-    {
-        $setting = new BlogConfiguratorSettingEntity();
-        $setting->setId($id);
-        $setting->setOptionId('missing');
-
-        return $setting;
-    }
 }

@@ -27,7 +27,6 @@ use Contena\Core\System\Channel\ChannelContext;
 #[Group('rules')]
 class OrderDeliveryStatusRuleTest extends TestCase
 {
-    private OrderDeliveryStatusRule $rule;
 
     protected function setUp(): void
     {

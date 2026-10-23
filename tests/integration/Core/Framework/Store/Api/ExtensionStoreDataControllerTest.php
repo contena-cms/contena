@@ -5,6 +5,9 @@ namespace Contena\Tests\Integration\Core\Framework\Store\Api;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Store\Api\ExtensionStoreDataController;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

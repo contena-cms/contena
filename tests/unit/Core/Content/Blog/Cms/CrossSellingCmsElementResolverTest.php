@@ -14,7 +14,6 @@ use Contena\Core\Content\Blog\Cms\CrossSellingCmsElementResolver;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\Channel\Struct\CrossSellingStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
@@ -47,7 +46,6 @@ class CrossSellingCmsElementResolverTest extends TestCase
 
         $resolver = new CrossSellingCmsElementResolver($route);
         $config = new FieldConfigCollection([
-            new FieldConfig('blog', FieldConfig::SOURCE_STATIC, $blogId),
         ]);
 
         $slot = new CmsSlotEntity();

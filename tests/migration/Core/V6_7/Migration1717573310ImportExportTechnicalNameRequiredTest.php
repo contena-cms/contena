@@ -10,6 +10,7 @@ use Contena\Core\Content\ImportExport\ImportExportProfileDefinition;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1717573310ImportExportTechnicalNameRequired;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

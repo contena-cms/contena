@@ -13,6 +13,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use SwagTestPlugin\SwagTestPlugin;
 use SwagTestSkipRebuild\SwagTestSkipRebuild;
 use SwagTestWithBundle\SwagTestWithBundle;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 trait PluginIntegrationTestBehaviour
 {

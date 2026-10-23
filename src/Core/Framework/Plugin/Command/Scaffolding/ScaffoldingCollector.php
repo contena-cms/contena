@@ -3,6 +3,8 @@
 namespace Contena\Core\Framework\Plugin\Command\Scaffolding;
 
 use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\ScaffoldingGenerator;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 /**
  * @internal
@@ -12,7 +14,6 @@ class ScaffoldingCollector
     private string $servicesPhpIntro = <<<'EOL'
 <?php declare(strict_types=1);
 
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -29,7 +30,6 @@ EOL;
     private string $routesPhpIntro = <<<'EOL'
 <?php declare(strict_types=1);
 
-use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 
 return static function (RoutingConfigurator $routes): void {
 

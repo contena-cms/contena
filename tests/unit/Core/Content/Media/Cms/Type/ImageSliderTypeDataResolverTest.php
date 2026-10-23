@@ -11,7 +11,6 @@ use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\Channel\Struct\ImageSliderStruct;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
@@ -40,7 +39,6 @@ class ImageSliderTypeDataResolverTest extends TestCase
         $slot->setUniqueIdentifier('slot-id');
         $slot->setType('image-slider');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('sliderItems', FieldConfig::SOURCE_MAPPED, 'blog.media'),
         ]));
 
         $context = $this->createEntityResolverContext($this->createBlogMediaCollectionWithoutMediaAssociation());
@@ -60,7 +58,6 @@ class ImageSliderTypeDataResolverTest extends TestCase
         $slot->setUniqueIdentifier('slot-id');
         $slot->setType('image-slider');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('sliderItems', FieldConfig::SOURCE_MAPPED, 'blog.media'),
         ]));
 
         $context = $this->createEntityResolverContext($this->createBlogMediaCollectionWithMediaAssociation());
@@ -77,7 +74,6 @@ class ImageSliderTypeDataResolverTest extends TestCase
         $slot->setUniqueIdentifier('slot-id');
         $slot->setType('image-slider');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('sliderItems', FieldConfig::SOURCE_STATIC, [['mediaId' => 'media-1']]),
         ]));
 
         $criteriaCollection = $resolver->collect($slot, $context);
@@ -96,7 +92,6 @@ class ImageSliderTypeDataResolverTest extends TestCase
         $slot->setUniqueIdentifier('slot-id');
         $slot->setType('image-slider');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('sliderItems', FieldConfig::SOURCE_MAPPED, 'blog.media'),
         ]));
 
         $result = new ElementDataCollection();

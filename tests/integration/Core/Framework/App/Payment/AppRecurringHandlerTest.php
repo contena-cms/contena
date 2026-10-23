@@ -5,14 +5,11 @@ namespace Contena\Tests\Integration\Core\Framework\App\Payment;
 use GuzzleHttp\Exception\ServerException;
 use GuzzleHttp\Psr7\Response;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
-use Contena\Core\Checkout\Payment\Cart\PaymentTransactionStruct;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Hmac\Guzzle\AuthMiddleware;
 use Contena\Core\Framework\App\Payment\Handler\AppPaymentHandler;
 use Contena\Core\Framework\App\Payment\Response\PaymentResponse;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 
 /**
  * @internal
@@ -145,14 +142,4 @@ FOO_BAR_ERROR_MESSAGE', $e->getMessage());
         static::fail('Should catch a RecurringException');
     }
 
-    private function getRecurringStruct(): PaymentTransactionStruct
-    {
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('order.id', $this->ids->get('order')));
-
-        $transactionId = $this->orderTransactionRepository->searchIds($criteria, Context::createDefaultContext())->firstId();
-        static::assertNotNull($transactionId);
-
-        return new PaymentTransactionStruct($transactionId);
-    }
 }

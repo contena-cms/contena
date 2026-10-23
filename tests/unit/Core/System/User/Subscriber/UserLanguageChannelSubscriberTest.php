@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
@@ -408,11 +407,6 @@ class UserLanguageChannelSubscriberTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext($context),
             [
-                new DeleteCommand(
-                    $userDef,
-                    ['id' => $userIdBytes],
-                    EntityExistence::createForEntity(UserDefinition::ENTITY_NAME, ['id' => $userIdBytes])
-                ),
                 new InsertCommand(
                     $userDef,
                     [

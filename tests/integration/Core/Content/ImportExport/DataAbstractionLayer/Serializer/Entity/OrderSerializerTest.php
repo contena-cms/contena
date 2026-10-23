@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\ImportExport\DataAbstractionLay
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderUser\OrderUserEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\OrderSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
@@ -17,6 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -27,7 +26,6 @@ class OrderSerializerTest extends TestCase
 
     use OrderFixture;
 
-    private OrderSerializer $serializer;
 
     /**
      * @var EntityRepository<OrderCollection>
@@ -119,44 +117,6 @@ class OrderSerializerTest extends TestCase
         static::assertSame($serialized['totalRounding'], $totalRounding->jsonSerialize());
     }
 
-    private function createOrder(): OrderEntity
-    {
-        // create blog
-        $blogId = Uuid::randomHex();
-        $blog = $this->getBlogData($blogId);
-
-        $blogRepository = static::getContainer()->get('blog.repository');
-        $blogRepository->create([$blog], $this->context);
-
-        $orderId = Uuid::randomHex();
-        $orderData = $this->getOrderData($orderId, $this->context)[0];
-
-        $orderData['lineItems'][0]['blogId'] = $blogId;
-
-        $orderData['transactions'] = [
-            $this->getTransactionData($orderData),
-        ];
-
-        $this->orderRepository->create([$orderData], $this->context);
-
-        $criteria = new Criteria();
-
-        $criteria->addAssociations([
-            'lineItems',
-            'billingAddress',
-            'deliveries.stateMachineState',
-            'deliveries.shippingOrderAddress',
-            'deliveries.stateMachineState',
-            'transactions.stateMachineState',
-            'transactions.shippingMethod',
-        ]);
-
-        $order = $this->orderRepository->search($criteria, $this->context)->getEntities()->first();
-
-        static::assertInstanceOf(OrderEntity::class, $order);
-
-        return $order;
-    }
 
     /**
      * @return array<string, mixed>

@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Adapter\Cache\InvalidatorStorage\MySQLInvalidatorStorage;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

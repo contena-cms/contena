@@ -63,7 +63,6 @@ class FlowSequenceDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of flow sequence.'),
             (new FkField('flow_id', 'flowId', FlowDefinition::class))->addFlags(new Required())->setDescription('Unique identity of flow.'),
             (new FkField('rule_id', 'ruleId', RuleDefinition::class))->setDescription('Unique identity of rule.'),
-            (new StringField('action_name', 'actionName', 255))->addFlags(new SearchRanking(SearchRanking::ASSOCIATION_SEARCH_RANKING))->setDescription('Unique name of the action in the flow sequence.'),
             (new JsonField('config', 'config', [], []))->setDescription('Specifies detailed information about the component.'),
             (new IntField('position', 'position'))->setDescription('The order of the tabs of your defined flow sequence is to be displayed.'),
             (new IntField('display_group', 'displayGroup'))->setDescription('The group to which the flow sequence is visible.'),

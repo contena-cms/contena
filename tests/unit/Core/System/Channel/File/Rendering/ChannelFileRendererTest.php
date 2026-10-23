@@ -58,7 +58,6 @@ class ChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new ChannelFileRendererTestHierarchyBuilder(['Ucp' => 0, 'Framework' => -1]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 
@@ -111,7 +110,6 @@ class ChannelFileRendererTest extends TestCase
         $scopeDetector = static::createStub(TemplateScopeDetector::class);
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new ChannelFileRendererTestHierarchyBuilder(['Ucp' => 0, 'Framework' => -1]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
         $twig->addExtension(new NodeExtension($templateFinder, $scopeDetector));
@@ -278,7 +276,6 @@ class ChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new ChannelFileRendererTestHierarchyBuilder(['Ucp' => 0, 'Framework' => -1]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 
@@ -330,7 +327,6 @@ class ChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new ChannelFileRendererTestHierarchyBuilder(['Framework' => 0]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 
@@ -382,7 +378,6 @@ class ChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new ChannelFileRendererTestHierarchyBuilder(['Framework' => 0]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 

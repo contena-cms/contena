@@ -22,7 +22,7 @@ class ContenaGrantType extends AbstractGrant
 
     public function __construct(
         RefreshTokenRepositoryInterface $refreshTokenRepository,
-        private readonly AdminUserService $admin_userService,
+        private readonly AdminUserService $adminUserService,
         private readonly ExternalTokenService $tokenService,
         private readonly ClockInterface $clock,
     ) {
@@ -39,14 +39,14 @@ class ContenaGrantType extends AbstractGrant
         $client = $this->getClientEntityOrFail('administration', $request);
         $scopes = $this->validateScopes($this->getRequestParameter('scope', $request, $this->defaultScope));
 
-        $admin_user = $this->validateUser($request);
-        $admin_userIdentifier = $admin_user->getIdentifier();
-        $finalizedScopes = $this->scopeRepository->finalizeScopes($scopes, $this->getIdentifier(), $client, $admin_userIdentifier);
+        $adminUser = $this->validateUser($request);
+        $adminUserIdentifier = $adminUser->getIdentifier();
+        $finalizedScopes = $this->scopeRepository->finalizeScopes($scopes, $this->getIdentifier(), $client, $adminUserIdentifier);
 
         // take the shorter token TTL to avoid that the external token gets invalid
-        $lowerTTL = TokenTimeToLive::getLowerTTL($accessTokenTTL, $this->clock->now()->diff($admin_user->expiry));
+        $lowerTTL = TokenTimeToLive::getLowerTTL($accessTokenTTL, $this->clock->now()->diff($adminUser->expiry));
 
-        $accessToken = $this->issueAccessToken($lowerTTL, $client, $admin_userIdentifier, $finalizedScopes);
+        $accessToken = $this->issueAccessToken($lowerTTL, $client, $adminUserIdentifier, $finalizedScopes);
         $this->getEmitter()->emit(new RequestAccessTokenEvent(RequestEvent::ACCESS_TOKEN_ISSUED, $request, $accessToken));
         $responseType->setAccessToken($accessToken);
 

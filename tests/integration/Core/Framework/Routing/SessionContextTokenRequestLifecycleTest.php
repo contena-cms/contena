@@ -9,6 +9,7 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\BrowserKit\Cookie;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * The session context source driven through the real HTTP kernel, where the listener order decides

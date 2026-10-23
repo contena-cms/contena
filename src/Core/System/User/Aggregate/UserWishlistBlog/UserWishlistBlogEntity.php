@@ -5,6 +5,7 @@ namespace Contena\Core\System\User\Aggregate\UserWishlistBlog;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\User\Aggregate\UserWishlist\UserWishlistEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

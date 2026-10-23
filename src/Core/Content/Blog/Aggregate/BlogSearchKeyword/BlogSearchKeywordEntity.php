@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Blog\Aggregate\BlogSearchKeyword;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

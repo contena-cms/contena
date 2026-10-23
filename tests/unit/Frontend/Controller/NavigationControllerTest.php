@@ -45,7 +45,6 @@ class NavigationControllerTest extends TestCase
 
     private MenuOffcanvasPageletLoaderInterface&Stub $offCanvasLoader;
 
-    private NavigationControllerStub $controller;
 
     private HeaderPageletLoaderInterface&Stub $headerLoader;
 
@@ -270,17 +269,4 @@ class NavigationControllerTest extends TestCase
         static::assertSame($footerPagelet, $this->controller->recorder()->calledHook->getPage());
     }
 
-    private function buildController(
-        ?HeaderPageletLoaderInterface $headerLoader = null,
-        ?FooterPageletLoaderInterface $footerLoader = null,
-    ): NavigationControllerStub {
-        return new NavigationControllerStub(
-            $this->pageLoader,
-            $this->offCanvasLoader,
-            $headerLoader ?? $this->headerLoader,
-            $footerLoader ?? $this->footerLoader,
-            $this->categoryUrlGenerator,
-            $this->seoUrlReplacer,
-        );
-    }
 }

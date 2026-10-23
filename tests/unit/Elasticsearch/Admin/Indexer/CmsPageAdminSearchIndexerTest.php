@@ -11,9 +11,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Event\NestedEventCollection;
@@ -56,9 +54,6 @@ class CmsPageAdminSearchIndexerTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent('cms_page', [
-                    new EntityWriteResult($cmsPageId, ['type' => 'page'], 'cms_page', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createDefaultContext()),
             ]),
             []
         );
@@ -81,9 +76,6 @@ class CmsPageAdminSearchIndexerTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent('cms_page_translation', [
-                    new EntityWriteResult(['cmsPageId' => $cmsPageId, 'languageId' => Uuid::randomHex()], ['name' => 'Home'], 'cms_page_translation', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createDefaultContext()),
             ]),
             []
         );

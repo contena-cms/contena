@@ -8,6 +8,8 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Contracts\Service\ResetInterface;
+use GuzzleHttp\Exception\GuzzleException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * @internal

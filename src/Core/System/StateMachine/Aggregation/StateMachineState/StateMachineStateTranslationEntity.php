@@ -3,6 +3,7 @@
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineState;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

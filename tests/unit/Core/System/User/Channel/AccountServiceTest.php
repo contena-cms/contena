@@ -54,14 +54,6 @@ class AccountServiceTest extends TestCase
         $user->setDoubleOptInRegistration(false);
 
         $userRepository = new StaticEntityRepository([
-            new EntitySearchResult(
-                UserDefinition::ENTITY_NAME,
-                1,
-                new UserCollection([$user]),
-                null,
-                new Criteria(),
-                $channelContext->getContext()
-            ),
         ]);
 
         $loggedinChannelContext = Generator::generateChannelContext();
@@ -499,14 +491,6 @@ class AccountServiceTest extends TestCase
         $user->setDoubleOptInRegistration(true);
 
         $userRepository = new StaticEntityRepository([
-            new EntitySearchResult(
-                UserDefinition::ENTITY_NAME,
-                1,
-                new UserCollection([$user]),
-                null,
-                new Criteria(),
-                $channelContext->getContext()
-            ),
         ]);
 
         $doubleOptInService = $this->createMock(DoubleOptInService::class);

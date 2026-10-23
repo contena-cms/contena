@@ -41,6 +41,10 @@ use Contena\Frontend\Theme\ThemeFilesystemResolver;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal
@@ -141,13 +145,11 @@ class ThemeCompilerTest extends TestCase
     {
         $configurationService = $this->getConfigurationServiceDbException(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
         $frontendPluginRegistry = $this->getFrontendPluginRegistry(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
@@ -265,13 +267,11 @@ PHP_EOL;
 
         $configurationService = $this->getConfigurationService(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
         $frontendPluginRegistry = $this->getFrontendPluginRegistry(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 

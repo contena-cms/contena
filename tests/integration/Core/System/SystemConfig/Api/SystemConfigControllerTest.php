@@ -8,6 +8,7 @@ use Contena\Core\System\SystemConfig\Api\SystemConfigController;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

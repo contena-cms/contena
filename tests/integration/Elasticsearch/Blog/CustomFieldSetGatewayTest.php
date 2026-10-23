@@ -7,6 +7,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Blog\CustomFieldSetGateway;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

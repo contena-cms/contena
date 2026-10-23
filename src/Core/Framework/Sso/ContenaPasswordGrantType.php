@@ -20,9 +20,9 @@ class ContenaPasswordGrantType extends PasswordGrant
         \DateInterval $accessTokenTTL
     ): ResponseTypeInterface {
         $client = $this->validateClient($request);
-        $admin_user = $this->validateUser($request, $client);
+        $adminUser = $this->validateUser($request, $client);
 
-        $this->admin_userService->removeExternalToken($admin_user->getIdentifier());
+        $this->admin_userService->removeExternalToken($adminUser->getIdentifier());
 
         return parent::respondToAccessTokenRequest($request, $responseType, $accessTokenTTL);
     }

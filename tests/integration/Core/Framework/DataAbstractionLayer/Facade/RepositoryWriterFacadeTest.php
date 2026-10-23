@@ -20,6 +20,8 @@ use Contena\Core\Framework\Test\Script\Execution\TestHook;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\Tax\TaxEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

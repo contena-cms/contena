@@ -16,6 +16,8 @@ use Contena\Core\Framework\Webhook\Webhook;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -157,12 +159,12 @@ class WebhookLoaderTest extends TestCase
 
     public function testAUserOwnedWebhookHasTheUsersRoles(): void
     {
-        $admin_user = TestUser::createNewTestUser($this->connection, ['blog:read']);
-        WebhookBuilder::ownedByUser($admin_user->getUserId())
+        $adminUser = TestUser::createNewTestUser($this->connection, ['blog:read']);
+        WebhookBuilder::ownedByUser($adminUser->getUserId())
             ->id($this->ids->get('wh-1'))
             ->insert($this->connection);
 
-        static::assertEquals(new AclRoles(false, [(string) $admin_user->getAclRoleId()]), $this->loadWebhook()->roles);
+        static::assertEquals(new AclRoles(false, [(string) $adminUser->getAclRoleId()]), $this->loadWebhook()->roles);
     }
 
     public function testAnIntegrationOwnedWebhookHasTheIntegrationsRoles(): void
@@ -331,10 +333,10 @@ class WebhookLoaderTest extends TestCase
         return $roleId;
     }
 
-    private function assignUserRole(string $admin_userId, string $roleId): void
+    private function assignUserRole(string $adminUserId, string $roleId): void
     {
         $this->connection->insert('acl_user_role', [
-            'admin_user_id' => Uuid::fromHexToBytes($admin_userId),
+            'admin_user_id' => Uuid::fromHexToBytes($adminUserId),
             'acl_role_id' => Uuid::fromHexToBytes($roleId),
             'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ]);

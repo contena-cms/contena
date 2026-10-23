@@ -14,9 +14,6 @@ interface Dependency
 
 class SystemUnderTest
 {
-    public function __construct(private readonly Dependency $dependency)
-    {
-    }
 
     public function run(): string
     {
@@ -26,9 +23,6 @@ class SystemUnderTest
 
 class Fixture
 {
-    public function __construct(public readonly Dependency $dependency, public readonly SystemUnderTest $sut)
-    {
-    }
 }
 
 /**
@@ -36,7 +30,6 @@ class Fixture
  */
 class Cases extends TestCase
 {
-    private Dependency $remembered;
 
     public function testStubInjectedIntoSut(): void
     {
@@ -149,37 +142,9 @@ class Cases extends TestCase
         static::assertSame('made', $sut->run());
     }
 
-    private function makeDependency(): Dependency
-    {
-        $dependency = $this->createMock(Dependency::class);
-        $dependency->method('value')->willReturn('made');
 
-        return $dependency;
-    }
 
-    private function configure(Dependency $dependency): void
-    {
-        // a helper that does set an expectation on the passed double
-        $dependency->expects($this->once())->method('value')->willReturn('helper');
-    }
 
-    private function createSut(?Dependency $dependency = null): SystemUnderTest
-    {
-        return new SystemUnderTest($dependency ?? $this->remembered);
-    }
 
-    private function buildSut(Dependency $dependency): SystemUnderTest
-    {
-        return $this->createSut(dependency: $dependency);
-    }
 
-    private function remember(Dependency $dependency): void
-    {
-        $this->remembered = $dependency;
-    }
-
-    private function createFixture(Dependency $dependency): Fixture
-    {
-        return new Fixture($dependency, new SystemUnderTest($dependency));
-    }
 }

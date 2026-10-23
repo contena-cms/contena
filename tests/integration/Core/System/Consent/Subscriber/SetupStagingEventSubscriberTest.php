@@ -9,6 +9,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Maintenance\Staging\Event\SetupStagingEvent;
 use Contena\Core\System\Consent\Subscriber\SetupStagingEventSubscriber;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -63,7 +63,6 @@ class MailerTransportDecorator implements \Stringable, TransportInterface
             $config->getMailTemplate(),
             $config->getExtension(),
             $config->getEventConfig(),
-            $config->getOrderId()
         );
 
         foreach ($attachments as $attachment) {

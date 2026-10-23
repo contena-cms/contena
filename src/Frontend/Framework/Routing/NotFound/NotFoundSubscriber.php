@@ -22,6 +22,7 @@ use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Symfony\Contracts\Service\ResetInterface;
 use Contena\Frontend\Framework\Routing\Exception\ErrorRedirectRequestEvent;
+use Contena\Core\Framework\HttpException;
 
 /**
  * @internal

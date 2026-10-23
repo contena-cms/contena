@@ -15,6 +15,7 @@ use Contena\Core\Framework\Webhook\Authorization\Subscription\SubscriptionValida
 use Contena\Core\Framework\Webhook\Hookable\HookableEventCollector;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

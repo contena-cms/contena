@@ -39,9 +39,9 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
     public function persistNewRefreshToken(RefreshTokenEntityInterface $refreshTokenEntity): void
     {
         // AdminUser identifier is by design null in case of authentication with integration (and no real admin_user)
-        $admin_userIdentifier = $refreshTokenEntity->getAccessToken()->getUserIdentifier();
+        $adminUserIdentifier = $refreshTokenEntity->getAccessToken()->getUserIdentifier();
 
-        if ($admin_userIdentifier) {
+        if ($adminUserIdentifier) {
             $familyId = $refreshTokenEntity instanceof RefreshToken ? $refreshTokenEntity->getFamilyId() : null;
 
             $this->connection->createQueryBuilder()
@@ -56,7 +56,7 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
                 ])
                 ->setParameters([
                     'id' => Uuid::randomBytes(),
-                    'admin_userId' => Uuid::fromHexToBytes($admin_userIdentifier),
+                    'admin_userId' => Uuid::fromHexToBytes($adminUserIdentifier),
                     'tokenId' => $refreshTokenEntity->getIdentifier(),
                     'familyId' => $familyId ?? Uuid::randomBytes(),
                     'issuedAt' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
@@ -132,12 +132,12 @@ class RefreshTokenRepository implements RefreshTokenRepositoryInterface
         return \is_string($familyId) ? $familyId : null;
     }
 
-    public function revokeRefreshTokensForUser(string $admin_userId): void
+    public function revokeRefreshTokensForUser(string $adminUserId): void
     {
         $this->connection->createQueryBuilder()
             ->delete('refresh_token')
             ->where('admin_user_id = UNHEX(:admin_userId)')
-            ->setParameter('admin_userId', $admin_userId)
+            ->setParameter('admin_userId', $adminUserId)
             ->executeStatement();
     }
 

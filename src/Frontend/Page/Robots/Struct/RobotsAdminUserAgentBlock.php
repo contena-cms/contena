@@ -10,7 +10,7 @@ class RobotsAdminUserAgentBlock
      * @param list<RobotsDirective> $directives
      */
     public function __construct(
-        public readonly string $admin_userAgent,
+        public readonly string $adminUserAgent,
         public readonly array $directives
     ) {
     }

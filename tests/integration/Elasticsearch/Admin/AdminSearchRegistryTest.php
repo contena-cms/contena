@@ -9,9 +9,7 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Util\Random;
@@ -26,6 +24,10 @@ use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
+use Contena\Elasticsearch\Test\AdminElasticsearchTestBehaviour;
 
 /**
  * @internal
@@ -195,14 +197,6 @@ class AdminSearchRegistryTest extends TestCase
         static::assertCount(0, $c->fetchAllAssociative('SELECT `index` FROM `admin_elasticsearch_index_task`'));
 
         $this->registry->refresh(new EntityWrittenContainerEvent(Context::createDefaultContext(), new NestedEventCollection([
-            new EntityWrittenEvent('promotion', [
-                new EntityWriteResult(
-                    'c1a28776116d4431a2208eb2960ec340',
-                    [],
-                    'promotion',
-                    EntityWriteResult::OPERATION_INSERT
-                ),
-            ], Context::createDefaultContext()),
         ]), []));
 
         $this->runWorker();

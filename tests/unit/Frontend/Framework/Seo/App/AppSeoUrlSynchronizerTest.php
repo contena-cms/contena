@@ -12,7 +12,6 @@ use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
@@ -307,7 +306,6 @@ class AppSeoUrlSynchronizerTest extends TestCase
                 static::assertEquals(
                     [
                         new EqualsFilter('active', true),
-                        new NotFilter(NotFilter::CONNECTION_AND, [new EqualsFilter('typeId', Defaults::CHANNEL_TYPE_API)]),
                     ],
                     $criteria->getFilters()
                 );

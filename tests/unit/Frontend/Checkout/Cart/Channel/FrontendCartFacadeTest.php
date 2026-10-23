@@ -9,21 +9,13 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\AbstractCartPersister;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\CartPersister;
 use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Cart\Error\ErrorCollection;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Gateway\Channel\AbstractCheckoutGatewayRoute;
 use Contena\Core\Checkout\Gateway\Channel\CheckoutGatewayRouteResponse;
 use Contena\Core\Checkout\Payment\Cart\Error\PaymentMethodBlockedError;
-use Contena\Core\Checkout\Payment\Channel\PaymentMethodRoute;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Checkout\Shipping\Cart\Error\ShippingMethodBlockedError;
-use Contena\Core\Checkout\Shipping\Channel\ShippingMethodRoute;
 use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Defaults;
@@ -590,213 +582,14 @@ class FrontendCartFacadeTest extends TestCase
         static::assertSame('original-payment-method-id', $channelContext->getPaymentMethod()->getId());
     }
 
-    public function callbackShippingMethodSwitcherReturnOriginalMethod(ErrorCollection $errors, ChannelContext $channelContext): ShippingMethodEntity
-    {
-        return $channelContext->getShippingMethod();
-    }
 
-    public function callbackShippingMethodSwitcherReturnFallbackMethod(ErrorCollection $errors, ChannelContext $channelContext): ShippingMethodEntity
-    {
-        $shippingMethod = new ShippingMethodEntity();
-        $shippingMethod->setId('fallback-shipping-method-id');
-        $shippingMethod->setName('fallback-shipping-method-name');
 
-        foreach ($errors as $error) {
-            if (!$error instanceof ShippingMethodBlockedError) {
-                continue;
-            }
 
-            static::assertNotNull($shippingMethod->getName());
 
-            // Exchange cart blocked warning with notice
-            $errors->remove($error->getId());
-            $errors->add(new ShippingMethodChangedError(
-                oldShippingMethodId: $error->getShippingMethodId(),
-                oldShippingMethodName: $error->getName(),
-                newShippingMethodId: $shippingMethod->getId(),
-                newShippingMethodName: $shippingMethod->getName(),
-                reason: $error->getReason(),
-            ));
-        }
 
-        return $shippingMethod;
-    }
 
-    public function callbackShippingMethodSwitcherUnswitchableCart(ErrorCollection $errors, ChannelContext $channelContext): ShippingMethodEntity
-    {
-        $shippingMethod = new ShippingMethodEntity();
-        $shippingMethod->setId('fallback-shipping-method-id');
-        $shippingMethod->setName('fallback-shipping-method-name');
 
-        foreach ($errors as $error) {
-            if (!$error instanceof ShippingMethodBlockedError) {
-                continue;
-            }
 
-            static::assertNotNull($shippingMethod->getName());
-
-            // Exchange cart blocked warning with notice
-            $errors->add(new ShippingMethodChangedError(
-                oldShippingMethodId: $error->getShippingMethodId(),
-                oldShippingMethodName: $error->getName(),
-                newShippingMethodId: $shippingMethod->getId(),
-                newShippingMethodName: $shippingMethod->getName(),
-                reason: $error->getReason(),
-            ));
-        }
-
-        return $shippingMethod;
-    }
-
-    public function callbackPaymentMethodSwitcherReturnOriginalMethod(ErrorCollection $errors, ChannelContext $channelContext): PaymentMethodEntity
-    {
-        return $channelContext->getPaymentMethod();
-    }
-
-    public function callbackPaymentMethodSwitcherReturnFallbackMethod(ErrorCollection $errors, ChannelContext $channelContext): PaymentMethodEntity
-    {
-        $paymentMethod = new PaymentMethodEntity();
-        $paymentMethod->setId('fallback-payment-method-id');
-        $paymentMethod->setName('fallback-payment-method-name');
-
-        foreach ($errors as $error) {
-            if (!$error instanceof PaymentMethodBlockedError) {
-                continue;
-            }
-
-            static::assertNotNull($paymentMethod->getName());
-
-            // Exchange cart blocked warning with notice
-            $errors->remove($error->getId());
-            $errors->add(new PaymentMethodChangedError(
-                oldPaymentMethodId: $error->getPaymentMethodId(),
-                oldPaymentMethodName: $error->getName(),
-                newPaymentMethodId: $paymentMethod->getId(),
-                newPaymentMethodName: $paymentMethod->getName(),
-                reason: $error->getReason(),
-            ));
-        }
-
-        return $paymentMethod;
-    }
-
-    public function callbackPaymentMethodSwitcherUnswitchableCart(ErrorCollection $errors, ChannelContext $channelContext): PaymentMethodEntity
-    {
-        $paymentMethod = new PaymentMethodEntity();
-        $paymentMethod->setId('fallback-payment-method-id');
-        $paymentMethod->setName('fallback-payment-method-name');
-
-        foreach ($errors as $error) {
-            if (!$error instanceof PaymentMethodBlockedError) {
-                continue;
-            }
-
-            static::assertNotNull($paymentMethod->getName());
-
-            // Exchange cart blocked warning with notice
-            $errors->add(new PaymentMethodChangedError(
-                oldPaymentMethodId: $error->getPaymentMethodId(),
-                oldPaymentMethodName: $error->getName(),
-                newPaymentMethodId: $paymentMethod->getId(),
-                newPaymentMethodName: $paymentMethod->getName(),
-                reason: $error->getReason(),
-            ));
-        }
-
-        return $paymentMethod;
-    }
-
-    private function getCart(): Cart
-    {
-        $cart = new Cart('cart-token');
-        $cart->add(
-            (new LineItem('line-item-id-1', 'line-item-type-1'))
-                ->setPrice(new CalculatedPrice(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()))
-                ->setLabel('line-item-label-1')
-                ->assign(['uniqueIdentifier' => 'line-item-id-1'])
-        )->add(
-            (new LineItem('line-item-id-2', 'line-item-type-2'))
-                ->setPrice(new CalculatedPrice(1, 1, new CalculatedTaxCollection(), new TaxRuleCollection()))
-                ->setLabel('line-item-label-2')
-                ->assign(['uniqueIdentifier' => 'line-item-id-2'])
-        );
-
-        return $cart;
-    }
-
-    private function getCartErrorCollection(bool $blockShippingMethod = false, bool $blockPaymentMethod = false): ErrorCollection
-    {
-        $cartErrors = new ErrorCollection();
-        if ($blockShippingMethod) {
-            $cartErrors->add(
-                new ShippingMethodBlockedError(
-                    id: 'original-shipping-method-id',
-                    name: 'original-shipping-method-name',
-                    reason: 'reason',
-                )
-            );
-        }
-
-        if ($blockPaymentMethod) {
-            $cartErrors->add(
-                new PaymentMethodBlockedError(
-                    id: 'original-payment-method-id',
-                    name: 'original-payment-method-name',
-                    reason: 'reason',
-                )
-            );
-        }
-
-        return $cartErrors;
-    }
-
-    /**
-     * @param callable(ErrorCollection, ChannelContext): ShippingMethodEntity|null $shippingSwitcherCallbackMethod
-     * @param callable(ErrorCollection, ChannelContext): PaymentMethodEntity|null $paymentSwitcherCallbackMethod
-     */
-    private function getFrontendCartFacade(
-        Cart $cart,
-        ?callable $shippingSwitcherCallbackMethod = null,
-        ?callable $paymentSwitcherCallbackMethod = null,
-        ?CartCalculator $cartCalculator = null,
-        ?AbstractCheckoutGatewayRoute $checkoutGatewayRoute = null,
-    ): FrontendCartFacade {
-        $cartService = static::createStub(CartService::class);
-        $cartService->method('getCart')->willReturn($cart);
-
-        $shippingCallback = $shippingSwitcherCallbackMethod ?? $this->callbackShippingMethodSwitcherReturnOriginalMethod(...);
-        $realShippingSwitcher = new BlockedShippingMethodSwitcher(static::createStub(ShippingMethodRoute::class));
-        $blockedShippingMethodSwitcher = static::createStub(BlockedShippingMethodSwitcher::class);
-        $blockedShippingMethodSwitcher->method('switch')->willReturnCallback(
-            static fn (ErrorCollection $errors, ChannelContext $context, ?ShippingMethodCollection $methods = null): ShippingMethodEntity => $methods === null ? $shippingCallback($errors, $context) : $realShippingSwitcher->switch($errors, $context, $methods),
-        );
-
-        $paymentCallback = $paymentSwitcherCallbackMethod ?? $this->callbackPaymentMethodSwitcherReturnOriginalMethod(...);
-        $realPaymentSwitcher = new BlockedPaymentMethodSwitcher(static::createStub(PaymentMethodRoute::class));
-        $blockedPaymentMethodSwitcher = static::createStub(BlockedPaymentMethodSwitcher::class);
-        $blockedPaymentMethodSwitcher->method('switch')->willReturnCallback(
-            static fn (ErrorCollection $errors, ChannelContext $context, ?PaymentMethodCollection $methods = null): PaymentMethodEntity => $methods === null ? $paymentCallback($errors, $context) : $realPaymentSwitcher->switch($errors, $context, $methods),
-        );
-
-        $contextSwitchRoute = static::createStub(ContextSwitchRoute::class);
-
-        if (!$cartCalculator) {
-            $cartCalculator = static::createStub(CartCalculator::class);
-            $cartCalculator->method('calculate')->willReturnArgument(0);
-        }
-
-        $cartPersister = static::createStub(CartPersister::class);
-
-        return new FrontendCartFacade(
-            $cartService,
-            $blockedShippingMethodSwitcher,
-            $blockedPaymentMethodSwitcher,
-            $contextSwitchRoute,
-            $cartCalculator,
-            $cartPersister,
-            $checkoutGatewayRoute ?? static::createStub(AbstractCheckoutGatewayRoute::class),
-        );
-    }
 
     private function getChannelContextWithDefaults(string $defaultPaymentMethodId, string $defaultShippingMethodId): ChannelContext
     {
@@ -810,25 +603,7 @@ class FrontendCartFacadeTest extends TestCase
         return $channelContext;
     }
 
-    private function createPaymentMethod(string $id, string $name): PaymentMethodEntity
-    {
-        $paymentMethod = new PaymentMethodEntity();
-        $paymentMethod->setId($id);
-        $paymentMethod->setName($name);
-        $paymentMethod->setTranslated(['name' => $name]);
 
-        return $paymentMethod;
-    }
-
-    private function createShippingMethod(string $id, string $name): ShippingMethodEntity
-    {
-        $shippingMethod = new ShippingMethodEntity();
-        $shippingMethod->setId($id);
-        $shippingMethod->setName($name);
-        $shippingMethod->setTranslated(['name' => $name]);
-
-        return $shippingMethod;
-    }
 
     /**
      * @return Stub&ChannelContext

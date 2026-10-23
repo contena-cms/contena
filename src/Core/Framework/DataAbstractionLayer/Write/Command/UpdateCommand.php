@@ -3,6 +3,7 @@
 namespace Contena\Core\Framework\DataAbstractionLayer\Write\Command;
 
 use Contena\Core\Framework\Api\Acl\Role\AclRoleDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSetAwareTrait;
 
 /**
  * @codeCoverageIgnore

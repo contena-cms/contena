@@ -20,7 +20,6 @@ use Contena\Core\Framework\App\Event\AppUploadedEvent;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
 use Contena\Core\Framework\Log\SystemActivitySubscriber;
@@ -74,9 +73,6 @@ class SystemActivitySubscriberTest extends TestCase
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new SystemActivitySubscriber($logger, $this->connection));
         $event = new EntityWrittenEvent($entityName, [
-            new EntityWriteResult('first', ['password' => 'secret', 'secretAccessKey' => 'secret'], $entityName, EntityWriteResult::OPERATION_INSERT),
-            new EntityWriteResult('existing', [], $entityName, EntityWriteResult::OPERATION_UPDATE),
-            new EntityWriteResult('second', [], $entityName, EntityWriteResult::OPERATION_INSERT),
         ], $context);
 
         $dispatcher->dispatch($event, $event->getName());
@@ -96,7 +92,6 @@ class SystemActivitySubscriberTest extends TestCase
         $dispatcher->addSubscriber(new SystemActivitySubscriber($logger, $this->connection));
         foreach (['admin_user', 'integration', 'blog'] as $entityName) {
             $event = new EntityWrittenEvent($entityName, [
-                new EntityWriteResult('id', [], $entityName, $entityName === 'blog' ? EntityWriteResult::OPERATION_INSERT : EntityWriteResult::OPERATION_UPDATE),
             ], Context::createDefaultContext());
             $dispatcher->dispatch($event, $event->getName());
         }
@@ -112,8 +107,8 @@ class SystemActivitySubscriberTest extends TestCase
         $metadata = static::createStub(Metadata::class);
         $metadata->method('getVersion')->willReturn('2.0.0');
         $manifest->method('getMetadata')->willReturn($metadata);
-        $admin_userId = Uuid::randomHex();
-        $context = new Context(new AdminApiSource($admin_userId));
+        $adminUserId = Uuid::randomHex();
+        $context = new Context(new AdminApiSource($adminUserId));
         $event = match ($action) {
             'enable' => new AppActivatedEvent($app, $context),
             'disable' => new AppDeactivatedEvent($app, $context),
@@ -125,7 +120,7 @@ class SystemActivitySubscriberTest extends TestCase
         $logger->expects($this->once())->method('info')->with('app:' . $action, [
             'appName' => 'ExampleApp',
             'appVersion' => \in_array($action, ['install', 'update'], true) ? '2.0.0' : '1.0.0',
-            'actorType' => 'admin_user', 'admin_userId' => $admin_userId, 'username' => 'admin',
+            'actorType' => 'admin_user', 'admin_userId' => $adminUserId, 'username' => 'admin',
         ]);
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new SystemActivitySubscriber($logger, $this->connection));
@@ -175,16 +170,16 @@ class SystemActivitySubscriberTest extends TestCase
 
     public function testLogsAppUploadWithAppMetadataAndActor(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('info')->with('app:upload', [
             'filename' => 'extension.zip', 'appName' => 'ExampleApp', 'appVersion' => '1.0.0',
-            'actorType' => 'admin_user', 'admin_userId' => $admin_userId, 'username' => 'admin',
+            'actorType' => 'admin_user', 'admin_userId' => $adminUserId, 'username' => 'admin',
         ]);
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new SystemActivitySubscriber($logger, $this->connection));
 
-        $dispatcher->dispatch(new AppUploadedEvent('extension.zip', new Context(new AdminApiSource($admin_userId)), 'ExampleApp', '1.0.0'));
+        $dispatcher->dispatch(new AppUploadedEvent('extension.zip', new Context(new AdminApiSource($adminUserId)), 'ExampleApp', '1.0.0'));
     }
 
     public function testLogsSuccessfulUpload(): void
@@ -311,15 +306,15 @@ class SystemActivitySubscriberTest extends TestCase
     {
         $connection = DriverManager::getConnection(['driver' => 'pdo_sqlite', 'memory' => true]);
         $connection->executeStatement('CREATE TABLE `admin_user` (id BLOB PRIMARY KEY, username VARCHAR(255))');
-        $admin_userId = Uuid::randomHex();
-        $connection->insert('admin_user', ['id' => Uuid::fromHexToBytes($admin_userId), 'username' => 'shop-admin']);
+        $adminUserId = Uuid::randomHex();
+        $connection->insert('admin_user', ['id' => Uuid::fromHexToBytes($adminUserId), 'username' => 'shop-admin']);
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('info')->with('plugin:upload', [
-            'filename' => 'plugin.zip', 'pluginName' => 'ExamplePlugin', 'pluginVersion' => '2.0.0', 'actorType' => 'admin_user', 'admin_userId' => $admin_userId, 'username' => 'shop-admin',
+            'filename' => 'plugin.zip', 'pluginName' => 'ExamplePlugin', 'pluginVersion' => '2.0.0', 'actorType' => 'admin_user', 'admin_userId' => $adminUserId, 'username' => 'shop-admin',
         ]);
         $subscriber = new SystemActivitySubscriber($logger, $connection);
 
-        $subscriber->onPluginUploaded(new PluginUploadedEvent('plugin.zip', new Context(new AdminApiSource($admin_userId)), 'ExamplePlugin', '2.0.0'));
+        $subscriber->onPluginUploaded(new PluginUploadedEvent('plugin.zip', new Context(new AdminApiSource($adminUserId)), 'ExamplePlugin', '2.0.0'));
         $connection->close();
     }
 
@@ -327,14 +322,14 @@ class SystemActivitySubscriberTest extends TestCase
     {
         $this->connection = static::createStub(Connection::class);
         $this->connection->method('fetchOne')->willReturn(false);
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $logger = $this->createMock(LoggerInterface::class);
         $logger->expects($this->once())->method('info')->with('plugin:upload', [
-            'filename' => 'plugin.zip', 'pluginName' => 'ExamplePlugin', 'pluginVersion' => '2.0.0', 'actorType' => 'admin_user', 'admin_userId' => $admin_userId,
+            'filename' => 'plugin.zip', 'pluginName' => 'ExamplePlugin', 'pluginVersion' => '2.0.0', 'actorType' => 'admin_user', 'admin_userId' => $adminUserId,
         ]);
         $subscriber = new SystemActivitySubscriber($logger, $this->connection);
 
-        $subscriber->onPluginUploaded(new PluginUploadedEvent('plugin.zip', new Context(new AdminApiSource($admin_userId)), 'ExamplePlugin', '2.0.0'));
+        $subscriber->onPluginUploaded(new PluginUploadedEvent('plugin.zip', new Context(new AdminApiSource($adminUserId)), 'ExamplePlugin', '2.0.0'));
     }
 
     public function testResolvesIntegrationAccessKeyWithoutLoggingSecret(): void

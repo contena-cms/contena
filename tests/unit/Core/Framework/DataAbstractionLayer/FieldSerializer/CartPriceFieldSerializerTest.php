@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Framework\Context;
@@ -72,7 +71,6 @@ class CartPriceFieldSerializerTest extends TestCase
             10.0,
             11.9,
             10.0,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection(),
             CartPrice::TAX_STATE_NET
         );

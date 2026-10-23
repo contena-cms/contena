@@ -10,6 +10,8 @@ use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\Tag\TagCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class LandingPageEntity extends Entity
 {

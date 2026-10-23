@@ -173,7 +173,6 @@ class AssignArrayTraitTest extends TestCase
     {
         $data = [
             ['id' => 'first-id'],
-            (new AssignTestStruct([]))->assignRecursive(['id' => 'second-id']),
             new \stdClass(),
             null,
             [],

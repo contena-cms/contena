@@ -8,6 +8,7 @@ use Contena\Frontend\Framework\ThemeInterface;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\AbstractFrontendPluginConfigurationFactory;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FileCollection;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfigurationFactory;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

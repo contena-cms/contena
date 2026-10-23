@@ -11,6 +11,7 @@ use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

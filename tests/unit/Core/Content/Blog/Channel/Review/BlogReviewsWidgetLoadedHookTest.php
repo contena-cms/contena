@@ -34,7 +34,6 @@ class BlogReviewsWidgetLoadedHookTest extends TestCase
 {
     private Stub&BlogReviewLoader $blogReviewLoaderMock;
 
-    private BlogControllerStub $controller;
 
     protected function setUp(): void
     {

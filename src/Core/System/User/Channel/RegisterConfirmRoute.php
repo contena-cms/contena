@@ -71,7 +71,7 @@ class RegisterConfirmRoute extends AbstractRegisterConfirmRoute
 
         $criteria = (new Criteria())
             ->addFilter(new EqualsFilter('hash', $dataBag->get('hash')))
-            ->addAssociations(['addresses', 'salutation'])
+            ->addAssociations(['addresses'])
             ->setLimit(1);
 
         $user = $this->userRepository->search($criteria, $context->getContext())->getEntities()->first();
@@ -131,7 +131,7 @@ class RegisterConfirmRoute extends AbstractRegisterConfirmRoute
         }
 
         $criteria = (new Criteria([$user->getId()]))
-            ->addAssociations(['addresses', 'salutation'])
+            ->addAssociations(['addresses'])
             ->setLimit(1);
 
         $user = $this->userRepository->search($criteria, $new->getContext())->getEntities()->first();

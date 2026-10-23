@@ -52,17 +52,6 @@ use Contena\Core\Content\Flow\Indexing\FlowBuilder;
 use Contena\Core\Content\Flow\Indexing\FlowIndexer;
 use Contena\Core\Content\Flow\Indexing\FlowIndexerSubscriber;
 use Contena\Core\Content\Flow\Indexing\FlowPayloadUpdater;
-use Contena\Core\Content\Flow\Rule\FlowRuleScopeBuilder;
-use Contena\Core\Content\Flow\Rule\OrderCreatedByAdminRule;
-use Contena\Core\Content\Flow\Rule\OrderCustomFieldRule;
-use Contena\Core\Content\Flow\Rule\OrderDaysSincePlacedRule;
-use Contena\Core\Content\Flow\Rule\OrderDeliveryStatusRule;
-use Contena\Core\Content\Flow\Rule\OrderDocumentTypeRule;
-use Contena\Core\Content\Flow\Rule\OrderDocumentTypeSentRule;
-use Contena\Core\Content\Flow\Rule\OrderStatusRule;
-use Contena\Core\Content\Flow\Rule\OrderTagRule;
-use Contena\Core\Content\Flow\Rule\OrderTrackingCodeRule;
-use Contena\Core\Content\Flow\Rule\OrderTransactionStatusRule;
 use Contena\Core\Content\Flow\Telemetry\FlowMetricsInstrumentor;
 use Contena\Core\Content\Flow\Telemetry\TriggerGroupResolver;
 use Contena\Core\Content\Mail\Service\MailService;
@@ -136,18 +125,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_subscriber');
 
-    $services->set(FlowRuleScopeBuilder::class)
-        ->args([
-            tagged_iterator('contena.cart.collector'),
-        ])
-        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(FlowExecutor::class)
         ->public()
         ->args([
             service('event_dispatcher'),
             service(AppFlowActionProvider::class),
-            service(FlowRuleScopeBuilder::class),
             service(Connection::class),
             service(ExtensionDispatcher::class),
             service('logger'),
@@ -417,35 +400,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             tagged_iterator('flow.storer'),
         ]);
 
-    $services->set(OrderTagRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderTrackingCodeRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDaysSincePlacedRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDeliveryStatusRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderCreatedByAdminRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderTransactionStatusRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderStatusRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderCustomFieldRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDocumentTypeRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDocumentTypeSentRule::class)
-        ->tag('contena.rule.definition');
 
     $services->set(FlowTemplateDefinition::class)
         ->tag('contena.entity.definition');

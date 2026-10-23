@@ -21,7 +21,6 @@ class SingleCoversClassInTestsTest extends TestCase
     public function testDetection(string $fileName, string $status, string $content, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status, $content),
         ])));
 
         (new SingleCoversClassInTests())($context);

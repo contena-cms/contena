@@ -189,7 +189,7 @@ class McpAllowlistProviderTest extends TestCase
 
     public function testBearerJwtPasswordGrantUsesUserAllowlist(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $connection = static::createStub(Connection::class);
         $connection->method('fetchAssociative')->willReturn([
@@ -200,7 +200,7 @@ class McpAllowlistProviderTest extends TestCase
         // 'administration' is the OAuth client_id for password-grant JWTs — not a valid SWIA/SWUA key.
         $request = new Request();
         $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_CLIENT_ID, 'administration');
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $admin_userId);
+        $request->attributes->set(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID, $adminUserId);
 
         $stack = new RequestStack();
         $stack->push($request);
@@ -214,7 +214,7 @@ class McpAllowlistProviderTest extends TestCase
 
     public function testAdminUserAlwaysUnrestrictedRegardlessOfAllowlist(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $connection = static::createStub(Connection::class);
         $connection->method('fetchAssociative')->willReturn([
@@ -222,7 +222,7 @@ class McpAllowlistProviderTest extends TestCase
             'admin' => true,
         ]);
 
-        $result = (new McpAllowlistProvider($connection, new RequestStack()))->forUserId($admin_userId);
+        $result = (new McpAllowlistProvider($connection, new RequestStack()))->forUserId($adminUserId);
 
         static::assertNull($result->tools);
         static::assertNull($result->resources);
@@ -231,11 +231,11 @@ class McpAllowlistProviderTest extends TestCase
 
     public function testUserAccessKeyPathLooksUpUserAndAppliesAllowlist(): void
     {
-        $admin_userId = Uuid::randomHex();
-        $admin_userIdBytes = Uuid::fromHexToBytes($admin_userId);
+        $adminUserId = Uuid::randomHex();
+        $adminUserIdBytes = Uuid::fromHexToBytes($adminUserId);
 
         $connection = static::createStub(Connection::class);
-        $connection->method('fetchOne')->willReturn($admin_userIdBytes);
+        $connection->method('fetchOne')->willReturn($adminUserIdBytes);
         $connection->method('fetchAssociative')->willReturn([
             'mcp_allowlist' => '{"tools":["admin_user-key-tool"],"resources":null,"prompts":null}',
             'admin' => false,

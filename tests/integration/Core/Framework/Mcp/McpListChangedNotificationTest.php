@@ -7,6 +7,8 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * An installation-wide list change (an app install, for example) reaches an existing session without

@@ -12,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Integration\PaymentHandler\TestPaymentHandler;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -16,18 +16,18 @@ use Contena\Core\System\AdminUser\AdminUserEntity;
 class SsoAdminUserService
 {
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
     ) {
     }
 
     public function inviteUser(string $email, string $localeId, Context $context): void
     {
-        $admin_user = $this->getUserByEmail($email, $context);
+        $adminUser = $this->getUserByEmail($email, $context);
 
-        if ($admin_user === null) {
+        if ($adminUser === null) {
             $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($email, $localeId): void {
                 $this->admin_userRepository->create([$this->createInitialUserData($email, $localeId)], $context);
             });

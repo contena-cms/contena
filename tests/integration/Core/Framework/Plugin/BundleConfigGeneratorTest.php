@@ -7,6 +7,8 @@ use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Plugin\BundleConfigGenerator;
 use Contena\Core\Framework\Plugin\BundleConfigGeneratorInterface;
 use Contena\Frontend\Theme\FrontendPluginRegistry;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

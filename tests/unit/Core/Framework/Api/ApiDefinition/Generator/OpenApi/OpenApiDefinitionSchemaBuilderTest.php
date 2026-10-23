@@ -24,12 +24,6 @@ class OpenApiDefinitionSchemaBuilderTest extends TestCase
         $this->schemaBuilder = new OpenApiDefinitionSchemaBuilder();
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                SimpleDefinition::class,
-                ComplexDefinition::class,
-                SimpleExtendedDefinition::class,
-                DefinitionWithJsonOverride::class,
-                DefinitionWithHiddenRequiredTranslation::class,
-                DefinitionWithHiddenRequiredTranslationTranslation::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

@@ -28,7 +28,6 @@ class McpToolAttributeReaderTest extends TestCase
     public function testClassWithNoAttributeOnClassOrInvokeReturnsNull(): void
     {
         $result = McpToolAttributeReader::resolveInfo(
-            McpAttributeReaderTestNoAttribute::class,
             McpTool::class,
             ['name', 'description']
         );
@@ -39,7 +38,6 @@ class McpToolAttributeReaderTest extends TestCase
     public function testClassLevelAttributeReturnsFields(): void
     {
         $result = McpToolAttributeReader::resolveInfo(
-            McpAttributeReaderTestClassLevel::class,
             McpTool::class,
             ['name', 'description']
         );
@@ -52,7 +50,6 @@ class McpToolAttributeReaderTest extends TestCase
     public function testMethodLevelAttributeIsUsedAsFallbackWhenNoClassLevelAttribute(): void
     {
         $result = McpToolAttributeReader::resolveInfo(
-            McpAttributeReaderTestMethodLevel::class,
             McpTool::class,
             ['name', 'description']
         );
@@ -65,7 +62,6 @@ class McpToolAttributeReaderTest extends TestCase
     public function testClassLevelAttributeTakesPrecedenceOverInvokeLevel(): void
     {
         $result = McpToolAttributeReader::resolveInfo(
-            McpAttributeReaderTestBothLevels::class,
             McpTool::class,
             ['name', 'description']
         );
@@ -78,7 +74,6 @@ class McpToolAttributeReaderTest extends TestCase
     public function testClassWithNoInvokeAndNoClassAttributeReturnsNull(): void
     {
         $result = McpToolAttributeReader::resolveInfo(
-            McpAttributeReaderTestNoInvokeNoAttribute::class,
             McpTool::class,
             ['name', 'description']
         );
@@ -89,7 +84,6 @@ class McpToolAttributeReaderTest extends TestCase
     public function testRequestedFieldNotPresentOnAttributeReturnsNullForThatField(): void
     {
         $result = McpToolAttributeReader::resolveInfo(
-            McpAttributeReaderTestClassLevel::class,
             McpTool::class,
             ['name', 'nonExistentField']
         );

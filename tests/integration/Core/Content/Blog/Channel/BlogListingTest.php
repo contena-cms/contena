@@ -18,6 +18,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal

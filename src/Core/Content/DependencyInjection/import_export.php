@@ -17,7 +17,6 @@ use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\Med
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\MediaSerializerSubscriber;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\BlogSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\PromotionIndividualCodeSerializer;
-use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\SalutationSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field\CustomFieldsSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field\FieldSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Field\PriceSerializer;
@@ -227,13 +226,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(MediaSerializer::class),
         ])
         ->tag('kernel.event_subscriber');
-
-    $services->set(SalutationSerializer::class)
-        ->args([
-            service('salutation.repository'),
-        ])
-        ->tag('contena.import_export.entity_serializer', ['priority' => -400])
-        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(CountrySerializer::class)
         ->args([

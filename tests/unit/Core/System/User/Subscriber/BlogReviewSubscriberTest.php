@@ -14,9 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSetAware;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -66,13 +63,6 @@ class BlogReviewSubscriberTest extends TestCase
         $event = EntityDeleteEvent::create(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand(
-                    $this->definitionInstanceRegistry->get(BlogReviewDefinition::class),
-                    [
-                        'id' => $ids->getBytes('foo'),
-                    ],
-                    new EntityExistence(BlogReviewDefinition::ENTITY_NAME, ['id' => $ids->get('foo')], true, false, false, [])
-                ),
             ]
         );
 
@@ -96,20 +86,6 @@ class BlogReviewSubscriberTest extends TestCase
         $event = EntityDeleteEvent::create(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand(
-                    $this->definitionInstanceRegistry->get(BlogDefinition::class),
-                    [
-                        'id' => $ids->getBytes('foo'),
-                    ],
-                    new EntityExistence(BlogDefinition::ENTITY_NAME, ['id' => $ids->get('foo')], true, false, false, [])
-                ),
-                new InsertCommand(
-                    $this->definitionInstanceRegistry->get(BlogReviewDefinition::class),
-                    ['id' => $ids->getBytes('foo')],
-                    ['id' => $ids->getBytes('foo')],
-                    new EntityExistence(BlogReviewDefinition::ENTITY_NAME, ['id' => $ids->get('foo')], true, false, false, []),
-                    '/bar'
-                ),
             ]
         );
 
@@ -136,7 +112,6 @@ class BlogReviewSubscriberTest extends TestCase
                     ['id' => 'id'],
                     BlogReviewDefinition::ENTITY_NAME,
                     EntityWriteResult::OPERATION_DELETE,
-                    new EntityExistence(BlogReviewDefinition::ENTITY_NAME, ['id' => 'id'], true, false, false, []),
                     new ChangeSet(['user_id' => 'user_id'], [], true)
                 ),
                 // should not trigger update as it has empty changeset
@@ -145,7 +120,6 @@ class BlogReviewSubscriberTest extends TestCase
                     ['id' => 'id'],
                     BlogReviewDefinition::ENTITY_NAME,
                     EntityWriteResult::OPERATION_DELETE,
-                    new EntityExistence(BlogReviewDefinition::ENTITY_NAME, ['id' => 'id'], true, false, false, []),
                     new ChangeSet([], [], true)
                 ),
                 // should not trigger update as it has wrong entity
@@ -154,7 +128,6 @@ class BlogReviewSubscriberTest extends TestCase
                     ['id' => 'id'],
                     BlogDefinition::ENTITY_NAME,
                     EntityWriteResult::OPERATION_DELETE,
-                    new EntityExistence(BlogDefinition::ENTITY_NAME, ['id' => 'id'], true, false, false, []),
                     new ChangeSet(['user_id' => 'user_id'], [], true)
                 ),
             ],

@@ -81,7 +81,6 @@ class BlogReviewResultTest extends TestCase
         $source = new EntitySearchResult(
             BlogReviewDefinition::ENTITY_NAME,
             42,
-            new BlogReviewCollection(),
             new AggregationResultCollection(),
             $criteria,
             Context::createDefaultContext(),

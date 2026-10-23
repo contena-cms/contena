@@ -475,12 +475,6 @@ TXT;
                 $parsedResult = $event->parsedResult;
                 $newIssues = array_values([
                     ...$parsedResult->issues,
-                    new ParseIssue(
-                        0,
-                        '',
-                        'Custom validation failed',
-                        ParseIssueSeverity::WARNING
-                    ),
                 ]);
                 $modifiedResult = new ParsedRobots(
                     $parsedResult->admin_userAgentBlocks,

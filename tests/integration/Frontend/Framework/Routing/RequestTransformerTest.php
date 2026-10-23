@@ -21,6 +21,7 @@ use Contena\Frontend\Framework\Routing\RequestTransformer;
 use Contena\Frontend\Framework\Seo\SeoUrlRoute\BlogPageSeoUrlRoute;
 use Contena\Frontend\Test\Framework\Routing\Helper\ExpectedRequest;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

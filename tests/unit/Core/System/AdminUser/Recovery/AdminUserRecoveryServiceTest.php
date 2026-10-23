@@ -9,7 +9,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\AdminUserDefinition;
@@ -31,6 +30,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal
@@ -61,12 +61,12 @@ class AdminUserRecoveryServiceTest extends TestCase
         $router = static::createStub(RouterInterface::class);
         $channelContextService = static::createStub(ChannelContextService::class);
 
-        $admin_userEmail = 'nonexistent@example.com';
+        $adminUserEmail = 'nonexistent@example.com';
         $context = new Context(new SystemSource(), [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM]);
         $recoveryEntity = new AdminUserRecoveryEntity();
         $recoveryEntity->setUniqueIdentifier(Uuid::randomHex());
 
-        $admin_userRepository = new StaticEntityRepository([
+        $adminUserRepository = new StaticEntityRepository([
             new AdminUserCollection([]),
         ], new AdminUserDefinition());
 
@@ -86,7 +86,7 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $service = new AdminUserRecoveryService(
             $recoveryRepository,
-            $admin_userRepository,
+            $adminUserRepository,
             $router,
             $dispatcher,
             $channelContextService,
@@ -94,7 +94,7 @@ class AdminUserRecoveryServiceTest extends TestCase
             new NativeClock()
         );
 
-        $service->generateUserRecovery($admin_userEmail, $context);
+        $service->generateUserRecovery($adminUserEmail, $context);
         static::assertCount(0, $recoveryRepository->creates);
         static::assertCount(0, $recoveryRepository->deletes);
     }
@@ -106,19 +106,19 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $this->expectExceptionObject(AdminUserException::channelNotFound());
 
-        $admin_userEmail = 'existing@example.com';
+        $adminUserEmail = 'existing@example.com';
         $context = new Context(new SystemSource(), [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM]);
-        $admin_user = new AdminUserEntity();
-        $admin_user->setUniqueIdentifier(Uuid::randomHex());
-        $admin_user->setId(Uuid::randomHex());
+        $adminUser = new AdminUserEntity();
+        $adminUser->setUniqueIdentifier(Uuid::randomHex());
+        $adminUser->setId(Uuid::randomHex());
 
         $recoveryEntity = new AdminUserRecoveryEntity();
         $recoveryEntity->setUniqueIdentifier(Uuid::randomHex());
         $recoveryEntity->setId(Uuid::randomHex());
         $recoveryEntity->setHash(Uuid::randomHex());
 
-        $admin_userRepository = new StaticEntityRepository([
-            new AdminUserCollection([$admin_user]),
+        $adminUserRepository = new StaticEntityRepository([
+            new AdminUserCollection([$adminUser]),
         ], new AdminUserDefinition());
 
         $recoveryRepository = new StaticEntityRepository([
@@ -137,7 +137,7 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $service = new AdminUserRecoveryService(
             $recoveryRepository,
-            $admin_userRepository,
+            $adminUserRepository,
             $router,
             $dispatcher,
             $channelContextService,
@@ -146,7 +146,7 @@ class AdminUserRecoveryServiceTest extends TestCase
         );
 
         try {
-            $service->generateUserRecovery($admin_userEmail, $context);
+            $service->generateUserRecovery($adminUserEmail, $context);
         } finally {
             static::assertCount(1, $recoveryRepository->creates);
             static::assertCount(1, $recoveryRepository->deletes);
@@ -158,12 +158,12 @@ class AdminUserRecoveryServiceTest extends TestCase
         $router = static::createStub(RouterInterface::class);
         $channelContextService = $this->createMock(ChannelContextService::class);
 
-        $admin_userEmail = 'existing@example.com';
+        $adminUserEmail = 'existing@example.com';
         $context = new Context(new SystemSource(), [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM]);
-        $admin_user = new AdminUserEntity();
+        $adminUser = new AdminUserEntity();
         $recoveryEntity = new AdminUserRecoveryEntity();
-        $admin_user->setUniqueIdentifier(Uuid::randomHex());
-        $admin_user->setId(Uuid::randomHex());
+        $adminUser->setUniqueIdentifier(Uuid::randomHex());
+        $adminUser->setId(Uuid::randomHex());
         $recoveryEntity->setUniqueIdentifier(Uuid::randomHex());
         $recoveryEntity->setId(Uuid::randomHex());
         $recoveryEntity->setHash(Uuid::randomHex());
@@ -173,8 +173,8 @@ class AdminUserRecoveryServiceTest extends TestCase
         $channelEntity->setLanguageId(Uuid::randomHex());
         $channelEntity->setCurrencyId(Uuid::randomHex());
 
-        $admin_userRepository = new StaticEntityRepository([
-            new AdminUserCollection([$admin_user]),
+        $adminUserRepository = new StaticEntityRepository([
+            new AdminUserCollection([$adminUser]),
         ], new AdminUserDefinition());
 
         $recoveryRepository = new StaticEntityRepository([
@@ -202,7 +202,7 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $service = new AdminUserRecoveryService(
             $recoveryRepository,
-            $admin_userRepository,
+            $adminUserRepository,
             $router,
             $dispatcher,
             $channelContextService,
@@ -210,7 +210,7 @@ class AdminUserRecoveryServiceTest extends TestCase
             new NativeClock()
         );
 
-        $service->generateUserRecovery($admin_userEmail, $context);
+        $service->generateUserRecovery($adminUserEmail, $context);
         static::assertCount(1, $recoveryRepository->deletes);
         static::assertCount(1, $recoveryRepository->creates);
     }
@@ -220,22 +220,22 @@ class AdminUserRecoveryServiceTest extends TestCase
         $router = static::createStub(RouterInterface::class);
         $channelContextService = $this->createMock(ChannelContextService::class);
 
-        $admin_userEmail = 'existing@example.com';
+        $adminUserEmail = 'existing@example.com';
         $context = new Context(new SystemSource(), [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM]);
-        $admin_user = new AdminUserEntity();
+        $adminUser = new AdminUserEntity();
         $recoveryEntity = new AdminUserRecoveryEntity();
         $channelEntity = new ChannelEntity();
         $channelEntity->setUniqueIdentifier(Uuid::randomHex());
         $channelEntity->setId(Uuid::randomHex());
         $channelEntity->setLanguageId(Uuid::randomHex());
         $channelEntity->setCurrencyId(Uuid::randomHex());
-        $admin_user->setUniqueIdentifier(Uuid::randomHex());
-        $admin_user->setId(Uuid::randomHex());
+        $adminUser->setUniqueIdentifier(Uuid::randomHex());
+        $adminUser->setId(Uuid::randomHex());
         $recoveryEntity->setUniqueIdentifier(Uuid::randomHex());
         $recoveryEntity->setHash(Uuid::randomHex());
 
-        $admin_userRepository = new StaticEntityRepository([
-            new AdminUserCollection([$admin_user]),
+        $adminUserRepository = new StaticEntityRepository([
+            new AdminUserCollection([$adminUser]),
         ], new AdminUserDefinition());
 
         $recoveryRepository = new StaticEntityRepository([
@@ -247,7 +247,6 @@ class AdminUserRecoveryServiceTest extends TestCase
             static function (Criteria $criteria, Context $context) use ($channelEntity) {
                 static::assertCount(1, $criteria->getFilters());
                 static::assertEquals([
-                    new NotEqualsFilter('typeId', Defaults::CHANNEL_TYPE_BLOG_COMPARISON),
                 ], $criteria->getFilters());
 
                 return new ChannelCollection([$channelEntity]);
@@ -270,7 +269,7 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $service = new AdminUserRecoveryService(
             $recoveryRepository,
-            $admin_userRepository,
+            $adminUserRepository,
             $router,
             $dispatcher,
             $channelContextService,
@@ -278,7 +277,7 @@ class AdminUserRecoveryServiceTest extends TestCase
             new NativeClock()
         );
 
-        $service->generateUserRecovery($admin_userEmail, $context);
+        $service->generateUserRecovery($adminUserEmail, $context);
         static::assertCount(0, $recoveryRepository->deletes);
         static::assertCount(1, $recoveryRepository->creates);
     }
@@ -383,9 +382,9 @@ class AdminUserRecoveryServiceTest extends TestCase
 
     private function getGeneratedRecoveryUrl(RouterInterface $router): string
     {
-        $admin_user = new AdminUserEntity();
-        $admin_user->setUniqueIdentifier(Uuid::randomHex());
-        $admin_user->setId(Uuid::randomHex());
+        $adminUser = new AdminUserEntity();
+        $adminUser->setUniqueIdentifier(Uuid::randomHex());
+        $adminUser->setId(Uuid::randomHex());
 
         $recoveryEntity = new AdminUserRecoveryEntity();
         $recoveryEntity->setUniqueIdentifier(Uuid::randomHex());
@@ -419,9 +418,9 @@ class AdminUserRecoveryServiceTest extends TestCase
             new AdminUserRecoveryCollection([$recoveryEntity]),
         ], new AdminUserRecoveryDefinition());
 
-        /** @var StaticEntityRepository<AdminUserCollection> $admin_userRepository */
-        $admin_userRepository = new StaticEntityRepository([
-            new AdminUserCollection([$admin_user]),
+        /** @var StaticEntityRepository<AdminUserCollection> $adminUserRepository */
+        $adminUserRepository = new StaticEntityRepository([
+            new AdminUserCollection([$adminUser]),
         ], new AdminUserDefinition());
 
         /** @var StaticEntityRepository<ChannelCollection> $channelRepository */
@@ -431,7 +430,7 @@ class AdminUserRecoveryServiceTest extends TestCase
 
         $service = new AdminUserRecoveryService(
             $recoveryRepository,
-            $admin_userRepository,
+            $adminUserRepository,
             $router,
             $dispatcher,
             $channelContextService,

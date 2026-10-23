@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\App\Aggregate\AppShippingMethod;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @internal only for use by the app-system

@@ -20,6 +20,7 @@ use Symfony\Component\RateLimiter\Util\TimeUtil;
 class TimeBackoffLimiter implements LimiterInterface
 {
     use ResetLimiterTrait;
+use Symfony\Component\RateLimiter\Exception\ReserveNotSupportedException;
 
     private readonly int $reset;
 

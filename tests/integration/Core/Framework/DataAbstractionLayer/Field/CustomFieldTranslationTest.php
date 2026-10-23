@@ -24,6 +24,9 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldCollection;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

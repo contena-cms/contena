@@ -11,6 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\Bucket;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

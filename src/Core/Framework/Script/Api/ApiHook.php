@@ -8,6 +8,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryWriterFacadeHoo
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
+use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
+use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 
 /**
  * Triggered when the api endpoint /api/script/{hook} is called

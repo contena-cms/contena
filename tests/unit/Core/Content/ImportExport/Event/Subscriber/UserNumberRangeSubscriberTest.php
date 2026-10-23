@@ -122,18 +122,6 @@ class UserNumberRangeSubscriberTest extends TestCase
         $subscriber->onAfterImport($this->createBatchEvent(
             $context,
             new EntityWriteResult(
-                'user-id-1',
-                ['userNumber' => '100014'],
-                UserDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
-                'user-id-2',
-                ['userNumber' => '100015'],
-                UserDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
                 'user-id-3',
                 ['userNumber' => '100013'],
                 UserDefinition::ENTITY_NAME,
@@ -237,18 +225,6 @@ class UserNumberRangeSubscriberTest extends TestCase
 
         $subscriber->onAfterImport($this->createBatchEvent(
             $context,
-            new EntityWriteResult(
-                'user-id-1',
-                ['userNumber' => '100014', 'channelId' => $firstChannelId],
-                UserDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
-                'user-id-2',
-                ['userNumber' => '100016', 'channelId' => $firstChannelId],
-                UserDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
             new EntityWriteResult(
                 'user-id-3',
                 ['userNumber' => '200010', 'channelId' => $secondChannelId],

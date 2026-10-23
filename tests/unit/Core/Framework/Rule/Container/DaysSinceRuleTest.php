@@ -21,7 +21,6 @@ use Contena\Core\System\Channel\ChannelContext;
 #[CoversClass(DaysSinceRule::class)]
 class DaysSinceRuleTest extends TestCase
 {
-    private DaysSinceRuleFixture $rule;
 
     protected function setUp(): void
     {

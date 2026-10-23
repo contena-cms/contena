@@ -11,6 +11,7 @@ use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\AdminUser\Service\AdminUserValidationService;
 use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -22,14 +23,14 @@ class AdminUserValidationServiceTest extends TestCase
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepository;
+    private EntityRepository $adminUserRepository;
 
     /**
      * @var EntityRepository<LocaleCollection>
      */
     private EntityRepository $localeRepository;
 
-    private AdminUserValidationService $admin_userValidationService;
+    private AdminUserValidationService $adminUserValidationService;
 
     protected function setUp(): void
     {
@@ -40,7 +41,7 @@ class AdminUserValidationServiceTest extends TestCase
 
     public function testIfReturnsTrueForUniqueEmails(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $context = Context::createDefaultContext();
         $localeIds = $this->localeRepository->searchIds(new Criteria(), $context)->getIds();
@@ -48,7 +49,7 @@ class AdminUserValidationServiceTest extends TestCase
 
         $this->admin_userRepository->create([
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'username' => 'some AdminUser',
                 'name' => 'first',
                 'lastName' => 'last',
@@ -58,14 +59,14 @@ class AdminUserValidationServiceTest extends TestCase
             ],
         ], $context);
 
-        $admin_userIdToTest = Uuid::randomHex();
-        static::assertTrue($this->admin_userValidationService->checkEmailUnique('some@other.email', $admin_userIdToTest, $context));
-        static::assertTrue($this->admin_userValidationService->checkEmailUnique('admin_user@contena.cn', $admin_userId, $context));
+        $adminUserIdToTest = Uuid::randomHex();
+        static::assertTrue($this->admin_userValidationService->checkEmailUnique('some@other.email', $adminUserIdToTest, $context));
+        static::assertTrue($this->admin_userValidationService->checkEmailUnique('admin_user@contena.cn', $adminUserId, $context));
     }
 
     public function testIfReturnsFalseForDuplicateEmails(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $context = Context::createDefaultContext();
         $localeIds = $this->localeRepository->searchIds(new Criteria(), $context)->getIds();
@@ -74,7 +75,7 @@ class AdminUserValidationServiceTest extends TestCase
 
         $this->admin_userRepository->create([
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'username' => 'some AdminUser',
                 'name' => 'first',
                 'lastName' => 'last',
@@ -84,13 +85,13 @@ class AdminUserValidationServiceTest extends TestCase
             ],
         ], $context);
 
-        $admin_userIdToTest = Uuid::randomHex();
-        static::assertFalse($this->admin_userValidationService->checkEmailUnique('admin_user@contena.cn', $admin_userIdToTest, $context));
+        $adminUserIdToTest = Uuid::randomHex();
+        static::assertFalse($this->admin_userValidationService->checkEmailUnique('admin_user@contena.cn', $adminUserIdToTest, $context));
     }
 
     public function testIfReturnsTrueForUniqueUsernames(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $context = Context::createDefaultContext();
         $localeIds = $this->localeRepository->searchIds(new Criteria(), $context)->getIds();
@@ -98,7 +99,7 @@ class AdminUserValidationServiceTest extends TestCase
 
         $this->admin_userRepository->create([
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'username' => 'some AdminUser',
                 'name' => 'first',
                 'lastName' => 'last',
@@ -108,14 +109,14 @@ class AdminUserValidationServiceTest extends TestCase
             ],
         ], $context);
 
-        $admin_userIdToTest = Uuid::randomHex();
-        static::assertTrue($this->admin_userValidationService->checkUsernameUnique('other AdminUser', $admin_userIdToTest, $context));
-        static::assertTrue($this->admin_userValidationService->checkUsernameUnique('some AdminUser', $admin_userId, $context));
+        $adminUserIdToTest = Uuid::randomHex();
+        static::assertTrue($this->admin_userValidationService->checkUsernameUnique('other AdminUser', $adminUserIdToTest, $context));
+        static::assertTrue($this->admin_userValidationService->checkUsernameUnique('some AdminUser', $adminUserId, $context));
     }
 
     public function testIfReturnsFalseForDuplicateUsernames(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
 
         $context = Context::createDefaultContext();
         $localeIds = $this->localeRepository->searchIds(new Criteria(), $context)->getIds();
@@ -123,7 +124,7 @@ class AdminUserValidationServiceTest extends TestCase
 
         $this->admin_userRepository->create([
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'username' => 'some AdminUser',
                 'name' => 'first',
                 'lastName' => 'last',
@@ -133,7 +134,7 @@ class AdminUserValidationServiceTest extends TestCase
             ],
         ], $context);
 
-        $admin_userIdToTest = Uuid::randomHex();
-        static::assertFalse($this->admin_userValidationService->checkUsernameUnique('some AdminUser', $admin_userIdToTest, $context));
+        $adminUserIdToTest = Uuid::randomHex();
+        static::assertFalse($this->admin_userValidationService->checkUsernameUnique('some AdminUser', $adminUserIdToTest, $context));
     }
 }

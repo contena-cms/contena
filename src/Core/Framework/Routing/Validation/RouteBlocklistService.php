@@ -4,6 +4,8 @@ namespace Contena\Core\Framework\Routing\Validation;
 
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\Api\Exception\ResourceNotFoundException;
+use Symfony\Component\Routing\Exception\MethodNotAllowedException;
 
 /**
  * @internal

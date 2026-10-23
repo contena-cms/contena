@@ -5,14 +5,7 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Garan;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
-use Contena\Core\Content\Blog\Garan\GaranLabelInlineImage;
 use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
-use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
-use Contena\Core\Content\Blog\Garan\GaranLabelTwigFilter;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
 
@@ -126,33 +119,4 @@ class GaranLabelRendererTest extends TestCase
         static::assertStringContainsString('&quot;&gt;&lt;a&gt;', $result);
     }
 
-    private function createRenderer(): GaranLabelRenderer
-    {
-        $label = file_get_contents(self::TEMPLATE_PATH);
-        static::assertIsString($label);
-
-        $nestedLabel = file_get_contents(self::NESTED_TEMPLATE_PATH);
-        static::assertIsString($nestedLabel);
-
-        $twig = new Environment(new ArrayLoader([
-            '@Framework/garan/label.svg.twig' => $label,
-            '@Framework/garan/nested-label.svg.twig' => $nestedLabel,
-        ]));
-
-        $renderer = new GaranLabelRenderer($twig);
-        $durationFormatter = new GaranLabelDurationFormatter();
-
-        /** @var StaticEntityRepository<BlogCollection> $blogRepository */
-        $blogRepository = new StaticEntityRepository([], new BlogDefinition());
-
-        // The templates measure their own values, so they need the filter the extension provides.
-        $twig->addExtension(new GaranLabelTwigFilter(
-            $durationFormatter,
-            $blogRepository,
-            new GaranLabelResolver($durationFormatter, $renderer),
-            new GaranLabelInlineImage(),
-        ));
-
-        return $renderer;
-    }
 }

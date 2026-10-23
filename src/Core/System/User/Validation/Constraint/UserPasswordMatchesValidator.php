@@ -5,6 +5,7 @@ namespace Contena\Core\System\User\Validation\Constraint;
 use Contena\Core\System\User\Channel\AccountService;
 use Symfony\Component\Validator\Constraint;
 use Symfony\Component\Validator\ConstraintValidator;
+use Contena\Core\System\User\Exception\BadCredentialsException;
 
 class UserPasswordMatchesValidator extends ConstraintValidator
 {

@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Frontend\Theme\fixtures;
 
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
-use Contena\Frontend\Theme\FrontendPluginRegistry;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeEntity;
 
@@ -249,13 +248,6 @@ class ThemeFixtures
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'technicalName' => 'ParentTheme',
                             'parentThemeId' => $baseThemeId,
@@ -334,13 +326,6 @@ class ThemeFixtures
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'technicalName' => 'ParentTheme',
                             'parentThemeId' => $baseThemeId,
@@ -403,13 +388,6 @@ class ThemeFixtures
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'technicalName' => 'ParentTheme',
                             'parentThemeId' => $baseThemeId,
@@ -457,13 +435,6 @@ class ThemeFixtures
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'parentThemeId' => $baseThemeId,
                             '_uniqueIdentifier' => $parentThemeId,
@@ -506,13 +477,6 @@ class ThemeFixtures
                             'configValues' => [
                                 'test' => ['value' => ['no_test']],
                             ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
                         ]
                     ),
                     (new ThemeEntity())->assign(
@@ -566,13 +530,6 @@ class ThemeFixtures
                     ),
                     (new ThemeEntity())->assign(
                         [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
                             'id' => $parentThemeId,
                             'parentThemeId' => $baseThemeId,
                             '_uniqueIdentifier' => $parentThemeId,
@@ -619,13 +576,6 @@ class ThemeFixtures
                             ],
                         ]
                     ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -660,16 +610,6 @@ class ThemeFixtures
                             'channels' => new ChannelCollection(),
                             'technicalName' => 'Test',
                             'configValues' => [],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
                         ]
                     ),
                 ]
@@ -730,14 +670,6 @@ class ThemeFixtures
                                     ],
                                 ],
                             ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                            'baseConfig' => self::getThemeJsonConfig(),
                         ]
                     ),
                 ]
@@ -823,13 +755,6 @@ class ThemeFixtures
                                 ],
                             ],
                         ],
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => FrontendPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
                     ),
                 ]
             ),

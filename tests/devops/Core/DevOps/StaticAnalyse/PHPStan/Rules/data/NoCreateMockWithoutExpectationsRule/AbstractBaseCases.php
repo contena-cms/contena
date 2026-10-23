@@ -17,7 +17,6 @@ interface BaseDependency
  */
 abstract class AbstractDependencyCases extends TestCase
 {
-    protected BaseDependency $dependency;
 
     protected function setUp(): void
     {
@@ -34,14 +33,6 @@ abstract class AbstractDependencyCases extends TestCase
         $this->dependency->expects($this->once())->method('value')->willReturn('a');
     }
 
-    protected function buildLocalDouble(): BaseSut
-    {
-        $local = $this->createMock(BaseDependency::class); // FLAGGED as stub once each subclass is analysed
-        $local->method('value')->willReturn('b');
-        $sut = new BaseSut($local);
-
-        return $sut;
-    }
 }
 
 /**
@@ -88,7 +79,6 @@ class CoveredChildCases extends AbstractDependencyCases
  */
 abstract class AbstractChainedSetUpCases extends TestCase
 {
-    protected BaseDependency $sharedDependency;
 
     protected function setUp(): void
     {
@@ -111,7 +101,6 @@ abstract class AbstractChainedSetUpCases extends TestCase
  */
 class ChainedSetUpChildCases extends AbstractChainedSetUpCases
 {
-    private BaseDependency $ownDependency;
 
     protected function setUp(): void
     {
@@ -153,9 +142,6 @@ class ReplacedSetUpChildCases extends AbstractChainedSetUpCases
  */
 class BaseSut
 {
-    public function __construct(private readonly BaseDependency $dependency)
-    {
-    }
 
     public function run(): string
     {

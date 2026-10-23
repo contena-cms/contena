@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\App\Aggregate\ActionButton;
 use Contena\Core\Framework\App\Aggregate\ActionButtonTranslation\ActionButtonTranslationCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @internal only for use by the app-system

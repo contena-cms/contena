@@ -36,6 +36,7 @@ use Symfony\Bundle\FrameworkBundle\Test\TestContainer;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Contena\Core\Framework\Test\Plugin\PluginIntegrationTestBehaviour;
 
 /**
  * @internal

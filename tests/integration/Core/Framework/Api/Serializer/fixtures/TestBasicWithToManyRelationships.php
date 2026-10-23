@@ -20,18 +20,18 @@ class TestBasicWithToManyRelationships extends SerializationFixture
 
     public function getInput(): EntityCollection|Entity
     {
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId(self::USER_ID);
-        $admin_user->setName('Manufacturer');
-        $admin_user->setLastName('');
-        $admin_user->setPassword('password');
-        $admin_user->setUsername('admin_user1');
-        $admin_user->setActive(true);
-        $admin_user->setAdmin(true);
-        $admin_user->setEmail('admin_user1@shop.de');
-        $admin_user->setCreatedAt(new \DateTime('2018-01-15T08:01:16.000+00:00'));
-        $admin_user->internalSetEntityData('admin_user', new FieldVisibility([]));
-        $admin_user->setLocaleId(self::LOCALE_ID);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId(self::USER_ID);
+        $adminUser->setName('Manufacturer');
+        $adminUser->setLastName('');
+        $adminUser->setPassword('password');
+        $adminUser->setUsername('admin_user1');
+        $adminUser->setActive(true);
+        $adminUser->setAdmin(true);
+        $adminUser->setEmail('admin_user1@shop.de');
+        $adminUser->setCreatedAt(new \DateTime('2018-01-15T08:01:16.000+00:00'));
+        $adminUser->internalSetEntityData('admin_user', new FieldVisibility([]));
+        $adminUser->setLocaleId(self::LOCALE_ID);
 
         $media = new MediaEntity();
         $media->setId(self::MEDIA_ID);
@@ -42,13 +42,13 @@ class TestBasicWithToManyRelationships extends SerializationFixture
         $media->setTitle('2');
         $media->setCreatedAt(new \DateTime('2012-08-31T00:00:00.000+00:00'));
         $media->setUpdatedAt(new \DateTime('2017-11-21T11:25:34.000+00:00'));
-        $media->setUser(clone $admin_user);
+        $media->setUser(clone $adminUser);
         $media->internalSetEntityData('media', new FieldVisibility([]));
 
         $mediaCollection = new MediaCollection([$media]);
-        $admin_user->setMedia($mediaCollection);
+        $adminUser->setMedia($mediaCollection);
 
-        return $admin_user;
+        return $adminUser;
     }
 
     /**

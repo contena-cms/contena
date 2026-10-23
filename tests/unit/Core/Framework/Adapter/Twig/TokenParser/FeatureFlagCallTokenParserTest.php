@@ -11,6 +11,7 @@ use Contena\Core\Framework\Adapter\Twig\TokenParser\FeatureFlagCallTokenParser;
 use Contena\Core\Framework\Feature;
 use Twig\Environment;
 use Twig\Loader\ArrayLoader;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

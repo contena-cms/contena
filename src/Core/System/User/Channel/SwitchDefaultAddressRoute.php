@@ -17,12 +17,13 @@ use Contena\Core\System\User\UserEntity;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\System\User\Channel\UserAddressValidationTrait;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class SwitchDefaultAddressRoute extends AbstractSwitchDefaultAddressRoute
 {
     use UserAddressValidationTrait;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
     /**
      * @internal

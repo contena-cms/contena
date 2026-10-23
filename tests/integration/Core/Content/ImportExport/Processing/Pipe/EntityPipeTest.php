@@ -14,6 +14,7 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -42,11 +43,6 @@ class EntityPipeTest extends TestCase
             'blogNumber' => 'P101',
             'active' => true,
             'translations' => new BlogTranslationCollection([
-                (new BlogTranslationEntity())->assign([
-                    'languageId' => Defaults::LANGUAGE_SYSTEM,
-                    'name' => 'test blog',
-                    '_uniqueIdentifier' => $id . '_' . Defaults::LANGUAGE_SYSTEM,
-                ]),
             ]),
         ]);
         $blog->setUniqueIdentifier($id);

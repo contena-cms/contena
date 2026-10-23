@@ -14,8 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 
 /**
  * @codeCoverageIgnore
@@ -79,7 +77,6 @@ class PropertyGroupDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of property group.'),
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('description'))->addFlags(new ApiAware()),
             (new StringField('display_type', 'displayType'))->addFlags(new ApiAware(), new Required())->setDescription('Property groups can be displayed in the form of text, image, dropdown or color.'),
             (new StringField('sorting_type', 'sortingType'))->addFlags(new ApiAware(), new Required())->setDescription('Sorting the property group by name or position.'),
@@ -87,7 +84,6 @@ class PropertyGroupDefinition extends EntityDefinition
             (new BoolField('visible_on_product_detail_page', 'visibleOnBlogDetailPage'))->addFlags(new ApiAware())->setDescription('When set to true, the property groups are displayed on blog detail page.'),
             (new TranslatedField('position'))->addFlags(new ApiAware()),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
-            (new OneToManyAssociationField('options', PropertyGroupOptionDefinition::class, 'property_group_id', 'id'))->addFlags(new ApiAware(), new CascadeDelete(), new SearchRanking(SearchRanking::ASSOCIATION_SEARCH_RANKING)),
             (new TranslationsAssociationField(PropertyGroupTranslationDefinition::class, 'property_group_id'))->addFlags(new Required(), new CascadeDelete()),
         ]);
     }

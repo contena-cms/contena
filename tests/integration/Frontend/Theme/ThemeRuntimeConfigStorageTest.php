@@ -11,6 +11,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeRuntimeConfig;
 use Contena\Frontend\Theme\ThemeRuntimeConfigStorage;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

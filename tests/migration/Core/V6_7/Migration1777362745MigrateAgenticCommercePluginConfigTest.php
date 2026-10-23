@@ -25,7 +25,6 @@ class Migration1777362745MigrateAgenticCommercePluginConfigTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1777362745MigrateAgenticCommercePluginConfig $migration;
 
     protected function setUp(): void
     {

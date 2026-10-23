@@ -9,6 +9,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_6\Migration1712309989DropLanguageLocaleUnique;
 use Contena\Core\System\Language\LanguageDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

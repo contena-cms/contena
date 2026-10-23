@@ -6,7 +6,6 @@ use Contena\Core\System\Consent\Api\ConsentController;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;
 use Contena\Core\System\Consent\ConsentRepository;
 use Contena\Core\System\Consent\ConsentScope;
-use Contena\Core\System\Consent\Definition;
 use Contena\Core\System\Consent\Event\ConsentHookableEventDescriber;
 use Contena\Core\System\Consent\Log\ConsentChangedSubscriber;
 use Contena\Core\System\Consent\Log\ConsentLogInterface;

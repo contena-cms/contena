@@ -10,6 +10,7 @@ use Contena\Core\Framework\Store\Authentication\LocaleProvider;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -21,7 +22,7 @@ class LocaleProviderTest extends TestCase
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepository;
+    private EntityRepository $adminUserRepository;
 
     private LocaleProvider $localeProvider;
 
@@ -33,28 +34,28 @@ class LocaleProviderTest extends TestCase
 
     public function testGetLocaleFromContextReturnsLocaleFromUser(): void
     {
-        $admin_userId = Uuid::randomHex();
-        $admin_userLocale = 'de-DE-1';
+        $adminUserId = Uuid::randomHex();
+        $adminUserLocale = 'de-DE-1';
 
         $this->admin_userRepository->create([[
-            'id' => $admin_userId,
+            'id' => $adminUserId,
             'username' => 'testUser',
             'name' => 'first',
             'lastName' => 'last',
             'email' => 'first@last.de',
             'password' => TestDefaults::HASHED_PASSWORD,
             'locale' => [
-                'code' => $admin_userLocale,
+                'code' => $adminUserLocale,
                 'name' => 'testLocale',
                 'territory' => 'somewhere',
             ],
         ]], Context::createDefaultContext());
 
-        $context = Context::createDefaultContext(new AdminApiSource($admin_userId));
+        $context = Context::createDefaultContext(new AdminApiSource($adminUserId));
 
         $locale = $this->localeProvider->getLocaleFromContext($context);
 
-        static::assertSame($admin_userLocale, $locale);
+        static::assertSame($adminUserLocale, $locale);
     }
 
     public function testGetLocaleFromContextReturnsEnglishForSystemContext(): void

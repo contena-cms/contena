@@ -11,6 +11,7 @@ use Contena\Core\Framework\Notification\NotificationCollection;
 use Contena\Core\Framework\Notification\NotificationEntity;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -8,6 +8,8 @@ use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

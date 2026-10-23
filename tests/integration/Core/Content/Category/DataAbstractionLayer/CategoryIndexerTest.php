@@ -26,6 +26,8 @@ use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\TraceableMessageBus;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 
 /**
  * @internal
@@ -248,11 +250,6 @@ class CategoryIndexerTest extends TestCase
         }
 
         return new NestedEventCollection([
-            new EntityWrittenEvent(
-                CategoryDefinition::ENTITY_NAME,
-                $results,
-                $context
-            ),
         ]);
     }
 

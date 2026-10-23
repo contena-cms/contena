@@ -7,6 +7,7 @@ namespace Contena\Core\Maintenance;
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Contena\Core\Maintenance\System\Exception\DatabaseSetupException;
+use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 
 /**
  * @internal
@@ -168,13 +169,13 @@ class MaintenanceException extends HttpException
         );
     }
 
-    public static function aclRolesNotLoaded(string $admin_userId, string $admin_userName): self
+    public static function aclRolesNotLoaded(string $adminUserId, string $adminUserName): self
     {
         return new self(
             Response::HTTP_INTERNAL_SERVER_ERROR,
             'MAINTENANCE__ACL_ROLES_NOT_LOADED',
             'Could not get ACL roles for admin_user "{{ admin_userName }}" (ID: {{ admin_userId }})',
-            ['admin_userId' => $admin_userId, 'admin_userName' => $admin_userName],
+            ['admin_userId' => $adminUserId, 'admin_userName' => $adminUserName],
         );
     }
 }

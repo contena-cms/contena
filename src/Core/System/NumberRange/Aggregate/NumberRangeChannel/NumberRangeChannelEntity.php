@@ -6,6 +6,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\ChannelEntity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeType\NumberRangeTypeEntity;
 use Contena\Core\System\NumberRange\NumberRangeEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

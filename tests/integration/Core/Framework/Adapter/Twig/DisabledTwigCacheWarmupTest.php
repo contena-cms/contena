@@ -4,6 +4,7 @@ namespace Contena\Tests\Integration\Core\Framework\Adapter\Twig;
 
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Exception\ServiceNotFoundException;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

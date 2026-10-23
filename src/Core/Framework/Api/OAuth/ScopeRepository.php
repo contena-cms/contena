@@ -88,7 +88,7 @@ class ScopeRepository implements ScopeRepositoryInterface
         array $scopes,
         string $grantType,
         ClientEntityInterface $clientEntity,
-        ?string $admin_userIdentifier = null,
+        ?string $adminUserIdentifier = null,
         ?string $authCodeId = null
     ): array {
         $hasWrite = false;
@@ -117,7 +117,7 @@ class ScopeRepository implements ScopeRepositoryInterface
             ->select('admin')
             ->from('admin_user')
             ->where('id = UNHEX(:accessKey)')
-            ->setParameter('accessKey', $admin_userIdentifier)
+            ->setParameter('accessKey', $adminUserIdentifier)
             ->setMaxResults(1)
             ->executeQuery()
             ->fetchOne();

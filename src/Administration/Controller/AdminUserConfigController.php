@@ -31,10 +31,10 @@ class AdminUserConfigController extends AbstractController
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserConfigCollection> $admin_userConfigRepository
+     * @param EntityRepository<AdminUserConfigCollection> $adminUserConfigRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userConfigRepository,
+        private readonly EntityRepository $adminUserConfigRepository,
         private readonly Connection $connection,
         private readonly ClockInterface $clock
     ) {
@@ -43,11 +43,11 @@ class AdminUserConfigController extends AbstractController
     #[Route(path: '/api/_info/config-me', name: 'api.config_me.get', defaults: ['auth_required' => true], methods: ['GET'])]
     public function getConfigMe(Context $context, Request $request): Response
     {
-        $admin_userConfigs = $this->getOwnUserConfig($context, $request->query->all('keys'));
+        $adminUserConfigs = $this->getOwnUserConfig($context, $request->query->all('keys'));
 
         $data = [];
-        foreach ($admin_userConfigs as $admin_userConfig) {
-            $data[$admin_userConfig->getKey()] = $admin_userConfig->getValue();
+        foreach ($adminUserConfigs as $adminUserConfig) {
+            $data[$adminUserConfig->getKey()] = $adminUserConfig->getValue();
         }
 
         return new JsonResponse(['data' => $data]);
@@ -72,10 +72,10 @@ class AdminUserConfigController extends AbstractController
      */
     private function getOwnUserConfig(Context $context, array $keys): AdminUserConfigCollection
     {
-        $admin_userId = $this->getUserId($context);
+        $adminUserId = $this->getUserId($context);
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('admin_userId', $admin_userId));
+        $criteria->addFilter(new EqualsFilter('admin_userId', $adminUserId));
         if ($keys !== []) {
             $criteria->addFilter(new EqualsAnyFilter('key', $keys));
         }
@@ -90,12 +90,12 @@ class AdminUserConfigController extends AbstractController
             throw ApiException::invalidAdminSource($source::class);
         }
 
-        $admin_userId = $source->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $source->getUserId();
+        if (!$adminUserId) {
             throw ApiException::admin_userNotLoggedIn();
         }
 
-        return $admin_userId;
+        return $adminUserId;
     }
 
     /**
@@ -103,25 +103,25 @@ class AdminUserConfigController extends AbstractController
      */
     private function massUpsert(Context $context, array $postUpdateConfigs): void
     {
-        $admin_userId = $this->getUserId($context);
-        $admin_userConfigs = $this->getOwnUserConfig($context, array_keys($postUpdateConfigs));
+        $adminUserId = $this->getUserId($context);
+        $adminUserConfigs = $this->getOwnUserConfig($context, array_keys($postUpdateConfigs));
 
-        $admin_userConfigsGroupByKey = [];
-        foreach ($admin_userConfigs as $admin_userConfig) {
-            $admin_userConfigsGroupByKey[$admin_userConfig->getKey()] = $admin_userConfig->getId();
+        $adminUserConfigsGroupByKey = [];
+        foreach ($adminUserConfigs as $adminUserConfig) {
+            $adminUserConfigsGroupByKey[$adminUserConfig->getKey()] = $adminUserConfig->getId();
         }
 
         $queue = new MultiInsertQueryQueue($this->connection, 250, false, true);
         foreach ($postUpdateConfigs as $key => $value) {
             $data = [
                 'value' => Json::encode($value),
-                'admin_user_id' => Uuid::fromHexToBytes($admin_userId),
+                'admin_user_id' => Uuid::fromHexToBytes($adminUserId),
                 'key' => $key,
                 'id' => Uuid::randomBytes(),
                 'created_at' => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
             ];
-            if (\array_key_exists($key, $admin_userConfigsGroupByKey)) {
-                $data['id'] = Uuid::fromHexToBytes($admin_userConfigsGroupByKey[$key]);
+            if (\array_key_exists($key, $adminUserConfigsGroupByKey)) {
+                $data['id'] = Uuid::fromHexToBytes($adminUserConfigsGroupByKey[$key]);
             }
 
             $queue->addInsert(AdminUserConfigDefinition::ENTITY_NAME, $data);

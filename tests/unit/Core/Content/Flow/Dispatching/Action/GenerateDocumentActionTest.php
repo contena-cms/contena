@@ -7,25 +7,19 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeCollection;
 use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeDefinition;
 use Contena\Core\Checkout\Document\FileGenerator\FileTypes;
 use Contena\Core\Checkout\Document\Service\DocumentGenerator;
 use Contena\Core\Checkout\Document\Struct\DocumentGenerateOperation;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentFile\DocumentFileCollection;
 use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentFile\DocumentFileDefinition;
-use Contena\Core\Checkout\DocumentV2\Config\DocumentNumberGenerator;
 use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentDefinition;
 use Contena\Core\Checkout\DocumentV2\DocumentEntity;
 use Contena\Core\Checkout\DocumentV2\DocumentFormat;
 use Contena\Core\Checkout\DocumentV2\DocumentType;
-use Contena\Core\Checkout\DocumentV2\Generation\DocumentDependencyResolver;
 use Contena\Core\Checkout\DocumentV2\Generation\DocumentGenerator as DocumentV2Generator;
-use Contena\Core\Checkout\DocumentV2\Generation\DocumentPersister;
 use Contena\Core\Checkout\DocumentV2\Generation\ReferencedDocumentResolver;
 use Contena\Core\Checkout\DocumentV2\Provider\DocumentDataProviderRegistry;
-use Contena\Core\Checkout\DocumentV2\Provider\DocumentMetaProvider;
 use Contena\Core\Checkout\DocumentV2\Renderer\DocumentRendererRegistry;
 use Contena\Core\Checkout\DocumentV2\Service\ReferenceInvoiceLoader;
 use Contena\Core\Checkout\DocumentV2\Type\DocumentTypeRegistry;
@@ -34,7 +28,6 @@ use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\Action\GenerateDocumentAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Content\Media\File\FileNameProvider;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\Context;
@@ -57,7 +50,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[CoversClass(GenerateDocumentAction::class)]
 class GenerateDocumentActionTest extends TestCase
 {
-    private GenerateDocumentAction $action;
 
     protected function setUp(): void
     {
@@ -220,14 +212,6 @@ class GenerateDocumentActionTest extends TestCase
         static::assertSame($createdOrderVersionId, $documentRepository->creates[0][0]['orderVersionId']);
     }
 
-    private function createAction(?DocumentGenerator $documentGenerator = null): GenerateDocumentAction
-    {
-        return new GenerateDocumentAction(
-            $documentGenerator ?? static::createStub(DocumentGenerator::class),
-            $this->createDocumentV2Generator(static::createStub(EntityRepository::class), Uuid::randomHex())[0],
-            static::createStub(LoggerInterface::class),
-        );
-    }
 
     /**
      * @param EntityRepository<OrderCollection> $orderRepository
@@ -258,7 +242,6 @@ class GenerateDocumentActionTest extends TestCase
 
         /** @var StaticEntityRepository<DocumentFileCollection> $documentFileRepository */
         $documentFileRepository = new StaticEntityRepository([
-            new DocumentFileCollection([]),
         ], new DocumentFileDefinition());
 
         /** @var StaticEntityRepository<DocumentTypeCollection> $documentTypeRepository */
@@ -267,7 +250,6 @@ class GenerateDocumentActionTest extends TestCase
         ], new DocumentTypeDefinition());
 
         $rendererRegistry = new DocumentRendererRegistry([
-            new StaticDocumentRenderer(DocumentFormat::PDF),
         ]);
 
         $mediaService = static::createStub(MediaService::class);
@@ -282,20 +264,8 @@ class GenerateDocumentActionTest extends TestCase
 
         $generator = new DocumentV2Generator(
             new DocumentDataProviderRegistry([
-                new StaticDocumentDataProvider([DocumentType::INVOICE->value], DocumentMetaProvider::KEY),
             ]),
             $rendererRegistry,
-            new DocumentNumberGenerator($numberRangeValueGenerator),
-            new DocumentPersister(
-                $documentRepository,
-                $documentFileRepository,
-                $documentTypeRepository,
-                $mediaService,
-                $documentTypeRegistry,
-                static::createStub(FileNameProvider::class),
-                static::createStub(EventDispatcherInterface::class),
-            ),
-            new DocumentDependencyResolver($rendererRegistry),
             new ReferencedDocumentResolver(
                 new ReferenceInvoiceLoader(static::createStub(Connection::class)),
                 static::createStub(Connection::class),

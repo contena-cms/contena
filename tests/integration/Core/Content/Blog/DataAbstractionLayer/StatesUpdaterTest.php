@@ -20,6 +20,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

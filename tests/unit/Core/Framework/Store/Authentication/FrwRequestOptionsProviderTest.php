@@ -26,23 +26,23 @@ class FrwRequestOptionsProviderTest extends TestCase
     {
         $context = Context::createDefaultContext(new AdminApiSource('admin_user-id'));
 
-        $admin_userConfig = new AdminUserConfigEntity();
-        $admin_userConfig->setUniqueIdentifier('admin_user-config-id');
-        $admin_userConfig->setValue([
+        $adminUserConfig = new AdminUserConfigEntity();
+        $adminUserConfig->setUniqueIdentifier('admin_user-config-id');
+        $adminUserConfig->setValue([
             'frwUserToken' => 'frw-admin_user-token',
         ]);
 
         $result = new EntitySearchResult(
             AdminUserConfigDefinition::ENTITY_NAME,
             1,
-            new AdminUserConfigCollection([$admin_userConfig]),
+            new AdminUserConfigCollection([$adminUserConfig]),
             null,
             new Criteria(),
             $context
         );
 
-        $admin_userConfigRepositoryMock = static::createMock(EntityRepository::class);
-        $admin_userConfigRepositoryMock->expects($this->once())
+        $adminUserConfigRepositoryMock = static::createMock(EntityRepository::class);
+        $adminUserConfigRepositoryMock->expects($this->once())
             ->method('search')
             ->willReturn($result);
 
@@ -50,7 +50,7 @@ class FrwRequestOptionsProviderTest extends TestCase
 
         $frwRequestOptionsProvider = new FrwRequestOptionsProvider(
             $innerOptionsProvider,
-            $admin_userConfigRepositoryMock
+            $adminUserConfigRepositoryMock
         );
 
         static::assertSame([
@@ -62,21 +62,21 @@ class FrwRequestOptionsProviderTest extends TestCase
     {
         $context = Context::createDefaultContext(new AdminApiSource('admin_user-id'));
 
-        $admin_userConfig = new AdminUserConfigEntity();
-        $admin_userConfig->setUniqueIdentifier('admin_user-config-id');
-        $admin_userConfig->setValue([]);
+        $adminUserConfig = new AdminUserConfigEntity();
+        $adminUserConfig->setUniqueIdentifier('admin_user-config-id');
+        $adminUserConfig->setValue([]);
 
         $result = new EntitySearchResult(
             AdminUserConfigDefinition::ENTITY_NAME,
             1,
-            new AdminUserConfigCollection([$admin_userConfig]),
+            new AdminUserConfigCollection([$adminUserConfig]),
             null,
             new Criteria(),
             $context
         );
 
-        $admin_userConfigRepositoryMock = static::createMock(EntityRepository::class);
-        $admin_userConfigRepositoryMock->expects($this->once())
+        $adminUserConfigRepositoryMock = static::createMock(EntityRepository::class);
+        $adminUserConfigRepositoryMock->expects($this->once())
             ->method('search')
             ->willReturn($result);
 
@@ -84,7 +84,7 @@ class FrwRequestOptionsProviderTest extends TestCase
 
         $frwRequestOptionsProvider = new FrwRequestOptionsProvider(
             $innerOptionsProvider,
-            $admin_userConfigRepositoryMock
+            $adminUserConfigRepositoryMock
         );
 
         static::assertSame([], $frwRequestOptionsProvider->getAuthenticationHeader($context));
@@ -103,8 +103,8 @@ class FrwRequestOptionsProviderTest extends TestCase
             $context
         );
 
-        $admin_userConfigRepositoryMock = static::createMock(EntityRepository::class);
-        $admin_userConfigRepositoryMock->expects($this->once())
+        $adminUserConfigRepositoryMock = static::createMock(EntityRepository::class);
+        $adminUserConfigRepositoryMock->expects($this->once())
             ->method('search')
             ->willReturn($result);
 
@@ -112,7 +112,7 @@ class FrwRequestOptionsProviderTest extends TestCase
 
         $frwRequestOptionsProvider = new FrwRequestOptionsProvider(
             $innerOptionsProvider,
-            $admin_userConfigRepositoryMock
+            $adminUserConfigRepositoryMock
         );
 
         static::assertSame([], $frwRequestOptionsProvider->getAuthenticationHeader($context));
@@ -122,15 +122,15 @@ class FrwRequestOptionsProviderTest extends TestCase
     {
         $context = Context::createDefaultContext();
 
-        $admin_userConfigRepositoryMock = static::createMock(EntityRepository::class);
-        $admin_userConfigRepositoryMock->expects($this->never())
+        $adminUserConfigRepositoryMock = static::createMock(EntityRepository::class);
+        $adminUserConfigRepositoryMock->expects($this->never())
             ->method('search');
 
         $innerOptionsProvider = static::createStub(AbstractStoreRequestOptionsProvider::class);
 
         $frwRequestOptionsProvider = new FrwRequestOptionsProvider(
             $innerOptionsProvider,
-            $admin_userConfigRepositoryMock
+            $adminUserConfigRepositoryMock
         );
 
         static::expectException(InvalidContextSourceException::class);
@@ -141,7 +141,7 @@ class FrwRequestOptionsProviderTest extends TestCase
     {
         $context = Context::createDefaultContext();
 
-        $admin_userConfigRepositoryMock = static::createStub(EntityRepository::class);
+        $adminUserConfigRepositoryMock = static::createStub(EntityRepository::class);
 
         $innerOptionsProvider = static::createMock(AbstractStoreRequestOptionsProvider::class);
         $innerOptionsProvider->expects($this->once())
@@ -153,7 +153,7 @@ class FrwRequestOptionsProviderTest extends TestCase
 
         $frwRequestOptionsProvider = new FrwRequestOptionsProvider(
             $innerOptionsProvider,
-            $admin_userConfigRepositoryMock
+            $adminUserConfigRepositoryMock
         );
 
         $queries = $frwRequestOptionsProvider->getDefaultQueryParameters($context);

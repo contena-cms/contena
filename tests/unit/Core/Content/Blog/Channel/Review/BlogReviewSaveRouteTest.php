@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Channel\Review;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewCollection;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Content\Blog\BlogException;
 use Contena\Core\Content\Blog\Channel\Review\BlogReviewSaveRoute;
@@ -50,7 +49,6 @@ class BlogReviewSaveRouteTest extends TestCase
 
     private Stub&BlogProvider $blogProvider;
 
-    private BlogReviewSaveRoute $route;
 
     protected function setUp(): void
     {

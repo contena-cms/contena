@@ -50,13 +50,13 @@ class CreatedByFieldSerializer extends FkFieldSerializer
             return;
         }
 
-        $admin_userId = $context->getSource()->getUserId();
+        $adminUserId = $context->getSource()->getUserId();
 
-        if (!$admin_userId) {
+        if (!$adminUserId) {
             return;
         }
 
-        $data->setValue($admin_userId);
+        $data->setValue($adminUserId);
 
         yield from parent::encode($field, $existence, $data, $parameters);
     }

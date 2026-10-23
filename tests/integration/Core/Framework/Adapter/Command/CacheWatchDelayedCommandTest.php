@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Core\Framework\Adapter\Command;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * Drives the real watch loop end to end: the command keeps polling until a signal arrives.

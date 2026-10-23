@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\NullLogger;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturerTranslation\BlogManufacturerTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Seo\SeoException;
@@ -59,8 +57,6 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
                 BlogDefinition::class,
                 BlogTranslationDefinition::class,
                 BlogCategoryDefinition::class,
-                BlogManufacturerDefinition::class,
-                BlogManufacturerTranslationDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class),
@@ -98,13 +94,6 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
 
         static::assertEquals(
             [
-                new AppEntitySeoUrlConfig(
-                    name: 'blog-teaser',
-                    routeName: self::TEASER_ROUTE,
-                    hook: 'blog-teaser',
-                    entityName: 'blog',
-                    defaultTemplate: 'teaser/{{ blog.blogNumber }}',
-                ),
                 new AppEntitySeoUrlConfig(
                     name: 'blog-detail',
                     routeName: 'frontend.app.SwagSeoUrlApp.blog-detail',
@@ -299,10 +288,6 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
     public function testPersistedKeepsTheDefaultAndTheOverridesForTheSameEntity(): void
     {
         $repository = new StaticEntityRepository([
-            new SeoUrlTemplateCollection([
-                $this->template(entityName: 'blog', template: 'shop-teaser/{{ blog.blogNumber }}', channelId: self::CHANNEL_ID),
-                $this->template(entityName: 'blog', template: 'my-teaser/{{ blog.translated.name }}'),
-            ]),
         ]);
 
         $this->buildDefinition($repository)->persisted([self::config()], $this->persistContext());

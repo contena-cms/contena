@@ -19,7 +19,6 @@ class Migration1783944800AddGaranLabelTest extends TestCase
 
     private readonly Connection $connection;
 
-    private readonly Migration1783944800AddGaranLabel $migration;
 
     /**
      * @var array<array<string, mixed>>

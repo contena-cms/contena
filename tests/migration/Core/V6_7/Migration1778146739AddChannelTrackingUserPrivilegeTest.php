@@ -19,7 +19,6 @@ class Migration1778146739AddChannelTrackingUserPrivilegeTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1778146739AddChannelTrackingUserPrivilege $migration;
 
     protected function setUp(): void
     {

@@ -8,6 +8,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Symfony\Component\HttpFoundation\Response;
 use Contena\Core\Content\Flow\Exception\CustomTriggerByNameNotFoundException;
+use Doctrine\DBAL\Exception as DBALException;
 
 class FlowException extends HttpException
 {

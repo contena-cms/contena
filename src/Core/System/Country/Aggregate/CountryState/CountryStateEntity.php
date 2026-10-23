@@ -6,6 +6,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Country\Aggregate\CountryStateTranslation\CountryStateTranslationCollection;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\User\Aggregate\UserAddress\UserAddressCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

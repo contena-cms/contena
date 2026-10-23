@@ -10,6 +10,8 @@ use Contena\Core\Framework\Api\OAuth\RefreshToken;
 use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\MockClock;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

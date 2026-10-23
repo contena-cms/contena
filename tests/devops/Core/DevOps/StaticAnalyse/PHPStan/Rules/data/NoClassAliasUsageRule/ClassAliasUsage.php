@@ -5,20 +5,6 @@ namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\NoCl
 
 class ClassAliasUsage
 {
-    public UnregisteredClass $property;
 
-    public ClassMovedAttributeUsage $canonicalProperty;
 
-    public function useOldClassName(UnregisteredClass $parameter): UnregisteredClass
-    {
-        $instance = new UnregisteredClass();
-        $className = UnregisteredClass::class;
-
-        if ($instance instanceof UnregisteredClass) {
-            UnregisteredClass::legacyCall();
-            UnregisteredClass::$legacyProperty;
-        }
-
-        return $instance;
-    }
 }

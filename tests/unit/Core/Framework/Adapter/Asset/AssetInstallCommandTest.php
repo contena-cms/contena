@@ -132,8 +132,4 @@ class AssetInstallCommandTest extends TestCase
         $testAssetFilesystem->delete('asset-manifest.json');
     }
 
-    private function getBundle(): ExampleBundle
-    {
-        return new ExampleBundle(true, __DIR__ . '/_fixtures/ExampleBundle');
-    }
 }

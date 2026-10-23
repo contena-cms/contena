@@ -9,6 +9,8 @@ use Contena\Core\Framework\Api\OAuth\AuthCodeRepository;
 use Contena\Core\Framework\Api\OAuth\Client\ApiClient;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\MockClock;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -86,13 +88,13 @@ class AuthCodeRepositoryTest extends TestCase
 
     public function testRevokeAuthCodesForUserOnlyRevokesThatUsersCodes(): void
     {
-        $admin_userId = Uuid::randomHex();
-        $revoked = $this->createAuthCode('code-' . Uuid::randomHex(), '+5 minutes', $admin_userId);
+        $adminUserId = Uuid::randomHex();
+        $revoked = $this->createAuthCode('code-' . Uuid::randomHex(), '+5 minutes', $adminUserId);
         $retained = $this->createAuthCode('code-' . Uuid::randomHex(), '+5 minutes');
         $this->repository->persistNewAuthCode($revoked);
         $this->repository->persistNewAuthCode($retained);
 
-        $this->repository->revokeAuthCodesForUser($admin_userId);
+        $this->repository->revokeAuthCodesForUser($adminUserId);
 
         static::assertTrue($this->repository->isAuthCodeRevoked($revoked->getIdentifier()));
         static::assertFalse($this->repository->isAuthCodeRevoked($retained->getIdentifier()));
@@ -100,15 +102,15 @@ class AuthCodeRepositoryTest extends TestCase
 
     /**
      * @param non-empty-string $identifier
-     * @param non-empty-string|null $admin_userId
+     * @param non-empty-string|null $adminUserId
      */
-    private function createAuthCode(string $identifier, string $expiresIn, ?string $admin_userId = null): AuthCode
+    private function createAuthCode(string $identifier, string $expiresIn, ?string $adminUserId = null): AuthCode
     {
-        $admin_userId ??= Uuid::randomHex();
+        $adminUserId ??= Uuid::randomHex();
 
         $authCode = new AuthCode();
         $authCode->setIdentifier($identifier);
-        $authCode->setUserIdentifier($admin_userId);
+        $authCode->setUserIdentifier($adminUserId);
         $authCode->setClient(new ApiClient('contena-cli', true, confidential: false));
         $authCode->setExpiryDateTime($this->clock->now()->modify($expiresIn));
 

@@ -16,12 +16,12 @@ class AdminUserAccessKeyCollection extends EntityCollection
      */
     public function getUserIds(): array
     {
-        return $this->fmap(static fn (AdminUserAccessKeyEntity $admin_user) => $admin_user->getUserId());
+        return $this->fmap(static fn (AdminUserAccessKeyEntity $adminUser) => $adminUser->getUserId());
     }
 
     public function filterByUserId(string $id): self
     {
-        return $this->filter(static fn (AdminUserAccessKeyEntity $admin_user) => $admin_user->getUserId() === $id);
+        return $this->filter(static fn (AdminUserAccessKeyEntity $adminUser) => $adminUser->getUserId() === $id);
     }
 
     public function getApiAlias(): string

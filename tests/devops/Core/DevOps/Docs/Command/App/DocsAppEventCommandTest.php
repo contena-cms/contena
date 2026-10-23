@@ -6,6 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Docs\App\DocsAppEventCommand;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Util\Hasher;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

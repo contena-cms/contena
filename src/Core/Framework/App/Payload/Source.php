@@ -12,6 +12,8 @@ class Source implements \JsonSerializable
 {
     use CloneTrait;
     use JsonSerializableTrait;
+use Contena\Core\Framework\Struct\CloneTrait;
+use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     public function __construct(
         protected string $url,

@@ -17,8 +17,6 @@ class ConsentHookableEventDescriberTest extends TestCase
     public function testResolveReturnsConsentWebhookPrivileges(): void
     {
         $resolver = new ConsentHookableEventDescriber(new ConsentDefinitionRegistry([
-            new TestDefinition('backend_data', 'system'),
-            new TestDefinition('blog_analytics', 'admin_user'),
         ]));
 
         static::assertEquals([

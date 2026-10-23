@@ -20,6 +20,8 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Integration\IntegrationCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal
@@ -579,13 +581,13 @@ class AuthControllerTest extends TestCase
     {
         $client = $this->getBrowser(false);
 
-        $admin_user = TestUser::createNewTestUser(static::getContainer()->get(Connection::class));
+        $adminUser = TestUser::createNewTestUser(static::getContainer()->get(Connection::class));
 
         $accessKey = AccessKeyHelper::generateAccessKey('admin_user');
         $secretKey = AccessKeyHelper::generateSecretAccessKey();
 
         $data = [
-            'admin_userId' => $admin_user->getUserId(),
+            'admin_userId' => $adminUser->getUserId(),
             'accessKey' => $accessKey,
             'secretAccessKey' => $secretKey,
         ];
@@ -681,10 +683,10 @@ class AuthControllerTest extends TestCase
 
         static::assertIsString($accessToken = $token['access_token']);
 
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
 
         // Change admin_user password
-        $admin_userRepository->update([[
+        $adminUserRepository->update([[
             'id' => $admin->getUserId(),
             'password' => Uuid::randomHex(),
         ]], Context::createDefaultContext());

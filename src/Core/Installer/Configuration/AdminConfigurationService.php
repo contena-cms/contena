@@ -24,19 +24,19 @@ class AdminConfigurationService
      *     email?: string,
      *     localeId?: string,
      *     admin?: bool
-     * } $admin_user
+     * } $adminUser
      */
-    public function createAdmin(array $admin_user, Connection $connection): void
+    public function createAdmin(array $adminUser, Connection $connection): void
     {
-        $admin_userProvisioner = new AdminUserProvisioner($connection, $this->clock);
-        $admin_userName = $admin_user['username'];
-        $password = $admin_user['password'];
-        unset($admin_user['username'], $admin_user['password']);
+        $adminUserProvisioner = new AdminUserProvisioner($connection, $this->clock);
+        $adminUserName = $adminUser['username'];
+        $password = $adminUser['password'];
+        unset($adminUser['username'], $adminUser['password']);
 
-        $admin_userProvisioner->provision(
-            $admin_userName,
+        $adminUserProvisioner->provision(
+            $adminUserName,
             $password,
-            $admin_user,
+            $adminUser,
         );
     }
 }

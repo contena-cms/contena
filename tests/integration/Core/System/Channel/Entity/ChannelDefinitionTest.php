@@ -26,6 +26,7 @@ use Contena\Core\System\Channel\Entity\ChannelDefinitionInstanceRegistry;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

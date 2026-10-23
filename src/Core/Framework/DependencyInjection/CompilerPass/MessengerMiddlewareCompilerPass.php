@@ -8,6 +8,7 @@ use Symfony\Component\DependencyInjection\Argument\IteratorArgument;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
+use Contena\Core\Framework\DependencyInjection\CompilerPass\CompilerPassConfigTrait;
 
 #[BecomesInternal(version: 'v6.8.0')]
 class MessengerMiddlewareCompilerPass implements CompilerPassInterface

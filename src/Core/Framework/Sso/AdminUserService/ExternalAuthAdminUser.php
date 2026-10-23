@@ -15,14 +15,14 @@ use Symfony\Component\Validator\Validation;
 /**
  * @internal
  */
-final readonly class ExternalAuthAdminUser implements AdminUserEntityInterface
+final readonly class ExternalAuthAdminUser implements UserEntityInterface
 {
     /**
-     * @param non-empty-string $admin_userId
+     * @param non-empty-string $adminUserId
      */
     private function __construct(
         public string $id,
-        public string $admin_userId,
+        public string $adminUserId,
         public string $sub,
         public ?Token $token,
         public \DateTimeInterface $expiry,

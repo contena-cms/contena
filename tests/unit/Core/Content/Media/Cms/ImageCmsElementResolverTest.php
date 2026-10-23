@@ -11,7 +11,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\Channel\Struct\ImageStruct;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
@@ -38,7 +37,6 @@ class ImageCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroImage'),
         ]));
 
         $context = new ResolverContext(Generator::generateChannelContext(), new Request());
@@ -69,7 +67,6 @@ class ImageCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'cover.media'),
         ]));
 
         static::assertNull($resolver->collect($slot, $context));
@@ -92,7 +89,6 @@ class ImageCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroImage'),
         ]));
 
         $collection = $resolver->collect($slot, $context);
@@ -125,7 +121,6 @@ class ImageCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroImage'),
         ]));
 
         $media = new MediaEntity();
@@ -162,7 +157,6 @@ class ImageCmsElementResolverTest extends TestCase
         $slot = new CmsSlotEntity();
         $slot->setId('slot-1');
         $slot->setFieldConfig(new FieldConfigCollection([
-            new FieldConfig('media', FieldConfig::SOURCE_MAPPED, 'blog.customFields.heroImage'),
         ]));
 
         $resolver->enrich($slot, $context, new ElementDataCollection());

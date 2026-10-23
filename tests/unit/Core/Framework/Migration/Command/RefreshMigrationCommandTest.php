@@ -10,6 +10,8 @@ use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use Doctrine\DBAL\Connection;
+use Contena\Core\Framework\Migration\MigrationStep;
 
 /**
  * @internal
@@ -22,8 +24,6 @@ class RefreshMigrationCommandTest extends TestCase
     private const NEW_TIMESTAMP = '1783669827';
     private const MIGRATION_CONTENT = '<?php declare(strict_types=1);
 
-use Doctrine\DBAL\Connection;
-use Contena\Core\Framework\Migration\MigrationStep;
 
 class Migration%%TIMESTAMP%%FooBar extends MigrationStep
 {

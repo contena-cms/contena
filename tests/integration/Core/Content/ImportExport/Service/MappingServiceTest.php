@@ -18,6 +18,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

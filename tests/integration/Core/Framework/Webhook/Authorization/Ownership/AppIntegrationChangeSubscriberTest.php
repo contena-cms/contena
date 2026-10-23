@@ -10,6 +10,8 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -19,7 +21,6 @@ class AppIntegrationChangeSubscriberTest extends TestCase
     use DatabaseTransactionBehaviour;
     use KernelTestBehaviour;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {

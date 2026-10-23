@@ -14,6 +14,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ListDe
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Channel\Aggregate\ChannelType\ChannelTypeDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

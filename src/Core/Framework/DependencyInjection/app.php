@@ -90,7 +90,6 @@ use Contena\Core\Framework\App\Lifecycle\Handler\CustomFieldLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\FlowActionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\FlowEventLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ModuleLifecycleHandler;
-use Contena\Core\Framework\App\Lifecycle\Handler\PaymentMethodLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\RuleConditionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TaxProviderLifecycleHandler;
@@ -287,14 +286,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ])
         ->tag('contena.app_lifecycle.handler', ['priority' => -200]);
-
-    $services->set(PaymentMethodLifecycleHandler::class)
-        ->args([
-            service('payment_method.repository'),
-            service('media.repository'),
-            service(MediaService::class),
-        ])
-        ->tag('contena.app_lifecycle.handler', ['priority' => -300]);
 
     $services->set(TaxProviderLifecycleHandler::class)
         ->args([

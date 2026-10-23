@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
@@ -35,9 +34,6 @@ class UserTokenSubscriberTest extends TestCase
         $subscriber = new UserTokenSubscriber($contextPersister, new RequestStack(), $this->sessionContextToken());
         $context = Context::createDefaultContext();
         $event = new EntityWrittenEvent('user', [
-            new EntityWriteResult('inserted', ['id' => 'inserted', 'password' => 'hash'], 'user', EntityWriteResult::OPERATION_INSERT),
-            new EntityWriteResult('updated-email', ['id' => 'updated-email', 'email' => 'new@example.com'], 'user', EntityWriteResult::OPERATION_UPDATE),
-            new EntityWriteResult('updated-password', ['id' => 'updated-password', 'password' => 'hash'], 'user', EntityWriteResult::OPERATION_UPDATE),
         ], $context);
 
         $subscriber->onUserWritten($event);
@@ -51,7 +47,6 @@ class UserTokenSubscriberTest extends TestCase
             ->with('deleted-user');
         $subscriber = new UserTokenSubscriber($contextPersister, new RequestStack(), $this->sessionContextToken());
         $event = new EntityDeletedEvent('user', [
-            new EntityWriteResult('deleted-user', [], 'user', EntityWriteResult::OPERATION_DELETE),
         ], Context::createDefaultContext());
 
         $subscriber->onUserDeleted($event);
@@ -80,7 +75,6 @@ class UserTokenSubscriberTest extends TestCase
 
         $subscriber = new UserTokenSubscriber($contextPersister, new RequestStack([$request]), $this->sessionContextToken());
         $subscriber->onUserWritten(new EntityWrittenEvent('user', [
-            new EntityWriteResult('user-id', ['id' => 'user-id', 'password' => 'hash'], 'user', EntityWriteResult::OPERATION_UPDATE),
         ], Context::createDefaultContext()));
 
         static::assertSame('new-token', $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN));

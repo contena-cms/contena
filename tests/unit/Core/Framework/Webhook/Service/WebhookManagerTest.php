@@ -626,16 +626,16 @@ class WebhookManagerTest extends TestCase
         int $requestTimeout,
         ?string $secret = null,
         ?string $languageId = null,
-        ?string $admin_userLocale = null,
+        ?string $adminUserLocale = null,
         array $webhookHeaders = [],
     ): WebhookRequest {
         $payload['timestamp'] = time();
         $jsonPayload = json_encode($payload, \JSON_THROW_ON_ERROR);
 
         $headers = ['Content-Type' => 'application/json', 'sw-version' => $contenaVersion, ...$webhookHeaders];
-        if ($languageId !== null && $admin_userLocale !== null) {
+        if ($languageId !== null && $adminUserLocale !== null) {
             $headers[AuthMiddleware::CONTENA_CONTEXT_LANGUAGE] = $languageId;
-            $headers[AuthMiddleware::CONTENA_USER_LANGUAGE] = $admin_userLocale;
+            $headers[AuthMiddleware::CONTENA_USER_LANGUAGE] = $adminUserLocale;
         }
 
         $options = ['connect_timeout' => $connectionTimeout, 'timeout' => $requestTimeout];

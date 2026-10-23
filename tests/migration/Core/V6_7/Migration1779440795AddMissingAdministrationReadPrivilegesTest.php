@@ -20,7 +20,6 @@ class Migration1779440795AddMissingAdministrationReadPrivilegesTest extends Test
 
     private Connection $connection;
 
-    private Migration1779440795AddMissingAdministrationReadPrivileges $migration;
 
     protected function setUp(): void
     {

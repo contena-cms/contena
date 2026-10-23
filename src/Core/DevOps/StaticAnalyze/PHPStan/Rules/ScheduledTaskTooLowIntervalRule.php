@@ -20,7 +20,6 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTask;
 class ScheduledTaskTooLowIntervalRule implements Rule
 {
     private const EXCEPTION_CLASSES = [
-        BlogExportGenerateTask::class, // Ticket: NEXT-21167
     ];
 
     private const MIN_SCHEDULED_TASK_INTERVAL = 3600;

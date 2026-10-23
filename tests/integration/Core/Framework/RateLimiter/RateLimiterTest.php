@@ -39,6 +39,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\RateLimiter\Policy\NoLimiter;
 use Symfony\Component\RateLimiter\Storage\CacheStorage;
+use Contena\Core\Framework\Test\RateLimiter\RateLimiterTestTrait;
+use Contena\Core\Test\Integration\Traits\UserTestTrait;
 
 /**
  * @internal
@@ -462,10 +464,10 @@ class RateLimiterTest extends TestCase
     public function testResetRateLimtitUserRecovery(): void
     {
         $recoveryService = static::createStub(AdminUserRecoveryService::class);
-        $admin_userEntity = new AdminUserEntity();
-        $admin_userEntity->setUsername('admin');
-        $admin_userEntity->setEmail('test@test.de');
-        $recoveryService->method('getUserByHash')->willReturn($admin_userEntity);
+        $adminUserEntity = new AdminUserEntity();
+        $adminUserEntity->setUsername('admin');
+        $adminUserEntity->setEmail('test@test.de');
+        $recoveryService->method('getUserByHash')->willReturn($adminUserEntity);
         $recoveryService->method('updatePassword')->willReturn(true);
 
         $controller = new AdminUserRecoveryController(

@@ -21,7 +21,6 @@ class RemovedTwigBlocksTest extends TestCase
     public function testRemovedBlockDetection(string $patch, bool $expectWarning, string $expectedBlock = ''): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Frontend/Resources/views/frontend/page/blog-detail/index.html.twig', File::STATUS_MODIFIED, '', $patch),
         ])));
 
         (new RemovedTwigBlocks())($context);
@@ -59,8 +58,6 @@ class RemovedTwigBlocksTest extends TestCase
     public function testNonTemplateFilesAreIgnored(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Frontend/Controller/BlogController.php', File::STATUS_MODIFIED, '', '-{% block foo %}'),
-            new StubFile('src/Frontend/Resources/views/frontend/base.html.twig', File::STATUS_ADDED, '', '-{% block bar %}'),
         ])));
 
         (new RemovedTwigBlocks())($context);

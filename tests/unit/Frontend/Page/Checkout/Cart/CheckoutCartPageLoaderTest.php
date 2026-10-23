@@ -8,10 +8,7 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Error\ErrorCollection;
 use Contena\Core\Checkout\Gateway\Channel\CheckoutGatewayRouteResponse;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
-use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
@@ -78,13 +75,9 @@ class CheckoutCartPageLoaderTest extends TestCase
     public function testPaymentShippingAndCountryMethodsAreSetToPage(): void
     {
         $paymentMethods = new PaymentMethodCollection([
-            (new PaymentMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
-            (new PaymentMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
         ]);
 
         $shippingMethods = new ShippingMethodCollection([
-            (new ShippingMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
-            (new ShippingMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
         ]);
 
         $countries = new CountryCollection([
@@ -160,36 +153,7 @@ class CheckoutCartPageLoaderTest extends TestCase
         static::assertCount(0, $page->getCountries());
     }
 
-    private function createLoader(
-        ?GenericPageLoader $pageLoader = null,
-        ?FrontendCartFacade $cartService = null,
-        ?CountryRoute $countryRoute = null,
-    ): CheckoutCartPageLoader {
-        return new CheckoutCartPageLoader(
-            $pageLoader ?? static::createStub(GenericPageLoader::class),
-            static::createStub(EventDispatcher::class),
-            $cartService ?? $this->createCartService(),
-            $countryRoute ?? static::createStub(CountryRoute::class),
-            static::createStub(AbstractTranslator::class),
-        );
-    }
 
-    private function createCartService(): FrontendCartFacade
-    {
-        $cartService = static::createStub(FrontendCartFacade::class);
-        $cartService
-            ->method('getWithCheckoutGateway')
-            ->willReturn(new FrontendCartGatewayResult(
-                new Cart('test'),
-                new CheckoutGatewayRouteResponse(
-                    new PaymentMethodCollection(),
-                    new ShippingMethodCollection(),
-                    new ErrorCollection()
-                )
-            ));
-
-        return $cartService;
-    }
 
     private function getContextWithDummyUser(): ChannelContext
     {

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Contena\Tests\Unit\Frontend\Controller\Stub;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\PlatformRequest;
 use Contena\Frontend\Controller\AccountProfileController;
@@ -20,12 +19,7 @@ use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [FrontendRouteScope::ID]])]
 class AccountProfileControllerStub extends AccountProfileController
 {
-    private ?FrontendControllerRecorder $recorder = null;
 
-    public function recorder(): FrontendControllerRecorder
-    {
-        return $this->recorder ??= new FrontendControllerRecorder();
-    }
 
     public function reset(): void
     {
@@ -75,9 +69,6 @@ class AccountProfileControllerStub extends AccountProfileController
         $this->recorder()->addFlash($type, $message);
     }
 
-    protected function addCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-    }
 
     /**
      * @param array<string|int, mixed> $parameters

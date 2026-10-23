@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Event\AppActivatedEvent;
 use Contena\Core\Framework\App\Event\AppDeactivatedEvent;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPostActivateEvent;
@@ -41,12 +40,6 @@ class ChannelFileCacheInvalidatorTest extends TestCase
             ], true);
 
         $event = new EntityWrittenEvent('channel_file', [
-            new EntityWriteResult($firstId, [
-                'channelId' => Uuid::randomHex(),
-                'fileFamily' => 'agentic',
-                'fileName' => 'llms.txt',
-            ], 'channel_file', EntityWriteResult::OPERATION_UPDATE),
-            new EntityWriteResult($secondId, [], 'channel_file', EntityWriteResult::OPERATION_UPDATE),
         ], Context::createDefaultContext());
 
         (new ChannelFileCacheInvalidator($cacheInvalidator))->invalidate($event);
@@ -62,7 +55,6 @@ class ChannelFileCacheInvalidatorTest extends TestCase
             ->with([ChannelFileCacheInvalidator::buildCacheTag($id)], true);
 
         $event = new EntityDeletedEvent('channel_file', [
-            new EntityWriteResult($id, [], 'channel_file', EntityWriteResult::OPERATION_DELETE),
         ], Context::createDefaultContext());
 
         (new ChannelFileCacheInvalidator($cacheInvalidator))->invalidate($event);
@@ -71,12 +63,6 @@ class ChannelFileCacheInvalidatorTest extends TestCase
     public function testItThrowsOnCombinedPrimaryKey(): void
     {
         $event = new EntityWrittenEvent(BlogCategoryDefinition::ENTITY_NAME, [
-            new EntityWriteResult(
-                ['blogId' => Uuid::randomHex(), 'categoryId' => Uuid::randomHex()],
-                [],
-                BlogCategoryDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ], Context::createDefaultContext());
 
         $cacheInvalidator = $this->createMock(CacheInvalidator::class);

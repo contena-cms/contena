@@ -31,6 +31,7 @@ use Contena\Core\Test\Integration\App\TestAppServer;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * Exercises the whole app-secret-rotation lifecycle — install, rotation and recovery — against a fake app

@@ -4,6 +4,7 @@ namespace Contena\Core\System\Channel\Aggregate\ChannelAnalytics;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Channel\ChannelEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class ChannelAnalyticsEntity extends Entity
 {

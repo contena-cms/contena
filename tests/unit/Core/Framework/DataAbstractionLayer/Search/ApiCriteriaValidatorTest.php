@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\ChannelApiSource;
@@ -43,7 +42,6 @@ class ApiCriteriaValidatorTest extends TestCase
             new StaticDefinitionInstanceRegistry(
                 [
                     ChannelBlogDefinition::class,
-                    OrderLineItemDefinition::class,
                 ],
                 static::createStub(ValidatorInterface::class),
                 static::createStub(EntityWriteGatewayInterface::class)

@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\WithoutErrorHandler;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogOption\BlogOptionDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionDefinition;
@@ -54,9 +52,7 @@ class RequestCriteriaBuilderTest extends TestCase
         $this->staticDefinitionRegistry = new StaticDefinitionInstanceRegistry(
             [
                 new BlogDefinition(),
-                new BlogOptionDefinition(),
                 new PropertyGroupOptionDefinition(),
-                new BlogPriceDefinition(),
                 new BlogCategoryDefinition(),
                 new CategoryDefinition(),
             ],
@@ -394,8 +390,6 @@ class RequestCriteriaBuilderTest extends TestCase
                 ],
             ],
             [
-                new FieldSorting('blog.id', FieldSorting::ASCENDING, true),
-                new FieldSorting('blog.price', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -428,7 +422,6 @@ class RequestCriteriaBuilderTest extends TestCase
             ],
             [
                 new FieldSorting('blog.id'),
-                new FieldSorting('blog.price', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -457,7 +450,6 @@ class RequestCriteriaBuilderTest extends TestCase
                 'sort' => '-prices.rule.id',
             ],
             [
-                new FieldSorting('blog.prices.ruleId', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -485,7 +477,6 @@ class RequestCriteriaBuilderTest extends TestCase
                 ],
             ],
             [
-                new FieldSorting('blog.id', FieldSorting::ASCENDING, true),
             ],
         ];
 

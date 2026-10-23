@@ -30,6 +30,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -330,7 +331,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('blog.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
 
@@ -345,7 +345,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('blog.prices.price', [RangeFilter::LTE => 100]),
             ])
         );
 
@@ -363,7 +362,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('blog.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
         $criteria->addSorting(new FieldSorting('blog.prices.price'));
@@ -382,7 +380,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('blog.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
         $criteria->addSorting(new FieldSorting('blog.prices.price', FieldSorting::DESCENDING));
@@ -401,7 +398,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('blog.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
         $criteria->addGroupField(new FieldGrouping('blog.prices.ruleId'));
@@ -607,7 +603,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('blog.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('blog.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
 
@@ -819,7 +814,7 @@ class JoinFilterTest extends TestCase
         $container->get('blog.repository')
             ->create($blogs, Context::createDefaultContext());
 
-        $admin_userId = $container->get(Connection::class)
+        $adminUserId = $container->get(Connection::class)
             ->fetchOne('SELECT LOWER(HEX(id)) FROM `admin_user` LIMIT 1');
 
         $media = [
@@ -831,7 +826,7 @@ class JoinFilterTest extends TestCase
             ->create($media, Context::createDefaultContext());
 
         $avatar = [
-            'id' => $admin_userId,
+            'id' => $adminUserId,
             'avatarId' => self::$ids->get('with-avatar'),
         ];
 

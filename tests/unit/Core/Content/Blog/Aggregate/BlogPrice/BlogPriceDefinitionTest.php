@@ -7,11 +7,9 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Test\Annotation\DisabledFeatures;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -53,17 +51,4 @@ class BlogPriceDefinitionTest extends TestCase
         static::assertNull($start->getMinValue());
     }
 
-    private function createDefinition(): BlogPriceDefinition
-    {
-        $registry = new StaticDefinitionInstanceRegistry(
-            [BlogPriceDefinition::class],
-            static::createStub(ValidatorInterface::class),
-            static::createStub(EntityWriteGateway::class),
-        );
-
-        $definition = $registry->getByEntityName(BlogPriceDefinition::ENTITY_NAME);
-        static::assertInstanceOf(BlogPriceDefinition::class, $definition);
-
-        return $definition;
-    }
 }

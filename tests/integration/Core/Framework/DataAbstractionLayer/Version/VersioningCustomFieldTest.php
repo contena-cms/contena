@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Version;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -13,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

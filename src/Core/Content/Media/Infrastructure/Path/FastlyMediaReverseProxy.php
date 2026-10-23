@@ -8,6 +8,7 @@ use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Media\Core\Application\MediaReverseProxy;
 use Contena\Core\Content\Media\MediaException;
+use GuzzleHttp\Exception\ServerException;
 
 class FastlyMediaReverseProxy implements MediaReverseProxy
 {

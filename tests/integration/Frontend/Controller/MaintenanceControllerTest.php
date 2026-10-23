@@ -15,6 +15,8 @@ use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Page\Maintenance\MaintenancePageLoadedHook;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal

@@ -38,6 +38,12 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\Uuid\Uuid;
+use Symfony\Component\Filesystem\Exception\IOException;
 
 #[AsCommand(
     name: 'dal:create:hydrators',
@@ -140,7 +146,6 @@ class CreateHydratorCommand extends Command
 namespace Contena\Core\Framework\DependencyInjection;
 
 #uses#
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 
@@ -327,10 +332,6 @@ EOF;
 
 namespace #namespace#;
 
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
-use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\Uuid\Uuid;
 
 class #class# extends EntityHydrator
 {

@@ -61,13 +61,13 @@ class SsoUserInvitationMailServiceTest extends TestCase
             new MailTemplateTypeCollection([$mailTemplateTypeEntity]),
         ], new MailTemplateTypeDefinition());
 
-        $admin_userEntity = new AdminUserEntity();
-        $admin_userEntity->setUniqueIdentifier(Uuid::randomHex());
-        $admin_userEntity->setName('FirstName');
-        $admin_userEntity->setLastName('LastName');
-        $admin_userEntity->setUsername('AdminUserName');
-        $admin_userRepository = new StaticEntityRepository([
-            new AdminUserCollection([$admin_userEntity]),
+        $adminUserEntity = new AdminUserEntity();
+        $adminUserEntity->setUniqueIdentifier(Uuid::randomHex());
+        $adminUserEntity->setName('FirstName');
+        $adminUserEntity->setLastName('LastName');
+        $adminUserEntity->setUsername('AdminUserName');
+        $adminUserRepository = new StaticEntityRepository([
+            new AdminUserCollection([$adminUserEntity]),
         ], new AdminUserDefinition());
 
         $languageEntity = new LanguageEntity();
@@ -85,7 +85,7 @@ class SsoUserInvitationMailServiceTest extends TestCase
             $systemConfigService,
             $mailTemplateRepository,
             $mailTemplateTypeRepository,
-            $admin_userRepository,
+            $adminUserRepository,
             $languageRepository,
             $routerMock,
             'app.url'

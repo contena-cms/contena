@@ -32,7 +32,6 @@ class NoManualChannelContextCreationRule implements Rule
     private static array $allowedClassesWhichCanCreateChannelContext = [
         ChannelContextFactory::class,
         Generator::class,
-        EntityCacheKeyGeneratorTest::class, // A bit complicated to refactor this test
     ];
 
     public function __construct(

@@ -14,6 +14,7 @@ use Contena\Core\Kernel;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

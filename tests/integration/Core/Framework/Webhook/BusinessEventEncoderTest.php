@@ -22,6 +22,7 @@ use Contena\Core\Framework\Webhook\BusinessEventEncoder;
 use Contena\Core\Framework\Webhook\WebhookException;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\Tax\TaxEntity;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

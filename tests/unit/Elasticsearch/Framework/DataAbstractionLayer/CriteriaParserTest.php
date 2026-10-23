@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturerTranslation\BlogManufacturerTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Defaults;
@@ -939,75 +938,23 @@ EOT,
     public static function providerTranslatedField(): iterable
     {
         yield 'non translated field' => [
-            new FieldSorting('blogNumber', FieldSorting::ASCENDING),
             new FieldSort('blogNumber', FieldSorting::ASCENDING, null, []),
             null,
         ];
 
         yield 'customFields translated field' => [
-            new FieldSorting('customFields.foo', FieldSorting::DESCENDING),
-            new FieldSort('_script', FieldSorting::DESCENDING, null, [
-                'type' => 'string',
-                'script' => [
-                    'source' => static::getScriptStringSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'foo',
-                    ],
-                ],
-            ]),
             new StringField('foo', 'foo'),
         ];
 
         yield 'customFields int translated field' => [
-            new FieldSorting('customFields.foo', FieldSorting::ASCENDING),
-            new FieldSort('_script', FieldSorting::ASCENDING, null, [
-                'type' => 'number',
-                'script' => [
-                    'source' => static::getScriptIntSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'foo',
-                        'order' => FieldSort::ASC,
-                    ],
-                ],
-            ]),
             new IntField('foo', 'foo'),
         ];
 
         yield 'customFields float translated field' => [
-            new FieldSorting('customFields.foo', FieldSorting::ASCENDING),
-            new FieldSort('_script', FieldSort::ASC, null, [
-                'type' => 'number',
-                'script' => [
-                    'source' => static::getScriptIntSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'foo',
-                        'order' => FieldSort::ASC,
-                    ],
-                ],
-            ]),
             new FloatField('foo', 'foo'),
         ];
 
         yield 'non nested translated field' => [
-            new FieldSorting('name', FieldSorting::ASCENDING),
             new FieldSort('_script', FieldSort::ASC, null, [
                 'type' => 'string',
                 'script' => [
@@ -1026,7 +973,6 @@ EOT,
         ];
 
         yield 'non translated field with root prefix' => [
-            new FieldSorting('blog_manufacturer.name', FieldSorting::ASCENDING),
             new FieldSort('_script', FieldSort::ASC, null, [
                 'type' => 'string',
                 'script' => [
@@ -1045,54 +991,20 @@ EOT,
         ];
 
         yield 'nested translated field' => [
-            new FieldSorting('blog_manufacturer.blogs.name', FieldSorting::ASCENDING),
             new FieldSort('blogs.name.' . Defaults::LANGUAGE_SYSTEM, FieldSorting::ASCENDING, new NestedSort('blogs')),
             null,
         ];
 
         yield 'nested translated field with root prefix' => [
-            new FieldSorting('blogs.name', FieldSorting::ASCENDING),
             new FieldSort('blogs.name.' . Defaults::LANGUAGE_SYSTEM, FieldSorting::ASCENDING, new NestedSort('blogs')),
             null,
         ];
 
         yield 'customFields string translated field in descending order' => [
-            new FieldSorting('customFields.bar', FieldSorting::DESCENDING),
-            new FieldSort('_script', FieldSort::DESC, null, [
-                'type' => 'string',
-                'script' => [
-                    'source' => static::getScriptStringSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'bar',
-                    ],
-                ],
-            ]),
             new StringField('bar', 'bar'),
         ];
 
         yield 'customFields bool translated field' => [
-            new FieldSorting('customFields.boolField', FieldSorting::DESCENDING),
-            new FieldSort('_script', FieldSort::DESC, null, [
-                'type' => 'string',
-                'script' => [
-                    'source' => static::getScriptStringSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'boolField',
-                    ],
-                ],
-            ]),
             new BoolField('boolField', 'boolField'),
         ];
     }
@@ -1320,8 +1232,6 @@ EOT,
         $instanceRegistry = new StaticDefinitionInstanceRegistry(
             [
                 BlogDefinition::class,
-                BlogManufacturerDefinition::class,
-                BlogManufacturerTranslationDefinition::class,
                 UnitDefinition::class,
                 BlogTranslationDefinition::class,
                 UnitTranslationDefinition::class,

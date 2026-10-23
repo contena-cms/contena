@@ -24,7 +24,7 @@ class AdminUserStorerTest extends TestCase
 {
     private AdminUserStorer $storer;
 
-    private Stub&AdminUserRecoveryProvider $admin_userRecoveryProvider;
+    private Stub&AdminUserRecoveryProvider $adminUserRecoveryProvider;
 
     protected function setUp(): void
     {
@@ -71,15 +71,15 @@ class AdminUserStorerTest extends TestCase
 
     public function testLazyLoadEntity(): void
     {
-        $admin_userRecoveryProvider = $this->createMock(AdminUserRecoveryProvider::class);
-        $storer = $this->createStorer($admin_userRecoveryProvider);
+        $adminUserRecoveryProvider = $this->createMock(AdminUserRecoveryProvider::class);
+        $storer = $this->createStorer($adminUserRecoveryProvider);
 
         $storable = new StorableFlow('name', Context::createDefaultContext(), ['admin_userRecoveryId' => 'id'], []);
         $storer->restore($storable);
         $entity = new AdminUserRecoveryEntity();
         $entity->setId('id');
 
-        $admin_userRecoveryProvider->expects($this->once())->method('getData')->willReturn($entity);
+        $adminUserRecoveryProvider->expects($this->once())->method('getData')->willReturn($entity);
         $res = $storable->getData('admin_userRecovery');
 
         static::assertSame($res, $entity);
@@ -87,13 +87,13 @@ class AdminUserStorerTest extends TestCase
 
     public function testLazyLoadNullEntity(): void
     {
-        $admin_userRecoveryProvider = $this->createMock(AdminUserRecoveryProvider::class);
-        $storer = $this->createStorer($admin_userRecoveryProvider);
+        $adminUserRecoveryProvider = $this->createMock(AdminUserRecoveryProvider::class);
+        $storer = $this->createStorer($adminUserRecoveryProvider);
 
         $storable = new StorableFlow('name', Context::createDefaultContext(), ['admin_userRecoveryId' => 'id'], []);
         $storer->restore($storable);
 
-        $admin_userRecoveryProvider->expects($this->once())->method('getData')->willReturn(null);
+        $adminUserRecoveryProvider->expects($this->once())->method('getData')->willReturn(null);
         $res = $storable->getData('admin_userRecovery');
 
         static::assertNull($res);
@@ -108,12 +108,12 @@ class AdminUserStorerTest extends TestCase
         static::assertNull($userGroup);
     }
 
-    private function createStorer(AdminUserRecoveryProvider $admin_userRecoveryProvider): AdminUserStorer
+    private function createStorer(AdminUserRecoveryProvider $adminUserRecoveryProvider): AdminUserStorer
     {
         return new AdminUserStorer(
             static::createStub(EntityRepository::class),
             static::createStub(EventDispatcherInterface::class),
-            $admin_userRecoveryProvider,
+            $adminUserRecoveryProvider,
         );
     }
 }

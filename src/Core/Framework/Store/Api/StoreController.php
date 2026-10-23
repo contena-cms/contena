@@ -19,6 +19,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
+use Symfony\Component\HttpClient\Exception\ClientException;
 
 /**
  * @internal
@@ -27,11 +28,11 @@ use Contena\Core\Framework\Store\Exception\StoreTokenMissingException;
 class StoreController extends AbstractController
 {
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
         private readonly StoreClient $storeClient,
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly AbstractExtensionDataProvider $extensionDataProvider
     ) {
     }
@@ -62,10 +63,10 @@ class StoreController extends AbstractController
             // Throws StoreTokenMissingException if no token is present
             $this->getUserStoreToken($context);
 
-            $admin_userInfo = $this->storeClient->admin_userInfo($context);
+            $adminUserInfo = $this->storeClient->admin_userInfo($context);
 
             return new JsonResponse([
-                'admin_userInfo' => $admin_userInfo,
+                'admin_userInfo' => $adminUserInfo,
             ]);
         } catch (StoreTokenMissingException|ClientException) {
             return new JsonResponse([
@@ -151,19 +152,19 @@ class StoreController extends AbstractController
             throw StoreException::invalidContextSource(AdminApiSource::class, $contextSource::class);
         }
 
-        $admin_userId = $contextSource->getUserId();
-        if ($admin_userId === null) {
+        $adminUserId = $contextSource->getUserId();
+        if ($adminUserId === null) {
             throw StoreException::invalidContextSourceUser($contextSource::class);
         }
 
-        /** @var AdminUserEntity|null $admin_user */
-        $admin_user = $this->admin_userRepository->search(new Criteria([$admin_userId]), $context)->getEntities()->first();
+        /** @var AdminUserEntity|null $adminUser */
+        $adminUser = $this->admin_userRepository->search(new Criteria([$adminUserId]), $context)->getEntities()->first();
 
-        if ($admin_user === null) {
+        if ($adminUser === null) {
             throw StoreException::storeTokenMissing();
         }
 
-        $storeToken = $admin_user->getStoreToken();
+        $storeToken = $adminUser->getStoreToken();
         if ($storeToken === null) {
             throw StoreException::storeTokenMissing();
         }

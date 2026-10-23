@@ -8,6 +8,7 @@ use Contena\Core\Content\Blog\Exception\DuplicateBlogSearchConfigFieldException;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -9,6 +9,7 @@ namespace Contena\Core\System\Snippet\DataTransfer\Metadata;
 class MetadataEntry
 {
     use JsonSerializableTrait;
+use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
     private function __construct(
         public readonly string $locale,

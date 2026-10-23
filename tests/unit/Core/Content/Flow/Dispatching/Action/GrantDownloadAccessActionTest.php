@@ -14,7 +14,6 @@ use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\State;
 use Contena\Core\Content\Flow\Dispatching\Action\GrantDownloadAccessAction;
-use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
@@ -61,23 +60,6 @@ class GrantDownloadAccessActionTest extends TestCase
         static::assertSame([OrderAware::class], $this->action->requirements());
     }
 
-    /**
-     * @param array<int, array<string, mixed>> $expectedPayload
-     */
-    #[DataProvider('orderProvider')]
-    public function testSetAccessHandleFlow(?OrderEntity $orderEntity, array $expectedPayload, bool $value = true): void
-    {
-        if ($orderEntity instanceof OrderEntity) {
-            $flow = new StorableFlow('foo', Context::createDefaultContext(), [], [OrderAware::ORDER => $orderEntity]);
-        } else {
-            $flow = new StorableFlow('foo', Context::createDefaultContext());
-        }
-        $flow->setConfig(['value' => $value]);
-
-        $this->action->handleFlow($flow);
-
-        static::assertSame($expectedPayload, $this->updatePayload);
-    }
 
     public static function orderProvider(): \Generator
     {

@@ -7,7 +7,7 @@
         "contena"
     ],
     "homepage": "https://www.contena.cn",
-    "license": "MIT",
+    "license": "Apache-2.0",
     "replace": {
         "contena/core": "self.version",
         "contena/frontend": "self.version",

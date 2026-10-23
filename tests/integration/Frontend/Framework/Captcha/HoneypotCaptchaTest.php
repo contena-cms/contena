@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Frontend\Framework\Captcha\HoneypotCaptcha;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

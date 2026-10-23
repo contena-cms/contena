@@ -29,15 +29,15 @@ class AdminUserControllerTest extends TestCase
 {
     public function testLogoutRevokesTokensAndReturnsNoContent(): void
     {
-        $admin_userId = 'test-admin_user-id';
+        $adminUserId = 'test-admin_user-id';
 
         $ssoService = $this->createMock(SsoService::class);
         $ssoService->expects($this->once())
             ->method('revokeUserTokens')
-            ->with($admin_userId);
+            ->with($adminUserId);
 
         $controller = $this->createController($ssoService);
-        $context = Context::createDefaultContext(new AdminApiSource($admin_userId));
+        $context = Context::createDefaultContext(new AdminApiSource($adminUserId));
 
         $response = $controller->logout($context);
 
@@ -66,22 +66,22 @@ class AdminUserControllerTest extends TestCase
 
     public function testUpdateMeAllowsChangingTimezone(): void
     {
-        $admin_userId = 'test-admin_user-id';
-        $context = Context::createDefaultContext(new AdminApiSource($admin_userId));
+        $adminUserId = 'test-admin_user-id';
+        $context = Context::createDefaultContext(new AdminApiSource($adminUserId));
         $request = Request::create('/', Request::METHOD_PATCH, ['timeZone' => 'Europe/Berlin']);
-        $admin_userDefinition = new AdminUserDefinition();
-        $admin_userRepository = StaticEntityRepository::of(AdminUserCollection::class, [], $admin_userDefinition);
+        $adminUserDefinition = new AdminUserDefinition();
+        $adminUserRepository = StaticEntityRepository::of(AdminUserCollection::class, [], $adminUserDefinition);
         $responseFactory = $this->createMock(ResponseFactoryInterface::class);
         $response = new Response();
         $responseFactory->expects($this->once())
             ->method('createRedirectResponse')
-            ->with($admin_userDefinition, $admin_userId, $request, $context)
+            ->with($adminUserDefinition, $adminUserId, $request, $context)
             ->willReturn($response);
 
-        $controller = $this->createController(admin_userRepository: $admin_userRepository, admin_userDefinition: $admin_userDefinition);
+        $controller = $this->createController(admin_userRepository: $adminUserRepository, admin_userDefinition: $adminUserDefinition);
 
         static::assertSame($response, $controller->updateMe($context, $request, $responseFactory));
-        static::assertSame('Europe/Berlin', $admin_userRepository->upserts[0][0]['timeZone']);
+        static::assertSame('Europe/Berlin', $adminUserRepository->upserts[0][0]['timeZone']);
     }
 
     /**
@@ -121,21 +121,21 @@ class AdminUserControllerTest extends TestCase
 
     public function testUpdateMeAllowsLinkingAnAvatarMedia(): void
     {
-        $admin_userId = 'test-admin_user-id';
+        $adminUserId = 'test-admin_user-id';
         $mediaId = Uuid::randomHex();
-        $context = Context::createDefaultContext(new AdminApiSource($admin_userId));
+        $context = Context::createDefaultContext(new AdminApiSource($adminUserId));
         $request = Request::create('/', Request::METHOD_PATCH, ['avatarMedia' => ['id' => $mediaId]]);
-        $admin_userDefinition = new AdminUserDefinition();
-        $admin_userRepository = StaticEntityRepository::of(AdminUserCollection::class, [], $admin_userDefinition);
+        $adminUserDefinition = new AdminUserDefinition();
+        $adminUserRepository = StaticEntityRepository::of(AdminUserCollection::class, [], $adminUserDefinition);
         $responseFactory = $this->createMock(ResponseFactoryInterface::class);
         $responseFactory->expects($this->once())
             ->method('createRedirectResponse')
             ->willReturn(new Response());
 
-        $controller = $this->createController(admin_userRepository: $admin_userRepository, admin_userDefinition: $admin_userDefinition);
+        $controller = $this->createController(admin_userRepository: $adminUserRepository, admin_userDefinition: $adminUserDefinition);
         $controller->updateMe($context, $request, $responseFactory);
 
-        static::assertSame(['id' => $mediaId], $admin_userRepository->upserts[0][0]['avatarMedia']);
+        static::assertSame(['id' => $mediaId], $adminUserRepository->upserts[0][0]['avatarMedia']);
     }
 
     /**
@@ -198,22 +198,22 @@ class AdminUserControllerTest extends TestCase
     }
 
     /**
-     * @param EntityRepository<AdminUserCollection>|null $admin_userRepository
+     * @param EntityRepository<AdminUserCollection>|null $adminUserRepository
      */
     private function createController(
         ?SsoService $ssoService = null,
-        ?EntityRepository $admin_userRepository = null,
-        ?AdminUserDefinition $admin_userDefinition = null,
+        ?EntityRepository $adminUserRepository = null,
+        ?AdminUserDefinition $adminUserDefinition = null,
     ): AdminUserController {
         $connection = static::createStub(Connection::class);
         $connection->method('transactional')->willReturnCallback(static fn (\Closure $func) => $func($connection));
 
         return new AdminUserController(
-            $admin_userRepository ?? static::createStub(EntityRepository::class),
+            $adminUserRepository ?? static::createStub(EntityRepository::class),
             static::createStub(EntityRepository::class),
             static::createStub(EntityRepository::class),
             static::createStub(EntityRepository::class),
-            $admin_userDefinition ?? static::createStub(AdminUserDefinition::class),
+            $adminUserDefinition ?? static::createStub(AdminUserDefinition::class),
             $ssoService ?? static::createStub(SsoService::class),
             $connection,
         );

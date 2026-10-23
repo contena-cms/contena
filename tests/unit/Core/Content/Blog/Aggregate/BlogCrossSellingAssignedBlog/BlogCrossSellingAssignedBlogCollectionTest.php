@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Aggregate\BlogCrossSellingAssigne
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCrossSellingAssignedBlogs\BlogCrossSellingAssignedBlogsCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSellingAssignedBlogs\BlogCrossSellingAssignedBlogsEntity;
 
 /**
  * @internal
@@ -39,12 +38,4 @@ class BlogCrossSellingAssignedBlogsCollectionTest extends TestCase
         static::assertSame('blog_cross_selling_assigned_products_collection', $collection->getApiAlias());
     }
 
-    private function assignment(string $id, int $position): BlogCrossSellingAssignedBlogsEntity
-    {
-        $assignment = new BlogCrossSellingAssignedBlogsEntity();
-        $assignment->setUniqueIdentifier($id);
-        $assignment->setPosition($position);
-
-        return $assignment;
-    }
 }

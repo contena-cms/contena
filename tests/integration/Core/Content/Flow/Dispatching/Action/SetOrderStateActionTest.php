@@ -8,11 +8,9 @@ use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
 use Contena\Core\Checkout\Order\Channel\OrderService;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\Action\SetOrderStateAction;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
@@ -177,7 +175,6 @@ class SetOrderStateActionTest extends TestCase
                 'shippingCosts' => new CalculatedPrice(
                     10.00,
                     10.00,
-                    new CalculatedTaxCollection([]),
                     new TaxRuleCollection([]),
                 ),
             ]),
@@ -186,7 +183,6 @@ class SetOrderStateActionTest extends TestCase
                 'shippingCosts' => new CalculatedPrice(
                     -10.00,
                     -10.00,
-                    new CalculatedTaxCollection([]),
                     new TaxRuleCollection([]),
                 ),
             ]),

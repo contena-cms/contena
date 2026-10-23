@@ -32,6 +32,7 @@ use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 use Contena\Core\Framework\Plugin\Exception\PluginNotFoundException;
+use Symfony\Component\DependencyInjection\Exception\ParameterNotFoundException;
 
 #[ClassMoved(version: 'v6.8.0', previousClassName: 'Contena\Core\Framework\Plugin\Util\AssetService')]
 #[BecomesInternal(version: 'v6.8.0')]

@@ -5,18 +5,10 @@ namespace Contena\Tests\Unit\Core\Content\Blog\Garan;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\BlogCollection;
-use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Content\Blog\Garan\GaranLabelDurationFormatter;
-use Contena\Core\Content\Blog\Garan\GaranLabelInlineImage;
 use Contena\Core\Content\Blog\Garan\GaranLabelMailSubscriber;
-use Contena\Core\Content\Blog\Garan\GaranLabelRenderer;
-use Contena\Core\Content\Blog\Garan\GaranLabelResolver;
 use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
@@ -25,7 +17,6 @@ use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\Mime\Email;
 use Symfony\Component\Mime\Part\DataPart;
 use Twig\Environment;
@@ -294,41 +285,7 @@ class GaranLabelMailSubscriberTest extends TestCase
         );
     }
 
-    /**
-     * @param list<mixed> $searchResults
-     */
-    private function createSubscriber(array $searchResults): GaranLabelMailSubscriber
-    {
-        $resolver = new GaranLabelResolver(
-            new GaranLabelDurationFormatter(),
-            new GaranLabelRenderer(static::createStub(Environment::class)),
-        );
 
-        /** @var StaticEntityRepository<BlogCollection> $blogRepository */
-        $blogRepository = new StaticEntityRepository($searchResults, new BlogDefinition());
-
-        return new GaranLabelMailSubscriber(new GaranLabelInlineImage(), $blogRepository, $resolver);
-    }
-
-    /**
-     * @param list<string|null> $blogIds
-     */
-    private static function createOrder(array $blogIds): OrderEntity
-    {
-        $lineItems = new OrderLineItemCollection();
-
-        foreach ($blogIds as $index => $blogId) {
-            $lineItem = new OrderLineItemEntity();
-            $lineItem->setId('line-item-' . $index);
-            $lineItem->setBlogId($blogId);
-            $lineItems->add($lineItem);
-        }
-
-        $order = new OrderEntity();
-        $order->setLineItems($lineItems);
-
-        return $order;
-    }
 
     private static function createBlog(
         string $id,

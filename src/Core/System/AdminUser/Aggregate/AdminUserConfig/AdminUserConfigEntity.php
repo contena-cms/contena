@@ -4,6 +4,7 @@ namespace Contena\Core\System\AdminUser\Aggregate\AdminUserConfig;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -19,9 +20,9 @@ class AdminUserConfigEntity extends Entity
      */
     protected ?array $value = null;
 
-    protected string $admin_userId;
+    protected string $adminUserId;
 
-    protected ?AdminUserEntity $admin_user = null;
+    protected ?AdminUserEntity $adminUser = null;
 
     public function getKey(): string
     {
@@ -54,9 +55,9 @@ class AdminUserConfigEntity extends Entity
         return $this->admin_userId;
     }
 
-    public function setUserId(string $admin_userId): void
+    public function setUserId(string $adminUserId): void
     {
-        $this->admin_userId = $admin_userId;
+        $this->admin_userId = $adminUserId;
     }
 
     public function getUser(): ?AdminUserEntity
@@ -64,8 +65,8 @@ class AdminUserConfigEntity extends Entity
         return $this->admin_user;
     }
 
-    public function setUser(AdminUserEntity $admin_user): void
+    public function setUser(AdminUserEntity $adminUser): void
     {
-        $this->admin_user = $admin_user;
+        $this->admin_user = $adminUser;
     }
 }

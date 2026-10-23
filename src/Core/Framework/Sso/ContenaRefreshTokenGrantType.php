@@ -13,6 +13,9 @@ use Contena\Core\Framework\Api\OAuth\RefreshTokenRepository;
 use Contena\Core\Framework\Sso\AdminUserService\AdminUserService;
 use Contena\Core\Framework\Sso\AdminUserService\Token;
 use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
+use Contena\Core\Framework\Sso\AdminUserService\ExternalAuthAdminUser;
+use League\OAuth2\Server\Exception\OAuthServerException;
+use League\OAuth2\Server\Exception\UniqueTokenIdentifierConstraintViolationException;
 
 /**
  * @internal
@@ -23,7 +26,7 @@ class ContenaRefreshTokenGrantType extends RefreshTokenGrant
 
     public function __construct(
         private readonly RefreshTokenRepository $contenaRefreshTokenRepository,
-        private readonly AdminUserService $admin_userService,
+        private readonly AdminUserService $adminUserService,
         private readonly ExternalTokenService $tokenService,
         private readonly ClockInterface $clock,
     ) {
@@ -43,10 +46,10 @@ class ContenaRefreshTokenGrantType extends RefreshTokenGrant
             throw OAuthServerException::invalidRefreshToken('Token has been revoked');
         }
 
-        $admin_userId = $oldRefreshToken['admin_user_id'];
+        $adminUserId = $oldRefreshToken['admin_user_id'];
 
-        $oAuthUser = $this->admin_userService->searchOAuthUserByUserId($admin_userId);
-        if ($oAuthUser instanceof ExternalAuthUser && $oAuthUser->token instanceof Token) {
+        $oAuthUser = $this->admin_userService->searchOAuthUserByUserId($adminUserId);
+        if ($oAuthUser instanceof ExternalAuthAdminUser && $oAuthUser->token instanceof Token) {
             $newSsoTokenResult = $this->tokenService->getUserTokenByRefreshToken($oAuthUser->token->refreshToken);
             $oAuthUser = $this->admin_userService->updateOAuthUserWithNewToken($oAuthUser, $newSsoTokenResult);
             $this->admin_userService->saveOAuthUser($oAuthUser);

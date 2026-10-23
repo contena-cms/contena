@@ -24,16 +24,16 @@ class AdminUserRepositoryTest extends TestCase
         $username = 'my_username';
         $password = 'secure-test';
 
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId(Uuid::randomBytes());
-        $admin_user->setUsername($username);
-        $admin_user->setPassword(password_hash($password, \PASSWORD_BCRYPT));
-        $admin_user->setActive(true);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId(Uuid::randomBytes());
+        $adminUser->setUsername($username);
+        $adminUser->setPassword(password_hash($password, \PASSWORD_BCRYPT));
+        $adminUser->setActive(true);
 
-        $admin_userRepository = $this->createUserRepository($admin_user);
+        $adminUserRepository = $this->createUserRepository($adminUser);
 
         $clientEntity = static::createStub(ClientEntityInterface::class);
-        $response = $admin_userRepository->getUserEntityByUserCredentials(
+        $response = $adminUserRepository->getUserEntityByUserCredentials(
             $username,
             $password,
             'password',
@@ -48,16 +48,16 @@ class AdminUserRepositoryTest extends TestCase
         $username = 'my_username';
         $password = 'secure-test';
 
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId(Uuid::randomBytes());
-        $admin_user->setUsername($username);
-        $admin_user->setPassword(password_hash($password, \PASSWORD_BCRYPT));
-        $admin_user->setActive(true);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId(Uuid::randomBytes());
+        $adminUser->setUsername($username);
+        $adminUser->setPassword(password_hash($password, \PASSWORD_BCRYPT));
+        $adminUser->setActive(true);
 
-        $admin_userRepository = $this->createUserRepository($admin_user);
+        $adminUserRepository = $this->createUserRepository($adminUser);
 
         $clientEntity = static::createStub(ClientEntityInterface::class);
-        $response = $admin_userRepository->getUserEntityByUserCredentials(
+        $response = $adminUserRepository->getUserEntityByUserCredentials(
             $username,
             'secure-test-wrong',
             'password',
@@ -72,10 +72,10 @@ class AdminUserRepositoryTest extends TestCase
         $username = 'my_username';
         $password = 'secure-test';
 
-        $admin_userRepository = $this->createUserRepository(null);
+        $adminUserRepository = $this->createUserRepository(null);
 
         $clientEntity = static::createStub(ClientEntityInterface::class);
-        $response = $admin_userRepository->getUserEntityByUserCredentials(
+        $response = $adminUserRepository->getUserEntityByUserCredentials(
             $username,
             $password,
             'password',
@@ -90,16 +90,16 @@ class AdminUserRepositoryTest extends TestCase
         $username = 'my_username';
         $password = 'secure-test';
 
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId(Uuid::randomBytes());
-        $admin_user->setUsername($username);
-        $admin_user->setPassword(password_hash($password, \PASSWORD_BCRYPT));
-        $admin_user->setActive(true);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId(Uuid::randomBytes());
+        $adminUser->setUsername($username);
+        $adminUser->setPassword(password_hash($password, \PASSWORD_BCRYPT));
+        $adminUser->setActive(true);
 
-        $admin_userRepository = $this->createUserRepository($admin_user, false);
+        $adminUserRepository = $this->createUserRepository($adminUser, false);
 
         $clientEntity = static::createStub(ClientEntityInterface::class);
-        $response = $admin_userRepository->getUserEntityByUserCredentials(
+        $response = $adminUserRepository->getUserEntityByUserCredentials(
             $username,
             $password,
             'password',
@@ -114,16 +114,16 @@ class AdminUserRepositoryTest extends TestCase
         $username = 'my_username';
         $password = 'secure-test';
 
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId(Uuid::randomBytes());
-        $admin_user->setUsername($username);
-        $admin_user->setPassword(password_hash($password, \PASSWORD_BCRYPT));
-        $admin_user->setActive(false);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId(Uuid::randomBytes());
+        $adminUser->setUsername($username);
+        $adminUser->setPassword(password_hash($password, \PASSWORD_BCRYPT));
+        $adminUser->setActive(false);
 
-        $admin_userRepository = $this->createUserRepository($admin_user);
+        $adminUserRepository = $this->createUserRepository($adminUser);
 
         $clientEntity = static::createStub(ClientEntityInterface::class);
-        $response = $admin_userRepository->getUserEntityByUserCredentials(
+        $response = $adminUserRepository->getUserEntityByUserCredentials(
             $username,
             $password,
             'password',
@@ -133,16 +133,16 @@ class AdminUserRepositoryTest extends TestCase
         static::assertNull($response);
     }
 
-    protected function createUserRepository(?AdminUserEntity $admin_user, bool $useDefault = true): AdminUserRepository
+    protected function createUserRepository(?AdminUserEntity $adminUser, bool $useDefault = true): AdminUserRepository
     {
         $queryBuilder = static::createStub(QueryBuilder::class);
         $queryBuilder->method('select')->willReturnSelf();
         $queryBuilder->method('from')->willReturnSelf();
         $queryBuilder->method('where')->willReturnSelf();
         $queryBuilder->method('setParameter')->willReturnSelf();
-        $queryBuilder->method('fetchAssociative')->willReturnCallback(static function () use ($admin_user) {
-            if ($admin_user !== null) {
-                return $admin_user->jsonSerialize();
+        $queryBuilder->method('fetchAssociative')->willReturnCallback(static function () use ($adminUser) {
+            if ($adminUser !== null) {
+                return $adminUser->jsonSerialize();
             }
 
             return false;

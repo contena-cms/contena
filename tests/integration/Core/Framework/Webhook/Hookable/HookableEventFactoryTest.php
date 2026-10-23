@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Framework\Webhook\Hookable;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
 use Contena\Core\Content\Flow\Dispatching\FlowState;
@@ -21,6 +20,7 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Tax\TaxCollection;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

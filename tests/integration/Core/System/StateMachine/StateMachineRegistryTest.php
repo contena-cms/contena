@@ -10,7 +10,6 @@ use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
@@ -28,6 +27,8 @@ use Contena\Core\System\StateMachine\Transition;
 use Contena\Core\Test\Integration\Builder\Order\OrderBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -209,10 +210,10 @@ EOF;
     {
         $ids = new IdsCollection();
 
-        $admin_userRepo = self::getContainer()->get('admin_user.repository');
-        static::assertInstanceOf(EntityRepository::class, $admin_userRepo);
+        $adminUserRepo = self::getContainer()->get('admin_user.repository');
+        static::assertInstanceOf(EntityRepository::class, $adminUserRepo);
 
-        $admin_userId = $admin_userRepo->searchIds((new Criteria())->setLimit(1), Context::createDefaultContext())->firstId();
+        $adminUserId = $adminUserRepo->searchIds((new Criteria())->setLimit(1), Context::createDefaultContext())->firstId();
 
         $integration = [
             'id' => $ids->get('integration-1'),
@@ -225,7 +226,7 @@ EOF;
         static::assertInstanceOf(EntityRepository::class, $integrationRepo);
         $integrationRepo->create([$integration], Context::createDefaultContext());
 
-        static::assertNotNull($admin_userId);
+        static::assertNotNull($adminUserId);
 
         $orderBuilder = new OrderBuilder($ids, 'o-1');
 
@@ -234,7 +235,7 @@ EOF;
         $orderRepo->create([$orderBuilder->build()], Context::createCLIContext());
 
         $context = new Context(
-            new AdminApiSource($admin_userId, $ids->get('integration-1'))
+            new AdminApiSource($adminUserId, $ids->get('integration-1'))
         );
 
         $stateMachineRegistry = self::getContainer()->get(StateMachineRegistry::class);
@@ -255,7 +256,7 @@ EOF;
         static::assertNotFalse($historyData);
         static::assertSame([
             'integration_id' => $ids->get('integration-1'),
-            'admin_user_id' => $admin_userId,
+            'admin_user_id' => $adminUserId,
             'source_type' => 'admin-api',
             'internal_comment' => 'internal comment',
         ], $historyData);
@@ -288,7 +289,6 @@ EOF;
                 10,
                 10,
                 10,
-                new CalculatedTaxCollection(),
                 new TaxRuleCollection(),
                 CartPrice::TAX_STATE_NET
             ),

@@ -26,13 +26,9 @@ use Contena\Core\Content\Blog\BlogTypeRegistry;
 use Contena\Core\Content\Blog\Channel\BlogCloseoutFilterFactory;
 use Contena\Core\Content\Blog\Channel\BlogListRoute;
 use Contena\Core\Content\Blog\Channel\ChannelBlogDefinition;
-use Contena\Core\Content\Blog\Channel\CrossSelling\BlogCrossSellingRoute;
-use Contena\Core\Content\Blog\Channel\Detail\AvailableCombinationLoader;
 use Contena\Core\Content\Blog\Channel\Detail\BlogConfiguratorLoader;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\FindVariant\FindBlogVariantRoute;
-use Contena\Core\Content\Blog\Channel\Garan\AbstractGaranLabelRoute;
-use Contena\Core\Content\Blog\Channel\Garan\GaranLabelRoute;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingLoader;
 use Contena\Core\Content\Blog\Channel\Listing\BlogListingRoute;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\AbstractListingFilterHandler;
@@ -42,8 +38,6 @@ use Contena\Core\Content\Blog\Channel\Listing\Filter\PropertyListingFilterHandle
 use Contena\Core\Content\Blog\Channel\Listing\Filter\RatingListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\Filter\ShippingFreeListingFilterHandler;
 use Contena\Core\Content\Blog\Channel\Listing\ResolveCriteriaBlogListingRoute;
-use Contena\Core\Content\Blog\Channel\Price\AppScriptBlogPriceCalculator;
-use Contena\Core\Content\Blog\Channel\Price\BlogPriceCalculator;
 use Contena\Core\Content\Blog\Channel\PurchaseLimit\BlogPurchaseLimitRoute;
 use Contena\Core\Content\Blog\Channel\Search\BlogSearchRoute;
 use Contena\Core\Content\Blog\Channel\Search\ResolvedCriteriaBlogSearchRoute;
@@ -57,28 +51,20 @@ use Contena\Core\Content\Blog\Cleanup\CleanupBlogKeywordDictionaryTaskHandler;
 use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTask;
 use Contena\Core\Content\Blog\Cleanup\CleanupUnusedDownloadMediaTaskHandler;
 use Contena\Core\Content\Blog\Cms\BlogBoxCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\BlogDescriptionReviewsCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogListingCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogNameCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BlogSlider\ContentStreamProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSlider\StaticBlogProcessor;
 use Contena\Core\Content\Blog\Cms\BlogSliderCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\BuyBoxCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\CrossSellingCmsElementResolver;
-use Contena\Core\Content\Blog\Cms\ManufacturerLogoCmsElementResolver;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserBuilder;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogDescriptionTeaserIndexer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogExceptionHandler;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceQuantitySelector;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\RatingAverageUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\StockUpdate\StockUpdateFilterProvider;
-use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingUpdater;
 use Contena\Core\Content\Blog\IsNewDetector;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilder;
 use Contena\Core\Content\Blog\SearchKeyword\BlogSearchBuilderInterface;
@@ -103,7 +89,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\TokenFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
-use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -235,7 +220,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(BlogSubscriber::class)
         ->args([
-            service(BlogPriceCalculator::class),
             service(AbstractIsNewDetector::class),
             service(SystemConfigService::class),
             service('request_stack'),
@@ -327,36 +311,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(BlogNameCmsElementResolver::class)
         ->tag('contena.cms.data_resolver');
 
-    $services->set(ManufacturerLogoCmsElementResolver::class)
-        ->tag('contena.cms.data_resolver');
-
-    $services->set(CrossSellingCmsElementResolver::class)
-        ->args([
-            service(BlogCrossSellingRoute::class),
-        ])
-        ->tag('contena.cms.data_resolver');
-
-    $services->set(BlogDescriptionReviewsCmsElementResolver::class)
-        ->args([
-            service(ScriptExecutor::class),
-            service(SystemConfigService::class),
-        ])
-        ->tag('contena.cms.data_resolver');
-
-    $services->set(BlogPriceCalculator::class)
-        ->args([
-            service('unit.repository'),
-            service(ExtensionDispatcher::class),
-        ])
-        ->tag('kernel.reset', ['method' => 'reset']);
-
-    $services->set(AppScriptBlogPriceCalculator::class)
-        ->decorate(BlogPriceCalculator::class)
-        ->args([
-            service(AppScriptBlogPriceCalculator::class . '.inner'),
-            service(ScriptExecutor::class),
-        ])
-        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(CompositeListingProcessor::class)
         ->args([
@@ -492,15 +446,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(IteratorFactory::class),
             service('blog.repository'),
             service(Connection::class),
-            service(VariantListingUpdater::class),
             service(BlogCategoryDenormalizer::class),
             service(InheritanceUpdater::class),
-            service(RatingAverageUpdater::class),
             service(SearchKeywordUpdater::class),
             service(ChildCountUpdater::class),
             service(ManyToManyIdFieldUpdater::class),
             service('event_dispatcher'),
-            service(CheapestPriceUpdater::class),
             service(ContentStreamUpdater::class),
             service('messenger.default_bus'),
             service(StatesUpdater::class)->nullOnInvalid(),
@@ -534,29 +485,14 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.inactiveFeature', ['flag' => 'v6.8.0.0']);
 
-    $services->set(VariantListingUpdater::class)
-        ->args([
-            service(Connection::class),
-        ]);
 
     $services->set(BlogCategoryDenormalizer::class)
         ->args([
             service(Connection::class),
         ]);
 
-    $services->set(CheapestPriceUpdater::class)
-        ->args([
-            service(Connection::class),
-            service(CheapestPriceQuantitySelector::class),
-            service('event_dispatcher'),
-        ]);
 
-    $services->set(CheapestPriceQuantitySelector::class);
 
-    $services->set(RatingAverageUpdater::class)
-        ->args([
-            service(Connection::class),
-        ]);
 
     $services->set(SearchKeywordUpdater::class)
         ->args([
@@ -569,10 +505,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
 
-    $services->set(StockUpdateFilterProvider::class)
-        ->args([
-            tagged_iterator('contena.blog.stock_filter'),
-        ]);
 
 
     $services->set(BlogListingLoader::class)
@@ -614,30 +546,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(BlogConfiguratorLoader::class)
         ->args([
-            service(AvailableCombinationLoader::class),
             service('property_group_option.repository'),
-        ]);
-
-    $services->set(AvailableCombinationLoader::class)
-        ->args([
-            service(Connection::class),
-            service(SystemConfigService::class),
-        ]);
-
-    $services->set(BlogCrossSellingRoute::class)
-        ->public()
-        ->args([
-            service('blog_cross_selling.repository'),
-            service('event_dispatcher'),
-            service(ContentStreamBuilder::class),
-            service('channel.blog.repository'),
-            service(SystemConfigService::class),
-            service(BlogListingLoader::class),
-            service(BlogCloseoutFilterFactory::class),
-            service(CacheTagCollector::class),
-            service(Connection::class),
-            service(ExtensionDispatcher::class),
-            service('logger'),
         ]);
 
 
@@ -648,14 +557,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ExtensionDispatcher::class),
         ]);
 
-    $services->set(GaranLabelRoute::class)
-        ->public()
-        ->args([
-            service('channel.blog.repository'),
-            service(ExtensionDispatcher::class),
-        ]);
-
-    $services->alias(AbstractGaranLabelRoute::class, GaranLabelRoute::class);
 
     $services->set(BuyBoxCmsElementResolver::class)
         ->args([

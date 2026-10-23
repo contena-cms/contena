@@ -9,6 +9,8 @@ use Contena\Elasticsearch\Blog\ElasticsearchBlogException;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchRegistry;
 use Contena\Elasticsearch\Framework\SystemUpdateListener;
+use OpenSearch\Exception\BadRequestHttpException;
+use OpenSearch\Exception\NotFoundHttpException;
 
 class IndexMappingUpdater
 {

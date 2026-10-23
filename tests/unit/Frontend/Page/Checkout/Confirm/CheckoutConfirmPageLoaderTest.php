@@ -10,10 +10,7 @@ use Contena\Core\Checkout\Cart\CartException;
 use Contena\Core\Checkout\Cart\Error\ErrorCollection;
 use Contena\Core\Checkout\Gateway\Channel\CheckoutGatewayRouteResponse;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
-use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\BuildValidationEvent;
 use Contena\Core\Framework\Validation\DataValidationDefinition;
@@ -83,13 +80,9 @@ class CheckoutConfirmPageLoaderTest extends TestCase
     public function testPaymentAndShippingMethodsAreSetToPage(): void
     {
         $paymentMethods = new PaymentMethodCollection([
-            (new PaymentMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
-            (new PaymentMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
         ]);
 
         $shippingMethods = new ShippingMethodCollection([
-            (new ShippingMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
-            (new ShippingMethodEntity())->assign(['_uniqueIdentifier' => Uuid::randomHex()]),
         ]);
 
         $response = new CheckoutGatewayRouteResponse(
@@ -348,44 +341,8 @@ class CheckoutConfirmPageLoaderTest extends TestCase
         $checkoutConfirmPageLoader->load(new Request(), $context);
     }
 
-    private function createLoader(
-        ?EventDispatcherInterface $eventDispatcher = null,
-        ?FrontendCartFacade $cartService = null,
-        ?GenericPageLoader $pageLoader = null,
-        ?DataValidationFactoryInterface $addressValidationFactory = null,
-        ?DataValidator $validator = null,
-    ): CheckoutConfirmPageLoader {
-        return new CheckoutConfirmPageLoader(
-            $eventDispatcher ?? static::createStub(EventDispatcherInterface::class),
-            $cartService ?? $this->createCartService(),
-            $pageLoader ?? static::createStub(GenericPageLoader::class),
-            $addressValidationFactory ?? static::createStub(DataValidationFactoryInterface::class),
-            $validator ?? static::createStub(DataValidator::class),
-            static::createStub(AbstractTranslator::class),
-        );
-    }
 
-    private function createCartService(): FrontendCartFacade
-    {
-        $cartService = static::createStub(FrontendCartFacade::class);
-        $cartService
-            ->method('getWithCheckoutGateway')
-            ->willReturn($this->createCartGatewayResult());
 
-        return $cartService;
-    }
-
-    private function createCartGatewayResult(?Cart $cart = null): FrontendCartGatewayResult
-    {
-        return new FrontendCartGatewayResult(
-            $cart ?? new Cart('test'),
-            new CheckoutGatewayRouteResponse(
-                new PaymentMethodCollection(),
-                new ShippingMethodCollection(),
-                new ErrorCollection()
-            )
-        );
-    }
 
     private function getContextWithDummyUser(): ChannelContext
     {

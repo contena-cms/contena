@@ -26,9 +26,9 @@ use Symfony\Contracts\HttpClient\ResponseInterface;
 class ValidUserServiceCreator extends TestCase
 {
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
-    public function create(Connection $connection, EntityRepository $admin_userRepository): AdminUserService
+    public function create(Connection $connection, EntityRepository $adminUserRepository): AdminUserService
     {
         $publicKeyLoader = new PublicKeyLoader(
             $this->createClient(),
@@ -48,7 +48,7 @@ class ValidUserServiceCreator extends TestCase
         $validatorProperty = (new \ReflectionClass(IdTokenParser::class))->getProperty('validator');
         $validatorProperty->setValue($idTokenParser, $validator);
 
-        return new AdminUserService($connection, $idTokenParser, $admin_userRepository, $this->createExternalTokenService(), new NativeClock());
+        return new AdminUserService($connection, $idTokenParser, $adminUserRepository, $this->createExternalTokenService(), new NativeClock());
     }
 
     private function createClient(): HttpClientInterface

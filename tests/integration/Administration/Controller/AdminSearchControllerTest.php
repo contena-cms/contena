@@ -8,6 +8,7 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\OAuth\Scope\AdminUserVerifiedScope;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -86,10 +87,10 @@ class AdminSearchControllerTest extends TestCase
         static::assertIsArray($content['data']['admin_user']['data']);
         static::assertNotCount(0, $content['data']['admin_user']['data']);
 
-        $admin_user = array_values($content['data']['admin_user']['data'])[0];
+        $adminUser = array_values($content['data']['admin_user']['data'])[0];
 
-        static::assertSame('admin_user', $admin_user['apiAlias']);
-        static::assertArrayNotHasKey('password', $admin_user);
+        static::assertSame('admin_user', $adminUser['apiAlias']);
+        static::assertArrayNotHasKey('password', $adminUser);
     }
 
     /**

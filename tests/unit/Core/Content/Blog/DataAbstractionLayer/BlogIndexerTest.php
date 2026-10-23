@@ -6,27 +6,11 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Blog\BlogDefinition;
-use Contena\Core\Content\Blog\DataAbstractionLayer\BlogCategoryDenormalizer;
 use Contena\Core\Content\Blog\DataAbstractionLayer\BlogIndexer;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPriceUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\ContentStreamUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\RatingAverageUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\SearchKeywordUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\StatesUpdater;
-use Contena\Core\Content\Blog\DataAbstractionLayer\VariantListingUpdater;
 use Contena\Core\Content\Blog\Stock\AbstractStockStorage;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
-use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\Event\NestedEventCollection;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -118,28 +102,6 @@ class BlogIndexerTest extends TestCase
         $this->createIndexer($connection, $stockStorage)->update($this->writtenEvent($context, $parentId, ['stock' => 0]));
     }
 
-    private function createIndexer(Connection $connection, AbstractStockStorage $stockStorage): BlogIndexer
-    {
-        return new BlogIndexer(
-            static::createStub(IteratorFactory::class),
-            static::createStub(EntityRepository::class),
-            $connection,
-            static::createStub(VariantListingUpdater::class),
-            static::createStub(BlogCategoryDenormalizer::class),
-            static::createStub(InheritanceUpdater::class),
-            static::createStub(RatingAverageUpdater::class),
-            static::createStub(SearchKeywordUpdater::class),
-            static::createStub(ChildCountUpdater::class),
-            static::createStub(ManyToManyIdFieldUpdater::class),
-            $stockStorage,
-            static::createStub(EventDispatcher::class),
-            static::createStub(CheapestPriceUpdater::class),
-            static::createStub(ContentStreamUpdater::class),
-            static::createStub(MessageBusInterface::class),
-            Feature::isActive('v6.8.0.0') ? null : static::createStub(StatesUpdater::class),
-            new NativeClock()
-        );
-    }
 
     /**
      * @param array<string, mixed> $payload
@@ -147,11 +109,6 @@ class BlogIndexerTest extends TestCase
     private function writtenEvent(Context $context, string $blogId, array $payload = []): EntityWrittenContainerEvent
     {
         return new EntityWrittenContainerEvent($context, new NestedEventCollection([
-            new EntityWrittenEvent(
-                BlogDefinition::ENTITY_NAME,
-                [new EntityWriteResult($blogId, $payload, BlogDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE)],
-                $context
-            ),
         ]), []);
     }
 }

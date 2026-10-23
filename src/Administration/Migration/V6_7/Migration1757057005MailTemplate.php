@@ -4,6 +4,8 @@ namespace Contena\Administration\Migration\V6_7;
 
 use Doctrine\DBAL\Connection;
 use Symfony\Component\Filesystem\Filesystem;
+use Contena\Core\Framework\Migration\MigrationStep;
+use Contena\Core\Migration\Traits\UpdateMailTrait;
 
 /**
  * @internal
@@ -11,7 +13,6 @@ use Symfony\Component\Filesystem\Filesystem;
 class Migration1757057005MailTemplate extends MigrationStep
 {
     use UpdateMailTrait;
-use Contena\Core\Framework\Migration\MigrationStep;
 
     public function getCreationTimestamp(): int
     {

@@ -5,6 +5,7 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Search;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\Framework\Struct\StateAwareTrait;
 
 /**
  * @template IDStructure of string|array<string, string> = string

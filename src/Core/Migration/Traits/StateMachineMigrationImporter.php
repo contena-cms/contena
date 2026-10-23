@@ -10,10 +10,12 @@ use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineS
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionDefinition;
 use Contena\Core\System\StateMachine\StateMachineDefinition;
 use Contena\Core\System\StateMachine\StateMachineTranslationDefinition;
+use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 
 class StateMachineMigrationImporter
 {
     use ImportTranslationsTrait;
+use Contena\Core\Framework\Migration\MigrationException;
 
     public function __construct(private readonly Connection $connection)
     {

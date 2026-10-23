@@ -3,8 +3,6 @@
 namespace Contena\Core\Content\Blog\Channel;
 
 use Contena\Core\Content\Blog\BlogEntity;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPrice;
-use Contena\Core\Content\Blog\DataAbstractionLayer\CheapestPrice\CheapestPriceContainer;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
@@ -23,12 +21,6 @@ class ChannelBlogEntity extends BlogEntity
     protected int $calculatedMaxPurchase;
 
     protected ?CategoryEntity $seoCategory = null;
-
-    /**
-     * The container will be resolved on blog.loaded event and
-     * the detected cheapest price will be set for the current context rules
-     */
-    protected CheapestPrice|CheapestPriceContainer|null $cheapestPrice = null;
 
 
 

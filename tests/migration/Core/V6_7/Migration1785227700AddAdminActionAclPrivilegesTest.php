@@ -20,7 +20,6 @@ class Migration1785227700AddAdminActionAclPrivilegesTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1785227700AddAdminActionAclPrivileges $migration;
 
     protected function setUp(): void
     {

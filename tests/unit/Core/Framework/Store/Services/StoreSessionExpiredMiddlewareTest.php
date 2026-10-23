@@ -75,10 +75,10 @@ class StoreSessionExpiredMiddlewareTest extends TestCase
 
     public function testLogsOutUserByInvalidToken(): void
     {
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $token = Uuid::randomHex();
         $requestStack = new RequestStack([
-            new Request([], [], ['sw-context' => new Context(new AdminApiSource($admin_userId))]),
+            new Request([], [], ['sw-context' => new Context(new AdminApiSource($adminUserId))]),
         ]);
 
         $response = new Response(401, [], '{"code":"ContenaPlatformException-1"}');

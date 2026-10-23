@@ -20,9 +20,7 @@ class OrderCustomFieldRuleTest extends TestCase
 {
     private const CUSTOM_FIELD_NAME = 'custom_test';
 
-    private OrderCustomFieldRule $rule;
 
-    private OrderEntity $order;
 
     protected function setUp(): void
     {

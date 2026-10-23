@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit\VersionCommitDefinition;
 use Symfony\Component\Clock\Clock;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 
 /**
  * @codeCoverageIgnore
@@ -56,7 +55,6 @@ class VersionDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new StringField('name', 'name'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             new OneToManyAssociationField('commits', VersionCommitDefinition::class, 'version_id'),
         ]);
     }

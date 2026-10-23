@@ -7,11 +7,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainCollection;
 use Contena\Core\System\Channel\Aggregate\ChannelDomain\ChannelDomainEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
@@ -23,7 +21,6 @@ use Contena\Frontend\Page\Robots\RobotsPageLoader;
 use Contena\Frontend\Page\Robots\Struct\DomainRuleStruct;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirective;
 use Contena\Frontend\Page\Robots\Struct\RobotsDirectiveType;
-use Contena\Frontend\Page\Robots\Struct\RobotsUserAgentBlock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -445,7 +442,6 @@ class RobotsPageLoaderTest extends TestCase
             static function (Criteria $criteria): ChannelDomainCollection {
                 static::assertEquals([
                     new ContainsFilter('url', 'example.com'),
-                    new EqualsFilter('channel.typeId', Defaults::CHANNEL_TYPE_FRONTEND),
                 ], $criteria->getFilters());
 
                 return new ChannelDomainCollection();

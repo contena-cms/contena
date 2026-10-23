@@ -5,6 +5,8 @@ namespace Contena\Core\Framework\Notification;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Deprecation\BCChange\ClassMoved;
 use Contena\Core\System\AdminUser\AdminUserEntity;
+use Contena\Core\System\Integration\IntegrationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore
@@ -13,7 +15,6 @@ use Contena\Core\System\AdminUser\AdminUserEntity;
 class NotificationEntity extends Entity
 {
     use EntityIdTrait;
-use Contena\Core\System\Integration\IntegrationEntity;
 
     protected ?string $createdByIntegrationId = null;
 

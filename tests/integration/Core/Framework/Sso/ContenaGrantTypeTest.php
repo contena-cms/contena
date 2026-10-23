@@ -27,6 +27,8 @@ use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -38,7 +40,7 @@ class ContenaGrantTypeTest extends TestCase
 
     private Connection $connection;
 
-    private AdminUserService $admin_userService;
+    private AdminUserService $adminUserService;
 
     protected function setUp(): void
     {

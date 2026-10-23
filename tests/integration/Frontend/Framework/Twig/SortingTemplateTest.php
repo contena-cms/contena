@@ -8,6 +8,7 @@ use Contena\Core\Content\Blog\Channel\Sorting\BlogSortingEntity;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

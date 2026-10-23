@@ -13,6 +13,7 @@ use Mcp\Schema\Result\ListResourcesResult;
 use Mcp\Schema\Result\ListToolsResult;
 use Mcp\Schema\ServerCapabilities;
 use Mcp\Schema\Tool;
+use Mcp\Exception\InvalidArgumentException;
 
 /**
  * @experimental stableVersion:v6.8.0
@@ -116,19 +117,19 @@ class McpJsonRpcResponse implements \JsonSerializable
      * Sets result._meta.contena.admin_user/integration from the given IDs.
      * Returns true when metadata was added, false when both IDs are null.
      */
-    public function addContenaMeta(?string $admin_userId, ?string $integrationId): bool
+    public function addContenaMeta(?string $adminUserId, ?string $integrationId): bool
     {
         if (!$this->result instanceof InitializeResult) {
             return false;
         }
 
-        if ($admin_userId === null && $integrationId === null) {
+        if ($adminUserId === null && $integrationId === null) {
             return false;
         }
 
         $contena = [];
-        if ($admin_userId !== null) {
-            $contena['admin_user'] = ['id' => $admin_userId];
+        if ($adminUserId !== null) {
+            $contena['admin_user'] = ['id' => $adminUserId];
         }
         if ($integrationId !== null) {
             $contena['integration'] = ['id' => $integrationId];

@@ -20,32 +20,32 @@ class SsoUserServiceTest extends TestCase
 {
     public function testInviteUserWillCreateNewUser(): void
     {
-        $admin_userRepository = $this->createMock(EntityRepository::class);
-        $admin_userRepository->expects($this->once())->method('search');
-        $admin_userRepository->expects($this->once())->method('create');
+        $adminUserRepository = $this->createMock(EntityRepository::class);
+        $adminUserRepository->expects($this->once())->method('search');
+        $adminUserRepository->expects($this->once())->method('create');
 
-        $ssoUserService = new SsoUserService($admin_userRepository);
+        $ssoUserService = new SsoUserService($adminUserRepository);
 
         $ssoUserService->inviteUser('test@example.com', Uuid::randomHex(), Context::createDefaultContext());
     }
 
     public function testInviteUserWillNotCreateNewUser(): void
     {
-        $admin_userEntity = new AdminUserEntity();
-        $admin_userEntity->setUniqueIdentifier(Uuid::randomHex());
-        $admin_userEntity->setEmail('test@example.foo');
-        $admin_userEntity->setName('FirstName');
-        $admin_userEntity->setLastName('LastName');
-        $admin_userEntity->setUsername('AdminUserName');
+        $adminUserEntity = new AdminUserEntity();
+        $adminUserEntity->setUniqueIdentifier(Uuid::randomHex());
+        $adminUserEntity->setEmail('test@example.foo');
+        $adminUserEntity->setName('FirstName');
+        $adminUserEntity->setLastName('LastName');
+        $adminUserEntity->setUsername('AdminUserName');
 
         $searchResult = $this->createMock(EntitySearchResult::class);
-        $searchResult->expects($this->once())->method('getEntities')->willReturn(new AdminUserCollection([$admin_userEntity]));
+        $searchResult->expects($this->once())->method('getEntities')->willReturn(new AdminUserCollection([$adminUserEntity]));
 
-        $admin_userRepository = $this->createMock(EntityRepository::class);
-        $admin_userRepository->expects($this->once())->method('search')->willReturn($searchResult);
-        $admin_userRepository->expects($this->never())->method('create');
+        $adminUserRepository = $this->createMock(EntityRepository::class);
+        $adminUserRepository->expects($this->once())->method('search')->willReturn($searchResult);
+        $adminUserRepository->expects($this->never())->method('create');
 
-        $ssoUserService = new SsoUserService($admin_userRepository);
+        $ssoUserService = new SsoUserService($adminUserRepository);
 
         $ssoUserService->inviteUser('test@example.com', Uuid::randomHex(), Context::createDefaultContext());
     }

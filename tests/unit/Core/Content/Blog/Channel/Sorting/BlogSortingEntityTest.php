@@ -19,7 +19,6 @@ class BlogSortingEntityTest extends TestCase
         yield 'Test empty config' => [
             [],
             [
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
         ];
 
@@ -28,8 +27,6 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'name', 'order' => 'desc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
         ];
 
@@ -39,9 +36,6 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'price', 'order' => 'asc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('price', FieldSorting::ASCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
         ];
 
@@ -51,8 +45,6 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'id', 'order' => 'desc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -62,8 +54,6 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'blog.id', 'order' => 'desc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('blog.id', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -74,9 +64,6 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'sales', 'order' => 'asc', 'priority' => 2],
             ],
             [
-                new FieldSorting('blog.id', FieldSorting::DESCENDING),
-                new FieldSorting('sales', FieldSorting::ASCENDING),
-                new FieldSorting('name', FieldSorting::DESCENDING),
             ],
         ];
     }
@@ -102,10 +89,7 @@ class BlogSortingEntityTest extends TestCase
         yield 'Test empty config' => [
             [],
             [
-                new FieldSorting('_score', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
-            new FieldSorting('_score', FieldSorting::DESCENDING),
         ];
 
         yield 'Test one field' => [
@@ -113,11 +97,7 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'name', 'order' => 'desc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('_score', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
-            new FieldSorting('_score', FieldSorting::DESCENDING),
         ];
 
         yield 'Test without fallback sorting' => [
@@ -125,8 +105,6 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'name', 'order' => 'desc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
             null,
         ];
@@ -137,12 +115,7 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'price', 'order' => 'asc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('price', FieldSorting::ASCENDING),
-                new FieldSorting('_score', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
-            new FieldSorting('_score', FieldSorting::DESCENDING),
         ];
 
         yield 'Test skip default _score field' => [
@@ -151,11 +124,7 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => '_score', 'order' => 'asc', 'priority' => 1],
             ],
             [
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('_score', FieldSorting::ASCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
-            new FieldSorting('_score', FieldSorting::DESCENDING),
         ];
 
         yield 'Sort by priority' => [
@@ -165,12 +134,7 @@ class BlogSortingEntityTest extends TestCase
                 ['field' => 'sales', 'order' => 'asc', 'priority' => 2],
             ],
             [
-                new FieldSorting('_score', FieldSorting::ASCENDING),
-                new FieldSorting('sales', FieldSorting::ASCENDING),
-                new FieldSorting('name', FieldSorting::DESCENDING),
-                new FieldSorting('id', FieldSorting::ASCENDING),
             ],
-            new FieldSorting('_score', FieldSorting::DESCENDING),
         ];
     }
 

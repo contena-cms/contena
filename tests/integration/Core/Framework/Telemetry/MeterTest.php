@@ -8,6 +8,7 @@ use Contena\Core\Framework\Telemetry\Metrics\Meter;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
 use Contena\Core\Framework\Test\Telemetry\Transport\TraceableTransport;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 use function PHPUnit\Framework\assertInstanceOf;
 

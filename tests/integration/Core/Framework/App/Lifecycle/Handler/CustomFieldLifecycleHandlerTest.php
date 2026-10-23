@@ -16,6 +16,8 @@ use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetColle
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationEntity;
 use Contena\Core\System\CustomField\CustomFieldCollection;
 use Contena\Core\System\CustomField\CustomFieldEntity;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -29,7 +31,6 @@ class CustomFieldLifecycleHandlerTest extends TestCase
 
     private CustomFieldLifecycleHandler $handler;
 
-    private AppFixture $appFixture;
 
     /**
      * @var EntityRepository<CustomFieldSetCollection>

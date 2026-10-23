@@ -17,6 +17,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Query\ScoreQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
 use Contena\Core\System\Tax\TaxCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

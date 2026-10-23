@@ -13,6 +13,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\Event\UserLoginEvent;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
 
 /**
  * @internal

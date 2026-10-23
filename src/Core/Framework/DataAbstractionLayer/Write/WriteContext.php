@@ -8,6 +8,7 @@ use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Language\LanguageLoaderInterface;
+use Contena\Core\Framework\Struct\StateAwareTrait;
 
 /**
  * @internal

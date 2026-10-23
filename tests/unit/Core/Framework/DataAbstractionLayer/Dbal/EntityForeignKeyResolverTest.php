@@ -9,10 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentFile\DocumentFileDefinition;
-use Contena\Core\Checkout\DocumentV2\DocumentDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItemDownload\OrderLineItemDownloadDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogDownload\BlogDownloadDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionDefinition;
 use Contena\Core\Content\Cms\CmsPageDefinition;
@@ -21,13 +17,9 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityForeignKeyResolver;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -222,10 +214,6 @@ class EntityForeignKeyResolverTest extends TestCase
                 new CmsPageDefinition(),
                 new CmsBlockDefinition(),
                 new CmsSectionDefinition(),
-                new BlogDownloadDefinition(),
-                new OrderLineItemDownloadDefinition(),
-                new DocumentDefinition(),
-                new DocumentFileDefinition(),
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -249,7 +237,6 @@ class CascadeCycleParentDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
-            (new OneToManyAssociationField('children', CascadeCycleChildDefinition::class, 'parent_id'))->addFlags(new CascadeDelete()),
         ]);
     }
 }
@@ -268,8 +255,6 @@ class CascadeCycleChildDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
-            new FkField('parent_id', 'parentId', CascadeCycleParentDefinition::class),
-            (new ManyToOneAssociationField('parent', 'parent_id', CascadeCycleParentDefinition::class, 'id'))->addFlags(new CascadeDelete()),
         ]);
     }
 }

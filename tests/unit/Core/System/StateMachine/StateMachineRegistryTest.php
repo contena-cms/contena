@@ -22,12 +22,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature\FeatureException;
-use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
@@ -496,70 +494,6 @@ class StateMachineRegistryTest extends TestCase
         return $connection;
     }
 
-    /**
-     * @param EntityRepository<EntityCollection<Entity>>&MockObject $entityRepository
-     * @param EntityRepository<StateMachineHistoryCollection>&MockObject $historyRepository
-     */
-    private function createRegistryFixture(
-        StateMachineEntity $stateMachine,
-        StateMachineStateEntity $fromPlace,
-        EventDispatcherInterface $dispatcher,
-        EntityRepository&MockObject $entityRepository,
-        EntityRepository&MockObject $historyRepository,
-        ?StateMachineStateEntity $forcedToPlace = null
-    ): StateMachineRegistryFixture {
-        $context = Context::createDefaultContext();
-        /** @var EntityRepository<StateMachineCollection>&Stub $stateMachineRepository */
-        $stateMachineRepository = static::createStub(EntityRepository::class);
-        /** @var EntityRepository<StateMachineStateCollection>&Stub $stateMachineStateRepository */
-        $stateMachineStateRepository = static::createStub(EntityRepository::class);
-        $definitionRegistry = static::createStub(DefinitionInstanceRegistry::class);
-        $definition = new StateMachineRegistryTestEntityDefinition();
-        $definition->compile($definitionRegistry);
-        $locker = static::createStub(StateMachineLocker::class);
-
-        $stateMachineRepository->method('search')
-            ->willReturn($this->createSearchResult('state_machine', new StateMachineCollection([$stateMachine]), $context));
-
-        $stateMachineStateRepository->method('search')
-            ->willReturnCallback(function (Criteria $criteria, Context $context) use ($fromPlace, $forcedToPlace): EntitySearchResult {
-                $state = $criteria->getIds() === [] && $forcedToPlace !== null ? $forcedToPlace : $fromPlace;
-
-                return $this->createSearchResult('state_machine_state', new StateMachineStateCollection([$state]), $context);
-            });
-
-        $entityRepository->expects($this->atLeastOnce())
-            ->method('search')
-            ->willReturnCallback(function (Criteria $criteria, Context $context) use ($fromPlace): EntitySearchResult {
-                $entity = new ArrayEntity(['id' => $criteria->getIds()[0], 'stateId' => $fromPlace->getId()]);
-                $entity->internalSetEntityData('order_transaction', new FieldVisibility([]));
-
-                return $this->createSearchResult('order_transaction', new EntityCollection([$entity]), $context);
-            });
-
-        $definitionRegistry->method('getByEntityName')
-            ->willReturnMap([['order_transaction', $definition]]);
-
-        $definitionRegistry->method('getRepository')
-            ->willReturnMap([['order_transaction', $entityRepository]]);
-
-        $locker->method('locked')
-            ->willReturnCallback(static fn (Transition $transition, Context $context, \Closure $closure): StateMachineTransitionResult => $closure());
-
-        return new StateMachineRegistryFixture(
-            new StateMachineRegistry(
-                $stateMachineRepository,
-                $stateMachineStateRepository,
-                $historyRepository,
-                $dispatcher,
-                $definitionRegistry,
-                $locker,
-                $this->createConnection()
-            ),
-            $entityRepository,
-            $historyRepository
-        );
-    }
 
     /**
      * @param list<StateMachineTransitionEntity> $transitions

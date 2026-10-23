@@ -46,7 +46,6 @@ class AddressValidationFactory implements DataValidationFactoryInterface
         $channelId = $context->getChannelId();
 
         $definition
-            ->add('salutationId', new EntityExists(entity: 'salutation', context: $frameworkContext))
             ->add('countryId', new EntityExists(entity: 'country', context: $frameworkContext))
             ->add('countryStateId', new EntityExists(entity: 'country_state', context: $frameworkContext))
             ->add('name', new NotBlank(message: 'VIOLATION::NAME_IS_BLANK_ERROR', normalizer: $this->trimStringValue(...)))

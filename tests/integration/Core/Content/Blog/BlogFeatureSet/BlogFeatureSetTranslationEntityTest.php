@@ -8,6 +8,7 @@ use Contena\Core\Content\Blog\Aggregate\BlogFeatureSetTranslation\BlogFeatureSet
 use Contena\Core\Content\Blog\Aggregate\BlogFeatureSetTranslation\BlogFeatureSetTranslationDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogFeatureSetTranslation\BlogFeatureSetTranslationEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -16,7 +17,6 @@ class BlogFeatureSetTranslationEntityTest extends TestCase
 {
     use KernelTestBehaviour;
 
-    private BlogFeatureSetTranslationDefinition $definition;
 
     protected function setUp(): void
     {

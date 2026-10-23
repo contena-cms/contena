@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture;
 
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Blog\BlogEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\AllowEmptyString;
@@ -32,6 +31,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @internal

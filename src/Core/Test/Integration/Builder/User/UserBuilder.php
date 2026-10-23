@@ -6,6 +6,8 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Test\TestBuilderTrait;
 
 /**
  * @final

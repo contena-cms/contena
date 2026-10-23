@@ -156,7 +156,7 @@ class MergeWishlistBlogRoute extends AbstractMergeWishlistBlogRoute
             'LOWER(HEX(`blog_id`)) as `blog_id`',
             'LOWER(HEX(`id`)) as id',
         );
-        $query->from('`user_wishlist_product`');
+        $query->from('`user_wishlist_blog`');
         $query->where('`user_wishlist_id` = :id');
         $query->andWhere('`blog_id` IN (:blogIds)');
         $query->setParameter('id', Uuid::fromHexToBytes($wishlistId));

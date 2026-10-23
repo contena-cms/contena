@@ -8,12 +8,14 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Frontend\Framework\SystemCheck\ChannelsReadinessCheck;
-use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainProvider;
 use Contena\Frontend\Framework\SystemCheck\Util\ChannelDomainUtil;
 use Contena\Frontend\Framework\SystemCheck\Util\FrontendHealthCheckResult;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -111,13 +113,6 @@ class ChannelsReadinessCheckTest extends TestCase
         Request::setTrustedHosts([]);
     }
 
-    private function createCheck((ChannelDomainUtil&MockObject)|null $util = null): ChannelsReadinessCheck
-    {
-        return new ChannelsReadinessCheck(
-            $util ?? static::getContainer()->get(ChannelDomainUtil::class),
-            static::getContainer()->get(ChannelDomainProvider::class)
-        );
-    }
 
     private function createChannels(): void
     {

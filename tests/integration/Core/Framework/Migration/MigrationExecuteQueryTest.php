@@ -7,6 +7,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Migration\Test\NullConnection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

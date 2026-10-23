@@ -24,6 +24,9 @@ use Contena\Core\System\User\Exception\UserNotFoundByIdException;
 use Contena\Core\System\User\Exception\UserOptinNotCompletedException;
 use Contena\Core\System\User\Exception\UserRecoveryHashExpiredException;
 use Contena\Core\System\User\Exception\UserWishlistNotFoundException;
+use Symfony\Component\Validator\Exception\MissingOptionsException;
+use Symfony\Component\Validator\Exception\UnexpectedTypeException;
+use Symfony\Component\Validator\Exception\UnexpectedValueException;
 
 class UserException extends HttpException
 {

@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Aggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResult;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

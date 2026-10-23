@@ -20,6 +20,8 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Frontend\Framework\Twig\Extension\UrlEncodingTwigFilter;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

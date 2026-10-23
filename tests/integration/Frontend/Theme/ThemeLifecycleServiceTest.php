@@ -36,6 +36,9 @@ use Contena\Frontend\Theme\ThemeEntity;
 use Contena\Frontend\Theme\ThemeFilesystemResolver;
 use Contena\Frontend\Theme\ThemeLifecycleService;
 use Contena\Frontend\Theme\ThemeRuntimeConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

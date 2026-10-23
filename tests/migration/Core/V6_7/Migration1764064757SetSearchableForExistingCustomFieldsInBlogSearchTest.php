@@ -18,7 +18,6 @@ class Migration1764064757SetSearchableForExistingCustomFieldsInBlogSearchTest ex
 {
     private readonly Connection $connection;
 
-    private readonly Migration1764064757SetSearchableForExistingCustomFieldsInBlogSearch $migration;
 
     protected function setUp(): void
     {

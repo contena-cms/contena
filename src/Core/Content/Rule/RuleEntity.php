@@ -8,6 +8,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\TaxProvider\TaxProviderCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class RuleEntity extends Entity
 {

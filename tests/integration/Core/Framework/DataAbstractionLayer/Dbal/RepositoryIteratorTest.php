@@ -15,6 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\System\SystemConfig\SystemConfigCollection;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -14,6 +14,8 @@ use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryE
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineHistory\StateMachineHistoryCollection;
 use Contena\Core\System\User\UserCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class AdminUserEntity extends Entity
 {

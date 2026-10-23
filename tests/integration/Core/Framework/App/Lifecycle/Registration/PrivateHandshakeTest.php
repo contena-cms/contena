@@ -7,6 +7,7 @@ use Contena\Core\Framework\App\Lifecycle\Registration\PrivateHandshake;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Kernel;
 use Symfony\Component\Clock\NativeClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

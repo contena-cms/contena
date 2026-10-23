@@ -4,6 +4,7 @@ namespace Contena\Tests\Unit\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\NoKern
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

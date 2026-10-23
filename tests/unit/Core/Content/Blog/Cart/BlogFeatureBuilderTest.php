@@ -68,7 +68,6 @@ class BlogFeatureBuilderTest extends TestCase
 
     private const SECOND_ENTITY_ID = '0191c3a1c1a271b3a1a1c3a1c1a271b4';
 
-    private BlogFeatureBuilder $blogFeatureBuilder;
 
     /**
      * @var Stub&EntityRepository<CustomFieldCollection>
@@ -574,15 +573,6 @@ class BlogFeatureBuilderTest extends TestCase
         );
     }
 
-    private function createCustomFieldFeatureSet(): BlogFeatureSetEntity
-    {
-        $featureSet = new BlogFeatureSetEntity();
-        $featureSet->setFeatures([
-            ['name' => 'custom_material', 'id' => 'feature-1', 'type' => BlogFeatureSetDefinition::TYPE_BLOG_CUSTOM_FIELD, 'position' => 1],
-        ]);
-
-        return $featureSet;
-    }
 
     /**
      * @param array<string, string> $labels

@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Psr\Cache\CacheItemInterface;
 use Psr\Cache\CacheItemPoolInterface;
 use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Content\Sitemap\Provider\AbstractUrlProvider;
 use Contena\Core\Content\Sitemap\Provider\CustomUrlProvider;
 use Contena\Core\Content\Sitemap\Service\SitemapExporter;
 use Contena\Core\Content\Sitemap\Service\SitemapHandleFactoryInterface;
@@ -210,25 +209,6 @@ class SitemapExporterTest extends TestCase
         $exporter->generate($channelContext);
     }
 
-    /**
-     * @param iterable<AbstractUrlProvider>|null $urlProvider
-     */
-    private function createSitemapExporter(
-        CacheItemPoolInterface&Stub $cache,
-        ?iterable $urlProvider = null,
-        (SitemapHandleFactoryInterface&MockObject)|null $sitemapHandleFactory = null,
-        ?CartRuleLoader $cartRuleLoader = null
-    ): SitemapExporter {
-        return new SitemapExporter(
-            $urlProvider ?? [],
-            $cache,
-            10,
-            static::createStub(FilesystemOperator::class),
-            $sitemapHandleFactory ?? static::createStub(SitemapHandleFactoryInterface::class),
-            static::createStub(EventDispatcher::class),
-            $cartRuleLoader ?? static::createStub(CartRuleLoader::class)
-        );
-    }
 
     private function createChannel(
         string $channelId,

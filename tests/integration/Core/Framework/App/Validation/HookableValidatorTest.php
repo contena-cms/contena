@@ -11,6 +11,7 @@ use Contena\Core\Framework\App\Validation\HookableValidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Service\Event\CommercialLicenseProvidedEvent;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

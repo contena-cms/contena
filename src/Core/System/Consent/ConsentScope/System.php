@@ -34,11 +34,11 @@ class System implements ConsentScope
             throw ConsentException::cannotResolveScope(self::NAME);
         }
 
-        $admin_userId = $source->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $source->getUserId();
+        if (!$adminUserId) {
             throw ConsentException::cannotResolveScope(self::NAME);
         }
 
-        return $admin_userId;
+        return $adminUserId;
     }
 }

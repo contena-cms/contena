@@ -364,9 +364,9 @@ class WriteAuthorizerTest extends TestCase
         ]);
     }
 
-    private function admin_userContext(string $admin_userId, bool $isAdmin = false): Context
+    private function admin_userContext(string $adminUserId, bool $isAdmin = false): Context
     {
-        $source = new AdminApiSource($admin_userId);
+        $source = new AdminApiSource($adminUserId);
         $source->setIsAdmin($isAdmin);
 
         return new Context($source);

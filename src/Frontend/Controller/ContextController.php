@@ -18,6 +18,8 @@ use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Routing\RouterInterface;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 /**
  * @internal

@@ -103,9 +103,9 @@ class McpAllowlistProvider
         }
 
         // Bearer JWT (password grant): ATTRIBUTE_OAUTH_CLIENT_ID = 'administration'
-        $admin_userId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID);
-        if ($admin_userId !== '' && Uuid::isValid($admin_userId)) {
-            return $this->forUserId($admin_userId);
+        $adminUserId = $request->attributes->getString(PlatformRequest::ATTRIBUTE_OAUTH_USER_ID);
+        if ($adminUserId !== '' && Uuid::isValid($adminUserId)) {
+            return $this->forUserId($adminUserId);
         }
 
         return McpAllowlist::blocked();
@@ -122,11 +122,11 @@ class McpAllowlistProvider
         return $this->fromAllowlist(McpAllowlist::restrictedFromJson(\is_string($json) ? $json : null));
     }
 
-    public function forUserId(string $admin_userId): McpAllowlist
+    public function forUserId(string $adminUserId): McpAllowlist
     {
         $row = $this->connection->fetchAssociative(
             'SELECT `mcp_allowlist`, `admin` FROM `admin_user` WHERE `id` = :id AND `active` = 1',
-            ['id' => Uuid::fromHexToBytes($admin_userId)],
+            ['id' => Uuid::fromHexToBytes($adminUserId)],
         );
 
         // Unknown or inactive: not a verified administrator, so no bypass.
@@ -144,16 +144,16 @@ class McpAllowlistProvider
 
     private function forUserAccessKey(string $accessKey): McpAllowlist
     {
-        $admin_userId = $this->connection->fetchOne(
+        $adminUserId = $this->connection->fetchOne(
             'SELECT `admin_user_id` FROM `admin_user_access_key` WHERE `access_key` = :key',
             ['key' => $accessKey],
         );
 
-        if (!\is_string($admin_userId) || $admin_userId === '') {
+        if (!\is_string($adminUserId) || $adminUserId === '') {
             return McpAllowlist::blocked();
         }
 
-        return $this->forUserId(Uuid::fromBytesToHex($admin_userId));
+        return $this->forUserId(Uuid::fromBytesToHex($adminUserId));
     }
 
     private function fromAllowlist(McpAllowlist $allowlist): McpAllowlist

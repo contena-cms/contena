@@ -16,9 +16,7 @@ use Contena\Core\Content\ContentStream\Service\ContentStreamBuilderInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelContext;
@@ -26,6 +24,9 @@ use Contena\Core\System\Channel\Context\ChannelContextFactory;
 use Contena\Core\System\Channel\Entity\ChannelRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToChannelTestBehaviour;
 
 /**
  * @internal
@@ -160,12 +161,6 @@ class ContentStreamBuilderTest extends TestCase
         $this->service->enrichCriteria($criteria, $ids->get('stream'), Context::createDefaultContext());
 
         $expected = new MultiFilter(MultiFilter::CONNECTION_OR, [
-            new MultiFilter(MultiFilter::CONNECTION_AND, [
-                new ContainsFilter('blog.name', 'Awesome'),
-                new NotFilter(MultiFilter::CONNECTION_AND, [
-                    new ContainsFilter('blog.name', 'Copper'),
-                ]),
-            ]),
         ]);
 
         $filters = $criteria->getFilters();

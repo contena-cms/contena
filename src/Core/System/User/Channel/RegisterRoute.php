@@ -5,6 +5,18 @@ namespace Contena\Core\System\User\Channel;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
+use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\System\Channel\Context\ChannelContextPersister;
+use Contena\Core\System\Channel\Context\ChannelContextServiceInterface;
+use Contena\Core\System\Channel\Entity\ChannelRepository;
+use Contena\Core\System\Channel\StoreApiCustomFieldMapper;
+use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\System\User\Service\DoubleOptInService;
+use Contena\Core\System\User\UserCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -43,14 +55,42 @@ use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\System\User\Channel\UserAddressDataNormalizerTrait;
+use Contena\Core\System\User\Channel\UserVatIdNormalizerTrait;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
 class RegisterRoute extends AbstractRegisterRoute
 {
     use UserAddressDataNormalizerTrait;
     use UserVatIdNormalizerTrait;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
+    /**
+     * @internal
+     *
+     * @param EntityRepository<UserCollection> $userRepository
+     * @param ChannelRepository<UserCollection> $countryRepository
+     */
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly NumberRangeValueGeneratorInterface $numberRangeValueGenerator,
+        private readonly DataValidator $validator,
+        private readonly DataValidationFactoryInterface $accountValidationFactory,
+        private readonly DataValidationFactoryInterface $addressValidationFactory,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly EntityRepository $userRepository,
+        private readonly ChannelContextPersister $contextPersister,
+        private readonly ChannelRepository $countryRepository,
+        protected Connection $connection,
+        private readonly ChannelContextServiceInterface $contextService,
+        private readonly StoreApiCustomFieldMapper $customFieldMapper,
+        private readonly DataValidationFactoryInterface $passwordValidationFactory,
+        private readonly DoubleOptInService $doubleOptInService,
+        private readonly ClockInterface $clock,
+        private readonly ExtensionDispatcher $extensions,
+    ) {
+    }
 
     public function getDecorated(): AbstractRegisterRoute
     {
@@ -85,9 +125,6 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
             $data->remove('accountType');
         }
 
-        if (!$data->get('salutationId')) {
-            $data->set('salutationId', $this->getDefaultSalutationId($context));
-        }
 
         $billing = $data->get('billingAddress');
         $shipping = $data->get('shippingAddress');
@@ -165,7 +202,6 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         $writeContext->addState(EntityIndexerRegistry::USE_INDEXING_QUEUE);
 
         $this->userRepository->create([$user], $writeContext);
-        $this->userNewsletterChannelsUpdater->update([$user['id']], true);
 
         $criteria = new Criteria([$user['id']]);
 
@@ -245,11 +281,11 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         $shippingAddress = $data->get('shippingAddress');
         if ($billingAddress instanceof DataBag) {
             $billingAddress->set('name', $data->get('name'));
-            $billingAddress->set('salutationId', $data->get('salutationId'));
+            $billingAddress->set($data->get('salutationId'));
         }
 
         if (($shippingAddress instanceof DataBag) && !$shippingAddress->get('salutationId')) {
-            $shippingAddress->set('salutationId', $data->get('salutationId'));
+            $shippingAddress->set($data->get('salutationId'));
         }
 
         $definition = $this->getUserCreateValidationDefinition($isGuest, $data, $context);
@@ -347,7 +383,6 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
             'languageId' => $context->getLanguageId(),
             'groupId' => $context->getUserGroupId(),
             'requestedGroupId' => $data->get('requestedGroupId', null),
-            'salutationId' => $data->get('salutationId'),
             'name' => $data->get('name'),
             'email' => $data->get('email'),
             'title' => $data->get('title'),
@@ -560,12 +595,4 @@ use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
         return $country->get('vatIdRequired');
     }
 
-    private function getDefaultSalutationId(ChannelContext $context): ?string
-    {
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('salutationKey', SalutationDefinition::NOT_SPECIFIED));
-
-        return $this->salutationRepository->searchIds($criteria, $context->getContext())->firstId();
-    }
 }

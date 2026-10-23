@@ -387,21 +387,7 @@ class TestNestedCommand extends Command
  */
 class TestCause
 {
-    /**
-     * The processor resolves the causing class from the exception's instantiation
-     * site, so exceptions that must be attributed to this fixture are created here.
-     * Deliberately not a Command: the entrypoint detection scans the trace for
-     * Command subclasses and must not match this fixture.
-     */
-    public static function createException(): TestException
-    {
-        return new TestException('test');
-    }
 
-    public static function createExceptionWithoutPackage(): TestExceptionNoPackage
-    {
-        return new TestExceptionNoPackage('test');
-    }
 
     public function throw(\Throwable $exception): never
     {

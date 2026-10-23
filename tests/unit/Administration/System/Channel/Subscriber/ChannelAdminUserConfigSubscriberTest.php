@@ -27,9 +27,8 @@ class ChannelUserConfigSubscriberTest extends TestCase
     /**
      * @var Stub&EntityRepository<AdminUserConfigCollection>
      */
-    private Stub&EntityRepository $admin_userConfigRepository;
+    private Stub&EntityRepository $adminUserConfigRepository;
 
-    private ChannelUserConfigSubscriber $channelUserConfigSubscriber;
 
     protected function setUp(): void
     {
@@ -69,9 +68,9 @@ class ChannelUserConfigSubscriberTest extends TestCase
 
     public function testOnChannelDeletedUpsertWithNoChannelId(): void
     {
-        $admin_userConfig = new AdminUserConfigEntity();
-        $admin_userConfig->setUniqueIdentifier('admin_user-config-id');
-        // $admin_userConfig->setValue(['']);
+        $adminUserConfig = new AdminUserConfigEntity();
+        $adminUserConfig->setUniqueIdentifier('admin_user-config-id');
+        // $adminUserConfig->setValue(['']);
         $context = Context::createDefaultContext();
         $event = new EntityDeletedEvent('testEntity', [], $context);
 
@@ -81,7 +80,7 @@ class ChannelUserConfigSubscriberTest extends TestCase
             ->willReturn(new EntitySearchResult(
                 AdminUserConfigDefinition::ENTITY_NAME,
                 1,
-                new AdminUserConfigCollection([$admin_userConfig]),
+                new AdminUserConfigCollection([$adminUserConfig]),
                 null,
                 new Criteria(),
                 $context
@@ -95,9 +94,9 @@ class ChannelUserConfigSubscriberTest extends TestCase
 
     public function testOnChannelDeletedUpsertWithNoMatchingId(): void
     {
-        $admin_userConfig = new AdminUserConfigEntity();
-        $admin_userConfig->setUniqueIdentifier('admin_user-config-id');
-        $admin_userConfig->setValue(['test' => '']);
+        $adminUserConfig = new AdminUserConfigEntity();
+        $adminUserConfig->setUniqueIdentifier('admin_user-config-id');
+        $adminUserConfig->setValue(['test' => '']);
         $context = Context::createDefaultContext();
         $event = new EntityDeletedEvent('testEntity', [], $context);
 
@@ -107,7 +106,7 @@ class ChannelUserConfigSubscriberTest extends TestCase
             ->willReturn(new EntitySearchResult(
                 AdminUserConfigDefinition::ENTITY_NAME,
                 1,
-                new AdminUserConfigCollection([$admin_userConfig]),
+                new AdminUserConfigCollection([$adminUserConfig]),
                 null,
                 new Criteria(),
                 $context
@@ -122,10 +121,10 @@ class ChannelUserConfigSubscriberTest extends TestCase
 
     public function testOnChannelDeletedUpsertWithMatchingId(): void
     {
-        $admin_userConfig = new AdminUserConfigEntity();
-        $admin_userConfig->setUniqueIdentifier('admin_user-config-id');
-        $admin_userConfig->setValue(['test' => 'test-deleted']);
-        $admin_userConfig->setId('test-deleted');
+        $adminUserConfig = new AdminUserConfigEntity();
+        $adminUserConfig->setUniqueIdentifier('admin_user-config-id');
+        $adminUserConfig->setValue(['test' => 'test-deleted']);
+        $adminUserConfig->setId('test-deleted');
         $context = Context::createDefaultContext();
         $event = new EntityDeletedEvent(
             'testEntity',
@@ -145,7 +144,7 @@ class ChannelUserConfigSubscriberTest extends TestCase
             ->willReturn(new EntitySearchResult(
                 AdminUserConfigDefinition::ENTITY_NAME,
                 1,
-                new AdminUserConfigCollection([$admin_userConfig]),
+                new AdminUserConfigCollection([$adminUserConfig]),
                 null,
                 new Criteria(),
                 $context
@@ -157,11 +156,4 @@ class ChannelUserConfigSubscriberTest extends TestCase
         $this->createSubscriber($repository)->onChannelDeleted($event);
     }
 
-    /**
-     * @param MockObject&EntityRepository<AdminUserConfigCollection> $repository
-     */
-    private function createSubscriber(MockObject&EntityRepository $repository): ChannelUserConfigSubscriber
-    {
-        return new ChannelUserConfigSubscriber($repository);
-    }
 }

@@ -47,11 +47,11 @@ final class McpToolResultPrincipal
         }
 
         $integrationId = $source->getIntegrationId();
-        $admin_userId = $source->getUserId();
-        if ($integrationId === null && $admin_userId === null) {
+        $adminUserId = $source->getUserId();
+        if ($integrationId === null && $adminUserId === null) {
             return null;
         }
 
-        return 'admin:' . ($integrationId ?? '') . ':' . ($admin_userId ?? '');
+        return 'admin:' . ($integrationId ?? '') . ':' . ($adminUserId ?? '');
     }
 }

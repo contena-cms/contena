@@ -8,6 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Adapter\Twig\EntityTemplateLoader;
 use Twig\Error\LoaderError;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

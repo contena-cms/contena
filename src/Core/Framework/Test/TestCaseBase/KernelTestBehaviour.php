@@ -4,6 +4,7 @@ namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use Contena\Core\Kernel;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 
 trait KernelTestBehaviour
 {

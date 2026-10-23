@@ -110,7 +110,6 @@ class ChannelFileTemplateResolverTest extends TestCase
     {
         return $this->createResolverWithHierarchyBuilder(
             $templates,
-            new ChannelFileTemplateResolverTestHierarchyBuilder($hierarchy),
             new EventDispatcher(),
         );
     }

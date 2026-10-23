@@ -8,6 +8,8 @@ use Contena\Core\Framework\Migration\Exception\UnknownMigrationSourceException;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Migration\MigrationStep;
+use Contena\Core\Framework\Test\Migration\MigrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

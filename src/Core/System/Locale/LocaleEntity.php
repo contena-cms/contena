@@ -6,6 +6,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Locale\Aggregate\LocaleTranslation\LocaleTranslationCollection;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

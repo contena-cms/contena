@@ -10,8 +10,6 @@ use Contena\Core\Content\Blog\Aggregate\BlogReview\BlogReviewEntity;
 use Contena\Core\Content\Blog\Channel\ChannelBlogEntity;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRoute;
 use Contena\Core\Content\Blog\Channel\Detail\BlogDetailRouteResponse;
-use Contena\Core\Content\Blog\Channel\Review\BlogReviewResult;
-use Contena\Core\Content\Blog\Channel\Review\RatingMatrix;
 use Contena\Core\Content\Blog\Cms\BlogDescriptionReviewsCmsElementResolver;
 use Contena\Core\Content\Blog\Cms\CrossSellingCmsElementResolver;
 use Contena\Core\Content\Category\CategoryEntity;
@@ -179,7 +177,6 @@ class BlogPageLoaderTest extends TestCase
         $entityResult = new EntitySearchResult(
             BlogReviewDefinition::ENTITY_NAME,
             0,
-            new BlogReviewCollection([]),
             new AggregationResultCollection([
                 new TermsResult('ratingMatrix', []),
             ]),
@@ -254,7 +251,6 @@ class BlogPageLoaderTest extends TestCase
             $entityResult = new EntitySearchResult(
                 BlogReviewDefinition::ENTITY_NAME,
                 0,
-                new BlogReviewCollection([]),
                 new AggregationResultCollection([new TermsResult('ratingMatrix', [])]),
                 new Criteria(),
                 Context::createDefaultContext()
@@ -344,27 +340,6 @@ class BlogPageLoaderTest extends TestCase
         ];
     }
 
-    private function getBlogReviewResult(): BlogReviewResult
-    {
-        $review = new BlogReviewEntity();
-        $review->setId(Uuid::randomHex());
-        $review->setTitle('myReviewTitle');
-        $review->setComment('this blog changed my life');
-
-        return BlogReviewResult::fromSearchResult(
-            new EntitySearchResult(
-                BlogReviewDefinition::ENTITY_NAME,
-                1,
-                new BlogReviewCollection([$review]),
-                null,
-                new Criteria(),
-                Context::createDefaultContext()
-            ),
-            new RatingMatrix([]),
-            Uuid::randomHex(),
-            1,
-        );
-    }
 
     private function getReviewBlock(ChannelBlogEntity $blogEntity): CmsBlockEntity
     {

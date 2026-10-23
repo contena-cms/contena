@@ -10,6 +10,8 @@ use Contena\Core\Framework\Deprecation\BCChange\PropertyTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
 use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class MediaThumbnailEntity extends Entity
 {

@@ -22,7 +22,6 @@ class CartOrderRouteBench extends AbstractBenchCase
     private const SUBJECT_CUSTOMER = 'user-0';
     private const CART_ITEMS_COUNT = 10;
 
-    private Cart $cart;
 
     public function setupWithLogin(): void
     {

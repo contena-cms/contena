@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\ChannelRequest;
 use Contena\Core\Checkout\Cart\Channel\CartService;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItemFactoryRegistry;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -51,6 +49,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpFoundation\Session\Session;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\MailTemplateTestBehaviour;
+use Contena\Frontend\Test\Controller\FrontendControllerTestBehaviour;
 
 /**
  * @internal
@@ -554,34 +555,6 @@ class RegisterControllerTest extends TestCase
         return array_values($userRepository->search($criteria, Context::createDefaultContext())->getEntities()->getIds());
     }
 
-    private function createBlogLineItem(): LineItem
-    {
-        $blogId = Uuid::randomHex();
-
-        static::getContainer()->get('blog.repository')->create([
-            [
-                'id' => $blogId,
-                'name' => 'Double submit blog',
-                'blogNumber' => 'double-submit-' . $blogId,
-                'stock' => 1,
-                'taxId' => $this->getValidTaxId(),
-                'price' => [
-                    ['currencyId' => Defaults::CURRENCY, 'gross' => 15.99, 'net' => 10, 'linked' => false],
-                ],
-                'visibilities' => [
-                    [
-                        'channelId' => TestDefaults::CHANNEL,
-                        'visibility' => BlogVisibilityDefinition::VISIBILITY_ALL,
-                    ],
-                ],
-            ],
-        ], Context::createDefaultContext());
-
-        return static::getContainer()->get(LineItemFactoryRegistry::class)->create(
-            ['type' => LineItem::BLOG_LINE_ITEM_TYPE, 'referencedId' => $blogId],
-            $this->channelContext
-        );
-    }
 
     /**
      * @param array<string|int, mixed> $userData

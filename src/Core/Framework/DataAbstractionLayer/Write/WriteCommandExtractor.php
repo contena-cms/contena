@@ -34,6 +34,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\FieldException\WriteFieldE
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\DataAbstractionLayer\Field\WasModifiedByAdminUserField;
 
 /**
  * @internal

@@ -3,6 +3,7 @@
 namespace Contena\Core\Service\DTO;
 
 use Contena\Core\Framework\App\AppEntity;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\State;
 
 /**
  * @internal

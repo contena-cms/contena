@@ -13,7 +13,6 @@ class PluginWithAdditionalBundles extends Plugin
     public function getAdditionalBundles(AdditionalBundleParameters $additionalBundleParameters): array
     {
         return [
-            new SubBundle1(),
         ];
     }
 }

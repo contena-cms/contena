@@ -21,7 +21,6 @@ class Migration1785334458AddSeoUrlUpdateAclPrivilegeTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1785334458AddSeoUrlUpdateAclPrivilege $migration;
 
     protected function setUp(): void
     {

@@ -19,7 +19,6 @@ class Migration1711461580SetSystemDefaultForDefaultMailFooterTest extends TestCa
 {
     use MigrationTestTrait;
 
-    private Migration1711461580SetSystemDefaultForDefaultMailFooter $migration;
 
     private Connection $connection;
 

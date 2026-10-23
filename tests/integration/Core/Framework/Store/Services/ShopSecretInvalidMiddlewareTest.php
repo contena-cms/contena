@@ -12,6 +12,7 @@ use Psr\Http\Message\RequestInterface;
 use Contena\Core\Framework\Store\Services\ShopSecretInvalidMiddleware;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

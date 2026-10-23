@@ -6,7 +6,6 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogMedia\BlogMediaEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
@@ -54,6 +53,7 @@ use Contena\Core\Test\Integration\Builder\Order\OrderBuilder;
 use Contena\Core\Test\Integration\Builder\User\UserBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

@@ -6,9 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCategory\BlogCategoryDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogManufacturer\BlogManufacturerDefinition;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogVisibility\BlogVisibilityDefinition;
 use Contena\Core\Content\Blog\BlogDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
@@ -34,13 +31,10 @@ class AssociationIdPathNormalizerTest extends TestCase
         $registry = new StaticDefinitionInstanceRegistry(
             [
                 BlogDefinition::class,
-                BlogManufacturerDefinition::class,
                 BlogVisibilityDefinition::class,
                 ChannelDefinition::class,
                 BlogCategoryDefinition::class,
                 CategoryDefinition::class,
-                BlogPriceDefinition::class,
-                BlogCrossSellingDefinition::class,
                 'measurement_display_unit.definition' => self::attributeDefinition(MeasurementDisplayUnitEntity::class),
                 'measurement_system_code_reference.definition' => self::attributeDefinition(MeasurementSystemCodeReferenceEntity::class),
             ],

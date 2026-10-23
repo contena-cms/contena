@@ -10,6 +10,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldCollection;
 use Contena\Core\System\CustomField\CustomFieldDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

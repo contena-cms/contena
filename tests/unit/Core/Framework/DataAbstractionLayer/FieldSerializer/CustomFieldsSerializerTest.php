@@ -33,7 +33,6 @@ class CustomFieldsSerializerTest extends TestCase
 {
     private StaticDefinitionInstanceRegistry $registry;
 
-    private CustomFieldsSerializerTestDefinition $definition;
 
     private CustomFieldsSerializer $serializer;
 

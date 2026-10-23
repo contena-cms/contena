@@ -10,6 +10,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\InAppPurchase\Services\KeyFetcher;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

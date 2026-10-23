@@ -11,6 +11,8 @@ use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Test\TestCaseHelper\TestIntegration;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -40,11 +42,11 @@ class AclRoleLoaderTest extends TestCase
 
     public function testANonAdminUserHasItsRoles(): void
     {
-        $admin_user = TestUser::createNewTestUser($this->connection, ['blog:read']);
+        $adminUser = TestUser::createNewTestUser($this->connection, ['blog:read']);
 
         static::assertEquals(
-            [$admin_user->getUserId() => new AclRoles(false, [(string) $admin_user->getAclRoleId()])],
-            $this->loader->getUserRoles([$admin_user->getUserId()])
+            [$adminUser->getUserId() => new AclRoles(false, [(string) $adminUser->getAclRoleId()])],
+            $this->loader->getUserRoles([$adminUser->getUserId()])
         );
     }
 
@@ -86,9 +88,9 @@ class AclRoleLoaderTest extends TestCase
 
     public function testAUserAndAnIntegrationWithTheSameIdAreKeptApart(): void
     {
-        $admin_user = TestUser::createNewTestUser($this->connection, ['blog:read']);
+        $adminUser = TestUser::createNewTestUser($this->connection, ['blog:read']);
         $this->connection->insert('integration', [
-            'id' => Uuid::fromHexToBytes($admin_user->getUserId()),
+            'id' => Uuid::fromHexToBytes($adminUser->getUserId()),
             'label' => 'admin integration',
             'access_key' => AccessKeyHelper::generateAccessKey('integration'),
             'secret_access_key' => 'secret',
@@ -97,12 +99,12 @@ class AclRoleLoaderTest extends TestCase
         ]);
 
         static::assertEquals(
-            [$admin_user->getUserId() => new AclRoles(false, [(string) $admin_user->getAclRoleId()])],
-            $this->loader->getUserRoles([$admin_user->getUserId()])
+            [$adminUser->getUserId() => new AclRoles(false, [(string) $adminUser->getAclRoleId()])],
+            $this->loader->getUserRoles([$adminUser->getUserId()])
         );
         static::assertEquals(
-            [$admin_user->getUserId() => new AclRoles(true, [])],
-            $this->loader->getIntegrationRoles([$admin_user->getUserId()])
+            [$adminUser->getUserId() => new AclRoles(true, [])],
+            $this->loader->getIntegrationRoles([$adminUser->getUserId()])
         );
     }
 

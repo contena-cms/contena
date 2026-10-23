@@ -100,8 +100,6 @@ class SortingListingProcessorTest extends TestCase
         );
 
         static::assertEquals([
-            new FieldSorting('_score', FieldSorting::DESCENDING),
-            new FieldSorting('id', FieldSorting::ASCENDING),
         ], $criteria->getSorting());
     }
 
@@ -146,9 +144,6 @@ class SortingListingProcessorTest extends TestCase
         );
 
         static::assertEquals([
-            new FieldSorting('name', FieldSorting::ASCENDING),
-            new FieldSorting('_score', FieldSorting::DESCENDING),
-            new FieldSorting('id', FieldSorting::ASCENDING),
         ], $criteria->getSorting());
     }
 
@@ -233,7 +228,6 @@ class SortingListingProcessorTest extends TestCase
 
         static::assertEquals([
             new FieldSorting('blog.name', $expectedDirection),
-            new FieldSorting('id', FieldSorting::ASCENDING),
         ], $criteria->getSorting());
 
         $sortings = $criteria->getExtension(SortingListingProcessor::SORTINGS_EXTENSION);
@@ -259,9 +253,6 @@ class SortingListingProcessorTest extends TestCase
         );
 
         static::assertEquals([
-            new FieldSorting('blog.stock', FieldSorting::DESCENDING),
-            new FieldSorting('id', FieldSorting::ASCENDING),
-            new FieldSorting('foo', FieldSorting::DESCENDING),
         ], $criteria->getSorting());
     }
 
@@ -288,8 +279,6 @@ class SortingListingProcessorTest extends TestCase
             'sorting' => 'foo',
             'testWithAvailableSortings' => false,
             'expected' => [
-                new FieldSorting('id', FieldSorting::ASCENDING),
-                new FieldSorting('foo', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -297,8 +286,6 @@ class SortingListingProcessorTest extends TestCase
             'sorting' => 'foo',
             'testWithAvailableSortings' => true,
             'expected' => [
-                new FieldSorting('id', FieldSorting::ASCENDING),
-                new FieldSorting('foo', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -306,8 +293,6 @@ class SortingListingProcessorTest extends TestCase
             'sorting' => 'bar',
             'testWithAvailableSortings' => false,
             'expected' => [
-                new FieldSorting('id', FieldSorting::ASCENDING),
-                new FieldSorting('bar', FieldSorting::DESCENDING),
             ],
         ];
 

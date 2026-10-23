@@ -16,10 +16,10 @@ class AppLocaleProvider
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly LanguageLocaleCodeProvider $languageLocaleProvider
     ) {
     }
@@ -39,13 +39,13 @@ class AppLocaleProvider
         $criteria = new Criteria([$source->getUserId()]);
         $criteria->addAssociation('locale');
 
-        $admin_user = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        $adminUser = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
 
-        if ($admin_user === null) {
+        if ($adminUser === null) {
             throw new EntityNotFoundException(AdminUserDefinition::ENTITY_NAME, $source->getUserId());
         }
 
-        $locale = $admin_user->getLocale();
+        $locale = $adminUser->getLocale();
         \assert($locale !== null);
 
         return $locale->getCode();

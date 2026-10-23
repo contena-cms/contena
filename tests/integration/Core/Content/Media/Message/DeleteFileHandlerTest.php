@@ -5,6 +5,7 @@ namespace Contena\Tests\Integration\Core\Content\Media\Message;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Message\DeleteFileHandler;
 use Contena\Core\Content\Media\Message\DeleteFileMessage;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

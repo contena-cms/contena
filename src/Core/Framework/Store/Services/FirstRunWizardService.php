@@ -32,6 +32,7 @@ use Contena\Core\Framework\Store\Struct\StorePluginStruct;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserConfig\AdminUserConfigCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\Store\Struct\ShopAdminUserTokenStruct;
 
 /**
  * @internal
@@ -49,7 +50,7 @@ class FirstRunWizardService
     private const FRW_MAX_FAILURES = 3;
 
     /**
-     * @param EntityRepository<AdminUserConfigCollection> $admin_userConfigRepository
+     * @param EntityRepository<AdminUserConfigCollection> $adminUserConfigRepository
      */
     public function __construct(
         private readonly StoreService $storeService,
@@ -58,7 +59,7 @@ class FirstRunWizardService
         private readonly bool $frwAutoRun,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly FirstRunWizardClient $frwClient,
-        private readonly EntityRepository $admin_userConfigRepository,
+        private readonly EntityRepository $adminUserConfigRepository,
         private readonly TrackingEventClient $trackingEventClient
     ) {
     }
@@ -358,17 +359,17 @@ class FirstRunWizardService
     {
         /** @var AdminApiSource $contextSource */
         $contextSource = $context->getSource();
-        $admin_userId = $contextSource->getUserId();
+        $adminUserId = $contextSource->getUserId();
 
         $frwUserToken = $accessToken->getShopUserToken()->getToken();
         $id = $this->getFrwUserTokenConfigId($context);
 
-        $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($admin_userId, $frwUserToken, $id): void {
+        $context->scope(Context::SYSTEM_SCOPE, function ($context) use ($adminUserId, $frwUserToken, $id): void {
             $this->admin_userConfigRepository->upsert(
                 [
                     [
                         'id' => $id,
-                        'admin_userId' => $admin_userId,
+                        'admin_userId' => $adminUserId,
                         'key' => self::USER_CONFIG_KEY_FRW_USER_TOKEN,
                         'value' => [self::USER_CONFIG_VALUE_FRW_USER_TOKEN => $frwUserToken,
                         ],
@@ -413,17 +414,17 @@ class FirstRunWizardService
 
     /**
      * @param array{shopSecret?: string, firstRunWizardUserToken?: array{token: string, expirationDate: string}, shopUserToken?: array{token: string, expirationDate: string}} $accessTokenData
-     * @param array{token: string, expirationDate: string} $admin_userTokenData
+     * @param array{token: string, expirationDate: string} $adminUserTokenData
      */
-    private function createAccessTokenStruct(array $accessTokenData, array $admin_userTokenData): AccessTokenStruct
+    private function createAccessTokenStruct(array $accessTokenData, array $adminUserTokenData): AccessTokenStruct
     {
-        $admin_userToken = new ShopUserTokenStruct(
-            $admin_userTokenData['token'],
-            new \DateTimeImmutable($admin_userTokenData['expirationDate'])
+        $adminUserToken = new ShopAdminUserTokenStruct(
+            $adminUserTokenData['token'],
+            new \DateTimeImmutable($adminUserTokenData['expirationDate'])
         );
 
         return new AccessTokenStruct(
-            $admin_userToken,
+            $adminUserToken,
             $accessTokenData['shopSecret'] ?? null,
         );
     }

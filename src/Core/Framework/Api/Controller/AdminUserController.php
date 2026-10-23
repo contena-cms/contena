@@ -26,6 +26,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Contena\Core\Framework\Api\Controller\Exception\PermissionDeniedException;
+use League\OAuth2\Server\Exception\OAuthServerException;
 
 #[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [ApiRouteScope::ID]])]
 class AdminUserController extends AbstractController
@@ -33,17 +34,17 @@ class AdminUserController extends AbstractController
     /**
      * @internal
      *
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
-     * @param EntityRepository<EntityCollection<Entity>> $admin_userRoleRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
+     * @param EntityRepository<EntityCollection<Entity>> $adminUserRoleRepository
      * @param EntityRepository<AclRoleCollection> $roleRepository
      * @param EntityRepository<AdminUserAccessKeyCollection> $keyRepository
      */
     public function __construct(
-        private readonly EntityRepository $admin_userRepository,
-        private readonly EntityRepository $admin_userRoleRepository,
+        private readonly EntityRepository $adminUserRepository,
+        private readonly EntityRepository $adminUserRoleRepository,
         private readonly EntityRepository $roleRepository,
         private readonly EntityRepository $keyRepository,
-        private readonly AdminUserDefinition $admin_userDefinition,
+        private readonly AdminUserDefinition $adminUserDefinition,
         private readonly SsoService $ssoService,
         private readonly Connection $connection,
     ) {
@@ -60,19 +61,19 @@ class AdminUserController extends AbstractController
             throw ApiException::invalidAdminSource($context->getSource()::class);
         }
 
-        $admin_userId = $context->getSource()->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $context->getSource()->getUserId();
+        if (!$adminUserId) {
             throw ApiException::admin_userNotLoggedIn();
         }
-        $criteria = new Criteria([$admin_userId]);
+        $criteria = new Criteria([$adminUserId]);
         $criteria->addAssociations(['aclRoles', 'avatarMedia']);
 
-        $admin_user = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
-        if (!$admin_user) {
+        $adminUser = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        if (!$adminUser) {
             throw OAuthServerException::invalidCredentials();
         }
 
-        return $responseFactory->createDetailResponse(new Criteria(), $admin_user, $this->admin_userDefinition, $request, $context);
+        return $responseFactory->createDetailResponse(new Criteria(), $adminUser, $this->admin_userDefinition, $request, $context);
     }
 
     #[Route(
@@ -90,8 +91,8 @@ class AdminUserController extends AbstractController
             throw ApiException::invalidAdminSource($context->getSource()::class);
         }
 
-        $admin_userId = $context->getSource()->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $context->getSource()->getUserId();
+        if (!$adminUserId) {
             throw ApiException::admin_userNotLoggedIn();
         }
 
@@ -108,7 +109,7 @@ class AdminUserController extends AbstractController
 
         return $context->scope(
             Context::SYSTEM_SCOPE,
-            fn (Context $context): Response => $this->upsertUser($admin_userId, $request, $context, $responseFactory),
+            fn (Context $context): Response => $this->upsertUser($adminUserId, $request, $context, $responseFactory),
         );
     }
 
@@ -123,11 +124,11 @@ class AdminUserController extends AbstractController
             throw ApiException::invalidAdminSource($context->getSource()::class);
         }
 
-        $admin_userId = $context->getSource()->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $context->getSource()->getUserId();
+        if (!$adminUserId) {
             throw ApiException::admin_userNotLoggedIn();
         }
-        $result = $this->admin_userRepository->searchIds(new Criteria([$admin_userId]), $context);
+        $result = $this->admin_userRepository->searchIds(new Criteria([$adminUserId]), $context);
 
         if ($result->getTotal() === 0) {
             throw OAuthServerException::invalidCredentials();
@@ -147,12 +148,12 @@ class AdminUserController extends AbstractController
             throw ApiException::invalidAdminSource($context->getSource()::class);
         }
 
-        $admin_userId = $context->getSource()->getUserId();
-        if (!$admin_userId) {
+        $adminUserId = $context->getSource()->getUserId();
+        if (!$adminUserId) {
             throw ApiException::admin_userNotLoggedIn();
         }
 
-        $this->ssoService->revokeUserTokens($admin_userId);
+        $this->ssoService->revokeUserTokens($adminUserId);
 
         return new Response(null, Response::HTTP_NO_CONTENT);
     }
@@ -166,7 +167,7 @@ class AdminUserController extends AbstractController
         ],
         methods: [Request::METHOD_DELETE]
     )]
-    public function deleteUser(string $admin_userId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
+    public function deleteUser(string $adminUserId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
     {
         $this->validateScope($request);
 
@@ -174,16 +175,16 @@ class AdminUserController extends AbstractController
 
         if ((!$source instanceof AdminApiSource)
             || (!$source->isAllowed('admin_user:update')
-            && $source->getUserId() !== $admin_userId)
+            && $source->getUserId() !== $adminUserId)
         ) {
             throw new PermissionDeniedException();
         }
 
-        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($admin_userId): void {
-            $this->admin_userRepository->delete([['id' => $admin_userId]], $context);
+        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($adminUserId): void {
+            $this->admin_userRepository->delete([['id' => $adminUserId]], $context);
         });
 
-        return $factory->createRedirectResponse($this->admin_userRepository->getDefinition(), $admin_userId, $request, $context);
+        return $factory->createRedirectResponse($this->admin_userRepository->getDefinition(), $adminUserId, $request, $context);
     }
 
     #[Route(
@@ -215,7 +216,7 @@ class AdminUserController extends AbstractController
         ],
         methods: [Request::METHOD_POST]
     )]
-    public function upsertUser(?string $admin_userId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
+    public function upsertUser(?string $adminUserId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
     {
         $this->validateScope($request);
 
@@ -224,7 +225,7 @@ class AdminUserController extends AbstractController
         $changesAdmin = isset($data['admin']);
         unset($data['admin']);
 
-        $entityId = $admin_userId ?? $data['id'] ?? Uuid::randomHex();
+        $entityId = $adminUserId ?? $data['id'] ?? Uuid::randomHex();
         \assert(\is_string($entityId));
         $data['id'] = $entityId;
 
@@ -266,9 +267,9 @@ class AdminUserController extends AbstractController
         ],
         methods: [Request::METHOD_PATCH]
     )]
-    public function updateUser(?string $admin_userId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
+    public function updateUser(?string $adminUserId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
     {
-        return $this->upsertUser($admin_userId, $request, $context, $factory);
+        return $this->upsertUser($adminUserId, $request, $context, $factory);
     }
 
     #[Route(
@@ -321,12 +322,12 @@ class AdminUserController extends AbstractController
         ],
         methods: [Request::METHOD_DELETE]
     )]
-    public function deleteUserRole(string $admin_userId, string $roleId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
+    public function deleteUserRole(string $adminUserId, string $roleId, Request $request, Context $context, ResponseFactoryInterface $factory): Response
     {
         $this->validateScope($request);
 
-        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($roleId, $admin_userId): void {
-            $this->admin_userRoleRepository->delete([['admin_userId' => $admin_userId, 'aclRoleId' => $roleId]], $context);
+        $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($roleId, $adminUserId): void {
+            $this->admin_userRoleRepository->delete([['admin_userId' => $adminUserId, 'aclRoleId' => $roleId]], $context);
         });
 
         return $factory->createRedirectResponse($this->admin_userRoleRepository->getDefinition(), $roleId, $request, $context);

@@ -36,6 +36,7 @@ use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageDefinition;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

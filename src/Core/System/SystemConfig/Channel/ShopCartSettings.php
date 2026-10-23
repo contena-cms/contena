@@ -3,6 +3,7 @@
 namespace Contena\Core\System\SystemConfig\Channel;
 
 use Contena\Core\Framework\Struct\Struct;
+use Contena\Core\System\SystemConfig\Channel\ConfigCastTrait;
 
 /**
  * Cart and checkout settings (core.cart).

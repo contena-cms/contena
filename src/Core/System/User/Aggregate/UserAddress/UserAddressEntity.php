@@ -6,6 +6,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\User\UserEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 class UserAddressEntity extends Entity
 {
@@ -17,8 +19,6 @@ class UserAddressEntity extends Entity
     protected string $countryId;
 
     protected ?string $countryStateId = null;
-
-    protected ?string $salutationId = null;
 
     protected string $name;
 
@@ -82,16 +82,6 @@ class UserAddressEntity extends Entity
     public function setCountryStateId(string $countryStateId): void
     {
         $this->countryStateId = $countryStateId;
-    }
-
-    public function getSalutationId(): ?string
-    {
-        return $this->salutationId;
-    }
-
-    public function setSalutationId(string $salutationId): void
-    {
-        $this->salutationId = $salutationId;
     }
 
     public function getName(): string

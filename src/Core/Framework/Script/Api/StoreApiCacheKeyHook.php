@@ -6,6 +6,7 @@ use Contena\Core\Framework\Script\Execution\Awareness\ChannelContextAware;
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
 use Contena\Core\Framework\Script\Execution\OptionalFunctionHook;
 use Contena\Core\System\Channel\ChannelContext;
+use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 
 /**
  * Triggered when the api endpoint /store-api/script/{hook} is called. Used to provide a cache-key based on the request.

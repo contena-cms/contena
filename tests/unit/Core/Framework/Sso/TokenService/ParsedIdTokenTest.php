@@ -18,7 +18,6 @@ use Contena\Core\Framework\Sso\TokenService\ParsedIdToken;
 #[CoversClass(ParsedIdToken::class)]
 class ParsedIdTokenTest extends TestCase
 {
-    private FakeTokenGenerator $tokenGenerator;
 
     protected function setUp(): void
     {
@@ -132,11 +131,4 @@ class ParsedIdTokenTest extends TestCase
         ];
     }
 
-    private function parseToken(FakeTokenGenerator $tokenGenerator): ParsedIdToken
-    {
-        $parsed = (new Parser(new JoseEncoder()))->parse($tokenGenerator->generate());
-        static::assertInstanceOf(Plain::class, $parsed);
-
-        return ParsedIdToken::createFromDataSet($parsed->claims());
-    }
 }

@@ -7,16 +7,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
-use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateIndexingMessage;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
-use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
-use Contena\Core\Framework\App\Manifest\Xml\Frontend\EntitySeoUrl;
-use Contena\Core\Framework\App\Manifest\Xml\Frontend\SeoUrl;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
@@ -178,8 +174,6 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
 
         static::assertEquals(
             [
-                new SeoUrlTemplateIndexingMessage(self::BLOG_TEASER_ROUTE, 'blog'),
-                new SeoUrlTemplateIndexingMessage(self::CATEGORY_TEASER_ROUTE, 'category'),
             ],
             $this->dispatchedMessages()
         );
@@ -223,8 +217,6 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
 
         static::assertEquals(
             [
-                new SeoUrlTemplateIndexingMessage(self::BLOG_TEASER_ROUTE, 'blog'),
-                new SeoUrlTemplateIndexingMessage(self::CATEGORY_TEASER_ROUTE, 'category'),
             ],
             $this->dispatchedMessages()
         );
@@ -388,33 +380,7 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
         );
     }
 
-    /**
-     * @param list<string> $seoUrls
-     * @param array<string, string> $entitySeoUrls
-     */
-    private static function manifest(array $seoUrls = [], array $entitySeoUrls = []): ManifestFixture
-    {
-        $manifest = ManifestFixture::empty()->withName(self::APP_NAME);
 
-        foreach ($seoUrls as $name) {
-            $manifest->withSeoUrl(SeoUrl::fromArray(['name' => $name, 'path' => ['en-GB' => $name]]));
-        }
-
-        foreach ($entitySeoUrls as $name => $entityName) {
-            $manifest->withEntitySeoUrl(EntitySeoUrl::fromArray([
-                'name' => $name,
-                'entity' => $entityName,
-                'defaultTemplate' => '{{ ' . $entityName . '.translated.name }}',
-            ]));
-        }
-
-        return $manifest;
-    }
-
-    private static function updateContext(ManifestFixture $manifest): AppPersistContext
-    {
-        return AppFixture::createUpdateContext(self::app(), $manifest);
-    }
 
     private static function activationContext(): AppActivationContext
     {

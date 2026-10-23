@@ -35,7 +35,7 @@ class GrantTypeFactoryTest extends TestCase
         $clock = new NativeClock();
         $loginConfigService = static::createStub(LoginConfigService::class);
         $externalTokenService = new ExternalTokenService(static::createStub(HttpClientInterface::class), $loginConfigService);
-        $admin_userService = new AdminUserService(
+        $adminUserService = new AdminUserService(
             static::createStub(Connection::class),
             new IdTokenParser(
                 new PublicKeyLoader(static::createStub(HttpClientInterface::class), $loginConfigService, new ArrayAdapter()),
@@ -51,7 +51,7 @@ class GrantTypeFactoryTest extends TestCase
             static::createStub(AdminUserRepositoryInterface::class),
             static::createStub(RefreshTokenRepository::class),
             static::createStub(AuthCodeRepositoryInterface::class),
-            $admin_userService,
+            $adminUserService,
             $externalTokenService,
             $clock,
         );

@@ -20,6 +20,7 @@ use Contena\Frontend\Theme\ThemeFilesystemResolver;
 use Symfony\Component\Console\Helper\HelperSet;
 use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Tester\CommandTester;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -89,17 +90,17 @@ class ThemeDumpCommandTest extends TestCase
         $themeDumpCommand->setHelperSet(new HelperSet([new QuestionHelper()]));
         $commandTester = new CommandTester($themeDumpCommand);
 
-        $admin_userInput = [];
+        $adminUserInput = [];
 
         if (!$themeId) {
-            $admin_userInput[] = 'Parent theme';
+            $adminUserInput[] = 'Parent theme';
         }
 
         if (!$domainUrl) {
-            $admin_userInput[] = 'http://localhost/1/' . $this->parentThemeId;
+            $adminUserInput[] = 'http://localhost/1/' . $this->parentThemeId;
         }
 
-        $commandTester->setInputs($admin_userInput);
+        $commandTester->setInputs($adminUserInput);
         $commandTester->execute([
             'theme-id' => $themeId,
             'domain-url' => $domainUrl,

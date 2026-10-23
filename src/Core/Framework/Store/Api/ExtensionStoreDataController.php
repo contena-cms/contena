@@ -26,12 +26,12 @@ use Symfony\Component\Routing\Attribute\Route;
 class ExtensionStoreDataController extends AbstractController
 {
     /**
-     * @param EntityRepository<AdminUserCollection> $admin_userRepository
+     * @param EntityRepository<AdminUserCollection> $adminUserRepository
      * @param EntityRepository<LanguageCollection> $languageRepository
      */
     public function __construct(
         private readonly AbstractExtensionDataProvider $extensionDataProvider,
-        private readonly EntityRepository $admin_userRepository,
+        private readonly EntityRepository $adminUserRepository,
         private readonly EntityRepository $languageRepository
     ) {
     }
@@ -63,14 +63,14 @@ class ExtensionStoreDataController extends AbstractController
 
         $criteria = new Criteria([$source->getUserId()]);
 
-        $admin_user = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
+        $adminUser = $this->admin_userRepository->search($criteria, $context)->getEntities()->first();
 
-        if ($admin_user === null) {
+        if ($adminUser === null) {
             return $context;
         }
 
         $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('localeId', $admin_user->getLocaleId()));
+        $criteria->addFilter(new EqualsFilter('localeId', $adminUser->getLocaleId()));
         $criteria->setLimit(1);
         $languageId = $this->languageRepository->searchIds($criteria, $context)->firstId();
 

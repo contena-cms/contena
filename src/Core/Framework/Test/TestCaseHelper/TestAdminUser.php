@@ -16,7 +16,7 @@ class TestAdminUser
     private function __construct(
         private readonly string $password,
         private readonly string $name,
-        private readonly string $admin_userId,
+        private readonly string $adminUserId,
         private readonly ?string $aclRoleId = null,
     ) {
     }
@@ -34,7 +34,7 @@ class TestAdminUser
         $username = Uuid::randomHex();
         $email = Uuid::randomHex();
 
-        $admin_userId = Uuid::randomBytes();
+        $adminUserId = Uuid::randomBytes();
         $avatarId = Uuid::randomBytes();
 
         $connection->insert('media', [
@@ -46,7 +46,7 @@ class TestAdminUser
         ]);
 
         $connection->insert('admin_user', [
-            'id' => $admin_userId,
+            'id' => $adminUserId,
             'first_name' => $username,
             'last_name' => '',
             'email' => "{$email}@example.com",
@@ -64,26 +64,26 @@ class TestAdminUser
             $connection->insert(
                 'acl_user_role',
                 [
-                    'admin_user_id' => $admin_userId,
+                    'admin_user_id' => $adminUserId,
                     'acl_role_id' => $roleId,
                     'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
                 ]
             );
         }
 
-        return new TestAdminUser('contena', $username, Uuid::fromBytesToHex($admin_userId), $roleId === null ? null : Uuid::fromBytesToHex($roleId));
+        return new TestAdminUser('contena', $username, Uuid::fromBytesToHex($adminUserId), $roleId === null ? null : Uuid::fromBytesToHex($roleId));
     }
 
     public static function createNewAdminTestUser(Connection $connection): TestAdminUser
     {
-        $admin_user = self::createNewTestUser($connection);
+        $adminUser = self::createNewTestUser($connection);
 
         $connection->executeStatement(
             'UPDATE `admin_user` SET admin = 1 WHERE id = :id',
-            ['id' => Uuid::fromHexToBytes($admin_user->getUserId())]
+            ['id' => Uuid::fromHexToBytes($adminUser->getUserId())]
         );
 
-        return $admin_user;
+        return $adminUser;
     }
 
     public function authorizeBrowser(KernelBrowser $browser): void

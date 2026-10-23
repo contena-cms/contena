@@ -15,6 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Channel\ChannelCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
+use Contena\Core\Test\Integration\Traits\EntityFixturesBase;
 
 /**
  * @internal
@@ -195,11 +196,9 @@ trait MediaFixtures
                                 'email' => 'test@example.com',
                                 'name' => 'Max',
                                 'lastName' => 'Mustermann',
-                                'salutationId' => $this->getValidSalutationId(),
                                 'userNumber' => '1337',
                             ],
                             'billingAddress' => [
-                                'salutationId' => $this->getValidSalutationId(),
                                 'name' => 'Max',
                                 'lastName' => 'Mustermann',
                                 'street' => 'Ebbinghoff 10',

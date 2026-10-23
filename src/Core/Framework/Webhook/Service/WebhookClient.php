@@ -9,6 +9,8 @@ use Psr\Clock\ClockInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Contena\Core\Framework\App\AppException;
+use GuzzleHttp\Exception\TransferException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * @internal

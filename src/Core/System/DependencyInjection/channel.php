@@ -23,10 +23,8 @@ use Contena\Core\Framework\Gateway\Context\Command\Executor\ContextGatewayComman
 use Contena\Core\Framework\Gateway\Context\Command\Executor\ContextGatewayCommandValidator;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\AddUserMessageCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeAddressCommandHandler;
-use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeCheckoutOptionsCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeCurrencyCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeLanguageCommandHandler;
-use Contena\Core\Framework\Gateway\Context\Command\Handler\ChangeShippingLocationCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\LoginUserCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\Handler\RegisterUserCommandHandler;
 use Contena\Core\Framework\Gateway\Context\Command\Registry\ContextGatewayCommandRegistry;
@@ -50,7 +48,7 @@ use Contena\Core\System\Channel\Capability\ChannelTypeCapabilityRegistry;
 use Contena\Core\System\Channel\Context\BaseChannelContextFactory;
 use Contena\Core\System\Channel\Context\CachedBaseChannelContextFactory;
 use Contena\Core\System\Channel\Context\CachedChannelContextFactory;
-use Contena\Core\System\Channel\Context\CartRestorer;
+use Contena\Core\System\Channel\Context\ChannelContextTokenRestorer;
 use Contena\Core\System\Channel\Context\Cleanup\CleanupChannelContextTask;
 use Contena\Core\System\Channel\Context\Cleanup\CleanupChannelContextTaskHandler;
 use Contena\Core\System\Channel\Context\ContextFactory;
@@ -298,12 +296,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChannelContextRestorer::class)
         ->args([
             service(ChannelContextFactory::class),
-            service('order.repository'),
             service(Connection::class),
-            service('event_dispatcher'),
         ]);
 
-    $services->set(CartRestorer::class)
+    $services->set(ChannelContextTokenRestorer::class)
         ->args([
             service(ChannelContextFactory::class),
             service(ChannelContextPersister::class),
@@ -462,13 +458,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeAddressCommandHandler::class)
         ->tag('contena.context.gateway.command');
 
-    $services->set(ChangeCheckoutOptionsCommandHandler::class)
-        ->args([
-            service('payment_method.repository'),
-            service('shipping_method.repository'),
-        ])
-        ->tag('contena.context.gateway.command');
-
     $services->set(ChangeCurrencyCommandHandler::class)
         ->args([
             service('currency.repository'),
@@ -478,13 +467,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ChangeLanguageCommandHandler::class)
         ->args([
             service('language.repository'),
-        ])
-        ->tag('contena.context.gateway.command');
-
-    $services->set(ChangeShippingLocationCommandHandler::class)
-        ->args([
-            service('country.repository'),
-            service('country_state.repository'),
         ])
         ->tag('contena.context.gateway.command');
 

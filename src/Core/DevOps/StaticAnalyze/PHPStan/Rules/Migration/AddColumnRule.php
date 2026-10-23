@@ -14,6 +14,7 @@ use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Type\ObjectType;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Migration\InMigrationClassTrait;
 
 /**
  * @implements Rule<MethodCall>

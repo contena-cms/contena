@@ -59,17 +59,5 @@ class AppFeatureValidatorTest extends TestCase
         return $app;
     }
 
-    private function createManifestWithoutFeaturesRequiringSecret(): ManifestFixture
-    {
-        return ManifestFixture::empty();
-    }
 
-    private function createManifestWithFeaturesRequiringSecret(): ManifestFixture
-    {
-        return ManifestFixture::empty()
-            ->withAdminModule()
-            ->withPaymentMethod()
-            ->withTaxProvider()
-            ->withWebhook();
-    }
 }

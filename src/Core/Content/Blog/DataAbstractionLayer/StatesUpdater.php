@@ -12,6 +12,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\State;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed, as blog states are deprecated.

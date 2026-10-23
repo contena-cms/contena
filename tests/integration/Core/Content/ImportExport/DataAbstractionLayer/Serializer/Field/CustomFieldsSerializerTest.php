@@ -12,6 +12,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -67,10 +69,6 @@ class CustomFieldsSerializerTest extends TestCase
     {
         yield 'expect nothing for non existing value' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKey'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [
@@ -83,10 +81,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect null for null value' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKey'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [
@@ -101,14 +95,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect nothing if the entity has no custom fields' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKeyText'
-                ),
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_NUMBER,
-                    'mappedKeyNumber'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [],
@@ -118,14 +104,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect values for both custom fields' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKeyText'
-                ),
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_NUMBER,
-                    'mappedKeyNumber'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [
@@ -193,10 +171,6 @@ class CustomFieldsSerializerTest extends TestCase
     {
         yield 'expect null for no value' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKey'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [],
@@ -204,10 +178,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect null for empty value' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKey'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [
@@ -217,14 +187,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect null for two empty values' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKeyText'
-                ),
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_NUMBER,
-                    'mappedKeyNumber'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [
@@ -235,14 +197,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect one of two values if one is empty' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKeyText'
-                ),
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_NUMBER,
-                    'mappedKeyNumber'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [
@@ -255,14 +209,6 @@ class CustomFieldsSerializerTest extends TestCase
         ];
         yield 'expect two values if both are defined' => [
             'mappings' => [
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_TEXT,
-                    'mappedKeyText'
-                ),
-                new Mapping(
-                    'translations.DEFAULT.customFields.' . self::CUSTOM_FIELD_NUMBER,
-                    'mappedKeyNumber'
-                ),
             ],
             'field' => new CustomFields('custom_fields', 'customFields'),
             'inputValue' => [

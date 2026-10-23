@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingDefinition;
 use Contena\Core\Content\Blog\Aggregate\BlogCrossSelling\BlogCrossSellingEntity;
 use Contena\Core\Content\Blog\Aggregate\BlogTranslation\BlogTranslationDefinition;
 use Contena\Core\Content\Blog\BlogCollection;
@@ -511,7 +510,6 @@ class StoreApiSeoResolverTest extends TestCase
                 BlogDefinition::class,
                 ChannelBlogDefinition::class,
                 SeoUrlDefinition::class,
-                BlogCrossSellingDefinition::class,
                 BlogTranslationDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),

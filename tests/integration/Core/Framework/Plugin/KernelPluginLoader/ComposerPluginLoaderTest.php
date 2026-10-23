@@ -8,6 +8,7 @@ use Contena\Core\Framework\Adapter\Composer\ComposerInfoProvider;
 use Contena\Core\Framework\Adapter\Composer\ComposerPackage;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\ComposerPluginLoader;
 use SwagTestComposerLoaded\SwagTestComposerLoaded;
+use Contena\Core\Framework\Test\Plugin\PluginIntegrationTestBehaviour;
 
 /**
  * @internal

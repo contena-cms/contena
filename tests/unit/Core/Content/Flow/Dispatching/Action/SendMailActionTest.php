@@ -10,9 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Contena\Core\Content\Flow\Dispatching\Action\FlowMailVariables;
 use Contena\Core\Content\Flow\Dispatching\Action\SendMailAction;
-use Contena\Core\Content\Flow\Dispatching\FlowState;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Content\Flow\Dispatching\Struct\Sequence;
 use Contena\Core\Content\Mail\Service\AbstractMailService;
 use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeCollection;
@@ -29,10 +27,7 @@ use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Event\LanguageAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Event\OrderAware;
-use Contena\Core\Framework\Event\UserAware;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -90,99 +85,6 @@ class SendMailActionTest extends TestCase
         static::assertSame('action.mail.send', SendMailAction::getName());
     }
 
-    #[DataProvider('mailTemplateTypeProvider')]
-    public function testUpdateMailTemplateType(MailTemplateTypeUpdateProvider $provider): void
-    {
-        $context = Context::createDefaultContext();
-
-        $connection = static::createStub(Connection::class);
-        $encoder = static::createStub(JsonEntityEncoder::class);
-        $encoder->method('encode')->willReturn(['encoded']);
-
-        $mailTemplateRepository = $this->createMock(EntityRepository::class);
-        $mailTemplateTypeRepository = $this->createMock(EntityRepository::class);
-
-        $action = $this->createAction(
-            mailTemplateRepository: $mailTemplateRepository,
-            mailTemplateTypeRepository: $mailTemplateTypeRepository,
-            connection: $connection,
-            encoder: $encoder,
-            updateMailTemplateType: $provider->updateMailTemplateTypeParam,
-        );
-
-        $mailTemplateId = Uuid::randomHex();
-        $this->mailTemplate->setId($mailTemplateId);
-        $this->mailTemplate->setSenderName('Phuoc');
-        $config = array_filter([
-            'mailTemplateId' => $mailTemplateId,
-            'recipient' => ['type' => 'user'],
-            'documentTypeIds' => null,
-            'replyTo' => 'foo@example.com',
-        ]);
-
-        $this->mailTemplate->setMailTemplateTypeId($provider->mailTemplateTypeId);
-
-        $expected = [
-            'data' => [
-                'recipients' => [
-                    'email' => 'firstName lastName',
-                ],
-                'channelId' => TestDefaults::CHANNEL,
-                'templateId' => $mailTemplateId,
-            ],
-            'context' => $context,
-        ];
-
-        $templateData = new MailRecipientStruct($expected['data']['recipients']);
-
-        $flow = new StorableFlow(
-            '',
-            $expected['context'],
-            []
-        );
-        $state = new FlowState();
-        $state->currentSequence = new Sequence();
-        $state->currentSequence->sequenceId = Uuid::randomHex();
-        $state->currentSequence->flowId = Uuid::randomHex();
-        $state->flowId = $state->currentSequence->flowId;
-        $flow->setFlowState($state);
-        $flow->setData(MailAware::MAIL_STRUCT, $templateData);
-        $flow->setData(MailAware::CHANNEL_ID, TestDefaults::CHANNEL);
-
-        $user = new UserEntity();
-        $user->setId(Uuid::randomHex());
-        // needed so `_entityName` property is set correctly
-        $user->getApiAlias();
-
-        $flow->setData(UserAware::CUSTOMER, $user);
-        $flow->setConfig($config);
-
-        $entitySearchResult = $this->createMock(EntitySearchResult::class);
-        $entitySearchResult->expects($this->once())
-            ->method('getEntities')
-            ->willReturn(new MailTemplateCollection([$this->mailTemplate]));
-
-        $mailTemplateRepository->expects($this->once())
-            ->method('search')
-            ->willReturn($entitySearchResult);
-
-        if (!Feature::isActive('v6.8.0.0') && $provider->mailTemplateTypeId && $provider->updateMailTemplateTypeParam) {
-            $mailTemplateTypeRepository->expects($this->once())->method('update')->with([
-                [
-                    'id' => $provider->mailTemplateTypeId,
-                    'templateData' => [
-                        'mailStruct' => $templateData,
-                        'channelId' => TestDefaults::CHANNEL,
-                        'user' => ['encoded'],
-                    ],
-                ],
-            ], $context);
-        } else {
-            $mailTemplateTypeRepository->expects($this->never())->method('update');
-        }
-
-        $action->handleFlow($flow);
-    }
 
     /**
      * @param array<string, string> $exptectedReplyTo

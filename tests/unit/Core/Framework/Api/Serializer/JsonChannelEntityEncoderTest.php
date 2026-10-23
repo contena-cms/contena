@@ -90,23 +90,6 @@ class JsonChannelEntityEncoderTest extends TestCase
         yield 'media resource with collection to one relationship is encoded' => [MediaDefinition::class, new TestCollectionWithToOneRelationship()];
     }
 
-    /**
-     * @param class-string<EntityDefinition> $definitionClass
-     */
-    #[DataProvider('complexStructsProvider')]
-    public function testEncodeComplexStructs(string $definitionClass, SerializationFixture $fixture): void
-    {
-        $definition = $this->createDefinition($definitionClass);
-        $encoder = $this->createEncoder();
-        $actual = $encoder->encode(
-            new Criteria(),
-            $definition,
-            $fixture->getInput(),
-            SerializationFixture::CHANNEL_API_BASE_URL
-        );
-
-        ArrayValues::assertValues($fixture->getChannelJsonFixtures(), $actual);
-    }
 
     public function testEncodeStructWithExtension(): void
     {

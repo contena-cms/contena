@@ -38,7 +38,6 @@ class InstallAppCommandTest extends TestCase
      */
     private EntityRepository $appRepository;
 
-    private AppFixture $appFixture;
 
     private Context $context;
 

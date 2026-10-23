@@ -20,22 +20,22 @@ class TestMainResourceShouldNotBeInIncluded extends SerializationFixture
 
     public function getInput(): EntityCollection|Entity
     {
-        $admin_user = new AdminUserEntity();
-        $admin_user->setId(self::USER_ID);
-        $admin_user->setName('Manufacturer');
-        $admin_user->setLastName('');
-        $admin_user->setPassword('password');
-        $admin_user->setUsername('admin_user1');
-        $admin_user->setActive(true);
-        $admin_user->setAdmin(true);
-        $admin_user->setEmail('admin_user1@shop.de');
-        $admin_user->setCreatedAt(new \DateTime('2018-01-15T08:01:16.000+00:00'));
-        $admin_user->internalSetEntityData('admin_user', new FieldVisibility([]));
-        $admin_user->setLocaleId(self::LOCALE_ID);
+        $adminUser = new AdminUserEntity();
+        $adminUser->setId(self::USER_ID);
+        $adminUser->setName('Manufacturer');
+        $adminUser->setLastName('');
+        $adminUser->setPassword('password');
+        $adminUser->setUsername('admin_user1');
+        $adminUser->setActive(true);
+        $adminUser->setAdmin(true);
+        $adminUser->setEmail('admin_user1@shop.de');
+        $adminUser->setCreatedAt(new \DateTime('2018-01-15T08:01:16.000+00:00'));
+        $adminUser->internalSetEntityData('admin_user', new FieldVisibility([]));
+        $adminUser->setLocaleId(self::LOCALE_ID);
 
         $media = new MediaEntity();
         $media->setId(self::MEDIA_ID);
-        $media->setUser(clone $admin_user);
+        $media->setUser(clone $adminUser);
         $media->setUserId(self::USER_ID);
         $media->setMimeType('image/jpg');
         $media->setFileExtension('jpg');
@@ -46,9 +46,9 @@ class TestMainResourceShouldNotBeInIncluded extends SerializationFixture
         $media->internalSetEntityData('media', new FieldVisibility([]));
 
         $mediaCollection = new MediaCollection([$media]);
-        $admin_user->setMedia($mediaCollection);
+        $adminUser->setMedia($mediaCollection);
 
-        return $admin_user;
+        return $adminUser;
     }
 
     /**

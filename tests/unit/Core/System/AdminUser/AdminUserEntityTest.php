@@ -35,7 +35,7 @@ class AdminUserEntityTest extends TestCase
 
     public function testAccessorsRoundTrip(): void
     {
-        $admin_user = new AdminUserEntity();
+        $adminUser = new AdminUserEntity();
 
         $historyEntries = new StateMachineHistoryCollection();
         $logEntries = new ImportExportLogCollection();
@@ -51,55 +51,55 @@ class AdminUserEntityTest extends TestCase
         $createdUsers = new UserCollection();
         $updatedUsers = new UserCollection();
 
-        $admin_user->setStateMachineHistoryEntries($historyEntries);
-        $admin_user->setImportExportLogEntries($logEntries);
-        $admin_user->setLocaleId('locale-id');
-        $admin_user->setAvatarId('avatar-id');
-        $admin_user->setUsername('admin');
-        $admin_user->setName('Ada');
-        $admin_user->setLastName('Lovelace');
-        $admin_user->setEmail('ada@example.com');
-        $admin_user->setActive(true);
-        $admin_user->setLocale($locale);
-        $admin_user->setAvatarMedia($avatar);
-        $admin_user->setMedia($media);
-        $admin_user->setAccessKeys($accessKeys);
-        $admin_user->setConfigs($configs);
-        $admin_user->setRecoveryUser($recovery);
-        $admin_user->setAdmin(true);
-        $admin_user->setMcpAllowlist(['tool-a' => true]);
-        $admin_user->setAclRoles($aclRoles);
-        $admin_user->setTitle('Dr.');
-        $admin_user->setCreatedOrders($createdOrders);
-        $admin_user->setUpdatedOrders($updatedOrders);
-        $admin_user->setCreatedUsers($createdUsers);
-        $admin_user->setUpdatedUsers($updatedUsers);
-        $admin_user->setTimeZone('Europe/Berlin');
+        $adminUser->setStateMachineHistoryEntries($historyEntries);
+        $adminUser->setImportExportLogEntries($logEntries);
+        $adminUser->setLocaleId('locale-id');
+        $adminUser->setAvatarId('avatar-id');
+        $adminUser->setUsername('admin');
+        $adminUser->setName('Ada');
+        $adminUser->setLastName('Lovelace');
+        $adminUser->setEmail('ada@example.com');
+        $adminUser->setActive(true);
+        $adminUser->setLocale($locale);
+        $adminUser->setAvatarMedia($avatar);
+        $adminUser->setMedia($media);
+        $adminUser->setAccessKeys($accessKeys);
+        $adminUser->setConfigs($configs);
+        $adminUser->setRecoveryUser($recovery);
+        $adminUser->setAdmin(true);
+        $adminUser->setMcpAllowlist(['tool-a' => true]);
+        $adminUser->setAclRoles($aclRoles);
+        $adminUser->setTitle('Dr.');
+        $adminUser->setCreatedOrders($createdOrders);
+        $adminUser->setUpdatedOrders($updatedOrders);
+        $adminUser->setCreatedUsers($createdUsers);
+        $adminUser->setUpdatedUsers($updatedUsers);
+        $adminUser->setTimeZone('Europe/Berlin');
 
-        static::assertSame($historyEntries, $admin_user->getStateMachineHistoryEntries());
-        static::assertSame($logEntries, $admin_user->getImportExportLogEntries());
-        static::assertSame('locale-id', $admin_user->getLocaleId());
-        static::assertSame('avatar-id', $admin_user->getAvatarId());
-        static::assertSame('admin', $admin_user->getUsername());
-        static::assertSame('Ada', $admin_user->getName());
-        static::assertSame('Lovelace', $admin_user->getLastName());
-        static::assertSame('ada@example.com', $admin_user->getEmail());
-        static::assertTrue($admin_user->getActive());
-        static::assertSame($locale, $admin_user->getLocale());
-        static::assertSame($avatar, $admin_user->getAvatarMedia());
-        static::assertSame($media, $admin_user->getMedia());
-        static::assertSame($accessKeys, $admin_user->getAccessKeys());
-        static::assertSame($configs, $admin_user->getConfigs());
-        static::assertSame($recovery, $admin_user->getRecoveryUser());
-        static::assertTrue($admin_user->isAdmin());
-        static::assertSame(['tool-a' => true], $admin_user->getMcpAllowlist());
-        static::assertSame($aclRoles, $admin_user->getAclRoles());
-        static::assertSame('Dr.', $admin_user->getTitle());
-        static::assertSame($createdOrders, $admin_user->getCreatedOrders());
-        static::assertSame($updatedOrders, $admin_user->getUpdatedOrders());
-        static::assertSame($createdUsers, $admin_user->getCreatedUsers());
-        static::assertSame($updatedUsers, $admin_user->getUpdatedUsers());
-        static::assertSame('Europe/Berlin', $admin_user->getTimeZone());
+        static::assertSame($historyEntries, $adminUser->getStateMachineHistoryEntries());
+        static::assertSame($logEntries, $adminUser->getImportExportLogEntries());
+        static::assertSame('locale-id', $adminUser->getLocaleId());
+        static::assertSame('avatar-id', $adminUser->getAvatarId());
+        static::assertSame('admin', $adminUser->getUsername());
+        static::assertSame('Ada', $adminUser->getName());
+        static::assertSame('Lovelace', $adminUser->getLastName());
+        static::assertSame('ada@example.com', $adminUser->getEmail());
+        static::assertTrue($adminUser->getActive());
+        static::assertSame($locale, $adminUser->getLocale());
+        static::assertSame($avatar, $adminUser->getAvatarMedia());
+        static::assertSame($media, $adminUser->getMedia());
+        static::assertSame($accessKeys, $adminUser->getAccessKeys());
+        static::assertSame($configs, $adminUser->getConfigs());
+        static::assertSame($recovery, $adminUser->getRecoveryUser());
+        static::assertTrue($adminUser->isAdmin());
+        static::assertSame(['tool-a' => true], $adminUser->getMcpAllowlist());
+        static::assertSame($aclRoles, $adminUser->getAclRoles());
+        static::assertSame('Dr.', $adminUser->getTitle());
+        static::assertSame($createdOrders, $adminUser->getCreatedOrders());
+        static::assertSame($updatedOrders, $adminUser->getUpdatedOrders());
+        static::assertSame($createdUsers, $adminUser->getCreatedUsers());
+        static::assertSame($updatedUsers, $adminUser->getUpdatedUsers());
+        static::assertSame('Europe/Berlin', $adminUser->getTimeZone());
     }
 
     /**
@@ -110,10 +110,10 @@ class AdminUserEntityTest extends TestCase
     #[DataProvider('internalPropertyProvider')]
     public function testInternalPropertyIsReadableOutsideTwig(\Closure $write, \Closure $read, mixed $expected, string $property): void
     {
-        $admin_user = $this->admin_userWithInternalProperties();
-        $write($admin_user);
+        $adminUser = $this->admin_userWithInternalProperties();
+        $write($adminUser);
 
-        static::assertSame($expected, $read($admin_user));
+        static::assertSame($expected, $read($adminUser));
     }
 
     /**
@@ -124,13 +124,13 @@ class AdminUserEntityTest extends TestCase
     #[DataProvider('internalPropertyProvider')]
     public function testInternalPropertyIsGuardedInsideTwig(\Closure $write, \Closure $read, mixed $expected, string $property): void
     {
-        $admin_user = $this->admin_userWithInternalProperties();
-        $write($admin_user);
+        $adminUser = $this->admin_userWithInternalProperties();
+        $write($adminUser);
 
         FieldVisibility::$isInTwigRenderingContext = true;
 
         $this->expectExceptionObject(DataAbstractionLayerException::internalFieldAccessNotAllowed($property, AdminUserEntity::class));
-        $read($admin_user);
+        $read($adminUser);
     }
 
     /**
@@ -139,15 +139,15 @@ class AdminUserEntityTest extends TestCase
     public static function internalPropertyProvider(): \Generator
     {
         yield 'password' => [
-            static fn (AdminUserEntity $admin_user) => $admin_user->setPassword('secret'),
-            static fn (AdminUserEntity $admin_user) => $admin_user->getPassword(),
+            static fn (AdminUserEntity $adminUser) => $adminUser->setPassword('secret'),
+            static fn (AdminUserEntity $adminUser) => $adminUser->getPassword(),
             'secret',
             'password',
         ];
 
         yield 'storeToken' => [
-            static fn (AdminUserEntity $admin_user) => $admin_user->setStoreToken('token'),
-            static fn (AdminUserEntity $admin_user) => $admin_user->getStoreToken(),
+            static fn (AdminUserEntity $adminUser) => $adminUser->setStoreToken('token'),
+            static fn (AdminUserEntity $adminUser) => $adminUser->getStoreToken(),
             'token',
             'storeToken',
         ];
@@ -155,9 +155,9 @@ class AdminUserEntityTest extends TestCase
 
     private function admin_userWithInternalProperties(): AdminUserEntity
     {
-        $admin_user = new AdminUserEntity();
-        $admin_user->internalSetEntityData(AdminUserDefinition::ENTITY_NAME, new FieldVisibility(['password', 'storeToken']));
+        $adminUser = new AdminUserEntity();
+        $adminUser->internalSetEntityData(AdminUserDefinition::ENTITY_NAME, new FieldVisibility(['password', 'storeToken']));
 
-        return $admin_user;
+        return $adminUser;
     }
 }

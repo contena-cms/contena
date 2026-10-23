@@ -70,9 +70,9 @@ class JsonApiEncodingResultTest extends TestCase
         static::assertFalse($result->containsInIncluded('admin_user-1', 'admin_user'));
 
         $data = $result->getData();
-        $admin_user = array_values($data)[0];
+        $adminUser = array_values($data)[0];
 
         // The media relationship should be preserved (not overwritten by empty array)
-        static::assertSame([['type' => 'media', 'id' => 'media-1']], $admin_user->getRelationships()['media']['data']);
+        static::assertSame([['type' => 'media', 'id' => 'media-1']], $adminUser->getRelationships()['media']['data']);
     }
 }

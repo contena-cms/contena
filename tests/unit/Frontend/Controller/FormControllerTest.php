@@ -144,29 +144,5 @@ class FormControllerTest extends TestCase
         );
     }
 
-    private function assertTranslatedViolation(FormControllerStub $controller): void
-    {
-        static::assertSame(['translated:error.' . self::VIOLATION_CODE], $controller->renderViewParameters['list']);
-    }
 
-    private function createController(
-        ?AbstractContactFormRoute $contactFormRoute = null,
-        ?AbstractNewsletterSubscribeRoute $subscribeRoute = null,
-        ?AbstractNewsletterUnsubscribeRoute $unsubscribeRoute = null,
-        ?AbstractRevocationRequestRoute $abstractRevocationRequestRoute = null,
-        ?ConstraintViolationTranslator $constraintViolationTranslator = null,
-    ): FormControllerStub {
-        $translator = static::createStub(TranslatorInterface::class);
-        $translator->method('trans')->willReturnCallback(
-            static fn (string $id): string => str_starts_with($id, 'error.') ? 'translated:' . $id : $id
-        );
-
-        return new FormControllerStub(
-            $contactFormRoute ?? static::createStub(AbstractContactFormRoute::class),
-            $subscribeRoute ?? static::createStub(AbstractNewsletterSubscribeRoute::class),
-            $unsubscribeRoute ?? static::createStub(AbstractNewsletterUnsubscribeRoute::class),
-            $abstractRevocationRequestRoute ?? static::createStub(AbstractRevocationRequestRoute::class),
-            $constraintViolationTranslator ?? new ConstraintViolationTranslator($translator),
-        );
-    }
 }

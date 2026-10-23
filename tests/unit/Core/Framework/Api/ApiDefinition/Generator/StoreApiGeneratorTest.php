@@ -95,10 +95,6 @@ class StoreApiGeneratorTest extends TestCase
 
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                SimpleDefinition::class,
-                DefinitionWithAssociations::class,
-                DefinitionWithJsonOverride::class,
-                SEOUrlDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -222,9 +218,6 @@ class StoreApiGeneratorTest extends TestCase
         );
         $definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                DefinitionWithAssociations::class,
-                SimpleDefinition::class,
-                SEOUrlDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

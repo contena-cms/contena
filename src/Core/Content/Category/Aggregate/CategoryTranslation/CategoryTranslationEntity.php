@@ -5,6 +5,7 @@ namespace Contena\Core\Content\Category\Aggregate\CategoryTranslation;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 
 /**
  * @codeCoverageIgnore

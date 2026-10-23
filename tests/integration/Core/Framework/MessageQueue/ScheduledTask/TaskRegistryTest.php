@@ -14,6 +14,7 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\FooMessage;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -35,7 +36,6 @@ class TaskRegistryTest extends TestCase
 
         $this->registry = new TaskRegistry(
             [
-                new TestTask(),
             ],
             $this->scheduledTaskRepo,
             new ParameterBag(),

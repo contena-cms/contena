@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Event\ControllerEvent;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
+use Contena\Core\Framework\Routing\RouteScopeCheckTrait;
 
 /**
  * Runs the session held context token through the request lifecycle for the frontend (owner) and

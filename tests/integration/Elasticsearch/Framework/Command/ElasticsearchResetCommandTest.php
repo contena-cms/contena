@@ -9,6 +9,9 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchResetCommand;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
+use Contena\Elasticsearch\Test\AdminElasticsearchTestBehaviour;
 
 /**
  * @internal

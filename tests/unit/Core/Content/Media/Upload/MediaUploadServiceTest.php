@@ -323,14 +323,14 @@ class MediaUploadServiceTest extends TestCase
     public function testLinkURLWithAdminContext(): void
     {
         $url = 'https://example.com/image.jpg';
-        $admin_userId = Uuid::randomHex();
+        $adminUserId = Uuid::randomHex();
         $params = new MediaUploadParameters(
             fileName: 'test.jpg',
             mimeType: 'image/jpeg'
         );
 
         $adminSource = static::createStub(AdminApiSource::class);
-        $adminSource->method('getUserId')->willReturn($admin_userId);
+        $adminSource->method('getUserId')->willReturn($adminUserId);
 
         $adminContext = Context::createDefaultContext($adminSource);
 
@@ -341,7 +341,7 @@ class MediaUploadServiceTest extends TestCase
         $service->linkURL($url, $adminContext, $params);
 
         static::assertCount(1, $this->mediaRepository->creates);
-        static::assertSame($admin_userId, $this->mediaRepository->creates[0][0]['admin_userId']);
+        static::assertSame($adminUserId, $this->mediaRepository->creates[0][0]['admin_userId']);
     }
 
     public function testUploadWithDeduplication(): void

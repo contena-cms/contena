@@ -19,6 +19,7 @@ use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Webhook\Hookable\CoreHookableEventDescriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventCollector;
 use Contena\Core\System\User\UserDefinition;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

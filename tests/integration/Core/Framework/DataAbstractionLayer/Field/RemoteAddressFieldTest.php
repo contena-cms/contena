@@ -23,6 +23,7 @@ use Contena\Core\System\User\Channel\AccountService;
 use Contena\Core\System\User\UserEntity;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\IpUtils;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

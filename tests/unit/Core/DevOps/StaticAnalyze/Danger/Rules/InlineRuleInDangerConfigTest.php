@@ -21,7 +21,6 @@ class InlineRuleInDangerConfigTest extends TestCase
     public function testInlineRuleDetection(string $fileName, string $patch, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, File::STATUS_MODIFIED, '', $patch),
         ])));
 
         (new InlineRuleInDangerConfig())($context);

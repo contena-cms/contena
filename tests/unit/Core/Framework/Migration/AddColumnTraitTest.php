@@ -12,6 +12,7 @@ use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Migration\AddColumnTrait;
 
 /**
  * @internal

@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Content\Mail\Service\Mail;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\Content\Mail\Service\MailAttachmentsConfig;

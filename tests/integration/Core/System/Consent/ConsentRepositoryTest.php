@@ -10,6 +10,7 @@ use Contena\Core\System\Consent\ConsentStatus;
 use Contena\Core\System\Consent\Definition\BackendData;
 use Contena\Core\System\Consent\Definition\BlogAnalytics;
 use Contena\Core\System\Consent\DTO\ConsentStateRecord;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -29,15 +30,15 @@ class ConsentRepositoryTest extends TestCase
     {
         $blogAnalytics = new BlogAnalytics();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($blogAnalytics, $admin_userId, ConsentStatus::ACCEPTED, $admin_userId, '2026-02-01');
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($blogAnalytics, $adminUserId, ConsentStatus::ACCEPTED, $adminUserId, '2026-02-01');
 
         $states = $this->repository->fetchAllConsentStates();
 
         static::assertCount(1, $states);
 
         static::assertSame('test-admin_user', $states[0]->actor);
-        static::assertSame($admin_userId, $states[0]->identifier);
+        static::assertSame($adminUserId, $states[0]->identifier);
         static::assertSame(ConsentStatus::ACCEPTED, $states[0]->status);
         static::assertSame($blogAnalytics->getName(), $states[0]->name);
         static::assertSame('2026-02-01', $states[0]->revision);
@@ -47,8 +48,8 @@ class ConsentRepositoryTest extends TestCase
     {
         $backendData = new BackendData();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($backendData, 'system', ConsentStatus::ACCEPTED, $admin_userId);
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($backendData, 'system', ConsentStatus::ACCEPTED, $adminUserId);
 
         $states = $this->repository->fetchAllConsentStates();
 
@@ -64,26 +65,26 @@ class ConsentRepositoryTest extends TestCase
     {
         $tracking = new BlogAnalytics();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::ACCEPTED, $admin_userId, '1.0.0');
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::ACCEPTED, $adminUserId, '1.0.0');
 
         $states = $this->repository->fetchAllConsentStates();
 
         static::assertCount(1, $states);
 
         static::assertSame('test-admin_user', $states[0]->actor);
-        static::assertSame($admin_userId, $states[0]->identifier);
+        static::assertSame($adminUserId, $states[0]->identifier);
         static::assertSame(ConsentStatus::ACCEPTED, $states[0]->status);
         static::assertSame('1.0.0', $states[0]->revision);
 
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::REVOKED, $admin_userId);
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::REVOKED, $adminUserId);
 
         $states = $this->repository->fetchAllConsentStates();
 
         static::assertCount(1, $states);
 
         static::assertSame('test-admin_user', $states[0]->actor);
-        static::assertSame($admin_userId, $states[0]->identifier);
+        static::assertSame($adminUserId, $states[0]->identifier);
         static::assertSame(ConsentStatus::REVOKED, $states[0]->status);
         static::assertNull($states[0]->revision);
     }
@@ -92,8 +93,8 @@ class ConsentRepositoryTest extends TestCase
     {
         $tracking = new BlogAnalytics();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::REVOKED, $admin_userId, '2.0.0');
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::REVOKED, $adminUserId, '2.0.0');
 
         $states = $this->repository->fetchAllConsentStates();
 
@@ -106,15 +107,15 @@ class ConsentRepositoryTest extends TestCase
     {
         $tracking = new BlogAnalytics();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::REVOKED, $admin_userId);
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::REVOKED, $adminUserId);
 
         $states = $this->repository->fetchAllConsentStates();
 
         static::assertCount(1, $states);
 
         static::assertSame('test-admin_user', $states[0]->actor);
-        static::assertSame($admin_userId, $states[0]->identifier);
+        static::assertSame($adminUserId, $states[0]->identifier);
         static::assertSame(ConsentStatus::DECLINED, $states[0]->status);
     }
 
@@ -122,16 +123,16 @@ class ConsentRepositoryTest extends TestCase
     {
         $tracking = new BlogAnalytics();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::REVOKED, $admin_userId);
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::REVOKED, $admin_userId);
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::REVOKED, $adminUserId);
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::REVOKED, $adminUserId);
 
         $states = $this->repository->fetchAllConsentStates();
 
         static::assertCount(1, $states);
 
         static::assertSame('test-admin_user', $states[0]->actor);
-        static::assertSame($admin_userId, $states[0]->identifier);
+        static::assertSame($adminUserId, $states[0]->identifier);
         static::assertSame(ConsentStatus::DECLINED, $states[0]->status);
     }
 
@@ -139,16 +140,16 @@ class ConsentRepositoryTest extends TestCase
     {
         $tracking = new BlogAnalytics();
 
-        $admin_userId = $this->createUser('test-admin_user');
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::ACCEPTED, $admin_userId);
-        $this->repository->updateConsentState($tracking, $admin_userId, ConsentStatus::REVOKED, $admin_userId);
+        $adminUserId = $this->createUser('test-admin_user');
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::ACCEPTED, $adminUserId);
+        $this->repository->updateConsentState($tracking, $adminUserId, ConsentStatus::REVOKED, $adminUserId);
 
         $states = $this->repository->fetchAllConsentStates();
 
         static::assertCount(1, $states);
 
         static::assertSame('test-admin_user', $states[0]->actor);
-        static::assertSame($admin_userId, $states[0]->identifier);
+        static::assertSame($adminUserId, $states[0]->identifier);
         static::assertSame(ConsentStatus::REVOKED, $states[0]->status);
     }
 
@@ -157,11 +158,11 @@ class ConsentRepositoryTest extends TestCase
         $blogAnalytics = new BlogAnalytics();
         $backendData = new BackendData();
 
-        $admin_user1 = $this->createUser('first-admin_user');
-        $this->repository->updateConsentState($backendData, 'system', ConsentStatus::ACCEPTED, $admin_user1);
+        $adminUser1 = $this->createUser('first-admin_user');
+        $this->repository->updateConsentState($backendData, 'system', ConsentStatus::ACCEPTED, $adminUser1);
 
-        $admin_user2 = $this->createUser('second-admin_user');
-        $this->repository->updateConsentState($blogAnalytics, $admin_user2, ConsentStatus::REVOKED, $admin_user2);
+        $adminUser2 = $this->createUser('second-admin_user');
+        $this->repository->updateConsentState($blogAnalytics, $adminUser2, ConsentStatus::REVOKED, $adminUser2);
 
         $result = $this->repository->fetchAllConsentStates();
 
@@ -174,19 +175,19 @@ class ConsentRepositoryTest extends TestCase
         static::assertSame(ConsentStatus::ACCEPTED, $result[0]->status);
 
         static::assertSame($blogAnalytics->getName(), $result[1]->name);
-        static::assertSame($admin_user2, $result[1]->identifier);
+        static::assertSame($adminUser2, $result[1]->identifier);
         static::assertSame('second-admin_user', $result[1]->actor);
         static::assertSame(ConsentStatus::DECLINED, $result[1]->status);
     }
 
     private function createUser(string $name): string
     {
-        $admin_userId = Uuid::randomHex();
-        $admin_userRepo = $this->getContainer()->get('admin_user.repository');
+        $adminUserId = Uuid::randomHex();
+        $adminUserRepo = $this->getContainer()->get('admin_user.repository');
 
-        $admin_userRepo->create([
+        $adminUserRepo->create([
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'username' => $name,
                 'name' => 'Test',
                 'lastName' => 'AdminUser',
@@ -202,6 +203,6 @@ class ConsentRepositoryTest extends TestCase
             ],
         ], Context::createDefaultContext());
 
-        return $admin_userId;
+        return $adminUserId;
     }
 }

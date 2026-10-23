@@ -20,6 +20,13 @@ use Contena\Tests\Unit\Core\DevOps\Test\Command\Fixture\Migration1763996000Dummy
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\Filesystem\Filesystem;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\DevOps\DevOps;
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 
 /**
  * @internal
@@ -150,9 +157,6 @@ class MakeCoverageTestCommandTest extends TestCase
 
 namespace Contena\Tests\Unit\Core\DevOps;
 
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Contena\Core\DevOps\DevOps;
 
 /**
  * @internal
@@ -175,10 +179,6 @@ EOF;
 
 namespace Contena\Tests\Migration\Tests\Unit\Core\DevOps\Test\Command\Fixture;
 
-use Doctrine\DBAL\Connection;
-use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 
 /**
  * @internal

@@ -7,13 +7,12 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
-use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
 use Contena\Core\Maintenance\AdminUser\Service\AdminUserProvisioner;
 use Contena\Core\System\AdminUser\Aggregate\AdminUserRecovery\AdminUserRecoveryEntity;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryRequestEvent;
 use Contena\Core\System\AdminUser\Recovery\AdminUserRecoveryService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -63,9 +62,6 @@ class AdminUserRecoveryControllerTest extends TestCase
         $logger = static::getContainer()->get('monolog.logger.business_events');
         $handlers = $logger->getHandlers();
         $logger->setHandlers([
-            new ExcludeFlowEventHandler(static::getContainer()->get(DoctrineSQLHandler::class), [
-                AdminUserRecoveryRequestEvent::EVENT_NAME,
-            ]),
         ]);
 
         $dispatchedEvent = null;
@@ -90,12 +86,12 @@ class AdminUserRecoveryControllerTest extends TestCase
         $criteria->setLimit(1);
         $criteria->addFilter(new EqualsFilter('admin_user.email', self::VALID_EMAIL));
 
-        $admin_userRecovery = static::getContainer()->get('admin_user_recovery.repository')->search(
+        $adminUserRecovery = static::getContainer()->get('admin_user_recovery.repository')->search(
             $criteria,
             Context::createDefaultContext()
         )->getEntities()->first();
 
-        static::assertNotNull($admin_userRecovery);
+        static::assertNotNull($adminUserRecovery);
         static::assertNotNull($dispatchedEvent);
 
         // excluded events and its mail events should not be logged

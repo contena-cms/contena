@@ -10,6 +10,10 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\MissingPackageAttributeInTests;
 use Contena\Core\Framework\Log\Package;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Contena\Core\Checkout\Fixture\FixtureException;
+use PHPUnit\Framework\Attributes\CoversClass;
+use Contena\Core\Content\Fixture\ScopedEntity;
 
 /**
  * @internal
@@ -68,8 +72,6 @@ class MissingPackageAttributeInTestsTest extends TestCase
     public function testSuggestsPackageOfCoveredClass(): void
     {
         $content = <<<'PHP'
-            use PHPUnit\Framework\Attributes\CoversClass;
-            use Contena\Core\Checkout\Fixture\FixtureException;
 
             #[CoversClass(FixtureException::class)]
             class FixtureExceptionTest extends TestCase
@@ -103,8 +105,6 @@ class MissingPackageAttributeInTestsTest extends TestCase
     public function testSuggestsScopedPackageKey(): void
     {
         $content = <<<'PHP'
-            use PHPUnit\Framework\Attributes\CoversClass;
-            use Contena\Core\Content\Fixture\ScopedEntity;
 
             #[CoversClass(ScopedEntity::class)]
             class ScopedEntityTest extends TestCase

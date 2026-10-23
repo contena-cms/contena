@@ -20,6 +20,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\AdminUser\AdminUserCollection;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -31,7 +32,7 @@ class StoreSessionExpiredMiddlewareTest extends TestCase
     /**
      * @var EntityRepository<AdminUserCollection>
      */
-    private EntityRepository $admin_userRepository;
+    private EntityRepository $adminUserRepository;
 
     protected function setUp(): void
     {
@@ -123,11 +124,11 @@ class StoreSessionExpiredMiddlewareTest extends TestCase
         }
     }
 
-    private function createAdminUser(string $admin_userId, string $storeToken): void
+    private function createAdminUser(string $adminUserId, string $storeToken): void
     {
         $data = [
             [
-                'id' => $admin_userId,
+                'id' => $adminUserId,
                 'localeId' => $this->getLocaleIdOfSystemLanguage(),
                 'username' => Uuid::randomHex() . 'foobar',
                 'password' => 'asdasdasdasd',

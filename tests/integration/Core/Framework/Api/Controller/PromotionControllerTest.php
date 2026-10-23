@@ -6,14 +6,12 @@ namespace Contena\Tests\Integration\Core\Framework\Api\Controller;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountEntity;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
-use Contena\Core\Checkout\Promotion\PromotionEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -262,16 +260,6 @@ class PromotionControllerTest extends TestCase
         static::assertNull($promotions);
     }
 
-    private function getPromotionFromDB(string $id): ?PromotionEntity
-    {
-        $criteria = new Criteria([$id]);
-        $criteria->addAssociation('discounts');
-
-        /** @var PromotionEntity|null $promotion */
-        $promotion = $this->promotionRepository->search($criteria, $this->context)->getEntities()->get($id);
-
-        return $promotion;
-    }
 
     private function insertPromotionInDB(string $id, string $discountId): void
     {

@@ -49,6 +49,9 @@ use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Contena\Core\Framework\Test\Migration\MigrationTestBehaviour;
+use Contena\Core\Framework\Test\Plugin\PluginTestsHelper;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

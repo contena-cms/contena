@@ -10,6 +10,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuil
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTermInterpreter;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

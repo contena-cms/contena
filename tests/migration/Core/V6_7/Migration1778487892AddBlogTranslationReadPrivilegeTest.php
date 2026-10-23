@@ -20,7 +20,6 @@ class Migration1778487892AddBlogTranslationReadPrivilegeTest extends TestCase
 
     private Connection $connection;
 
-    private Migration1778487892AddBlogTranslationReadPrivilege $migration;
 
     protected function setUp(): void
     {

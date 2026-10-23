@@ -11,6 +11,7 @@ use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Feature\Triggerer;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

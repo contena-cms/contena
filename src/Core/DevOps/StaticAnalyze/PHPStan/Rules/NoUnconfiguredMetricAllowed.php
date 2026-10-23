@@ -15,6 +15,7 @@ use PHPStan\Rules\RuleErrorBuilder;
 use PHPStan\Symfony\ParameterMap;
 use Contena\Core\Framework\Telemetry\Instrumentation\DurationMetric;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\ConfiguredMetric;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\InTestClassTrait;
 
 /**
  * @implements Rule<New_>

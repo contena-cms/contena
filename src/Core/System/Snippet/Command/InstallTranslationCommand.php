@@ -204,10 +204,10 @@ class InstallTranslationCommand extends Command
         $question->setErrorMessage('Locale "%s" is invalid.');
 
         $locales = array_keys($choices);
-        $question->setAutocompleterCallback(static function (string $admin_userInput) use ($locales): array {
-            $trailingComma = strrpos($admin_userInput, ',');
-            $prefix = $trailingComma === false ? '' : substr($admin_userInput, 0, $trailingComma + 1);
-            $current = ltrim($trailingComma === false ? $admin_userInput : substr($admin_userInput, $trailingComma + 1));
+        $question->setAutocompleterCallback(static function (string $adminUserInput) use ($locales): array {
+            $trailingComma = strrpos($adminUserInput, ',');
+            $prefix = $trailingComma === false ? '' : substr($adminUserInput, 0, $trailingComma + 1);
+            $current = ltrim($trailingComma === false ? $adminUserInput : substr($adminUserInput, $trailingComma + 1));
 
             $suggestions = [];
             foreach ($locales as $locale) {

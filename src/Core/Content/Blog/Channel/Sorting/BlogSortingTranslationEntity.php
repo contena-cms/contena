@@ -3,6 +3,7 @@
 namespace Contena\Core\Content\Blog\Channel\Sorting;
 
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @codeCoverageIgnore

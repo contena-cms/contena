@@ -9,10 +9,12 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Deprecation\BCChange\ExceptionChange;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Util\Database\TableHelper;
+use Contena\Core\Framework\Migration\AddColumnTrait;
 
 abstract class MigrationStep
 {
     use AddColumnTrait;
+use Doctrine\DBAL\Exception\TableNotFoundException;
 
     final public const INSTALL_ENVIRONMENT_VARIABLE = 'CONTENA_INSTALL';
 

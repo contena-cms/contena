@@ -12,7 +12,6 @@ use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Channel\ChannelContext;
-use Contena\Core\System\Channel\Context\CartRestorer;
 use Contena\Core\System\User\Event\UserBeforeLoginEvent;
 use Contena\Core\System\User\Event\UserLoginEvent;
 use Contena\Core\System\User\Extension\LoginByCredentialsExtension;
@@ -28,6 +27,7 @@ use Symfony\Component\Validator\ConstraintViolation;
 class AccountService
 {
     use CheckPasswordLengthTrait;
+use Contena\Core\System\User\Exception\UserNotFoundException;
 
     /**
      * Bcrypt hash of a static placeholder password used to equalize timing when the login cannot succeed.
@@ -44,7 +44,6 @@ class AccountService
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly LegacyPasswordVerifier $legacyPasswordVerifier,
         private readonly AbstractSwitchDefaultAddressRoute $switchDefaultAddressRoute,
-        private readonly CartRestorer $restorer,
         private readonly DoubleOptInService $doubleOptInService,
         private readonly ClockInterface $clock,
         private readonly ExtensionDispatcher $extensions,

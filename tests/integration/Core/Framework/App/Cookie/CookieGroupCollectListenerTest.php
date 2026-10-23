@@ -14,6 +14,9 @@ use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\App\Cookie\AppCookieCollectListener;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Test\AppSystemTestBehaviour;
 
 /**
  * @internal

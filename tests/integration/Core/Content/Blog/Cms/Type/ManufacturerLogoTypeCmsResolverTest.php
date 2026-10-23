@@ -21,6 +21,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\System\Channel\ChannelContext;
 use Symfony\Component\HttpFoundation\Request;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -29,7 +30,6 @@ class ManufacturerLogoTypeCmsResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private ManufacturerLogoCmsElementResolver $manufacturerLogoCmsElementResolver;
 
     protected function setUp(): void
     {

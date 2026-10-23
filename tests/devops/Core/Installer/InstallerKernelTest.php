@@ -10,6 +10,7 @@ use Contena\Core\Installer\InstallerKernel;
 use Contena\Core\TestBootstrapper;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 use Symfony\Bundle\TwigBundle\TwigBundle;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

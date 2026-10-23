@@ -15,6 +15,8 @@ use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

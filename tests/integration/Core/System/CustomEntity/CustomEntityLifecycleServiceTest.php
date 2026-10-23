@@ -19,6 +19,7 @@ use Contena\Core\System\CustomEntity\Xml\Config\CustomEntityEnrichmentService;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchemaValidator;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Symfony\Component\Clock\NativeClock;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -31,7 +32,6 @@ class CustomEntityLifecycleServiceTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     /**
      * @var EntityRepository<CustomEntityCollection>

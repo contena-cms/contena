@@ -6,15 +6,12 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\ContentStream\ContentStreamCollection;
-use Contena\Core\Content\ContentStream\ContentStreamDefinition;
 use Contena\Core\Content\ContentStream\ContentStreamEntity;
 use Contena\Core\Content\ContentStream\DataAbstractionLayer\ContentStreamIndexer;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -22,6 +19,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -577,11 +576,6 @@ class ContentStreamIndexerTest extends TestCase
         return new EntityWrittenContainerEvent(
             $this->context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ContentStreamDefinition::ENTITY_NAME,
-                    [new EntityWriteResult($id, [], ContentStreamDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT, null)],
-                    Context::createDefaultContext()
-                ),
             ]),
             []
         );

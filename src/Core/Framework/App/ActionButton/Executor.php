@@ -17,6 +17,7 @@ use Symfony\Component\HttpKernel\HttpKernelInterface;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Routing\RouterInterface;
 use Contena\Core\Framework\App\Exception\ShopIdChangeSuggestedException;
+use Symfony\Component\HttpClient\Exception\ServerException;
 
 /**
  * @internal only for use by the app-system

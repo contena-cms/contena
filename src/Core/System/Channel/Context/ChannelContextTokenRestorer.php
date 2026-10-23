@@ -8,13 +8,28 @@ use Contena\Core\System\Channel\Event\ChannelContextRestoredEvent;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
-class CartRestorer
+/**
+ * Switches the channel context to a given user (login, logout, guest conversion, imitation).
+ *
+ * Upstream this class also merged guest carts into the user cart; Contena has no cart, so only the
+ * token / context handling remains.
+ */
+class ChannelContextTokenRestorer
 {
+    /**
+     * @internal
+     */
+    public function __construct(
+        private readonly AbstractChannelContextFactory $factory,
+        private readonly ChannelContextPersister $contextPersister,
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly RequestStack $requestStack,
+    ) {
+    }
 
     /**
-     * This function restores the context by the given token. If a context with this token doesn't exist, the context will
-     * create with the user id in the payload, but not in the main userId table column.
-     * So, the context is not directly referenced to the user and will not be loaded, if the normal restore-function is used.
+     * Restores the context by the given token. If a context with this token doesn't exist, the context
+     * is created with the user id in the payload, but not in the main user_id table column.
      *
      * @internal
      */
@@ -38,9 +53,8 @@ class CartRestorer
     }
 
     /**
-     * This function restores the context by the given user id. If a context with this user id doesn't exist, the context will
-     * create with the user id in the main userId table column.
-     * So, the context is directly referenced to the user.
+     * Restores the context by the given user id. If a context with this user id doesn't exist, a new
+     * context is created that is directly referenced to the user.
      */
     public function restore(string $userId, ChannelContext $currentContext): ChannelContext
     {
@@ -66,16 +80,11 @@ class CartRestorer
         return $this->enrichUserContext($userContext, $currentContext, $currentContext->getToken(), $userId);
     }
 
-
     private function replaceContextToken(?string $userId, ChannelContext $currentContext, ?string $newToken = null): ChannelContext
     {
         $originalToken = $newToken;
         if ($newToken === null) {
             $newToken = $this->contextPersister->replace($currentContext->getToken(), $currentContext);
-        } else {
-            // Prevent duplicate key RDBMS errors in case the new token exists and has permissions attached.
-            $this->cartPersister->delete($newToken, $currentContext);
-            $this->cartPersister->replace($currentContext->getToken(), $newToken, $currentContext);
         }
 
         $currentContext->assign([
@@ -125,15 +134,7 @@ class CartRestorer
             $userContext->setImitatingUserId($currentContext->getImitatingUserId());
         }
 
-        $this->cartCalculator->calculateByToken($userContext->getToken(), $userContext);
-
         return $userContext;
-    }
-
-    private function deleteGuestContext(ChannelContext $guestContext, string $userId): void
-    {
-        $this->cartService->deleteCart($guestContext);
-        $this->contextPersister->delete($guestContext->getToken(), $guestContext->getChannelId(), $userId);
     }
 
     private function updateRequestState(ChannelContext $context): void
@@ -172,29 +173,12 @@ class CartRestorer
             $userContext->setDomainId($currentContext->getDomainId());
         }
 
-        $guestCart = $this->cartService->getCart($token, $currentContext);
-        $userCart = $this->cartService->getCart($userContext->getToken(), $userContext);
-        $cartsAreIdentical = $token === $userContext->getToken();
-
-        if ($guestCart->getLineItems()->count() > 0 && !$cartsAreIdentical) {
-            $restoredCart = $this->mergeCart($userCart, $guestCart, $userContext);
-        } else {
-            $restoredCart = $this->cartService->recalculate($userCart, $userContext);
-        }
-
-        $restoredCart->addErrors(...array_values($guestCart->getErrors()->getPersistent()->getElements()));
-
-        $this->deleteGuestContext($currentContext, $userId);
+        $this->contextPersister->delete($currentContext->getToken(), $currentContext->getChannelId(), $userId);
 
         if ($currentContext->getImitatingUserId() !== $userContext->getImitatingUserId()) {
             $userContext->setImitatingUserId($currentContext->getImitatingUserId());
         }
         $this->updateRequestState($userContext);
-
-        $errors = $restoredCart->getErrors();
-        $cartWithErrors = $this->cartCalculator->calculateByToken($restoredCart->getToken(), $userContext);
-        $cartWithErrors->setErrors($errors);
-        $this->cartService->setCart($cartWithErrors);
 
         $this->eventDispatcher->dispatch(new ChannelContextRestoredEvent($userContext, $currentContext));
 

@@ -15,6 +15,8 @@ use Contena\Frontend\Theme\Exception\ThemeException;
 use Contena\Frontend\Theme\FrontendPluginConfiguration\FrontendPluginConfiguration;
 use Contena\Frontend\Theme\ThemeCollection;
 use Contena\Frontend\Theme\ThemeLifecycleHandler;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

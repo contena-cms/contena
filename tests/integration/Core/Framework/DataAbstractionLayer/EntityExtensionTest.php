@@ -42,6 +42,7 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Scalar
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\System\Tax\TaxEntity;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

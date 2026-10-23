@@ -12,6 +12,7 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal
@@ -76,7 +77,7 @@ class AdminUserConfigControllerTest extends TestCase
         $ids = new IdsCollection();
 
         // Different admin_user
-        $admin_user = [
+        $adminUser = [
             'id' => $ids->get('admin_user'),
             'email' => 'foo@bar.com',
             'name' => 'Firstname',
@@ -87,7 +88,7 @@ class AdminUserConfigControllerTest extends TestCase
             'aclRoles' => [],
         ];
 
-        static::getContainer()->get('admin_user.repository')->create([$admin_user], Context::createDefaultContext());
+        static::getContainer()->get('admin_user.repository')->create([$adminUser], Context::createDefaultContext());
 
         static::getContainer()->get('admin_user_config.repository')
             ->create([[
@@ -105,11 +106,11 @@ class AdminUserConfigControllerTest extends TestCase
         static::assertSame([], json_decode($content, true, 512, \JSON_THROW_ON_ERROR)['data']);
 
         // Different Key
-        $admin_userId = $this->getUserId();
+        $adminUserId = $this->getUserId();
 
         static::getContainer()->get('admin_user_config.repository')
             ->create([[
-                'admin_userId' => $admin_userId,
+                'admin_userId' => $adminUserId,
                 'key' => $configKey,
                 'value' => ['content'],
             ]], Context::createDefaultContext());
@@ -204,9 +205,9 @@ class AdminUserConfigControllerTest extends TestCase
         static::assertInstanceOf(Context::class, $context);
         $source = $context->getSource();
         static::assertInstanceOf(AdminApiSource::class, $source);
-        $admin_userId = $source->getUserId();
-        static::assertIsString($admin_userId);
+        $adminUserId = $source->getUserId();
+        static::assertIsString($adminUserId);
 
-        return Uuid::fromBytesToHex($admin_userId);
+        return Uuid::fromBytesToHex($adminUserId);
     }
 }

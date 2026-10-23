@@ -96,10 +96,6 @@ class CmsSlotsMultiDataResolverTest extends TestCase
         static::assertInstanceOf(CategoryCollection::class, $secondData->getEntities());
     }
 
-    private function createResolver(string $type, string $definition): MultiCmsElementResolver
-    {
-        return new MultiCmsElementResolver($type, $definition);
-    }
 
     /**
      * @return ChannelRepository<covariant EntityCollection<covariant Entity>>&Stub

@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Stopwatch\Stopwatch;
+use Contena\Core\Framework\DataAbstractionLayer\Command\ConsoleProgressTrait;
 
 #[AsCommand(
     name: 'es:index',

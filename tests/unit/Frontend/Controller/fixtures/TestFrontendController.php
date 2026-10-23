@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Frontend\Controller\fixtures;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Frontend\Controller\FrontendController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -60,10 +59,6 @@ class TestFrontendController extends FrontendController
         return $this->redirectToRoute($route, $parameters, $status);
     }
 
-    public function testAddCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-        $this->addCartErrors($cart, $filter);
-    }
 
     /**
      * @param array<string, mixed> $parameters

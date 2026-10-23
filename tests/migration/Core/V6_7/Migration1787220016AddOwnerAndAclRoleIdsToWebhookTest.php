@@ -11,6 +11,7 @@ use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1787220016AddOwnerAndAclRoleIdsToWebhook;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -48,14 +49,14 @@ class Migration1787220016AddOwnerAndAclRoleIdsToWebhookTest extends TestCase
     {
         (new Migration1787220016AddOwnerAndAclRoleIdsToWebhook())->update($this->connection);
 
-        $admin_userId = TestUser::createNewTestUser($this->connection)->getUserId();
+        $adminUserId = TestUser::createNewTestUser($this->connection)->getUserId();
         $ownerlessId = Uuid::randomBytes();
         $otherOwnerlessId = Uuid::randomBytes();
         $ownedByUserId = Uuid::randomBytes();
 
         $this->insertWebhook($ownerlessId, 'ownerless', null);
         $this->insertWebhook($otherOwnerlessId, 'other-ownerless', null);
-        $this->insertWebhook($ownedByUserId, 'owned-by-admin_user', $admin_userId);
+        $this->insertWebhook($ownedByUserId, 'owned-by-admin_user', $adminUserId);
 
         (new Migration1787220016AddOwnerAndAclRoleIdsToWebhook())->update($this->connection);
 
@@ -66,7 +67,7 @@ class Migration1787220016AddOwnerAndAclRoleIdsToWebhookTest extends TestCase
         static::assertEquals([
             Uuid::fromBytesToHex($ownerlessId) => ['name' => '[Legacy] ownerless', 'active' => 1, 'owner_user_id' => null, 'owner_integration_id' => $integrationId],
             Uuid::fromBytesToHex($otherOwnerlessId) => ['name' => '[Legacy] other-ownerless', 'active' => 1, 'owner_user_id' => null, 'owner_integration_id' => $integrationId],
-            Uuid::fromBytesToHex($ownedByUserId) => ['name' => 'owned-by-admin_user', 'active' => 1, 'owner_user_id' => $admin_userId, 'owner_integration_id' => null],
+            Uuid::fromBytesToHex($ownedByUserId) => ['name' => 'owned-by-admin_user', 'active' => 1, 'owner_user_id' => $adminUserId, 'owner_integration_id' => null],
         ], $webhooks);
 
         static::assertEquals(

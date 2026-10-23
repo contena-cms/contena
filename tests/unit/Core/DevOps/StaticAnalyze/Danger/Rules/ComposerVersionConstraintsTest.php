@@ -59,9 +59,6 @@ class ComposerVersionConstraintsTest extends TestCase
     public function testRequireDevIsNotChecked(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('composer.json', File::STATUS_MODIFIED, (string) json_encode([
-                'require-dev' => ['monolog/monolog' => '3.5.0'],
-            ])),
         ])));
 
         (new ComposerVersionConstraints())($context);
@@ -74,9 +71,6 @@ class ComposerVersionConstraintsTest extends TestCase
     public function testExemptComposerFiles(string $fileName, string $status): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status, (string) json_encode([
-                'require' => ['monolog/monolog' => '3.5.0'],
-            ])),
         ])));
 
         (new ComposerVersionConstraints())($context);
@@ -108,7 +102,6 @@ class ComposerVersionConstraintsTest extends TestCase
     private function createContextWithComposerFile(string $fileName, array $require): Context
     {
         return new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, File::STATUS_MODIFIED, (string) json_encode(['require' => $require])),
         ])));
     }
 }

@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Media\File\FileLoader;
 use Contena\Core\Defaults;
@@ -80,8 +79,8 @@ class AppManagerTest extends TestCase
 
         $this->appManager = static::getContainer()->get(AppManager::class);
 
-        $admin_userId = static::getContainer()->get('admin_user.repository')->searchIds(new Criteria(), Context::createDefaultContext())->firstId();
-        $source = new AdminApiSource($admin_userId);
+        $adminUserId = static::getContainer()->get('admin_user.repository')->searchIds(new Criteria(), Context::createDefaultContext())->firstId();
+        $source = new AdminApiSource($adminUserId);
         $source->setIsAdmin(true);
         $this->context = Context::createDefaultContext($source);
 
@@ -996,13 +995,13 @@ class AppManagerTest extends TestCase
     public function testInstallWithUpdateAclRole(): void
     {
         $connection = static::getContainer()->get(Connection::class);
-        $admin_userId = Uuid::randomHex();
-        $this->createUser($admin_userId);
+        $adminUserId = Uuid::randomHex();
+        $this->createUser($adminUserId);
 
         $aclRoleId = Uuid::randomHex();
         $this->createAclRole($aclRoleId, ['app.all']);
 
-        $this->createAclUserRole($admin_userId, $aclRoleId);
+        $this->createAclUserRole($adminUserId, $aclRoleId);
 
         $manifest = Manifest::createFromXmlFile(__DIR__ . '/../Manifest/_fixtures/test/manifest.xml');
 
@@ -1439,10 +1438,10 @@ class AppManagerTest extends TestCase
         return $locale->getId();
     }
 
-    private function createUser(string $admin_userId): void
+    private function createUser(string $adminUserId): void
     {
         static::getContainer()->get(Connection::class)->insert('admin_user', [
-            'id' => Uuid::fromHexToBytes($admin_userId),
+            'id' => Uuid::fromHexToBytes($adminUserId),
             'first_name' => 'test',
             'last_name' => '',
             'email' => 'test@example.com',
@@ -1468,10 +1467,10 @@ class AppManagerTest extends TestCase
         ]);
     }
 
-    private function createAclUserRole(string $admin_userId, string $aclRoleId): void
+    private function createAclUserRole(string $adminUserId, string $aclRoleId): void
     {
         static::getContainer()->get(Connection::class)->insert('acl_user_role', [
-            'admin_user_id' => Uuid::fromHexToBytes($admin_userId),
+            'admin_user_id' => Uuid::fromHexToBytes($adminUserId),
             'acl_role_id' => Uuid::fromHexToBytes($aclRoleId),
             'created_at' => (new \DateTime())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
         ]);

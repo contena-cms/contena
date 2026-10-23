@@ -21,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\CompressedCriteriaDecoder
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\CriteriaArrayConverter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\AggregationParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
@@ -55,7 +54,6 @@ class BlogReviewRouteTest extends TestCase
 
     private CacheTagCollector&Stub $cacheTagCollector;
 
-    private BlogReviewRoute $route;
 
     protected function setUp(): void
     {
@@ -98,14 +96,6 @@ class BlogReviewRouteTest extends TestCase
         $expectedCriteria->setTitle('blog-review-route');
         $expectedCriteria->addFilter(
             new MultiFilter(MultiFilter::CONNECTION_AND, [
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('status', true),
-                    new EqualsFilter('userId', $user->getId()),
-                ]),
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new EqualsFilter('blog.id', $blogId),
-                    new EqualsFilter('blog.parentId', $blogId),
-                ]),
             ])
         );
 
@@ -423,18 +413,4 @@ class BlogReviewRouteTest extends TestCase
         static::assertSame(5, $response->getResult()->getCriteria()->getOffset());
     }
 
-    /**
-     * @param (EntityRepository<BlogReviewCollection>&MockObject)|null $repository
-     */
-    private function createRoute(
-        ?EntityRepository $repository = null,
-        ?CacheTagCollector $cacheTagCollector = null,
-    ): BlogReviewRoute {
-        return new BlogReviewRoute(
-            $repository ?? $this->repository,
-            $this->config,
-            $cacheTagCollector ?? $this->cacheTagCollector,
-            new ExtensionDispatcher(new EventDispatcher()),
-        );
-    }
 }

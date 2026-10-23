@@ -7,12 +7,8 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Channel\CartService;
 use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\BlogLineItemFactory;
-use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Blog\BlogCollection;
 use Contena\Core\Content\Blog\BlogDefinition;
@@ -26,7 +22,6 @@ use Contena\Core\Content\MailTemplate\MailTemplateTypes;
 use Contena\Core\Content\MailTemplate\Service\Event\MailBeforeSentEvent;
 use Contena\Core\Content\Media\File\FileFetcher;
 use Contena\Core\Content\Media\File\FileSaver;
-use Contena\Core\Content\Test\Blog\BlogBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -44,10 +39,11 @@ use Contena\Core\System\User\Channel\AbstractDownloadRoute;
 use Contena\Core\System\User\Channel\DownloadRoute;
 use Contena\Core\System\User\UserException;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -57,7 +53,6 @@ class GrantDownloadAccessActionTest extends TestCase
     use IntegrationTestBehaviour;
     use ChannelApiTestBehaviour;
 
-    private CartService $cartService;
 
     /**
      * @var EntityRepository<BlogCollection>
@@ -81,7 +76,6 @@ class GrantDownloadAccessActionTest extends TestCase
 
     private ChannelContext $channelContext;
 
-    private OrderTransactionStateHandler $orderTransactionStateHandler;
 
     private AbstractDownloadRoute $downloadRoute;
 
@@ -381,56 +375,6 @@ class GrantDownloadAccessActionTest extends TestCase
         }
     }
 
-    /**
-     * @param array<int, string[]> $blogDownloads
-     */
-    private function addBlogs(Cart $cart, array $blogDownloads): Cart
-    {
-        $ids = new IdsCollection();
-        $taxIds = $this->channelContext->getTaxRules()->getIds();
-        $ids->set('t1', (string) array_pop($taxIds));
-        $blogs = [];
-
-        foreach ($blogDownloads as $key => $downloadFiles) {
-            $blogs[] = (new BlogBuilder($ids, 'blog-' . $key))
-                ->price(1.0)
-                ->tax('t1')
-                ->visibility()
-                ->type($downloadFiles === [] ? BlogDefinition::TYPE_PHYSICAL : BlogDefinition::TYPE_DIGITAL)
-                ->add('downloads', array_map(static function (string $file): array {
-                    [$fileName, $fileExtension] = explode('.', $file);
-
-                    return [
-                        'media' => [
-                            'id' => Uuid::randomHex(),
-                            'fileName' => $fileName,
-                            'fileExtension' => $fileExtension,
-                            'path' => 'media/' . $fileName . '.' . $fileExtension,
-                            'private' => true,
-                        ],
-                    ];
-                }, $downloadFiles))
-                ->build();
-        }
-
-        $this->channelContext->getContext()->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($blogs): void {
-            $this->blogRepository->create($blogs, $context);
-            $downloads = array_merge(...array_column($blogs, 'downloads'));
-
-            foreach ($downloads as $download) {
-                $media = $download['media'];
-                $mediaFile = $this->fileFetcher->fetchBlob($media['id'], $media['fileExtension'], '');
-                $this->fileSaver->persistFileToMedia($mediaFile, $media['fileName'], $media['id'], $context);
-                $this->fileFetcher->cleanUpTempFile($mediaFile);
-            }
-        });
-
-        foreach ($ids->prefixed('blog-') as $id) {
-            $cart = $this->addBlog($id, 1, $cart, $this->cartService, $this->channelContext);
-        }
-
-        return $cart;
-    }
 
     private function changeTransactionStateToPaid(string $orderId): void
     {
@@ -463,13 +407,6 @@ class GrantDownloadAccessActionTest extends TestCase
         $this->flowRepository->clone($flowId, $this->channelContext->getContext(), null, $behavior);
     }
 
-    private function addBlog(string $blogId, int $quantity, Cart $cart, CartService $cartService, ChannelContext $context): Cart
-    {
-        $factory = new BlogLineItemFactory(new PriceDefinitionFactory());
-        $blog = $factory->create(['id' => $blogId, 'referencedId' => $blogId, 'quantity' => $quantity], $context);
-
-        return $cartService->add($cart, $blog, $context);
-    }
 
     private function createDefaultChannelContext(): ChannelContext
     {

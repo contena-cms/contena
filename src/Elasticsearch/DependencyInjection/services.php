@@ -388,6 +388,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     // @deprecated tag:v6.8.0 Will be removed
     $services->alias(
         'Contena\Elasticsearch\Blog\SearchConfigLoader',
+        SearchConfigLoader::class,
     )->deprecate('contena/elasticsearch', '6.7.2.0', 'The "%alias_id%" service alias is deprecated and will be removed in v6.8.0. Use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader instead.');
 
     $services->set(AbstractFieldQueryBuilder::class, FieldQueryBuilder::class)

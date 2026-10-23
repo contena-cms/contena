@@ -6,6 +6,7 @@ use League\Flysystem\FilesystemException;
 use League\Flysystem\FilesystemOperator;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Contena\Core\Framework\App\Exception\AppDownloadException;
 
 /**
  * @internal

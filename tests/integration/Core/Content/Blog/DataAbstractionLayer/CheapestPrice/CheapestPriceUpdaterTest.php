@@ -13,6 +13,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Test\Assert\Serialization;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

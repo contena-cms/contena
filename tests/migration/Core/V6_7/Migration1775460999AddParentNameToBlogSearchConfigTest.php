@@ -16,7 +16,6 @@ class Migration1775460999AddParentNameToBlogSearchConfigTest extends TestCase
 {
     private Connection $connection;
 
-    private Migration1775460999AddParentNameToBlogSearchConfig $migration;
 
     protected function setUp(): void
     {

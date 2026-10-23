@@ -7,6 +7,7 @@ use Contena\Core\System\SystemConfig\CachedSystemConfigLoader;
 use Contena\Core\System\SystemConfig\ConfiguredSystemConfigLoader;
 use Contena\Core\System\SystemConfig\MemoizedSystemConfigLoader;
 use Contena\Core\System\SystemConfig\SystemConfigLoader;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

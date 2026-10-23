@@ -37,6 +37,7 @@ use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -55,9 +56,7 @@ class BlogCartProcessorTest extends TestCase
 
     private IdsCollection $ids;
 
-    private CartService $cartService;
 
-    private QuantityPriceCalculator $calculator;
 
     protected function setUp(): void
     {
@@ -1013,17 +1012,6 @@ class BlogCartProcessorTest extends TestCase
         return $userId;
     }
 
-    private function getBlogCart(): Cart
-    {
-        $context = $this->getContext();
-
-        $blog = static::getContainer()->get(BlogLineItemFactory::class)
-            ->create(['id' => $this->ids->get('blog'), 'referencedId' => $this->ids->get('blog')], $context);
-
-        $cart = $this->cartService->getCart($context->getToken(), $context);
-
-        return $this->cartService->add($cart, $blog, $context);
-    }
 
     private function getContext(): ChannelContext
     {

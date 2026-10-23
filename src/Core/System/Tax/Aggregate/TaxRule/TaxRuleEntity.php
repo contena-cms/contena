@@ -7,6 +7,7 @@ use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
 use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Tax\Aggregate\TaxRuleType\TaxRuleTypeEntity;
 use Contena\Core\System\Tax\TaxEntity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 
 /**
  * @phpstan-type TaxRuleData array{states?: list<string>, zipCode?: string, fromZipCode?: string, toZipCode?: string}

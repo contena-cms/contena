@@ -14,7 +14,6 @@ use Contena\Core\Framework\DependencyInjection\CompilerPass\AttributeEntityCompi
 use Contena\Core\Framework\DependencyInjection\CompilerPass\AutoconfigureCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\CreateGeneratorScaffoldingCommandPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\DefaultTransportCompilerPass;
-use Contena\Core\Framework\DependencyInjection\CompilerPass\DemodataCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\DisableTwigCacheWarmerCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\EntityCompilerPass;
 use Contena\Core\Framework\DependencyInjection\CompilerPass\FeatureFlagCompilerPass;
@@ -82,7 +81,6 @@ class Framework extends Bundle
         $phpLoader->load('app.php');
         $phpLoader->load('custom-field.php');
         $phpLoader->load('data-abstraction-layer.php');
-        $phpLoader->load('demodata.php');
         $phpLoader->load('event.php');
         $phpLoader->load('hydrator.php');
         $phpLoader->load('filesystem.php');
@@ -159,7 +157,6 @@ class Framework extends Bundle
         $container->addCompilerPass(new McpToolResultRendererCompilerPass(), priority: -10);
         $container->addCompilerPass(new McpDebugCommandCompilerPass());
 
-        $container->addCompilerPass(new DemodataCompilerPass());
 
         parent::build($container);
         $this->buildDefaultConfig($container);

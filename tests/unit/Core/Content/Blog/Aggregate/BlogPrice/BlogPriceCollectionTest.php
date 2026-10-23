@@ -6,11 +6,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceCollection;
-use Contena\Core\Content\Blog\Aggregate\BlogPrice\BlogPriceEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
-use Contena\Core\Framework\Uuid\Uuid;
 
 /**
  * @internal
@@ -48,12 +45,4 @@ class BlogPriceCollectionTest extends TestCase
         static::assertSame(['expensive-gross', 'cheap-gross'], $collection->getKeys());
     }
 
-    private function createPrice(string $id, float $gross, float $net): BlogPriceEntity
-    {
-        $price = new BlogPriceEntity();
-        $price->setId($id);
-        $price->setPrice(new PriceCollection([new Price(Uuid::randomHex(), $net, $gross, false)]));
-
-        return $price;
-    }
 }

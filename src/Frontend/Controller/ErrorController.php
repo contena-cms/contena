@@ -8,6 +8,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
+use Contena\Core\Framework\HttpException;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
 
 /**
  * @internal

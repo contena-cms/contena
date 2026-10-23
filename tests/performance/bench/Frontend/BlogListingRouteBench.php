@@ -12,6 +12,8 @@ use Contena\Core\System\Channel\Context\ChannelContextService;
 use Contena\Core\System\User\UserEntity;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelApiTestBehaviour;
 
 /**
  * @internal - only for performance benchmarks

@@ -28,7 +28,6 @@ class GaranLabelBlogValidatorTest extends TestCase
 {
     private StaticDefinitionInstanceRegistry $registry;
 
-    private GaranLabelBlogValidator $validator;
 
     protected function setUp(): void
     {

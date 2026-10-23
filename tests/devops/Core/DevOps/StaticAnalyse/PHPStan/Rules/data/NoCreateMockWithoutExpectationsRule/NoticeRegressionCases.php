@@ -58,18 +58,6 @@ class NullGuardedDefaultParamCases extends TestCase
         static::assertSame('a', $sut->run());
     }
 
-    /**
-     * @return array{0: GuardSut}
-     */
-    private function createSut(?GuardDependency $dependency = null): array
-    {
-        if ($dependency === null) {
-            $dependency = static::createStub(GuardDependency::class);
-            $dependency->method('value')->willReturn('');
-        }
-
-        return [new GuardSut($dependency)];
-    }
 }
 
 /**
@@ -115,12 +103,6 @@ class FixtureReturningHelperCases extends TestCase
         static::assertSame('', $this->buildFixture()->sut->run());
     }
 
-    private function buildFixture(): GuardFixture
-    {
-        $dependency = $this->createMock(GuardDependency::class);
-
-        return new GuardFixture($dependency, new GuardSut($dependency));
-    }
 }
 
 /**
@@ -158,9 +140,6 @@ class ReturnedClosureCases extends TestCase
  */
 class FluentSut
 {
-    public function __construct(private readonly FluentDependency $dependency)
-    {
-    }
 
     public function run(): string
     {
@@ -173,9 +152,6 @@ class FluentSut
  */
 class GuardSut
 {
-    public function __construct(private readonly GuardDependency $dependency)
-    {
-    }
 
     public function run(): string
     {
@@ -188,9 +164,4 @@ class GuardSut
  */
 class GuardFixture
 {
-    public function __construct(
-        public readonly GuardDependency $dependency,
-        public readonly GuardSut $sut,
-    ) {
-    }
 }

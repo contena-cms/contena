@@ -9,6 +9,7 @@ use Contena\Core\Content\Flow\Dispatching\Action\SendMailAction;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_7\Migration1763377575SendEmailAfterPasswordChangeFlow;
 use Contena\Core\System\User\Event\UserPasswordChangedEvent;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

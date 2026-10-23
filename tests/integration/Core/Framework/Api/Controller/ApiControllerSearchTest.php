@@ -15,6 +15,10 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Response;
+use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -833,10 +837,10 @@ class ApiControllerSearchTest extends TestCase
         $response = $browser->getResponse();
         static::assertSame(Response::HTTP_OK, $response->getStatusCode(), (string) $response->getContent());
 
-        $admin_userRepository = static::getContainer()->get('admin_user.repository');
+        $adminUserRepository = static::getContainer()->get('admin_user.repository');
 
         // Change admin_user password
-        $admin_userRepository->update([[
+        $adminUserRepository->update([[
             'id' => $admin->getUserId(),
             'password' => Uuid::randomHex(),
         ]], Context::createDefaultContext());

@@ -9,6 +9,7 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\TestDefaults;
 use Contena\Frontend\Framework\Routing\NotFound\NotFoundSubscriber;
+use Contena\Core\Framework\Test\TestCaseBase\ChannelFunctionalTestBehaviour;
 
 /**
  * @internal

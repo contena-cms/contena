@@ -4,6 +4,7 @@ namespace Contena\Core\System\Consent\Definition;
 
 use Contena\Core\System\Consent\ConsentDefinition;
 use Contena\Core\System\Consent\ConsentScope;
+use Contena\Core\Framework\Api\OAuth\AdminUser\AdminUser;
 
 /**
  * @internal
