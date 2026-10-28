@@ -1,0 +1,8 @@
+{
+    "require-dev": {
+        "frosh/contena-rector": "0.6.0",
+        "phpstan/phpstan": "2.3.0",
+        "rector/rector": "2.7.0"
+    },
+    "sort-packages": true
+}

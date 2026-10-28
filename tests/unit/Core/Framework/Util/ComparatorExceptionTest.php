@@ -1,0 +1,30 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Util;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Util\Exception\ComparatorException;
+use Contena\Core\Test\Annotation\DisabledFeatures;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ *
+ * @deprecated tag:v6.8.0 - Will be removed, use UtilException::operatorNotSupported()
+ */
+#[Package('framework')]
+#[CoversClass(ComparatorException::class)]
+#[DisabledFeatures(['v6.8.0.0'])]
+class ComparatorExceptionTest extends TestCase
+{
+    public function testOperatorNotSupported(): void
+    {
+        $e = ComparatorException::operatorNotSupported('test');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+        static::assertSame('CONTENT__OPERATOR_NOT_SUPPORTED', $e->getErrorCode());
+        static::assertSame('Operator "test" is not supported.', $e->getMessage());
+    }
+}

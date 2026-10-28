@@ -1,0 +1,283 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Storefront\Framework\HealthCheck;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\CartRuleLoader;
+use Contena\Core\Content\Product\ProductCollection;
+use Contena\Core\Content\Test\Product\ProductBuilder;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\SystemCheck\Check\Status;
+use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
+use Contena\Core\System\SalesChannel\Event\SalesChannelProcessCriteriaEvent;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Storefront\Framework\SystemCheck\ProductDetailReadinessCheck;
+
+/**
+ * @internal
+ */
+#[Package('discovery')]
+class ProductDetailReadinessCheckTest extends TestCase
+{
+    use CacheTestBehaviour;
+    use DatabaseTransactionBehaviour;
+    use KernelTestBehaviour;
+    use SalesChannelApiTestBehaviour;
+
+    private Connection $connection;
+
+    /**
+     * @var EntityRepository<ProductCollection>
+     */
+    private EntityRepository $productRepository;
+
+    private IdsCollection $ids;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->connection = static::getContainer()->get(Connection::class);
+        $this->productRepository = static::getContainer()->get('product.repository');
+        $this->ids = new IdsCollection();
+
+        $this->createSalesChannels();
+    }
+
+    public function testAllChecksAreHealthy(): void
+    {
+        $this->createProducts();
+
+        $check = $this->createCheck();
+        $result = $check->run();
+
+        static::assertTrue($result->healthy);
+        static::assertSame(Status::OK, $result->status);
+    }
+
+    public function testCheckWithoutProducts(): void
+    {
+        $check = $this->createCheck();
+        $result = $check->run();
+
+        static::assertTrue($result->healthy);
+        static::assertSame(Status::SKIPPED, $result->status);
+    }
+
+    public function testCheckIsHealthyWhenAllProductsAreRestrictedByAnExtension(): void
+    {
+        $productIds = $this->getProductIds($this->createProducts());
+
+        // simulates an extension that restricts product visibility by rules, e.g. Dynamic Access:
+        // for an anonymous visitor the rule does not match, so the products are filtered out
+        $this->restrictProducts($productIds);
+
+        $check = $this->createCheck();
+        $result = $check->run();
+
+        static::assertTrue($result->healthy);
+        static::assertSame(Status::SKIPPED, $result->status);
+    }
+
+    public function testCheckPicksAProductThatIsNotRestrictedByAnExtension(): void
+    {
+        $productIds = $this->getProductIds($this->createProducts());
+        $additionalProductIds = $this->getProductIds($this->createProducts('additional-product-'));
+
+        // restrict the product that would be selected first, the check has to fall back to the other one
+        $restrictedIds = [];
+        foreach ($productIds as $index => $productId) {
+            $ids = [$productId, $additionalProductIds[$index]];
+            sort($ids);
+            $restrictedIds[] = $ids[0];
+        }
+
+        $this->restrictProducts($restrictedIds);
+
+        $check = $this->createCheck();
+        $result = $check->run();
+
+        static::assertTrue($result->healthy);
+        static::assertSame(Status::OK, $result->status);
+        static::assertCount(2, $result->extra);
+    }
+
+    /**
+     * Extensions like Dynamic Access can also expose a product only for a rule that matches an anonymous
+     * visitor. The probe request detects those rules, so the lookup has to as well, otherwise the check
+     * reports SKIPPED while the product detail pages render fine.
+     */
+    public function testProductsRestrictedToARuleMatchingAnAnonymousVisitorAreProbed(): void
+    {
+        $productIds = $this->getProductIds($this->createProducts());
+        $this->restrictProducts($productIds, unlessRuleId: $this->createAlwaysValidRule());
+
+        $result = $this->createCheck()->run();
+
+        static::assertSame(Status::OK, $result->status);
+        static::assertCount(2, $result->extra);
+    }
+
+    /**
+     * `ProductDetailRoute::addCloseoutFilter()` only excludes closeout products out of stock while
+     * `core.listing.hideCloseoutProductsWhenOutOfStock` is on. With the setting off their detail pages
+     * render, so the check must still probe them instead of reporting SKIPPED.
+     */
+    public function testClosedOutProductsAreProbedWhenTheSettingIsOff(): void
+    {
+        $this->createClosedOutProducts();
+        static::getContainer()->get(SystemConfigService::class)
+            ->set('core.listing.hideCloseoutProductsWhenOutOfStock', false);
+
+        $result = $this->createCheck()->run();
+
+        static::assertSame(Status::OK, $result->status);
+        static::assertCount(2, $result->extra);
+    }
+
+    public function testClosedOutProductsAreSkippedWhenTheSettingIsOn(): void
+    {
+        $this->createClosedOutProducts();
+        static::getContainer()->get(SystemConfigService::class)
+            ->set('core.listing.hideCloseoutProductsWhenOutOfStock', true);
+
+        $result = $this->createCheck()->run();
+
+        static::assertTrue($result->healthy);
+        static::assertSame(Status::SKIPPED, $result->status);
+    }
+
+    /**
+     * The only products in either sales channel are closeout and out of stock, so the setting alone
+     * decides whether the check has anything to probe.
+     */
+    private function createClosedOutProducts(): void
+    {
+        $products = [];
+        foreach ([$this->ids->get('sales-channel-1'), $this->ids->get('sales-channel-2')] as $index => $id) {
+            $products[] = (new ProductBuilder($this->ids, 'closeout-' . $index))
+                ->name('Closeout-' . $index)
+                ->price(10)
+                ->manufacturer('manufacturer')
+                ->tax('tax')
+                ->visibility($id)
+                ->stock(0)
+                ->closeout()
+                ->build();
+        }
+
+        $this->productRepository->create($products, Context::createDefaultContext());
+    }
+
+    /**
+     * @param list<string> $productIds
+     */
+    private function restrictProducts(array $productIds, ?string $unlessRuleId = null): void
+    {
+        EventHookDispatcher::fromContainer(static::getContainer())->on(
+            'sales_channel.product.process.criteria',
+            static function (SalesChannelProcessCriteriaEvent $event) use ($productIds, $unlessRuleId): void {
+                if ($unlessRuleId !== null && \in_array($unlessRuleId, $event->getSalesChannelContext()->getRuleIds(), true)) {
+                    return;
+                }
+
+                $event->getCriteria()->addFilter(
+                    new NotFilter(NotFilter::CONNECTION_AND, [new EqualsAnyFilter('product.id', $productIds)])
+                );
+            }
+        );
+    }
+
+    private function createAlwaysValidRule(): string
+    {
+        static::getContainer()->get('rule.repository')->create([[
+            'id' => $this->ids->create('always-valid-rule'),
+            'name' => 'always valid',
+            'priority' => 1,
+            'conditions' => [['type' => 'alwaysValid']],
+        ]], Context::createDefaultContext());
+
+        // the rule loader keeps the rules it loaded before in memory
+        static::getContainer()->get(CartRuleLoader::class)->invalidate();
+
+        return $this->ids->get('always-valid-rule');
+    }
+
+    /**
+     * @param list<array<string, mixed>> $products
+     *
+     * @return list<string>
+     */
+    private function getProductIds(array $products): array
+    {
+        return array_map(static fn (array $product) => (string) $product['id'], $products);
+    }
+
+    private function createCheck(): ProductDetailReadinessCheck
+    {
+        return $this->getContainer()->get(ProductDetailReadinessCheck::class);
+    }
+
+    private function createSalesChannels(): void
+    {
+        $this->connection->executeStatement('DELETE FROM `sales_channel_domain`');
+        $this->createSalesChannel([
+            'id' => $this->ids->create('sales-channel-1'),
+            'domains' => [
+                [
+                    'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
+                    'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+                    'url' => 'http://example.com',
+                ],
+            ],
+        ]);
+        $this->createSalesChannel([
+            'id' => $this->ids->create('sales-channel-2'),
+            'domains' => [
+                [
+                    'languageId' => Defaults::LANGUAGE_SYSTEM,
+                    'currencyId' => Defaults::CURRENCY,
+                    'snippetSetId' => $this->getSnippetSetIdForLocale('en-GB'),
+                    'url' => 'http://shop.test',
+                ],
+            ],
+        ]);
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function createProducts(string $keyPrefix = 'product-'): array
+    {
+        $salesChannelIds = [
+            $this->ids->get('sales-channel-1'),
+            $this->ids->get('sales-channel-2'),
+        ];
+
+        $products = [];
+        foreach ($salesChannelIds as $index => $id) {
+            $products[] = (new ProductBuilder($this->ids, $keyPrefix . $index))
+                ->name('Test-' . $keyPrefix . $index)
+                ->price(10)
+                ->manufacturer('manufacturer')
+                ->tax('tax')
+                ->visibility($id)
+                ->build();
+        }
+
+        $this->productRepository->create($products, Context::createDefaultContext());
+
+        return $products;
+    }
+}

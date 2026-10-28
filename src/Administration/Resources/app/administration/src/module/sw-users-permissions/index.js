@@ -1,0 +1,151 @@
+/**
+ * @sw-package fundamentals@framework
+ */
+import './acl';
+
+/* eslint-disable sw-deprecation-rules/private-feature-declarations */
+Contena.Component.register('sw-users-permissions', () => import('./page/sw-users-permissions'));
+Contena.Component.register(
+    'sw-users-permissions-user-listing',
+    () => import('./components/sw-users-permissions-user-listing'),
+);
+Contena.Component.register(
+    'sw-users-permissions-role-listing',
+    () => import('./components/sw-users-permissions-role-listing'),
+);
+Contena.Component.register(
+    'sw-users-permissions-configuration',
+    () => import('./components/sw-users-permissions-configuration'),
+);
+Contena.Component.register(
+    'sw-users-permissions-additional-permissions',
+    () => import('./components/sw-users-permissions-additional-permissions'),
+);
+Contena.Component.register(
+    'sw-users-permissions-permissions-grid',
+    () => import('./components/sw-users-permissions-permissions-grid'),
+);
+Contena.Component.register(
+    'sw-users-permissions-detailed-permissions-grid',
+    () => import('./components/sw-users-permissions-detailed-permissions-grid'),
+);
+Contena.Component.register(
+    'sw-users-permissions-detailed-additional-permissions',
+    () => import('./components/sw-users-permissions-detailed-additional-permissions'),
+);
+Contena.Component.register('sw-users-permissions-user-detail', () => import('./page/sw-users-permissions-user-detail'));
+Contena.Component.extend(
+    'sw-users-permissions-user-create',
+    'sw-users-permissions-user-detail',
+    () => import('./page/sw-users-permissions-user-create'),
+);
+Contena.Component.register('sw-users-permissions-role-detail', () => import('./page/sw-users-permissions-role-detail'));
+Contena.Component.register(
+    'sw-users-permissions-role-view-general',
+    () => import('./view/sw-users-permissions-role-view-general'),
+);
+Contena.Component.register(
+    'sw-users-permissions-role-view-detailed',
+    () => import('./view/sw-users-permissions-role-view-detailed'),
+);
+Contena.Component.register(
+    'sw-sso-users-permission-user-detail',
+    () => import('./page/sw-sso-users-permission-user-detail'),
+);
+Contena.Component.register('sw-user-sso-invitation-modal', () => import('./components/sw-user-sso-invitation-modal'));
+Contena.Component.register('sw-user-sso-status-label', () => import('./components/sw-user-sso-status-label'));
+Contena.Component.register(
+    'sw-user-sso-access-key-create-modal',
+    () => import('./components/sw-user-sso-access-key-create-modal'),
+);
+Contena.Component.register(
+    'sw-users-permissions-role-mcp-reference-modal',
+    () => import('./component/sw-users-permissions-role-mcp-reference-modal'),
+);
+
+/* eslint-enable sw-deprecation-rules/private-feature-declarations */
+
+// eslint-disable-next-line sw-deprecation-rules/private-feature-declarations
+Contena.Module.register('sw-users-permissions', {
+    type: 'core',
+    name: 'users-permissions',
+    title: 'sw-users-permissions.general.label',
+    description: 'sw-users-permissions.general.label',
+    version: '1.0.0',
+    targetVersion: '1.0.0',
+    color: 'var(--sw-color-module-neutral-default)',
+    icon: 'regular-user',
+    favicon: 'icon-module-settings.svg',
+    entity: 'user',
+
+    routes: {
+        index: {
+            component: 'sw-users-permissions',
+            path: 'index',
+            meta: {
+                parentPath: 'sw.settings.index.system',
+                privilege: 'users_and_permissions.viewer',
+            },
+        },
+        'user.detail': {
+            component: 'sw-users-permissions-user-detail',
+            path: 'user.detail/:id?',
+            meta: {
+                parentPath: 'sw.users.permissions.index',
+                privilege: 'users_and_permissions.viewer',
+            },
+        },
+        'user.sso.detail': {
+            component: 'sw-sso-users-permission-user-detail',
+            path: 'user.sso.detail/:id?',
+            meta: {
+                parentPath: 'sw.users.permissions.index',
+                privilege: 'users_and_permissions.viewer',
+            },
+        },
+        'user.create': {
+            component: 'sw-users-permissions-user-create',
+            path: 'user.create',
+            meta: {
+                parentPath: 'sw.users.permissions.index',
+                privilege: 'users_and_permissions.creator',
+            },
+        },
+        'role.detail': {
+            component: 'sw-users-permissions-role-detail',
+            path: 'role.detail/:id?',
+            meta: {
+                parentPath: 'sw.users.permissions.index',
+                privilege: 'users_and_permissions.viewer',
+            },
+            redirect: {
+                name: 'sw.users.permissions.role.detail.general',
+            },
+            children: {
+                general: {
+                    component: 'sw-users-permissions-role-view-general',
+                    path: 'general',
+                    meta: {
+                        parentPath: 'sw.users.permissions.index',
+                        privilege: 'users_and_permissions.viewer',
+                    },
+                },
+                'detailed-privileges': {
+                    component: 'sw-users-permissions-role-view-detailed',
+                    path: 'detailed-privileges',
+                    meta: {
+                        parentPath: 'sw.users.permissions.index',
+                        privilege: 'users_and_permissions.viewer',
+                    },
+                },
+            },
+        },
+    },
+
+    settingsItem: {
+        group: 'system',
+        to: 'sw.users.permissions.index',
+        icon: 'regular-user',
+        privilege: 'users_and_permissions.viewer',
+    },
+});

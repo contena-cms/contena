@@ -1,0 +1,33 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Storefront\Theme\Extension;
+
+use Contena\Core\Content\Media\MediaDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\EntityExtension;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
+use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
+use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\Log\Package;
+use Contena\Storefront\Theme\Aggregate\ThemeMediaDefinition;
+use Contena\Storefront\Theme\ThemeDefinition;
+
+#[Package('discovery')]
+class MediaExtension extends EntityExtension
+{
+    public function extendFields(FieldCollection $collection): void
+    {
+        $collection->add(
+            new OneToManyAssociationField('themes', ThemeDefinition::class, 'preview_media_id')
+        );
+
+        $collection->add(
+            (new ManyToManyAssociationField('themeMedia', ThemeDefinition::class, ThemeMediaDefinition::class, 'media_id', 'theme_id'))->addFlags(new RestrictDelete())
+        );
+    }
+
+    public function getEntityName(): string
+    {
+        return MediaDefinition::ENTITY_NAME;
+    }
+}

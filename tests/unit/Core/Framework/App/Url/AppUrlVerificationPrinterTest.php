@@ -1,0 +1,82 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\App\Url;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\App\Url\AppUrlVerificationPrinter;
+use Contena\Core\Framework\App\Url\VerificationState;
+use Contena\Core\Framework\App\Url\VerificationStatus;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\BufferedOutput;
+use Symfony\Component\Console\Style\SymfonyStyle;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(AppUrlVerificationPrinter::class)]
+class AppUrlVerificationPrinterTest extends TestCase
+{
+    public function testPrintsPassBasic(): void
+    {
+        $printer = new AppUrlVerificationPrinter();
+
+        $output = new BufferedOutput();
+        $io = new SymfonyStyle(new ArrayInput([]), $output);
+
+        $state = new VerificationState(
+            'https://example.com',
+            VerificationStatus::PASS,
+            1,
+            new \DateTimeImmutable('2024-01-01 12:00:00'),
+            null,
+            statusCode: null,
+        );
+
+        $printer->print($io, $state, false);
+
+        $display = $output->fetch();
+
+        static::assertStringContainsString('App URL Verification Status', $display);
+        static::assertStringContainsString('APP URL: https://example.com', $display);
+        static::assertStringContainsString('Result', $display);
+        static::assertStringContainsString('OK', $display);
+        static::assertStringContainsString('Info', $display);
+        static::assertStringContainsString('No additional information available', $display);
+        static::assertStringContainsString('Tries', $display);
+        static::assertStringContainsString('1', $display);
+        static::assertStringContainsString('Checked at', $display);
+        static::assertStringContainsString('2024-01-01 12:00:00', $display);
+        static::assertStringContainsString('When a hard fail occurs, app communication will be disabled.', $display);
+    }
+
+    public function testPrintsManualAttemptAndTimestamp(): void
+    {
+        $printer = new AppUrlVerificationPrinter();
+
+        $output = new BufferedOutput();
+        $io = new SymfonyStyle(new ArrayInput([]), $output);
+
+        $state = new VerificationState(
+            'https://example.org',
+            VerificationStatus::SOFT_FAIL,
+            3,
+            new \DateTimeImmutable('2025-01-01 12:00:00'),
+            'Temporary error',
+            statusCode: null,
+        );
+
+        $printer->print($io, $state, true);
+
+        $display = $output->fetch();
+
+        static::assertStringContainsString('APP URL: https://example.org', $display);
+        static::assertStringContainsString('SOFT FAIL', $display);
+        static::assertStringContainsString('please try again', $display);
+        static::assertStringContainsString('Manual attempt', $display);
+        static::assertStringContainsString('2025-01-01 12:00:00', $display);
+        static::assertStringContainsString('Temporary error', $display);
+    }
+}

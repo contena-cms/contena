@@ -1,0 +1,101 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Migration\Command;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Migration\Command\CreateMigrationCommand;
+use Contena\Core\Framework\Migration\MigrationException;
+use Contena\Core\Framework\Plugin\KernelPluginCollection;
+use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin as SimplePluginIntegration;
+use Contena\Tests\Unit\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
+use Symfony\Component\Console\Tester\CommandTester;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(CreateMigrationCommand::class)]
+class CreateMigrationCommandTest extends TestCase
+{
+    #[DataProvider('forbiddenNameProvider')]
+    public function testExecuteThrowsExceptionIfNameContainsForbiddenCharacters(string $name): void
+    {
+        $command = new CreateMigrationCommand(
+            new KernelPluginCollection(),
+            'coreDir',
+            'contenaVersion'
+        );
+        $commandTester = new CommandTester($command);
+
+        $input = ['--name' => $name];
+
+        $this->expectExceptionObject(MigrationException::invalidArgument('Migration name contains forbidden characters!'));
+
+        $commandTester->execute($input);
+    }
+
+    public static function forbiddenNameProvider(): \Generator
+    {
+        yield 'special characters' => ['%%%%'];
+        yield 'trailing newline' => ["Foo\n"];
+    }
+
+    public function testExecuteThrowsExceptionWhenDirectoryIsSpecifiedButNoNamespace(): void
+    {
+        $command = new CreateMigrationCommand(
+            new KernelPluginCollection(),
+            'coreDir',
+            'contenaVersion'
+        );
+        $commandTester = new CommandTester($command);
+
+        $input = ['directory' => 'test-dir'];
+
+        $this->expectExceptionObject(MigrationException::invalidArgument('Please specify both dir and namespace or none.'));
+
+        $commandTester->execute($input);
+    }
+
+    public function testExecuteThrowsExceptionWhenPluginIsNotFound(): void
+    {
+        $command = new CreateMigrationCommand(
+            new KernelPluginCollection(),
+            'coreDir',
+            'contenaVersion'
+        );
+        $commandTester = new CommandTester($command);
+
+        $input = ['--plugin' => 'test-plugin'];
+
+        $this->expectExceptionObject(MigrationException::pluginNotFound('test-plugin'));
+
+        $commandTester->execute($input);
+    }
+
+    public function testExecuteThrowsExceptionWhenMoreThanOnePluginIsFound(): void
+    {
+        $kernelPluginCollection = new KernelPluginCollection();
+        $plugin1 = new SimplePlugin(true, '');
+        $plugin2 = new SimplePluginIntegration(true, '');
+        $kernelPluginCollection->addList([$plugin1, $plugin2]);
+
+        $command = new CreateMigrationCommand(
+            $kernelPluginCollection,
+            'coreDir',
+            'contenaVersion'
+        );
+        $commandTester = new CommandTester($command);
+
+        $input = ['--plugin' => 'SimplePlugin'];
+
+        $this->expectExceptionObject(MigrationException::moreThanOnePluginFound(
+            'SimplePlugin',
+            array_keys($kernelPluginCollection->all())
+        ));
+
+        $commandTester->execute($input);
+    }
+}

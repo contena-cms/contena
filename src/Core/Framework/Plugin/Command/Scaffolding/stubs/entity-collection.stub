@@ -1,0 +1,16 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }}\Core\Content\{{ entityName }};
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+
+/**
+ * @extends EntityCollection<{{ entityName }}Entity>
+ */
+class {{ entityName }}Collection extends EntityCollection
+{
+    protected function getExpectedClass(): string
+    {
+        return {{ entityName }}Entity::class;
+    }
+}

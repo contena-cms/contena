@@ -1,0 +1,741 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\ImportExport;
+
+use Doctrine\DBAL\Connection;
+use League\Flysystem\FilesystemOperator;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Customer\CustomerCollection;
+use Contena\Core\Checkout\Customer\CustomerDefinition;
+use Contena\Core\Checkout\Order\OrderCollection;
+use Contena\Core\Checkout\Order\OrderDefinition;
+use Contena\Core\Checkout\Order\OrderEntity;
+use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFileEntity;
+use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogEntity;
+use Contena\Core\Content\ImportExport\Event\EnrichExportCriteriaEvent;
+use Contena\Core\Content\ImportExport\Event\ImportExportBeforeExportRecordEvent;
+use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRecordEvent;
+use Contena\Core\Content\ImportExport\Event\ImportExportBeforeImportRowEvent;
+use Contena\Core\Content\ImportExport\Event\ImportExportExceptionExportRecordEvent;
+use Contena\Core\Content\ImportExport\ImportExport;
+use Contena\Core\Content\ImportExport\Processing\Pipe\AbstractPipe;
+use Contena\Core\Content\ImportExport\Processing\Reader\AbstractReader;
+use Contena\Core\Content\ImportExport\Processing\Writer\AbstractWriter;
+use Contena\Core\Content\ImportExport\Service\FileService;
+use Contena\Core\Content\ImportExport\Service\ImportExportService;
+use Contena\Core\Content\ImportExport\Strategy\Import\ImportStrategyService;
+use Contena\Core\Content\ImportExport\Struct\Config;
+use Contena\Core\Content\ImportExport\Struct\ImportResult;
+use Contena\Core\Content\ImportExport\Struct\Progress;
+use Contena\Core\Content\Product\Aggregate\ProductKeywordDictionary\ProductKeywordDictionaryDefinition;
+use Contena\Core\Content\Product\Aggregate\ProductKeywordDictionary\ProductKeywordDictionaryEntity;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Language\LanguageEntity;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+
+/**
+ * @internal
+ */
+#[Package('fundamentals@after-sales')]
+#[CoversClass(ImportExport::class)]
+class ImportExportTest extends TestCase
+{
+    public function testImportWithFinishedProgress(): void
+    {
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->never())->method('read');
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->never())->method('append');
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->never())->method('in');
+        $pipe->expects($this->never())->method('out');
+
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+            'file' => (new ImportExportFileEntity())->assign([
+                'path' => 'foobar', 'size' => 1337,
+            ]),
+            'records' => 5,
+        ]);
+
+        $importExportService = static::createStub(ImportExportService::class);
+        $importExportService->method('findLog')->willReturn($logEntity);
+
+        /** @var StaticEntityRepository<OrderCollection> */
+        $repository = new StaticEntityRepository([], new OrderDefinition());
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            new EventDispatcher(),
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            static::createStub(ImportStrategyService::class)
+        );
+
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn () => new Progress($logEntity->getId(), $logEntity->getState())
+            );
+
+        $logEntity->setState(Progress::STATE_SUCCEEDED);
+        $importExport->import(Context::createDefaultContext());
+
+        $logEntity->setState(Progress::STATE_ABORTED);
+        $importExport->import(Context::createDefaultContext());
+
+        $logEntity->setState(Progress::STATE_FAILED);
+        $importExport->import(Context::createDefaultContext());
+    }
+
+    public function testImport(): void
+    {
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->once())->method('read')->willReturn([
+            ['id' => 'id1', 'name' => 'foo'],
+            ['id' => 'id2', 'name' => 'baz'],
+            ['id' => 'id3', 'name' => 'bar'],
+        ]);
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->never())->method('append');
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->never())->method('in');
+        $pipe->expects($this->exactly(3))->method('out')->willReturnOnConsecutiveCalls([
+            'id1' => ['id' => 'id1', 'name' => 'foo'],
+        ], [
+            'id2' => ['id' => 'id2', 'name' => 'baz'],
+        ], [
+            'id3' => ['id' => 'id3', 'name' => 'bar'],
+        ]);
+
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+            'activity' => ImportExportLogEntity::ACTIVITY_IMPORT,
+            'file' => (new ImportExportFileEntity())->assign([
+                'originalName' => 'customer.csv',
+                'expireDate' => new \DateTimeImmutable(),
+                'path' => 'foobar',
+                'size' => 1337,
+            ]),
+            'records' => 5,
+        ]);
+
+        $importExportBeforeImportRowEventCount = 0;
+        $importExportBeforeImportRecordEventCount = 0;
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            ImportExportBeforeImportRowEvent::class,
+            static function () use (&$importExportBeforeImportRowEventCount): void {
+                ++$importExportBeforeImportRowEventCount;
+            }
+        );
+        $eventDispatcher->addListener(
+            ImportExportBeforeImportRecordEvent::class,
+            static function () use (&$importExportBeforeImportRecordEventCount): void {
+                ++$importExportBeforeImportRecordEventCount;
+            }
+        );
+
+        $importExportService = static::createStub(ImportExportService::class);
+        $importExportService->method('findLog')->willReturn($logEntity);
+
+        $importStrategyService = static::createStub(ImportStrategyService::class);
+        $importStrategyService->method('import')->willReturn(new ImportResult([], []));
+        $importStrategyService->method('commit')->willReturn(new ImportResult([], []));
+
+        /** @var StaticEntityRepository<CustomerCollection> */
+        $repository = new StaticEntityRepository([], new CustomerDefinition());
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            $eventDispatcher,
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            $importStrategyService
+        );
+
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn () => new Progress($logEntity->getId(), $logEntity->getState())
+            );
+
+        $logEntity->setState(Progress::STATE_PROGRESS);
+        $context = Context::createDefaultContext();
+
+        static::assertFalse($context->hasState(Context::SKIP_TRIGGER_FLOW));
+        $importExport->import($context);
+
+        static::assertTrue($context->hasState(Context::SKIP_TRIGGER_FLOW));
+        static::assertSame(3, $importExportBeforeImportRowEventCount);
+        static::assertSame(3, $importExportBeforeImportRecordEventCount);
+    }
+
+    public function testExportWithFinishedProgress(): void
+    {
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+        ]);
+
+        $importExportService = static::createStub(ImportExportService::class);
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn () => new Progress($logEntity->getId(), $logEntity->getState())
+            );
+
+        $eventDispatcher = new EventDispatcher();
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->never())->method('in');
+        $pipe->expects($this->never())->method('out');
+
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->never())->method('read');
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->never())->method('append');
+
+        /** @var StaticEntityRepository<CustomerCollection> */
+        $repository = new StaticEntityRepository([], new CustomerDefinition());
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            $eventDispatcher,
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            static::createStub(ImportStrategyService::class)
+        );
+
+        $context = Context::createDefaultContext();
+
+        $logEntity->setState(Progress::STATE_SUCCEEDED);
+        static::assertEquals(new Progress($logEntity->getId(), $logEntity->getState()), $importExport->export($context, new Criteria(), 0));
+
+        $logEntity->setState(Progress::STATE_FAILED);
+        static::assertEquals(new Progress($logEntity->getId(), $logEntity->getState()), $importExport->export($context, new Criteria(), 0));
+
+        $logEntity->setState(Progress::STATE_ABORTED);
+        static::assertEquals(new Progress($logEntity->getId(), $logEntity->getState()), $importExport->export($context, new Criteria(), 0));
+    }
+
+    public function testSuccessfulExport(): void
+    {
+        $exportFileName = 'order_export.csv';
+
+        $fileId = Uuid::randomHex();
+
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+            'state' => Progress::STATE_PROGRESS,
+            'fileId' => $fileId,
+            'file' => (new ImportExportFileEntity())->assign([
+                'id' => $fileId,
+                'path' => 'tests/unit/Core/Content/ImportExport/fixtures/' . $exportFileName,
+            ]),
+        ]);
+
+        $importExportService = static::createStub(ImportExportService::class);
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn () => new Progress($logEntity->getId(), $logEntity->getState())
+            );
+
+        $enrichExportCriteriaEventCount = 0;
+        $importExportBeforeExportRecordEventCount = 0;
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            EnrichExportCriteriaEvent::class,
+            static function () use (&$enrichExportCriteriaEventCount): void {
+                ++$enrichExportCriteriaEventCount;
+            }
+        );
+        $eventDispatcher->addListener(
+            ImportExportBeforeExportRecordEvent::class,
+            static function () use (&$importExportBeforeExportRecordEventCount): void {
+                ++$importExportBeforeExportRecordEventCount;
+            }
+        );
+
+        $orderId = Uuid::randomHex();
+
+        /** @var StaticEntityRepository<OrderCollection> */
+        $repository = new StaticEntityRepository(
+            [new EntitySearchResult(
+                OrderDefinition::ENTITY_NAME,
+                1,
+                new EntityCollection([(new OrderEntity())->assign(['id' => $orderId])]),
+                null,
+                new Criteria(),
+                Context::createDefaultContext()
+            )],
+            new OrderDefinition()
+        );
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->exactly(1))->method('in')->willReturnCallback(
+            static function (Config $config, array $originalRecord): iterable {
+                $serializedRecord = [];
+
+                $serializedRecord['id'] = $originalRecord['id'];
+
+                return $serializedRecord;
+            }
+        );
+        $pipe->expects($this->never())->method('out');
+
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->never())->method('read');
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->exactly(1))->method('append')->with(
+            new Config([], [], []),
+            [
+                'id' => $orderId,
+            ],
+            0
+        );
+        $writer->expects($this->exactly(1))->method('flush');
+        $writer->expects($this->exactly(1))->method('finish');
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            $eventDispatcher,
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            static::createStub(ImportStrategyService::class)
+        );
+
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+
+        static::assertEquals(
+            (new Progress($logEntity->getId(), Progress::STATE_SUCCEEDED))->assign([
+                'offset' => 1,
+                'total' => 1,
+                'processedRecords' => 1,
+            ]),
+            $importExport->export($context, $criteria, 0)
+        );
+
+        static::assertSame(1, $enrichExportCriteriaEventCount);
+        static::assertSame(1, $importExportBeforeExportRecordEventCount);
+    }
+
+    public function testSuccessfulExportOnEntitiesWithoutCreatedAt(): void
+    {
+        $exportFileName = 'product_keyword_dictionary.csv';
+
+        $fileId = Uuid::randomHex();
+
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+            'state' => Progress::STATE_PROGRESS,
+            'fileId' => $fileId,
+            'file' => (new ImportExportFileEntity())->assign([
+                'id' => $fileId,
+                'path' => 'tests/unit/Core/Content/ImportExport/fixtures/' . $exportFileName,
+            ]),
+        ]);
+
+        $importExportService = static::createStub(ImportExportService::class);
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn () => new Progress($logEntity->getId(), $logEntity->getState())
+            );
+
+        $enrichExportCriteriaEventCount = 0;
+        $importExportBeforeExportRecordEventCount = 0;
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            EnrichExportCriteriaEvent::class,
+            static function () use (&$enrichExportCriteriaEventCount): void {
+                ++$enrichExportCriteriaEventCount;
+            }
+        );
+        $eventDispatcher->addListener(
+            ImportExportBeforeExportRecordEvent::class,
+            static function () use (&$importExportBeforeExportRecordEventCount): void {
+                ++$importExportBeforeExportRecordEventCount;
+            }
+        );
+
+        $dictId = Uuid::randomHex();
+
+        /** @var StaticEntityRepository<OrderCollection> */
+        $repository = new StaticEntityRepository(
+            [
+                static function (Criteria $criteria, Context $ctx) use ($dictId): EntitySearchResult {
+                    $sortings = $criteria->getSorting();
+
+                    static::assertNotCount(0, $sortings, 'Expected export to add at least one sorting');
+                    static::assertCount(
+                        0,
+                        \array_filter($sortings, static fn ($s) => $s->getField() === 'createdAt'),
+                        'Export must not sort by createdAt for entities without that field'
+                    );
+                    static::assertCount(
+                        1,
+                        \array_filter($sortings, static fn ($s) => $s->getField() === 'id'),
+                        'Expected export to sort by primary key field id'
+                    );
+
+                    return new EntitySearchResult(
+                        ProductKeywordDictionaryDefinition::ENTITY_NAME,
+                        1,
+                        new EntityCollection([(new ProductKeywordDictionaryEntity())->assign(['id' => $dictId])]),
+                        null,
+                        $criteria,
+                        $ctx
+                    );
+                },
+            ],
+            new ProductKeywordDictionaryDefinition()
+        );
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->exactly(1))->method('in')->willReturnCallback(
+            static function (Config $config, array $originalRecord): iterable {
+                $serializedRecord = [];
+
+                $serializedRecord['id'] = $originalRecord['id'];
+
+                return $serializedRecord;
+            }
+        );
+        $pipe->expects($this->never())->method('out');
+
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->never())->method('read');
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->exactly(1))->method('append')->with(
+            new Config([], [], []),
+            [
+                'id' => $dictId,
+            ],
+            0
+        );
+        $writer->expects($this->exactly(1))->method('flush');
+        $writer->expects($this->exactly(1))->method('finish');
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            $eventDispatcher,
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            static::createStub(ImportStrategyService::class)
+        );
+
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+
+        static::assertEquals(
+            (new Progress($logEntity->getId(), Progress::STATE_SUCCEEDED))->assign([
+                'offset' => 1,
+                'total' => 1,
+                'processedRecords' => 1,
+            ]),
+            $importExport->export($context, $criteria, 0)
+        );
+
+        static::assertSame(1, $enrichExportCriteriaEventCount);
+        static::assertSame(1, $importExportBeforeExportRecordEventCount);
+    }
+
+    public function testExportWithError(): void
+    {
+        $exportFileName = 'order_export.csv';
+        $fileId = Uuid::randomHex();
+        $profileId = Uuid::randomHex();
+        $invalidRecordsLogId = Uuid::randomHex();
+
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+            'state' => Progress::STATE_PROGRESS,
+            'fileId' => $fileId,
+            'profileId' => $profileId,
+            'file' => (new ImportExportFileEntity())->assign([
+                'id' => $fileId,
+                'path' => 'tests/unit/Core/Content/ImportExport/fixtures/' . $exportFileName,
+                'originalName' => $exportFileName,
+                'expireDate' => new \DateTimeImmutable(),
+            ]),
+        ]);
+
+        $importExportService = $this->createMock(ImportExportService::class);
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn (string $logId, int $offset) => new Progress($logId, Progress::STATE_PROGRESS)
+            );
+        $importExportService->expects($this->exactly(1))->method('prepareExport')
+            ->willReturnCallback(
+                static fn () => (new ImportExportLogEntity())->assign([
+                    'id' => $invalidRecordsLogId,
+                    'activity' => ImportExportLogEntity::ACTIVITY_EXPORT,
+                    'state' => Progress::STATE_PROGRESS,
+                    'profileId' => $profileId,
+                    'fileId' => $fileId,
+                    'file' => (new ImportExportFileEntity())->assign([
+                        'id' => $fileId,
+                        'path' => 'tests/unit/Core/Content/ImportExport/fixtures/' . $exportFileName . '_invalid',
+                    ]),
+                ])
+            );
+
+        $enrichExportCriteriaEventCount = 0;
+        $importExportBeforeExportRecordEventCount = 0;
+        $importExportExceptionExportRecordEventCount = 0;
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            EnrichExportCriteriaEvent::class,
+            static function () use (&$enrichExportCriteriaEventCount): void {
+                ++$enrichExportCriteriaEventCount;
+            }
+        );
+        $eventDispatcher->addListener(
+            ImportExportBeforeExportRecordEvent::class,
+            static function () use (&$importExportBeforeExportRecordEventCount): void {
+                ++$importExportBeforeExportRecordEventCount;
+            }
+        );
+        $eventDispatcher->addListener(
+            ImportExportExceptionExportRecordEvent::class,
+            static function () use (&$importExportExceptionExportRecordEventCount): void {
+                ++$importExportExceptionExportRecordEventCount;
+            }
+        );
+
+        /** @var StaticEntityRepository<OrderCollection> */
+        $repository = new StaticEntityRepository(
+            [new EntitySearchResult(
+                OrderDefinition::ENTITY_NAME,
+                1,
+                new EntityCollection([
+                    (new OrderEntity())->assign(['id' => Uuid::randomHex(), 'language' => new LanguageEntity()]),
+                ]),
+                null,
+                new Criteria(),
+                Context::createDefaultContext()
+            )],
+            new OrderDefinition()
+        );
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->exactly(2))->method('in')->willReturnCallback(
+            static function (Config $config, array $originalRecord): iterable {
+                $serializedRecord = [];
+
+                foreach ($originalRecord as $key => $value) {
+                    $serializedRecord[$key] = $value;
+                }
+
+                $serializedRecord['extensions'] = '';
+                $serializedRecord['translated'] = '';
+                $serializedRecord['ruleIds'] = '';
+
+                return $serializedRecord;
+            }
+        );
+        $pipe->expects($this->never())->method('out');
+
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->never())->method('read');
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->exactly(1))->method('append');
+        $writer->expects($this->exactly(2))->method('flush');
+        $writer->expects($this->exactly(2))->method('finish');
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            $eventDispatcher,
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            static::createStub(ImportStrategyService::class)
+        );
+
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+
+        static::assertEquals(
+            (new Progress($logEntity->getId(), Progress::STATE_FAILED))->assign([
+                'offset' => 1,
+                'total' => 1,
+                'invalidRecordsLogId' => $invalidRecordsLogId,
+                'processedRecords' => 0,
+            ]),
+            $importExport->export($context, $criteria, 0)
+        );
+
+        static::assertSame(1, $enrichExportCriteriaEventCount);
+        static::assertSame(1, $importExportBeforeExportRecordEventCount);
+        static::assertSame(1, $importExportExceptionExportRecordEventCount);
+    }
+
+    public function testExportExceptions(): void
+    {
+        $exportFileName = 'order_export.csv';
+        $fileId = Uuid::randomHex();
+        $profileId = Uuid::randomHex();
+        $invalidRecordsLogId = Uuid::randomHex();
+        $errorMessage = 'Foo';
+
+        $logEntity = new ImportExportLogEntity();
+        $logEntity->assign([
+            'id' => Uuid::randomHex(),
+            'state' => Progress::STATE_PROGRESS,
+            'fileId' => $fileId,
+            'profileId' => $profileId,
+            'file' => (new ImportExportFileEntity())->assign([
+                'id' => $fileId,
+                'path' => 'tests/unit/Core/Content/ImportExport/fixtures/' . $exportFileName,
+                'originalName' => $exportFileName,
+                'expireDate' => new \DateTimeImmutable(),
+            ]),
+        ]);
+
+        $importExportService = $this->createMock(ImportExportService::class);
+        $importExportService->method('getProgress')
+            ->willReturnCallback(
+                static fn (string $logId, int $offset) => new Progress($logId, Progress::STATE_PROGRESS)
+            );
+        $importExportService->expects($this->exactly(1))->method('prepareExport')
+            ->willReturnCallback(
+                static fn () => (new ImportExportLogEntity())->assign([
+                    'id' => $invalidRecordsLogId,
+                    'activity' => ImportExportLogEntity::ACTIVITY_EXPORT,
+                    'state' => Progress::STATE_PROGRESS,
+                    'profileId' => $profileId,
+                    'fileId' => $fileId,
+                    'file' => (new ImportExportFileEntity())->assign([
+                        'id' => $fileId,
+                        'path' => 'tests/unit/Core/Content/ImportExport/fixtures/' . $exportFileName . '_invalid',
+                    ]),
+                ])
+            );
+
+        $importExportBeforeExportRecordEventCount = 0;
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            ImportExportBeforeExportRecordEvent::class,
+            static function () use (&$importExportBeforeExportRecordEventCount): void {
+                ++$importExportBeforeExportRecordEventCount;
+            }
+        );
+
+        $pipe = $this->createMock(AbstractPipe::class);
+        $pipe->expects($this->exactly(1))->method('in')->willReturnCallback(
+            static function (Config $config, iterable $originalRecord) use ($errorMessage): iterable {
+                static::assertSame(['_error' => $errorMessage], $originalRecord);
+
+                $serializedRecord = [];
+
+                foreach ($originalRecord as $key => $value) {
+                    $serializedRecord[$key] = $value;
+                }
+
+                return $serializedRecord;
+            }
+        );
+        $pipe->expects($this->never())->method('out');
+
+        $reader = $this->createMock(AbstractReader::class);
+        $reader->expects($this->never())->method('read');
+
+        $writer = $this->createMock(AbstractWriter::class);
+        $writer->expects($this->exactly(1))->method('append')->with(
+            new Config([], [], []),
+            ['_error' => $errorMessage],
+            0
+        );
+        $writer->expects($this->exactly(1))->method('flush');
+        $writer->expects($this->exactly(1))->method('finish');
+
+        /** @var StaticEntityRepository<OrderCollection> */
+        $repository = new StaticEntityRepository([], new OrderDefinition());
+
+        $importExport = new ImportExport(
+            $importExportService,
+            $logEntity,
+            static::createStub(FilesystemOperator::class),
+            $eventDispatcher,
+            static::createStub(Connection::class),
+            $repository,
+            $pipe,
+            $reader,
+            $writer,
+            static::createStub(FileService::class),
+            static::createStub(ImportStrategyService::class)
+        );
+
+        $context = Context::createDefaultContext();
+
+        static::assertEquals(
+            (new Progress($logEntity->getId(), Progress::STATE_FAILED))->assign([
+                'offset' => 0,
+                'total' => null,
+                'invalidRecordsLogId' => $invalidRecordsLogId,
+                'processedRecords' => 0,
+            ]),
+            $importExport->exportExceptions($context, [['_error' => $errorMessage]])
+        );
+
+        static::assertSame(1, $importExportBeforeExportRecordEventCount);
+    }
+}

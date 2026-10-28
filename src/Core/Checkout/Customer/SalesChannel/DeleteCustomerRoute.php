@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Checkout\Customer\SalesChannel;
+
+use Contena\Core\Checkout\Customer\CustomerCollection;
+use Contena\Core\Checkout\Customer\CustomerEntity;
+use Contena\Core\Checkout\Customer\Extension\DeleteCustomerRouteExtension;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\SalesChannel\NoContentResponse;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Package('checkout')]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+class DeleteCustomerRoute extends AbstractDeleteCustomerRoute
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<CustomerCollection> $customerRepository
+     */
+    public function __construct(private readonly EntityRepository $customerRepository, private readonly ExtensionDispatcher $extensions)
+    {
+    }
+
+    public function getDecorated(): AbstractDeleteCustomerRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    #[Route(
+        path: '/store-api/account/customer',
+        name: 'store-api.account.customer.delete',
+        defaults: [
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,
+        ],
+        methods: [Request::METHOD_DELETE]
+    )]
+    public function delete(SalesChannelContext $context, CustomerEntity $customer): NoContentResponse
+    {
+        return $this->extensions->publish(
+            name: DeleteCustomerRouteExtension::NAME,
+            extension: new DeleteCustomerRouteExtension($context, $customer),
+            function: $this->_delete(...),
+        );
+    }
+
+    private function _delete(SalesChannelContext $context, CustomerEntity $customer): NoContentResponse
+    {
+        $this->customerRepository->delete([['id' => $customer->getId()]], $context->getContext());
+
+        return new NoContentResponse();
+    }
+}

@@ -1,0 +1,97 @@
+parameters:
+    contenaLegacyStoreApiRouteMethods:
+        # Endpoints that publish no extension event on purpose: infrastructure and test routes.
+        # New store-api routes must follow the ADR, do not add them here.
+        - Contena\Core\Content\ProductExport\SalesChannel\ExportController::index
+        - Contena\Core\Content\Test\TestNavigationSeoUrlRoute::route
+        - Contena\Core\Content\Test\TestProductSeoUrlRoute::route
+        - Contena\Core\Framework\App\Api\AppJWTGenerateRoute::generate
+        - Contena\Core\Framework\Mcp\Controller\StoreApiMcpServerController::handle
+        - Contena\Core\Framework\Script\Api\ScriptStoreApiRoute::execute
+        - Contena\Core\System\SalesChannel\SalesChannel\StoreApiInfoController::getRoutes
+        - Contena\Core\System\SalesChannel\SalesChannel\StoreApiInfoController::info
+        - Contena\Core\System\SalesChannel\SalesChannel\StoreApiInfoController::openApiSchema
+        - Contena\Core\System\SalesChannel\SalesChannel\StoreApiInfoController::stoplightIoInfoHtml
+
+    # Route methods that keep their abstract route class for backwards compatibility.
+    # They publish extension events like every other route. Remove an entry together with its abstract route class.
+    contenaStoreApiRouteMethodsWithAbstractContract:
+        - Contena\Core\Checkout\Cart\SalesChannel\CartDeleteRoute::delete
+        - Contena\Core\Checkout\Cart\SalesChannel\CartItemAddRoute::add
+        - Contena\Core\Checkout\Cart\SalesChannel\CartItemRemoveRoute::remove
+        - Contena\Core\Checkout\Cart\SalesChannel\CartItemUpdateRoute::change
+        - Contena\Core\Checkout\Cart\SalesChannel\CartLoadRoute::load
+        - Contena\Core\Checkout\Cart\SalesChannel\CartOrderRoute::order
+        - Contena\Core\Checkout\Cart\SalesChannel\ProductShippingCostRoute::shippingCostsByProduct
+        - Contena\Core\Checkout\Cart\SalesChannel\ShippingCostRoute::shippingCostsCart
+        - Contena\Core\Checkout\Customer\SalesChannel\AccountNewsletterRecipientRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\AddWishlistProductRoute::add
+        - Contena\Core\Checkout\Customer\SalesChannel\ChangeCustomerProfileRoute::change
+        - Contena\Core\Checkout\Customer\SalesChannel\ChangeEmailRoute::change
+        - Contena\Core\Checkout\Customer\SalesChannel\ChangeLanguageRoute::change
+        - Contena\Core\Checkout\Customer\SalesChannel\ChangePasswordRoute::change
+        - Contena\Core\Checkout\Customer\SalesChannel\ConvertGuestRoute::convertGuest
+        - Contena\Core\Checkout\Customer\SalesChannel\CustomerGroupRegistrationSettingsRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\CustomerRecoveryIsExpiredRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\CustomerRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\DeleteAddressRoute::delete
+        - Contena\Core\Checkout\Customer\SalesChannel\DeleteCustomerRoute::delete
+        - Contena\Core\Checkout\Customer\SalesChannel\DownloadRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\ImitateCustomerRoute::imitateCustomerLogin
+        - Contena\Core\Checkout\Customer\SalesChannel\ListAddressRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\LoadWishlistRoute::load
+        - Contena\Core\Checkout\Customer\SalesChannel\LoginRoute::login
+        - Contena\Core\Checkout\Customer\SalesChannel\LogoutRoute::logout
+        - Contena\Core\Checkout\Customer\SalesChannel\MergeWishlistProductRoute::merge
+        - Contena\Core\Checkout\Customer\SalesChannel\RegisterConfirmRoute::confirm
+        - Contena\Core\Checkout\Customer\SalesChannel\RegisterRoute::register
+        - Contena\Core\Checkout\Customer\SalesChannel\RemoveWishlistProductRoute::delete
+        - Contena\Core\Checkout\Customer\SalesChannel\ResetPasswordRoute::resetPassword
+        - Contena\Core\Checkout\Customer\SalesChannel\SendPasswordRecoveryMailRoute::sendRecoveryMail
+        - Contena\Core\Checkout\Customer\SalesChannel\SwitchDefaultAddressRoute::swap
+        - Contena\Core\Checkout\Customer\SalesChannel\UpsertAddressRoute::upsert
+        - Contena\Core\Checkout\DocumentV2\SalesChannel\DocumentRoute::download
+        - Contena\Core\Checkout\Gateway\SalesChannel\CheckoutGatewayRoute::load
+        - Contena\Core\Checkout\Order\SalesChannel\CancelOrderRoute::cancel
+        - Contena\Core\Checkout\Order\SalesChannel\OrderRoute::load
+        - Contena\Core\Checkout\Order\SalesChannel\SetPaymentOrderRoute::setPayment
+        - Contena\Core\Checkout\Payment\SalesChannel\HandlePaymentMethodRoute::load
+        - Contena\Core\Checkout\Payment\SalesChannel\PaymentMethodRoute::load
+        - Contena\Core\Checkout\Shipping\SalesChannel\ShippingMethodRoute::load
+        - Contena\Core\Content\Breadcrumb\SalesChannel\BreadcrumbRoute::load
+        - Contena\Core\Content\Category\SalesChannel\CategoryListRoute::load
+        - Contena\Core\Content\Category\SalesChannel\CategoryRoute::load
+        - Contena\Core\Content\Category\SalesChannel\NavigationRoute::load
+        - Contena\Core\Content\Cms\SalesChannel\CmsRoute::load
+        - Contena\Core\Content\ContactForm\SalesChannel\ContactFormRoute::load
+        - Contena\Core\Content\Cookie\SalesChannel\CookieRoute::getCookieGroups
+        - Contena\Core\Content\LandingPage\SalesChannel\LandingPageRoute::load
+        - Contena\Core\Content\LegalGuaranteeNotice\SalesChannel\LegalGuaranteeNoticeRoute::load
+        - Contena\Core\Content\Media\SalesChannel\MediaRoute::load
+        - Contena\Core\Content\Newsletter\SalesChannel\NewsletterConfirmRoute::confirmWithResponse
+        - Contena\Core\Content\Newsletter\SalesChannel\NewsletterSubscribeRoute::subscribeWithResponse
+        - Contena\Core\Content\Newsletter\SalesChannel\NewsletterUnsubscribeRoute::unsubscribeWithResponse
+        - Contena\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRoute::load
+        - Contena\Core\Content\Product\SalesChannel\Detail\ProductDetailRoute::load
+        - Contena\Core\Content\Product\SalesChannel\FindVariant\FindProductVariantRoute::load
+        - Contena\Core\Content\Product\SalesChannel\Garan\GaranLabelRoute::load
+        - Contena\Core\Content\Product\SalesChannel\Listing\ProductListingRoute::load
+        - Contena\Core\Content\Product\SalesChannel\ProductListRoute::load
+        - Contena\Core\Content\Product\SalesChannel\PurchaseLimit\ProductPurchaseLimitRoute::readProductsPurchaseLimit
+        - Contena\Core\Content\Product\SalesChannel\Review\ProductReviewRoute::load
+        - Contena\Core\Content\Product\SalesChannel\Review\ProductReviewSaveRoute::save
+        - Contena\Core\Content\Product\SalesChannel\Search\ProductSearchRoute::load
+        - Contena\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRoute::load
+        - Contena\Core\Content\RevocationRequest\SalesChannel\RevocationRequestRoute::request
+        - Contena\Core\Content\Seo\SalesChannel\SeoUrlRoute::load
+        - Contena\Core\Content\Sitemap\SalesChannel\SitemapRoute::load
+        - Contena\Core\Framework\Gateway\Context\SalesChannel\ContextGatewayRoute::load
+        - Contena\Core\System\Country\SalesChannel\CountryRoute::load
+        - Contena\Core\System\Country\SalesChannel\CountryStateRoute::load
+        - Contena\Core\System\Currency\SalesChannel\CurrencyRoute::load
+        - Contena\Core\System\Language\SalesChannel\LanguageRoute::load
+        - Contena\Core\System\SalesChannel\SalesChannel\ContextRoute::load
+        - Contena\Core\System\SalesChannel\SalesChannel\ContextSwitchRoute::switchContext
+        - Contena\Core\System\Salutation\SalesChannel\SalutationRoute::load
+        - Contena\Core\System\Snippet\SalesChannel\SnippetRoute::load
+        - Contena\Core\System\SystemConfig\SalesChannel\ShopSettingsRoute::load

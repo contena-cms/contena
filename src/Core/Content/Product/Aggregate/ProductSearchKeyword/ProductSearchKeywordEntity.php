@@ -1,0 +1,90 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Product\Aggregate\ProductSearchKeyword;
+
+use Contena\Core\Content\Product\ProductEntity;
+use Contena\Core\Framework\DataAbstractionLayer\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Language\LanguageEntity;
+
+/**
+ * @codeCoverageIgnore
+ */
+#[Package('inventory')]
+class ProductSearchKeywordEntity extends Entity
+{
+    use EntityIdTrait;
+
+    protected string $languageId;
+
+    protected string $productId;
+
+    protected string $keyword;
+
+    protected float $ranking;
+
+    protected ?ProductEntity $product = null;
+
+    protected ?LanguageEntity $language = null;
+
+    public function getLanguageId(): string
+    {
+        return $this->languageId;
+    }
+
+    public function setLanguageId(string $languageId): void
+    {
+        $this->languageId = $languageId;
+    }
+
+    public function getProductId(): string
+    {
+        return $this->productId;
+    }
+
+    public function setProductId(string $productId): void
+    {
+        $this->productId = $productId;
+    }
+
+    public function getKeyword(): string
+    {
+        return $this->keyword;
+    }
+
+    public function setKeyword(string $keyword): void
+    {
+        $this->keyword = $keyword;
+    }
+
+    public function getRanking(): float
+    {
+        return $this->ranking;
+    }
+
+    public function setRanking(float $ranking): void
+    {
+        $this->ranking = $ranking;
+    }
+
+    public function getProduct(): ?ProductEntity
+    {
+        return $this->product;
+    }
+
+    public function setProduct(?ProductEntity $product): void
+    {
+        $this->product = $product;
+    }
+
+    public function getLanguage(): ?LanguageEntity
+    {
+        return $this->language;
+    }
+
+    public function setLanguage(?LanguageEntity $language): void
+    {
+        $this->language = $language;
+    }
+}

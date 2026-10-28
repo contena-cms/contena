@@ -1,0 +1,12 @@
+diff --git a/src/Frontend/Resources/snippet/frontend.en.json b/src/Frontend/Resources/snippet/frontend.en.json
+index aaaaaaa..bbbbbbb 100644
+--- a/src/Frontend/Resources/snippet/frontend.en.json
++++ b/src/Frontend/Resources/snippet/frontend.en.json
+@@ -10,7 +10,7 @@
+   "account": {
+     "login": {
+-      "title": "Sign in"
++      "title": "Sign in to your account"
+     }
+   }
+ }

@@ -1,0 +1,13 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Validation;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\ContenaException;
+use Symfony\Component\Validator\ConstraintViolationList;
+
+#[Package('framework')]
+interface ConstraintViolationExceptionInterface extends ContenaException
+{
+    public function getViolations(): ConstraintViolationList;
+}

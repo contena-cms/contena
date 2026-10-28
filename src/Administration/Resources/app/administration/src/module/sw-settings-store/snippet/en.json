@@ -1,0 +1,15 @@
+{
+  "sw-settings-store": {
+    "general": {
+      "mainMenuItemGeneral": "Contena Account",
+      "textHeadline": "Contena Account",
+      "description": "Change your Contena Account settings here.",
+      "messageSaveSuccess": "Your Contena Account information have been saved."
+    },
+    "detail": {
+      "titleCard": "Settings",
+      "labelHost": "Licence domain",
+      "placeholderHost": "Enter the licence domain (shop domain), specified in your Contena Account."
+    }
+  }
+}

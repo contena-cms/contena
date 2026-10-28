@@ -1,0 +1,119 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\SalesChannel\Api;
+
+use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\SalesChannel\SalesChannelException;
+use Symfony\Component\HttpFoundation\Request;
+
+#[Package('framework')]
+class ResponseFields
+{
+    /**
+     * @param array<string, list<string>>|null $includes
+     * @param array<string, list<string>>|null $excludes
+     */
+    public function __construct(
+        protected ?array $includes = null,
+        protected ?array $excludes = null,
+    ) {
+        $this->validateFields();
+    }
+
+    /**
+     * Reads the `includes` and `excludes` parameters of the request.
+     */
+    public static function fromRequest(Request $request): self
+    {
+        return new self(
+            self::getFieldsParameter($request, 'includes'),
+            self::getFieldsParameter($request, 'excludes'),
+        );
+    }
+
+    public function isAllowed(string $type, string $property): bool
+    {
+        if (isset($this->excludes[$type]) && \in_array($property, $this->excludes[$type], true)) {
+            return false;
+        }
+
+        if (isset($this->includes[$type])) {
+            return \in_array($property, $this->includes[$type], true);
+        }
+
+        return true;
+    }
+
+    public function hasNested(string $alias, string $prefix): bool
+    {
+        $prefix .= '.';
+
+        $excludeFields = $this->excludes[$alias] ?? [];
+        foreach ($excludeFields as $property) {
+            if (str_starts_with((string) $property, $prefix)) {
+                return false;
+            }
+        }
+
+        $includeFields = $this->includes[$alias] ?? [];
+        foreach ($includeFields as $property) {
+            if (str_starts_with((string) $property, $prefix)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    protected function validateFields(): void
+    {
+        if (\is_array($this->includes)) {
+            foreach ($this->includes as $type => $fields) {
+                if (\is_array($fields)) {
+                    continue;
+                }
+
+                throw SalesChannelException::invalidType(
+                    \sprintf(
+                        'The includes for type "%s" must be of the type array, %s given',
+                        $type,
+                        \gettype($fields)
+                    )
+                );
+            }
+        }
+
+        if (\is_array($this->excludes)) {
+            foreach ($this->excludes as $type => $fields) {
+                if (\is_array($fields)) {
+                    continue;
+                }
+
+                throw SalesChannelException::invalidType(
+                    \sprintf(
+                        'The excludes for type "%s" must be of the type array, %s given',
+                        $type,
+                        \gettype($fields)
+                    )
+                );
+            }
+        }
+    }
+
+    /**
+     * @return array<string, list<string>>|null
+     */
+    private static function getFieldsParameter(Request $request, string $name): ?array
+    {
+        $fields = RequestParamHelper::get($request, $name, []);
+
+        if ($fields !== null && !\is_array($fields)) {
+            throw SalesChannelException::invalidType(
+                \sprintf('The %s must be of the type array, %s given', $name, \gettype($fields))
+            );
+        }
+
+        return $fields;
+    }
+}

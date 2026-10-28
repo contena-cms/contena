@@ -1,0 +1,7 @@
+<?xml version="1.0" ?>
+<container>
+    <services>
+        <service id="Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\ClassMovedAttributeUsage" class="Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\ClassMovedAttributeUsage"/>
+        <service id="Contena\Tests\Legacy\UnregisteredClass" alias="Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\ClassMovedAttributeUsage"/>
+    </services>
+</container>

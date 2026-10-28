@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Increment\Exception;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\ContenaHttpException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @codeCoverageIgnore
+ */
+#[Package('framework')]
+class IncrementGatewayNotFoundException extends ContenaHttpException
+{
+    public function __construct(string $pool)
+    {
+        parent::__construct(
+            'Increment gateway for pool "{{ pool }}" was not found.',
+            ['pool' => $pool]
+        );
+    }
+
+    public function getStatusCode(): int
+    {
+        return Response::HTTP_BAD_REQUEST;
+    }
+
+    public function getErrorCode(): string
+    {
+        return 'FRAMEWORK__INCREMENT_GATEWAY_NOT_FOUND';
+    }
+}

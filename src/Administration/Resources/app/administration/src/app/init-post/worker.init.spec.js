@@ -1,0 +1,191 @@
+/**
+ * @sw-package framework
+ */
+import WorkerNotificationFactory from 'src/core/factory/worker-notification.factory';
+import { createPinia, setActivePinia } from 'pinia';
+import initializeWorker from './worker.init';
+
+describe('src/app/init-post/worker.init.ts', () => {
+    let loggedIn = false;
+    let config = {};
+    let loginListeners = [];
+
+    beforeAll(() => {
+        Contena.Service().register('loginService', () => {
+            return {
+                isLoggedIn: () => {
+                    return loggedIn;
+                },
+
+                addOnLoginListener: (listener) => {
+                    loginListeners.push(listener);
+                },
+                getBearerAuthentication: () => {
+                    return 'jest';
+                },
+                refreshToken: () => {
+                    return Promise.resolve();
+                },
+
+                addOnTokenChangedListener: () => {},
+                addOnLogoutListener: () => {},
+            };
+        });
+
+        Contena.Service().register('configService', () => {
+            return {
+                getConfig: () => {
+                    return Promise.resolve(config);
+                },
+            };
+        });
+    });
+
+    beforeEach(() => {
+        const registry = WorkerNotificationFactory.getRegistry();
+        registry.clear();
+
+        WorkerNotificationFactory.resetHelper();
+
+        setActivePinia(createPinia());
+    });
+
+    afterEach(() => {
+        loggedIn = false;
+        config = {};
+        loginListeners = [];
+    });
+
+    it('should not initialize if not logged in', () => {
+        loggedIn = false;
+
+        initializeWorker();
+
+        expect(loginListeners).toHaveLength(1);
+    });
+
+    // @deprecated tag:v6.8.0 - The tests will be removed with registerThumbnailMiddleware.
+    it.deprecated('v6.8.0.0').each([
+        'Contena\\Core\\Framework\\DataAbstractionLayer\\Indexing\\MessageQueue\\IndexerMessage',
+        'Contena\\Elasticsearch\\Framework\\Indexing\\IndexingMessage',
+        'Contena\\Core\\Content\\Media\\Message\\GenerateThumbnailsMessage',
+        'Contena\\Core\\Checkout\\Promotion\\DataAbstractionLayer\\PromotionIndexingMessage',
+        'Contena\\Core\\Content\\ProductStream\\DataAbstractionLayer\\ProductStreamIndexingMessage',
+        'Contena\\Core\\Content\\Category\\DataAbstractionLayer\\CategoryIndexingMessage',
+        'Contena\\Core\\Content\\Media\\DataAbstractionLayer\\MediaIndexingMessage',
+        'Contena\\Core\\System\\SalesChannel\\DataAbstractionLayer\\SalesChannelIndexingMessage',
+        'Contena\\Core\\Content\\Rule\\DataAbstractionLayer\\RuleIndexingMessage',
+        'Contena\\Core\\Content\\Product\\DataAbstractionLayer\\ProductIndexingMessage',
+        'Contena\\Elasticsearch\\Framework\\Indexing\\ElasticsearchIndexingMessage',
+        'Contena\\Core\\Content\\ImportExport\\Message\\ImportExportMessage',
+        'Contena\\Core\\Content\\Flow\\Indexing\\FlowIndexingMessage',
+        'Contena\\Core\\Content\\Newsletter\\DataAbstractionLayer\\NewsletterRecipientIndexingMessage',
+    ])('should register thumbnail middleware "%s"', async (name) => {
+        loggedIn = true;
+
+        config = {
+            adminWorker: {
+                enableQueueStatsWorker: false,
+            },
+        };
+
+        initializeWorker();
+        const helper = WorkerNotificationFactory.initialize();
+
+        const createMock = jest.fn(() => {
+            return Promise.resolve('jest-id');
+        });
+
+        helper.go({
+            queue: [{ name, size: 1 }],
+            $root: {
+                $t: (msg) => msg,
+            },
+            notification: {
+                create: createMock,
+            },
+        });
+
+        await flushPromises();
+
+        expect(loginListeners).toHaveLength(0);
+        expect(createMock).toHaveBeenCalledTimes(1);
+    });
+
+    // @deprecated tag:v6.8.0 - The test will be removed with messageQueueNotification.
+    it.deprecated('v6.8.0.0')('should update thumbnail middleware notifications', async () => {
+        loggedIn = true;
+
+        config = {
+            adminWorker: {
+                enableQueueStatsWorker: false,
+            },
+        };
+
+        initializeWorker();
+        const helper = WorkerNotificationFactory.initialize();
+
+        const createMock = jest.fn(() => {
+            return Promise.resolve('jest-id');
+        });
+
+        const updateMock = jest.fn(() => {
+            return Promise.resolve();
+        });
+
+        // First run should create notification
+        helper.go({
+            queue: [
+                {
+                    name: 'Contena\\Core\\Framework\\DataAbstractionLayer\\Indexing\\MessageQueue\\IndexerMessage',
+                    size: 1,
+                },
+            ],
+            $root: {
+                $t: (msg) => msg,
+            },
+            notification: {
+                create: createMock,
+                update: updateMock,
+            },
+        });
+        await flushPromises();
+        expect(createMock).toHaveBeenCalledTimes(1);
+
+        // Second run should update notification
+        helper.go({
+            queue: [
+                {
+                    name: 'Contena\\Core\\Framework\\DataAbstractionLayer\\Indexing\\MessageQueue\\IndexerMessage',
+                    size: 0,
+                },
+            ],
+            $root: {
+                $t: (msg) => msg,
+            },
+            notification: {
+                create: createMock,
+                update: updateMock,
+            },
+        });
+        await flushPromises();
+        expect(updateMock).toHaveBeenCalledTimes(1);
+    });
+
+    it('should update config if logged in', async () => {
+        loggedIn = true;
+
+        config = {
+            version: 'jest',
+            adminWorker: {
+                enableQueueStatsWorker: false,
+            },
+        };
+
+        initializeWorker();
+        await flushPromises();
+
+        expect(loginListeners).toHaveLength(0);
+        expect(Contena.Store.get('context').app.config.version).toBe('jest');
+    });
+});

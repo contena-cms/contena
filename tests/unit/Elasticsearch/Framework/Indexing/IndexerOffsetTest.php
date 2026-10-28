@@ -1,0 +1,84 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Elasticsearch\Framework\Indexing;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
+use Contena\Core\Content\Product\ProductDefinition;
+use Contena\Core\Framework\Log\Package;
+use Contena\Elasticsearch\Framework\Indexing\IndexerOffset;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\AbstractNormalizer;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(IndexerOffset::class)]
+class IndexerOffsetTest extends TestCase
+{
+    public function testItConvertsDefinitionsToSerializableNamesAndCanDoAnDefinitionRoundTrip(): void
+    {
+        $timestamp = (new \DateTime())->getTimestamp();
+        $offset = new IndexerOffset(
+            ['product', 'product_manufacturer'],
+            $timestamp
+        );
+
+        static::assertSame(ProductDefinition::ENTITY_NAME, $offset->getDefinition());
+        static::assertTrue($offset->hasNextDefinition());
+        static::assertSame($timestamp, $offset->getTimestamp());
+        static::assertNull($offset->getLastId());
+
+        $offset->selectNextDefinition();
+
+        static::assertSame(ProductManufacturerDefinition::ENTITY_NAME, $offset->getDefinition());
+        static::assertCount(0, $offset->getDefinitions());
+        static::assertFalse($offset->hasNextDefinition());
+
+        $offset->resetDefinitions();
+
+        static::assertSame(ProductDefinition::ENTITY_NAME, $offset->getDefinition());
+        static::assertSame(
+            [
+                ProductManufacturerDefinition::ENTITY_NAME,
+            ],
+            $offset->getDefinitions()
+        );
+
+        $offset->setLastId(['offset' => 42]);
+        static::assertSame(['offset' => 42], $offset->getLastId());
+    }
+
+    public function testSerialize(): void
+    {
+        $serialize = new Serializer(
+            [
+                new ObjectNormalizer(),
+            ],
+            [
+                new JsonEncoder(null),
+            ]
+        );
+
+        $before = new IndexerOffset(
+            ['product', 'product_manufacturer'],
+            (new \DateTime())->getTimestamp()
+        );
+        $data = $serialize->serialize(
+            $before,
+            'json'
+        );
+
+        $after = $serialize->deserialize($data, IndexerOffset::class, 'json', [
+            AbstractNormalizer::DEFAULT_CONSTRUCTOR_ARGUMENTS => [
+                IndexerOffset::class => ['mappingDefinitions' => []],
+            ],
+        ]);
+
+        static::assertEquals($before, $after);
+    }
+}

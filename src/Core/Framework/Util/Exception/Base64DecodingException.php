@@ -1,0 +1,14 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Util\Exception;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Util\UtilException;
+
+/**
+ * @codeCoverageIgnore
+ */
+#[Package('framework')]
+class Base64DecodingException extends UtilException
+{
+}

@@ -1,0 +1,29 @@
+<?xml version="1.0" ?>
+<container>
+    <services>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\GuardedListener" class="Contena\Core\DevOps\MyFakeNamespace\GuardedListener">
+            <tag name="kernel.event_listener" event="event"/>
+        </service>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\DeprecatedClass" class="Contena\Core\DevOps\MyFakeNamespace\DeprecatedClass"/>
+        <service id="decorated.service" class="Contena\Core\DevOps\MyFakeNamespace\DecoratedService"/>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\DeprecatedDecorator" class="Contena\Core\DevOps\MyFakeNamespace\DeprecatedDecorator">
+            <tag name="container.decorator" id="decorated.service"/>
+            <tag name="contena.inactiveFeature" flag="v6.9.0.0"/>
+        </service>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\TaggedDeprecatedClass" class="Contena\Core\DevOps\MyFakeNamespace\TaggedDeprecatedClass">
+            <tag name="contena.inactiveFeature" flag="v6.8.0.0"/>
+        </service>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\DeprecatedTwigExtension" class="Contena\Core\DevOps\MyFakeNamespace\DeprecatedTwigExtension">
+            <tag name="twig.extension"/>
+            <tag name="contena.inactiveFeature" flag="v6.8.0.0"/>
+        </service>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\WrongVersionTwigExtension" class="Contena\Core\DevOps\MyFakeNamespace\WrongVersionTwigExtension">
+            <tag name="twig.extension"/>
+            <tag name="contena.inactiveFeature" flag="v6.9.0.0"/>
+        </service>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\CoveredTwigExtension" class="Contena\Core\DevOps\MyFakeNamespace\CoveredTwigExtension">
+            <tag name="twig.extension"/>
+            <tag name="contena.inactiveFeature" flag="v6.8.0.0"/>
+        </service>
+    </services>
+</container>

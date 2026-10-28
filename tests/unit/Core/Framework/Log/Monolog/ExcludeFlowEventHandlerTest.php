@@ -1,0 +1,168 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Log\Monolog;
+
+use Monolog\Handler\FingersCrossedHandler;
+use Monolog\Handler\Handler;
+use Monolog\Level;
+use Monolog\LogRecord;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
+use Contena\Core\Checkout\Customer\Event\CustomerAccountRecoverRequestEvent;
+use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
+use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(ExcludeFlowEventHandler::class)]
+class ExcludeFlowEventHandlerTest extends TestCase
+{
+    /**
+     * @param list<string> $excludeList
+     */
+    #[DataProvider('cases')]
+    public function testHandler(LogRecord $record, array $excludeList, bool $shouldBePassed): void
+    {
+        $innerHandler = $this->createMock(FingersCrossedHandler::class);
+        $innerHandler->expects($shouldBePassed ? $this->once() : $this->never())->method('handle')->willReturn(true);
+
+        $handler = new ExcludeFlowEventHandler(
+            $innerHandler,
+            $excludeList
+        );
+
+        $handler->handle($record);
+    }
+
+    public function testResetIsForwardedToResettableInnerHandler(): void
+    {
+        $innerHandler = $this->createMock(FingersCrossedHandler::class);
+        $innerHandler->expects($this->once())->method('reset');
+
+        $handler = new ExcludeFlowEventHandler($innerHandler, []);
+
+        $handler->reset();
+    }
+
+    public function testResetSkipsInnerHandlerWithoutReset(): void
+    {
+        // a handler without reset(): forwarding the call unconditionally would fail here
+        $innerHandler = new class extends Handler {
+            /**
+             * @var list<LogRecord>
+             */
+            public array $records = [];
+
+            public function isHandling(LogRecord $record): bool
+            {
+                return true;
+            }
+
+            public function handle(LogRecord $record): bool
+            {
+                $this->records[] = $record;
+
+                return false;
+            }
+        };
+        $handler = new ExcludeFlowEventHandler($innerHandler, []);
+
+        $handler->reset();
+        $handler->handle(new LogRecord(new \DateTimeImmutable(), 'app', Level::Error, 'after reset'));
+
+        static::assertCount(1, $innerHandler->records);
+        static::assertSame('after reset', $innerHandler->records[0]->message);
+    }
+
+    /**
+     * @return iterable<string, array{0: LogRecord, 1: list<string>, 2: bool}>
+     */
+    public static function cases(): iterable
+    {
+        // record, exclude list, should be passed
+        yield 'event without exclude list' => [
+            new LogRecord(new \DateTimeImmutable(), 'foo', Level::Alert, 'some message'),
+            [],
+            true,
+        ];
+
+        yield 'event with exclude list that matches but different channel' => [
+            new LogRecord(new \DateTimeImmutable(), 'app', Level::Alert, UserRecoveryRequestEvent::EVENT_NAME),
+            [
+                UserRecoveryRequestEvent::EVENT_NAME,
+            ],
+            true,
+        ];
+
+        yield 'event with exclude list that matches' => [
+            new LogRecord(new \DateTimeImmutable(), 'business_events', Level::Alert, UserRecoveryRequestEvent::EVENT_NAME),
+            [
+                UserRecoveryRequestEvent::EVENT_NAME,
+            ],
+            false,
+        ];
+
+        yield 'event with exclude list that not matches' => [
+            new LogRecord(new \DateTimeImmutable(), 'business_events', Level::Alert, UserRecoveryRequestEvent::EVENT_NAME),
+            [
+                CustomerAccountRecoverRequestEvent::EVENT_NAME,
+            ],
+            true,
+        ];
+
+        yield 'mail event with exclude list that matches' => [
+            new LogRecord(
+                new \DateTimeImmutable(),
+                'business_events',
+                Level::Alert,
+                MailSentEvent::EVENT_NAME,
+                [
+                    'additionalData' => [
+                        'eventName' => CustomerAccountRecoverRequestEvent::EVENT_NAME,
+                    ],
+                ]
+            ),
+            [
+                CustomerAccountRecoverRequestEvent::EVENT_NAME,
+            ],
+            false,
+        ];
+
+        yield 'mail event with exclude list that not matches' => [
+            new LogRecord(
+                new \DateTimeImmutable(),
+                'business_events',
+                Level::Alert,
+                MailSentEvent::EVENT_NAME,
+                [
+                    'additionalData' => [
+                        'eventName' => CheckoutOrderPlacedEvent::EVENT_NAME,
+                    ],
+                ]
+            ),
+            [
+                CustomerAccountRecoverRequestEvent::EVENT_NAME,
+            ],
+            true,
+        ];
+
+        yield 'mail event with exclude list without additionalData' => [
+            new LogRecord(
+                new \DateTimeImmutable(),
+                'business_events',
+                Level::Alert,
+                MailSentEvent::EVENT_NAME,
+            ),
+            [
+                CustomerAccountRecoverRequestEvent::EVENT_NAME,
+            ],
+            true,
+        ];
+    }
+}

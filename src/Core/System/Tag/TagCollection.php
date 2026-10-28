@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Tag;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @extends EntityCollection<TagEntity>
+ *
+ * @codeCoverageIgnore
+ */
+#[Package('fundamentals@framework')]
+class TagCollection extends EntityCollection
+{
+    public function getApiAlias(): string
+    {
+        return 'tag_collection';
+    }
+
+    protected function getExpectedClass(): string
+    {
+        return TagEntity::class;
+    }
+}

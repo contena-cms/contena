@@ -1,0 +1,12 @@
+{
+  "extends": "../../app/storefront/tsconfig.json",
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "../../app/storefront",
+    "paths": {
+      "contena": ["src/contena.ts"]
+    },
+    "typeRoots": ["../../app/storefront/node_modules/@types"]
+  },
+  "include": ["**/*"]
+}

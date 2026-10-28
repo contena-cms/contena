@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Storefront\Theme\Message;
+
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
+use Contena\Storefront\Theme\ScheduledTask\DeleteThemeFilesTask;
+use Contena\Storefront\Theme\ScheduledTask\DeleteThemeFilesTaskHandler;
+
+/**
+ * used to delay the deletion of theme files
+ *
+ * @deprecated tag:v6.8.0 - Will be removed. Unused theme files are now deleted with a scheduled task.
+ * @see DeleteThemeFilesTask
+ * @see DeleteThemeFilesTaskHandler
+ */
+#[Package('discovery')]
+class DeleteThemeFilesMessage implements AsyncMessageInterface
+{
+    public function __construct(
+        private readonly string $themePath,
+        private readonly string $salesChannelId,
+        private readonly string $themeId
+    ) {
+        Feature::triggerDeprecationOrThrow(
+            'v6.8.0.0',
+            Feature::deprecatedClassMessage(self::class, 'v6.8.0.0')
+        );
+    }
+
+    public function getThemePath(): string
+    {
+        Feature::triggerDeprecationOrThrow(
+            'v6.8.0.0',
+            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0')
+        );
+
+        return $this->themePath;
+    }
+
+    public function getSalesChannelId(): string
+    {
+        Feature::triggerDeprecationOrThrow(
+            'v6.8.0.0',
+            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0')
+        );
+
+        return $this->salesChannelId;
+    }
+
+    public function getThemeId(): string
+    {
+        Feature::triggerDeprecationOrThrow(
+            'v6.8.0.0',
+            Feature::deprecatedMethodMessage(self::class, __METHOD__, 'v6.8.0.0')
+        );
+
+        return $this->themeId;
+    }
+}

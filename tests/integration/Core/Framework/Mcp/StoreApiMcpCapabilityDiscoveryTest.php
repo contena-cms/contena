@@ -1,0 +1,270 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Mcp;
+
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
+use Contena\Core\PlatformRequest;
+use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+class StoreApiMcpCapabilityDiscoveryTest extends TestCase
+{
+    use DatabaseTransactionBehaviour;
+    use KernelTestBehaviour;
+    use SalesChannelApiTestBehaviour;
+
+    public function testStoreApiMcpAdvertisesReducedMetaToolSet(): void
+    {
+        $browser = $this->createSalesChannelBrowser();
+        $sessionId = $this->initialize($browser);
+
+        $tools = $this->listTools($browser, $sessionId);
+
+        // Progressive disclosure: only the default meta-tools are advertised up front.
+        static::assertContains('contena-tool-search', $tools);
+        static::assertContains('contena-toolsets-list', $tools);
+        static::assertContains('contena-toolset-enable', $tools);
+        // Store API tools live in their toolset and are hidden until enabled.
+        static::assertNotContains('contena-store-api-context', $tools);
+        // Admin tools never leak into the store-api registry.
+        static::assertNotContains('contena-entity-search', $tools);
+        static::assertNotContains('contena-theme-config', $tools);
+    }
+
+    public function testStoreApiMcpToolSearchCarriesEnableUsageHint(): void
+    {
+        $browser = $this->createSalesChannelBrowser();
+        $sessionId = $this->initialize($browser);
+
+        $result = $this->callTool($browser, $sessionId, 'contena-tool-search', ['query' => 'context']);
+        $meta = $this->toolPayload($result)['_meta'];
+
+        static::assertArrayHasKey('usage', $meta);
+        static::assertIsString($meta['usage']);
+        static::assertStringContainsString('contena-toolset-enable', $meta['usage']);
+    }
+
+    public function testStoreApiMcpToolsetEnableRevealsHiddenToolsAndSignalsListChanged(): void
+    {
+        $browser = $this->createSalesChannelBrowser();
+        $sessionId = $this->initialize($browser);
+
+        // The store-api toolset is listed and not yet enabled.
+        $toolsets = $this->callTool($browser, $sessionId, 'contena-toolsets-list', []);
+        $listData = $this->toolPayload($toolsets)['data'];
+        static::assertIsArray($listData);
+        $listedToolsets = $listData['toolsets'] ?? null;
+        static::assertIsArray($listedToolsets);
+        $storeApiToolset = null;
+        foreach ($listedToolsets as $toolset) {
+            static::assertIsArray($toolset);
+            if ($toolset['name'] === 'store-api') {
+                $storeApiToolset = $toolset;
+            }
+        }
+        static::assertNotNull($storeApiToolset, 'store-api toolset should be listed: ' . $toolsets['content'][0]['text']);
+        static::assertFalse($storeApiToolset['enabled']);
+        static::assertContains('contena-store-api-context', $storeApiToolset['tools']);
+
+        // Enabling it reports listChanged.
+        $enable = $this->callTool($browser, $sessionId, 'contena-toolset-enable', ['toolset' => 'store-api']);
+        static::assertTrue($this->toolPayload($enable)['_meta']['listChanged'] ?? false);
+
+        // After enabling, the previously hidden tool is advertised.
+        $tools = $this->listTools($browser, $sessionId);
+        static::assertContains('contena-store-api-context', $tools);
+    }
+
+    public function testStoreApiInitializeResponseInstructionsGuideToolDiscovery(): void
+    {
+        $browser = $this->createSalesChannelBrowser();
+        $browser->request('POST', '/store-api/_mcp', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'jsonrpc' => '2.0',
+            'method' => 'initialize',
+            'params' => [
+                'protocolVersion' => '2025-03-26',
+                'capabilities' => new \stdClass(),
+                'clientInfo' => ['name' => 'store-api-mcp-discovery-test', 'version' => '1.0'],
+            ],
+            'id' => 1,
+        ], \JSON_THROW_ON_ERROR));
+
+        $content = $browser->getResponse()->getContent();
+        static::assertNotFalse($content, 'Store API MCP response was empty');
+
+        $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertIsArray($response);
+        static::assertArrayHasKey('result', $response, 'Store API MCP initialize missing result: ' . $content);
+
+        $instructions = $response['result']['instructions'] ?? '';
+        static::assertIsString($instructions);
+        static::assertStringContainsString(
+            'contena-tool-search',
+            $instructions,
+            'Store API server instructions must point clients at contena-tool-search when no advertised tool matches the requested action.',
+        );
+    }
+
+    public function testStoreApiToolResultsGoThroughTheResultRenderer(): void
+    {
+        $browser = $this->createSalesChannelBrowser();
+        $sessionId = $this->initialize($browser);
+
+        $result = $this->callTool($browser, $sessionId, 'contena-toolsets-list', []);
+
+        static::assertArrayHasKey('contena/generatedAt', $result['_meta'] ?? [], 'the Store API server must wrap its reference handler too');
+    }
+
+    private function initialize(KernelBrowser $browser): string
+    {
+        $browser->request('POST', '/store-api/_mcp', [], [], ['CONTENT_TYPE' => 'application/json'], json_encode([
+            'jsonrpc' => '2.0',
+            'method' => 'initialize',
+            'params' => [
+                'protocolVersion' => '2025-03-26',
+                'capabilities' => new \stdClass(),
+                'clientInfo' => ['name' => 'store-api-mcp-discovery-test', 'version' => '1.0'],
+            ],
+            'id' => 1,
+        ], \JSON_THROW_ON_ERROR));
+
+        $response = $browser->getResponse();
+        $sessionId = $response->headers->get('mcp-session-id');
+        static::assertNotNull($sessionId, 'initialize response is missing the mcp-session-id header');
+
+        static::assertContains(
+            PlatformRequest::HEADER_MCP_SESSION_ID,
+            explode(',', (string) $response->headers->get('Access-Control-Expose-Headers')),
+            'mcp-session-id must be exposed via CORS for browser-based MCP clients',
+        );
+
+        return $sessionId;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function listTools(KernelBrowser $browser, string $sessionId): array
+    {
+        $result = $this->rpc($browser, $sessionId, ['jsonrpc' => '2.0', 'method' => 'tools/list', 'params' => new \stdClass(), 'id' => 2]);
+
+        return array_column($result['tools'] ?? [], 'name');
+    }
+
+    /**
+     * @param array<string, mixed> $arguments
+     *
+     * @return array{content: list<array{text: string}>, _meta?: array<string, mixed>}
+     */
+    private function callTool(KernelBrowser $browser, string $sessionId, string $name, array $arguments): array
+    {
+        /** @var array{content: list<array{text: string}>, _meta?: array<string, mixed>} $result */
+        $result = $this->rpc($browser, $sessionId, [
+            'jsonrpc' => '2.0',
+            'method' => 'tools/call',
+            'params' => ['name' => $name, 'arguments' => $arguments === [] ? new \stdClass() : $arguments],
+            'id' => 3,
+        ]);
+
+        return $result;
+    }
+
+    /**
+     * The tool's data and metadata in either result format: the legacy envelope in the first text
+     * block, or, with `v6.8.0.0`, the plain data followed by a `{"_meta": …}` block.
+     *
+     * @param array{content: list<array{text: string}>, _meta?: array<string, mixed>} $result
+     *
+     * @return array{data: mixed, _meta: array<mixed>}
+     */
+    private function toolPayload(array $result): array
+    {
+        $first = json_decode($result['content'][0]['text'], true, 512, \JSON_THROW_ON_ERROR);
+
+        if (!Feature::isActive('v6.8.0.0')) {
+            static::assertIsArray($first);
+            $meta = $first['_meta'] ?? [];
+            static::assertIsArray($meta);
+
+            return ['data' => $first['data'] ?? null, '_meta' => $meta];
+        }
+
+        $meta = [];
+        foreach (\array_slice($result['content'], 1) as $block) {
+            $decoded = json_decode($block['text'], true);
+            if (\is_array($decoded) && \is_array($decoded['_meta'] ?? null)) {
+                $meta = $decoded['_meta'];
+            }
+        }
+
+        return ['data' => $first, '_meta' => $meta];
+    }
+
+    /**
+     * @param array<string, mixed> $body
+     *
+     * @return array<string, mixed>
+     */
+    private function rpc(KernelBrowser $browser, string $sessionId, array $body): array
+    {
+        $browser->request(
+            'POST',
+            '/store-api/_mcp',
+            [],
+            [],
+            ['CONTENT_TYPE' => 'application/json', 'HTTP_MCP_SESSION_ID' => $sessionId],
+            json_encode($body, \JSON_THROW_ON_ERROR),
+        );
+
+        static::assertSame(Response::HTTP_OK, $browser->getResponse()->getStatusCode(), 'Store API MCP endpoint returned non-200');
+        $content = $browser->getResponse()->getContent();
+        static::assertNotFalse($content, 'Store API MCP response was empty');
+
+        // A request issued right after a toolset-enable also drains the queued
+        // notifications/tools/list_changed. Per the MCP spec those multiple messages are delivered
+        // as a text/event-stream (one single-object event each), so parse either shape and return
+        // the result of the message that carries one.
+        foreach ($this->decodeMcpMessages($content) as $message) {
+            if (\array_key_exists('result', $message)) {
+                return $message['result'];
+            }
+        }
+
+        static::fail('Store API MCP response missing result: ' . $content);
+    }
+
+    /**
+     * @return list<array<string, mixed>>
+     */
+    private function decodeMcpMessages(string $content): array
+    {
+        $trimmed = ltrim($content);
+
+        if ($trimmed !== '' && $trimmed[0] === '{') {
+            $decoded = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+            static::assertIsArray($decoded);
+
+            return [$decoded];
+        }
+
+        $messages = [];
+        foreach (explode("\n", $content) as $line) {
+            if (str_starts_with($line, 'data:')) {
+                $decoded = json_decode(trim(substr($line, 5)), true, 512, \JSON_THROW_ON_ERROR);
+                static::assertIsArray($decoded);
+                $messages[] = $decoded;
+            }
+        }
+
+        return $messages;
+    }
+}

@@ -1,0 +1,67 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Storefront\Page\Navigation;
+
+use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Category\CategoryEntity;
+use Contena\Core\Content\Cms\CmsPageEntity;
+use Contena\Core\Framework\Log\Package;
+use Contena\Storefront\Page\Page;
+
+#[Package('discovery')]
+class NavigationPage extends Page
+{
+    protected ?CmsPageEntity $cmsPage = null;
+
+    protected ?CategoryEntity $category = null;
+
+    protected ?string $navigationId = null;
+
+    protected ?BreadcrumbCollection $breadcrumb = null;
+
+    public function getCmsPage(): ?CmsPageEntity
+    {
+        return $this->cmsPage;
+    }
+
+    public function setCmsPage(CmsPageEntity $cmsPage): void
+    {
+        $this->cmsPage = $cmsPage;
+    }
+
+    public function getNavigationId(): ?string
+    {
+        return $this->navigationId;
+    }
+
+    public function setNavigationId(?string $navigationId): void
+    {
+        $this->navigationId = $navigationId;
+    }
+
+    public function getCategory(): ?CategoryEntity
+    {
+        return $this->category;
+    }
+
+    public function setCategory(?CategoryEntity $category): void
+    {
+        $this->category = $category;
+    }
+
+    public function getBreadcrumb(): ?BreadcrumbCollection
+    {
+        return $this->breadcrumb;
+    }
+
+    public function setBreadcrumb(?BreadcrumbCollection $breadcrumb): void
+    {
+        $this->breadcrumb = $breadcrumb;
+    }
+
+    public function getEntityName(): string
+    {
+        return CategoryDefinition::ENTITY_NAME;
+    }
+}

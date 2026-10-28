@@ -1,0 +1,223 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Store\Api;
+
+use Doctrine\DBAL\Connection;
+use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\Api\FirstRunWizardController;
+use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
+use Contena\Core\Framework\Store\Event\FirstRunWizardFinishedEvent;
+use Contena\Core\Framework\Store\Event\FirstRunWizardStartedEvent;
+use Contena\Core\Framework\Store\Services\FirstRunWizardService;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Validation\DataBag\QueryDataBag;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+
+/**
+ * @internal
+ */
+#[Package('fundamentals@after-sales')]
+class FirstRunWizardControllerTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+    use StoreClientBehaviour;
+
+    private FirstRunWizardController $frwController;
+
+    protected function setUp(): void
+    {
+        $this->frwController = static::getContainer()->get(FirstRunWizardController::class);
+    }
+
+    public function testFrwStartFiresTrackingEventAndDispatchesStartedEvent(): void
+    {
+        $dispatchedEvent = null;
+
+        // Response for request of TrackingEventClient::fireTrackingEvent()
+        $this->getStoreRequestHandler()->append(new Response());
+
+        EventHookDispatcher::fromContainer(static::getContainer())->on(
+            FirstRunWizardStartedEvent::class,
+            static function (FirstRunWizardStartedEvent $event) use (&$dispatchedEvent): void {
+                $dispatchedEvent = $event;
+            }
+        );
+
+        $this->frwController->frwStart(Context::createDefaultContext());
+
+        static::assertInstanceOf(FirstRunWizardStartedEvent::class, $dispatchedEvent);
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(Request::class, $lastRequest);
+        static::assertSame('POST', $lastRequest->getMethod());
+        static::assertSame('/swplatform/tracking/events', $lastRequest->getUri()->getPath());
+    }
+
+    public function testFrwLoginStoresFrwUserToken(): void
+    {
+        $frwUserToken = 'frw-us3r-t0k3n';
+        $expirationDate = new \DateTimeImmutable('2022-12-15');
+        $context = $this->createAdminStoreContext();
+
+        // Response for request of FirstRunWizardClient::frwLogin()
+        $this->getFrwRequestHandler()->append(new Response(
+            body: json_encode([
+                'firstRunWizardUserToken' => [
+                    'token' => $frwUserToken,
+                    'expirationDate' => $expirationDate->format(Defaults::STORAGE_DATE_FORMAT),
+                ],
+            ], \JSON_THROW_ON_ERROR),
+        ));
+
+        $this->frwController->frwLogin(
+            new RequestDataBag([
+                'contenaId' => 'contena-id',
+                'password' => 'p4ssw0rd',
+            ]),
+            $context
+        );
+
+        static::assertSame(
+            $frwUserToken,
+            $this->fetchUserConfig(FirstRunWizardService::USER_CONFIG_KEY_FRW_USER_TOKEN, FirstRunWizardService::USER_CONFIG_VALUE_FRW_USER_TOKEN)
+        );
+    }
+
+    public function testUpgradesFrwTokenToStoreTokenOnSuccessfulFrwFinish(): void
+    {
+        $dispatchedEvent = null;
+        $shopUserToken = 'sh0p-us3r-t0k3n';
+        $shopSecret = 'sh0p-s3cr3t';
+        $context = $this->createAdminStoreContext();
+
+        $this->setFrwUserToken($context, 'frw-us3r-t0k3n');
+        // an already completed FRW keeps the finished event from compiling the storefront theme
+        static::getContainer()->get(SystemConfigService::class)->set('core.frw.completedAt', '2022-12-01T00:00:00+00:00');
+
+        EventHookDispatcher::fromContainer(static::getContainer())->on(
+            FirstRunWizardFinishedEvent::class,
+            static function (FirstRunWizardFinishedEvent $event) use (&$dispatchedEvent): void {
+                $dispatchedEvent = $event;
+            }
+        );
+
+        // Response for request of TrackEventClient::fireTrackingEvent()
+        $this->getStoreRequestHandler()->append(new Response());
+
+        // Response for request of FirstRunWizardClient::upgradeAccessToken()
+        $this->getFrwRequestHandler()->append(new Response(
+            body: json_encode([
+                'shopUserToken' => [
+                    'token' => $shopUserToken,
+                    'expirationDate' => (new \DateTimeImmutable('2022-12-15'))->format(Defaults::STORAGE_DATE_FORMAT),
+                ],
+                'shopSecret' => $shopSecret,
+            ], \JSON_THROW_ON_ERROR),
+        ));
+
+        $this->frwController->frwFinish(
+            new QueryDataBag([
+                'failed' => false,
+            ]),
+            $context
+        );
+
+        static::assertInstanceOf(FirstRunWizardFinishedEvent::class, $dispatchedEvent);
+        static::assertNull(
+            $this->fetchUserConfig(FirstRunWizardService::USER_CONFIG_KEY_FRW_USER_TOKEN, FirstRunWizardService::USER_CONFIG_VALUE_FRW_USER_TOKEN)
+        );
+        static::assertSame(
+            $shopUserToken,
+            $this->fetchStoreToken($context)
+        );
+        static::assertSame(
+            $shopSecret,
+            static::getContainer()->get(SystemConfigService::class)->getString(StoreRequestOptionsProvider::CONFIG_KEY_STORE_SHOP_SECRET)
+        );
+    }
+
+    public function testSetsLicenseHostAndShopSecretONSuccessfulDomainVerification(): void
+    {
+        $context = $this->createAdminStoreContext();
+
+        // Response for first request of FirstRunWizardClient::getLicenseDomains()
+        $this->getFrwRequestHandler()->append(new Response(
+            body: json_encode([], \JSON_THROW_ON_ERROR),
+        ));
+
+        // Response for request of FirstRunWizardClient::fetchVerificationInfo()
+        $this->getFrwRequestHandler()->append(new Response(
+            body: json_encode([
+                'fileName' => 'sw-verification-hash.html',
+                'content' => 'sw-v3rific4ti0n-h4sh',
+            ], \JSON_THROW_ON_ERROR),
+        ));
+
+        // Response for request of FirstRunWizardClient::checkVerificationSecret()
+        $this->getFrwRequestHandler()->append(new Response());
+
+        // Response for second request of FirstRunWizardClient::getLicenseDomains()
+        $this->getFrwRequestHandler()->append(new Response(
+            body: json_encode([
+                [
+                    'id' => 123456,
+                    'domain' => 'contena.swag',
+                    'verified' => true,
+                    'edition' => [
+                        'name' => 'Community Edition',
+                        'label' => 'Community Edition',
+                    ],
+                ],
+            ], \JSON_THROW_ON_ERROR),
+        ));
+
+        $this->frwController->verifyDomain(
+            new QueryDataBag([
+                'domain' => 'contena.swag',
+                'testEnvironment' => true,
+            ]),
+            $context,
+        );
+
+        static::assertSame(
+            'contena.swag',
+            static::getContainer()->get(SystemConfigService::class)->getString(StoreRequestOptionsProvider::CONFIG_KEY_STORE_LICENSE_DOMAIN)
+        );
+    }
+
+    private function fetchUserConfig(string $configKey, string $valueKey): ?string
+    {
+        $value = static::getContainer()->get(Connection::class)->executeQuery(
+            'SELECT value FROM user_config WHERE `key` = :key',
+            ['key' => $configKey]
+        )->fetchOne();
+
+        return $value ? json_decode($value, true, flags: \JSON_THROW_ON_ERROR)[$valueKey] : null;
+    }
+
+    private function fetchStoreToken(Context $context): ?string
+    {
+        $source = $context->getSource();
+        static::assertInstanceOf(AdminApiSource::class, $source);
+
+        $userId = $source->getUserId();
+        static::assertIsString($userId);
+
+        $storeToken = static::getContainer()->get(Connection::class)->executeQuery(
+            'SELECT store_token FROM user WHERE `id` = :userId',
+            ['userId' => Uuid::fromHexToBytes($userId)]
+        )->fetchOne();
+
+        return $storeToken ?: null;
+    }
+}

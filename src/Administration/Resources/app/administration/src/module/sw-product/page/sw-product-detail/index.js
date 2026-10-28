@@ -1,0 +1,1512 @@
+/*
+ * @sw-package inventory
+ */
+
+import EntityValidationService from 'src/app/service/entity-validation.service';
+import template from './sw-product-detail.html.twig';
+import errorConfiguration from './error.cfg.json';
+import './sw-product-detail.scss';
+import '../../page/sw-product-detail/store';
+
+const { Context, Mixin, EntityDefinition } = Contena;
+const { Criteria, ChangesetGenerator } = Contena.Data;
+const { cloneDeep } = Contena.Utils.object;
+const { mapPageErrors } = Contena.Component.getComponentHelper();
+const type = Contena.Utils.types;
+
+const ADVANCED_MODE_SETTINGS_KEY = 'mode.setting.advancedModeSettings';
+
+// eslint-disable-next-line sw-deprecation-rules/private-feature-declarations
+export default {
+    template,
+
+    inject: [
+        'feature',
+        'mediaService',
+        'repositoryFactory',
+        'numberRangeService',
+        'seoUrlService',
+        'acl',
+        'systemConfigApiService',
+        'customFieldDataProviderService',
+        'entityValidationService',
+    ],
+
+    provide() {
+        return {
+            swProductDetailLoadAll: this.loadAll,
+        };
+    },
+
+    mixins: [Mixin.getByName('notification'), Mixin.getByName('placeholder')],
+
+    shortcuts: {
+        'SYSTEMKEY+S': {
+            active() {
+                return this.acl.can('product.editor');
+            },
+            method: 'onSave',
+        },
+        ESCAPE: 'onCancel',
+    },
+
+    props: {
+        productId: {
+            type: String,
+            required: false,
+            default: null,
+        },
+        /**
+         * @deprecated tag:v6.8.0 - will be removed, please use `creationType` instead
+         */
+        creationStates: {
+            type: Array,
+            required: false,
+            default: null,
+        },
+        /* Product "type" provided by the split button for creating a new product through a router parameter */
+        creationType: {
+            type: String,
+            required: false,
+            default: 'physical',
+        },
+    },
+
+    data() {
+        return {
+            productNumberPreview: '',
+            isSaveSuccessful: false,
+            cloning: false,
+            defaultSalesChannelVisibility: 30,
+            previousLengthUnit: null,
+            previousWeightUnit: null,
+            updateSeoPromises: [],
+            isProductNotFound: false,
+            lastViewedProductId: null,
+        };
+    },
+
+    metaInfo() {
+        return {
+            title: this.$createTitle(this.identifier),
+        };
+    },
+
+    computed: {
+        product() {
+            return Contena.Store.get('swProductDetail').product;
+        },
+
+        parentProduct() {
+            return Contena.Store.get('swProductDetail').parentProduct;
+        },
+
+        localMode() {
+            return Contena.Store.get('swProductDetail').localMode;
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        advancedModeSetting() {
+            return Contena.Store.get('swProductDetail').advancedModeSetting;
+        },
+
+        modeSettings() {
+            return Contena.Store.get('swProductDetail').modeSettings;
+        },
+
+        isLoading() {
+            return Contena.Store.get('swProductDetail').isLoading;
+        },
+
+        isChild() {
+            return Contena.Store.get('swProductDetail').isChild;
+        },
+
+        defaultCurrency() {
+            return Contena.Store.get('swProductDetail').defaultCurrency;
+        },
+
+        getDefaultFeatureSet() {
+            return Contena.Store.get('swProductDetail').getDefaultFeatureSet;
+        },
+
+        showModeSetting() {
+            return Contena.Store.get('swProductDetail').showModeSetting;
+        },
+
+        advanceModeEnabled() {
+            return Contena.Store.get('swProductDetail').advanceModeEnabled;
+        },
+
+        productDetailTabs() {
+            const createRouteTab = (label, routeName, additionalProperties = {}) => {
+                const route = {
+                    name: routeName,
+                    params: { id: this.$route.params.id },
+                };
+
+                return {
+                    label: this.$t(label),
+                    name: route.name,
+                    onClick: () => {
+                        void this.$router.push(route);
+                    },
+                    ...additionalProperties,
+                };
+            };
+
+            const tabs = [
+                createRouteTab('sw-product.detail.tabGeneral', 'sw.product.detail.base', {
+                    hasError: this.swProductDetailBaseError,
+                }),
+                createRouteTab('sw-product.detail.tabSpecifications', 'sw.product.detail.specifications'),
+            ];
+
+            if (this.showModeSetting) {
+                tabs.push(createRouteTab('sw-product.detail.tabAdvancedPrices', 'sw.product.detail.prices'));
+            }
+
+            if (!this.isChild && this.showModeSetting) {
+                tabs.push(createRouteTab('sw-product.detail.tabVariation', 'sw.product.detail.variants'));
+            }
+
+            if (this.showModeSetting) {
+                tabs.push(
+                    createRouteTab('sw-product.detail.tabLayout', 'sw.product.detail.layout'),
+                    createRouteTab('sw-product.detail.tabSeo', 'sw.product.detail.seo'),
+                    createRouteTab('sw-product.detail.tabCrossSelling', 'sw.product.detail.crossSelling', {
+                        hasError: this.swProductDetailCrossSellingError,
+                    }),
+                    createRouteTab('sw-product.detail.tabReviews', 'sw.product.detail.reviews'),
+                );
+            }
+
+            return tabs;
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed, please use `productType` instead
+         */
+        productStates() {
+            return Contena.Store.get('swProductDetail').productStates;
+        },
+
+        productType() {
+            return Contena.Store.get('swProductDetail').productType;
+        },
+
+        isUploadedFileRequired() {
+            return this.productType === 'digital' && !Contena.Store.get('swProductDetail').isDownloadExternallyManaged;
+        },
+
+        ...mapPageErrors(errorConfiguration),
+
+        identifier() {
+            return this.productTitle;
+        },
+
+        productTitle() {
+            // when product is variant
+            if (this.isChild && this.product) {
+                return this.getInheritTitle();
+            }
+
+            if (!this.$i18n) {
+                return '';
+            }
+
+            // return name
+            return this.placeholder(this.product, 'name', this.$t('sw-product.detail.textHeadline'));
+        },
+
+        productRepository() {
+            return this.repositoryFactory.create('product');
+        },
+
+        propertyRepository() {
+            return this.repositoryFactory.create('property_group_option');
+        },
+
+        syncRepository() {
+            return this.repositoryFactory.create('product', null, {
+                useSync: true,
+            });
+        },
+
+        salesChannelRepository() {
+            return this.repositoryFactory.create('sales_channel');
+        },
+
+        productVisibilityRepository() {
+            return this.repositoryFactory.create('product_visibility');
+        },
+
+        mediaRepository() {
+            if (this.product && this.product.media) {
+                return this.repositoryFactory.create(this.product.media.entity, this.product.media.source);
+            }
+            return null;
+        },
+
+        featureSetRepository() {
+            return this.repositoryFactory.create('product_feature_set');
+        },
+
+        currencyRepository() {
+            return this.repositoryFactory.create('currency');
+        },
+
+        taxRepository() {
+            return this.repositoryFactory.create('tax');
+        },
+
+        currentUser() {
+            return Contena.Store.get('session').currentUser;
+        },
+
+        productCriteria() {
+            const criteria = new Criteria(1, 1);
+            criteria.setTotalCountMode(0);
+
+            criteria.getAssociation('media').addSorting(Criteria.sort('position', 'ASC'));
+            criteria.addAssociation('media.media');
+
+            criteria.getAssociation('prices').addSorting(Criteria.sort('quantityStart', 'ASC', true));
+
+            criteria.getAssociation('tags').addSorting(Criteria.sort('name', 'ASC'));
+
+            criteria.getAssociation('seoUrls').addFilter(Criteria.equals('isCanonical', true));
+
+            criteria
+                .getAssociation('crossSellings')
+                .addSorting(Criteria.sort('position', 'ASC'))
+                .getAssociation('assignedProducts')
+                .addSorting(Criteria.sort('position', 'ASC'))
+                .addAssociation('product')
+                .getAssociation('product')
+                .addAssociation('options.group');
+
+            criteria
+                .addAssociation('cover.media')
+                .addAssociation('openGraphMedia')
+                .addAssociation('categories')
+                .addAssociation('visibilities.salesChannel')
+                .addAssociation('options')
+                .addAssociation('configuratorSettings.option')
+                .addAssociation('unit')
+                .addAssociation('productReviews')
+                .addAssociation('seoUrls')
+                .addAssociation('mainCategories')
+                .addAssociation('options.group')
+                .addAssociation('customFieldSets')
+                .addAssociation('featureSet')
+                .addAssociation('cmsPage')
+                .addAssociation('translations')
+                .addAssociation('downloads.media');
+
+            criteria.getAssociation('manufacturer').addAssociation('media');
+
+            return criteria;
+        },
+
+        defaultFeatureSetCriteria() {
+            const criteria = new Criteria(1, 1);
+
+            criteria
+                .addSorting(Criteria.sort('createdAt', 'ASC'))
+                .addFilter(Criteria.equalsAny('name', ['Default', 'Standard']));
+
+            return criteria;
+        },
+
+        tooltipSave() {
+            const systemKey = this.$device.getSystemKey();
+
+            return {
+                message: `${systemKey} + S`,
+                appearance: 'light',
+            };
+        },
+
+        tooltipCancel() {
+            return {
+                message: 'ESC',
+                appearance: 'light',
+            };
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        getModeSettingGeneralTab() {
+            return [
+                {
+                    key: 'general_information',
+                    label: 'sw-product.detailBase.cardTitleProductInfo',
+                    enabled: true,
+                    name: 'general',
+                },
+                {
+                    key: 'prices',
+                    label: 'sw-product.detailBase.cardTitlePrices',
+                    enabled: true,
+                    name: 'general',
+                },
+                {
+                    key: 'deliverability',
+                    label: 'sw-product.detailBase.cardTitleDeliverabilityInfo',
+                    enabled: true,
+                    name: 'general',
+                },
+                {
+                    key: 'visibility_structure',
+                    label: 'sw-product.detailBase.cardTitleAssignment',
+                    enabled: true,
+                    name: 'general',
+                },
+                {
+                    key: 'media',
+                    label: 'sw-product.detailBase.cardTitleMedia',
+                    enabled: true,
+                    name: 'general',
+                },
+                {
+                    key: 'labelling',
+                    label: 'sw-product.detailBase.cardTitleSettings',
+                    enabled: true,
+                    name: 'general',
+                },
+            ];
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        getModeSettingSpecificationsTab() {
+            return [
+                {
+                    key: 'measurement',
+                    label: 'sw-product.specifications.cardTitleMeasurement',
+                    enabled: true,
+                    name: 'specifications',
+                },
+                {
+                    key: 'selling_packaging',
+                    label: 'sw-product.specifications.cardTitleSellingPackaging',
+                    enabled: true,
+                    name: 'specifications',
+                },
+                {
+                    key: 'properties',
+                    label: 'sw-product.specifications.cardTitleProperties',
+                    enabled: true,
+                    name: 'specifications',
+                },
+                {
+                    key: 'essential_characteristics',
+                    label: 'sw-product.specifications.cardTitleEssentialCharacteristics',
+                    enabled: true,
+                    name: 'specifications',
+                },
+                {
+                    key: 'custom_fields',
+                    label: 'sw-product.specifications.cardTitleCustomFields',
+                    enabled: true,
+                    name: 'specifications',
+                },
+            ];
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        showAdvanceModeSetting() {
+            if (this.isChild) {
+                return false;
+            }
+
+            const routes = ['sw.product.detail.base', 'sw.product.detail.specifications'];
+
+            return routes.includes(this.$route.name);
+        },
+
+        cmsPageState() {
+            return Contena.Store.get('cmsPage');
+        },
+
+        currentPage() {
+            return Contena.Store.get('cmsPage').currentPage;
+        },
+
+        languageRepository() {
+            return this.repositoryFactory.create('language');
+        },
+
+        language() {
+            return Contena.Store.get('context').api.language;
+        },
+
+        translateFields() {
+            if (!this.product) {
+                return null;
+            }
+
+            return Object.keys(EntityDefinition.getTranslatedFields(this.product.getEntityName()));
+        },
+
+        ignoreFieldsValidation() {
+            if (!this.language?.parentId) {
+                return [];
+            }
+
+            const productData = { ...this.product };
+
+            // This filter identifies fields in a child language that are null, undefined, or empty.
+            // These specific fields might be inheriting their values from the parent language,
+            // so they are intentionally ignored during validation.
+            return (this.translateFields || []).filter((field) => {
+                const value = productData[field];
+
+                return value === null || value === undefined || value === '';
+            });
+        },
+
+        productApiContext() {
+            return {
+                ...Contena.Context.api,
+                measurementWeightUnit: this.weightUnit,
+                measurementLengthUnit: this.lengthUnit,
+            };
+        },
+
+        lengthUnit() {
+            return Contena.Store.get('swProductDetail').lengthUnit;
+        },
+
+        weightUnit() {
+            return Contena.Store.get('swProductDetail').weightUnit;
+        },
+
+        measurementUnitsChanged() {
+            return this.previousWeightUnit !== this.weightUnit || this.previousLengthUnit !== this.lengthUnit;
+        },
+    },
+
+    watch: {
+        productId() {
+            this.createdComponent();
+        },
+    },
+
+    created() {
+        this.createdComponent();
+    },
+
+    beforeRouteLeave() {
+        Contena.Store.get('contenaApps').selectedIds = [];
+    },
+
+    methods: {
+        async createdComponent() {
+            this.isProductNotFound = false;
+
+            Contena.ExtensionAPI.publishData({
+                id: 'sw-product-detail__product',
+                path: 'product',
+                scope: this,
+            });
+
+            Contena.ExtensionAPI.publishData({
+                id: 'sw-product-detail__cmsPage',
+                path: 'currentPage',
+                scope: this,
+            });
+
+            this.cmsPageState.resetCmsPageState();
+
+            // when create
+            if (!this.productId) {
+                this.lastViewedProductId = null;
+                // Immediately reset store to prevent
+                // stale data from a previous variant/child product from rendering
+                // before initState() creates a new product entity
+                Contena.Store.get('swProductDetail').$reset();
+
+                // set language to system language
+                if (!Contena.Store.get('context').isSystemDefaultLanguage) {
+                    Contena.Store.get('context').resetLanguageToDefault();
+                }
+            }
+
+            Contena.Store.get('swProductDetail').setLoading(['product', true]);
+
+            await this.initProductMeasurementUnits();
+
+            // initialize default state
+            this.initState();
+
+            this.initAdvancedModeSettings();
+        },
+
+        initState() {
+            Contena.Store.get('swProductDetail').apiContext = Contena.Context.api;
+
+            // when product exists
+            if (this.productId) {
+                return this.loadState();
+            }
+
+            // When no product id exists init state and new product with the repositoryFactory
+            return this.createState().then(() => {
+                // create new product number
+                this.numberRangeService.reserve('product', '', true).then((response) => {
+                    this.productNumberPreview = response.number;
+                    this.product.productNumber = response.number;
+                });
+            });
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        initAdvancedModeSettings() {
+            Contena.Store.get('swProductDetail').advancedModeSetting = this.getAdvancedModeDefaultSetting();
+
+            // Only load settings when editing existing product
+            if (this.productId) {
+                this.getAdvancedModeSetting();
+            } else {
+                // Reset modeSettings to default when creating a new product
+                Contena.Store.get('swProductDetail').modeSettings = this.changeModeSettings();
+            }
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        createUserModeSetting() {
+            return {
+                key: ADVANCED_MODE_SETTINGS_KEY,
+                userId: this.currentUser && this.currentUser.id,
+            };
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        getAdvancedModeDefaultSetting() {
+            const defaultSettings = this.createUserModeSetting();
+            defaultSettings.value = {
+                advancedMode: {
+                    label: 'sw-product.general.textAdvancedMode',
+                    enabled: true,
+                },
+                settings: [...this.getModeSettingGeneralTab, ...this.getModeSettingSpecificationsTab],
+            };
+            return defaultSettings;
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        async getAdvancedModeSetting() {
+            const modeSettingsValue = (await Contena.Service('userConfigService').search([ADVANCED_MODE_SETTINGS_KEY]))
+                ?.data?.[ADVANCED_MODE_SETTINGS_KEY];
+
+            if (!modeSettingsValue) {
+                return;
+            }
+
+            const modeSettings = {
+                ...this.createUserModeSetting(),
+                value: cloneDeep(modeSettingsValue),
+            };
+            const defaultSettings = this.getAdvancedModeDefaultSetting().value.settings;
+
+            modeSettings.value.settings = defaultSettings.reduce((accumulator, defaultEntry) => {
+                const foundEntry = modeSettings.value.settings.find((dbEntry) => dbEntry.key === defaultEntry.key);
+                accumulator.push(foundEntry || defaultEntry);
+
+                return accumulator;
+            }, []);
+
+            Contena.Store.get('swProductDetail').advancedModeSetting = modeSettings;
+            Contena.Store.get('swProductDetail').modeSettings = this.changeModeSettings();
+
+            await this.$nextTick();
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        saveAdvancedMode() {
+            Contena.Store.get('swProductDetail').setLoading(['advancedMode', true]);
+
+            return Contena.Service('userConfigService')
+                .upsert({
+                    [ADVANCED_MODE_SETTINGS_KEY]: this.advancedModeSetting.value,
+                })
+                .then(async () => {
+                    await this.getAdvancedModeSetting();
+                    Contena.Store.get('swProductDetail').setLoading(['advancedMode', false]);
+                })
+                .catch(() => {
+                    this.createNotificationError({
+                        message: this.$t('global.notification.unspecifiedSaveErrorMessage'),
+                    });
+                });
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        onChangeSetting() {
+            Contena.Store.get('swProductDetail').advancedModeSetting = this.advancedModeSetting;
+            this.saveAdvancedMode();
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        changeModeSettings() {
+            const enabledModeItems = this.advancedModeSetting.value.settings.filter((item) => item.enabled);
+            if (!enabledModeItems.length) {
+                return [];
+            }
+
+            return enabledModeItems.map((item) => item.key);
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        onChangeSettingItem() {
+            Contena.Store.get('swProductDetail').modeSettings = this.changeModeSettings();
+            this.saveAdvancedMode();
+        },
+
+        loadState() {
+            Contena.Store.get('swProductDetail').localMode = false;
+            Contena.Store.get('contenaApps').selectedIds = [this.productId];
+
+            return this.loadAll();
+        },
+
+        loadAll() {
+            return Promise.all([
+                this.loadProduct(),
+                this.loadCurrencies(),
+                this.loadTaxes(),
+                this.loadAttributeSet(),
+            ]);
+        },
+
+        createState() {
+            // set local mode
+            Contena.Store.get('swProductDetail').localMode = true;
+            Contena.Store.get('contenaApps').selectedIds = [];
+
+            Contena.Store.get('swProductDetail').setLoading(['product', true]);
+
+            // set product "type"
+            if (!Contena.Feature.isActive('v6.8.0.0')) {
+                Contena.Store.get('swProductDetail').creationStates = this.creationStates;
+            }
+
+            Contena.Store.get('swProductDetail').creationType = this.creationType;
+
+            // create empty product
+            Contena.Store.get('swProductDetail').product = this.productRepository.create();
+
+            // fill empty data
+            this.product.active = true;
+            this.product.taxId = null;
+
+            this.product.metaTitle = '';
+            this.product.additionalText = '';
+            this.product.variantListingConfig = {};
+
+            if (this.creationType) {
+                this.adjustProductAccordingToType();
+            }
+
+            return Promise.all([
+                this.loadCurrencies(),
+                this.loadTaxes(),
+                this.loadAttributeSet(),
+                this.loadDefaultFeatureSet(),
+            ]).then(() => {
+                // set default product price and empty purchase price
+                this.product.price = [
+                    {
+                        currencyId: this.defaultCurrency.id,
+                        net: null,
+                        linked: true,
+                        gross: null,
+                    },
+                ];
+
+                this.product.purchasePrices = this.getDefaultPurchasePrices();
+
+                // Set default tax rate / sales channels on creation
+                if (this.product.isNew) {
+                    this.getDefaultTaxRate().then((result) => {
+                        this.product.taxId = result;
+                    });
+
+                    this.getDefaultSalesChannels().then((result) => {
+                        if (type.isEmpty(result)) {
+                            return;
+                        }
+
+                        this.product.active = result.defaultActive;
+
+                        if (!result.defaultSalesChannelIds || result.defaultSalesChannelIds.length <= 0) {
+                            return;
+                        }
+
+                        this.fetchSalesChannelByIds(result.defaultSalesChannelIds).then((salesChannels) => {
+                            if (!salesChannels.length) {
+                                return;
+                            }
+
+                            salesChannels.forEach((salesChannel) => {
+                                const visibilities = this.createProductVisibilityEntity(
+                                    result.defaultVisibilities,
+                                    salesChannel,
+                                );
+                                this.product.visibilities.push(visibilities);
+                            });
+                        });
+                    });
+                }
+
+                if (this.getDefaultFeatureSet?.length) {
+                    this.product.featureSetId = this.getDefaultFeatureSet?.[0].id;
+                }
+
+                Contena.Store.get('swProductDetail').setLoading(['product', false]);
+            });
+        },
+
+        adjustProductAccordingToType() {
+            if (this.creationType === 'digital') {
+                this.product.maxPurchase = 1;
+            }
+
+            this.product.type = this.creationType;
+        },
+
+        loadProduct() {
+            Contena.Store.get('swProductDetail').setLoading(['product', true]);
+
+            return this.productRepository
+                .get(this.productId || this.product.id, this.productApiContext, this.productCriteria)
+                .then(async (product) => {
+                    if (!product) {
+                        await this.onProductNotFound();
+
+                        return;
+                    }
+
+                    if (!product.parentId && (!product.purchasePrices || product.purchasePrices.length === 0)) {
+                        if (!this.defaultCurrency?.id) {
+                            await this.loadCurrencies();
+                        }
+
+                        product.purchasePrices = this.getDefaultPurchasePrices();
+                        product._origin.purchasePrices = cloneDeep(product.purchasePrices);
+                    }
+
+                    if (product.propertyIds?.length > 0) {
+                        const propertyCriteria = new Criteria(1, null);
+                        propertyCriteria.addSorting(Criteria.sort('name', 'ASC', true));
+                        propertyCriteria.setIds(product.propertyIds);
+                        propertyCriteria.addFilter(Criteria.equals('productProperties.id', product.id));
+
+                        const result = await this.propertyRepository.search(propertyCriteria);
+                        result.source = product.properties.source;
+
+                        product._origin.properties = cloneDeep(result);
+                        product.properties = result;
+                    }
+
+                    Contena.Store.get('swProductDetail').isDownloadExternallyManaged = !product.downloads?.length;
+                    Contena.Store.get('swProductDetail').product = product;
+
+                    if (this.product.parentId) {
+                        await this.loadParentProduct();
+                        this.syncVariantPriceInheritance();
+                    } else {
+                        Contena.Store.get('swProductDetail').parentProduct = {};
+                    }
+
+                    if (this.productId === product.id && this.lastViewedProductId !== product.id) {
+                        this.lastViewedProductId = product.id;
+                        Contena.Telemetry.track({
+                            eventName: 'sw_product.detail.product_viewed',
+                            product_type: product.type,
+                        });
+                    }
+                })
+                .finally(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['product', false]);
+                });
+        },
+
+        async onProductNotFound() {
+            this.isProductNotFound = true;
+            Contena.Store.get('contenaApps').selectedIds = [];
+
+            this.createNotificationError({
+                message: this.$t('sw-product.detail.messageProductNotFound'),
+            });
+
+            try {
+                await this.$router.push({
+                    name: 'sw.product.index',
+                });
+            } catch {
+                // Ignore navigation failures. The missing product state still prevents the detail view from rendering.
+            } finally {
+                const productDetailStore = Contena.Store.get('swProductDetail');
+                productDetailStore.product = {};
+                productDetailStore.parentProduct = {};
+            }
+        },
+
+        syncVariantPriceInheritance() {
+            const priceInherited = this.product.price === null;
+            const purchasePricesInherited = this.product.purchasePrices === null;
+
+            // Price is inherited — purchasePrices must also inherit
+            if (priceInherited) {
+                this.product.purchasePrices = null;
+                return;
+            }
+
+            // Price is overridden but purchasePrices still inherited — copy from parent
+            if (purchasePricesInherited) {
+                this.product.purchasePrices = cloneDeep(this.parentProduct.purchasePrices);
+            }
+        },
+
+        getDefaultPurchasePrices() {
+            return [
+                {
+                    currencyId: this.defaultCurrency.id,
+                    net: 0,
+                    linked: true,
+                    gross: 0,
+                },
+            ];
+        },
+
+        loadParentProduct() {
+            Contena.Store.get('swProductDetail').setLoading(['parentProduct', true]);
+
+            return this.productRepository
+                .get(this.product.parentId, Contena.Context.api, this.productCriteria)
+                .then(async (parent) => {
+                    if (!parent.purchasePrices || parent.purchasePrices.length === 0) {
+                        if (!this.defaultCurrency?.id) {
+                            await this.loadCurrencies();
+                        }
+
+                        parent.purchasePrices = this.getDefaultPurchasePrices();
+                        parent._origin.purchasePrices = cloneDeep(parent.purchasePrices);
+                    }
+
+                    if (parent.propertyIds?.length > 0) {
+                        const propertyCriteria = new Criteria(1, null);
+                        propertyCriteria.addSorting(Criteria.sort('name', 'ASC', true));
+                        propertyCriteria.setIds(parent.propertyIds);
+
+                        const result = await this.propertyRepository.search(propertyCriteria);
+                        result.source = parent.properties.source;
+
+                        parent._origin.properties = cloneDeep(result);
+                        parent.properties = result;
+                    }
+
+                    Contena.Store.get('swProductDetail').parentProduct = parent;
+                })
+                .then(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['parentProduct', false]);
+                });
+        },
+
+        loadCurrencies() {
+            Contena.Store.get('swProductDetail').setLoading(['currencies', true]);
+
+            const criteria = new Criteria(1, 500);
+
+            criteria.addSorting(Criteria.sort('name', 'ASC', false));
+
+            return this.currencyRepository
+                .search(criteria, Contena.Context.api, {
+                    cacheKey: ['shared-data', 'currencies', Contena.Context.api.languageId ?? 'default'],
+                    ttl: 5 * 60 * 1000,
+                })
+                .then((res) => {
+                    Contena.Store.get('swProductDetail').currencies = [...res];
+                })
+                .finally(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['currencies', false]);
+                });
+        },
+
+        loadTaxes() {
+            Contena.Store.get('swProductDetail').setLoading(['taxes', true]);
+
+            const criteria = new Criteria(1, 500);
+            criteria.addSorting(Criteria.sort('position'));
+
+            return this.taxRepository
+                .search(criteria, Contena.Context.api, {
+                    cacheKey: ['shared-data', 'taxes', Contena.Context.api.languageId ?? 'default'],
+                    ttl: 5 * 60 * 1000,
+                })
+                .then((res) => {
+                    Contena.Store.get('swProductDetail').setTaxes(res);
+                })
+                .finally(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['taxes', false]);
+                });
+        },
+
+        getDefaultTaxRate() {
+            return Contena.Service('cacheService').query({
+                key: ['shared-data', 'default-tax-rate-id'],
+                ttl: 5 * 60 * 1000,
+                fn: () =>
+                    this.systemConfigApiService.getValues('core.tax').then((response) => {
+                        const defaultTaxRateId = response['core.tax.defaultTaxRate'];
+
+                        return typeof defaultTaxRateId === 'string' ? defaultTaxRateId : null;
+                    }),
+            });
+        },
+
+        loadAttributeSet() {
+            Contena.Store.get('swProductDetail').setLoading(['customFieldSets', true]);
+
+            const customFieldDataProviderService =
+                this.customFieldDataProviderService ?? Contena.Service('customFieldDataProviderService');
+
+            return customFieldDataProviderService
+                .getCustomFieldSets('product')
+                .then((res) => {
+                    Contena.Store.get('swProductDetail').customFieldSets = res;
+                })
+                .finally(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['customFieldSets', false]);
+                });
+        },
+
+        loadDefaultFeatureSet() {
+            Contena.Store.get('swProductDetail').setLoading(['defaultFeatureSet', true]);
+
+            return this.featureSetRepository
+                .search(this.defaultFeatureSetCriteria)
+                .then((res) => {
+                    Contena.Store.get('swProductDetail').setDefaultFeatureSet(res);
+                })
+                .finally(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['defaultFeatureSet', false]);
+                });
+        },
+
+        getDefaultSalesChannels() {
+            return this.systemConfigApiService.getValues('core.defaultSalesChannel').then((response) => {
+                if (type.isEmpty(response)) {
+                    return {};
+                }
+
+                return {
+                    defaultSalesChannelIds: response?.['core.defaultSalesChannel.salesChannel'],
+                    defaultVisibilities: response?.['core.defaultSalesChannel.visibility'],
+                    defaultActive: !!response?.['core.defaultSalesChannel.active'],
+                };
+            });
+        },
+
+        fetchSalesChannelByIds(ids) {
+            const criteria = new Criteria(1, 25);
+
+            criteria.addFilter(Criteria.equalsAny('id', ids));
+
+            return this.salesChannelRepository.search(criteria);
+        },
+
+        createProductVisibilityEntity(visibility, salesChannel) {
+            const visibilities = this.productVisibilityRepository.create(Context.api);
+
+            Object.assign(visibilities, {
+                visibility: visibility[salesChannel.id] || this.defaultSalesChannelVisibility,
+                productId: this.product.id,
+                salesChannelId: salesChannel.id,
+                salesChannel: salesChannel,
+            });
+
+            return visibilities;
+        },
+
+        abortOnLanguageChange() {
+            return this.productRepository.hasChanges(this.product);
+        },
+
+        saveOnLanguageChange() {
+            return this.onSave();
+        },
+
+        onChangeLanguage(languageId) {
+            Contena.Store.get('context').setApiLanguageId(languageId);
+            this.loadLanguage(languageId);
+
+            this.initState();
+        },
+
+        saveFinish() {
+            this.isSaveSuccessful = false;
+
+            if (!this.productId) {
+                this.$router.push({
+                    name: 'sw.product.detail',
+                    params: { id: this.product.id },
+                });
+            }
+        },
+
+        onSave() {
+            if (!this.validateProductPurchase()) {
+                this.createNotificationError({
+                    message: this.$t('sw-product.detail.errorMinMaxPurchase'),
+                });
+
+                return new Promise((resolve) => {
+                    resolve();
+                });
+            }
+
+            this.validateProductPrices();
+
+            if (!this.productId) {
+                if (this.productNumberPreview === this.product.productNumber) {
+                    this.numberRangeService.reserve('product').then((response) => {
+                        this.productNumberPreview = 'reserved';
+                        this.product.productNumber = response.number;
+                    });
+                }
+            }
+
+            this.isSaveSuccessful = false;
+
+            if (type.isEmpty(this.product.slotConfig)) {
+                this.product.slotConfig = null;
+            }
+
+            if (!this.entityValidationService.validate(this.product, this.customValidate, this.ignoreFieldsValidation)) {
+                const titleSaveError = this.$t('global.default.error');
+                const messageSaveError = this.$t('global.notification.notificationSaveErrorMessageRequiredFieldsInvalid');
+
+                this.createNotificationError({
+                    title: titleSaveError,
+                    message: messageSaveError,
+                });
+                return Promise.resolve();
+            }
+
+            return this.saveProduct().then(this.onSaveFinished);
+        },
+
+        customValidate(errors, product) {
+            if (this.isUploadedFileRequired && (product.downloads === undefined || product.downloads.length < 1)) {
+                errors.push({
+                    ...EntityValidationService.createRequiredError('/0/downloads'),
+                    code: 'SW_PRODUCT_DOWNLOADS_EXTERNAL_MANAGEMENT_REQUIRED',
+                    detail: this.$t('sw-product.detailBase.downloadsExternalManagementRequired'),
+                });
+            }
+
+            return errors;
+        },
+
+        validateProductPrices() {
+            this.product.prices.forEach((advancedPrice) => {
+                this.validatePrices('listPrice', advancedPrice.price);
+            });
+            this.validatePrices('listPrice', this.product.price);
+
+            this.product.prices.forEach((advancedPrice) => {
+                this.validatePrices('regulationPrice', advancedPrice.price);
+            });
+            this.validatePrices('regulationPrice', this.product.price);
+        },
+
+        validatePrices(priceLabel, prices) {
+            if (!prices) {
+                return;
+            }
+
+            prices.forEach((price) => {
+                if (!price[priceLabel]) {
+                    return;
+                }
+
+                if (!price[priceLabel].gross && !price[priceLabel].net) {
+                    price[priceLabel] = null;
+                    return;
+                }
+
+                if (!price[priceLabel].gross) {
+                    price[priceLabel].gross = 0;
+                    return;
+                }
+
+                if (!price[priceLabel].net) {
+                    price[priceLabel].net = 0;
+                }
+            });
+        },
+
+        onSaveFinished(response) {
+            if (response !== 'success' && response !== 'empty') {
+                const errorCode = response?.response?.data?.errors?.[0]?.code;
+
+                if (errorCode === 'CONTENT__DUPLICATE_PRODUCT_NUMBER') {
+                    const titleSaveError = this.$t('global.default.error');
+                    const messageSaveError = this.$t('sw-product.notification.notificationSaveErrorProductNoAlreadyExists', {
+                        productNo: response.response.data.errors[0].meta.parameters.number,
+                    });
+
+                    this.createNotificationError({
+                        title: titleSaveError,
+                        message: messageSaveError,
+                    });
+                    return;
+                }
+
+                const errorDetail = response?.response?.data?.errors?.[0]?.detail;
+                const titleSaveError = this.$t('global.default.error');
+                const messageSaveError =
+                    errorDetail ?? this.$t('global.notification.notificationSaveErrorMessageRequiredFieldsInvalid');
+
+                this.createNotificationError({
+                    title: titleSaveError,
+                    message: messageSaveError,
+                });
+                return;
+            }
+
+            Contena.Store.get('error').resetApiErrors();
+
+            Contena.Utils.EventBus.emit('sw-product-detail-save-success');
+
+            if (this.updateSeoPromises.length === 0) {
+                this.isSaveSuccessful = true;
+
+                return;
+            }
+
+            Contena.Store.get('swProductDetail').setLoading(['product', true]);
+
+            Promise.all(this.updateSeoPromises)
+                .then(() => {
+                    Contena.Utils.EventBus.emit('sw-product-detail-save-finish');
+                })
+                .then(() => {
+                    this.isSaveSuccessful = true;
+                })
+                .catch(() => Promise.resolve())
+                .finally(() => {
+                    Contena.Store.get('swProductDetail').setLoading(['product', false]);
+
+                    this.loadProduct();
+                });
+        },
+
+        onCancel() {
+            this.$router.push({ name: 'sw.product.index' });
+        },
+
+        saveProduct() {
+            Contena.Store.get('swProductDetail').setLoading(['product', true]);
+
+            this.updateSeoPromises = [];
+
+            if (Contena.Store.list().includes('swSeoUrl')) {
+                const seoUrls = Contena.Store.get('swSeoUrl').newOrModifiedUrls;
+                const defaultSeoUrl = Contena.Store.get('swSeoUrl').defaultSeoUrl;
+
+                if (seoUrls) {
+                    seoUrls.forEach((seoUrl) => {
+                        if (!seoUrl.seoPathInfo) {
+                            seoUrl.seoPathInfo = defaultSeoUrl.seoPathInfo;
+                            seoUrl.isModified = false;
+                        } else {
+                            seoUrl.isModified = true;
+                        }
+
+                        this.updateSeoPromises.push(
+                            this.seoUrlService.updateCanonicalUrl(seoUrl, seoUrl.languageId).catch((error) => {
+                                if (error.response?.data?.errors) {
+                                    error.response.data.errors.forEach((apiError) => {
+                                        const messageKey = `global.error-codes.${apiError.detail}`;
+                                        const params = apiError.meta?.parameters || {};
+                                        const translated = this.$t(messageKey, params);
+
+                                        const message =
+                                            translated !== messageKey
+                                                ? translated
+                                                : apiError.detail ||
+                                                  apiError.title ||
+                                                  this.$t('global.notification.unspecifiedSaveErrorMessage');
+
+                                        this.createNotificationError({ message });
+                                    });
+                                } else {
+                                    const message =
+                                        error.message || this.$t('global.notification.unspecifiedSaveErrorMessage');
+                                    this.createNotificationError({ message });
+                                }
+
+                                return Promise.reject(error);
+                            }),
+                        );
+                    });
+                }
+            }
+
+            return new Promise((resolve) => {
+                // check if product exists
+                if (!this.productRepository.hasChanges(this.product)) {
+                    Contena.Store.get('swProductDetail').setLoading(['product', false]);
+                    resolve('empty');
+                    Contena.Store.get('swProductDetail').setLoading(['product', false]);
+                    return;
+                }
+
+                const productType = this.productType;
+                const productIsNew = this.product.isNew();
+
+                // save product
+                this.syncRepository
+                    .save(this.product, this.productApiContext)
+                    .then(() => {
+                        Contena.Telemetry.track({
+                            eventName: 'sw_product.detail.product_saved',
+                            product_type: productType,
+                            product_is_new: productIsNew,
+                        });
+
+                        this.savePreferenceUnits()
+                            .then(() => {
+                                this.previousLengthUnit = this.lengthUnit;
+                                this.previousWeightUnit = this.weightUnit;
+                            })
+                            .catch((response) => {
+                                resolve(response);
+                            });
+
+                        this.loadAll().then(() => {
+                            Contena.Store.get('swProductDetail').setLoading(['product', false]);
+
+                            resolve('success');
+                        });
+                    })
+                    .catch((response) => {
+                        Contena.Store.get('swProductDetail').setLoading(['product', false]);
+                        resolve(response);
+                    });
+            });
+        },
+
+        removeMediaItem(state, mediaId) {
+            const media = this.product.media.find((mediaItem) => mediaItem.mediaId === mediaId);
+
+            // remove cover id if mediaId matches
+            if (this.product.coverId === media.id) {
+                this.product.coverId = null;
+            }
+
+            this.product.media.remove(mediaId);
+        },
+
+        onCoverChange(mediaId) {
+            if (!mediaId || mediaId.length < 0) {
+                return;
+            }
+
+            const media = this.product.media.find((mediaItem) => mediaItem.mediaId === mediaId);
+
+            if (media) {
+                this.product.coverId = media.id;
+            }
+        },
+
+        getInheritTitle() {
+            if (
+                this.product.hasOwnProperty('translated') &&
+                this.product.translated.hasOwnProperty('name') &&
+                this.product.translated.name !== null
+            ) {
+                return this.product.translated.name;
+            }
+            if (this.product.name !== null) {
+                return this.product.name;
+            }
+            if (this.parentProduct && this.parentProduct.hasOwnProperty('translated')) {
+                const pProduct = this.parentProduct;
+                return pProduct.translated.hasOwnProperty('name') ? pProduct.translated.name : pProduct.name;
+            }
+            return '';
+        },
+
+        onDuplicate() {
+            this.cloning = true;
+        },
+
+        onDuplicateFinish(duplicate) {
+            this.cloning = false;
+            this.$router.push({
+                name: 'sw.product.detail',
+                params: { id: duplicate.id },
+            });
+        },
+
+        validateProductPurchase() {
+            if (this.product.maxPurchase && this.product.minPurchase > this.product.maxPurchase) {
+                return false;
+            }
+
+            return true;
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        getCmsPageOverrides() {
+            if (this.currentPage === null) {
+                return null;
+            }
+
+            this.deleteSpecifcKeys(this.currentPage.sections);
+
+            const changesetGenerator = new ChangesetGenerator();
+            const { changes } = changesetGenerator.generate(this.currentPage);
+
+            const slotOverrides = {};
+            if (changes === null) {
+                return slotOverrides;
+            }
+
+            if (type.isArray(changes.sections)) {
+                changes.sections.forEach((section) => {
+                    if (type.isArray(section.blocks)) {
+                        section.blocks.forEach((block) => {
+                            if (type.isArray(block.slots)) {
+                                block.slots.forEach((slot) => {
+                                    slotOverrides[slot.id] = slot.config;
+                                });
+                            }
+                        });
+                    }
+                });
+            }
+
+            return slotOverrides;
+        },
+
+        /**
+         * @deprecated tag:v6.8.0 - will be removed without replacement
+         */
+        deleteSpecifcKeys(sections) {
+            if (!sections) {
+                return;
+            }
+
+            sections.forEach((section) => {
+                if (!section.blocks) {
+                    return;
+                }
+
+                section.blocks.forEach((block) => {
+                    if (!block.slots) {
+                        return;
+                    }
+
+                    block.slots.forEach((slot) => {
+                        if (!slot.config) {
+                            return;
+                        }
+
+                        Object.values(slot.config).forEach((configField) => {
+                            if (configField.entity) {
+                                delete configField.entity;
+                            }
+                            if (configField.hasOwnProperty('required')) {
+                                delete configField.required;
+                            }
+                            if (configField.type) {
+                                delete configField.type;
+                            }
+                        });
+                    });
+                });
+            });
+        },
+
+        async loadLanguage(newLanguageId) {
+            Contena.Store.get('context').api.language = await this.languageRepository.get(newLanguageId, {
+                ...Contena.Context.api,
+                inheritance: true,
+            });
+        },
+
+        async initProductMeasurementUnits() {
+            const preferenceUnits = await this.getPreferredMeasurementUnits();
+            const store = Contena.Store.get('swProductDetail');
+
+            const defaultUnits = {
+                length: store.lengthUnit,
+                weight: store.weightUnit,
+            };
+
+            const units = preferenceUnits || defaultUnits;
+
+            store.setLengthUnit(units.length);
+            store.setWeightUnit(units.weight);
+
+            this.previousLengthUnit = units.length;
+            this.previousWeightUnit = units.weight;
+        },
+
+        async getPreferredMeasurementUnits() {
+            try {
+                return (await Contena.Service('userConfigService').search(['measurement.preferenceUnits']))?.data?.[
+                    'measurement.preferenceUnits'
+                ];
+            } catch {
+                // the product must not stay in its loading state when the preferences cannot be read,
+                // initProductMeasurementUnits() falls back to the default units instead
+                return null;
+            }
+        },
+
+        savePreferenceUnits() {
+            if (!this.measurementUnitsChanged) {
+                return Promise.resolve();
+            }
+
+            return Contena.Service('userConfigService').upsert({
+                'measurement.preferenceUnits': {
+                    length: this.lengthUnit,
+                    weight: this.weightUnit,
+                },
+            });
+        },
+    },
+};

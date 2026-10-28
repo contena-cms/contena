@@ -1,0 +1,183 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Telemetry;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\AggregationResultCollection;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
+use Contena\Core\Framework\DataAbstractionLayer\Telemetry\DalSearchInstrumentor;
+use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Telemetry\Metrics\Config\MetricConfigProvider;
+use Contena\Core\Test\Stub\Telemetry\CollectingMeter;
+use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntitySearcher;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(DalSearchInstrumentor::class)]
+class DalSearchInstrumentorTest extends TestCase
+{
+    private CollectingMeter $meter;
+
+    public function testMeasureReturnsCallbackResultUnchanged(): void
+    {
+        $result = new AggregationResultCollection();
+
+        $returned = $this->createInstrumentor()->measure(
+            DalSearchInstrumentor::OPERATION_AGGREGATE,
+            $this->definition('product'),
+            new Criteria(),
+            fn (): AggregationResultCollection => $result,
+        );
+
+        static::assertSame($result, $returned);
+    }
+
+    public function testEmitsDurationWithResolvedLabels(): void
+    {
+        $this->createInstrumentor()->measure(
+            DalSearchInstrumentor::OPERATION_SEARCH_IDS,
+            $this->definition('product_price'),
+            new Criteria(),
+            fn (): IdSearchResult => new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+        );
+
+        static::assertCount(1, $this->meter->getMetrics());
+        $metric = $this->meter->getMetrics()[0];
+        static::assertSame('dal.search.duration', $metric->name);
+        static::assertIsFloat($metric->value);
+        static::assertGreaterThanOrEqual(0.0, $metric->value);
+        // product_price buckets to the product group via EntityGroupResolver
+        $labels = $metric->labels;
+        static::assertIsArray($labels);
+        static::assertSame('product', $labels['entity_group']);
+        static::assertSame('searchIds', $labels['operation']);
+    }
+
+    #[DataProvider('esAwareProvider')]
+    public function testEsAwareLabelReflectsCriteriaState(bool $addState, string $expected): void
+    {
+        $criteria = new Criteria();
+        if ($addState) {
+            $criteria->addState(Criteria::STATE_ELASTICSEARCH_AWARE);
+        }
+
+        $this->createInstrumentor()->measure(
+            DalSearchInstrumentor::OPERATION_SEARCH,
+            $this->definition('product'),
+            $criteria,
+            fn (): IdSearchResult => new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+        );
+
+        $labels = $this->meter->getMetrics()[0]->labels;
+        static::assertIsArray($labels);
+        static::assertSame($expected, $labels['es_aware']);
+    }
+
+    public static function esAwareProvider(): \Generator
+    {
+        yield 'elasticsearch-aware criteria' => [true, 'yes'];
+        yield 'plain criteria' => [false, 'no'];
+    }
+
+    public function testBackendIsSqlWhenResultCarriesNoElasticsearchState(): void
+    {
+        $this->createInstrumentor()->measure(
+            DalSearchInstrumentor::OPERATION_SEARCH_IDS,
+            $this->definition('product'),
+            new Criteria(),
+            fn (): IdSearchResult => new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+        );
+
+        $labels = $this->meter->getMetrics()[0]->labels;
+        static::assertIsArray($labels);
+        static::assertSame('sql', $labels['backend']);
+    }
+
+    public function testBackendIsElasticsearchWhenResultCarriesElasticsearchState(): void
+    {
+        $result = new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext());
+        // exactly the state the ES bundle stamps on a result it served (drift guard against the literal)
+        $result->addState(ElasticsearchEntitySearcher::RESULT_STATE);
+
+        $this->createInstrumentor()->measure(
+            DalSearchInstrumentor::OPERATION_SEARCH_IDS,
+            $this->definition('product'),
+            new Criteria(),
+            fn (): IdSearchResult => $result,
+        );
+
+        $labels = $this->meter->getMetrics()[0]->labels;
+        static::assertIsArray($labels);
+        static::assertSame('elasticsearch', $labels['backend']);
+    }
+
+    public function testDoesNotEmitButStillRunsCallbackWhenTelemetryGloballyDisabled(): void
+    {
+        $result = new AggregationResultCollection();
+
+        $returned = $this->createInstrumentor(globalEnabled: false)->measure(
+            DalSearchInstrumentor::OPERATION_AGGREGATE,
+            $this->definition('product'),
+            new Criteria(),
+            fn (): AggregationResultCollection => $result,
+        );
+
+        static::assertSame($result, $returned);
+        static::assertSame([], $this->meter->getMetrics());
+    }
+
+    public function testDoesNotEmitWhenThisMetricDefinitionIsDisabled(): void
+    {
+        $this->createInstrumentor(metricEnabled: false)->measure(
+            DalSearchInstrumentor::OPERATION_SEARCH,
+            $this->definition('product'),
+            new Criteria(),
+            fn (): IdSearchResult => new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+        );
+
+        static::assertSame([], $this->meter->getMetrics());
+    }
+
+    public function testDoesNotEmitWhenMetricConfigurationIsMissing(): void
+    {
+        $this->meter = new CollectingMeter();
+        // a provider without the metric configuration must disable the metric, never break the DAL
+        $instrumentor = new DalSearchInstrumentor($this->meter, new EntityGroupResolver(), new MetricConfigProvider([]), true);
+
+        $instrumentor->measure(
+            DalSearchInstrumentor::OPERATION_SEARCH,
+            $this->definition('product'),
+            new Criteria(),
+            fn (): IdSearchResult => new IdSearchResult(0, [], new Criteria(), Context::createDefaultContext()),
+        );
+
+        static::assertSame([], $this->meter->getMetrics());
+    }
+
+    private function createInstrumentor(bool $globalEnabled = true, bool $metricEnabled = true): DalSearchInstrumentor
+    {
+        $this->meter = new CollectingMeter();
+
+        $configProvider = new MetricConfigProvider([
+            'dal.search.duration' => ['type' => 'histogram', 'description' => 'test', 'enabled' => $metricEnabled],
+        ]);
+
+        return new DalSearchInstrumentor($this->meter, new EntityGroupResolver(), $configProvider, $globalEnabled);
+    }
+
+    private function definition(string $entityName): EntityDefinition
+    {
+        $definition = static::createStub(EntityDefinition::class);
+        $definition->method('getEntityName')->willReturn($entityName);
+
+        return $definition;
+    }
+}

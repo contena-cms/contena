@@ -1,0 +1,533 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Checkout\Customer\SalesChannel;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Customer\CustomerCollection;
+use Contena\Core\Checkout\Customer\CustomerDefinition;
+use Contena\Core\Checkout\Customer\CustomerEntity;
+use Contena\Core\Checkout\Customer\CustomerException;
+use Contena\Core\Checkout\Customer\Event\CustomerBeforeLoginEvent;
+use Contena\Core\Checkout\Customer\Event\CustomerLoginEvent;
+use Contena\Core\Checkout\Customer\Exception\BadCredentialsException;
+use Contena\Core\Checkout\Customer\Exception\CustomerNotFoundByIdException;
+use Contena\Core\Checkout\Customer\Exception\CustomerOptinNotCompletedException;
+use Contena\Core\Checkout\Customer\Exception\PasswordPoliciesUpdatedException;
+use Contena\Core\Checkout\Customer\Password\LegacyPasswordVerifier;
+use Contena\Core\Checkout\Customer\SalesChannel\AbstractSwitchDefaultAddressRoute;
+use Contena\Core\Checkout\Customer\SalesChannel\AccountService;
+use Contena\Core\Checkout\Customer\Service\DoubleOptInService;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Validation\WriteConstraintViolationException;
+use Contena\Core\System\SalesChannel\Context\CartRestorer;
+use Contena\Core\Test\Generator;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Contena\Core\Test\TestDefaults;
+use Symfony\Component\Clock\NativeClock;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+use Symfony\Component\PasswordHasher\PasswordHasherInterface;
+use Symfony\Component\Validator\ConstraintViolation;
+use Symfony\Component\Validator\ConstraintViolationList;
+
+/**
+ * @internal
+ */
+#[Package('checkout')]
+#[CoversClass(AccountService::class)]
+class AccountServiceTest extends TestCase
+{
+    public function testLoginByValidCredentials(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+        $customer = $salesChannelContext->getCustomer();
+        static::assertNotNull($customer);
+        $customer->setActive(true);
+        $customer->setGuest(false);
+        $customer->setPassword(TestDefaults::HASHED_PASSWORD);
+        $customer->setEmail('foo@bar.de');
+        $customer->setDoubleOptInRegistration(false);
+
+        $customerRepository = new StaticEntityRepository([
+            new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                1,
+                new CustomerCollection([$customer]),
+                null,
+                new Criteria(),
+                $salesChannelContext->getContext()
+            ),
+        ]);
+
+        $loggedinSalesChannelContext = Generator::generateSalesChannelContext();
+        $cartRestorer = $this->createMock(CartRestorer::class);
+        $cartRestorer->expects($this->once())
+            ->method('restore')
+            ->willReturn($loggedinSalesChannelContext);
+
+        $beforeLoginEventCalled = false;
+        $loginEventCalled = false;
+
+        $eventDispatcher = new EventDispatcher();
+        $eventDispatcher->addListener(
+            CustomerBeforeLoginEvent::class,
+            static function (CustomerBeforeLoginEvent $event) use ($salesChannelContext, &$beforeLoginEventCalled): void {
+                $beforeLoginEventCalled = true;
+                static::assertSame('foo@bar.de', $event->getEmail());
+                static::assertSame($salesChannelContext, $event->getSalesChannelContext());
+            },
+        );
+
+        $eventDispatcher->addListener(
+            CustomerLoginEvent::class,
+            static function (CustomerLoginEvent $event) use ($customer, $loggedinSalesChannelContext, &$loginEventCalled): void {
+                $loginEventCalled = true;
+                static::assertSame($customer, $event->getCustomer());
+                static::assertSame($loggedinSalesChannelContext, $event->getSalesChannelContext());
+                static::assertSame($loggedinSalesChannelContext->getToken(), $event->getContextToken());
+            },
+        );
+
+        $accountService = new AccountService(
+            $customerRepository,
+            $eventDispatcher,
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            $cartRestorer,
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $token = $accountService->loginByCredentials('foo@bar.de', 'contena', $salesChannelContext);
+        static::assertSame($loggedinSalesChannelContext->getToken(), $token);
+        static::assertTrue($beforeLoginEventCalled);
+        static::assertTrue($loginEventCalled);
+        static::assertCount(1, $customerRepository->updates);
+        static::assertCount(1, $customerRepository->updates[0]);
+        static::assertIsArray($customerRepository->updates[0][0]);
+        static::assertCount(2, $customerRepository->updates[0][0]);
+        static::assertSame($customer->getId(), $customerRepository->updates[0][0]['id']);
+        static::assertInstanceOf(\DateTimeImmutable::class, $customerRepository->updates[0][0]['lastLogin']);
+    }
+
+    public function testLoginFailsByInvalidCredentials(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+        $customer = $salesChannelContext->getCustomer();
+        static::assertNotNull($customer);
+        $customer->setActive(true);
+        $customer->setGuest(false);
+        $customer->setPassword(TestDefaults::HASHED_PASSWORD);
+        $customer->setEmail('foo@bar.de');
+        $customer->setDoubleOptInRegistration(false);
+
+        $customerRepository = $this->createMock(EntityRepository::class);
+        $customerRepository->expects($this->once())
+            ->method('search')
+            ->willReturn(new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                1,
+                new CustomerCollection([$customer]),
+                null,
+                new Criteria(),
+                $salesChannelContext->getContext()
+            ));
+
+        $cartRestorer = $this->createMock(CartRestorer::class);
+        $cartRestorer->expects($this->never())
+            ->method('restore');
+
+        $accountService = new AccountService(
+            $customerRepository,
+            new EventDispatcher(),
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            $cartRestorer,
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectException(BadCredentialsException::class);
+        $accountService->loginByCredentials('foo@bar.de', 'invalidPassword', $salesChannelContext);
+    }
+
+    public function testGetCustomerByLoginThrowsBadCredentialsWhenEmailNotFound(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+
+        $customerRepository = $this->createMock(EntityRepository::class);
+        $customerRepository->expects($this->once())
+            ->method('search')
+            ->willReturn(new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                0,
+                new CustomerCollection(),
+                null,
+                new Criteria(),
+                $salesChannelContext->getContext()
+            ));
+
+        $accountService = new AccountService(
+            $customerRepository,
+            new EventDispatcher(),
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectException(BadCredentialsException::class);
+        $accountService->getCustomerByLogin('unknown@example.com', 'any-password', $salesChannelContext);
+    }
+
+    public function testGetCustomerByIdThrowsPasswordPoliciesChangedException(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+        $customer = $salesChannelContext->getCustomer();
+        static::assertNotNull($customer);
+        $customer->setActive(true);
+        $customer->setGuest(false);
+        $customer->setLegacyPassword('foo');
+        $customer->setLegacyEncoder('bar');
+
+        $legacyPasswordVerifier = $this->createMock(LegacyPasswordVerifier::class);
+        $legacyPasswordVerifier->expects($this->once())
+            ->method('verify')
+            ->with('password', $customer)
+            ->willReturn(true);
+
+        $customerRepository = $this->createMock(EntityRepository::class);
+        $customerRepository->expects($this->once())
+            ->method('search')
+            ->willReturn(new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                1,
+                new CustomerCollection([$customer]),
+                null,
+                new Criteria(),
+                $salesChannelContext->getContext()
+            ));
+
+        $exception = new WriteConstraintViolationException(new ConstraintViolationList([new ConstraintViolation('', '', [], '', '/password', '')]), '/');
+        $writeException = new WriteException();
+        $writeException->add($exception);
+
+        $customerRepository->expects($this->once())
+            ->method('update')
+            ->with([[
+                'id' => $customer->getId(),
+                'password' => 'password',
+                'legacyPassword' => null,
+                'legacyEncoder' => null,
+            ]], $salesChannelContext->getContext())
+            ->willThrowException($writeException);
+
+        $accountService = new AccountService(
+            $customerRepository,
+            static::createStub(EventDispatcherInterface::class),
+            $legacyPasswordVerifier,
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectExceptionObject(new PasswordPoliciesUpdatedException());
+        $accountService->getCustomerByLogin('user', 'password', $salesChannelContext);
+    }
+
+    public function testGetCustomerByIdIgnoresOtherWriteViolations(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+        $customer = $salesChannelContext->getCustomer();
+        static::assertNotNull($customer);
+        $customer->setActive(true);
+        $customer->setGuest(false);
+        $customer->setLegacyPassword('foo');
+        $customer->setLegacyEncoder('bar');
+
+        $legacyPasswordVerifier = $this->createMock(LegacyPasswordVerifier::class);
+        $legacyPasswordVerifier->expects($this->once())
+            ->method('verify')
+            ->with('password', $customer)
+            ->willReturn(true);
+
+        $customerRepository = $this->createMock(EntityRepository::class);
+        $customerRepository->expects($this->once())
+            ->method('search')
+            ->willReturn(new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                1,
+                new CustomerCollection([$customer]),
+                null,
+                new Criteria(),
+                $salesChannelContext->getContext()
+            ));
+
+        $exception = CustomerException::badCredentials();
+        $writeException = new WriteException();
+        $writeException->add($exception);
+
+        $customerRepository->expects($this->once())
+            ->method('update')
+            ->with([[
+                'id' => $customer->getId(),
+                'password' => 'password',
+                'legacyPassword' => null,
+                'legacyEncoder' => null,
+            ]], $salesChannelContext->getContext())
+            ->willThrowException($writeException);
+
+        $accountService = new AccountService(
+            $customerRepository,
+            static::createStub(EventDispatcherInterface::class),
+            $legacyPasswordVerifier,
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectException(WriteException::class);
+        $accountService->getCustomerByLogin('user', 'password', $salesChannelContext);
+    }
+
+    public function testSetDefaultBillingAddress(): void
+    {
+        $context = Generator::generateSalesChannelContext();
+        $customer = $context->getCustomer();
+
+        static::assertNotNull($customer);
+
+        $switcher = $this->createMock(AbstractSwitchDefaultAddressRoute::class);
+        $switcher
+            ->expects($this->once())
+            ->method('swap')
+            ->with('billing-address-id', AbstractSwitchDefaultAddressRoute::TYPE_BILLING, $context, $customer);
+
+        $accountService = new AccountService(
+            static::createStub(EntityRepository::class),
+            static::createStub(EventDispatcherInterface::class),
+            static::createStub(LegacyPasswordVerifier::class),
+            $switcher,
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $accountService->setDefaultBillingAddress('billing-address-id', $context, $customer);
+    }
+
+    public function testSetDefaultShippingAddress(): void
+    {
+        $context = Generator::generateSalesChannelContext();
+        $customer = $context->getCustomer();
+
+        static::assertNotNull($customer);
+
+        $switcher = $this->createMock(AbstractSwitchDefaultAddressRoute::class);
+        $switcher
+            ->expects($this->once())
+            ->method('swap')
+            ->with('shipping-address-id', AbstractSwitchDefaultAddressRoute::TYPE_SHIPPING, $context, $customer);
+
+        $accountService = new AccountService(
+            static::createStub(EntityRepository::class),
+            static::createStub(EventDispatcherInterface::class),
+            static::createStub(LegacyPasswordVerifier::class),
+            $switcher,
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $accountService->setDefaultShippingAddress('shipping-address-id', $context, $customer);
+    }
+
+    public function testLoginById(): void
+    {
+        $context = Generator::generateSalesChannelContext();
+
+        $customer = new CustomerEntity();
+        $customer->setId(Uuid::randomHex());
+        $customer->setActive(true);
+        $customer->setBoundSalesChannelId($context->getSalesChannel()->getId());
+        $customer->setEmail('foo@bar.de');
+
+        $repo = $this->createMock(EntityRepository::class);
+        $repo
+            ->expects($this->once())
+            ->method('search')
+            ->willReturn(new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                1,
+                new CustomerCollection([$customer]),
+                null,
+                new Criteria(),
+                $context->getContext()
+            ));
+
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $dispatcher
+            ->expects($this->exactly(2))
+            ->method('dispatch')
+            ->with(static::callback(static function ($event) use ($context, $customer): bool {
+                if ($event instanceof CustomerBeforeLoginEvent) {
+                    static::assertSame($context, $event->getSalesChannelContext());
+                    static::assertSame($customer->getEmail(), $event->getEmail());
+
+                    return true;
+                }
+
+                if ($event instanceof CustomerLoginEvent) {
+                    static::assertSame($customer, $event->getCustomer());
+
+                    return true;
+                }
+
+                return false;
+            }));
+
+        $accountService = new AccountService(
+            $repo,
+            $dispatcher,
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $accountService->loginById($customer->getId(), $context);
+    }
+
+    public function testLoginByIdWithNonValidId(): void
+    {
+        $context = Generator::generateSalesChannelContext();
+
+        $accountService = new AccountService(
+            static::createStub(EntityRepository::class),
+            static::createStub(EventDispatcherInterface::class),
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectException(BadCredentialsException::class);
+
+        $accountService->loginById('foo', $context);
+    }
+
+    public function testLoginByIdNotFound(): void
+    {
+        $context = Generator::generateSalesChannelContext();
+
+        $repo = $this->createMock(EntityRepository::class);
+        $repo
+            ->expects($this->once())
+            ->method('search')
+            ->willReturn(new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                0,
+                new CustomerCollection(),
+                null,
+                new Criteria(),
+                $context->getContext()
+            ));
+
+        $accountService = new AccountService(
+            $repo,
+            static::createStub(EventDispatcherInterface::class),
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectException(CustomerNotFoundByIdException::class);
+
+        $accountService->loginById(Uuid::randomHex(), $context);
+    }
+
+    public function testPasswordTooLongThrowsBadCredentials(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+        $accountService = new AccountService(
+            static::createStub(EntityRepository::class),
+            static::createStub(EventDispatcherInterface::class),
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            static::createStub(DoubleOptInService::class),
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        static::expectException(BadCredentialsException::class);
+
+        $accountService->loginByCredentials('foo@bar.de', \str_repeat('a', PasswordHasherInterface::MAX_PASSWORD_LENGTH + 1), $salesChannelContext);
+    }
+
+    public function testGetCustomerByLoginWithUnconfirmedDoubleOptIn(): void
+    {
+        $salesChannelContext = Generator::generateSalesChannelContext();
+        $customer = $salesChannelContext->getCustomer();
+        static::assertNotNull($customer);
+        $customer->setActive(true);
+        $customer->setGuest(false);
+        $customer->setPassword(TestDefaults::HASHED_PASSWORD);
+        $customer->setEmail('foo@bar.de');
+        $customer->setDoubleOptInRegistration(true);
+
+        $customerRepository = new StaticEntityRepository([
+            new EntitySearchResult(
+                CustomerDefinition::ENTITY_NAME,
+                1,
+                new CustomerCollection([$customer]),
+                null,
+                new Criteria(),
+                $salesChannelContext->getContext()
+            ),
+        ]);
+
+        $doubleOptInService = $this->createMock(DoubleOptInService::class);
+        $doubleOptInService->expects($this->once())
+            ->method('resendDoubleOptInMail')
+            ->with($customer, $salesChannelContext);
+
+        $accountService = new AccountService(
+            $customerRepository,
+            new EventDispatcher(),
+            static::createStub(LegacyPasswordVerifier::class),
+            static::createStub(AbstractSwitchDefaultAddressRoute::class),
+            static::createStub(CartRestorer::class),
+            $doubleOptInService,
+            new NativeClock(),
+            new ExtensionDispatcher(new EventDispatcher()),
+        );
+
+        $this->expectException(CustomerOptinNotCompletedException::class);
+        $accountService->getCustomerByLogin('foo@bar.de', 'contena', $salesChannelContext);
+    }
+}

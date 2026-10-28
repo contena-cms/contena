@@ -1,0 +1,85 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Checkout\Customer\SalesChannel;
+
+use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressCollection;
+use Contena\Core\Checkout\Customer\CustomerEntity;
+use Contena\Core\Checkout\Customer\CustomerException;
+use Contena\Core\Checkout\Customer\Extension\DeleteAddressRouteExtension;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\SalesChannel\NoContentResponse;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Package('checkout')]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+class DeleteAddressRoute extends AbstractDeleteAddressRoute
+{
+    use CustomerAddressValidationTrait;
+
+    /**
+     * @param EntityRepository<CustomerAddressCollection> $addressRepository
+     *
+     * @internal
+     */
+    public function __construct(private readonly EntityRepository $addressRepository, private readonly ExtensionDispatcher $extensions)
+    {
+    }
+
+    public function getDecorated(): AbstractDeleteAddressRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    #[Route(
+        path: '/store-api/account/address/{addressId}',
+        name: 'store-api.account.address.delete',
+        defaults: [
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,
+        ],
+        methods: [Request::METHOD_DELETE]
+    )]
+    public function delete(string $addressId, SalesChannelContext $context, CustomerEntity $customer): NoContentResponse
+    {
+        return $this->extensions->publish(
+            name: DeleteAddressRouteExtension::NAME,
+            extension: new DeleteAddressRouteExtension($addressId, $context, $customer),
+            function: $this->_delete(...),
+        );
+    }
+
+    private function _delete(string $addressId, SalesChannelContext $context, CustomerEntity $customer): NoContentResponse
+    {
+        $this->validateAddress($addressId, $context, $customer);
+
+        if (
+            $addressId === $customer->getDefaultBillingAddressId()
+            || $addressId === $customer->getDefaultShippingAddressId()
+        ) {
+            throw CustomerException::cannotDeleteDefaultAddress($addressId);
+        }
+
+        $this->addressRepository->delete([['id' => $addressId]], $context->getContext());
+
+        if ($addressId === $customer->getActiveBillingAddress()?->getId()) {
+            /** @deprecated tag:v6.8.0 - Use setter instead */
+            $customer->assign(['activeBillingAddress' => $customer->getDefaultBillingAddress()]);
+            // $customer->setActiveBillingAddress($customer->getDefaultBillingAddress());
+        }
+
+        if ($addressId === $customer->getActiveShippingAddress()?->getId()) {
+            /** @deprecated tag:v6.8.0 - Use setter instead */
+            $customer->assign(['activeShippingAddress' => $customer->getDefaultShippingAddress()]);
+            // $customer->setActiveShippingAddress($customer->getDefaultShippingAddress());
+        }
+
+        return new NoContentResponse();
+    }
+}

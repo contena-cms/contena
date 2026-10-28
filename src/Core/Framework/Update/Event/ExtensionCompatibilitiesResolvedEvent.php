@@ -1,0 +1,32 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Update\Event;
+
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\Struct\ExtensionCollection;
+use Contena\Core\Framework\Update\Services\ExtensionCompatibility;
+use Contena\Core\Framework\Update\Struct\Version;
+use Symfony\Contracts\EventDispatcher\Event;
+
+/**
+ * @internal
+ *
+ * @phpstan-import-type Compatibility from ExtensionCompatibility
+ *
+ * @codeCoverageIgnore
+ */
+#[Package('framework')]
+class ExtensionCompatibilitiesResolvedEvent extends Event
+{
+    /**
+     * @param list<Compatibility> $compatibilities
+     */
+    public function __construct(
+        public Version $update,
+        public ExtensionCollection $extensions,
+        public array $compatibilities,
+        public readonly Context $context
+    ) {
+    }
+}

@@ -1,0 +1,49 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules;
+
+use PHPStan\Rules\Rule;
+use PHPStan\Testing\RuleTestCase;
+use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\RouteScopeRule;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @internal
+ *
+ * @extends RuleTestCase<RouteScopeRule>
+ */
+#[Package('framework')]
+class RouteScopeRuleTest extends RuleTestCase
+{
+    public function testRouteScopeRule(): void
+    {
+        $this->analyse([__DIR__ . '/data/RouteScope/ControllerWithRouteAttribute.php'], [
+            [
+                'Method Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\RouteScope\ControllerWithRouteAttribute::resetScope() has no route scope defined. Please add a route scope to the method or the class.',
+                28,
+            ],
+        ]);
+
+        $this->analyse([__DIR__ . '/data/RouteScope/ControllerWithRouteAttribute.php'], [
+            [
+                'Method Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\RouteScope\ControllerWithRouteAttribute::resetScope() has no route scope defined. Please add a route scope to the method or the class.',
+                28,
+            ],
+        ]);
+
+        $this->analyse([__DIR__ . '/data/RouteScope/ControllerWithoutRouteAttribute.php'], [
+            [
+                'Method Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\RouteScope\ControllerWithoutRouteAttribute::withoutScope() has no route scope defined. Please add a route scope to the method or the class.',
+                18,
+            ],
+        ]);
+    }
+
+    /**
+     * @return RouteScopeRule
+     */
+    protected function getRule(): Rule
+    {
+        return new RouteScopeRule();
+    }
+}

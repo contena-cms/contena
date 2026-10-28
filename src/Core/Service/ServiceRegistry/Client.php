@@ -1,0 +1,237 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Service\ServiceRegistry;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Service\ServiceException;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\HttpClient\ChunkInterface;
+use Symfony\Contracts\HttpClient\Exception\ExceptionInterface;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Symfony\Contracts\HttpClient\ResponseInterface;
+use Symfony\Contracts\Service\ResetInterface;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+class Client implements ResetInterface
+{
+    private readonly string $registryUrl;
+
+    /**
+     * @var array<ServiceEntry>
+     */
+    private ?array $services = null;
+
+    public function __construct(
+        string $registryUrl,
+        private readonly string $appUrl,
+        private readonly HttpClientInterface $client,
+    ) {
+        $this->registryUrl = rtrim($registryUrl, '/');
+    }
+
+    public function get(string $name): ServiceEntry
+    {
+        $services = $this->getAll();
+
+        foreach ($services as $service) {
+            if ($service->name === $name) {
+                return $service;
+            }
+        }
+
+        throw ServiceException::notFound('name', $name);
+    }
+
+    /**
+     * @return \Generator<ChunkInterface>
+     */
+    public function fetchServiceZip(string $zipUrl): \Generator
+    {
+        $client = $this->client->withOptions([
+            'max_duration' => 10,
+        ]);
+
+        $response = $client->request('GET', $zipUrl, [
+            'headers' => [
+                'Accept' => 'application/zip',
+            ],
+        ]);
+
+        $this->checkResponse($response);
+        $contentType = $response->getHeaders()['content-type'] ?? [];
+        if (!\in_array('application/zip', $contentType, true)) {
+            throw ServiceException::requestFailed($response);
+        }
+
+        foreach ($client->stream($response) as $chunk) {
+            yield $chunk;
+        }
+    }
+
+    /**
+     * Every service of the registry's versioned list, including retired ones and ones whose status this version doesn't
+     * know (status null). To act on services, use getActive() or getRetired().
+     *
+     * @return array<ServiceEntry>
+     */
+    public function getAll(): array
+    {
+        if ($this->services !== null) {
+            return $this->services;
+        }
+
+        $rawServices = [];
+        $page = 1;
+
+        do {
+            $response = $this->fetchServices($page);
+            if ($response === null) {
+                break;
+            }
+
+            $rawServices = array_merge($rawServices, $response['services']);
+            ++$page;
+        } while ($page <= ($response['pagination']['pages'] ?? 1));
+
+        $this->services = array_map(
+            static fn (array $service) => new ServiceEntry(
+                $service['name'],
+                $service['label'],
+                $service['host'],
+                $service['app-endpoint'],
+                (bool) $service['activate-on-install'],
+                ServiceStatus::tryFrom($service['status']),
+            ),
+            $rawServices
+        );
+
+        return $this->services;
+    }
+
+    /**
+     * @return list<ServiceEntry>
+     */
+    public function getActive(): array
+    {
+        return array_values(array_filter($this->getAll(), static fn (ServiceEntry $entry): bool => $entry->status === ServiceStatus::ACTIVE));
+    }
+
+    /**
+     * @return list<ServiceEntry>
+     */
+    public function getRetired(): array
+    {
+        return array_values(array_filter($this->getAll(), static fn (ServiceEntry $entry): bool => $entry->status === ServiceStatus::RETIRED));
+    }
+
+    public function reset(): void
+    {
+        $this->services = null;
+    }
+
+    public function saveConsent(SaveConsentRequest $saveConsentRequest): void
+    {
+        try {
+            $response = $this->client->request('POST', \sprintf('%s/api/consent/', $this->registryUrl), [
+                'headers' => [
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json',
+                ],
+                'body' => json_encode($saveConsentRequest),
+            ]);
+
+            if ($response->getStatusCode() !== Response::HTTP_ACCEPTED) {
+                throw ServiceException::consentSaveFailed('Unexpected response status code: ' . $response->getStatusCode());
+            }
+        } catch (ExceptionInterface $e) {
+            throw ServiceException::consentSaveFailed($e->getMessage());
+        }
+    }
+
+    public function revokeConsent(string $identifier): void
+    {
+        try {
+            $response = $this->client->request('DELETE', \sprintf('%s/api/consent/revoke/%s', $this->registryUrl, $identifier), [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+            ]);
+
+            if ($response->getStatusCode() !== Response::HTTP_ACCEPTED) {
+                throw ServiceException::consentRevokeFailed('Unexpected response status code: ' . $response->getStatusCode());
+            }
+        } catch (ExceptionInterface $e) {
+            throw ServiceException::consentRevokeFailed($e->getMessage());
+        }
+    }
+
+    private function checkResponse(ResponseInterface $response): void
+    {
+        try {
+            if ($response->getStatusCode() !== 200) {
+                throw ServiceException::requestFailed($response);
+            }
+        } catch (TransportExceptionInterface $exception) {
+            throw ServiceException::requestTransportError($exception);
+        }
+    }
+
+    /**
+     * @return array<mixed>
+     */
+    private function fetchServices(int $page): ?array
+    {
+        try {
+            $response = $this->client->request('GET', \sprintf('%s/api/service/v2', $this->registryUrl), [
+                'headers' => [
+                    'Referer' => $this->appUrl,
+                    'Accept' => 'application/json',
+                ],
+                'query' => [
+                    'page' => $page,
+                    'limit' => 100,
+                ],
+            ]);
+
+            if ($response->getStatusCode() !== 200) {
+                return null;
+            }
+
+            $content = $response->toArray();
+
+            if (!$this->validateServicesResponse($content)) {
+                return null;
+            }
+
+            return $content;
+        } catch (ExceptionInterface $e) {
+            return null;
+        }
+    }
+
+    /**
+     * @param array<mixed> $content
+     */
+    private function validateServicesResponse(array $content): bool
+    {
+        if (!isset($content['services'])) {
+            return false;
+        }
+
+        foreach ($content['services'] as $service) {
+            if (!\is_array($service)) {
+                return false;
+            }
+
+            if (!isset($service['name']) || !isset($service['label']) || !isset($service['host']) || !isset($service['app-endpoint']) || !isset($service['activate-on-install']) || !isset($service['status'])) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+}

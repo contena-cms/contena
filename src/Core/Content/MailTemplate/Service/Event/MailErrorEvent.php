@@ -1,0 +1,156 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\MailTemplate\Service\Event;
+
+use Monolog\Level;
+use Contena\Core\Content\Flow\Dispatching\Action\FlowMailVariables;
+use Contena\Core\Content\Flow\Dispatching\Aware\ScalarValuesAware;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Event\EventData\EventDataCollection;
+use Contena\Core\Framework\Event\EventData\ScalarValueType;
+use Contena\Core\Framework\Event\FlowEventAware;
+use Contena\Core\Framework\Log\LogAware;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\Mime\Email;
+use Symfony\Contracts\EventDispatcher\Event;
+
+#[Package('after-sales')]
+class MailErrorEvent extends Event implements LogAware, ScalarValuesAware, FlowEventAware
+{
+    final public const NAME = 'mail.sent.error';
+
+    private readonly Level $logLevel;
+
+    /**
+     * @param array<string, mixed> $templateData
+     * @param array<string, mixed>|null $data the mail data passed to the mail service, e.g. `subject`, `recipients` and `templateId`
+     */
+    public function __construct(
+        private readonly Context $context,
+        ?Level $logLevel = Level::Debug,
+        private readonly ?\Throwable $throwable = null,
+        private readonly ?string $message = null,
+        private readonly ?string $template = null,
+        private readonly ?array $templateData = [],
+        private readonly ?array $data = null,
+        private readonly ?Email $mail = null,
+    ) {
+        $this->logLevel = $logLevel ?? Level::Debug;
+    }
+
+    /**
+     * @return array<string, scalar|array<mixed>|null>
+     */
+    public function getValues(): array
+    {
+        return [FlowMailVariables::EVENT_NAME => self::NAME];
+    }
+
+    public function getThrowable(): ?\Throwable
+    {
+        return $this->throwable;
+    }
+
+    public function getMessage(): ?string
+    {
+        return $this->message;
+    }
+
+    public function getContext(): Context
+    {
+        return $this->context;
+    }
+
+    public function getLogLevel(): Level
+    {
+        return $this->logLevel;
+    }
+
+    public function getLogData(): array
+    {
+        $logData = [];
+
+        if ($this->getThrowable()) {
+            $throwable = $this->getThrowable();
+            $logData['exception'] = (string) $throwable;
+        }
+
+        if ($this->message) {
+            $logData['message'] = $this->message;
+        }
+
+        if ($this->template) {
+            $logData['template'] = $this->template;
+        }
+
+        $logData['eventName'] = null;
+
+        if ($this->templateData) {
+            $logData['templateData'] = $this->templateData;
+            $logData['eventName'] = $this->templateData['eventName'] ?? null;
+        }
+
+        return $logData;
+    }
+
+    public function getName(): string
+    {
+        return self::NAME;
+    }
+
+    public static function getAvailableData(): EventDataCollection
+    {
+        return (new EventDataCollection())
+            ->add(FlowMailVariables::EVENT_NAME, new ScalarValueType(ScalarValueType::TYPE_STRING));
+    }
+
+    public function getTemplate(): ?string
+    {
+        return $this->template;
+    }
+
+    /**
+     * @return mixed[]|null
+     */
+    public function getTemplateData(): ?array
+    {
+        return $this->templateData;
+    }
+
+    /**
+     * @return array<string, mixed>|null
+     */
+    public function getData(): ?array
+    {
+        return $this->data;
+    }
+
+    /**
+     * The mail as far as it was built when the error occurred, `null` if the error happened before.
+     */
+    public function getMail(): ?Email
+    {
+        return $this->mail;
+    }
+
+    public function getEventName(): ?string
+    {
+        $eventName = $this->templateData['eventName'] ?? null;
+
+        return \is_string($eventName) ? $eventName : null;
+    }
+
+    public function getTemplateId(): ?string
+    {
+        $templateId = $this->data['templateId'] ?? null;
+
+        return \is_string($templateId) ? $templateId : null;
+    }
+
+    public function getSalesChannelId(): ?string
+    {
+        $salesChannelId = $this->data['salesChannelId'] ?? null;
+
+        return \is_string($salesChannelId) ? $salesChannelId : null;
+    }
+}

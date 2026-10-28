@@ -1,0 +1,102 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Webhook;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Webhook\WebhookException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(WebhookException::class)]
+class WebhookExceptionTest extends TestCase
+{
+    public function testAppWebhookFailedException(): void
+    {
+        $e = WebhookException::appWebhookFailedException('webhookId', 'appId', new \Exception('error'));
+        static::assertSame('Webhook "webhookId" from "appId" failed with error: error.', $e->getMessage());
+        static::assertSame('FRAMEWORK__APP_WEBHOOK_FAILED', $e->getErrorCode());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+    }
+
+    public function testWebhookFailedException(): void
+    {
+        $e = WebhookException::webhookFailedException('webhookId', new \Exception('error'));
+        static::assertSame('Webhook "webhookId" failed with error: error.', $e->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_FAILED', $e->getErrorCode());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $e->getStatusCode());
+    }
+
+    public function testInvalidDataMapping(): void
+    {
+        $exception = WebhookException::invalidDataMapping('propertyName', 'classString');
+
+        if (!Feature::isActive('v6.8.0.0')) {
+            static::assertSame('Invalid available DataMapping, could not get property "propertyName" on instance of classString', $exception->getMessage());
+
+            return;
+        }
+
+        static::assertInstanceOf(WebhookException::class, $exception);
+        static::assertSame('Invalid available DataMapping, could not get property "propertyName" on instance of classString', $exception->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_INVALID_DATA_MAPPING', $exception->getErrorCode());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+    }
+
+    public function testUnknownEventDataType(): void
+    {
+        $exception = WebhookException::unknownEventDataType('invalidType');
+
+        if (!Feature::isActive('v6.8.0.0')) {
+            static::assertSame('Unknown EventDataType: invalidType', $exception->getMessage());
+
+            return;
+        }
+
+        static::assertInstanceOf(WebhookException::class, $exception);
+        static::assertSame('Unknown EventDataType: invalidType', $exception->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_UNKNOWN_DATA_TYPE', $exception->getErrorCode());
+        static::assertSame(Response::HTTP_INTERNAL_SERVER_ERROR, $exception->getStatusCode());
+    }
+
+    public function testWebhookNotOwned(): void
+    {
+        $e = WebhookException::webhookNotOwned('webhookId');
+
+        static::assertSame('Webhook "webhookId" can only be changed by its owner.', $e->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_NOT_OWNED', $e->getErrorCode());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+    }
+
+    public function testWebhookEventNotPermitted(): void
+    {
+        $e = WebhookException::webhookEventNotPermitted('order.written');
+
+        static::assertSame('Subscribing to event "order.written" is not permitted.', $e->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_EVENT_NOT_PERMITTED', $e->getErrorCode());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+    }
+
+    public function testWebhookEventPrivilegesMissing(): void
+    {
+        $e = WebhookException::webhookEventPrivilegesMissing('product.written', ['product:read', 'order:read']);
+
+        static::assertSame('Subscribing to event "product.written" requires the privileges: product:read, order:read.', $e->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_EVENT_PRIVILEGES_MISSING', $e->getErrorCode());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+    }
+
+    public function testUnsupportedMessage(): void
+    {
+        $e = WebhookException::unsupportedMessage('stdClass');
+
+        static::assertSame('The webhook transport only supports WebhookEventMessage, got "stdClass".', $e->getMessage());
+        static::assertSame('FRAMEWORK__WEBHOOK_UNSUPPORTED_MESSAGE', $e->getErrorCode());
+        static::assertSame(Response::HTTP_BAD_REQUEST, $e->getStatusCode());
+    }
+}

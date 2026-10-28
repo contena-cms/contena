@@ -1,0 +1,148 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\Product\Stock;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\PDO\Exception as PdoException;
+use Doctrine\DBAL\Exception\DriverException;
+use Doctrine\DBAL\Statement;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Product\Events\ProductBackInStockEvent;
+use Contena\Core\Content\Product\Events\ProductNoLongerAvailableEvent;
+use Contena\Core\Content\Product\Events\ProductStockAlteredEvent;
+use Contena\Core\Content\Product\Stock\StockAlteration;
+use Contena\Core\Content\Product\Stock\StockLoadRequest;
+use Contena\Core\Content\Product\Stock\StockStorage;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
+
+/**
+ * @internal
+ */
+#[Package('inventory')]
+#[CoversClass(StockStorage::class)]
+class StockStorageTest extends TestCase
+{
+    public function testLoadDoesNothing(): void
+    {
+        $ids = new IdsCollection();
+
+        $productIds = $ids->getList(['p-1', 'p-2', 'p-3']);
+        $salesChannelContext = static::createStub(SalesChannelContext::class);
+
+        $connection = static::createStub(Connection::class);
+        $dispatcher = static::createStub(EventDispatcherInterface::class);
+
+        $stockStorage = new StockStorage($connection, $dispatcher);
+
+        static::assertSame(
+            [],
+            $stockStorage->load(new StockLoadRequest(array_values($productIds)), $salesChannelContext)->all()
+        );
+    }
+
+    public function testEmptyChangesDoNotDispatchEvent(): void
+    {
+        $connection = static::createStub(Connection::class);
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
+
+        $dispatcher->expects($this->never())->method('dispatch');
+
+        $stockStorage = new StockStorage($connection, $dispatcher);
+        $stockStorage->alter([], Context::createDefaultContext());
+    }
+
+    public function testAlterRetriesMariaDbRecordChangedExceptionOutsideTransaction(): void
+    {
+        $productId = Uuid::randomHex();
+        $recordChangedException = new DriverException(
+            new PdoException('Record has changed since last read', 'HY000', 1020),
+            null,
+        );
+        $attempts = 0;
+
+        $statement = $this->createMock(Statement::class);
+        $statement->expects($this->exactly(6))->method('bindValue');
+        $statement->expects($this->exactly(2))
+            ->method('executeStatement')
+            ->willReturnCallback(static function () use (&$attempts, $recordChangedException): int {
+                ++$attempts;
+
+                if ($attempts === 1) {
+                    throw $recordChangedException;
+                }
+
+                return 1;
+            });
+
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->once())->method('prepare')->willReturn($statement);
+        $connection->method('getTransactionNestingLevel')->willReturn(0);
+        $connection->expects($this->exactly(2))
+            ->method('fetchAllKeyValue')
+            ->willReturn([$productId => 1]);
+        $connection->expects($this->once())->method('executeStatement')->willReturn(1);
+
+        $dispatcher = $this->createMock(EventDispatcherInterface::class);
+        $dispatcher->expects($this->once())
+            ->method('dispatch')
+            ->with(static::isInstanceOf(ProductStockAlteredEvent::class));
+
+        $stockStorage = new StockStorage($connection, $dispatcher);
+        $stockStorage->alter([
+            new StockAlteration(Uuid::randomHex(), $productId, 1, 0),
+        ], Context::createDefaultContext());
+
+        static::assertSame(2, $attempts);
+    }
+
+    public function testIndexDispatchesEventsByAvailabilityDirection(): void
+    {
+        $ids = new IdsCollection();
+        $dispatcher = new CollectingEventDispatcher();
+
+        $stockStorage = new StockStorage($this->createAvailabilityConnection($ids), $dispatcher);
+        $stockStorage->index(array_values($ids->getList(['lost', 'gained', 'unchanged'])), Context::createDefaultContext());
+
+        $noLongerAvailable = $dispatcher->getEventsOfClass(ProductNoLongerAvailableEvent::class);
+        static::assertCount(1, $noLongerAvailable);
+        static::assertSame([$ids->get('lost')], $noLongerAvailable[0]->getIds());
+
+        $backInStock = $dispatcher->getEventsOfClass(ProductBackInStockEvent::class);
+        static::assertCount(1, $backInStock);
+        static::assertSame([$ids->get('gained')], $backInStock[0]->getIds());
+    }
+
+    public function testIndexDispatchesNoEventWithoutAvailabilityChange(): void
+    {
+        $ids = new IdsCollection();
+        $dispatcher = new CollectingEventDispatcher();
+
+        $before = [$ids->get('p-1') => '1', $ids->get('p-2') => '0'];
+
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllKeyValue')->willReturn($before, $before);
+
+        $stockStorage = new StockStorage($connection, $dispatcher);
+        $stockStorage->index(array_keys($before), Context::createDefaultContext());
+
+        static::assertSame([], $dispatcher->getEvents());
+    }
+
+    private function createAvailabilityConnection(IdsCollection $ids): Connection
+    {
+        $connection = static::createStub(Connection::class);
+        $connection->method('fetchAllKeyValue')->willReturn(
+            [$ids->get('lost') => '1', $ids->get('gained') => '0', $ids->get('unchanged') => '1'],
+            [$ids->get('lost') => '0', $ids->get('gained') => '1', $ids->get('unchanged') => '1'],
+        );
+
+        return $connection;
+    }
+}

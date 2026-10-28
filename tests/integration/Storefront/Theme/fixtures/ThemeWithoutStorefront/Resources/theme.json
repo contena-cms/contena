@@ -1,0 +1,9 @@
+{
+  "name": "ThemeWithoutStorefront",
+  "author": "Contena",
+  "views": [
+    "@PayPal",
+    "@ThemeWithoutStorefront",
+    "@Plugins"
+  ]
+}

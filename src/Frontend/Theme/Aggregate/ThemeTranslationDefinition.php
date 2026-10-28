@@ -1,0 +1,57 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Storefront\Theme\Aggregate;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
+use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
+use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Deprecated;
+use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
+use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
+use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
+use Contena\Core\Framework\Log\Package;
+use Contena\Storefront\Theme\ThemeDefinition;
+
+/**
+ * @codeCoverageIgnore
+ */
+#[Package('discovery')]
+class ThemeTranslationDefinition extends EntityTranslationDefinition
+{
+    final public const ENTITY_NAME = 'theme_translation';
+
+    public function getEntityName(): string
+    {
+        return self::ENTITY_NAME;
+    }
+
+    public function getCollectionClass(): string
+    {
+        return ThemeTranslationCollection::class;
+    }
+
+    public function getEntityClass(): string
+    {
+        return ThemeTranslationEntity::class;
+    }
+
+    public function since(): ?string
+    {
+        return '6.0.0.0';
+    }
+
+    protected function getParentDefinitionClass(): string
+    {
+        return ThemeDefinition::class;
+    }
+
+    protected function defineFields(): FieldCollection
+    {
+        return new FieldCollection([
+            (new StringField('description', 'description'))->addFlags(new ApiAware()),
+            (new JsonField('labels', 'labels'))->addFlags(new ApiAware(), new Deprecated('v6.7.16.0', 'v6.8.0.0')),
+            (new JsonField('help_texts', 'helpTexts'))->addFlags(new ApiAware(), new Deprecated('v6.7.16.0', 'v6.8.0.0')),
+            (new CustomFields())->addFlags(new ApiAware()),
+        ]);
+    }
+}

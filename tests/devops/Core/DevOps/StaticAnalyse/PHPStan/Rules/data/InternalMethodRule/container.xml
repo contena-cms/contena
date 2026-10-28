@@ -1,0 +1,6 @@
+<?xml version="1.0" ?>
+<container>
+    <services>
+        <service id="Contena\Core\DevOps\MyFakeNamespace\InternalService" class="Contena\Core\DevOps\MyFakeNamespace\InternalService"/>
+    </services>
+</container>

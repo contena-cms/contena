@@ -1,0 +1,66 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Checkout\Customer\SalesChannel;
+
+use Contena\Core\Checkout\Customer\CustomerCollection;
+use Contena\Core\Checkout\Customer\CustomerDefinition;
+use Contena\Core\Checkout\Customer\CustomerEntity;
+use Contena\Core\Checkout\Customer\Extension\CustomerRouteExtension;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Package('checkout')]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+class CustomerRoute extends AbstractCustomerRoute
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<CustomerCollection> $customerRepository
+     */
+    public function __construct(private readonly EntityRepository $customerRepository, private readonly ExtensionDispatcher $extensions)
+    {
+    }
+
+    public function getDecorated(): AbstractCustomerRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    #[Route(
+        path: '/store-api/account/customer',
+        name: 'store-api.account.customer',
+        defaults: [
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED => true,
+            PlatformRequest::ATTRIBUTE_LOGIN_REQUIRED_ALLOW_GUEST => true,
+            PlatformRequest::ATTRIBUTE_ENTITY => CustomerDefinition::ENTITY_NAME,
+        ],
+        methods: [Request::METHOD_GET, Request::METHOD_POST],
+    )]
+    public function load(Request $request, SalesChannelContext $context, Criteria $criteria, CustomerEntity $customer): CustomerResponse
+    {
+        return $this->extensions->publish(
+            name: CustomerRouteExtension::NAME,
+            extension: new CustomerRouteExtension($request, $context, $criteria, $customer),
+            function: fn (Request $request, SalesChannelContext $context, Criteria $criteria, CustomerEntity $customer): CustomerResponse => $this->_load($context, $criteria, $customer),
+        );
+    }
+
+    private function _load(SalesChannelContext $context, Criteria $criteria, CustomerEntity $customer): CustomerResponse
+    {
+        $criteria->setIds([$customer->getId()]);
+
+        $customerEntity = $this->customerRepository->search($criteria, $context->getContext())->getEntities()->first();
+        \assert($customerEntity !== null);
+
+        return new CustomerResponse($customerEntity);
+    }
+}

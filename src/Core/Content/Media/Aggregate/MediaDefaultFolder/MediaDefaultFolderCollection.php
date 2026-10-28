@@ -1,0 +1,25 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Media\Aggregate\MediaDefaultFolder;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @extends EntityCollection<MediaDefaultFolderEntity>
+ *
+ * @codeCoverageIgnore
+ */
+#[Package('discovery')]
+class MediaDefaultFolderCollection extends EntityCollection
+{
+    public function getApiAlias(): string
+    {
+        return 'media_default_folder_collection';
+    }
+
+    protected function getExpectedClass(): string
+    {
+        return MediaDefaultFolderEntity::class;
+    }
+}

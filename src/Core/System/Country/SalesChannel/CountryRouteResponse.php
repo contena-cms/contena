@@ -1,0 +1,28 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Country\SalesChannel;
+
+use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\SalesChannel\StoreApiResponse;
+
+/**
+ * @extends StoreApiResponse<EntitySearchResult<CountryCollection>>
+ */
+#[Package('fundamentals@discovery')]
+class CountryRouteResponse extends StoreApiResponse
+{
+    /**
+     * @return EntitySearchResult<CountryCollection>
+     */
+    public function getResult(): EntitySearchResult
+    {
+        return $this->object;
+    }
+
+    public function getCountries(): CountryCollection
+    {
+        return $this->object->getEntities();
+    }
+}

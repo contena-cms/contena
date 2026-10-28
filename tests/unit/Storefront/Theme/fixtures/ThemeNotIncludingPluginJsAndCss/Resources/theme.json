@@ -1,0 +1,17 @@
+{
+  "name": "SwagTheme",
+  "author": "Contena",
+  "views": [
+     "@MockStorefront",
+     "@SwagTheme"
+  ],
+  "style": [
+    "@MockStorefront"
+  ],
+  "script": [
+    "@MockStorefront"
+  ],
+  "asset": [
+    "@MockStorefront"
+  ]
+}

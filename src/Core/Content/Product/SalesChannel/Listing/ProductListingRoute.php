@@ -1,0 +1,156 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Product\SalesChannel\Listing;
+
+use Psr\Log\LoggerInterface;
+use Contena\Core\Content\Category\CategoryCollection;
+use Contena\Core\Content\Category\CategoryDefinition;
+use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
+use Contena\Core\Content\Product\Extension\ProductListingCriteriaExtension;
+use Contena\Core\Content\Product\Extension\ProductListingRouteExtension;
+use Contena\Core\Content\Product\ProductDefinition;
+use Contena\Core\Content\Product\ProductException;
+use Contena\Core\Content\Product\SalesChannel\ProductAvailableFilter;
+use Contena\Core\Content\ProductStream\Exception\EmptyProductStreamException;
+use Contena\Core\Content\ProductStream\Exception\NoFilterException;
+use Contena\Core\Content\ProductStream\Service\AbstractProductStreamBuilder;
+use Contena\Core\Content\ProductStream\Service\ProductStreamBuilderInterface;
+use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Package('inventory')]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+class ProductListingRoute extends AbstractProductListingRoute
+{
+    /**
+     * @internal
+     *
+     * @param EntityRepository<CategoryCollection> $categoryRepository
+     */
+    public function __construct(
+        private readonly ProductListingLoader $listingLoader,
+        private readonly EntityRepository $categoryRepository,
+        private readonly ProductStreamBuilderInterface|AbstractProductStreamBuilder $productStreamBuilder,
+        private readonly CacheTagCollector $cacheTagCollector,
+        private readonly ExtensionDispatcher $extensions,
+        private readonly LoggerInterface $logger,
+    ) {
+    }
+
+    public function getDecorated(): AbstractProductListingRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    public static function buildName(string $categoryId): string
+    {
+        return 'product-listing-' . $categoryId;
+    }
+
+    #[Route(
+        path: '/store-api/product-listing/{categoryId}',
+        name: 'store-api.product.listing',
+        methods: [Request::METHOD_POST, Request::METHOD_GET],
+        defaults: [PlatformRequest::ATTRIBUTE_ENTITY => ProductDefinition::ENTITY_NAME, PlatformRequest::ATTRIBUTE_HTTP_CACHE => true]
+    )]
+    public function load(string $categoryId, Request $request, SalesChannelContext $context, Criteria $criteria): ProductListingRouteResponse
+    {
+        return $this->extensions->publish(
+            name: ProductListingRouteExtension::NAME,
+            extension: new ProductListingRouteExtension($categoryId, $request, $context, $criteria),
+            function: fn (string $categoryId, Request $request, SalesChannelContext $context, Criteria $criteria): ProductListingRouteResponse => $this->_load($categoryId, $context, $criteria),
+        );
+    }
+
+    private function _load(string $categoryId, SalesChannelContext $context, Criteria $criteria): ProductListingRouteResponse
+    {
+        $this->cacheTagCollector->addTag(self::buildName($categoryId));
+
+        $criteria->addFilter(
+            new ProductAvailableFilter($context->getSalesChannelId(), ProductVisibilityDefinition::VISIBILITY_ALL)
+        );
+        $criteria->setTitle('product-listing-route::loading');
+
+        $categoryCriteria = new Criteria([$categoryId]);
+        $categoryCriteria->setTitle('product-listing-route::category-loading');
+        $categoryCriteria->addFields(['productAssignmentType', 'productStreamId']);
+        $categoryCriteria->setLimit(1);
+
+        /** @var ?PartialEntity */
+        $category = $this->categoryRepository->search($categoryCriteria, $context->getContext())->getEntities()->first();
+        if (!$category) {
+            throw ProductException::categoryNotFound($categoryId);
+        }
+
+        $criteria = $this->extensions->publish(
+            name: ProductListingCriteriaExtension::NAME,
+            extension: new ProductListingCriteriaExtension($criteria, $context, $categoryId),
+            function: function ($criteria, $context, $categoryId) use ($category): Criteria {
+                $this->extendCriteria($context, $criteria, $category);
+
+                return $criteria;
+            }
+        );
+
+        $entities = $this->listingLoader->load($criteria, $context);
+
+        $result = ProductListingResult::createFrom($entities);
+        $result->addState(...$entities->getStates());
+
+        $result->setStreamId($category->get('productStreamId'));
+
+        return new ProductListingRouteResponse($result);
+    }
+
+    private function extendCriteria(SalesChannelContext $salesChannelContext, Criteria $criteria, PartialEntity $category): void
+    {
+        $productAssignmentType = $category->get('productAssignmentType');
+        $productStreamId = $category->get('productStreamId');
+
+        if ($productAssignmentType === CategoryDefinition::PRODUCT_ASSIGNMENT_TYPE_PRODUCT_STREAM && \is_string($productStreamId) && $productStreamId !== '') {
+            $this->cacheTagCollector->addTag(
+                EntityCacheKeyGenerator::buildStreamTag($productStreamId)
+            );
+
+            $productStreamBuilder = $this->productStreamBuilder;
+
+            try {
+                if ($productStreamBuilder instanceof AbstractProductStreamBuilder) {
+                    $productStreamBuilder->enrichCriteria($criteria, $productStreamId, $salesChannelContext->getContext());
+                } else {
+                    $criteria->addFilter(...$productStreamBuilder->buildFilters($productStreamId, $salesChannelContext->getContext()));
+                }
+            } catch (EmptyProductStreamException) {
+                // An empty group selects all products, as in the product export
+            } catch (NoFilterException $exception) {
+                $this->logger->warning(
+                    'Product stream configured for category listing has no usable filters.',
+                    [
+                        'productStreamId' => $productStreamId,
+                        'exception' => $exception,
+                    ]
+                );
+
+                $criteria->addFilter(new EqualsFilter('product.id', null));
+            }
+
+            return;
+        }
+
+        $criteria->addFilter(
+            new EqualsFilter('product.categoriesRo.id', $category->getId())
+        );
+    }
+}

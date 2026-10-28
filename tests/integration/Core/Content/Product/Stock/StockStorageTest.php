@@ -1,0 +1,1167 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Content\Product\Stock;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\LineItem\LineItem;
+use Contena\Core\Checkout\Cart\LineItemFactoryHandler\ProductLineItemFactory;
+use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
+use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
+use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
+use Contena\Core\Checkout\Cart\SalesChannel\CartService;
+use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
+use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
+use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
+use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
+use Contena\Core\Checkout\Order\OrderCollection;
+use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
+use Contena\Core\Content\Product\Events\ProductBackInStockEvent;
+use Contena\Core\Content\Product\Events\ProductNoLongerAvailableEvent;
+use Contena\Core\Content\Product\ProductCollection;
+use Contena\Core\Content\Product\ProductDefinition;
+use Contena\Core\Content\Product\ProductEntity;
+use Contena\Core\Content\Test\Product\ProductBuilder;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\CountryAddToSalesChannelTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
+use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
+use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
+use Contena\Core\System\StateMachine\StateMachineRegistry;
+use Contena\Core\System\StateMachine\Transition;
+use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+use Contena\Core\Test\TestDefaults;
+
+/**
+ * @internal
+ */
+#[Package('inventory')]
+class StockStorageTest extends TestCase
+{
+    use CountryAddToSalesChannelTestBehaviour;
+    use IntegrationTestBehaviour;
+    use TaxAddToSalesChannelTestBehaviour;
+
+    /**
+     * @var EntityRepository<ProductCollection>
+     */
+    private EntityRepository $productRepository;
+
+    /**
+     * @var EntityRepository<OrderLineItemCollection>
+     */
+    private EntityRepository $lineItemRepository;
+
+    private CartService $cartService;
+
+    /**
+     * @var list<string>
+     */
+    private array $noLongerAvailableIds = [];
+
+    /**
+     * @var list<string>
+     */
+    private array $backInStockIds = [];
+
+    private AbstractSalesChannelContextFactory $contextFactory;
+
+    private SalesChannelContext $context;
+
+    /**
+     * @var EntityRepository<OrderCollection>
+     */
+    private EntityRepository $orderRepository;
+
+    protected function setUp(): void
+    {
+        $this->productRepository = static::getContainer()->get('product.repository');
+        $this->cartService = static::getContainer()->get(CartService::class);
+        $this->contextFactory = static::getContainer()->get(SalesChannelContextFactory::class);
+        $this->lineItemRepository = static::getContainer()->get('order_line_item.repository');
+        $this->orderRepository = static::getContainer()->get('order.repository');
+        $this->addCountriesToSalesChannel();
+
+        $this->context = $this->contextFactory->create(
+            Uuid::randomHex(),
+            TestDefaults::SALES_CHANNEL,
+            [
+                SalesChannelContextService::CUSTOMER_ID => $this->createCustomer(),
+            ]
+        );
+    }
+
+    public function testAvailableOnInsert(): void
+    {
+        $id = Uuid::randomHex();
+
+        $product = [
+            'id' => $id,
+            'productNumber' => Uuid::randomHex(),
+            'stock' => 10,
+            'name' => 'Test',
+            'isCloseout' => true,
+            'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 10, 'net' => 9, 'linked' => false]],
+            'tax' => ['id' => Uuid::randomHex(), 'name' => 'test', 'taxRate' => 19],
+            'manufacturer' => ['name' => 'test'],
+        ];
+
+        $context = Context::createDefaultContext();
+        $this->productRepository->create([$product], $context);
+        $this->addTaxDataToSalesChannel($this->context, $product['tax']);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+
+        $this->assertStock(10, $product);
+    }
+
+    public function testAvailableWithoutStock(): void
+    {
+        $id = Uuid::randomHex();
+
+        $product = [
+            'id' => $id,
+            'productNumber' => Uuid::randomHex(),
+            'stock' => 0,
+            'isCloseout' => true,
+            'name' => 'Test',
+            'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 10, 'net' => 9, 'linked' => false]],
+            'tax' => ['id' => Uuid::randomHex(), 'name' => 'test', 'taxRate' => 19],
+            'manufacturer' => ['name' => 'test'],
+        ];
+
+        $context = Context::createDefaultContext();
+        $this->productRepository->create([$product], $context);
+        $this->addTaxDataToSalesChannel($this->context, $product['tax']);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getIsCloseout());
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+    }
+
+    public function testAvailableAfterUpdate(): void
+    {
+        $id = Uuid::randomHex();
+
+        $product = [
+            'id' => $id,
+            'productNumber' => Uuid::randomHex(),
+            'stock' => 10,
+            'name' => 'Test',
+            'isCloseout' => true,
+            'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 10, 'net' => 9, 'linked' => false]],
+            'tax' => ['id' => Uuid::randomHex(), 'name' => 'test', 'taxRate' => 19],
+            'manufacturer' => ['name' => 'test'],
+        ];
+
+        $context = Context::createDefaultContext();
+        $this->productRepository->create([$product], $context);
+        $this->addTaxDataToSalesChannel($this->context, $product['tax']);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(10, $product);
+
+        $this->productRepository->update([['id' => $id, 'stock' => 0]], $context);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getIsCloseout());
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+    }
+
+    public function testAvailableAfterUpdateIsCloseoutNull(): void
+    {
+        $parentId = $this->createProduct([
+            'isCloseout' => null,
+        ]);
+        $productId = $this->createProduct([
+            'parentId' => $parentId,
+            'stock' => 10,
+            'isCloseout' => true,
+        ]);
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->get($productId);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(10, $product);
+
+        $this->productRepository->update([['id' => $productId, 'isCloseout' => null]], $context);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->get($productId);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertFalse($product->getIsCloseout());
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(10, $product);
+    }
+
+    public function testVariantAvailabilityFollowsCloseoutChangeOfParent(): void
+    {
+        $parentId = $this->createProduct([
+            'stock' => 0,
+            'isCloseout' => true,
+        ]);
+        $variantId = $this->createProduct([
+            'parentId' => $parentId,
+            'stock' => 0,
+            'isCloseout' => null,
+        ]);
+
+        $context = Context::createDefaultContext();
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertFalse($variant->getAvailable());
+
+        $this->productRepository->update([['id' => $parentId, 'isCloseout' => false]], $context);
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertTrue($variant->getAvailable());
+
+        $this->productRepository->update([['id' => $parentId, 'isCloseout' => true]], $context);
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertFalse($variant->getAvailable());
+    }
+
+    public function testVariantAvailabilityFollowsMinPurchaseChangeOfParent(): void
+    {
+        $parentId = $this->createProduct([
+            'stock' => 0,
+            'isCloseout' => true,
+            'minPurchase' => 1,
+        ]);
+        $variantId = $this->createProduct([
+            'parentId' => $parentId,
+            'stock' => 1,
+            'isCloseout' => null,
+        ]);
+
+        $context = Context::createDefaultContext();
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertTrue($variant->getAvailable());
+
+        $this->productRepository->update([['id' => $parentId, 'minPurchase' => 2]], $context);
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertFalse($variant->getAvailable());
+    }
+
+    public function testVariantWithOwnCloseoutFollowsMinPurchaseChangeOfParent(): void
+    {
+        $parentId = $this->createProduct([
+            'stock' => 0,
+            'isCloseout' => false,
+            'minPurchase' => 1,
+        ]);
+        $variantId = $this->createProduct([
+            'parentId' => $parentId,
+            'stock' => 1,
+            'isCloseout' => true,
+        ]);
+
+        $context = Context::createDefaultContext();
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertTrue($variant->getAvailable());
+
+        $this->productRepository->update([['id' => $parentId, 'minPurchase' => 2]], $context);
+
+        $variant = $this->productRepository->search(new Criteria([$variantId]), $context)->getEntities()->get($variantId);
+        static::assertInstanceOf(ProductEntity::class, $variant);
+        static::assertFalse($variant->getAvailable());
+    }
+
+    public static function availabilityEventsOnCreateProvider(): \Generator
+    {
+        yield 'Closeout, no stock' => [0, true, false];
+        yield 'Closeout, with stock' => [1, true, true];
+        yield 'None closeout, no stock' => [0, false, true];
+        yield 'None closeout, stock' => [1, false, true];
+    }
+
+    #[DataProvider('availabilityEventsOnCreateProvider')]
+    public function testAvailabilityEventsOnCreate(int $stock, bool $closeout, bool $backInStock): void
+    {
+        $ids = new IdsCollection();
+
+        $this->collectAvailabilityEvents();
+
+        $product = (new ProductBuilder($ids, 'p1'))
+            ->price(10)
+            ->stock($stock)
+            ->closeout($closeout)
+            ->build();
+
+        $this->productRepository->create([$product], Context::createDefaultContext());
+
+        $this->assertAvailabilityEvents($ids->get('p1'), noLongerAvailable: false, backInStock: $backInStock);
+    }
+
+    public static function availabilityEventsOnAlterProvider(): \Generator
+    {
+        yield 'Closeout, not stock, after 0' => [
+            'stock' => 0,
+            'closeout' => true,
+            'after' => 0,
+            'noLongerAvailable' => false,
+            'backInStock' => false,
+        ];
+
+        yield 'Closeout, not stock, after 1' => [
+            'stock' => 0,
+            'closeout' => true,
+            'after' => 1,
+            'noLongerAvailable' => false,
+            'backInStock' => true,
+        ];
+
+        yield 'Closeout, stock, after 0' => [
+            'stock' => 1,
+            'closeout' => true,
+            'after' => 0,
+            'noLongerAvailable' => true,
+            'backInStock' => false,
+        ];
+
+        yield 'Closeout, stock, after 1' => [
+            'stock' => 1,
+            'closeout' => true,
+            'after' => 1,
+            'noLongerAvailable' => false,
+            'backInStock' => false,
+        ];
+
+        // changing stock of none closeout products should never change the availability
+        yield 'None closeout, not stock, after 0' => [
+            'stock' => 0,
+            'closeout' => false,
+            'after' => 0,
+            'noLongerAvailable' => false,
+            'backInStock' => false,
+        ];
+
+        yield 'None closeout, not stock, after 1' => [
+            'stock' => 0,
+            'closeout' => false,
+            'after' => 1,
+            'noLongerAvailable' => false,
+            'backInStock' => false,
+        ];
+
+        yield 'None closeout, stock, after 0' => [
+            'stock' => 1,
+            'closeout' => false,
+            'after' => 0,
+            'noLongerAvailable' => false,
+            'backInStock' => false,
+        ];
+
+        yield 'None closeout, stock, after 1' => [
+            'stock' => 1,
+            'closeout' => false,
+            'after' => 1,
+            'noLongerAvailable' => false,
+            'backInStock' => false,
+        ];
+    }
+
+    #[DataProvider('availabilityEventsOnAlterProvider')]
+    public function testAvailabilityEventsOnAlter(int $stock, bool $closeout, int $after, bool $noLongerAvailable, bool $backInStock): void
+    {
+        $ids = new IdsCollection();
+
+        $context = Context::createDefaultContext();
+
+        $product = (new ProductBuilder($ids, 'p1'))
+            ->price(10)
+            ->stock($stock)
+            ->closeout($closeout)
+            ->build();
+
+        $this->productRepository->create([$product], $context);
+
+        $this->collectAvailabilityEvents();
+
+        $this->productRepository->update([['id' => $product['id'], 'stock' => $after]], $context);
+
+        $this->assertAvailabilityEvents($ids->get('p1'), $noLongerAvailable, $backInStock);
+    }
+
+    public function testStockAfterOrderProduct(): void
+    {
+        $id = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+
+        $this->orderProduct($id, 1);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+    }
+
+    public function testStockAfterCancel(): void
+    {
+        $context = Context::createDefaultContext();
+        $initialStock = 12;
+        $orderQuantity = 8;
+
+        $productId = $this->createProduct([
+            'stock' => $initialStock,
+        ]);
+        $orderId = $this->orderProduct($productId, $orderQuantity);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock($initialStock - $orderQuantity, $product);
+
+        $this->transitionOrder($orderId, StateMachineTransitionActions::ACTION_CANCEL);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock($initialStock, $product);
+    }
+
+    public function testStockNotReduceDuplicatedWhenReOpenOrder(): void
+    {
+        $id = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(5, $product);
+        static::assertSame(0, $product->getSales());
+
+        $orderId = $this->orderProduct($id, 1);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+        static::assertSame(1, $product->getSales());
+
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+        $this->transitionOrder($orderId, 'reopen');
+        $this->transitionOrder($orderId, 'process');
+
+        $id2 = $this->createProduct();
+        $this->orderProduct($id2, 1);
+
+        $this->transitionOrder($orderId, 'complete');
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+        static::assertSame(1, $product->getSales());
+    }
+
+    public function testUpdateStockAndSalesWithDifferentOrderVersions(): void
+    {
+        $id = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(5, $product);
+        static::assertSame(0, $product->getSales());
+
+        $orderId = $this->orderProduct($id, 1);
+
+        static::getContainer()->get('order.repository')
+            ->createVersion($orderId, $context);
+
+        static::getContainer()->get('order.repository')
+            ->createVersion($orderId, $context);
+
+        $count = (int) static::getContainer()
+            ->get(Connection::class)
+            ->fetchOne('SELECT COUNT(id) FROM `order` WHERE id = :id', ['id' => Uuid::fromHexToBytes($orderId)]);
+
+        static::assertSame(3, $count);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+        static::assertSame(1, $product->getSales());
+
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+        static::assertSame(1, $product->getSales());
+    }
+
+    public function testProductGoesOutOfStock(): void
+    {
+        $id = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(5, $product);
+
+        $orderId = $this->orderProduct($id, 5);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+    }
+
+    public function testSwitchLineItem(): void
+    {
+        $id = $this->createProduct();
+        $id2 = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(5, $product);
+
+        $orderId = $this->orderProduct($id, 5);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+
+        $lineItemRepository = static::getContainer()->get('order_line_item.repository');
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('referencedId', $id));
+        $criteria->addFilter(new EqualsFilter('orderId', $orderId));
+
+        $lineItem = $lineItemRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(OrderLineItemEntity::class, $lineItem);
+
+        $update = [
+            ['id' => $lineItem->getId(), 'referencedId' => $id2, 'productId' => $id2, 'payload' => ['productNumber' => $id2]],
+        ];
+
+        $this->lineItemRepository->update($update, $context);
+
+        /** @var ProductCollection $products */
+        $products = $this->productRepository->search(new Criteria([$id, $id2]), $context)->getEntities();
+
+        $product = $products->get($id);
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+
+        $product = $products->get($id2);
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+    }
+
+    public function testProductLineItemWithoutProductReferenceDoesNotChangeStock(): void
+    {
+        $context = Context::createDefaultContext();
+        $productId = $this->createProduct(['stock' => 5]);
+        $orderId = $this->orderProduct($productId, 5);
+
+        $this->lineItemRepository->create([[
+            'id' => Uuid::randomHex(),
+            'orderId' => $orderId,
+            'identifier' => 'deleted-product',
+            'quantity' => 2,
+            'label' => 'Deleted product',
+            'type' => LineItem::PRODUCT_LINE_ITEM_TYPE,
+            'price' => new CalculatedPrice(10, 20, new CalculatedTaxCollection(), new TaxRuleCollection(), 2),
+            'priceDefinition' => new QuantityPriceDefinition(10, new TaxRuleCollection(), 2),
+        ]], $context);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(0, $product);
+    }
+
+    public function testRemovingTheProductReferenceOfAnOrderLineItemRestoresStock(): void
+    {
+        $context = Context::createDefaultContext();
+        $productId = $this->createProduct(['stock' => 5]);
+        $orderId = $this->orderProduct($productId, 5);
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('orderId', $orderId));
+        $lineItem = $this->lineItemRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(OrderLineItemEntity::class, $lineItem);
+
+        $this->lineItemRepository->update([['id' => $lineItem->getId(), 'referencedId' => null, 'productId' => null, 'payload' => ['productNumber' => null]]], $context);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(5, $product);
+    }
+
+    public function testCancellingAnOrderWithAProductLineItemWithoutProductReference(): void
+    {
+        $productId = $this->createProduct(['stock' => 5]);
+        $orderId = $this->orderProduct($productId, 5);
+
+        static::getContainer()->get(Connection::class)->executeStatement(
+            'UPDATE order_line_item SET referenced_id = NULL, product_id = NULL WHERE order_id = :orderId',
+            ['orderId' => Uuid::fromHexToBytes($orderId)]
+        );
+
+        $this->transitionOrder($orderId, StateMachineTransitionActions::ACTION_CANCEL);
+
+        static::assertSame('cancelled', static::getContainer()->get(Connection::class)->fetchOne(
+            'SELECT state_machine_state.technical_name FROM `order` INNER JOIN state_machine_state ON state_machine_state.id = `order`.state_id WHERE `order`.id = :orderId AND `order`.version_id = :versionId',
+            ['orderId' => Uuid::fromHexToBytes($orderId), 'versionId' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION)]
+        ));
+    }
+
+    public function testStockIsUpdatedIfOrderLineItemIsDeleted(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 5,
+        ]);
+        $orderId = $this->orderProduct($productId, 5);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertFalse($product->getAvailable());
+        $this->assertStock(0, $product);
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('orderId', $orderId));
+
+        $orderLineItem = $this->lineItemRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(OrderLineItemEntity::class, $orderLineItem);
+
+        $this->lineItemRepository->delete([
+            [
+                'id' => $orderLineItem->getId(),
+            ],
+        ], $context);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+    }
+
+    public function testAvailableStockIsUpdatedIfProductOfOrderLineItemIsChanged(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $originalProductId = $this->createProduct([
+            'stock' => 5,
+        ]);
+        $newProductId = $this->createProduct([
+            'stock' => 5,
+        ]);
+        $orderId = $this->orderProduct($originalProductId, 1);
+
+        $originalProduct = $this->productRepository->search(new Criteria([$originalProductId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $originalProduct);
+
+        $newProduct = $this->productRepository->search(new Criteria([$newProductId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $newProduct);
+        $this->assertStock(4, $originalProduct);
+        $this->assertStock(5, $newProduct);
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('orderId', $orderId));
+
+        $orderLineItem = $this->lineItemRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(OrderLineItemEntity::class, $orderLineItem);
+
+        $this->lineItemRepository->update([
+            [
+                'id' => $orderLineItem->getId(),
+                'referencedId' => $newProduct->getId(),
+                'productId' => $newProduct->getId(),
+                'payload' => [
+                    'productNumber' => $newProduct->getProductNumber(),
+                ],
+            ],
+        ], $context);
+
+        $newProduct = $this->productRepository->search(new Criteria([$newProductId]), $context)->getEntities()->first();
+        $originalProduct = $this->productRepository->search(new Criteria([$originalProductId]), $context)->getEntities()->first();
+
+        static::assertInstanceOf(ProductEntity::class, $newProduct);
+        static::assertInstanceOf(ProductEntity::class, $originalProduct);
+        $this->assertStock(5, $originalProduct);
+        $this->assertStock(4, $newProduct);
+    }
+
+    public function testSalesIsUpdatedIfProductOfOrderLineItemIsChanged(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $originalProductId = $this->createProduct([
+            'stock' => 5,
+        ]);
+        $newProductId = $this->createProduct([
+            'stock' => 5,
+        ]);
+
+        $orderId = $this->orderProduct($originalProductId, 1);
+
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+
+        $originalProduct = $this->productRepository->search(new Criteria([$originalProductId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $originalProduct);
+
+        $newProduct = $this->productRepository->search(new Criteria([$newProductId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $newProduct);
+
+        static::assertSame(1, $originalProduct->getSales());
+        static::assertSame(0, $newProduct->getSales());
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('orderId', $orderId));
+
+        $orderLineItem = $this->lineItemRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(OrderLineItemEntity::class, $orderLineItem);
+
+        $this->lineItemRepository->update([
+            [
+                'id' => $orderLineItem->getId(),
+                'referencedId' => $newProduct->getId(),
+                'productId' => $newProduct->getId(),
+                'payload' => [
+                    'productNumber' => $newProduct->getProductNumber(),
+                ],
+            ],
+        ], $context);
+
+        $newProduct = $this->productRepository->search(new Criteria([$newProductId]), $context)->getEntities()->first();
+        $originalProduct = $this->productRepository->search(new Criteria([$originalProductId]), $context)->getEntities()->first();
+
+        static::assertInstanceOf(ProductEntity::class, $newProduct);
+        static::assertInstanceOf(ProductEntity::class, $originalProduct);
+        static::assertSame(0, $originalProduct->getSales());
+        static::assertSame(1, $newProduct->getSales());
+    }
+
+    public function testStockIsUpdatedIfQuantityOfOrderLineItemIsChanged(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 5,
+        ]);
+        $orderId = $this->orderProduct($productId, 1);
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(4, $product);
+        static::assertSame(1, $product->getSales());
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('orderId', $orderId));
+
+        $orderLineItem = $this->lineItemRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(OrderLineItemEntity::class, $orderLineItem);
+
+        $this->lineItemRepository->update([
+            [
+                'id' => $orderLineItem->getId(),
+                'quantity' => 2,
+            ],
+        ], $context);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        // only not completed orders are considered by the stock indexer
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(3, $product);
+        static::assertSame(2, $product->getSales());
+    }
+
+    public function testOrderCanceled(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 5,
+        ]);
+        $orderId = $this->orderProduct($productId, 1);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(4, $product);
+
+        $this->transitionOrder($orderId, 'cancel');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(5, $product);
+
+        $this->transitionOrder($orderId, 'reopen');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        $this->assertStock(4, $product);
+    }
+
+    public function testSalesIsUpdatedWhenOrderCancelled(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 5,
+        ]);
+
+        $orderId = $this->orderProduct($productId, 1);
+
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertSame(1, $product->getSales());
+
+        $this->transitionOrder($orderId, 'reopen');
+        $this->transitionOrder($orderId, 'cancel');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertSame(0, $product->getSales());
+    }
+
+    public function testSalesIsUpdatedWhenOrderReopened(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 5,
+        ]);
+
+        $orderId = $this->orderProduct($productId, 1);
+
+        $this->transitionOrder($orderId, 'process');
+        $this->transitionOrder($orderId, 'complete');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertSame(1, $product->getSales());
+
+        $this->transitionOrder($orderId, 'reopen');
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->first();
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertSame(1, $product->getSales());
+    }
+
+    public function testDeleteOrderedProduct(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 5,
+        ]);
+
+        $this->orderProduct($productId, 1);
+
+        $this->productRepository->delete([
+            ['id' => $productId],
+        ], $context);
+    }
+
+    public function testDeleteOrderIncreasesStock(): void
+    {
+        $id = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+
+        $orderId = $this->orderProduct($id, 1);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+
+        $this->orderRepository->delete([['id' => $orderId]], $context);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+    }
+
+    public function testDeleteCancelledOrderDoesNotIncreasesStock(): void
+    {
+        $id = $this->createProduct();
+
+        $context = Context::createDefaultContext();
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+
+        $orderId = $this->orderProduct($id, 1);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(4, $product);
+
+        $this->transitionOrder($orderId, StateMachineTransitionActions::ACTION_CANCEL);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+
+        $this->orderRepository->delete([['id' => $orderId]], $context);
+
+        $product = $this->productRepository->search(new Criteria([$id]), $context)->getEntities()->get($id);
+
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getAvailable());
+        $this->assertStock(5, $product);
+    }
+
+    public function testStockAlterationWithClearanceSaleProduct(): void
+    {
+        $context = Context::createDefaultContext();
+
+        $productId = $this->createProduct([
+            'stock' => 1,
+            'isCloseout' => true,
+        ]);
+
+        $product = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->get($productId);
+        static::assertInstanceOf(ProductEntity::class, $product);
+        static::assertTrue($product->getIsCloseout());
+        static::assertTrue($product->getAvailable());
+
+        $initialUpdatedAt = $product->getUpdatedAt();
+        static::assertNotNull($initialUpdatedAt);
+
+        // Wait to ensure timestamp difference
+        sleep(1);
+
+        $this->orderProduct($productId, 1);
+
+        $productAfterOrder = $this->productRepository->search(new Criteria([$productId]), $context)->getEntities()->get($productId);
+        static::assertInstanceOf(ProductEntity::class, $productAfterOrder);
+
+        $updatedAtAfterOrder = $productAfterOrder->getUpdatedAt();
+        static::assertNotNull($updatedAtAfterOrder);
+
+        static::assertGreaterThan(
+            $initialUpdatedAt->getTimestamp(),
+            $updatedAtAfterOrder->getTimestamp(),
+            'Product updated_at should be updated when clearance sale stock is altered'
+        );
+
+        $this->assertStock(0, $productAfterOrder);
+        static::assertFalse($productAfterOrder->getAvailable());
+    }
+
+    private function assertStock(int $expectedStock, ProductEntity $product): void
+    {
+        static::assertSame($expectedStock, $product->getAvailableStock());
+        static::assertSame($expectedStock, $product->getStock());
+    }
+
+    private function createCustomer(): string
+    {
+        $customerId = Uuid::randomHex();
+        $addressId = Uuid::randomHex();
+
+        $customer = [
+            'id' => $customerId,
+            'number' => '1337',
+            'salutationId' => $this->getValidSalutationId(),
+            'firstName' => 'Max',
+            'lastName' => 'Mustermann',
+            'customerNumber' => '1337',
+            'email' => Uuid::randomHex() . '@example.com',
+            'password' => 'contena',
+            'groupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+            'salesChannelId' => TestDefaults::SALES_CHANNEL,
+            'defaultBillingAddressId' => $addressId,
+            'defaultShippingAddressId' => $addressId,
+            'addresses' => [
+                [
+                    'id' => $addressId,
+                    'customerId' => $customerId,
+                    'countryId' => $this->getValidCountryId(),
+                    'salutationId' => $this->getValidSalutationId(),
+                    'firstName' => 'Max',
+                    'lastName' => 'Mustermann',
+                    'street' => 'Ebbinghoff 10',
+                    'zipcode' => '48624',
+                    'city' => 'Schöppingen',
+                ],
+            ],
+        ];
+
+        static::getContainer()
+            ->get('customer.repository')
+            ->upsert([$customer], Context::createDefaultContext());
+
+        return $customerId;
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    private function createProduct(array $config = []): string
+    {
+        $id = Uuid::randomHex();
+
+        $product = [
+            'id' => $id,
+            'productNumber' => Uuid::randomHex(),
+            'stock' => 5,
+            'name' => 'Test',
+            'isCloseout' => true,
+            'type' => ProductDefinition::TYPE_PHYSICAL,
+            'price' => [['currencyId' => Defaults::CURRENCY, 'gross' => 10, 'net' => 9, 'linked' => false]],
+            'tax' => ['id' => Uuid::randomHex(), 'name' => 'test', 'taxRate' => 19],
+            'manufacturer' => ['name' => 'test'],
+            'visibilities' => [
+                [
+                    'salesChannelId' => TestDefaults::SALES_CHANNEL,
+                    'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL,
+                ],
+            ],
+        ];
+
+        $product = array_replace_recursive($product, $config);
+
+        $this->productRepository->create([$product], Context::createDefaultContext());
+        $this->addTaxDataToSalesChannel($this->context, $product['tax']);
+
+        return $id;
+    }
+
+    private function orderProduct(string $id, int $quantity): string
+    {
+        $factory = new ProductLineItemFactory(new PriceDefinitionFactory());
+        $lineItem = $factory->create(['id' => $id, 'referencedId' => $id, 'quantity' => $quantity], $this->context);
+
+        $cart = $this->cartService->getCart($this->context->getToken(), $this->context);
+
+        $cart = $this->cartService->add($cart, $lineItem, $this->context);
+
+        $item = $cart->get($id);
+        static::assertInstanceOf(LineItem::class, $item);
+        static::assertSame($quantity, $item->getQuantity());
+
+        return $this->cartService->order($cart, $this->context, new RequestDataBag());
+    }
+
+    private function transitionOrder(string $orderId, string $transition): void
+    {
+        $registry = static::getContainer()->get(StateMachineRegistry::class);
+        $transitionObject = new Transition('order', $orderId, $transition, 'stateId');
+
+        $registry->transition($transitionObject, Context::createDefaultContext());
+    }
+
+    private function collectAvailabilityEvents(): void
+    {
+        $hooks = EventHookDispatcher::fromContainer(static::getContainer());
+
+        $hooks->on(ProductNoLongerAvailableEvent::class, function (ProductNoLongerAvailableEvent $event): void {
+            $this->noLongerAvailableIds = [...$this->noLongerAvailableIds, ...$event->getIds()];
+        });
+
+        $hooks->on(ProductBackInStockEvent::class, function (ProductBackInStockEvent $event): void {
+            $this->backInStockIds = [...$this->backInStockIds, ...$event->getIds()];
+        });
+    }
+
+    private function assertAvailabilityEvents(string $productId, bool $noLongerAvailable, bool $backInStock): void
+    {
+        static::assertSame($noLongerAvailable ? [$productId] : [], $this->noLongerAvailableIds);
+        static::assertSame($backInStock ? [$productId] : [], $this->backInStockIds);
+    }
+}

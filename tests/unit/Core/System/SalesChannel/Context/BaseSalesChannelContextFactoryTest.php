@@ -1,0 +1,756 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\SalesChannel\Context;
+
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Query\QueryBuilder;
+use Doctrine\DBAL\Result;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupCollection;
+use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefinition;
+use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
+use Contena\Core\Checkout\Payment\PaymentMethodCollection;
+use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
+use Contena\Core\Checkout\Payment\PaymentMethodEntity;
+use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
+use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
+use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
+use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
+use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
+use Contena\Core\System\Country\Aggregate\CountryState\CountryStateDefinition;
+use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\Country\CountryDefinition;
+use Contena\Core\System\Country\CountryEntity;
+use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
+use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingDefinition;
+use Contena\Core\System\Currency\CurrencyCollection;
+use Contena\Core\System\Currency\CurrencyDefinition;
+use Contena\Core\System\Currency\CurrencyEntity;
+use Contena\Core\System\Language\LanguageDefinition;
+use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainCollection;
+use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
+use Contena\Core\System\SalesChannel\Context\BaseSalesChannelContextFactory;
+use Contena\Core\System\SalesChannel\Context\ContextFactory;
+use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
+use Contena\Core\System\SalesChannel\SalesChannelCollection;
+use Contena\Core\System\SalesChannel\SalesChannelDefinition;
+use Contena\Core\System\SalesChannel\SalesChannelEntity;
+use Contena\Core\System\SalesChannel\SalesChannelException;
+use Contena\Core\System\Tax\TaxCollection;
+use Contena\Core\System\Tax\TaxDefinition;
+use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
+use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
+use Contena\Core\Test\TestDefaults;
+
+/**
+ * @internal
+ *
+ * @phpstan-import-type ContextOptions from BaseSalesChannelContextFactory
+ */
+#[Package('framework')]
+#[CoversClass(BaseSalesChannelContextFactory::class)]
+class BaseSalesChannelContextFactoryTest extends TestCase
+{
+    /**
+     * @param ContextOptions $options
+     * @param array<string, array<mixed>> $entitySearchResult
+     * @param false|array<string, mixed> $fetchDataResult
+     */
+    #[DataProvider('factoryCreationDataProvider')]
+    public function testCreate(
+        array $options,
+        false|array $fetchDataResult,
+        false|string $fetchParentLanguageResult,
+        array $entitySearchResult,
+        ?\Exception $expectedException = null,
+    ): void {
+        if ($expectedException !== null) {
+            $this->expectExceptionObject($expectedException);
+        }
+
+        $customerGroupRepository = StaticEntityRepository::of(CustomerGroupCollection::class, [new CustomerGroupCollection($entitySearchResult[CustomerGroupDefinition::ENTITY_NAME] ?? [])]);
+        $countryRepository = StaticEntityRepository::of(CountryCollection::class, [new CountryCollection($entitySearchResult[CountryDefinition::ENTITY_NAME] ?? [])]);
+        $taxRepository = StaticEntityRepository::of(TaxCollection::class, [new TaxCollection($entitySearchResult[TaxDefinition::ENTITY_NAME] ?? [])]);
+        $paymentMethodRepository = StaticEntityRepository::of(PaymentMethodCollection::class, [new PaymentMethodCollection($entitySearchResult[PaymentMethodDefinition::ENTITY_NAME] ?? [])]);
+        $shippingMethodRepository = StaticEntityRepository::of(ShippingMethodCollection::class, [new ShippingMethodCollection($entitySearchResult[ShippingMethodDefinition::ENTITY_NAME] ?? [])]);
+        $salesChannelRepository = StaticEntityRepository::of(SalesChannelCollection::class, [new SalesChannelCollection($entitySearchResult[SalesChannelDefinition::ENTITY_NAME] ?? [])]);
+        $countryStateRepository = StaticEntityRepository::of(CountryStateCollection::class, [new CountryStateCollection($entitySearchResult[CountryStateDefinition::ENTITY_NAME] ?? [])]);
+        $currencyCountryRepository = StaticEntityRepository::of(CurrencyCountryRoundingCollection::class, [new CurrencyCountryRoundingCollection($entitySearchResult[CurrencyCountryRoundingDefinition::ENTITY_NAME] ?? [])]);
+        /** @var StaticEntityRepository<EntityCollection<PartialEntity>> $languageRepository */
+        $languageRepository = new StaticEntityRepository([new EntityCollection($entitySearchResult[LanguageDefinition::ENTITY_NAME] ?? [])]);
+
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->once())->method('fetchAssociative')->willReturn($fetchDataResult);
+
+        if ($fetchDataResult === false) {
+            $connection->expects($this->never())->method('createQueryBuilder');
+        }
+
+        if ($fetchParentLanguageResult !== false) {
+            $result = $this->createMock(Result::class);
+            $result->expects($this->once())->method('fetchOne')->willReturn($fetchParentLanguageResult);
+            $connection->expects($this->once())->method('executeQuery')->willReturn($result);
+            $connection->expects($this->atMost(1))->method('createQueryBuilder')->willReturn(new QueryBuilder($connection));
+        } else {
+            $result = $this->createMock(Result::class);
+            $result->expects($this->atMost(1))->method('fetchOne')->willReturn(false);
+            $connection->expects($this->atMost(1))->method('executeQuery')->willReturn($result);
+            $connection->expects($this->atMost(1))->method('createQueryBuilder')->willReturn(new QueryBuilder($connection));
+        }
+
+        $contextProvider = new ContextFactory($connection, new CollectingEventDispatcher());
+
+        $factory = new BaseSalesChannelContextFactory(
+            $salesChannelRepository,
+            $customerGroupRepository,
+            $countryRepository,
+            $taxRepository,
+            $paymentMethodRepository,
+            $shippingMethodRepository,
+            $countryStateRepository,
+            $currencyCountryRepository,
+            $contextProvider,
+            $languageRepository,
+        );
+
+        $context = $factory->create(TestDefaults::SALES_CHANNEL, $options);
+        $salesChannel = $context->getSalesChannel();
+
+        static::assertSame($salesChannel->getCurrencyId(), $salesChannel->getCurrency()?->getId());
+        static::assertSame($options[SalesChannelContextService::CURRENCY_ID] ?? $salesChannel->getCurrencyId(), $context->getCurrencyId());
+        static::assertSame($context->getCurrentCustomerGroup(), $salesChannel->getCustomerGroup());
+    }
+
+    /**
+     * @return iterable<string, array<string, mixed>>
+     */
+    public static function factoryCreationDataProvider(): iterable
+    {
+        $invalidSalesChannelId = Uuid::randomHex();
+        $paymentMethodId = Uuid::randomHex();
+        $customerGroupId = Uuid::randomHex();
+        $shippingMethodId = Uuid::randomHex();
+        $currencyId = Uuid::randomHex();
+        $countryStateId = Uuid::randomHex();
+        $countryId = Uuid::randomHex();
+        $anotherLanguageId = Uuid::randomHex();
+
+        $locale = new PartialEntity();
+        $locale->assign([
+            'code' => 'en-GB',
+        ]);
+
+        $language = new PartialEntity();
+        $language->assign([
+            'id' => Defaults::LANGUAGE_SYSTEM,
+            'name' => 'English',
+            'locale' => $locale,
+            'translationCode' => $locale,
+        ]);
+
+        $salesChannelEntity = new SalesChannelEntity();
+        $salesChannelEntity->setUniqueIdentifier(TestDefaults::SALES_CHANNEL);
+        $salesChannelEntity->setCustomerGroupId($customerGroupId);
+        $salesChannelEntity->setPaymentMethodId($paymentMethodId);
+        $salesChannelEntity->setShippingMethodId($shippingMethodId);
+        $salesChannelEntity->setCurrencyId($currencyId);
+        $salesChannelEntity->setCountryId($countryId);
+        $salesChannelEntity->setMeasurementUnits(MeasurementUnits::createDefaultUnits());
+        $domains = new SalesChannelDomainCollection();
+        $domain = new SalesChannelDomainEntity();
+        $domain->setId('domain-id');
+        $domain->setMeasurementUnits(MeasurementUnits::createDefaultUnits());
+        $domains->add($domain);
+        $salesChannelEntity->setDomains($domains);
+
+        $currency = new CurrencyEntity();
+        $rounding = new CashRoundingConfig(1, 1, true);
+        $currency->setUniqueIdentifier($currencyId);
+        $currency->setTotalRounding($rounding);
+        $currency->setItemRounding($rounding);
+        $currency->setId($currencyId);
+        $currency->setFactor(1);
+        $salesChannelEntity->setCurrencies(new CurrencyCollection([$currency]));
+
+        $country = new CountryEntity();
+        $country->setUniqueIdentifier($countryId);
+        $country->setId($countryId);
+
+        $countryState = new CountryStateEntity();
+        $countryState->setUniqueIdentifier($countryStateId);
+        $countryState->setCountryId($countryId);
+
+        $paymentMethod = new PaymentMethodEntity();
+        $paymentMethod->setUniqueIdentifier($paymentMethodId);
+        $paymentMethod->setId($paymentMethodId);
+
+        $shippingMethod = new ShippingMethodEntity();
+        $shippingMethod->setUniqueIdentifier($shippingMethodId);
+        $shippingMethod->setId($shippingMethodId);
+        $salesChannelEntity->setShippingMethod($shippingMethod);
+
+        $customerGroup = new CustomerGroupEntity();
+        $customerGroup->setUniqueIdentifier($customerGroupId);
+
+        yield 'no context data' => [
+            'options' => [],
+            'fetchDataResult' => false,
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [],
+            'expectedException' => SalesChannelException::noContextData(TestDefaults::SALES_CHANNEL),
+        ];
+
+        yield 'provided language not available' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => $invalidSalesChannelId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [],
+            'expectedException' => SalesChannelException::providedLanguageNotAvailable($invalidSalesChannelId, [Defaults::LANGUAGE_SYSTEM]),
+        ];
+
+        yield 'language id is not uuid' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => 'not-an-uuid',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => '3ebb5fe2e29a4d70aa5854ce7ce3e20b,' . Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [],
+            'expectedException' => SalesChannelException::invalidLanguageId(),
+        ];
+
+        yield 'language id not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => '3ebb5fe2e29a4d70aa5854ce7ce3e20b',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => '3ebb5fe2e29a4d70aa5854ce7ce3e20b,' . Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [],
+            'expectedException' => SalesChannelException::languageNotFound('3ebb5fe2e29a4d70aa5854ce7ce3e20b'),
+        ];
+
+        yield 'sales channel not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => '3ebb5fe2e29a4d70aa5854ce7ce3e20b',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => '3ebb5fe2e29a4d70aa5854ce7ce3e20b,' . Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => Uuid::randomHex(),
+            'entitySearchResult' => [],
+            'expectedException' => SalesChannelException::salesChannelNotFound(TestDefaults::SALES_CHANNEL),
+        ];
+
+        yield 'currency id is not uuid' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => 'not-an-uuid',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+            ],
+            'expectedException' => SalesChannelException::invalidCurrencyId(),
+        ];
+
+        yield 'currency not available in sales channel' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => '3ebb5fe2e29a4d70aa5854ce7ce3e20b',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+            ],
+            'expectedException' => SalesChannelException::currencyNotFound('3ebb5fe2e29a4d70aa5854ce7ce3e20b'),
+        ];
+
+        $salesChannelWithoutCurrency = new SalesChannelEntity();
+        $salesChannelWithoutCurrency->setUniqueIdentifier(TestDefaults::SALES_CHANNEL);
+        $salesChannelWithoutCurrency->setCurrencyId('b7d2554b0ce847cd82f3ac9bd1c0dfca');
+
+        yield 'default currency not loaded' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelWithoutCurrency,
+                ],
+            ],
+            'expectedException' => SalesChannelException::currencyNotFound('b7d2554b0ce847cd82f3ac9bd1c0dfca'),
+        ];
+
+        yield 'customer group not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryDefinition::ENTITY_NAME => [
+                    $countryId => $country,
+                ],
+            ],
+            'expectedException' => SalesChannelException::customerGroupNotFound($customerGroupId),
+        ];
+
+        yield 'country state id is not uuid' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_STATE_ID => 'not-an-uuid',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+            ],
+            'expectedException' => SalesChannelException::invalidCountryStateId(),
+        ];
+
+        yield 'country state not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_STATE_ID => $countryStateId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+            ],
+            'expectedException' => SalesChannelException::countryStateNotFound($countryStateId),
+        ];
+
+        yield 'country not found if country state ID is given' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_STATE_ID => $countryStateId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryStateDefinition::ENTITY_NAME => [
+                    $countryStateId => $countryState,
+                ],
+            ],
+            'expectedException' => SalesChannelException::countryNotFound($countryId),
+        ];
+
+        yield 'country id is not uuid' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => 'not-an-uuid',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+            ],
+            'expectedException' => SalesChannelException::invalidCountryId(),
+        ];
+
+        yield 'country not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+            ],
+            'expectedException' => SalesChannelException::countryNotFound($countryId),
+        ];
+
+        yield 'payment method not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryDefinition::ENTITY_NAME => [
+                    $countryId => $country,
+                ],
+                CustomerGroupDefinition::ENTITY_NAME => [
+                    $customerGroupId => $customerGroup,
+                ],
+            ],
+            'expectedException' => SalesChannelException::unknownPaymentMethod($paymentMethodId),
+        ];
+
+        yield 'shipping method not found' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryDefinition::ENTITY_NAME => [
+                    $countryId => $country,
+                ],
+                PaymentMethodDefinition::ENTITY_NAME => [
+                    $paymentMethodId => $paymentMethod,
+                ],
+                CustomerGroupDefinition::ENTITY_NAME => [
+                    $customerGroupId => $customerGroup,
+                ],
+            ],
+            'expectedException' => SalesChannelException::shippingMethodNotFound($shippingMethodId),
+        ];
+
+        yield 'missing sales channel language' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => $anotherLanguageId,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM . ',' . $anotherLanguageId,
+            ],
+            'fetchParentLanguageResult' => Defaults::LANGUAGE_SYSTEM,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryDefinition::ENTITY_NAME => [
+                    $countryId => $country,
+                ],
+                PaymentMethodDefinition::ENTITY_NAME => [
+                    $paymentMethodId => $paymentMethod,
+                ],
+                ShippingMethodDefinition::ENTITY_NAME => [
+                    $shippingMethodId => $shippingMethod,
+                ],
+                CustomerGroupDefinition::ENTITY_NAME => [
+                    $customerGroupId => $customerGroup,
+                ],
+            ],
+            'expectedException' => SalesChannelException::languageNotFound($anotherLanguageId),
+        ];
+
+        yield 'create base context successfully' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryDefinition::ENTITY_NAME => [
+                    $countryId => $country,
+                ],
+                PaymentMethodDefinition::ENTITY_NAME => [
+                    $paymentMethodId => $paymentMethod,
+                ],
+                ShippingMethodDefinition::ENTITY_NAME => [
+                    $shippingMethodId => $shippingMethod,
+                ],
+                CustomerGroupDefinition::ENTITY_NAME => [
+                    $customerGroupId => $customerGroup,
+                ],
+                LanguageDefinition::ENTITY_NAME => [
+                    Defaults::LANGUAGE_SYSTEM => $language,
+                ],
+            ],
+            'expectedException' => null,
+        ];
+
+        yield 'create base context successfully with domain' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+                SalesChannelContextService::DOMAIN_ID => 'domain-id',
+            ],
+            'fetchDataResult' => [
+                'sales_channel_default_language_id' => Uuid::randomBytes(),
+                'sales_channel_currency_factor' => 1,
+                'sales_channel_currency_id' => Uuid::randomBytes(),
+                'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+            ],
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+                ],
+                CurrencyDefinition::ENTITY_NAME => [
+                    $currencyId => $currency,
+                ],
+                CountryDefinition::ENTITY_NAME => [
+                    $countryId => $country,
+                ],
+                PaymentMethodDefinition::ENTITY_NAME => [
+                    $paymentMethodId => $paymentMethod,
+                ],
+                ShippingMethodDefinition::ENTITY_NAME => [
+                    $shippingMethodId => $shippingMethod,
+                ],
+                CustomerGroupDefinition::ENTITY_NAME => [
+                    $customerGroupId => $customerGroup,
+                ],
+                LanguageDefinition::ENTITY_NAME => [
+                    Defaults::LANGUAGE_SYSTEM => $language,
+                ],
+            ],
+            'expectedException' => null,
+        ];
+
+        $successfulFetchDataResult = [
+            'sales_channel_default_language_id' => Uuid::randomBytes(),
+            'sales_channel_currency_factor' => 1,
+            'sales_channel_currency_id' => Uuid::randomBytes(),
+            'sales_channel_language_ids' => Defaults::LANGUAGE_SYSTEM,
+        ];
+        $successfulEntitySearchResult = [
+            SalesChannelDefinition::ENTITY_NAME => [
+                TestDefaults::SALES_CHANNEL => $salesChannelEntity,
+            ],
+            CurrencyDefinition::ENTITY_NAME => [
+                $currencyId => $currency,
+            ],
+            CountryDefinition::ENTITY_NAME => [
+                $countryId => $country,
+            ],
+            PaymentMethodDefinition::ENTITY_NAME => [
+                $paymentMethodId => $paymentMethod,
+            ],
+            ShippingMethodDefinition::ENTITY_NAME => [
+                $shippingMethodId => $shippingMethod,
+            ],
+            CustomerGroupDefinition::ENTITY_NAME => [
+                $customerGroupId => $customerGroup,
+            ],
+            LanguageDefinition::ENTITY_NAME => [
+                Defaults::LANGUAGE_SYSTEM => $language,
+            ],
+        ];
+
+        $otherCurrencyId = Uuid::randomHex();
+        $otherCurrency = clone $currency;
+        $otherCurrency->setUniqueIdentifier($otherCurrencyId);
+        $otherCurrency->setId($otherCurrencyId);
+
+        $salesChannelWithOtherCurrency = clone $salesChannelEntity;
+        $salesChannelWithOtherCurrency->setCurrencies(new CurrencyCollection([$currency, $otherCurrency]));
+
+        yield 'create base context with currency differing from sales channel default' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $otherCurrencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+            ],
+            'fetchDataResult' => $successfulFetchDataResult,
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelWithOtherCurrency,
+                ],
+            ] + $successfulEntitySearchResult,
+            'expectedException' => null,
+        ];
+
+        $salesChannelWithoutDefaultCurrency = clone $salesChannelWithOtherCurrency;
+        $salesChannelWithoutDefaultCurrency->setCurrencies(new CurrencyCollection([$otherCurrency]));
+
+        yield 'default currency missing while an assigned alternative is selected' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $otherCurrencyId,
+            ],
+            'fetchDataResult' => $successfulFetchDataResult,
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => [
+                SalesChannelDefinition::ENTITY_NAME => [
+                    TestDefaults::SALES_CHANNEL => $salesChannelWithoutDefaultCurrency,
+                ],
+            ] + $successfulEntitySearchResult,
+            'expectedException' => SalesChannelException::currencyNotFound($currencyId),
+        ];
+
+        yield 'create base context with original context' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+                SalesChannelContextService::ORIGINAL_CONTEXT => Context::createDefaultContext(),
+            ],
+            'fetchDataResult' => $successfulFetchDataResult,
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => $successfulEntitySearchResult,
+            'expectedException' => null,
+        ];
+
+        yield 'create base context with version id' => [
+            'options' => [
+                SalesChannelContextService::LANGUAGE_ID => Defaults::LANGUAGE_SYSTEM,
+                SalesChannelContextService::CURRENCY_ID => $currencyId,
+                SalesChannelContextService::COUNTRY_ID => $countryId,
+                SalesChannelContextService::VERSION_ID => Defaults::LIVE_VERSION,
+            ],
+            'fetchDataResult' => $successfulFetchDataResult,
+            'fetchParentLanguageResult' => false,
+            'entitySearchResult' => $successfulEntitySearchResult,
+            'expectedException' => null,
+        ];
+    }
+}

@@ -1,0 +1,117 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Content\MailTemplate\Service\Event;
+
+use Monolog\Level;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
+use Contena\Core\Content\Flow\Dispatching\StorableFlow;
+use Contena\Core\Content\Flow\Dispatching\Storer\ScalarValuesStorer;
+use Contena\Core\Content\MailTemplate\Service\Event\MailErrorEvent;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+use Symfony\Component\Mime\Email;
+
+/**
+ * @internal
+ */
+#[Package('after-sales')]
+#[CoversClass(MailErrorEvent::class)]
+class MailErrorEventTest extends TestCase
+{
+    public function testScalarValuesCorrectly(): void
+    {
+        $event = new MailErrorEvent(
+            Context::createDefaultContext()
+        );
+
+        $storer = new ScalarValuesStorer();
+
+        $stored = $storer->store($event, []);
+
+        $flow = new StorableFlow('foo', Context::createDefaultContext(), $stored);
+
+        $storer->restore($flow);
+
+        static::assertArrayHasKey('name', $flow->data());
+        static::assertSame('mail.sent.error', $flow->getData('name'));
+    }
+
+    public function testInstantiate(): void
+    {
+        $exception = new \Exception('exception');
+        $context = Context::createDefaultContext();
+
+        $event = new MailErrorEvent(
+            $context,
+            Level::Error,
+            $exception,
+            'Test',
+            '{{ subject }}',
+            [
+                'eventName' => CheckoutOrderPlacedEvent::EVENT_NAME,
+                'shopName' => 'Storefront',
+            ],
+        );
+
+        static::assertSame('Test', $event->getMessage());
+        static::assertSame(Level::Error, $event->getLogLevel());
+        static::assertSame([
+            'exception' => (string) $exception,
+            'message' => 'Test',
+            'template' => '{{ subject }}',
+            'eventName' => 'checkout.order.placed',
+            'templateData' => [
+                'eventName' => 'checkout.order.placed',
+                'shopName' => 'Storefront',
+            ],
+        ], $event->getLogData());
+        static::assertSame('mail.sent.error', $event->getName());
+        static::assertSame($context, $event->getContext());
+        static::assertSame($exception, $event->getThrowable());
+        static::assertSame('{{ subject }}', $event->getTemplate());
+        static::assertSame([
+            'eventName' => 'checkout.order.placed',
+            'shopName' => 'Storefront',
+        ], $event->getTemplateData());
+    }
+
+    public function testAvailableDataDescribesTheFlowPayload(): void
+    {
+        static::assertSame(['name'], array_keys(MailErrorEvent::getAvailableData()->toArray()));
+    }
+
+    public function testCarriesTheMailDataAndTheMail(): void
+    {
+        $mail = new Email();
+
+        $event = new MailErrorEvent(
+            Context::createDefaultContext(),
+            Level::Error,
+            null,
+            'Test',
+            null,
+            ['eventName' => 'checkout.order.placed'],
+            ['subject' => 'Hello', 'templateId' => 'template-id', 'salesChannelId' => 'sales-channel-id'],
+            $mail,
+        );
+
+        static::assertSame('Hello', $event->getData()['subject'] ?? null);
+        static::assertSame($mail, $event->getMail());
+        static::assertSame('checkout.order.placed', $event->getEventName());
+        static::assertSame('template-id', $event->getTemplateId());
+        static::assertSame('sales-channel-id', $event->getSalesChannelId());
+    }
+
+    public function testMailDataIsOptional(): void
+    {
+        $event = new MailErrorEvent(Context::createDefaultContext());
+
+        static::assertNull($event->getData());
+        static::assertNull($event->getMail());
+        static::assertNull($event->getEventName());
+        static::assertNull($event->getTemplateId());
+        static::assertNull($event->getSalesChannelId());
+    }
+}

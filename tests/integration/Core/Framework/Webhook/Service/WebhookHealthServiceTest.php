@@ -1,0 +1,123 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Webhook\Service;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Webhook\Service\WebhookHealthService;
+use Contena\Core\Framework\Webhook\WebhookFailureStrategy;
+use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+class WebhookHealthServiceTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+
+    private IdsCollection $ids;
+
+    private Connection $connection;
+
+    private WebhookHealthService $service;
+
+    protected function setUp(): void
+    {
+        $this->ids = new IdsCollection();
+        $this->connection = static::getContainer()->get(Connection::class);
+        $this->service = static::getContainer()->get(WebhookHealthService::class);
+    }
+
+    public function testRecordTerminalFailureIncrementsBelowThreshold(): void
+    {
+        WebhookBuilder::withoutOwner()
+            ->id($this->ids->get('wh-1'))
+            ->errorCount(0)
+            ->insert($this->connection);
+
+        $this->service->recordFailure($this->ids->get('wh-1'), WebhookFailureStrategy::DisableOnThreshold);
+
+        static::assertSame(1, $this->fetchErrorCount('wh-1'));
+        static::assertTrue($this->fetchActive('wh-1'));
+    }
+
+    public function testRecordTerminalFailureDeactivatesAtThreshold(): void
+    {
+        WebhookBuilder::withoutOwner()
+            ->id($this->ids->get('wh-1'))
+            ->errorCount(WebhookFailureStrategy::MAX_ERROR_COUNT - 1)
+            ->insert($this->connection);
+
+        $this->service->recordFailure($this->ids->get('wh-1'), WebhookFailureStrategy::DisableOnThreshold);
+
+        static::assertSame(0, $this->fetchErrorCount('wh-1'));
+        static::assertFalse($this->fetchActive('wh-1'));
+    }
+
+    public function testRecordTerminalFailureIsNoOpOnInactiveWebhook(): void
+    {
+        WebhookBuilder::withoutOwner()
+            ->id($this->ids->get('wh-1'))
+            ->inactive()
+            ->errorCount(3)
+            ->insert($this->connection);
+
+        $this->service->recordFailure($this->ids->get('wh-1'), WebhookFailureStrategy::DisableOnThreshold);
+
+        static::assertSame(3, $this->fetchErrorCount('wh-1'));
+        static::assertFalse($this->fetchActive('wh-1'));
+    }
+
+    public function testRecordTerminalFailureIsNoOpOnMissingWebhook(): void
+    {
+        $this->service->recordFailure(Uuid::randomHex(), WebhookFailureStrategy::DisableOnThreshold);
+
+        $this->addToAssertionCount(1);
+    }
+
+    public function testRecordTerminalFailureKeepsActiveUnderIgnoreStrategy(): void
+    {
+        WebhookBuilder::withoutOwner()
+            ->id($this->ids->get('wh-1'))
+            ->errorCount(WebhookFailureStrategy::MAX_ERROR_COUNT + 5)
+            ->insert($this->connection);
+
+        $this->service->recordFailure($this->ids->get('wh-1'), WebhookFailureStrategy::Ignore);
+
+        static::assertSame(WebhookFailureStrategy::MAX_ERROR_COUNT + 6, $this->fetchErrorCount('wh-1'));
+        static::assertTrue($this->fetchActive('wh-1'));
+    }
+
+    public function testResetErrorCount(): void
+    {
+        WebhookBuilder::withoutOwner()
+            ->id($this->ids->get('wh-1'))
+            ->errorCount(5)
+            ->insert($this->connection);
+
+        $this->service->resetErrorCount($this->ids->get('wh-1'));
+
+        static::assertSame(0, $this->fetchErrorCount('wh-1'));
+    }
+
+    private function fetchErrorCount(string $key): int
+    {
+        return (int) $this->connection->fetchOne(
+            'SELECT error_count FROM webhook WHERE id = :id',
+            ['id' => $this->ids->getBytes($key)]
+        );
+    }
+
+    private function fetchActive(string $key): bool
+    {
+        return (bool) $this->connection->fetchOne(
+            'SELECT active FROM webhook WHERE id = :id',
+            ['id' => $this->ids->getBytes($key)]
+        );
+    }
+}

@@ -1,0 +1,69 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\System\Currency\SalesChannel;
+
+use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Currency\CurrencyCollection;
+use Contena\Core\System\Currency\CurrencyDefinition;
+use Contena\Core\System\Currency\Extension\CurrencyRouteExtension;
+use Contena\Core\System\SalesChannel\Entity\SalesChannelRepository;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Attribute\Route;
+
+#[Package('fundamentals@framework')]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+class CurrencyRoute extends AbstractCurrencyRoute
+{
+    final public const ALL_TAG = 'currency-route';
+
+    /**
+     * @internal
+     *
+     * @param SalesChannelRepository<CurrencyCollection> $currencyRepository
+     */
+    public function __construct(
+        private readonly SalesChannelRepository $currencyRepository,
+        private readonly CacheTagCollector $cacheTagCollector,
+        private readonly ExtensionDispatcher $extensions,
+    ) {
+    }
+
+    public function getDecorated(): AbstractCurrencyRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    public static function buildName(string $salesChannelId): string
+    {
+        return 'currency-route-' . $salesChannelId;
+    }
+
+    #[Route(
+        path: '/store-api/currency',
+        name: 'store-api.currency',
+        defaults: [PlatformRequest::ATTRIBUTE_ENTITY => CurrencyDefinition::ENTITY_NAME, PlatformRequest::ATTRIBUTE_HTTP_CACHE => true],
+        methods: [Request::METHOD_GET, Request::METHOD_POST],
+    )]
+    public function load(Request $request, SalesChannelContext $context, Criteria $criteria): CurrencyRouteResponse
+    {
+        return $this->extensions->publish(
+            name: CurrencyRouteExtension::NAME,
+            extension: new CurrencyRouteExtension($request, $context, $criteria),
+            function: fn (Request $request, SalesChannelContext $context, Criteria $criteria): CurrencyRouteResponse => $this->_load($context, $criteria),
+        );
+    }
+
+    private function _load(SalesChannelContext $context, Criteria $criteria): CurrencyRouteResponse
+    {
+        $this->cacheTagCollector->addTag(self::buildName($context->getSalesChannelId()), self::ALL_TAG);
+
+        return new CurrencyRouteResponse($this->currencyRepository->search($criteria, $context)->getEntities());
+    }
+}

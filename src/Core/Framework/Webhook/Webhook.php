@@ -1,0 +1,36 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Webhook;
+
+use Contena\Core\Framework\Api\Acl\AclRoles;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * Simple DTO for internal use
+ *
+ * @internal
+ *
+ * @codeCoverageIgnore
+ */
+#[Package('framework')]
+final readonly class Webhook
+{
+    /**
+     * @param AclRoles $roles the ACL roles the webhook is authorized with, resolved live at load: the owner's roles, limited to the webhook's aclRoleIds when set; for an app webhook the owner is the app's integration
+     */
+    public function __construct(
+        public string $id,
+        public string $webhookName,
+        public string $eventName,
+        public string $url,
+        public bool $onlyLiveVersion,
+        public ?string $appId,
+        public ?string $appName,
+        public ?string $appSourceType,
+        public bool $appActive,
+        public ?string $appVersion,
+        public ?string $appSecret,
+        public AclRoles $roles,
+    ) {
+    }
+}

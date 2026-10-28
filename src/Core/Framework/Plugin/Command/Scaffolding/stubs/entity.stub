@@ -1,0 +1,26 @@
+<?php declare(strict_types=1);
+
+namespace {{ namespace }}\Core\Content\{{ entityName }};
+
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\Entity;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\Field;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
+use Contena\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
+use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
+
+#[Entity('{{ tableName }}', collectionClass: {{ entityName }}Collection::class)]
+class {{ entityName }}Entity extends EntityStruct
+{
+    #[PrimaryKey]
+    #[Field(type: FieldType::UUID, api: ['admin-api' => true, 'store-api' => false])]
+    public string $id;
+
+    #[Field(type: FieldType::STRING, api: ['admin-api' => true, 'store-api' => false])]
+    public ?string $name = null;
+
+    #[Field(type: FieldType::STRING, api: ['admin-api' => true, 'store-api' => false])]
+    public ?string $description = null;
+
+    #[Field(type: FieldType::BOOL, api: ['admin-api' => true, 'store-api' => false])]
+    public ?bool $active = null;
+}

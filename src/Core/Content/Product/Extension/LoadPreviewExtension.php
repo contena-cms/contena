@@ -1,0 +1,54 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Product\Extension;
+
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
+use Contena\Core\Framework\Extensions\Extension;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+
+/**
+ * @public this class is used as type-hint for all event listeners, so the class string is "public consumable" API
+ *
+ * @title Determination of the preview loading in product listing
+ *
+ * @description This event allows intercepting the loading preview of product listing when the product IDs should be determined
+ *
+ * @codeCoverageIgnore
+ *
+ * @extends Extension<array>
+ */
+#[Package('inventory')]
+final class LoadPreviewExtension extends Extension
+{
+    public const NAME = 'listing-loader.load-previews';
+
+    /**
+     * @internal contena owns the __constructor, but the properties are public API
+     */
+    public function __construct(
+        /**
+         * @public
+         *
+         * @description The array should contain a list of product ids.
+         *
+         * @var array<string>
+         */
+        public readonly array $ids,
+        /**
+         * @public
+         *
+         * @description Allows you to access to the current customer/sales-channel context
+         */
+        public readonly SalesChannelContext $context,
+        /**
+         * @public
+         *
+         * @description The active post filters of the listing. A configured main variant is only used as preview if it matches them.
+         *
+         * @var list<Filter>
+         */
+        public readonly array $postFilters = []
+    ) {
+    }
+}

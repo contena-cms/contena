@@ -1,0 +1,134 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\System\SalesChannel;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\ContenaHttpException;
+use Contena\Core\System\SalesChannel\SalesChannelException;
+use Symfony\Component\HttpFoundation\Response;
+
+/**
+ * @internal
+ */
+#[Package('discovery')]
+#[CoversClass(SalesChannelException::class)]
+class SalesChannelExceptionTest extends TestCase
+{
+    public function testMcpToolResultNotFoundMatchesTheAdminApiServer(): void
+    {
+        $e = SalesChannelException::mcpToolResultNotFound('abc');
+
+        static::assertSame('Tool result "abc" not found. It may have expired or been stored by another caller.', $e->uri);
+    }
+
+    #[DataProvider('exceptionDataProvider')]
+    public function testExceptions(ContenaHttpException|SalesChannelException $exception, int $statusCode, string $errorCode, string $message): void
+    {
+        static::assertSame($statusCode, $exception->getStatusCode());
+        static::assertSame($errorCode, $exception->getErrorCode());
+        static::assertSame($message, $exception->getMessage());
+    }
+
+    /**
+     * @return iterable<string, array{exception: ContenaHttpException|SalesChannelException, statusCode: int, errorCode: string, message: string}>
+     */
+    public static function exceptionDataProvider(): iterable
+    {
+        yield SalesChannelException::CRITERIA_TOO_MANY_NESTED_CRITERIA => [
+            'exception' => SalesChannelException::tooManyNestedCriteria(100),
+            'statusCode' => Response::HTTP_BAD_REQUEST,
+            'errorCode' => SalesChannelException::CRITERIA_TOO_MANY_NESTED_CRITERIA,
+            'message' => 'The criteria contains more than 100 nested criteria.',
+        ];
+
+        yield SalesChannelException::SALES_CHANNEL_LANGUAGE_NOT_AVAILABLE_EXCEPTION => [
+            'exception' => SalesChannelException::providedLanguageNotAvailable('myCustomScn', ['scn1', 'scn2']),
+            'statusCode' => Response::HTTP_PRECONDITION_FAILED,
+            'errorCode' => SalesChannelException::SALES_CHANNEL_LANGUAGE_NOT_AVAILABLE_EXCEPTION,
+            'message' => 'Provided language "myCustomScn" is not in list of available languages: scn1, scn2',
+        ];
+
+        yield SalesChannelException::SALES_CHANNEL_DOES_NOT_EXISTS_EXCEPTION => [
+            'exception' => SalesChannelException::salesChannelNotFound('myCustomScn'),
+            'statusCode' => Response::HTTP_NOT_FOUND,
+            'errorCode' => SalesChannelException::SALES_CHANNEL_DOES_NOT_EXISTS_EXCEPTION,
+            'message' => 'Sales channel with id "myCustomScn" not found or not valid!.',
+        ];
+
+        yield MissingPrivilegeException::MISSING_PRIVILEGE_ERROR => [
+            'exception' => SalesChannelException::missingPrivileges(['product_stream:read', 'category:read']),
+            'statusCode' => Response::HTTP_FORBIDDEN,
+            'errorCode' => MissingPrivilegeException::MISSING_PRIVILEGE_ERROR,
+            'message' => '{"message":"Missing privilege","missingPrivileges":["product_stream:read","category:read"]}',
+        ];
+
+        yield SalesChannelException::LANGUAGE_INVALID_EXCEPTION => [
+            'exception' => SalesChannelException::invalidLanguageId(),
+            'statusCode' => Response::HTTP_PRECONDITION_FAILED,
+            'errorCode' => SalesChannelException::LANGUAGE_INVALID_EXCEPTION,
+            'message' => 'Provided language ID is not a valid UUID',
+        ];
+
+        yield SalesChannelException::NO_CONTEXT_DATA_EXCEPTION => [
+            'exception' => SalesChannelException::noContextData('myCustomScn'),
+            'statusCode' => Response::HTTP_PRECONDITION_FAILED,
+            'errorCode' => SalesChannelException::NO_CONTEXT_DATA_EXCEPTION,
+            'message' => 'No context data found for SalesChannel "myCustomScn"',
+        ];
+
+        yield SalesChannelException::COUNTRY_DOES_NOT_EXISTS_EXCEPTION => [
+            'exception' => SalesChannelException::countryNotFound('myCustomCountry'),
+            'statusCode' => Response::HTTP_NOT_FOUND,
+            'errorCode' => SalesChannelException::COUNTRY_DOES_NOT_EXISTS_EXCEPTION,
+            'message' => 'Could not find country with id "myCustomCountry"',
+        ];
+
+        yield SalesChannelException::COUNTRY_STATE_DOES_NOT_EXISTS_EXCEPTION => [
+            'exception' => SalesChannelException::countryStateNotFound('myCustomCountryState'),
+            'statusCode' => Response::HTTP_NOT_FOUND,
+            'errorCode' => SalesChannelException::COUNTRY_STATE_DOES_NOT_EXISTS_EXCEPTION,
+            'message' => 'Could not find country state with id "myCustomCountryState"',
+        ];
+
+        yield SalesChannelException::CURRENCY_DOES_NOT_EXISTS_EXCEPTION => [
+            'exception' => SalesChannelException::currencyNotFound('myCustomCurrency'),
+            'statusCode' => Response::HTTP_NOT_FOUND,
+            'errorCode' => SalesChannelException::CURRENCY_DOES_NOT_EXISTS_EXCEPTION,
+            'message' => 'Could not find currency with id "myCustomCurrency"',
+        ];
+
+        yield SalesChannelException::LANGUAGE_NOT_FOUND => [
+            'exception' => SalesChannelException::languageNotFound('myCustomLanguage'),
+            'statusCode' => Response::HTTP_PRECONDITION_FAILED,
+            'errorCode' => SalesChannelException::LANGUAGE_NOT_FOUND,
+            'message' => 'Could not find language with id "myCustomLanguage"',
+        ];
+
+        yield 'payment method not found exception' => [
+            'exception' => SalesChannelException::unknownPaymentMethod('myCustomPaymentMethod'),
+            'statusCode' => Response::HTTP_BAD_REQUEST,
+            'errorCode' => 'CHECKOUT__UNKNOWN_PAYMENT_METHOD',
+            'message' => 'Could not find payment method with id "myCustomPaymentMethod"',
+        ];
+
+        yield SalesChannelException::CONTEXT_TOKEN_NOT_ACCESSIBLE => [
+            'exception' => SalesChannelException::contextTokenNotAccessible(),
+            'statusCode' => Response::HTTP_BAD_REQUEST,
+            'errorCode' => SalesChannelException::CONTEXT_TOKEN_NOT_ACCESSIBLE,
+            'message' => 'The context token is not accessible in Twig rendering context, as the token should never be leaked in HTML content.',
+        ];
+    }
+
+    public function testWrongTypeInTheRequestIsAClientError(): void
+    {
+        $exception = SalesChannelException::invalidType('The includes must be of the type array, string given');
+
+        static::assertSame(Response::HTTP_BAD_REQUEST, $exception->getStatusCode());
+        static::assertSame(SalesChannelException::INVALID_TYPE, $exception->getErrorCode());
+        static::assertSame('The includes must be of the type array, string given', $exception->getMessage());
+    }
+}

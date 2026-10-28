@@ -1,0 +1,335 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Mcp;
+
+use Mcp\Capability\Registry;
+use Mcp\Schema\Tool;
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Mcp\AllowList\McpAllowlistProvider;
+use Contena\Core\Framework\Mcp\Loader\AppMcpPrivilegeProvider;
+use Contena\Core\Framework\Mcp\McpCapabilityCatalog;
+use Contena\Core\Framework\Mcp\McpToolsetRegistry;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(McpToolsetRegistry::class)]
+class McpToolsetRegistryTest extends TestCase
+{
+    /**
+     * @return iterable<string, array{?string, string, bool}>
+     */
+    public static function reservedGroupClaimCases(): iterable
+    {
+        yield 'extension tool in the discovery group' => [McpToolsetRegistry::DISCOVERY_GROUP, 'swag-report', true];
+        yield 'meta-tool in the discovery group' => [McpToolsetRegistry::DISCOVERY_GROUP, 'contena-tool-search', false];
+        yield 'extension tool in its own group' => ['swag', 'swag-report', false];
+        yield 'ungrouped tool' => [null, 'swag-report', false];
+    }
+
+    #[DataProvider('reservedGroupClaimCases')]
+    public function testIsReservedGroupClaim(?string $group, string $toolName, bool $expected): void
+    {
+        static::assertSame($expected, McpToolsetRegistry::isReservedGroupClaim($group, $toolName));
+    }
+
+    public function testBuildsToolsetsFromExplicitToolGroups(): void
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::LIST_TOOLSETS_TOOL,
+            McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
+            'contena-entity-search',
+            'contena-entity-read',
+            'contena-order-state',
+            'ungrouped-tool',
+        ]);
+
+        $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
+            $registry,
+            $this->stubPrivilegeProvider(),
+            toolGroups: [
+                McpToolsetRegistry::LIST_TOOLSETS_TOOL => 'discovery',
+                McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
+                'contena-entity-search' => 'entity',
+                'contena-entity-read' => 'entity',
+                'contena-order-state' => 'order',
+            ],
+        ));
+
+        $toolsets = $toolsetRegistry->toolsets();
+        $toolsetsByName = array_column($toolsets, null, 'name');
+
+        // A tool without an explicit group uses its first name segment as an enable-able toolset.
+        static::assertSame(['entity', 'order', 'ungrouped'], array_keys($toolsetsByName));
+        static::assertSame(['contena-entity-read', 'contena-entity-search'], $toolsetsByName['entity']['tools']);
+        static::assertSame(['contena-order-state'], $toolsetsByName['order']['tools']);
+        static::assertSame(['ungrouped-tool'], $toolsetsByName['ungrouped']['tools']);
+        static::assertSame('Entity tools', $toolsetsByName['entity']['title']);
+        static::assertSame('Ungrouped tools', $toolsetsByName['ungrouped']['title']);
+        static::assertSame('Tools explicitly assigned to the "entity" MCP tool group.', $toolsetsByName['entity']['description']);
+    }
+
+    public function testBuildsToolsetPerAppFromRuntimeAppGroups(): void
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
+            'contena-entity-search',
+            'my-erp-sync-orders',
+            'my-erp-read-stock',
+        ]);
+
+        $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
+            $registry,
+            $this->stubPrivilegeProvider([
+                'my-erp-sync-orders' => 'my-erp',
+                'my-erp-read-stock' => 'my-erp',
+            ]),
+            toolGroups: [
+                McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
+                'contena-entity-search' => 'entity',
+            ],
+        ));
+
+        $toolsetsByName = array_column($toolsetRegistry->toolsets(), null, 'name');
+
+        // App tools without a compile-time #[McpToolGroup] are grouped under their owning app,
+        // forming a real toolset instead of vanishing into "other".
+        static::assertSame(['entity', 'my-erp'], array_keys($toolsetsByName));
+        static::assertSame(['my-erp-read-stock', 'my-erp-sync-orders'], $toolsetsByName['my-erp']['tools']);
+        static::assertNotNull($toolsetRegistry->find('my-erp'));
+    }
+
+    public function testFindReturnsToolsetByName(): void
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::LIST_TOOLSETS_TOOL,
+            McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
+            'contena-entity-search',
+        ]);
+
+        $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
+            $registry,
+            $this->stubPrivilegeProvider(),
+            toolGroups: [
+                McpToolsetRegistry::LIST_TOOLSETS_TOOL => 'discovery',
+                McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
+                'contena-entity-search' => 'entity',
+            ],
+        ));
+
+        static::assertSame('entity', $toolsetRegistry->find('entity')['name'] ?? null);
+        static::assertNull($toolsetRegistry->find('discovery'));
+        static::assertNull($toolsetRegistry->find('missing'));
+    }
+
+    public function testAdvertisedToolsReturnsEnabledToolsetTools(): void
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::LIST_TOOLSETS_TOOL,
+            McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
+            'contena-entity-search',
+            'contena-entity-read',
+            'contena-order-state',
+        ]);
+
+        $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
+            $registry,
+            $this->stubPrivilegeProvider(),
+            toolGroups: [
+                McpToolsetRegistry::LIST_TOOLSETS_TOOL => 'discovery',
+                McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
+                'contena-entity-search' => 'entity',
+                'contena-entity-read' => 'entity',
+                'contena-order-state' => 'order',
+            ],
+        ));
+
+        static::assertSame([], $toolsetRegistry->advertisedTools([]));
+
+        static::assertSame(
+            [
+                'contena-entity-read',
+                'contena-entity-search',
+            ],
+            $toolsetRegistry->advertisedTools(['entity']),
+        );
+
+        static::assertSame(
+            [
+                'contena-entity-read',
+                'contena-entity-search',
+                'contena-order-state',
+            ],
+            $toolsetRegistry->advertisedTools(['entity', 'order']),
+        );
+
+        static::assertSame(
+            $toolsetRegistry->advertisedToolsForNames([McpToolsetRegistry::ALL_TOOLSETS]),
+            $toolsetRegistry->advertisedTools([McpToolsetRegistry::ALL_TOOLSETS]),
+        );
+    }
+
+    public function testAToolGroupNamedLikeTheAllSelectorLandsInTheFallbackToolset(): void
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
+            'swag-report',
+            'my-erp-sync-orders',
+        ]);
+
+        $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
+            $registry,
+            $this->stubPrivilegeProvider(['my-erp-sync-orders' => McpToolsetRegistry::ALL_TOOLSETS]),
+            toolGroups: [
+                McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
+                'swag-report' => McpToolsetRegistry::ALL_TOOLSETS,
+            ],
+        ));
+
+        $toolsetsByName = array_column($toolsetRegistry->toolsets(), null, 'name');
+
+        static::assertSame([McpToolsetRegistry::FALLBACK_GROUP], array_keys($toolsetsByName));
+        static::assertSame(['my-erp-sync-orders', 'swag-report'], $toolsetsByName[McpToolsetRegistry::FALLBACK_GROUP]['tools']);
+        static::assertNull($toolsetRegistry->find(McpToolsetRegistry::ALL_TOOLSETS));
+    }
+
+    public function testToolsetsAreScopedToTheCurrentAllowlist(): void
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::ENABLE_TOOLSET_TOOL,
+            'contena-entity-search',
+            'contena-entity-read',
+            'contena-order-state',
+        ]);
+
+        $toolsetRegistry = new McpToolsetRegistry(
+            new McpCapabilityCatalog(
+                $registry,
+                $this->stubPrivilegeProvider(),
+                toolGroups: [
+                    McpToolsetRegistry::ENABLE_TOOLSET_TOOL => 'discovery',
+                    'contena-entity-search' => 'entity',
+                    'contena-entity-read' => 'entity',
+                    'contena-order-state' => 'order',
+                ],
+            ),
+            $this->stubAllowlistProvider(['contena-entity-search']),
+        );
+
+        $toolsetsByName = array_column($toolsetRegistry->toolsets(), null, 'name');
+
+        // Discovery stays inside the allowlist: only the allowed tool surfaces. The denied
+        // "entity-read" and the entirely-denied "order" toolset never leak through list/enable.
+        static::assertSame(['entity'], array_keys($toolsetsByName));
+        static::assertSame(['contena-entity-search'], $toolsetsByName['entity']['tools']);
+        static::assertNull($toolsetRegistry->find('order'));
+        static::assertSame([], $toolsetRegistry->advertisedTools(['order']));
+    }
+
+    public function testAdvertisedToolsForNamesReturnsEmptyWithoutReadingTheCatalogue(): void
+    {
+        $privilegeProvider = $this->createMock(AppMcpPrivilegeProvider::class);
+        $privilegeProvider->expects($this->never())->method('getAppToolGroups');
+        $privilegeProvider->expects($this->never())->method('getAppToolPrivileges');
+
+        $toolsetRegistry = new McpToolsetRegistry(new McpCapabilityCatalog(
+            $this->buildRegistry(['contena-entity-search']),
+            $privilegeProvider,
+            toolGroups: ['contena-entity-search' => 'entity'],
+        ));
+
+        static::assertSame([], $toolsetRegistry->advertisedToolsForNames([]));
+    }
+
+    /**
+     * @param list<string> $names
+     * @param list<string> $expected
+     */
+    #[DataProvider('advertisedToolsForNamesCases')]
+    #[TestDox('advertisedToolsForNames $_dataName')]
+    public function testAdvertisedToolsForNames(array $names, array $expected): void
+    {
+        static::assertSame($expected, $this->toolsetRegistry()->advertisedToolsForNames($names));
+    }
+
+    /**
+     * @return \Generator<string, array{list<string>, list<string>}>
+     */
+    public static function advertisedToolsForNamesCases(): \Generator
+    {
+        $entity = 'contena-entity-search';
+        $order = 'contena-order-state';
+
+        yield 'returns empty for no names' => [[], []];
+        yield 'resolves known names' => [['entity', 'order'], [$entity, $order]];
+        yield 'drops unknown names' => [['entity', 'does-not-exist'], [$entity]];
+        yield 'deduplicates' => [['entity', 'entity'], [$entity]];
+        yield 'resolves the all shorthand' => [[McpToolsetRegistry::ALL_TOOLSETS], [$entity, $order]];
+        yield 'lets all subsume other names' => [['order', McpToolsetRegistry::ALL_TOOLSETS], [$entity, $order]];
+        yield 'rejects the discovery group' => [[McpToolsetRegistry::DISCOVERY_GROUP], []];
+    }
+
+    /**
+     * @param list<string> $toolNames
+     */
+    private function buildRegistry(array $toolNames): Registry
+    {
+        $registry = new Registry();
+
+        foreach ($toolNames as $toolName) {
+            $registry->registerTool(
+                new Tool($toolName, null, ['type' => 'object', 'properties' => [], 'required' => []], null, null),
+                'Acme\\' . str_replace('-', '', ucwords($toolName, '-')),
+            );
+        }
+
+        return $registry;
+    }
+
+    private function toolsetRegistry(): McpToolsetRegistry
+    {
+        $registry = $this->buildRegistry([
+            McpToolsetRegistry::LIST_TOOLSETS_TOOL,
+            'contena-entity-search',
+            'contena-order-state',
+        ]);
+
+        return new McpToolsetRegistry(new McpCapabilityCatalog(
+            $registry,
+            $this->stubPrivilegeProvider(),
+            toolGroups: [
+                McpToolsetRegistry::LIST_TOOLSETS_TOOL => McpToolsetRegistry::DISCOVERY_GROUP,
+                'contena-entity-search' => 'entity',
+                'contena-order-state' => 'order',
+            ],
+        ));
+    }
+
+    /**
+     * @param array<string, string> $appGroups
+     */
+    private function stubPrivilegeProvider(array $appGroups = []): AppMcpPrivilegeProvider
+    {
+        $stub = static::createStub(AppMcpPrivilegeProvider::class);
+        $stub->method('getAppToolPrivileges')->willReturn([]);
+        $stub->method('getAppToolGroups')->willReturn($appGroups);
+
+        return $stub;
+    }
+
+    /**
+     * @param list<string>|null $tools
+     */
+    private function stubAllowlistProvider(?array $tools): McpAllowlistProvider
+    {
+        $stub = static::createStub(McpAllowlistProvider::class);
+        $stub->method('toolsForCurrentRequest')->willReturn($tools);
+
+        return $stub;
+    }
+}

@@ -1,0 +1,98 @@
+/**
+ * @sw-package framework
+ */
+
+import template from './sw-app-wrong-app-url-modal.html.twig';
+import './sw-app-wrong-app-url-modal.scss';
+
+const STORAGE_KEY_WAS_WRONG_APP_MODAL_SHOWN = 'sw-app-wrong-app-url-modal-shown';
+
+/**
+ * @private
+ */
+export default {
+    template,
+
+    emits: ['modal-close'],
+
+    mixins: [Contena.Mixin.getByName('notification')],
+
+    data() {
+        return {
+            wasModalAlreadyShown: !!localStorage.getItem(STORAGE_KEY_WAS_WRONG_APP_MODAL_SHOWN),
+            verifyCommand: 'bin/console app:url:verify',
+            commandCopied: false,
+            notification: {
+                title: this.$t('sw-app.component.sw-app-wrong-app-url-modal.title'),
+                message: this.$t('sw-app.component.sw-app-wrong-app-url-modal.explanation'),
+                actions: [
+                    {
+                        label: this.$t('sw-app.component.sw-app-wrong-app-url-modal.labelLearnMoreButton'),
+                        route: this.$t('sw-app.component.sw-app-wrong-app-url-modal.linkToDocsArticle'),
+                    },
+                ],
+                uuid: STORAGE_KEY_WAS_WRONG_APP_MODAL_SHOWN,
+            },
+        };
+    },
+
+    computed: {
+        isAppUrlReachable() {
+            return Contena.Store.get('context').app.config.settings?.appUrlReachable;
+        },
+
+        appUrl() {
+            return Contena.Store.get('context').app.config.appUrl;
+        },
+
+        appUrlStatusCode() {
+            return Contena.Store.get('context').app.config.settings?.appUrlStatusCode;
+        },
+
+        hasAppsThatRequireAppUrl() {
+            return Contena.Store.get('context').app.config.settings?.appsRequireAppUrl;
+        },
+
+        display() {
+            return !this.isAppUrlReachable && this.hasAppsThatRequireAppUrl && !this.wasModalAlreadyShown;
+        },
+
+        assetFilter() {
+            return Contena.Filter.getByName('asset');
+        },
+    },
+
+    created() {
+        if (!this.display && !this.isAppUrlReachable) {
+            this.createAlertNotification();
+        }
+
+        if (this.isAppUrlReachable) {
+            localStorage.removeItem(STORAGE_KEY_WAS_WRONG_APP_MODAL_SHOWN);
+            this.removeAlertNotification();
+        }
+    },
+
+    methods: {
+        async copyVerifyCommand() {
+            await Contena.Utils.dom.copyStringToClipboard(this.verifyCommand);
+            this.commandCopied = true;
+        },
+
+        closeModal() {
+            localStorage.setItem(STORAGE_KEY_WAS_WRONG_APP_MODAL_SHOWN, 'true');
+            this.wasModalAlreadyShown = true;
+            this.createAlertNotification();
+
+            this.$emit('modal-close');
+        },
+
+        createAlertNotification() {
+            this.createSystemNotificationInfo(this.notification);
+        },
+
+        removeAlertNotification() {
+            Contena.Store.get('notification').removeNotification(this.notification);
+        },
+    },
+};

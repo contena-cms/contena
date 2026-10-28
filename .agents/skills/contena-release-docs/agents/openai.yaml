@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena Release Docs"
+  short_description: "Decide and write Contena release and upgrade notes."
+  default_prompt: "Check whether this Contena change needs release or upgrade documentation."

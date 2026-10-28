@@ -1,0 +1,43 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Content\Product\Aggregate\ProductVisibility;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @extends EntityCollection<ProductVisibilityEntity>
+ *
+ * @codeCoverageIgnore
+ */
+#[Package('inventory')]
+class ProductVisibilityCollection extends EntityCollection
+{
+    /**
+     * @return array<string>
+     */
+    public function getProductIds(): array
+    {
+        return $this->fmap(static fn (ProductVisibilityEntity $visibility) => $visibility->getProductId());
+    }
+
+    public function filterByProductId(string $id): self
+    {
+        return $this->filter(static fn (ProductVisibilityEntity $visibility) => $visibility->getProductId() === $id);
+    }
+
+    public function filterBySalesChannelId(string $id): self
+    {
+        return $this->filter(static fn (ProductVisibilityEntity $visibility) => $visibility->getSalesChannelId() === $id);
+    }
+
+    public function getApiAlias(): string
+    {
+        return 'product_visibility_collection';
+    }
+
+    protected function getExpectedClass(): string
+    {
+        return ProductVisibilityEntity::class;
+    }
+}

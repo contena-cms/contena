@@ -1,0 +1,20 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\App\Aggregate\FlowActionTranslation;
+
+use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * @extends EntityCollection<AppFlowActionTranslationEntity>
+ *
+ * @codeCoverageIgnore
+ */
+#[Package('framework')]
+class AppFlowActionTranslationCollection extends EntityCollection
+{
+    protected function getExpectedClass(): string
+    {
+        return AppFlowActionTranslationEntity::class;
+    }
+}

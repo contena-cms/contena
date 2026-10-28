@@ -1,0 +1,8 @@
+{
+  "name": "ConfigWithoutStorefrontDefined",
+  "author": "Contena",
+  "views": [
+    "@ConfigWithoutStorefrontDefined",
+    "@Plugins"
+  ]
+}

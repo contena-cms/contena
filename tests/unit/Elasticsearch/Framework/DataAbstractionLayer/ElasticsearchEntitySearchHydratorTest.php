@@ -1,0 +1,228 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Elasticsearch\Framework\DataAbstractionLayer;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Product\ProductDefinition;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Grouping\FieldGrouping;
+use Contena\Core\Framework\Log\Package;
+use Contena\Elasticsearch\Framework\DataAbstractionLayer\ElasticsearchEntitySearchHydrator;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(ElasticsearchEntitySearchHydrator::class)]
+class ElasticsearchEntitySearchHydratorTest extends TestCase
+{
+    private ElasticsearchEntitySearchHydrator $hydrator;
+
+    private Context $context;
+
+    protected function setUp(): void
+    {
+        $this->hydrator = new ElasticsearchEntitySearchHydrator();
+        $this->context = Context::createDefaultContext();
+    }
+
+    public function testHydrateWithEmptyResult(): void
+    {
+        $definition = static::createStub(ProductDefinition::class);
+        $criteria = new Criteria();
+        $result = [
+            'hits' => [
+                'hits' => [],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(0, $idSearchResult->getTotal());
+        static::assertCount(0, $idSearchResult->getIds());
+    }
+
+    public function testHydrateWithHits(): void
+    {
+        $definition = static::createStub(ProductDefinition::class);
+        $criteria = new Criteria();
+        $result = [
+            'hits' => [
+                'hits' => [
+                    [
+                        '_id' => '1',
+                        '_score' => 1.0,
+                        '_source' => ['field' => 'value'],
+                    ],
+                    [
+                        '_id' => '2',
+                        '_score' => 2.0,
+                        '_source' => ['field' => 'value'],
+                    ],
+                ],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(2, $idSearchResult->getTotal());
+        static::assertSame(['1', '2'], $idSearchResult->getIds());
+    }
+
+    public function testHydrateWithoutTotal(): void
+    {
+        $definition = static::createStub(ProductDefinition::class);
+        $criteria = new Criteria();
+        $criteria->setTotalCountMode(Criteria::TOTAL_COUNT_MODE_NONE);
+
+        $result = [
+            'hits' => [
+                'hits' => [
+                    [
+                        '_id' => '1',
+                        '_score' => 1.0,
+                        '_source' => ['field' => 'value'],
+                    ],
+                    [
+                        '_id' => '2',
+                        '_score' => 2.0,
+                        '_source' => ['field' => 'value'],
+                    ],
+                ],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(2, $idSearchResult->getTotal());
+    }
+
+    public function testHydrateWithExactTotal(): void
+    {
+        $definition = static::createStub(ProductDefinition::class);
+        $criteria = new Criteria();
+        $criteria->setTotalCountMode(Criteria::TOTAL_COUNT_MODE_EXACT);
+
+        $result = [
+            'hits' => [
+                'total' => [
+                    'value' => 2,
+                ],
+                'hits' => [],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(2, $idSearchResult->getTotal());
+
+        $criteria->addGroupField(new FieldGrouping('displayGroup'));
+        $result = [
+            'hits' => [
+                'hits' => [],
+            ],
+            'aggregations' => [
+                'total-count' => [
+                    'value' => 3,
+                ],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(3, $idSearchResult->getTotal());
+
+        $criteria->addPostFilter(new EqualsFilter('field', 'value'));
+        $result = [
+            'hits' => [
+                'hits' => [],
+            ],
+            'aggregations' => [
+                'total-filtered-count' => [
+                    'total-count' => [
+                        'value' => 3,
+                    ],
+                ],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(3, $idSearchResult->getTotal());
+    }
+
+    public function testHydrateWithNestedHits(): void
+    {
+        $definition = static::createStub(ProductDefinition::class);
+        $criteria = new Criteria();
+        $criteria->setTotalCountMode(Criteria::TOTAL_COUNT_MODE_EXACT);
+
+        $result = [
+            'hits' => [
+                'total' => [
+                    'value' => 2,
+                ],
+                'hits' => [
+                    [
+                        '_id' => '1',
+                        '_score' => 1.0,
+                        '_source' => ['field' => 'value'],
+                        'inner_hits' => [
+                            'inner' => [
+                                'hits' => [
+                                    'hits' => [
+                                        [
+                                            '_id' => '2',
+                                            '_score' => 2.0,
+                                            '_source' => ['field' => 'value'],
+                                        ],
+                                        [
+                                            '_id' => '3',
+                                            '_score' => 2.0,
+                                            '_source' => ['field' => 'value'],
+                                        ],
+                                    ],
+                                ],
+                            ],
+                        ],
+                    ],
+                ],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(2, $idSearchResult->getTotal());
+        static::assertSame(['2', '3'], $idSearchResult->getIds());
+    }
+
+    public function testHydrateWithIdSorting(): void
+    {
+        $definition = static::createStub(ProductDefinition::class);
+        $criteria = new Criteria(['2', '1']);
+        $result = [
+            'hits' => [
+                'hits' => [
+                    [
+                        '_id' => '1',
+                        '_score' => 1.0,
+                        '_source' => ['field' => 'value'],
+                    ],
+                    [
+                        '_id' => '2',
+                        '_score' => 2.0,
+                        '_source' => ['field' => 'value'],
+                    ],
+                ],
+            ],
+        ];
+
+        $idSearchResult = $this->hydrator->hydrate($definition, $criteria, $this->context, $result);
+
+        static::assertSame(2, $idSearchResult->getTotal());
+        static::assertSame(['2', '1'], $idSearchResult->getIds());
+    }
+}

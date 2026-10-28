@@ -1,0 +1,9 @@
+<flow-extensions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../src/Core/Framework/App/Flow/Schema/flow-1.0.xsd">
+    <flow-events>
+        <flow-event>
+            <name>checkout.order.place.custom</name>
+            <aware>orderAware</aware>
+            <aware>customerAware</aware>
+        </flow-event>
+    </flow-events>
+</flow-extensions>

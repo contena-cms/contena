@@ -1,0 +1,627 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Checkout\Customer\SalesChannel;
+
+use Doctrine\DBAL\Connection;
+use Psr\Clock\ClockInterface;
+use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressDefinition;
+use Contena\Core\Checkout\Customer\CustomerCollection;
+use Contena\Core\Checkout\Customer\CustomerDefinition;
+use Contena\Core\Checkout\Customer\CustomerEntity;
+use Contena\Core\Checkout\Customer\CustomerEvents;
+use Contena\Core\Checkout\Customer\CustomerException;
+use Contena\Core\Checkout\Customer\Event\CustomerLoginEvent;
+use Contena\Core\Checkout\Customer\Event\CustomerRegisterEvent;
+use Contena\Core\Checkout\Customer\Event\GuestCustomerRegisterEvent;
+use Contena\Core\Checkout\Customer\Extension\RegisterRouteExtension;
+use Contena\Core\Checkout\Customer\Service\DoubleOptInService;
+use Contena\Core\Checkout\Customer\Service\EmailIdnConverter;
+use Contena\Core\Checkout\Customer\Validation\Constraint\CustomerEmailUnique;
+use Contena\Core\Checkout\Customer\Validation\Constraint\CustomerVatIdentification;
+use Contena\Core\Checkout\Customer\Validation\Constraint\CustomerZipCode;
+use Contena\Core\Checkout\Order\SalesChannel\OrderService;
+use Contena\Core\Content\Newsletter\DataAbstractionLayer\Indexing\CustomerNewsletterSalesChannelsUpdater;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
+use Contena\Core\Framework\Event\DataMappingEvent;
+use Contena\Core\Framework\Extensions\ExtensionDispatcher;
+use Contena\Core\Framework\Feature;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
+use Contena\Core\Framework\Routing\StoreApiRouteScope;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Framework\Validation\BuildValidationEvent;
+use Contena\Core\Framework\Validation\DataBag\DataBag;
+use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
+use Contena\Core\Framework\Validation\DataValidationDefinition;
+use Contena\Core\Framework\Validation\DataValidationFactoryInterface;
+use Contena\Core\Framework\Validation\DataValidator;
+use Contena\Core\Framework\Validation\Exception\ConstraintViolationException;
+use Contena\Core\PlatformRequest;
+use Contena\Core\System\Country\CountryCollection;
+use Contena\Core\System\NumberRange\ValueGenerator\NumberRangeValueGeneratorInterface;
+use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainCollection;
+use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
+use Contena\Core\System\SalesChannel\Context\SalesChannelContextPersister;
+use Contena\Core\System\SalesChannel\Context\SalesChannelContextServiceInterface;
+use Contena\Core\System\SalesChannel\Context\SalesChannelContextServiceParameters;
+use Contena\Core\System\SalesChannel\Entity\SalesChannelRepository;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
+use Contena\Core\System\SalesChannel\StoreApiCustomFieldMapper;
+use Contena\Core\System\Salutation\SalutationCollection;
+use Contena\Core\System\Salutation\SalutationDefinition;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Validator\Constraints\AtLeastOneOf;
+use Symfony\Component\Validator\Constraints\Choice;
+use Symfony\Component\Validator\Constraints\IsNull;
+use Symfony\Component\Validator\Constraints\Length;
+use Symfony\Component\Validator\Constraints\NotBlank;
+use Symfony\Component\Validator\Constraints\Type;
+use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
+
+#[Package('checkout')]
+#[Route(defaults: [PlatformRequest::ATTRIBUTE_ROUTE_SCOPE => [StoreApiRouteScope::ID]])]
+class RegisterRoute extends AbstractRegisterRoute
+{
+    use CustomerAddressDataNormalizerTrait;
+    use CustomerVatIdNormalizerTrait;
+
+    /**
+     * @internal
+     *
+     * @param EntityRepository<CustomerCollection> $customerRepository
+     * @param SalesChannelRepository<CountryCollection> $countryRepository
+     * @param EntityRepository<SalutationCollection> $salutationRepository
+     */
+    public function __construct(
+        private readonly EventDispatcherInterface $eventDispatcher,
+        private readonly NumberRangeValueGeneratorInterface $numberRangeValueGenerator,
+        private readonly DataValidator $validator,
+        private readonly DataValidationFactoryInterface $accountValidationFactory,
+        private readonly DataValidationFactoryInterface $addressValidationFactory,
+        private readonly SystemConfigService $systemConfigService,
+        private readonly EntityRepository $customerRepository,
+        private readonly SalesChannelContextPersister $contextPersister,
+        private readonly SalesChannelRepository $countryRepository,
+        protected Connection $connection,
+        private readonly SalesChannelContextServiceInterface $contextService,
+        private readonly StoreApiCustomFieldMapper $customFieldMapper,
+        private readonly EntityRepository $salutationRepository,
+        private readonly DataValidationFactoryInterface $passwordValidationFactory,
+        private readonly DoubleOptInService $doubleOptInService,
+        private readonly CustomerNewsletterSalesChannelsUpdater $customerNewsletterSalesChannelsUpdater,
+        private readonly ClockInterface $clock,
+        private readonly ExtensionDispatcher $extensions,
+    ) {
+    }
+
+    public function getDecorated(): AbstractRegisterRoute
+    {
+        throw new DecorationPatternException(self::class);
+    }
+
+    #[Route(path: '/store-api/account/register', name: 'store-api.account.register', methods: ['POST'])]
+    public function register(
+        RequestDataBag $data,
+        SalesChannelContext $context,
+        bool $validateStorefrontUrl = true,
+        ?DataValidationDefinition $additionalValidationDefinitions = null
+    ): CustomerResponse {
+        return $this->extensions->publish(
+            name: RegisterRouteExtension::NAME,
+            extension: new RegisterRouteExtension($data, $context, $validateStorefrontUrl, $additionalValidationDefinitions),
+            function: $this->_register(...),
+        );
+    }
+
+    private function _register(
+        RequestDataBag $data,
+        SalesChannelContext $context,
+        bool $validateStorefrontUrl,
+        ?DataValidationDefinition $additionalValidationDefinitions
+    ): CustomerResponse {
+        EmailIdnConverter::encodeDataBag($data);
+
+        $isGuest = $data->getBoolean('guest');
+
+        if ($data->has('accountType') && $data->getString('accountType') === '') {
+            $data->remove('accountType');
+        }
+
+        if (!$data->get('salutationId')) {
+            $data->set('salutationId', $this->getDefaultSalutationId($context));
+        }
+
+        $billing = $data->get('billingAddress');
+        $shipping = $data->get('shippingAddress');
+
+        if ($billing instanceof DataBag) {
+            if ($billing->has('firstName') && !$data->has('firstName')) {
+                $data->set('firstName', $billing->get('firstName'));
+            }
+
+            if ($billing->has('lastName') && !$data->has('lastName')) {
+                $data->set('lastName', $billing->get('lastName'));
+            }
+
+            if ($data->has('title')) {
+                $billing->set('title', $data->get('title'));
+            }
+        }
+
+        $this->validateRegistrationData($data, $isGuest, $context, $additionalValidationDefinitions, $validateStorefrontUrl);
+
+        $customer = $this->mapCustomerData($data, $isGuest, $context);
+
+        if ($billing instanceof DataBag) {
+            $billingAddress = $this->mapAddressData($billing, $context->getContext(), CustomerEvents::MAPPING_REGISTER_ADDRESS_BILLING);
+            $billingAddress['id'] = Uuid::randomHex();
+            $billingAddress['customerId'] = $customer['id'];
+            $customer['defaultBillingAddressId'] = $billingAddress['id'];
+            $customer['addresses'][] = $billingAddress;
+
+            if (!$shipping) {
+                $customer['defaultShippingAddressId'] = $billingAddress['id'];
+            }
+        }
+
+        if ($shipping instanceof DataBag) {
+            $shippingAddress = $this->mapAddressData($shipping, $context->getContext(), CustomerEvents::MAPPING_REGISTER_ADDRESS_SHIPPING);
+            $shippingAddress['id'] = Uuid::randomHex();
+            $shippingAddress['customerId'] = $customer['id'];
+
+            $customer['defaultShippingAddressId'] = $shippingAddress['id'];
+            $customer['addresses'][] = $shippingAddress;
+
+            if (!$billing) {
+                $customer['defaultBillingAddressId'] = $shippingAddress['id'];
+            }
+        }
+
+        if ($data->get('accountType')) {
+            $customer['accountType'] = $data->get('accountType');
+        }
+
+        $companyName = $billingAddress['company'] ?? $shippingAddress['company'] ?? null;
+        if ($data->get('accountType') === CustomerEntity::ACCOUNT_TYPE_BUSINESS && $companyName) {
+            $customer['company'] = $companyName;
+            if ($data->get('vatIds')) {
+                $customer['vatIds'] = $data->get('vatIds');
+            }
+        }
+
+        $customer = $this->doubleOptInService->mapCustomerDoubleOptInData($customer, $context);
+
+        $customer['boundSalesChannelId'] = $this->getBoundSalesChannelId($customer['email'], $context);
+
+        if ($data->get('customFields') instanceof RequestDataBag) {
+            $customer['customFields'] = $this->customFieldMapper->map(CustomerDefinition::ENTITY_NAME, $data->get('customFields'));
+        }
+
+        // Convert all DataBags to array
+        $customer = array_map(static function (mixed $value) {
+            if ($value instanceof DataBag) {
+                return $value->all();
+            }
+
+            return $value;
+        }, $customer);
+
+        $writeContext = clone $context->getContext();
+        $writeContext->addState(EntityIndexerRegistry::USE_INDEXING_QUEUE);
+
+        $this->customerRepository->create([$customer], $writeContext);
+        $this->customerNewsletterSalesChannelsUpdater->update([$customer['id']], true);
+
+        $criteria = new Criteria([$customer['id']]);
+
+        $customerEntity = $this->customerRepository->search($criteria, $context->getContext())->getEntities()->first();
+        \assert(assertion: $customerEntity !== null);
+
+        if ($customerEntity->getDoubleOptInRegistration()) {
+            $this->doubleOptInService->sendDoubleOptInMail(
+                $customerEntity,
+                $context,
+                (string) $data->get('storefrontUrl'),
+                $data->get('redirectTo'),
+                $data->get('redirectParameters')
+            );
+
+            // We don't want to leak the hash in store-api
+            $customerEntity->setHash('');
+
+            return new CustomerResponse($customerEntity);
+        }
+
+        $response = new CustomerResponse($customerEntity);
+
+        $newToken = $this->contextPersister->replace($context->getToken(), $context);
+
+        $this->contextPersister->save(
+            $newToken,
+            [
+                'customerId' => $customerEntity->getId(),
+                'billingAddressId' => null,
+                'shippingAddressId' => null,
+                'domainId' => $context->getDomainId(),
+            ],
+            $context->getSalesChannelId(),
+            $customerEntity->getId()
+        );
+
+        $new = $this->contextService->get(
+            new SalesChannelContextServiceParameters(
+                $context->getSalesChannelId(),
+                $newToken,
+                $context->getLanguageId(),
+                $context->getCurrencyId(),
+                $context->getDomainId(),
+                null,
+                $customerEntity->getId()
+            )
+        );
+
+        $new->addState(...$context->getStates());
+
+        if (!$customerEntity->getGuest()) {
+            $this->eventDispatcher->dispatch(new CustomerRegisterEvent($new, $customerEntity));
+        } else {
+            $this->eventDispatcher->dispatch(new GuestCustomerRegisterEvent($new, $customerEntity));
+        }
+
+        $event = new CustomerLoginEvent($new, $customerEntity, $newToken);
+        $this->eventDispatcher->dispatch($event);
+
+        $response->headers->set(PlatformRequest::HEADER_CONTEXT_TOKEN, $newToken);
+
+        // We don't want to leak the hash in store-api
+        $customerEntity->setHash('');
+
+        return $response;
+    }
+
+    private function validateRegistrationData(
+        DataBag $data,
+        bool $isGuest,
+        SalesChannelContext $context,
+        ?DataValidationDefinition $additionalValidations,
+        bool $validateStorefrontUrl
+    ): void {
+        $billingAddress = $data->get('billingAddress');
+        $shippingAddress = $data->get('shippingAddress');
+        if ($billingAddress instanceof DataBag) {
+            $billingAddress->set('firstName', $data->get('firstName'));
+            $billingAddress->set('lastName', $data->get('lastName'));
+            $billingAddress->set('salutationId', $data->get('salutationId'));
+        }
+
+        if (($shippingAddress instanceof DataBag) && !$shippingAddress->get('salutationId')) {
+            $shippingAddress->set('salutationId', $data->get('salutationId'));
+        }
+
+        $definition = $this->getCustomerCreateValidationDefinition($isGuest, $data, $context);
+
+        if ($additionalValidations) {
+            $definition->merge($additionalValidations);
+        }
+
+        if ($validateStorefrontUrl && $this->doubleOptInService->isDoubleOptInEnabled($isGuest, $context)) {
+            $definition
+                ->add('storefrontUrl', new NotBlank(), new Choice(choices: $this->getDomainUrls($context)));
+        }
+
+        $accountType = $data->get('accountType', CustomerEntity::ACCOUNT_TYPE_PRIVATE);
+
+        // The billing address is mandatory.
+        // The shipping address is optional but if there is one, a non-array value results in an exception in the validation process.
+        $definition->add(
+            'billingAddress',
+            new Type('associative_array', message: 'VIOLATION::BILLING_ADDRESS_INVALID_TYPE_ERROR')
+        );
+        $definition->add(
+            'shippingAddress',
+            new AtLeastOneOf([
+                new Type('associative_array', message: 'VIOLATION::SHIPPING_ADDRESS_INVALID_TYPE_ERROR'),
+                new IsNull(),
+            ])
+        );
+
+        // The billing address validation must not be added if the data is neither a data bag nor valid because the validation building will fail.
+        // Using a null value must be possible to allow the event based modification (see BuildValidationEvent).
+        if ($billingAddress instanceof DataBag || (!$shippingAddress instanceof DataBag && $billingAddress === null)) {
+            $definition->addSub('billingAddress', $this->getCreateAddressValidationDefinition($data, $accountType, $billingAddress ?? new RequestDataBag(), $context));
+        }
+
+        if ($shippingAddress instanceof DataBag) {
+            $shippingAccountType = $shippingAddress->get('accountType', CustomerEntity::ACCOUNT_TYPE_PRIVATE);
+            $definition->addSub('shippingAddress', $this->getCreateAddressValidationDefinition($data, $shippingAccountType, $shippingAddress, $context));
+        }
+
+        if ($this->systemConfigService->get('core.loginRegistration.requireDataProtectionCheckbox', $context->getSalesChannelId())) {
+            $definition->add('acceptedDataProtection', new NotBlank());
+        }
+
+        $violations = $this->validator->getViolations($data->all(), $definition);
+
+        if (!$violations->count()) {
+            return;
+        }
+
+        throw new ConstraintViolationException($violations, $data->all());
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function getDomainUrls(SalesChannelContext $context): array
+    {
+        $salesChannelDomainCollection = $context->getSalesChannel()->getDomains();
+        \assert($salesChannelDomainCollection instanceof SalesChannelDomainCollection);
+
+        return array_values(array_map(static fn (SalesChannelDomainEntity $domainEntity) => rtrim($domainEntity->getUrl(), '/'), $salesChannelDomainCollection->getElements()));
+    }
+
+    private function getBirthday(DataBag $data): ?\DateTimeInterface
+    {
+        $birthdayDay = $data->get('birthdayDay');
+        $birthdayMonth = $data->get('birthdayMonth');
+        $birthdayYear = $data->get('birthdayYear');
+
+        if (!\is_numeric($birthdayDay) || !\is_numeric($birthdayMonth) || !\is_numeric($birthdayYear)) {
+            return null;
+        }
+
+        return new \DateTime(\sprintf(
+            '%d-%d-%d',
+            (int) $birthdayYear,
+            (int) $birthdayMonth,
+            (int) $birthdayDay
+        ));
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mapCustomerData(DataBag $data, bool $isGuest, SalesChannelContext $context): array
+    {
+        $customer = [
+            'customerNumber' => $this->numberRangeValueGenerator->getValue(
+                $this->customerRepository->getDefinition()->getEntityName(),
+                $context->getContext(),
+                $context->getSalesChannelId()
+            ),
+            'salesChannelId' => $context->getSalesChannelId(),
+            'languageId' => $context->getLanguageId(),
+            'groupId' => $context->getCustomerGroupId(),
+            'requestedGroupId' => $data->get('requestedGroupId', null),
+            'salutationId' => $data->get('salutationId'),
+            'firstName' => $data->get('firstName'),
+            'lastName' => $data->get('lastName'),
+            'email' => $data->get('email'),
+            'title' => $data->get('title'),
+            'affiliateCode' => $data->get(OrderService::AFFILIATE_CODE_KEY),
+            'campaignCode' => $data->get(OrderService::CAMPAIGN_CODE_KEY),
+            'active' => true,
+            'birthday' => $this->getBirthday($data),
+            'guest' => $isGuest,
+            'firstLogin' => $this->clock->now(),
+            'addresses' => [],
+        ];
+
+        if (!$isGuest) {
+            $customer['password'] = $data->get('password');
+        }
+
+        $event = new DataMappingEvent($data, $customer, $context->getContext());
+        $this->eventDispatcher->dispatch($event, CustomerEvents::MAPPING_REGISTER_CUSTOMER);
+
+        $customer = $event->getOutput();
+        $customer['id'] = Uuid::randomHex();
+
+        return $customer;
+    }
+
+    private function getCreateAddressValidationDefinition(
+        DataBag $data,
+        ?string $accountType,
+        DataBag $address,
+        SalesChannelContext $context
+    ): DataValidationDefinition {
+        $validation = $this->addressValidationFactory->create($context);
+
+        if ($accountType === CustomerEntity::ACCOUNT_TYPE_BUSINESS
+            && $this->systemConfigService->get('core.loginRegistration.showAccountTypeSelection', $context->getSalesChannelId())) {
+            $validation->add('company', new NotBlank());
+        }
+
+        $validation->set('zipcode', new CustomerZipCode(countryId: $address->get('countryId')));
+        $validation->add('zipcode', new Length(max: 50));
+
+        $validationEvent = new BuildValidationEvent($validation, $data, $context->getContext());
+        $this->eventDispatcher->dispatch($validationEvent, $validationEvent->getName());
+
+        return $validation;
+    }
+
+    private function getCustomerCreateValidationDefinition(bool $isGuest, DataBag $data, SalesChannelContext $context): DataValidationDefinition
+    {
+        $validation = $this->accountValidationFactory->create($context);
+
+        $criteria = (new Criteria())
+            ->addFilter(new EqualsFilter('registrationSalesChannels.id', $context->getSalesChannelId()));
+
+        $validation->add('requestedGroupId', new EntityExists(
+            entity: 'customer_group',
+            context: $context->getContext(),
+            criteria: $criteria,
+        ));
+
+        if (!$isGuest) {
+            $validation->merge(
+                $this->passwordValidationFactory->create($context)
+            );
+            $validation->add('email', new CustomerEmailUnique(salesChannelContext: $context));
+        }
+
+        $this->addVatIdsValidation($validation, $data, $context);
+
+        $validationEvent = new BuildValidationEvent($validation, $data, $context->getContext());
+        $this->eventDispatcher->dispatch($validationEvent, $validationEvent->getName());
+
+        return $validation;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function mapAddressData(DataBag $addressData, Context $context, string $eventName): array
+    {
+        $mappedData = $addressData->only(
+            'title',
+            'firstName',
+            'lastName',
+            'salutationId',
+            'street',
+            'zipcode',
+            'city',
+            'company',
+            'department',
+            'countryStateId',
+            'countryId',
+            'additionalAddressLine1',
+            'additionalAddressLine2',
+            'phoneNumber'
+        );
+
+        if (isset($mappedData['countryStateId']) && $mappedData['countryStateId'] === '') {
+            $mappedData['countryStateId'] = null;
+        }
+
+        $mappedData = $this->trimAddressFields($mappedData);
+
+        if ($addressData->get('customFields') instanceof RequestDataBag) {
+            $mappedData['customFields'] = $this->customFieldMapper->map(CustomerAddressDefinition::ENTITY_NAME, $addressData->get('customFields'));
+        }
+
+        $event = new DataMappingEvent($addressData, $mappedData, $context);
+        $this->eventDispatcher->dispatch($event, $eventName);
+
+        return $event->getOutput();
+    }
+
+    private function getBoundSalesChannelId(string $email, SalesChannelContext $context): ?string
+    {
+        $bindCustomers = $this->systemConfigService->get('core.systemWideLoginRegistration.isCustomerBoundToSalesChannel');
+        $salesChannelId = $context->getSalesChannelId();
+
+        if ($bindCustomers) {
+            return $salesChannelId;
+        }
+
+        if ($this->hasBoundAccount($email)) {
+            return $salesChannelId;
+        }
+
+        return null;
+    }
+
+    private function hasBoundAccount(string $email): bool
+    {
+        $query = $this->connection->createQueryBuilder();
+
+        $results = $query
+            ->select('LOWER(HEX(bound_sales_channel_id)) as bound_sales_channel_id')
+            ->from('customer')
+            ->where($query->expr()->eq('email', $query->createPositionalParameter($email)))
+            ->executeQuery()
+            ->fetchAllAssociative();
+
+        foreach ($results as $result) {
+            if ($result['bound_sales_channel_id']) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The VAT ID constraints are added before the BuildValidationEvent is dispatched, so that subscribers can modify them.
+     */
+    private function addVatIdsValidation(DataValidationDefinition $validation, DataBag $data, SalesChannelContext $context): void
+    {
+        if ($data->get('vatIds') instanceof DataBag) {
+            $vatIds = array_filter($data->get('vatIds')->all());
+            $data->set('vatIds', $vatIds);
+        }
+
+        if ($data->get('accountType', CustomerEntity::ACCOUNT_TYPE_PRIVATE) !== CustomerEntity::ACCOUNT_TYPE_BUSINESS) {
+            return;
+        }
+
+        $billingAddress = $data->get('billingAddress');
+        $shippingAddress = $data->get('shippingAddress');
+
+        $countryId = $billingAddress instanceof DataBag
+            ? $billingAddress->get('countryId')
+            : ($shippingAddress instanceof DataBag ? $shippingAddress->get('countryId') : null);
+
+        if (!$countryId) {
+            return;
+        }
+
+        if ($this->requiredVatIdField($countryId, $context)) {
+            $validation->add('vatIds', new NotBlank());
+        }
+
+        $validation->add('vatIds', new Type('array'), new CustomerVatIdentification(
+            countryId: $countryId
+        ));
+
+        $vatIds = $data->get('vatIds');
+        if ($vatIds instanceof DataBag) {
+            $vatIds = $vatIds->all();
+        }
+
+        if (\is_array($vatIds) && $vatIds !== []) {
+            $data->set('vatIds', $this->normalizeVatIds($vatIds));
+        }
+    }
+
+    private function requiredVatIdField(string $countryId, SalesChannelContext $context): bool
+    {
+        if (!Feature::isActive('v6.8.0.0')) {
+            $country = $this->countryRepository->search(new Criteria([$countryId]), $context)->getEntities()->get($countryId);
+
+            if (!$country) {
+                throw CustomerException::countryNotFound($countryId);
+            }
+
+            return $country->getVatIdRequired();
+        }
+
+        $countryCriteria = (new Criteria([$countryId]))
+            ->addFields(['vatIdRequired']);
+
+        $country = $this->countryRepository->search($countryCriteria, $context)->getEntities()->first();
+        if (!$country) {
+            throw CustomerException::countryNotFound($countryId);
+        }
+
+        return $country->get('vatIdRequired');
+    }
+
+    private function getDefaultSalutationId(SalesChannelContext $context): ?string
+    {
+        $criteria = (new Criteria())
+            ->setLimit(1)
+            ->addFilter(new EqualsFilter('salutationKey', SalutationDefinition::NOT_SPECIFIED));
+
+        return $this->salutationRepository->searchIds($criteria, $context->getContext())->firstId();
+    }
+}

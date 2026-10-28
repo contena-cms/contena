@@ -1,0 +1,306 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Framework\Store\Services;
+
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\ConnectException;
+use GuzzleHttp\Psr7\Query;
+use GuzzleHttp\Psr7\Response;
+use PHPUnit\Framework\TestCase;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Contena\Core\Framework\Api\Context\AdminApiSource;
+use Contena\Core\Framework\Api\Context\SystemSource;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Store\Services\StoreClient;
+use Contena\Core\Framework\Store\StoreException;
+use Contena\Core\Framework\Store\Struct\ExtensionCollection;
+use Contena\Core\Framework\Store\Struct\ExtensionStruct;
+use Contena\Core\Framework\Store\Struct\ReviewStruct;
+use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\System\SystemConfig\SystemConfigService;
+use Symfony\Contracts\Cache\CacheInterface;
+
+/**
+ * @internal
+ */
+#[Package('checkout')]
+class StoreClientTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+    use StoreClientBehaviour;
+
+    private StoreClient $storeClient;
+
+    private SystemConfigService $configService;
+
+    private Context $storeContext;
+
+    private CacheInterface $cache;
+
+    protected function setUp(): void
+    {
+        $this->configService = static::getContainer()->get(SystemConfigService::class);
+        $this->cache = static::getContainer()->get('cache.object');
+        $this->storeClient = static::getContainer()->get(StoreClient::class);
+
+        $this->setLicenseDomain('contena-test');
+
+        $this->storeContext = $this->createAdminStoreContext();
+    }
+
+    public function testLoginWithContenaIdInvalidSource(): void
+    {
+        $this->expectExceptionObject(StoreException::invalidContextSource(AdminApiSource::class, SystemSource::class));
+
+        $this->storeClient->loginWithContenaId('contenaId', 'password', Context::createDefaultContext());
+    }
+
+    public function testSignPayloadWithAppSecret(): void
+    {
+        $this->getStoreRequestHandler()->append(new Response(200, [], '{"signature": "signed"}'));
+
+        static::assertSame('signed', $this->storeClient->signPayloadWithAppSecret('[this can be anything]', 'testApp'));
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(RequestInterface::class, $lastRequest);
+
+        static::assertSame('/swplatform/generatesignature', $lastRequest->getUri()->getPath());
+
+        static::assertSame([
+            'contenaVersion' => $this->getContenaVersion(),
+            'language' => 'en-GB',
+            'domain' => 'contena-test',
+        ], Query::parse($lastRequest->getUri()->getQuery()));
+
+        static::assertEquals([
+            'appName' => 'testApp',
+            'payload' => '[this can be anything]',
+        ], \json_decode($lastRequest->getBody()->getContents(), true, flags: \JSON_THROW_ON_ERROR));
+    }
+
+    public function testItUpdatesUserTokenAfterLogin(): void
+    {
+        $responseBody = \file_get_contents(__DIR__ . '/../_fixtures/responses/login.json');
+        static::assertIsString($responseBody);
+
+        $this->getStoreRequestHandler()->append(
+            new Response(200, [], $responseBody)
+        );
+
+        $this->storeClient->loginWithContenaId('contenaId', 'password', $this->storeContext);
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(RequestInterface::class, $lastRequest);
+
+        static::assertSame([
+            'contenaVersion' => $this->getContenaVersion(),
+            'language' => 'en-GB',
+            'domain' => 'contena-test',
+        ], Query::parse($lastRequest->getUri()->getQuery()));
+
+        $contextSource = $this->storeContext->getSource();
+        static::assertInstanceOf(AdminApiSource::class, $contextSource);
+
+        static::assertSame([
+            'contenaId' => 'contenaId',
+            'password' => 'password',
+            'contenaUserId' => $contextSource->getUserId(),
+        ], \json_decode($lastRequest->getBody()->getContents(), true, flags: \JSON_THROW_ON_ERROR));
+
+        // token from login.json
+        static::assertSame(
+            'updated-token',
+            $this->getStoreTokenFromContext($this->storeContext)
+        );
+
+        // secret from login.json
+        static::assertSame(
+            'shop.secret',
+            $this->configService->get('core.store.shopSecret')
+        );
+    }
+
+    public function testItRequestsUpdatesForLoggedInUser(): void
+    {
+        $pluginList = new ExtensionCollection();
+        $pluginList->add((new ExtensionStruct())->assign([
+            'name' => 'TestExtension',
+            'version' => '1.0.0',
+        ]));
+
+        $this->getStoreRequestHandler()->append(new Response(200, [], \json_encode([
+            'data' => [],
+        ], \JSON_THROW_ON_ERROR)));
+
+        $updateList = $this->storeClient->getExtensionUpdateList($pluginList, $this->storeContext);
+
+        static::assertSame([], $updateList);
+
+        $cachedList = $this->cache->get(StoreClient::EXTENSION_LIST_CACHE, static fn () => null);
+
+        static::assertIsArray($cachedList);
+        static::assertSame([], $cachedList);
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(RequestInterface::class, $lastRequest);
+
+        static::assertSame(
+            $this->getStoreTokenFromContext($this->storeContext),
+            $lastRequest->getHeader('X-Contena-Platform-Token')[0],
+        );
+    }
+
+    public function testItRequestsUpdateForNotLoggedInUser(): void
+    {
+        $contextSource = $this->storeContext->getSource();
+        static::assertInstanceOf(AdminApiSource::class, $contextSource);
+
+        $this->getUserRepository()->update([
+            [
+                'id' => $contextSource->getUserId(),
+                'storeToken' => null,
+            ],
+        ], Context::createDefaultContext());
+
+        $pluginList = new ExtensionCollection();
+        $pluginList->add((new ExtensionStruct())->assign([
+            'name' => 'TestExtension',
+            'version' => '1.0.0',
+            'inAppPurchases' => ['feature1', 'feature2'],
+        ]));
+
+        $this->getStoreRequestHandler()->append(new Response(200, [], \json_encode([
+            'data' => [
+                [
+                    'name' => 'TestExtension',
+                    'version' => '1.1.0',
+                    'inAppFeatures' => 'feature1,feature2',
+                ],
+            ],
+        ], \JSON_THROW_ON_ERROR)));
+
+        $updateList = $this->storeClient->getExtensionUpdateList($pluginList, $this->storeContext);
+
+        static::assertCount(1, $updateList);
+        static::assertSame('TestExtension', $updateList[0]->getName());
+        static::assertSame('1.1.0', $updateList[0]->getVersion());
+        static::assertSame('feature1,feature2', $updateList[0]->getInAppFeatures());
+
+        $cachedList = $this->cache->get(StoreClient::EXTENSION_LIST_CACHE, static fn () => null);
+
+        static::assertIsArray($cachedList);
+        static::assertCount(1, $cachedList);
+        static::assertSame('TestExtension', $cachedList[0]->getName());
+        static::assertSame('1.1.0', $cachedList[0]->getVersion());
+        static::assertSame('feature1,feature2', $cachedList[0]->getInAppFeatures());
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(RequestInterface::class, $lastRequest);
+
+        static::assertFalse($lastRequest->hasHeader('X-Contena-Platform-Token'));
+    }
+
+    public function testItReturnsUserInfo(): void
+    {
+        $userInfo = [
+            'name' => 'John Doe',
+            'email' => 'john.doe@contena.cn',
+            'avatarUrl' => 'https://avatar.contena.cn/john-doe.png',
+        ];
+
+        $this->getStoreRequestHandler()->append(new Response(200, [], \json_encode($userInfo, \JSON_THROW_ON_ERROR)));
+
+        $returnedUserInfo = $this->storeClient->userInfo($this->storeContext);
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(RequestInterface::class, $lastRequest);
+
+        static::assertSame('/swplatform/userinfo', $lastRequest->getUri()->getPath());
+        static::assertSame('GET', $lastRequest->getMethod());
+        static::assertSame($userInfo, $returnedUserInfo);
+    }
+
+    public function testMissingConnectionBecauseYouAreInGermanCellularInternet(): void
+    {
+        $this->getStoreRequestHandler()->append(new ConnectException(
+            'cURL error 7: Failed to connect to api.contena.cn port 443 after 4102 ms: Network is unreachable (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for https://api.contena.cn/swplatform/pluginupdates?contenaVersion=6.4.12.0&language=de-DE&domain=',
+            static::createStub(RequestInterface::class)
+        ));
+
+        $pluginList = new ExtensionCollection();
+        $pluginList->add((new ExtensionStruct())->assign([
+            'name' => 'TestExtension',
+            'version' => '1.0.0',
+        ]));
+
+        $returnedUserInfo = $this->storeClient->getExtensionUpdateList($pluginList, $this->storeContext);
+
+        static::assertSame([], $returnedUserInfo);
+    }
+
+    public function testCancelExtensionAlreadyCancelled(): void
+    {
+        $errorInfo = [
+            'success' => false,
+            'code' => StoreClient::EXTENSION_LICENSE_IS_ALREADY_CANCELLED,
+            'title' => 'Error',
+            'description' => 'The license is already cancelled',
+        ];
+        $this->getStoreRequestHandler()->append(new Response(400, [], \json_encode($errorInfo, \JSON_THROW_ON_ERROR)));
+
+        $this->storeClient->cancelSubscription(123, $this->storeContext);
+
+        $lastRequest = $this->getStoreRequestHandler()->getLastRequest();
+        static::assertInstanceOf(RequestInterface::class, $lastRequest);
+
+        static::assertSame('/swplatform/pluginlicenses/123/cancel', $lastRequest->getUri()->getPath());
+        static::assertSame('POST', $lastRequest->getMethod());
+    }
+
+    public function testCancelSubscriptionAlreadyCancelled(): void
+    {
+        $errorInfo = [
+            'success' => false,
+        ];
+        $this->getStoreRequestHandler()->append(new Response(400, [], \json_encode($errorInfo, \JSON_THROW_ON_ERROR)));
+
+        $this->expectExceptionObject(StoreException::storeError(new ClientException(
+            'Client error: `POST /swplatform/pluginlicenses/123/cancel',
+            static::createStub(RequestInterface::class),
+            static::createStub(ResponseInterface::class)
+        )));
+        $this->storeClient->cancelSubscription(123, $this->storeContext);
+    }
+
+    public function testCreateRatingThrowsExceptionOnClientError(): void
+    {
+        $clientException = new ClientException(
+            'Client error',
+            static::createStub(RequestInterface::class),
+            static::createStub(ResponseInterface::class)
+        );
+        $this->getStoreRequestHandler()->append($clientException);
+
+        $rating = new ReviewStruct();
+        $rating->setExtensionId(123);
+
+        $this->expectExceptionObject(StoreException::storeError($clientException));
+        $this->storeClient->createRating($rating, $this->storeContext);
+    }
+
+    public function testFetchLicensesThrowsExceptionOnClientError(): void
+    {
+        $clientException = new ClientException(
+            'Client error',
+            static::createStub(RequestInterface::class),
+            static::createStub(ResponseInterface::class)
+        );
+        $this->getStoreRequestHandler()->append($clientException);
+
+        $this->expectExceptionObject(StoreException::storeError($clientException));
+        $this->storeClient->listMyExtensions(new ExtensionCollection(), $this->storeContext);
+    }
+}

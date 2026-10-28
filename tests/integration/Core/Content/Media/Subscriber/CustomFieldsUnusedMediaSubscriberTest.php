@@ -1,0 +1,247 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Core\Content\Media\Subscriber;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Content\Media\Event\UnusedMediaSearchEvent;
+use Contena\Core\Content\Media\MediaCollection;
+use Contena\Core\Content\Media\Subscriber\CustomFieldsUnusedMediaSubscriber;
+use Contena\Core\Content\Test\Category\CategoryBuilder;
+use Contena\Core\Content\Test\Product\ProductBuilder;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
+use Contena\Core\System\CustomField\CustomFieldTypes;
+use Contena\Core\Test\Stub\Framework\IdsCollection;
+
+/**
+ * @internal
+ */
+#[Package('discovery')]
+class CustomFieldsUnusedMediaSubscriberTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+
+    /**
+     * @var EntityRepository<MediaCollection>
+     */
+    private EntityRepository $mediaRepository;
+
+    /**
+     * @var EntityRepository<CustomFieldSetCollection>
+     */
+    private EntityRepository $customFieldSetRepository;
+
+    protected function setUp(): void
+    {
+        $connection = static::getContainer()->get(Connection::class);
+
+        try {
+            $connection->fetchOne('SELECT JSON_OVERLAPS(JSON_ARRAY(1), JSON_ARRAY(1));');
+        } catch (\Exception $e) {
+            static::markTestSkipped('JSON_OVERLAPS() function not supported on this database');
+        }
+
+        parent::setUp();
+
+        $this->mediaRepository = static::getContainer()->get('media.repository');
+        $this->customFieldSetRepository = static::getContainer()->get('custom_field_set.repository');
+    }
+
+    public function testMediaIdsAreNotRemovedWhenMediaIsNotReferenced(): void
+    {
+        $mediaIds = array_values($this->createMedia(10)->all());
+
+        $event = new UnusedMediaSearchEvent($mediaIds, Context::createDefaultContext());
+        $listener = new CustomFieldsUnusedMediaSubscriber(
+            static::getContainer()->get(Connection::class),
+            static::getContainer()->get(DefinitionInstanceRegistry::class)
+        );
+
+        $listener->removeUsedMedia($event);
+
+        static::assertSame($mediaIds, $event->getUnusedIds());
+    }
+
+    public function testMediaIdsFromAllPossibleLocationsAreRemovedFromEvent(): void
+    {
+        $mediaIds = $this->createContent();
+        $event = new UnusedMediaSearchEvent($mediaIds, Context::createDefaultContext());
+        $listener = new CustomFieldsUnusedMediaSubscriber(
+            static::getContainer()->get(Connection::class),
+            static::getContainer()->get(DefinitionInstanceRegistry::class)
+        );
+        $listener->removeUsedMedia($event);
+
+        static::assertCount(0, $event->getUnusedIds());
+    }
+
+    public function testUnusedMediaIsPresent(): void
+    {
+        $mediaIds = $this->createContent();
+
+        $unusedMediaIds = array_values($this->createMedia(5, 10)->all());
+
+        $event = new UnusedMediaSearchEvent([...$mediaIds, ...$unusedMediaIds], Context::createDefaultContext());
+        $listener = new CustomFieldsUnusedMediaSubscriber(
+            static::getContainer()->get(Connection::class),
+            static::getContainer()->get(DefinitionInstanceRegistry::class)
+        );
+        $listener->removeUsedMedia($event);
+
+        static::assertSame($unusedMediaIds, $event->getUnusedIds());
+    }
+
+    private function createMedia(int $num, ?int $start = null): IdsCollection
+    {
+        $ids = new IdsCollection();
+        $media = [];
+        foreach (range($start ?? 1, $num) as $i) {
+            $media[] = [
+                'id' => $ids->create('media-' . $i),
+                'fileName' => "Media $i",
+                'fileExtension' => 'jpg',
+                'mimeType' => 'image/jpeg',
+                'fileSize' => 12345,
+            ];
+        }
+        $this->mediaRepository->create($media, Context::createDefaultContext());
+
+        return $ids;
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function createContent(): array
+    {
+        $ids = $this->createMedia(9);
+
+        $mediaIds = $ids->all();
+
+        foreach (['product', 'category', 'order'] as $entity) {
+            $this->createMediaCustomField($entity);
+            $this->createMediaSelectCustomField($entity);
+            $this->createMediaMultiSelectCustomField($entity);
+        }
+
+        $product = new ProductBuilder($ids, Uuid::randomHex(), 100);
+        $product->price(100);
+        $product->customField('custom_field_media_product', $ids->get('media-1'));
+        $product->customField('custom_field_media_select_product', $ids->get('media-2'));
+        $product->customField('custom_field_media_multi_select_product', [$ids->get('media-2'), $ids->get('media-3'), $ids->get('media-4')]);
+        $products = [$product->build()];
+
+        static::getContainer()->get('product.repository')->create($products, Context::createDefaultContext());
+
+        $category = new CategoryBuilder($ids, 'Category');
+        $category->customField('custom_field_media_category', $ids->get('media-5'));
+        $category->customField('custom_field_media_select_category', $ids->get('media-6'));
+        $category->customField('custom_field_media_multi_select_category', [$ids->get('media-7'), $ids->get('media-8'), $ids->get('media-9')]);
+
+        $categories = [$category->build()];
+
+        static::getContainer()->get('category.repository')->create($categories, Context::createDefaultContext());
+
+        return array_values($mediaIds);
+    }
+
+    /**
+     * @param array<array{name: string, type: string, config: array<string, mixed>}> $fields
+     */
+    private function createFieldSet(string $entity, string $name, array $fields): void
+    {
+        $this->customFieldSetRepository->create(
+            [
+                [
+                    'name' => $name,
+                    'config' => [
+                        'label' => [
+                            'en-GB' => $name,
+                        ],
+                    ],
+                    'customFields' => $fields,
+                    'relations' => [
+                        [
+                            'entityName' => $entity,
+                        ],
+                    ],
+                ],
+            ],
+            Context::createDefaultContext()
+        );
+    }
+
+    private function createMediaCustomField(string $entity): void
+    {
+        $this->createFieldSet(
+            $entity,
+            'media_fieldset_' . $entity,
+            [
+                [
+                    'name' => 'custom_field_media_' . $entity,
+                    'type' => CustomFieldTypes::MEDIA,
+                    'config' => [
+                        'label' => [
+                            'en-GB' => 'custom_field_media_' . $entity,
+                        ],
+                        'componentName' => 'sw-media-field',
+                        'customFieldType' => 'media',
+                        'customFieldPosition' => 1,
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function createMediaSelectCustomField(string $entity): void
+    {
+        $this->createFieldSet(
+            $entity,
+            'media_select_fieldset_' . $entity,
+            [
+                [
+                    'name' => 'custom_field_media_select_' . $entity,
+                    'type' => CustomFieldTypes::SELECT,
+                    'config' => [
+                        'entity' => 'media',
+                        'componentName' => 'sw-entity-single-select',
+                        'label' => [
+                            'en-GB' => 'custom_field_media_select_' . $entity,
+                        ],
+                        'customFieldType' => 'select',
+                        'customFieldPosition' => 1,
+                    ],
+                ],
+            ]
+        );
+    }
+
+    private function createMediaMultiSelectCustomField(string $entity): void
+    {
+        $this->createFieldSet(
+            $entity,
+            'media_multi_select_fieldset_' . $entity,
+            [
+                [
+                    'name' => 'custom_field_media_multi_select_' . $entity,
+                    'type' => CustomFieldTypes::SELECT,
+                    'config' => [
+                        'entity' => 'media',
+                        'componentName' => 'sw-entity-multi-id-select',
+                        'label' => [
+                            'en-GB' => 'custom_field_media_select_' . $entity,
+                        ],
+                        'customFieldType' => 'select',
+                        'customFieldPosition' => 1,
+                    ],
+                ],
+            ]
+        );
+    }
+}

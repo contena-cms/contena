@@ -1,0 +1,58 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Core\Framework\Plugin\Command\Scaffolding\Generator;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\Generator\TestsGenerator;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\PluginScaffoldConfiguration;
+use Contena\Core\Framework\Plugin\Command\Scaffolding\StubCollection;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+
+/**
+ * @internal
+ */
+#[Package('framework')]
+#[CoversClass(TestsGenerator::class)]
+class TestsGeneratorTest extends TestCase
+{
+    public function testCommandOptions(): void
+    {
+        $generator = new TestsGenerator();
+
+        static::assertFalse($generator->hasCommandOption());
+        static::assertSame('', $generator->getCommandOptionName());
+        static::assertSame('', $generator->getCommandOptionDescription());
+        static::assertSame('', $generator->getCommandOptionTitle());
+        static::assertSame('', $generator->getCommandOptionDescriptionLong());
+    }
+
+    public function testAddScaffoldConfigDoesNothing(): void
+    {
+        $configuration = new PluginScaffoldConfiguration('TestPlugin', 'MyNamespace', '/path/to/directory');
+
+        (new TestsGenerator())->addScaffoldConfig(
+            $configuration,
+            static::createStub(InputInterface::class),
+            static::createStub(OutputInterface::class),
+        );
+
+        static::assertSame([], $configuration->options);
+    }
+
+    public function testGenerateStubs(): void
+    {
+        $generator = new TestsGenerator();
+        $configuration = new PluginScaffoldConfiguration('TestPlugin', 'MyNamespace', '/path/to/directory');
+        $stubCollection = new StubCollection();
+
+        $generator->generateStubs($configuration, $stubCollection);
+
+        static::assertCount(2, $stubCollection);
+
+        static::assertTrue($stubCollection->has('phpunit.xml'));
+        static::assertTrue($stubCollection->has('tests/TestBootstrap.php'));
+    }
+}

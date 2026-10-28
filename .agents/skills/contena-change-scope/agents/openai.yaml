@@ -1,0 +1,4 @@
+interface:
+  display_name: "Contena Change Scope"
+  short_description: "Scope Contena fixes and cleanups from root cause."
+  default_prompt: "Scope this Contena change and identify the root-cause fix."

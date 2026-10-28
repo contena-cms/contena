@@ -1,0 +1,35 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Unit\Storefront\Framework\Health\Util;
+
+use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Framework\Log\Package;
+use Contena\Storefront\Framework\SystemCheck\Util\SalesChannelDomain;
+use Contena\Storefront\Framework\SystemCheck\Util\SalesChannelDomainCollection;
+
+/**
+ * @internal
+ */
+#[Package('discovery')]
+#[CoversClass(SalesChannelDomainCollection::class)]
+class SalesChannelDomainCollectionTest extends TestCase
+{
+    public function testCreate(): void
+    {
+        $domain1 = SalesChannelDomain::create('test-sales-channel-id-1', 'http://localhost:8000', 'domain-1', 'language-1', 'currency-1');
+        $domain2 = SalesChannelDomain::create('test-sales-channel-id-2', 'http://localhost:8001', 'domain-2', 'language-2', 'currency-2');
+
+        $collection = new SalesChannelDomainCollection([$domain1, $domain2]);
+
+        static::assertCount(2, $collection);
+
+        $domain = $collection->get('test-sales-channel-id-1');
+        static::assertInstanceOf(SalesChannelDomain::class, $domain);
+        static::assertSame('http://localhost:8000', $domain->url);
+
+        $domain = $collection->get('test-sales-channel-id-2');
+        static::assertInstanceOf(SalesChannelDomain::class, $domain);
+        static::assertSame('http://localhost:8001', $domain->url);
+    }
+}

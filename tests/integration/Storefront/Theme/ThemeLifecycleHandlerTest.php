@@ -1,0 +1,347 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Tests\Integration\Storefront\Theme;
+
+use Doctrine\DBAL\Connection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Contena\Core\Defaults;
+use Contena\Core\Framework\Api\Util\AccessKeyHelper;
+use Contena\Core\Framework\Context;
+use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
+use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
+use Contena\Core\Framework\Uuid\Uuid;
+use Contena\Core\Test\TestDefaults;
+use Contena\Storefront\Storefront;
+use Contena\Storefront\Theme\Exception\ThemeException;
+use Contena\Storefront\Theme\StorefrontPluginConfiguration\AbstractStorefrontPluginConfigurationFactory;
+use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
+use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
+use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
+use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
+use Contena\Storefront\Theme\StorefrontPluginRegistry;
+use Contena\Storefront\Theme\ThemeCollection;
+use Contena\Storefront\Theme\ThemeEntity;
+use Contena\Storefront\Theme\ThemeLifecycleHandler;
+use Contena\Storefront\Theme\ThemeLifecycleService;
+use Contena\Storefront\Theme\ThemeSalesChannel;
+use Contena\Storefront\Theme\ThemeSalesChannelCollection;
+use Contena\Storefront\Theme\ThemeService;
+use Contena\Tests\Integration\Storefront\Theme\fixtures\InheritanceWithConfig\InheritanceWithConfig;
+use Contena\Tests\Integration\Storefront\Theme\fixtures\PluginWithAdditionalBundles\PluginWithAdditionalBundles;
+use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
+use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePluginWithoutCompilation\SimplePluginWithoutCompilation;
+use Contena\Tests\Integration\Storefront\Theme\fixtures\SimpleTheme\SimpleTheme;
+
+/**
+ * @internal
+ */
+#[Package('discovery')]
+class ThemeLifecycleHandlerTest extends TestCase
+{
+    use IntegrationTestBehaviour;
+
+    private MockObject&ThemeService $themeServiceMock;
+
+    private MockObject&StorefrontPluginRegistry $configurationRegistryMock;
+
+    private ThemeLifecycleHandler $themeLifecycleHandler;
+
+    private AbstractStorefrontPluginConfigurationFactory $configFactory;
+
+    protected function setUp(): void
+    {
+        $this->themeServiceMock = $this->createMock(ThemeService::class);
+
+        $this->configurationRegistryMock = $this->createMock(StorefrontPluginRegistry::class);
+
+        $this->themeLifecycleHandler = new ThemeLifecycleHandler(
+            static::getContainer()->get(ThemeLifecycleService::class),
+            $this->themeServiceMock,
+            static::getContainer()->get('theme.repository'),
+            $this->configurationRegistryMock,
+            static::getContainer()->get(Connection::class)
+        );
+
+        $this->configFactory = static::getContainer()->get(StorefrontPluginConfigurationFactory::class);
+
+        static::getContainer()->get(Connection::class)->executeStatement('DELETE FROM `theme_sales_channel`');
+        $this->assignThemeToDefaultSalesChannel();
+    }
+
+    public function testHandleThemeInstallOrUpdateWillRecompileThemeIfNecessary(): void
+    {
+        // the registry is only consulted on uninstall, after the deactivation succeeded
+        $this->configurationRegistryMock->expects($this->never())->method(static::anything());
+
+        $installConfig = $this->configFactory->createFromBundle(new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'));
+
+        $this->themeServiceMock->expects($this->once())
+            ->method('compileTheme')
+            ->with(
+                TestDefaults::SALES_CHANNEL,
+                static::isString(),
+                static::isInstanceOf(Context::class),
+                static::callback(static fn (StorefrontPluginConfigurationCollection $configs): bool => $configs->count() === 2)
+            );
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $installConfig,
+        ]);
+
+        $this->themeLifecycleHandler->handleThemeInstallOrUpdate($installConfig, $configs, Context::createDefaultContext());
+    }
+
+    public function testHandleThemeInstallOrUpdateWillRecompilePluginWithSubBundles(): void
+    {
+        // the registry is only consulted on uninstall, after the deactivation succeeded
+        $this->configurationRegistryMock->expects($this->never())->method(static::anything());
+
+        $installConfig = $this->configFactory->createFromBundle(new PluginWithAdditionalBundles(true, __DIR__ . '/fixtures/PluginWithSubBundles'));
+
+        $this->themeServiceMock->expects($this->once())
+            ->method('compileTheme')
+            ->with(
+                TestDefaults::SALES_CHANNEL,
+                static::isString(),
+                static::isInstanceOf(Context::class),
+                static::callback(static fn (StorefrontPluginConfigurationCollection $configs): bool => $configs->count() === 2)
+            );
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $installConfig,
+        ]);
+
+        $this->themeLifecycleHandler->handleThemeInstallOrUpdate($installConfig, $configs, Context::createDefaultContext());
+    }
+
+    public function testHandleThemeInstallOrUpdateWithInheritance(): void
+    {
+        // the registry is only consulted on uninstall, after the deactivation succeeded
+        $this->configurationRegistryMock->expects($this->never())->method(static::anything());
+
+        // the fixture theme ships no files to compile, so nothing reaches the theme service
+        $this->themeServiceMock->expects($this->never())->method(static::anything());
+
+        $installConfig = $this->configFactory->createFromBundle(new InheritanceWithConfig());
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $installConfig,
+        ]);
+
+        $this->themeLifecycleHandler->handleThemeInstallOrUpdate($installConfig, $configs, Context::createDefaultContext());
+
+        /** @var EntityRepository<ThemeCollection> $themeRepository */
+        $themeRepository = static::getContainer()->get('theme.repository');
+        $context = Context::createDefaultContext();
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('technicalName', $installConfig->getTechnicalName()));
+        $criteria->addAssociation('parentThemes');
+
+        $themeEntity = $themeRepository->search($criteria, $context)->getEntities()->first();
+        static::assertInstanceOf(ThemeEntity::class, $themeEntity);
+        static::assertSame($installConfig->getTechnicalName(), $themeEntity->getTechnicalName());
+    }
+
+    public function testHandleThemeInstallOrUpdateWillRecompileOnlyTouchedTheme(): void
+    {
+        // the registry is only consulted on uninstall, after the deactivation succeeded
+        $this->configurationRegistryMock->expects($this->never())->method(static::anything());
+
+        $salesChannelId = $this->createSalesChannel();
+        $themeId = $this->createTheme('SimpleTheme', $salesChannelId);
+        $installConfig = $this->configFactory->createFromBundle(new SimpleTheme());
+        $installConfig->setStyleFiles(FileCollection::createFromArray(['onlyForFile']));
+
+        $this->themeServiceMock->expects($this->once())
+            ->method('compileThemeById')
+            ->with(
+                $themeId,
+                static::isInstanceOf(Context::class),
+                static::callback(static fn (StorefrontPluginConfigurationCollection $configs): bool => $configs->count() === 2)
+            );
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $installConfig,
+        ]);
+
+        $this->themeLifecycleHandler->handleThemeInstallOrUpdate($installConfig, $configs, Context::createDefaultContext());
+    }
+
+    public function testHandleThemeUninstallWillRecompileThemeIfNecessary(): void
+    {
+        $uninstalledConfig = $this->configFactory->createFromBundle(new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'));
+
+        $this->themeServiceMock->expects($this->once())
+            ->method('compileTheme')
+            ->with(
+                TestDefaults::SALES_CHANNEL,
+                static::isString(),
+                static::isInstanceOf(Context::class),
+                static::callback(static fn (StorefrontPluginConfigurationCollection $configs): bool => $configs->count() === 1 && (
+                    (
+                        $configs->first() instanceof StorefrontPluginConfiguration
+                        ? $configs->first()->getTechnicalName()
+                        : ''
+                    ) === 'Storefront'
+                ))
+            );
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $uninstalledConfig,
+        ]);
+
+        $this->configurationRegistryMock->expects($this->once())
+            ->method('getConfigurations')
+            ->willReturn($configs);
+
+        $this->themeLifecycleHandler->handleThemeUninstall($uninstalledConfig, Context::createDefaultContext());
+    }
+
+    public function testHandleThemeUninstallWillNotRecompileThemeIfNotNecessary(): void
+    {
+        $uninstalledConfig = $this->configFactory->createFromBundle(new SimplePluginWithoutCompilation());
+
+        $this->themeServiceMock->expects($this->never())
+            ->method('compileTheme');
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $uninstalledConfig,
+        ]);
+
+        $this->configurationRegistryMock->expects($this->once())
+            ->method('getConfigurations')
+            ->willReturn($configs);
+
+        $this->themeLifecycleHandler->handleThemeUninstall($uninstalledConfig, Context::createDefaultContext());
+    }
+
+    public function testHandleThemeUninstallWillThrowExceptionIfThemeIsStillInUse(): void
+    {
+        // the registry is only consulted on uninstall, after the deactivation succeeded
+        $this->configurationRegistryMock->expects($this->never())->method(static::anything());
+
+        $uninstalledConfig = $this->configFactory->createFromBundle(new SimpleTheme());
+        $uninstalledConfig->setStyleFiles(new FileCollection());
+        $uninstalledConfig->setScriptFiles(new FileCollection());
+
+        $configs = new StorefrontPluginConfigurationCollection([
+            $this->configFactory->createFromBundle(new Storefront()),
+            $uninstalledConfig,
+        ]);
+
+        $this->themeLifecycleHandler->handleThemeInstallOrUpdate($uninstalledConfig, $configs, Context::createDefaultContext());
+        $this->assignThemeToDefaultSalesChannel('SimpleTheme');
+
+        $criteria = new Criteria();
+        $criteria->addFilter(new EqualsFilter('technicalName', 'SimpleTheme'));
+        $themeId = static::getContainer()->get('theme.repository')->searchIds($criteria, Context::createDefaultContext())->firstId();
+        static::assertIsString($themeId);
+        $scCollection = new ThemeSalesChannelCollection();
+        $scCollection->add(new ThemeSalesChannel($themeId, TestDefaults::SALES_CHANNEL));
+        $this->themeServiceMock->expects($this->once())
+            ->method('getThemeDependencyMapping')
+            ->willReturn($scCollection);
+
+        $this->expectExceptionObject(ThemeException::themeAssignmentException(
+            'Simple theme',
+            ['Simple theme' => [TestDefaults::SALES_CHANNEL]],
+            [],
+            [TestDefaults::SALES_CHANNEL => 'Headless'],
+        ));
+
+        $this->themeLifecycleHandler->handleThemeUninstall($uninstalledConfig, Context::createDefaultContext());
+    }
+
+    private function assignThemeToDefaultSalesChannel(?string $themeName = null): void
+    {
+        $themeRepository = static::getContainer()->get('theme.repository');
+        $context = Context::createDefaultContext();
+
+        $criteria = new Criteria();
+        if ($themeName) {
+            $criteria->addFilter(new EqualsFilter('technicalName', $themeName));
+        }
+
+        $themeId = $themeRepository->searchIds($criteria, $context)->firstId();
+
+        $themeRepository->update([
+            [
+                'id' => $themeId,
+                'salesChannels' => [
+                    [
+                        'id' => TestDefaults::SALES_CHANNEL,
+                    ],
+                ],
+            ],
+        ], $context);
+    }
+
+    private function createTheme(string $name, string $salesChannelId): string
+    {
+        $id = Uuid::randomHex();
+
+        $repository = static::getContainer()->get('theme.repository');
+
+        $repository->create([
+            [
+                'id' => $id,
+                'technicalName' => $name,
+                'name' => $name,
+                'author' => 'test',
+                'active' => true,
+                'salesChannels' => [
+                    [
+                        'id' => $salesChannelId,
+                    ],
+                ],
+            ],
+        ], Context::createDefaultContext());
+
+        return $id;
+    }
+
+    private function createSalesChannel(): string
+    {
+        $salesChannelRepository = static::getContainer()->get('sales_channel.repository');
+
+        $id = Uuid::randomHex();
+        $payload = [[
+            'id' => $id,
+            'accessKey' => AccessKeyHelper::generateAccessKey('sales-channel'),
+            'typeId' => Defaults::SALES_CHANNEL_TYPE_STOREFRONT,
+            'languageId' => Defaults::LANGUAGE_SYSTEM,
+            'currencyId' => Defaults::CURRENCY,
+            'active' => true,
+            'currencyVersionId' => Defaults::LIVE_VERSION,
+            'paymentMethodId' => $this->getValidPaymentMethodId(),
+            'paymentMethodVersionId' => Defaults::LIVE_VERSION,
+            'shippingMethodId' => $this->getValidShippingMethodId(),
+            'shippingMethodVersionId' => Defaults::LIVE_VERSION,
+            'navigationCategoryId' => $this->getValidCategoryId(),
+            'navigationCategoryVersionId' => Defaults::LIVE_VERSION,
+            'countryId' => $this->getValidCountryId(),
+            'countryVersionId' => Defaults::LIVE_VERSION,
+            'currencies' => [['id' => Defaults::CURRENCY]],
+            'languages' => [['id' => Defaults::LANGUAGE_SYSTEM]],
+            'shippingMethods' => [['id' => $this->getValidShippingMethodId()]],
+            'paymentMethods' => [['id' => $this->getValidPaymentMethodId()]],
+            'countries' => [['id' => $this->getValidCountryId()]],
+            'name' => 'first sales-channel',
+            'customerGroupId' => TestDefaults::FALLBACK_CUSTOMER_GROUP,
+        ]];
+
+        $salesChannelRepository->create($payload, Context::createDefaultContext());
+
+        return $id;
+    }
+}

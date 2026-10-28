@@ -1,0 +1,20 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\Store\Struct;
+
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\Framework\Struct\Struct;
+
+/**
+ * @codeCoverageIgnore
+ */
+#[Package('checkout')]
+class StoreLicenseTypeStruct extends Struct
+{
+    protected string $name;
+
+    public function getApiAlias(): string
+    {
+        return 'store_license_type';
+    }
+}
