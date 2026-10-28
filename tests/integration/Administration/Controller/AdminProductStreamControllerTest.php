@@ -4,10 +4,8 @@ namespace Contena\Tests\Integration\Administration\Controller;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 
@@ -145,39 +143,6 @@ class AdminProductStreamControllerTest extends TestCase
         static::getContainer()->get(Connection::class)->executeStatement('DELETE FROM product');
 
         $products = [
-            (new ProductBuilder($this->ids, 'p.1'))
-                ->price(900)
-                ->property('rot', 'Farbe')
-                ->property('grün', 'Farbe')
-                ->visibility(TestDefaults::SALES_CHANNEL)
-                ->prices('rule-a', 220, 'default', null, 3, true)
-                ->variant(
-                    (new ProductBuilder($this->ids, 'v.1.1'))
-                        ->build()
-                )
-                ->variant(
-                    (new ProductBuilder($this->ids, 'v.1.2'))
-                        ->prices('rule-a', 210, 'default', null, 3, true)
-                        ->prices('rule-b', 501, 'default', null, 3, true)
-                        ->build()
-                )
-                ->build(),
-            (new ProductBuilder($this->ids, 'p.2'))
-                ->price(800)
-                ->property('grün', 'Farbe')
-                ->visibility(TestDefaults::SALES_CHANNEL)
-                ->prices('rule-c', 200, 'default', null, 3, true)
-                ->variant(
-                    (new ProductBuilder($this->ids, 'v.2.1'))
-                        ->build()
-                )
-                ->variant(
-                    (new ProductBuilder($this->ids, 'v.2.2'))
-                        ->prices('rule-d', 501, 'default', null, 3, true)
-                        ->prices('rule-e', 100, 'default', null, 3, true)
-                        ->build()
-                )
-                ->build(),
         ];
 
         static::getContainer()->get('product.repository')

@@ -3,7 +3,6 @@
 namespace Contena\Storefront\Theme;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 
@@ -45,10 +44,6 @@ class SeedingThemePathBuilder extends AbstractThemePathBuilder
         $this->systemConfigService->set(self::SYSTEM_CONFIG_KEY_PREFIX . $themeId, $seed, $salesChannelId, false);
     }
 
-    public function getDecorated(): AbstractThemePathBuilder
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
     private function getSeed(string $salesChannelId, string $themeId): string
     {

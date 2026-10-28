@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
@@ -53,7 +52,6 @@ class CustomerGroupDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of the customer\'s group.'),
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new BoolField('display_gross', 'displayGross'))->addFlags(new ApiAware())->setDescription('If boolean value is `true` gross value is displayed else, net value will be displayed to the customer.'),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             // Merchant Registration

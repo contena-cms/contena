@@ -5,15 +5,10 @@ namespace Contena\Tests\Unit\Storefront\Theme\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
-use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainCollection;
-use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
-use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Storefront\Theme\Command\ThemeDumpCommand;
 use Contena\Storefront\Theme\ConfigLoader\StaticFileConfigDumper;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
@@ -98,7 +93,6 @@ class ThemeDumpCommandTest extends TestCase
 
         $this->pluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('technical-name'),
             ])
         );
 
@@ -130,7 +124,6 @@ class ThemeDumpCommandTest extends TestCase
 
         $this->pluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('technical-name'),
             ])
         );
 
@@ -190,7 +183,6 @@ class ThemeDumpCommandTest extends TestCase
 
         $this->pluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('technical-name'),
             ])
         );
 
@@ -278,50 +270,5 @@ class ThemeDumpCommandTest extends TestCase
         static::assertNull($this->dumpedConfig);
     }
 
-    private function arrangeThemeDump(ThemeEntity $themeEntity): void
-    {
-        $searchResult = static::createStub(EntitySearchResult::class);
-        $searchResult->method('count')->willReturn(1);
-        $searchResult->method('getEntities')->willReturn(new ThemeCollection([$themeEntity]));
 
-        $this->themeRepository->method('search')->willReturn($searchResult);
-
-        $this->pluginRegistry->method('getConfigurations')->willReturn(
-            new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('technical-name'),
-            ])
-        );
-
-        $this->themeFileResolver->method('resolveFiles')->willReturn(['resolved' => 'files']);
-        $this->themeFilesystemResolver->method('getFilesystemForStorefrontConfig')->willReturn(
-            new Filesystem('')
-        );
-    }
-
-    /**
-     * @param list<string> $urls
-     */
-    private function createThemeEntityWithDomains(array $urls): ThemeEntity
-    {
-        $domains = [];
-        foreach ($urls as $index => $url) {
-            $domain = new SalesChannelDomainEntity();
-            $domain->setId('domain-' . $index);
-            $domain->setUrl($url);
-            $domains[] = $domain;
-        }
-
-        $salesChannel = new SalesChannelEntity();
-        $salesChannel->setId('sales-channel-id');
-        $salesChannel->setTypeId(Defaults::SALES_CHANNEL_TYPE_STOREFRONT);
-        $salesChannel->setDomains(new SalesChannelDomainCollection($domains));
-
-        $themeEntity = new ThemeEntity();
-        $themeEntity->setId('theme-id');
-        $themeEntity->setTechnicalName('technical-name');
-        $themeEntity->setName('Theme Name');
-        $themeEntity->setSalesChannels(new SalesChannelCollection([$salesChannel]));
-
-        return $themeEntity;
-    }
 }

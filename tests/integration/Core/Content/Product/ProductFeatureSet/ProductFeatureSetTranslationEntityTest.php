@@ -9,7 +9,6 @@ use Contena\Core\Content\Product\Aggregate\ProductFeatureSetTranslation\ProductF
 use Contena\Core\Content\Product\Aggregate\ProductFeatureSetTranslation\ProductFeatureSetTranslationEntity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal
@@ -19,7 +18,6 @@ class ProductFeatureSetTranslationEntityTest extends TestCase
 {
     use KernelTestBehaviour;
 
-    private ProductFeatureSetTranslationDefinition $definition;
 
     protected function setUp(): void
     {

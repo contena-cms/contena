@@ -6,9 +6,6 @@ use Cocur\Slugify\Bridge\Twig\SlugifyExtension;
 use Cocur\Slugify\Slugify;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\ApiOrderCartService;
-use Contena\Core\Checkout\Cart\SalesChannel\CartOrderRoute;
-use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Checkout\Customer\ImitateCustomerTokenGenerator;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
@@ -59,7 +56,6 @@ use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Telemetry\EntityGroupResolver;
-use Contena\Core\Framework\Demodata\PersonalData\CleanPersonalDataCommand;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature\Command\FeatureDisableCommand;
 use Contena\Core\Framework\Feature\Command\FeatureDumpCommand;
@@ -94,7 +90,6 @@ use Contena\Core\Framework\Routing\ContextResolverListener;
 use Contena\Core\Framework\Routing\CoreSubscriber;
 use Contena\Core\Framework\Routing\Facade\RequestFacadeFactory;
 use Contena\Core\Framework\Routing\MaintenanceModeResolver;
-use Contena\Core\Framework\Routing\PaymentScopeWhitelist;
 use Contena\Core\Framework\Routing\QueryDataBagResolver;
 use Contena\Core\Framework\Routing\RequestDataBagResolver;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
@@ -343,13 +338,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('console.command');
 
-    $services->set(CleanPersonalDataCommand::class)
-        ->args([
-            service(Connection::class),
-            service('customer.repository'),
-            service(ClockInterface::class),
-        ])
-        ->tag('console.command');
 
     $services->set(MigrationDestructiveCommand::class)
         ->args([
@@ -386,8 +374,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SymfonyRouteScopeWhitelist::class)
         ->tag('contena.route_scope_whitelist');
 
-    $services->set(PaymentScopeWhitelist::class)
-        ->tag('contena.route_scope_whitelist');
 
     $services->set(RouteScopeListener::class)
         ->args([
@@ -763,11 +749,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(RouteScopeRegistry::class),
         ]);
 
-    $services->set(ApiOrderCartService::class)
-        ->args([
-            service(CartService::class),
-            service(SalesChannelContextPersister::class),
-        ]);
 
     $services->set(SalesChannelProxyController::class)
         ->public()
@@ -778,9 +759,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SalesChannelContextPersister::class),
             service(SalesChannelContextService::class),
             service('event_dispatcher'),
-            service(ApiOrderCartService::class),
-            service(CartOrderRoute::class),
-            service(CartService::class),
             service('request_stack'),
             service(ImitateCustomerTokenGenerator::class),
         ])

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Storefront\Framework\Seo\App;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppEvents;
-use Contena\Core\Framework\App\Feature\AppFeature;
 use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Framework\Seo\App\AppEntitySeoUrlConfig;
@@ -64,30 +63,5 @@ class AppSeoUrlRouteProviderTest extends TestCase
         static::assertSame([$blog], $provider->getEntityRoutes());
     }
 
-    /**
-     * @return AppFeature<AppEntitySeoUrlConfig>
-     */
-    private function feature(AppEntitySeoUrlConfig $seoUrl): AppFeature
-    {
-        return new AppFeature(
-            appId: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
-            appName: 'SwagSeoUrlApp',
-            appActive: true,
-            appVersion: '1.0.0',
-            appHasSecret: false,
-            createdAt: new \DateTimeImmutable('2026-01-01 00:00:00'),
-            config: $seoUrl,
-        );
-    }
 
-    private function seoUrl(string $name, string $entityName): AppEntitySeoUrlConfig
-    {
-        return new AppEntitySeoUrlConfig(
-            name: $name,
-            routeName: 'storefront.app.SwagSeoUrlApp.' . $name,
-            hook: $name,
-            entityName: $entityName,
-            defaultTemplate: '{{ ' . $entityName . '.translated.name }}',
-        );
-    }
 }

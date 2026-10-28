@@ -4,8 +4,6 @@ namespace Contena\Storefront\Page\Robots;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
-use Contena\Storefront\Page\Robots\Struct\DomainRuleCollection;
-use Contena\Storefront\Page\Robots\Struct\RobotsUserAgentBlock;
 
 /**
  * @codeCoverageIgnore Simple DTO with no business logic, tested indirectly through RobotsPageLoaderTest
@@ -13,7 +11,6 @@ use Contena\Storefront\Page\Robots\Struct\RobotsUserAgentBlock;
 #[Package('discovery')]
 class RobotsPage extends Struct
 {
-    protected DomainRuleCollection $domainRules;
 
     /**
      * @var list<string>
@@ -25,15 +22,7 @@ class RobotsPage extends Struct
      */
     protected array $globalUserAgentBlocks = [];
 
-    public function getDomainRules(): DomainRuleCollection
-    {
-        return $this->domainRules;
-    }
 
-    public function setDomainRules(DomainRuleCollection $domainRules): void
-    {
-        $this->domainRules = $domainRules;
-    }
 
     /**
      * @return list<string>

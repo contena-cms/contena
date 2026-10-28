@@ -179,32 +179,7 @@ class CaptchaRouteListenerTest extends TestCase
         );
     }
 
-    private function createCaptcha(ConstraintViolationList $violations, bool $shouldBreak = false): AbstractCaptcha&MockObject
-    {
-        $captcha = $this->createMock(AbstractCaptcha::class);
-        $captcha->expects($this->once())
-            ->method('supports')
-            ->willReturn(true);
-        $captcha->expects($this->once())
-            ->method('validate')
-            ->willReturn($violations);
-        $captcha->method('shouldBreak')
-            ->willReturn($shouldBreak);
 
-        return $captcha;
-    }
-
-    private function createListener(AbstractCaptcha $captcha): CaptchaRouteListener
-    {
-        $systemConfigService = static::createStub(SystemConfigService::class);
-        $systemConfigService->method('get')->willReturn([]);
-
-        return new CaptchaRouteListener(
-            [$captcha],
-            $systemConfigService,
-            static::createStub(ContainerInterface::class)
-        );
-    }
 
     private static function createViolations(string $code): ConstraintViolationList
     {

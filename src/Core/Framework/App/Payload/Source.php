@@ -3,8 +3,6 @@
 namespace Contena\Core\Framework\App\Payload;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\CloneTrait;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
 /**
  * @internal only for use by the app-system

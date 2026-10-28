@@ -10,7 +10,6 @@ use Contena\Core\Framework\App\Event\AppActivatedEvent;
 use Contena\Core\Framework\App\Event\AppDeactivatedEvent;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Package;
@@ -43,12 +42,6 @@ class SalesChannelFileCacheInvalidatorTest extends TestCase
             ], true);
 
         $event = new EntityWrittenEvent('sales_channel_file', [
-            new EntityWriteResult($firstId, [
-                'salesChannelId' => Uuid::randomHex(),
-                'fileFamily' => 'agentic',
-                'fileName' => 'llms.txt',
-            ], 'sales_channel_file', EntityWriteResult::OPERATION_UPDATE),
-            new EntityWriteResult($secondId, [], 'sales_channel_file', EntityWriteResult::OPERATION_UPDATE),
         ], Context::createDefaultContext());
 
         (new SalesChannelFileCacheInvalidator($cacheInvalidator))->invalidate($event);
@@ -64,7 +57,6 @@ class SalesChannelFileCacheInvalidatorTest extends TestCase
             ->with([SalesChannelFileCacheInvalidator::buildCacheTag($id)], true);
 
         $event = new EntityDeletedEvent('sales_channel_file', [
-            new EntityWriteResult($id, [], 'sales_channel_file', EntityWriteResult::OPERATION_DELETE),
         ], Context::createDefaultContext());
 
         (new SalesChannelFileCacheInvalidator($cacheInvalidator))->invalidate($event);
@@ -73,12 +65,6 @@ class SalesChannelFileCacheInvalidatorTest extends TestCase
     public function testItThrowsOnCombinedPrimaryKey(): void
     {
         $event = new EntityWrittenEvent(ProductCategoryDefinition::ENTITY_NAME, [
-            new EntityWriteResult(
-                ['productId' => Uuid::randomHex(), 'categoryId' => Uuid::randomHex()],
-                [],
-                ProductCategoryDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ], Context::createDefaultContext());
 
         $cacheInvalidator = $this->createMock(CacheInvalidator::class);

@@ -5,15 +5,11 @@ namespace Contena\Core\Framework\Mcp\Tool;
 use Doctrine\DBAL\Connection;
 use Mcp\Capability\Attribute\McpTool;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Attribute\McpToolGroup;
 use Contena\Core\Framework\Mcp\Attribute\McpToolRequires;
@@ -113,95 +109,9 @@ class OrderStateTool extends McpToolResponse
         return $this->success(array_merge($base, $transitionResult), ['dryRun' => $dryRun]);
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function applyTransitions(
-        OrderEntity $order,
-        string $orderAction,
-        string $transactionAction,
-        string $deliveryAction,
-        Context $context,
-        bool $dryRun,
-    ): array {
-        $result = [];
 
-        if ($orderAction !== '') {
-            $result['order'] = $this->resolveTransition(
-                OrderDefinition::ENTITY_NAME,
-                $order->getId(),
-                $orderAction,
-                $order->getStateMachineState()?->getTechnicalName() ?? 'unknown',
-                $context,
-                $dryRun,
-            );
-        }
 
-        if ($transactionAction !== '') {
-            $result['transactions'] = $this->applyToTransactions($order, $transactionAction, $context, $dryRun);
-        }
 
-        if ($deliveryAction !== '') {
-            $result['deliveries'] = $this->applyToDeliveries($order, $deliveryAction, $context, $dryRun);
-        }
-
-        return $result;
-    }
-
-    /**
-     * @return list<array<string, mixed>>
-     */
-    private function applyToTransactions(OrderEntity $order, string $action, Context $context, bool $dryRun): array
-    {
-        $results = [];
-        foreach ($order->getTransactions()?->getElements() ?? [] as $tx) {
-            \assert($tx instanceof OrderTransactionEntity);
-            $currentState = $tx->getStateMachineState()?->getTechnicalName() ?? 'unknown';
-
-            $results[] = $this->resolveTransition(OrderTransactionDefinition::ENTITY_NAME, $tx->getId(), $action, $currentState, $context, $dryRun);
-        }
-
-        return $results;
-    }
-
-    /**
-     * @return list<array<string, mixed>>
-     */
-    private function applyToDeliveries(OrderEntity $order, string $action, Context $context, bool $dryRun): array
-    {
-        $results = [];
-        foreach ($order->getDeliveries()?->getElements() ?? [] as $delivery) {
-            \assert($delivery instanceof OrderDeliveryEntity);
-            $currentState = $delivery->getStateMachineState()?->getTechnicalName() ?? 'unknown';
-
-            $results[] = $this->resolveTransition(OrderDeliveryDefinition::ENTITY_NAME, $delivery->getId(), $action, $currentState, $context, $dryRun);
-        }
-
-        return $results;
-    }
-
-    private function loadOrder(string $orderId, string $orderNumber, Context $context): ?OrderEntity
-    {
-        $repository = $this->registry->getRepository(OrderDefinition::ENTITY_NAME);
-
-        $criteria = $orderId !== ''
-            ? new Criteria([$orderId])
-            : new Criteria();
-
-        if ($orderId === '' && $orderNumber !== '') {
-            $criteria->addFilter(new EqualsFilter('orderNumber', $orderNumber));
-        }
-
-        $criteria->setLimit(1);
-        $criteria->addAssociation('transactions.stateMachineState');
-        $criteria->addAssociation('deliveries.stateMachineState');
-        $criteria->addAssociation('stateMachineState');
-
-        $result = $repository->search($criteria, $context);
-        $order = $result->getEntities()->first();
-
-        return $order instanceof OrderEntity ? $order : null;
-    }
 
     /**
      * @return array<string, mixed>

@@ -10,7 +10,6 @@ use Contena\Core\Framework\Adapter\Twig\NamespaceHierarchy\NamespaceHierarchyBui
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
 use Contena\Core\Framework\Adapter\Twig\TemplateScopeDetector;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Stub\Framework\BundleFixture;
 use Twig\Cache\CacheInterface;

@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -366,7 +365,6 @@ class TestSubDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            new FkField('parent_id', 'parentId', TestParentDefinition::class),
         ]);
     }
 }

@@ -24,8 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\TraceableMessageBus;
@@ -252,11 +250,6 @@ class CategoryIndexerTest extends TestCase
         }
 
         return new NestedEventCollection([
-            new EntityWrittenEvent(
-                CategoryDefinition::ENTITY_NAME,
-                $results,
-                $context
-            ),
         ]);
     }
 

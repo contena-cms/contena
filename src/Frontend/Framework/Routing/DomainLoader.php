@@ -7,8 +7,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
-use Contena\Storefront\Framework\Routing\Struct\DomainCollection;
 
 /**
  * @phpstan-import-type Domain from AbstractDomainLoader
@@ -23,10 +21,6 @@ class DomainLoader extends AbstractDomainLoader
     {
     }
 
-    public function getDecorated(): AbstractDomainLoader
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
     /**
      * @deprecated tag:v6.8.0 - Will be removed, use loadDomains() instead
@@ -43,10 +37,6 @@ class DomainLoader extends AbstractDomainLoader
         return $this->fetch();
     }
 
-    public function loadDomains(): DomainCollection
-    {
-        return DomainCollection::fromArray($this->fetch());
-    }
 
     /**
      * @return array<string, Domain>

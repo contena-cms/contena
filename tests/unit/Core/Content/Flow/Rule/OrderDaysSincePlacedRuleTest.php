@@ -12,8 +12,6 @@ use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionDefinition;
 use Contena\Core\Content\Rule\RuleValidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
@@ -142,16 +140,6 @@ class OrderDaysSincePlacedRuleTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $definition,
-                    [
-                        'type' => OrderDaysSincePlacedRule::RULE_NAME,
-                        'value' => json_encode(['operator' => Rule::OPERATOR_LTE, 'daysPassed' => $daysPassed], \JSON_THROW_ON_ERROR),
-                    ],
-                    $primaryKey,
-                    EntityExistence::createForEntity(RuleConditionDefinition::ENTITY_NAME, $primaryKey),
-                    '/0'
-                ),
             ]
         );
 

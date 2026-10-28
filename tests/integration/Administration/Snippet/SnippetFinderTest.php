@@ -14,14 +14,12 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
 use Contena\Core\System\Snippet\Files\SnippetFileLoader;
 use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
-use Contena\Tests\Unit\Core\System\Snippet\Service\TestableTranslationConfigLoader;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Filesystem\Path;
 
@@ -44,7 +42,6 @@ class SnippetFinderTest extends TestCase
 
     private TranslationLoader $translationLoader;
 
-    private FakePlugin $plugin;
 
     protected function setUp(): void
     {

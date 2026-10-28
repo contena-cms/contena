@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace Contena\Storefront\Theme\ConfigLoader;
 
 use League\Flysystem\FilesystemOperator;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\File;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
@@ -21,29 +19,7 @@ class StaticFileConfigLoader extends AbstractConfigLoader
     {
     }
 
-    public function getDecorated(): AbstractConfigLoader
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
-    public function load(string $themeId, Context $context): StorefrontPluginConfiguration
-    {
-        $path = \sprintf('theme-config/%s.json', $themeId);
-
-        if (!$this->filesystem->fileExists($path)) {
-            throw new \RuntimeException('Cannot find theme configuration. Did you run bin/console theme:dump');
-        }
-
-        $fileContent = $this->filesystem->read($path);
-        $fileObject = json_decode($fileContent, true, 512, \JSON_THROW_ON_ERROR);
-
-        $fileObject = $this->prepareCollections($fileObject);
-
-        $config = new StorefrontPluginConfiguration('');
-        $config->assign($fileObject);
-
-        return $config;
-    }
 
     private function prepareCollections(array $fileObject): array
     {

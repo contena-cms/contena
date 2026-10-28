@@ -7,11 +7,8 @@ use OpenSearch\Client;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
-use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

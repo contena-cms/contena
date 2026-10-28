@@ -9,14 +9,10 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 use Contena\Storefront\Theme\Command\ThemeDumpCommand;
 use Contena\Storefront\Theme\ConfigLoader\StaticFileConfigDumper;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
-use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\ThemeFileResolver;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
 use Symfony\Component\Console\Helper\HelperSet;
@@ -220,27 +216,6 @@ class ThemeDumpCommandTest extends TestCase
         ];
     }
 
-    private function getPluginRegistryMock(): Stub&StorefrontPluginRegistry
-    {
-        $storePluginConfiguration1 = new StorefrontPluginConfiguration('parentTheme');
-        $storePluginConfiguration1->setThemeConfig([
-            'any' => 'expectedConfig',
-        ]);
-
-        $storePluginConfiguration2 = new StorefrontPluginConfiguration('childTheme');
-        $storePluginConfiguration2->setThemeConfig([
-            'any' => 'unexpectedConfig',
-        ]);
-
-        $mock = static::createStub(StorefrontPluginRegistry::class);
-
-        $mock->method('getConfigurations')
-            ->willReturn(
-                new StorefrontPluginConfigurationCollection([$storePluginConfiguration1, $storePluginConfiguration2])
-            );
-
-        return $mock;
-    }
 
     private function setUpExampleThemes(?string $parentThemeId = null): void
     {
@@ -346,20 +321,6 @@ class ThemeDumpCommandTest extends TestCase
         return ['themeId' => $themeId, 'domainUrl' => $domainUrl];
     }
 
-    private function createStaticFileConfigDumperMock(): StaticFileConfigDumper&Stub
-    {
-        $staticFileConfigDumper = static::createStub(StaticFileConfigDumper::class);
-        $staticFileConfigDumper->method('dumpConfigInVar')->willReturnCallback(
-            /**
-             * @param array<string, mixed> $dump
-             */
-            function (string $filePath, array $dump): void {
-                $this->dumpedConfig = $dump;
-            }
-        );
-
-        return $staticFileConfigDumper;
-    }
 }
 
 /**
@@ -367,19 +328,9 @@ class ThemeDumpCommandTest extends TestCase
  */
 class ThemeFileResolverMock extends ThemeFileResolver
 {
-    public StorefrontPluginConfiguration $themeConfig;
 
     public function __construct()
     {
     }
 
-    public function resolveFiles(
-        StorefrontPluginConfiguration $themeConfig,
-        StorefrontPluginConfigurationCollection $configurationCollection,
-        bool $onlySourceFiles
-    ): array {
-        $this->themeConfig = $themeConfig;
-
-        return [];
-    }
 }

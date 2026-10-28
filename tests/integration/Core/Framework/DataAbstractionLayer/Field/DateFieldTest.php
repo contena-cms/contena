@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\DateDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

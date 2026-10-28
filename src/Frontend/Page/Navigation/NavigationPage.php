@@ -5,14 +5,12 @@ namespace Contena\Storefront\Page\Navigation;
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Page\Page;
 
 #[Package('discovery')]
 class NavigationPage extends Page
 {
-    protected ?CmsPageEntity $cmsPage = null;
 
     protected ?CategoryEntity $category = null;
 
@@ -20,15 +18,7 @@ class NavigationPage extends Page
 
     protected ?BreadcrumbCollection $breadcrumb = null;
 
-    public function getCmsPage(): ?CmsPageEntity
-    {
-        return $this->cmsPage;
-    }
 
-    public function setCmsPage(CmsPageEntity $cmsPage): void
-    {
-        $this->cmsPage = $cmsPage;
-    }
 
     public function getNavigationId(): ?string
     {

@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Exception\MissingSystemTranslati
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Language\TranslationValidator;

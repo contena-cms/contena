@@ -13,7 +13,6 @@ use Contena\Core\Content\Product\Cms\ProductListingCmsElementResolver;
 use Contena\Core\Content\Product\SalesChannel\Listing\ProductListingResult;
 use Contena\Core\Content\Product\SalesChannel\Sorting\ProductSortingEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
@@ -29,7 +28,6 @@ class ProductListingCmsElementResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private ProductListingCmsElementResolver $productListingCMSElementResolver;
 
     private SalesChannelContext $salesChannelContext;
 

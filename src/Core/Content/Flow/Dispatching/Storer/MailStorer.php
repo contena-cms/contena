@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
 use Contena\Core\Checkout\Customer\CustomerEntity;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\MailTemplate\Exception\MailEventConfigurationException;
 use Contena\Core\Framework\Event\CustomerAware;

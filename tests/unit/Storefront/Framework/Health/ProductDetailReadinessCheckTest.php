@@ -9,8 +9,6 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\SalesChannel\ProductAvailableFilter;
 use Contena\Core\Content\Product\SalesChannel\ProductCloseoutFilter;
-use Contena\Core\Content\Product\SalesChannel\ProductCloseoutFilterFactory;
-use Contena\Core\Content\Product\SalesChannel\SalesChannelProductCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
@@ -18,9 +16,7 @@ use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticSalesChannelRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Framework\SystemCheck\ProductDetailReadinessCheck;
 use Contena\Storefront\Framework\SystemCheck\Util\AbstractSalesChannelDomainProvider;
@@ -280,28 +276,6 @@ class ProductDetailReadinessCheckTest extends TestCase
         ], array_map(static fn (SalesChannelDomain $domain) => $domain->id, $this->contextDomains));
     }
 
-    /**
-     * @param array<callable(Criteria, SalesChannelContext): list<string>|list<string>> $searchResults
-     */
-    private function createCheck(array $searchResults = []): ProductDetailReadinessCheck
-    {
-        /** @var StaticSalesChannelRepository<SalesChannelProductCollection> $productRepository */
-        $productRepository = new StaticSalesChannelRepository($searchResults);
-
-        $systemConfigService = static::createStub(SystemConfigService::class);
-        $systemConfigService->method('getBool')->willReturnCallback(
-            fn (string $key): bool => $key === 'core.listing.hideCloseoutProductsWhenOutOfStock' && $this->hideCloseoutProducts
-        );
-
-        return new ProductDetailReadinessCheck(
-            $this->util,
-            $this->domainProvider,
-            $productRepository,
-            $this->contextFactory,
-            new ProductCloseoutFilterFactory(),
-            $systemConfigService,
-        );
-    }
 
     /**
      * @return list<list<string>>
@@ -380,16 +354,6 @@ class ProductDetailReadinessCheckTest extends TestCase
         $this->domainProvider->method('fetchSalesChannelDomains')->willReturn($collection);
     }
 
-    private function domain(string $key, string $url): SalesChannelDomain
-    {
-        return SalesChannelDomain::create(
-            $this->ids->get($key),
-            $url,
-            $this->ids->get('domain-' . $key),
-            $this->ids->get('language-' . $key),
-            $this->ids->get('currency-' . $key),
-        );
-    }
 
     private function initCreateEmptyResult(): void
     {

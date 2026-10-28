@@ -14,9 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Immutable;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
@@ -68,7 +66,6 @@ class WriteCommandExtractorTest extends TestCase
                 return new FieldCollection([
                     (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
                     (new StringField('name', 'name'))->addFlags(new Required()),
-                    (new IntField('error_count', 'errorCount', 0))->addFlags(new Required(), (new WriteProtected(Context::SYSTEM_SCOPE))->allowWriteThroughAdminApi()),
                 ]);
             }
         };

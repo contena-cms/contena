@@ -10,7 +10,6 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Storefront\Controller\ErrorController;
 use Contena\Storefront\Framework\Twig\ErrorTemplateResolver;
 use Contena\Storefront\Page\Navigation\Error\ErrorPageLoaderInterface;
-use Contena\Tests\Unit\Storefront\Controller\Stub\ErrorControllerStub;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,13 +24,10 @@ use Symfony\Component\Validator\ConstraintViolationList;
 #[CoversClass(ErrorController::class)]
 class ErrorControllerTest extends TestCase
 {
-    private ErrorControllerStub $controller;
 
-    private ErrorTemplateResolver $errorTemplateResolver;
 
     private SystemConfigService $systemConfigService;
 
-    private ErrorPageLoaderInterface $errorPageLoader;
 
     private ConstraintViolationList $violations;
 

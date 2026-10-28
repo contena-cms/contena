@@ -2,11 +2,8 @@
 
 namespace Contena\Storefront\Framework;
 
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Framework\Media\Exception\MediaValidatorMissingException;
 use Contena\Storefront\Framework\Routing\Exception\SalesChannelMappingException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -76,18 +73,4 @@ class StorefrontFrameworkException extends HttpException
         return new SalesChannelMappingException($url);
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function mediaValidatorMissing(string $type): self|MediaValidatorMissingException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return new MediaValidatorMissingException($type);
-        }
-
-        return new self(
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            self::MEDIA_VALIDATOR_MISSING,
-            'No validator for {{ type }} was found.',
-            ['type' => $type],
-        );
-    }
 }

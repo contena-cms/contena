@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Sso\TokenService\ParsedIdToken;
-use Contena\Tests\Integration\Core\Framework\Sso\Helper\FakeTokenGenerator;
 
 /**
  * @internal
@@ -21,7 +20,6 @@ use Contena\Tests\Integration\Core\Framework\Sso\Helper\FakeTokenGenerator;
 #[CoversClass(ParsedIdToken::class)]
 class ParsedIdTokenTest extends TestCase
 {
-    private FakeTokenGenerator $tokenGenerator;
 
     protected function setUp(): void
     {
@@ -135,11 +133,4 @@ class ParsedIdTokenTest extends TestCase
         ];
     }
 
-    private function parseToken(FakeTokenGenerator $tokenGenerator): ParsedIdToken
-    {
-        $parsed = (new Parser(new JoseEncoder()))->parse($tokenGenerator->generate());
-        static::assertInstanceOf(Plain::class, $parsed);
-
-        return ParsedIdToken::createFromDataSet($parsed->claims());
-    }
 }

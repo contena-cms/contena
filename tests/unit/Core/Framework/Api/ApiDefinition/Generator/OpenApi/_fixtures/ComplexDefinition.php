@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SimpleDefinition;
 
 /**
  * @internal
@@ -35,15 +34,6 @@ class ComplexDefinition extends EntityDefinition
         return new FieldCollection(
             [
                 (new IdField('id_field', 'idField'))->addFlags(new ApiAware(), new Required()),
-                (new ManyToOneAssociationField('simpleTo', 'simpleToId', SimpleDefinition::class))
-                    ->addFlags(new ApiAware())
-                    ->setDescription('A reference to a simple entity'),
-                (new OneToManyAssociationField('simpleManys', SimpleDefinition::class, 'ref_field'))
-                    ->addFlags(new ApiAware(), new Required())
-                    ->setDescription('Multiple simple entities'),
-                (new ManyToOneAssociationField('simpleToWithEmptyDescription', 'simpleToId', SimpleDefinition::class))
-                    ->addFlags(new ApiAware())
-                    ->setDescription(''),
             ]
         );
     }

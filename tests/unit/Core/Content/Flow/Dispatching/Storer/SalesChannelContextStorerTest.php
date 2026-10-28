@@ -14,7 +14,6 @@ use Contena\Core\Framework\Event\SalesChannelContextAware;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\SalesChannelContextAwareEvent;
 
 /**
  * @internal

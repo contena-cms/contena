@@ -8,8 +8,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Telemetry\ScheduledTaskHealthGateway;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

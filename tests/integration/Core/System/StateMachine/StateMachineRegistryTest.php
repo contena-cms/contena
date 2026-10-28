@@ -10,7 +10,6 @@ use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryStates;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
@@ -20,8 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionEntity;
 use Contena\Core\System\StateMachine\StateMachineCollection;
@@ -293,7 +290,6 @@ EOF;
                 10,
                 10,
                 10,
-                new CalculatedTaxCollection(),
                 new TaxRuleCollection(),
                 CartPrice::TAX_STATE_NET
             ),

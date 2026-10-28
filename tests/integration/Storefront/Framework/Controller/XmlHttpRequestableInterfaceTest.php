@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Storefront\Framework\Controller;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelFunctionalTestBehaviour;
 
 /**
  * @internal

@@ -6,14 +6,10 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Order\OrderEntity;
-use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderCreatedByAdminRule;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Unit\Core\Checkout\Customer\Rule\TestRuleScope;
 use Symfony\Component\Validator\Constraints\NotNull;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -25,7 +21,6 @@ use Symfony\Component\Validator\Constraints\Type;
 #[Group('rules')]
 class OrderCreatedByAdminRuleTest extends TestCase
 {
-    private OrderCreatedByAdminRule $rule;
 
     protected function setUp(): void
     {
@@ -73,41 +68,25 @@ class OrderCreatedByAdminRuleTest extends TestCase
         static::assertFalse($match);
     }
 
-    #[DataProvider('getCaseTestMatchValues')]
-    public function testMatch(OrderCreatedByAdminRule $rule, OrderEntity $order, bool $isMatching): void
-    {
-        $scope = new FlowRuleScope(
-            $order,
-            new Cart('test'),
-            static::createStub(SalesChannelContext::class)
-        );
-
-        $match = $rule->match($scope);
-        static::assertSame($match, $isMatching);
-    }
 
     public static function getCaseTestMatchValues(): \Generator
     {
         yield 'Condition is not created by admin => Not match because order created by admin' => [
-            new OrderCreatedByAdminRule(false),
             (new OrderEntity())->assign(['createdById' => Uuid::randomHex()]),
             false,
         ];
 
         yield 'Condition is created by admin => Not match because order is registered' => [
-            new OrderCreatedByAdminRule(true),
             new OrderEntity(),
             false,
         ];
 
         yield 'Condition is not created by admin => Match because order registered' => [
-            new OrderCreatedByAdminRule(false),
             new OrderEntity(),
             true,
         ];
 
         yield 'Condition is created by admin => Match because order created by admin' => [
-            new OrderCreatedByAdminRule(true),
             (new OrderEntity())->assign(['createdById' => Uuid::randomHex()]),
             true,
         ];

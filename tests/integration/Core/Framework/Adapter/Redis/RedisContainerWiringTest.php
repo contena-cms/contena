@@ -8,7 +8,6 @@ use Contena\Core\Framework\Adapter\Redis\RedisConnectionProvider;
 use Contena\Core\Framework\Increment\RedisIncrementer;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestKernel;
-use Contena\Tests\Integration\Core\Framework\Trait\CustomKernelTestBehavior;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 

@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
-use Contena\Tests\Unit\Core\Framework\Plugin\_fixtures\ExampleBundle\ExampleBundle;
 
 /**
  * @internal

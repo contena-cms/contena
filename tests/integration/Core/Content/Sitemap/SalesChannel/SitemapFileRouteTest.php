@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Sitemap\Service\SitemapLister;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;

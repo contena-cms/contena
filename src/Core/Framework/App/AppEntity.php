@@ -8,20 +8,16 @@ use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodCollec
 use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionCollection;
 use Contena\Core\Framework\App\Aggregate\AppShippingMethod\AppShippingMethodEntity;
 use Contena\Core\Framework\App\Aggregate\AppTranslation\AppTranslationCollection;
-use Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockCollection;
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionCollection;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventCollection;
 use Contena\Core\Framework\App\Template\TemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\ScriptCollection;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
 use Contena\Core\System\Integration\IntegrationEntity;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 
 /**
  * @phpstan-type Module array{name: string, label: array<string, string>, parent: string, source?: string|null, position: int}
@@ -135,17 +131,12 @@ class AppEntity extends Entity
 
     protected ?AppPaymentMethodCollection $paymentMethods = null;
 
-    protected ?TaxProviderCollection $taxProviders = null;
 
     /**
      * @internal
      */
     protected ?AppScriptConditionCollection $scriptConditions = null;
 
-    /**
-     * @internal
-     */
-    protected ?AppCmsBlockCollection $cmsBlocks = null;
 
     protected ?AppFlowActionCollection $flowActions = null;
 
@@ -585,15 +576,7 @@ class AppEntity extends Entity
         $this->paymentMethods = $paymentMethods;
     }
 
-    public function getTaxProviders(): ?TaxProviderCollection
-    {
-        return $this->taxProviders;
-    }
 
-    public function setTaxProviders(TaxProviderCollection $taxProviders): void
-    {
-        $this->taxProviders = $taxProviders;
-    }
 
     /**
      * @internal
@@ -613,21 +596,7 @@ class AppEntity extends Entity
         $this->scriptConditions = $scriptConditions;
     }
 
-    /**
-     * @internal
-     */
-    public function getCmsBlocks(): ?AppCmsBlockCollection
-    {
-        return $this->cmsBlocks;
-    }
 
-    /**
-     * @internal
-     */
-    public function setCmsBlocks(AppCmsBlockCollection $cmsBlocks): void
-    {
-        $this->cmsBlocks = $cmsBlocks;
-    }
 
     public function getFlowActions(): ?AppFlowActionCollection
     {

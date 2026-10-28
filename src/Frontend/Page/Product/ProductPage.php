@@ -3,9 +3,7 @@
 namespace Contena\Storefront\Page\Product;
 
 use Contena\Core\Content\Breadcrumb\Struct\BreadcrumbCollection;
-use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Product\ProductDefinition;
-use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewResult;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
@@ -17,7 +15,6 @@ class ProductPage extends Page
 {
     protected SalesChannelProductEntity $product;
 
-    protected CmsPageEntity $cmsPage;
 
     protected ?string $navigationId = null;
 
@@ -25,12 +22,6 @@ class ProductPage extends Page
 
     protected PropertyGroupOptionCollection $selectedOptions;
 
-    /**
-     * A small sample of approved reviews used exclusively for JSON-LD structured data output.
-     * This contains at most ProductPageLoader::MAX_REVIEWS_IN_JSON_LD items — it must NOT be
-     * used to display reviews in templates.
-     */
-    protected ?ProductReviewResult $structuredDataReviews = null;
 
     protected ?BreadcrumbCollection $breadcrumb = null;
 
@@ -44,15 +35,7 @@ class ProductPage extends Page
         $this->product = $product;
     }
 
-    public function getCmsPage(): ?CmsPageEntity
-    {
-        return $this->cmsPage;
-    }
 
-    public function setCmsPage(CmsPageEntity $cmsPage): void
-    {
-        $this->cmsPage = $cmsPage;
-    }
 
     public function getNavigationId(): ?string
     {
@@ -84,15 +67,7 @@ class ProductPage extends Page
         $this->selectedOptions = $selectedOptions;
     }
 
-    public function getStructuredDataReviews(): ?ProductReviewResult
-    {
-        return $this->structuredDataReviews;
-    }
 
-    public function setStructuredDataReviews(ProductReviewResult $structuredDataReviews): void
-    {
-        $this->structuredDataReviews = $structuredDataReviews;
-    }
 
     public function getBreadcrumb(): ?BreadcrumbCollection
     {

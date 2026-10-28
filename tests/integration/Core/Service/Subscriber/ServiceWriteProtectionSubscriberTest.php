@@ -9,12 +9,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestBrowser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Service\Requirement\ServicesEnabledRequirement;
 use Contena\Core\Service\Subscriber\ServiceWriteProtectionSubscriber;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -30,7 +28,6 @@ class ServiceWriteProtectionSubscriberTest extends TestCase
      */
     private EntityRepository $appRepository;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {

@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Customer\CustomerException;
 use Contena\Core\Checkout\Customer\Event\WishlistProductRemovedEvent;
 use Contena\Core\Checkout\Customer\Extension\RemoveWishlistProductRouteExtension;
 use Contena\Core\Content\Product\ProductCollection;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
@@ -109,7 +108,6 @@ class RemoveWishlistProductRoute extends AbstractRemoveWishlistProductRoute
             ->addFilter(new MultiFilter(MultiFilter::CONNECTION_AND, [
                 new EqualsFilter('wishlistId', $wishlistId),
                 new EqualsFilter('productId', $productId),
-                new EqualsFilter('productVersionId', Defaults::LIVE_VERSION),
             ]));
 
         $wishlistProductId = $this->productRepository->searchIds($criteria, $context->getContext())->firstId();

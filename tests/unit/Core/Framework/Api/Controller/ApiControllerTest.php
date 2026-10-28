@@ -33,8 +33,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Framework\Api\Controller\Fixtures\ApiController\ChildDefinition;
-use Contena\Tests\Unit\Core\Framework\Api\Controller\Fixtures\ApiController\ParentDefinition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpFoundation\Request;
@@ -145,8 +143,6 @@ class ApiControllerTest extends TestCase
 
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                ParentDefinition::class,
-                ChildDefinition::class,
                 VersionDefinition::class,
                 VersionCommitDefinition::class,
             ],

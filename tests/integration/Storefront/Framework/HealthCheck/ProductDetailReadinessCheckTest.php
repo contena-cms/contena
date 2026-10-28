@@ -14,15 +14,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Status;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\System\SalesChannel\Event\SalesChannelProcessCriteriaEvent;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Storefront\Framework\SystemCheck\ProductDetailReadinessCheck;
 
 /**
  * @internal
@@ -223,10 +218,6 @@ class ProductDetailReadinessCheckTest extends TestCase
         return array_map(static fn (array $product) => (string) $product['id'], $products);
     }
 
-    private function createCheck(): ProductDetailReadinessCheck
-    {
-        return $this->getContainer()->get(ProductDetailReadinessCheck::class);
-    }
 
     private function createSalesChannels(): void
     {

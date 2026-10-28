@@ -38,7 +38,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Write\NonUuidFkField\NonUuidFkFieldSerializer;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Write\NonUuidFkField\TestEntityOneDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Write\NonUuidFkField\TestEntityTwoDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

@@ -13,8 +13,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
-use Contena\Tests\Bench\AbstractBenchCase;
-use Contena\Tests\Bench\Fixtures;
 
 /**
  * @internal - only for performance benchmarks
@@ -24,7 +22,6 @@ class CartOrderRouteBench extends AbstractBenchCase
     private const SUBJECT_CUSTOMER = 'customer-0';
     private const CART_ITEMS_COUNT = 10;
 
-    private Cart $cart;
 
     public function setupWithLogin(): void
     {

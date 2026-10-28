@@ -3,11 +3,7 @@
 namespace Contena\Storefront\Page\Product\QuickView;
 
 use Contena\Core\Content\Product\SalesChannel\Detail\AbstractProductDetailRoute;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,37 +22,4 @@ class MinimalQuickViewPageLoader
     ) {
     }
 
-    /**
-     * @throws RoutingException
-     */
-    public function load(Request $request, SalesChannelContext $salesChannelContext): MinimalQuickViewPage
-    {
-        $productId = $request->attributes->get('productId');
-        if (!$productId) {
-            throw RoutingException::missingRequestParameter('productId', '/productId');
-        }
-
-        $criteria = (new Criteria())
-            ->addAssociation('manufacturer.media')
-            ->addAssociation('options.group')
-            ->addAssociation('properties.group')
-            ->addAssociation('mainCategories.category');
-
-        $criteria
-            ->getAssociation('media')
-            ->addSorting(new FieldSorting('position'));
-
-        $this->eventDispatcher->dispatch(new MinimalQuickViewPageCriteriaEvent($productId, $criteria, $salesChannelContext));
-
-        $result = $this->productRoute->load($productId, $request->duplicate(), $salesChannelContext, $criteria);
-        $product = $result->getProduct();
-
-        $page = new MinimalQuickViewPage($product);
-
-        $event = new MinimalQuickViewPageLoadedEvent($page, $salesChannelContext, $request);
-
-        $this->eventDispatcher->dispatch($event);
-
-        return $page;
-    }
 }

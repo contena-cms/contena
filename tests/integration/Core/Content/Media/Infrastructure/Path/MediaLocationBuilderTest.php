@@ -13,8 +13,6 @@ use Contena\Core\Content\Media\Infrastructure\Path\SqlMediaLocationBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayStruct;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\EventDispatcher\EventDispatcher;

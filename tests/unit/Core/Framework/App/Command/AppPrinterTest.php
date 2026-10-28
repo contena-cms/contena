@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\Console\Style\SymfonyStyle;

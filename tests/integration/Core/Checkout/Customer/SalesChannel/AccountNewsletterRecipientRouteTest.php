@@ -5,15 +5,12 @@ namespace Contena\Tests\Integration\Core\Checkout\Customer\SalesChannel;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\SalesChannel\AccountNewsletterRecipientResult;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 

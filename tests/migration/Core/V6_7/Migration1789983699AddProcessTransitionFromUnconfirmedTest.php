@@ -10,7 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_7\Migration1789983699AddProcessTransitionFromUnconfirmed;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

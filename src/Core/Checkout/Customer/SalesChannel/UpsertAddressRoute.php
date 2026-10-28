@@ -27,7 +27,6 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SalesChannel\StoreApiCustomFieldMapper;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\Salutation\SalutationDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;

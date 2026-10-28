@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Installer\Installer;
 use Contena\Core\Installer\InstallerKernel;
 use Contena\Core\TestBootstrapper;

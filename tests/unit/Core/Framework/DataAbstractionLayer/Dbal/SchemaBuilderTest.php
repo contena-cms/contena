@@ -6,7 +6,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\DBAL\Types\Types;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\SchemaBuilder;
@@ -30,10 +29,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\DateTimeField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\EmailField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -42,8 +39,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LockedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ObjectField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
@@ -53,7 +48,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\PriceDefinitionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\RemoteAddressField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TaxFreeConfigField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TimeZoneField;
@@ -86,12 +80,7 @@ class SchemaBuilderTest extends TestCase
     {
         $this->registry = new StaticDefinitionInstanceRegistry(
             [
-                TestEntityWithSkippedFieldsDefinition::class,
-                TestAssociationDefinition::class,
-                TestEntityWithAllPossibleFieldsDefinition::class,
-                TestEntityWithForeignKeysDefinition::class,
                 ProductDefinition::class,
-                TestAssociationWithMissingReferenceVersionDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -350,12 +339,8 @@ class TestEntityWithSkippedFieldsDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
-            (new NonStorageAwareField('id2'))->addFlags(new PrimaryKey(), new Required()),
             (new StringField('runtime', 'runtime'))->addFlags(new Runtime()),
-            new FkField('relation_id', 'relationId', TestAssociationDefinition::class),
-            new ManyToOneAssociationField('relation', 'relation_id', TestAssociationDefinition::class, 'id'),
             new TranslatedField('translated'),
-            new NonStorageAwareField('nonStorageAware'),
         ]);
     }
 }
@@ -389,7 +374,6 @@ class TestEntityWithAllPossibleFieldsDefinition extends EntityDefinition
             new VersionField(),
             new CreatedByField(),
             new UpdatedByField(),
-            new StateMachineStateField('state_id', 'stateId', OrderStates::STATE_MACHINE),
             new CreatedAtField(),
             new UpdatedAtField(),
             new DateTimeField('datetime', 'datetime'),
@@ -448,14 +432,7 @@ class TestEntityWithForeignKeysDefinition extends EntityDefinition
             new VersionField(),
             new ParentFkField(self::class),
             (new ReferenceVersionField(self::class, 'parent_version_id'))->addFlags(new Required()),
-            new FkField('association_id', 'associationId', TestAssociationDefinition::class),
-            new ManyToOneAssociationField('association', 'association_id', TestAssociationDefinition::class, 'id'),
-            new FkField('association_id2', 'associationId2', TestAssociationDefinition::class),
-            (new ManyToOneAssociationField('association2', 'association_id2', TestAssociationDefinition::class, 'id'))->addFlags(new CascadeDelete()),
-            new FkField('association_id3', 'associationId3', TestAssociationDefinition::class),
-            (new ManyToOneAssociationField('association3', 'association_id3', TestAssociationDefinition::class, 'id'))->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('children', self::class, 'parent_id'),
-            new ManyToManyAssociationField('manyToMany', self::class, TestAssociationDefinition::class, 'test_entity_with_foreign_keys_id', 'test_association_id'),
             new OneToOneAssociationField('oneToOne', 'id', 'test_entity_with_foreign_keys_id', self::class, true),
         ]);
     }

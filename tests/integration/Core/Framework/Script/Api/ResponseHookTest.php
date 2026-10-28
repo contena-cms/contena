@@ -4,9 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Script\Api;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 

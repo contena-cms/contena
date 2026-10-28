@@ -6,12 +6,9 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\Exception\InvalidPlatformVersion;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Kernel;
 use Contena\Core\System\SystemConfig\Service\AppConfigReader;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -20,10 +17,7 @@ use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Theme\CompilerConfiguration;
 use Contena\Storefront\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
 use Contena\Storefront\Theme\ScssPhpCompiler;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
-use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\Subscriber\ThemeCompilerEnrichScssVarSubscriber;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
 
 /**
  * @internal
@@ -125,11 +119,9 @@ SCSS;
     public function testHandlesDatabaseException(): void
     {
         $configurationService = $this->getConfigurationServiceDbException([
-            new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
         ]);
 
         $storefrontPluginRegistry = $this->getStorefrontPluginRegistry([
-            new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
         ]);
 
         $event = new ThemeCompilerEnrichScssVariablesEvent(
@@ -164,22 +156,6 @@ SCSS;
         );
     }
 
-    /**
-     * @param array<int, Plugin> $plugins
-     */
-    private function getStorefrontPluginRegistry(array $plugins): StorefrontPluginRegistry
-    {
-        $kernel = static::createStub(Kernel::class);
-        $kernel
-            ->method('getBundles')
-            ->willReturn($plugins);
-
-        return new StorefrontPluginRegistry(
-            $kernel,
-            static::getContainer()->get(StorefrontPluginConfigurationFactory::class),
-            static::getContainer()->get(ActiveAppsLoader::class)
-        );
-    }
 }
 
 /**

@@ -8,12 +8,10 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\ManyToOneAssociationFieldSerializer;
@@ -180,14 +178,7 @@ class OrderDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
             (new StringField('name', 'name'))->addFlags(new Required()),
-            new FkField('customer_id', 'customerId', CustomerDefinition::class),
 
-            new ManyToOneAssociationField(
-                'customer',
-                'customer_id',
-                CustomerDefinition::class,
-                'id',
-            ),
         ]);
     }
 }
@@ -209,11 +200,6 @@ class CustomerDefinition extends EntityDefinition
             (new StringField('first_name', 'first_name'))->addFlags(new Required()),
             (new StringField('last_name', 'last_name'))->addFlags(new Required()),
 
-            new OneToManyAssociationField(
-                'orders',
-                OrderDefinition::class,
-                'customer_id',
-            ),
         ]);
     }
 }

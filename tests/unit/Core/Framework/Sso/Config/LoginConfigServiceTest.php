@@ -9,7 +9,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfig;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoException;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Loader\ClosureLoader;
 use Symfony\Component\Routing\RequestContext;

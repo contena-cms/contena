@@ -35,7 +35,6 @@ use Symfony\Component\HttpFoundation\Request;
 #[CoversClass(ProductBoxCmsElementResolver::class)]
 class ProductBoxCmsElementResolverTest extends TestCase
 {
-    private ProductBoxCmsElementResolver $boxCmsElementResolver;
 
     private Stub&SystemConfigService $systemConfig;
 
@@ -70,7 +69,6 @@ class ProductBoxCmsElementResolverTest extends TestCase
         $resolverContext = new ResolverContext(static::createStub(SalesChannelContext::class), new Request());
 
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('products', FieldConfig::SOURCE_STATIC, []),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -89,7 +87,6 @@ class ProductBoxCmsElementResolverTest extends TestCase
 
         $productId = Uuid::randomHex();
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, $productId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -114,7 +111,6 @@ class ProductBoxCmsElementResolverTest extends TestCase
         $resolverContext = new ResolverContext(static::createStub(SalesChannelContext::class), new Request());
 
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_MAPPED, 'category.products'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -161,7 +157,6 @@ class ProductBoxCmsElementResolverTest extends TestCase
         $resolverContext = new EntityResolverContext($salesChannelContext, new Request(), static::createStub(SalesChannelProductDefinition::class), $product);
         $result = new ElementDataCollection();
         $fieldConfig = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_MAPPED, $productId),
         ]);
 
         $slot = new CmsSlotEntity();

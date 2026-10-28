@@ -7,7 +7,6 @@ use Contena\Core\Content\Category\Event\NavigationLoadedEvent;
 use Contena\Core\Content\Category\Service\NavigationLoader;
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;

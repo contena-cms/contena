@@ -20,7 +20,6 @@ use Contena\Core\Framework\App\Event\AppUploadedEvent;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\App\Manifest\Xml\Meta\Metadata;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
 use Contena\Core\Framework\Log\Package;
@@ -76,9 +75,6 @@ class SystemActivitySubscriberTest extends TestCase
         $dispatcher = new EventDispatcher();
         $dispatcher->addSubscriber(new SystemActivitySubscriber($logger, $this->connection));
         $event = new EntityWrittenEvent($entityName, [
-            new EntityWriteResult('first', ['password' => 'secret', 'secretAccessKey' => 'secret'], $entityName, EntityWriteResult::OPERATION_INSERT),
-            new EntityWriteResult('existing', [], $entityName, EntityWriteResult::OPERATION_UPDATE),
-            new EntityWriteResult('second', [], $entityName, EntityWriteResult::OPERATION_INSERT),
         ], $context);
 
         $dispatcher->dispatch($event, $event->getName());
@@ -98,7 +94,6 @@ class SystemActivitySubscriberTest extends TestCase
         $dispatcher->addSubscriber(new SystemActivitySubscriber($logger, $this->connection));
         foreach (['user', 'integration', 'product'] as $entityName) {
             $event = new EntityWrittenEvent($entityName, [
-                new EntityWriteResult('id', [], $entityName, $entityName === 'product' ? EntityWriteResult::OPERATION_INSERT : EntityWriteResult::OPERATION_UPDATE),
             ], Context::createDefaultContext());
             $dispatcher->dispatch($event, $event->getName());
         }

@@ -4,7 +4,6 @@ namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
@@ -48,7 +47,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('contena.filesystem.sitemap'),
             service(SitemapHandleFactoryInterface::class),
             service('event_dispatcher'),
-            service(CartRuleLoader::class),
         ]);
 
     $services->set(SitemapLister::class)

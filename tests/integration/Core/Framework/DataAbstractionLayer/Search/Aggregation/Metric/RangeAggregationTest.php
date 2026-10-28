@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\RangeA
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\RangeResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

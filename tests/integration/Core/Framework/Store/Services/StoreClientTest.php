@@ -18,8 +18,6 @@ use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Contracts\Cache\CacheInterface;
 

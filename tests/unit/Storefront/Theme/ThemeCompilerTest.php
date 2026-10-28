@@ -19,7 +19,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Util\Filesystem as ThemeFilesystem;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
@@ -37,11 +36,6 @@ use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfi
 use Contena\Storefront\Theme\ThemeCompiler;
 use Contena\Storefront\Theme\ThemeFileResolver;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\MockThemeCompilerConcatenatedSubscriber;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\MockThemeVariablesSubscriber;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeAndPlugin\AsyncPlugin\AsyncPlugin;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeAndPlugin\NotFoundPlugin\NotFoundPlugin;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeAndPlugin\TestTheme\TestTheme;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -58,10 +52,6 @@ class ThemeCompilerTest extends TestCase
 
     private string $mockSalesChannelId;
 
-    /**
-     * @var ThemeFileResolver&Stub
-     */
-    private ThemeFileResolver $themeFileResolver;
 
     private Filesystem $filesystem;
 
@@ -82,12 +72,7 @@ class ThemeCompilerTest extends TestCase
      */
     private LoggerInterface $logger;
 
-    /**
-     * @var ScssPhpCompiler&Stub
-     */
-    private ScssPhpCompiler $scssPhpCompiler;
 
-    private MD5ThemePathBuilder $pathBuilder;
 
     private ThemeFilesystemResolver&Stub $themeFilesystemResolver;
 
@@ -917,30 +902,6 @@ PHP_EOL,
         ];
     }
 
-    protected function getThemeCompiler(
-        ?CopyBatchInputFactory $copyBatchInputFactory = null,
-        ?ThemeFilesystemResolver $themeFilesystemResolver = null,
-        ?LoggerInterface $logger = null,
-        ?ScssPhpCompiler $scssPhpCompiler = null,
-    ): ThemeCompiler {
-        return new ThemeCompiler(
-            $this->filesystem,
-            $this->tempFilesystem,
-            static::createStub(FilesystemOperator::class),
-            $copyBatchInputFactory ?? $this->copyBatchInputFactory,
-            $this->themeFileResolver,
-            true,
-            $this->eventDispatcher,
-            $themeFilesystemResolver ?? $this->themeFilesystemResolver,
-            ['theme' => new UrlPackage(['http://localhost'], new EmptyVersionStrategy())],
-            $this->cacheInvalidator,
-            $logger ?? $this->logger,
-            $this->pathBuilder,
-            $scssPhpCompiler ?? $this->scssPhpCompiler,
-            [],
-            false
-        );
-    }
 }
 
 /**

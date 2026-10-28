@@ -6,11 +6,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\CustomerDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityWriteGateway;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyIdField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
@@ -103,12 +101,7 @@ class EntityDefinitionServiceTest extends TestCase
     private function initDefinitions(): void
     {
         $definitions = [
-            EntityWithManyToManyWithoutIdFieldDefinition::class,
-            MockEntityDefinition::class,
-            ManyToManyMappingEntityDefinition::class,
-            EntityWithManyToManyWithIdFieldDefinition::class,
             ProductDefinition::class,
-            NewsletterRecipientDefinition::class,
             CustomerDefinition::class,
         ];
 
@@ -149,7 +142,6 @@ class EntityWithManyToManyWithoutIdFieldDefinition extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new ManyToManyAssociationField('manyToMany', MockEntityDefinition::class, ManyToManyMappingEntityDefinition::class, 'manyToMany', 'manyToMany'),
         ]);
     }
 }
@@ -168,7 +160,6 @@ class EntityWithManyToManyWithIdFieldDefinition extends EntityDefinition
     {
         return new FieldCollection([
             new ManyToManyIdField('manyToManyIds', 'manyToManyIds', 'EntityWithManyToManyWithIdFieldAssociationName'),
-            new ManyToManyAssociationField('EntityWithManyToManyWithIdFieldAssociationName', MockEntityDefinition::class, ManyToManyMappingEntityDefinition::class, 'manyToMany', 'manyToMany'),
         ]);
     }
 }

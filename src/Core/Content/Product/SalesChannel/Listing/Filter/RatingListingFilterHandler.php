@@ -4,8 +4,6 @@ namespace Contena\Core\Content\Product\SalesChannel\Listing\Filter;
 
 use Contena\Core\Content\Product\SalesChannel\Listing\Filter;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
@@ -34,11 +32,6 @@ class RatingListingFilterHandler extends AbstractListingFilterHandler
             'rating',
             $filtered !== null,
             [
-                new FilterAggregation(
-                    'rating-exists',
-                    new MaxAggregation('rating', 'product.ratingAverage'),
-                    [new RangeFilter('product.ratingAverage', [RangeFilter::GTE => 0])]
-                ),
             ],
             new RangeFilter('product.ratingAverage', [
                 RangeFilter::GTE => (int) $filtered,

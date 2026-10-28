@@ -17,7 +17,6 @@ class CaptchaControllerTest extends TestCase
 {
     private const CAPTCHA_NAME = 'lorem-ipsum';
 
-    private CaptchaController $captchaController;
 
     protected function setUp(): void
     {

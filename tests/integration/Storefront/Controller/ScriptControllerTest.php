@@ -10,13 +10,10 @@ use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;
 

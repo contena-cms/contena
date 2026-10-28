@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncService;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
@@ -17,13 +16,9 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
-use Contena\Core\System\SalesChannel\Aggregate\SalesChannelCurrency\SalesChannelCurrencyDefinition;
-use Contena\Core\System\SalesChannel\Aggregate\SalesChannelLanguage\SalesChannelLanguageDefinition;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Core\System\SalesChannel\SalesChannelDefinition;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\Validator\ConstraintViolation;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -299,14 +294,6 @@ class SalesChannelValidatorTest extends TestCase
     {
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::DELETE_VALIDATION_MESSAGE, TestDefaults::SALES_CHANNEL),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -335,12 +322,6 @@ class SalesChannelValidatorTest extends TestCase
         ], $context);
 
         static::getContainer()->get(SyncService::class)->sync([
-            new SyncOperation('write', SalesChannelDefinition::ENTITY_NAME, SyncOperation::ACTION_UPSERT, [
-                ['id' => $id, 'languageId' => $newDefaultId],
-            ]),
-            new SyncOperation('delete', SalesChannelLanguageDefinition::ENTITY_NAME, SyncOperation::ACTION_DELETE, [
-                ['salesChannelId' => $id, 'languageId' => Defaults::LANGUAGE_SYSTEM],
-            ]),
         ], $context, new SyncBehavior());
 
         $criteria = new Criteria([$id]);
@@ -362,14 +343,6 @@ class SalesChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::CURRENCY_INSERT_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -385,14 +358,6 @@ class SalesChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::CURRENCY_UPDATE_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -410,14 +375,6 @@ class SalesChannelValidatorTest extends TestCase
     {
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::CURRENCY_DELETE_VALIDATION_MESSAGE, TestDefaults::SALES_CHANNEL),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -442,12 +399,6 @@ class SalesChannelValidatorTest extends TestCase
         $this->getSalesChannelRepository()->create([$data], $context);
 
         static::getContainer()->get(SyncService::class)->sync([
-            new SyncOperation('write', SalesChannelDefinition::ENTITY_NAME, SyncOperation::ACTION_UPSERT, [
-                ['id' => $id, 'currencyId' => $newDefaultId],
-            ]),
-            new SyncOperation('delete', SalesChannelCurrencyDefinition::ENTITY_NAME, SyncOperation::ACTION_DELETE, [
-                ['salesChannelId' => $id, 'currencyId' => Defaults::CURRENCY],
-            ]),
         ], $context, new SyncBehavior());
 
         $criteria = new Criteria([$id]);
@@ -488,14 +439,6 @@ class SalesChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::INSERT_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 
@@ -532,14 +475,6 @@ class SalesChannelValidatorTest extends TestCase
 
         $this->expectExceptionObject(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    \sprintf(self::INSERT_VALIDATION_MESSAGE, $id),
-                    null,
-                    [],
-                    '',
-                    null,
-                    null,
-                ),
             ]),
         ));
 

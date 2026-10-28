@@ -8,8 +8,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Increment\AbstractIncrementer;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\HttpFoundation\Response;

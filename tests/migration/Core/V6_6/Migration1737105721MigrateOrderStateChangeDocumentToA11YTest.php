@@ -10,10 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\MailTemplate\MailTemplateTypes;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 use Contena\Core\Migration\V6_6\Migration1737105721MigrateOrderStateChangeDocumentToA11Y;
 
 /**

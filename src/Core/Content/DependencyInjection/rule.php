@@ -4,7 +4,6 @@ namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionDefinition;
 use Contena\Core\Content\Rule\Aggregate\RuleTag\RuleTagDefinition;
 use Contena\Core\Content\Rule\DataAbstractionLayer\RuleAreaUpdater;
@@ -63,7 +62,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(RuleIndexerSubscriber::class)
         ->args([
             service(Connection::class),
-            service(CartRuleLoader::class),
             service(ClockInterface::class),
         ])
         ->tag('kernel.event_subscriber');

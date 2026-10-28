@@ -2,11 +2,9 @@
 
 namespace Contena\Storefront\Theme\Aggregate;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Theme\ThemeEntity;
 
 #[Package('discovery')]
 class ThemeTranslationEntity extends TranslationEntity
@@ -31,7 +29,6 @@ class ThemeTranslationEntity extends TranslationEntity
      */
     protected ?array $helpTexts = null;
 
-    protected ?ThemeEntity $theme = null;
 
     public function getDescription(): ?string
     {
@@ -101,13 +98,5 @@ class ThemeTranslationEntity extends TranslationEntity
         $this->themeId = $themeId;
     }
 
-    public function getTheme(): ?ThemeEntity
-    {
-        return $this->theme;
-    }
 
-    public function setTheme(?ThemeEntity $theme): void
-    {
-        $this->theme = $theme;
-    }
 }

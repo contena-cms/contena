@@ -31,7 +31,6 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\App\TestAppServer;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 use Symfony\Component\Clock\NativeClock;
 
 /**

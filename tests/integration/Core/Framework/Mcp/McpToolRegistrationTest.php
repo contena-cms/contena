@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpToolsetRegistry;
 use Contena\Core\Framework\Mcp\Tool\ToolSearchTool;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SalesChannel\Mcp\Tool\StoreApiToolSearchTool;
 use Contena\Core\System\SalesChannel\Mcp\Tool\StoreApiToolsetEnableTool;
 use Contena\Core\System\SalesChannel\Mcp\Tool\StoreApiToolsetsListTool;

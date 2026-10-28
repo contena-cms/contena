@@ -6,9 +6,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutor;
 use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Integration\Helper\MailEventListener;
-use Contena\Core\Test\Integration\Traits\TestShortHands;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

@@ -19,7 +19,6 @@ class Migration1673964565MigrateToReferencedColumnsTest extends TestCase
 {
     private Connection $connection;
 
-    private Migration1673964565MigrateToReferencedColumns $migration;
 
     protected function setUp(): void
     {

@@ -7,13 +7,9 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Storefront\Framework\Captcha\BasicCaptcha;
 use Contena\Storefront\Framework\Captcha\GoogleReCaptchaV3;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 

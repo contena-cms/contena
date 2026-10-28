@@ -41,8 +41,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\ParentRelationValidator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;

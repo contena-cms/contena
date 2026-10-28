@@ -17,7 +17,6 @@ use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendedProductDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductExtension;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

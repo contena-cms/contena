@@ -25,7 +25,6 @@ class UnusedThemeDirectoryDeleterTest extends TestCase
 
     private MockClock $clock;
 
-    private UnusedThemeDirectoryDeleter $deleter;
 
     protected function setUp(): void
     {

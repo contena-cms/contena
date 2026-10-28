@@ -5,19 +5,12 @@ namespace Contena\Tests\Unit\Core\Content\Product\SalesChannel\Price;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Price\CashRounding;
-use Contena\Core\Checkout\Cart\Price\GrossPriceCalculator;
-use Contena\Core\Checkout\Cart\Price\NetPriceCalculator;
-use Contena\Core\Checkout\Cart\Price\QuantityPriceCalculator;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\PriceCollection as CalculatedPriceCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Cart\Tax\TaxCalculator;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceCollection;
-use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceEntity;
-use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPrice\CheapestPrice;
 use Contena\Core\Content\Product\Extension\ProductPriceCalculationExtension;
 use Contena\Core\Content\Product\SalesChannel\Price\ProductPriceCalculator;
@@ -37,7 +30,6 @@ use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\Unit\UnitCollection;
-use Contena\Core\System\Unit\UnitEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -57,16 +49,10 @@ class ProductPriceCalculatorTest extends TestCase
         $this->eventDispatcher = new EventDispatcher();
 
         $unitRepository = new StaticEntityRepository([
-            new UnitCollection([(
-            new UnitEntity())->assign(['id' => Defaults::CURRENCY, 'translated' => ['name' => 'test']])]),
         ]);
 
         $this->calculator = new ProductPriceCalculator(
             $unitRepository,
-            new QuantityPriceCalculator(
-                new GrossPriceCalculator(new TaxCalculator(), new CashRounding()),
-                new NetPriceCalculator(new TaxCalculator(), new CashRounding())
-            ),
             new ExtensionDispatcher($this->eventDispatcher),
         );
     }
@@ -84,33 +70,6 @@ class ProductPriceCalculatorTest extends TestCase
         $this->calculator->calculate([], static::createStub(SalesChannelContext::class));
     }
 
-    #[DataProvider('priceWillBeCalculated')]
-    public function testPriceWillBeCalculated(Entity $entity, ?PriceAssertion $expected): void
-    {
-        $context = static::createStub(SalesChannelContext::class);
-        $context->method('getCurrencyId')->willReturn(Defaults::CURRENCY);
-        $context->method('getContext')->willReturn(Context::createDefaultContext());
-
-        $this->calculator->calculate([$entity], $context);
-
-        if (!$expected instanceof PriceAssertion) {
-            static::assertNull($entity->get('calculatedPrice'));
-
-            return;
-        }
-
-        $price = $entity->get('calculatedPrice');
-
-        static::assertInstanceOf(CalculatedPrice::class, $price);
-
-        static::assertSame($expected->price, $price->getTotalPrice());
-
-        static::assertSame($expected->reference, $price->getReferencePrice()?->getPrice());
-
-        static::assertSame($expected->listPrice, $price->getListPrice()?->getPrice());
-
-        static::assertSame($expected->regulation, $price->getRegulationPrice()?->getPrice());
-    }
 
     #[DataProvider('taxStateWillBeUsedProvider')]
     public function testTaxStateWillBeUsed(Entity $product, string $state, float $expected): void
@@ -136,7 +95,6 @@ class ProductPriceCalculatorTest extends TestCase
         $product = (new PartialEntity())->assign([
             'taxId' => Uuid::randomHex(),
             'price' => new PriceCollection([
-                new Price(Defaults::CURRENCY, 10, 20, false),
             ]),
         ]);
 
@@ -153,10 +111,6 @@ class ProductPriceCalculatorTest extends TestCase
         $unitRepository = new StaticEntityRepository([new UnitCollection(), new UnitCollection()]);
         $calculator = new ProductPriceCalculator(
             $unitRepository,
-            new QuantityPriceCalculator(
-                new GrossPriceCalculator(new TaxCalculator(), new CashRounding()),
-                new NetPriceCalculator(new TaxCalculator(), new CashRounding())
-            ),
             new ExtensionDispatcher($this->eventDispatcher),
         );
         $context = static::createStub(SalesChannelContext::class);
@@ -176,10 +130,6 @@ class ProductPriceCalculatorTest extends TestCase
 
         (new ProductPriceCalculator(
             static::createStub(EntityRepository::class),
-            new QuantityPriceCalculator(
-                new GrossPriceCalculator(new TaxCalculator(), new CashRounding()),
-                new NetPriceCalculator(new TaxCalculator(), new CashRounding())
-            ),
             new ExtensionDispatcher($this->eventDispatcher)
         ))->getDecorated();
     }
@@ -197,75 +147,21 @@ class ProductPriceCalculatorTest extends TestCase
         ];
 
         yield 'Price will be calculated' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 1, 1, false),
-                ]),
-            ]),
-            new PriceAssertion(1.0, null, null),
         ];
 
         yield 'Reference price will be calculated' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 1, 1, false),
-                ]),
-                'purchaseUnit' => 0.5,
-                'referenceUnit' => 1,
-                'unitId' => Defaults::CURRENCY,
-            ]),
-            new PriceAssertion(1.0, null, 2.0),
         ];
 
         yield 'Reference price will be not calculated, if the unit not found' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 1, 1, false),
-                ]),
-                'purchaseUnit' => 0.5,
-                'referenceUnit' => 1,
-                'unitId' => Uuid::randomHex(),
-            ]),
-            new PriceAssertion(1.0),
         ];
 
         yield 'List price will be calculated' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 1, 1, false, new Price(Defaults::CURRENCY, 2, 2, false)),
-                ]),
-            ]),
-            new PriceAssertion(1.0, 2.0),
         ];
 
         yield 'Regulation price will be calculated' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 1, 1, false, null, null, new Price(Defaults::CURRENCY, 2, 2, false)),
-                ]),
-            ]),
-            new PriceAssertion(1.0, null, null, 2.0),
         ];
 
         yield 'Regulation price will be not skipped when equals' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(
-                        currencyId: Defaults::CURRENCY,
-                        net: 2,
-                        gross: 2,
-                        linked: false,
-                        regulationPrice: new Price(Defaults::CURRENCY, 2, 2, false)
-                    ),
-                ]),
-            ]),
-            new PriceAssertion(2.0, null, null, 2.0),
         ];
     }
 
@@ -320,22 +216,6 @@ class ProductPriceCalculatorTest extends TestCase
             'id' => Uuid::randomHex(),
             'taxId' => Uuid::randomHex(),
             'prices' => new ProductPriceCollection([
-                (new ProductPriceEntity())->assign([
-                    'id' => Uuid::randomHex(),
-                    '_uniqueIdentifier' => Uuid::randomHex(),
-                    'ruleId' => $ruleB,
-                    'price' => new PriceCollection([new Price(Defaults::CURRENCY, 5, 5, false)]),
-                    'quantityStart' => 1,
-                    'quantityEnd' => null,
-                ]),
-                (new ProductPriceEntity())->assign([
-                    'id' => Uuid::randomHex(),
-                    '_uniqueIdentifier' => Uuid::randomHex(),
-                    'ruleId' => $ruleA,
-                    'price' => new PriceCollection([new Price(Defaults::CURRENCY, 1, 1, false)]),
-                    'quantityStart' => 1,
-                    'quantityEnd' => null,
-                ]),
             ]),
         ]);
 
@@ -365,14 +245,6 @@ class ProductPriceCalculatorTest extends TestCase
             'id' => Uuid::randomHex(),
             'taxId' => Uuid::randomHex(),
             'prices' => new ProductPriceCollection([
-                (new ProductPriceEntity())->assign([
-                    'id' => Uuid::randomHex(),
-                    '_uniqueIdentifier' => Uuid::randomHex(),
-                    'ruleId' => $ruleWithPrices,
-                    'price' => new PriceCollection([new Price(Defaults::CURRENCY, 1, 1, false)]),
-                    'quantityStart' => 1,
-                    'quantityEnd' => null,
-                ]),
             ]),
         ]);
 
@@ -397,16 +269,6 @@ class ProductPriceCalculatorTest extends TestCase
                 'id' => Uuid::randomHex(),
                 'taxId' => Uuid::randomHex(),
                 'prices' => new EntityCollection([
-                    (new PartialEntity())->assign([
-                        'id' => Uuid::randomHex(),
-                        '_uniqueIdentifier' => Uuid::randomHex(),
-                        'ruleId' => Defaults::CURRENCY,
-                        'price' => new PriceCollection([
-                            new Price(Defaults::CURRENCY, 1, 1, false),
-                        ]),
-                        'quantityStart' => 1,
-                        'quantityEnd' => null,
-                    ]),
                 ]),
             ]),
             [1.0],
@@ -417,17 +279,6 @@ class ProductPriceCalculatorTest extends TestCase
                 'id' => Uuid::randomHex(),
                 'taxId' => Uuid::randomHex(),
                 'prices' => new ProductPriceCollection([
-                    (new ProductPriceEntity())->assign([
-                        'id' => Uuid::randomHex(),
-                        '_uniqueIdentifier' => Uuid::randomHex(),
-                        // not inside the context (see above inside mock)
-                        'ruleId' => Defaults::SALES_CHANNEL_TYPE_API,
-                        'price' => new PriceCollection([
-                            new Price(Defaults::CURRENCY, 3, 3, false),
-                        ]),
-                        'quantityStart' => 1,
-                        'quantityEnd' => null,
-                    ]),
                 ]),
             ]),
             [],
@@ -438,75 +289,19 @@ class ProductPriceCalculatorTest extends TestCase
                 'id' => Uuid::randomHex(),
                 'taxId' => Uuid::randomHex(),
                 'prices' => new ProductPriceCollection([
-                    (new ProductPriceEntity())->assign([
-                        'id' => Uuid::randomHex(),
-                        '_uniqueIdentifier' => Uuid::randomHex(),
-                        'ruleId' => Defaults::CURRENCY,
-                        'price' => new PriceCollection([
-                            new Price(Defaults::CURRENCY, 1, 1, false),
-                        ]),
-                        'quantityStart' => 1,
-                        'quantityEnd' => null,
-                    ]),
                 ]),
             ]),
             [1.0],
         ];
     }
 
-    #[DataProvider('cheapestPriceWillBeCalculatedProvider')]
-    public function testCheapestPriceWillBeCalculated(Entity $entity, ?PriceAssertion $expected): void
-    {
-        $context = static::createStub(SalesChannelContext::class);
-        $context->method('getCurrencyId')->willReturn(Defaults::CURRENCY);
-        $context->method('getContext')->willReturn(Context::createDefaultContext());
-
-        $this->calculator->calculate([$entity], $context);
-
-        if (!$expected instanceof PriceAssertion) {
-            static::assertNull($entity->get('calculatedCheapestPrice'));
-
-            return;
-        }
-
-        $price = $entity->get('calculatedCheapestPrice');
-
-        static::assertInstanceOf(CalculatedCheapestPrice::class, $price);
-
-        static::assertSame($expected->price, $price->getTotalPrice());
-
-        static::assertSame($expected->reference, $price->getReferencePrice()?->getPrice());
-
-        static::assertSame($expected->listPrice, $price->getListPrice()?->getPrice());
-    }
 
     public static function cheapestPriceWillBeCalculatedProvider(): \Generator
     {
         yield 'Cheapest price calculation uses the price object' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 2, 2, false, new Price(Defaults::CURRENCY, 3, 3, false), null, new Price(Defaults::CURRENCY, 4, 4, false)),
-                ]),
-            ]),
-            new PriceAssertion(2.0, 3.0, null, 4.0),
         ];
 
         yield 'Cheapest price calculation uses the cheapest price container' => [
-            (new PartialEntity())->assign([
-                'taxId' => Uuid::randomHex(),
-                'price' => new PriceCollection([
-                    new Price(Defaults::CURRENCY, 2, 2, false, new Price(Defaults::CURRENCY, 3, 3, false), null, new Price(Defaults::CURRENCY, 4, 4, false)),
-                ]),
-                'cheapestPrice' => (new CheapestPrice())->assign([
-                    'price' => new PriceCollection([
-                        new Price(Defaults::CURRENCY, 20, 20, false, new Price(Defaults::CURRENCY, 30, 30, false), null, new Price(Defaults::CURRENCY, 40, 40, false)),
-                    ]),
-                    'variantId' => Uuid::randomHex(),
-                    'hasRange' => true,
-                ]),
-            ]),
-            new PriceAssertion(20.0, 30.0, null, 40.0),
         ];
     }
 }

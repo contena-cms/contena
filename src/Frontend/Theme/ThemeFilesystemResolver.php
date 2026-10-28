@@ -5,9 +5,7 @@ namespace Contena\Storefront\Theme;
 use Contena\Core\Framework\App\Source\SourceResolver;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Kernel;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**
@@ -34,26 +32,4 @@ class ThemeFilesystemResolver
         )));
     }
 
-    public function getFilesystemForStorefrontConfig(StorefrontPluginConfiguration $configuration): Filesystem
-    {
-        if (!\in_array($configuration->getTechnicalName(), $this->bundleNames, true)) {
-            // it's an app
-            return $this->sourceResolver->filesystemForAppName($configuration->getTechnicalName());
-        }
-
-        try {
-            $bundle = $this->kernel->getBundle($configuration->getTechnicalName());
-        } catch (\InvalidArgumentException) {
-            $bundles = $this->kernel->getPluginLoader()
-                ->getPluginInstances()
-                ->filter(static fn (Plugin $plugin) => $plugin->getName() === $configuration->getTechnicalName())
-                ->all();
-
-            $bundle = array_values($bundles)[0];
-        }
-
-        \assert($bundle instanceof BundleInterface);
-
-        return new Filesystem($bundle->getPath());
-    }
 }

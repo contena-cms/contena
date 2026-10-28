@@ -29,7 +29,6 @@ class ThemeMigrateTranslationsCommandTest extends TestCase
 
     private string $themeDirectory;
 
-    private StorefrontPluginConfiguration $configuration;
 
     private CommandTester $commandTester;
 

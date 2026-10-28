@@ -16,7 +16,6 @@ use Contena\Storefront\Theme\StorefrontPluginRegistry;
 #[CoversClass(ThemeConfigSnippetGenerator::class)]
 class ThemeConfigSnippetGeneratorTest extends TestCase
 {
-    private ThemeConfigSnippetGenerator $generator;
 
     /**
      * @var array<string, StorefrontPluginConfiguration>
@@ -422,14 +421,4 @@ class ThemeConfigSnippetGeneratorTest extends TestCase
         static::assertSame(['de-DE', 'zh-Hant-TW'], array_keys($this->generator->generate($configuration)));
     }
 
-    /**
-     * @param array<string, mixed> $config
-     */
-    private function createConfiguration(array $config, string $technicalName = 'SwagTheme'): StorefrontPluginConfiguration
-    {
-        $configuration = new StorefrontPluginConfiguration($technicalName);
-        $configuration->setThemeJson(['name' => $technicalName, 'config' => $config]);
-
-        return $configuration;
-    }
 }

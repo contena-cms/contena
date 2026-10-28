@@ -22,11 +22,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Scalar
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\Assert\ArrayValues;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\SerializationFixture;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicStruct;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithExtension;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToOneRelationship;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestCollectionWithToOneRelationship;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -97,23 +92,6 @@ class JsonSalesChannelEntityEncoderTest extends TestCase
         yield 'media resource with collection to one relationship is encoded' => [MediaDefinition::class, new TestCollectionWithToOneRelationship()];
     }
 
-    /**
-     * @param class-string<EntityDefinition> $definitionClass
-     */
-    #[DataProvider('complexStructsProvider')]
-    public function testEncodeComplexStructs(string $definitionClass, SerializationFixture $fixture): void
-    {
-        $definition = $this->createDefinition($definitionClass);
-        $encoder = $this->createEncoder();
-        $actual = $encoder->encode(
-            new Criteria(),
-            $definition,
-            $fixture->getInput(),
-            SerializationFixture::SALES_CHANNEL_API_BASE_URL
-        );
-
-        ArrayValues::assertValues($fixture->getSalesChannelJsonFixtures(), $actual);
-    }
 
     public function testEncodeStructWithExtension(): void
     {

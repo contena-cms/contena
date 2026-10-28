@@ -5,10 +5,7 @@ namespace Contena\Tests\Integration\Storefront\Theme\StorefrontPluginConfigurati
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Framework\ThemeInterface;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\AbstractStorefrontPluginConfigurationFactory;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
 
 /**
@@ -19,7 +16,6 @@ class StorefrontPluginConfigurationFactoryTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private AbstractStorefrontPluginConfigurationFactory $configFactory;
 
     protected function setUp(): void
     {
@@ -131,16 +127,4 @@ class StorefrontPluginConfigurationFactoryTest extends TestCase
         };
     }
 
-    /**
-     * @param array<string, array<string, string>> $expected
-     */
-    private function assertFileCollection(array $expected, FileCollection $files): void
-    {
-        $flatFiles = [];
-        foreach ($files as $file) {
-            $flatFiles[$file->getFilepath()] = $file->getResolveMapping();
-        }
-
-        static::assertSame($expected, $flatFiles);
-    }
 }

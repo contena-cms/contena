@@ -5,7 +5,6 @@ namespace Contena\Core\Framework\DependencyInjection;
 use Contena\Core\Framework\Rule\Api\RuleConfigController;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Rule\Container\AndRule;
-use Contena\Core\Framework\Rule\Container\MatchAllLineItemsRule;
 use Contena\Core\Framework\Rule\Container\NotRule;
 use Contena\Core\Framework\Rule\Container\OrRule;
 use Contena\Core\Framework\Rule\Container\XorRule;
@@ -43,8 +42,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(XorRule::class)
         ->tag('contena.rule.definition');
 
-    $services->set(MatchAllLineItemsRule::class)
-        ->tag('contena.rule.definition');
 
     $services->set(ScriptRule::class)
         ->tag('contena.rule.definition');

@@ -4,7 +4,6 @@ namespace Contena\Core\System\CustomField;
 
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfigField\ProductSearchConfigFieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetEntity;
 

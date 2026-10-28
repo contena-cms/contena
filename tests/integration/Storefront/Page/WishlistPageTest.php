@@ -7,13 +7,10 @@ use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\CustomerException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Storefront\Page\PageLoadedEvent;
 use Contena\Storefront\Page\Wishlist\WishlistPageLoadedEvent;
-use Contena\Storefront\Page\Wishlist\WishlistPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -82,10 +79,6 @@ class WishlistPageTest extends TestCase
         self::assertPageEvent(WishlistPageLoadedEvent::class, $event, $context, $request, $page);
     }
 
-    protected function getPageLoader(): WishlistPageLoader
-    {
-        return static::getContainer()->get(WishlistPageLoader::class);
-    }
 
     private function createCustomerWishlist(string $customerId, string $productId, string $salesChannelId): string
     {

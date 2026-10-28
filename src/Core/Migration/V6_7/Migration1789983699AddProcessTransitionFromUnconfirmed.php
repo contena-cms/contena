@@ -7,7 +7,6 @@ use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionState
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Migration\Traits\StateMachineMigration;
-use Contena\Core\Migration\Traits\StateMachineMigrationTrait;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
 
 /**

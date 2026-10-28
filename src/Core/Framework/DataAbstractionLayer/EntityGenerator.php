@@ -53,7 +53,6 @@ class EntityGenerator
 namespace #domain#;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 #uses#
 
 class #entity#Entity extends Entity

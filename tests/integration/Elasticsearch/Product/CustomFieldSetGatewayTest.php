@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Elasticsearch\Product;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Product\CustomFieldSetGateway;

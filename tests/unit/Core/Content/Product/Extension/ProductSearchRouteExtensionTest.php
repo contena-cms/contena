@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Examples\ProductSearchRouteExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 

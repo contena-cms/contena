@@ -69,7 +69,6 @@ class StorefrontSubscriberTest extends TestCase
         $eventDispatcher = new EventDispatcher();
         $eventIsThrown = false;
         $eventDispatcher->addListener(
-            MaintenanceRedirectEvent::class,
             static function () use (&$eventIsThrown): void {
                 $eventIsThrown = true;
             }
@@ -117,7 +116,6 @@ class StorefrontSubscriberTest extends TestCase
         $eventDispatcher = new EventDispatcher();
         $eventIsThrown = false;
         $eventDispatcher->addListener(
-            MaintenanceRedirectEvent::class,
             static function (MaintenanceRedirectEvent $event) use (&$eventIsThrown): void {
                 $parameters = $event->getParameters();
                 static::assertEquals('product_page', $parameters['redirectTo']);

@@ -5,7 +5,6 @@ namespace Contena\Tests\Unit\Storefront\Theme\StorefrontPluginConfiguration;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\File;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 
 /**
@@ -30,8 +29,6 @@ class FileCollectionTest extends TestCase
     public function testResolveMappingGetsMerged(): void
     {
         $collection = new FileCollection([
-            new File('foo', ['a' => 'b']),
-            new File('bar', ['b' => 'c']),
         ]);
 
         static::assertSame(['a' => 'b', 'b' => 'c'], $collection->getResolveMappings());
@@ -40,9 +37,6 @@ class FileCollectionTest extends TestCase
     public function testGetPublicPaths(): void
     {
         $collection = new FileCollection([
-            new File('foo.js', [], null),
-            new File('bar.js', [], 'bar'),
-            new File('foo/bar.js', [], 'foo'),
         ]);
 
         static::assertSame(['baz/foo/bar.js'], $collection->getPublicPaths('baz'));

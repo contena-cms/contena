@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition;
 
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -36,8 +35,6 @@ class WriteProtectedRelationDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new Required(), new PrimaryKey()),
             (new OneToManyAssociationField('wp', WriteProtectedDefinition::class, 'relation_id', 'id'))->addFlags(new ApiAware(), new WriteProtected()),
             (new ManyToManyAssociationField('wps', WriteProtectedDefinition::class, WriteProtectedReferenceDefinition::class, 'relation_id', 'wp_id'))->addFlags(new ApiAware(), new WriteProtected()),
-            (new OneToManyAssociationField('systemWp', WriteProtectedDefinition::class, 'system_relation_id', 'id'))->addFlags(new ApiAware(), new WriteProtected(Context::SYSTEM_SCOPE)),
-            (new ManyToManyAssociationField('systemWps', WriteProtectedDefinition::class, WriteProtectedReferenceDefinition::class, 'system_relation_id', 'system_wp_id'))->addFlags(new ApiAware(), new WriteProtected(Context::SYSTEM_SCOPE)),
         ]);
     }
 

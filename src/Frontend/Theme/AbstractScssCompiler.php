@@ -10,9 +10,4 @@ use Contena\Core\Framework\Log\Package;
 #[Package('discovery')]
 abstract class AbstractScssCompiler
 {
-    abstract public function compileString(
-        AbstractCompilerConfiguration $config,
-        string $scss,
-        ?string $path = null
-    ): string;
 }

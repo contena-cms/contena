@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Mail\Transport;
 
 use League\Flysystem\FilesystemOperator;
 use League\Flysystem\UnableToRetrieveMetadata;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Content\Mail\Service\Mail;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;

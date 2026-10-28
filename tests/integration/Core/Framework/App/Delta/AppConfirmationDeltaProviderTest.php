@@ -7,7 +7,6 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Delta\AppConfirmationDeltaProvider;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

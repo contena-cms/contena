@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\System\SystemConfig;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SystemConfig\CachedSystemConfigLoader;
 use Contena\Core\System\SystemConfig\ConfiguredSystemConfigLoader;
 use Contena\Core\System\SystemConfig\MemoizedSystemConfigLoader;

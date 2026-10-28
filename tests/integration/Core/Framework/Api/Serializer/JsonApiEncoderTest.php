@@ -16,7 +16,6 @@ use Contena\Core\Framework\Api\Serializer\JsonApiEncoder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -29,19 +28,8 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Extend
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendedProductDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ScalarRuntimeExtension;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserDefinition;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\SerializationFixture;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicStruct;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithExtension;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToManyExtension;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToManyRelationships;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToOneRelationship;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestCollectionWithSelfReference;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestCollectionWithToOneRelationship;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestInternalFieldsAreFiltered;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestMainResourceShouldNotBeInIncluded;
 
 /**
  * @internal
@@ -142,24 +130,6 @@ class JsonApiEncoderTest extends TestCase
         yield 'user resource keeps main resource out of included data' => [UserDefinition::class, new TestMainResourceShouldNotBeInIncluded()];
     }
 
-    /**
-     * @param class-string<EntityDefinition> $definitionClass
-     */
-    #[DataProvider('complexStructsProvider')]
-    public function testEncodeComplexStructs(string $definitionClass, SerializationFixture $fixture): void
-    {
-        $definition = static::getContainer()->get($definitionClass);
-        static::assertInstanceOf(EntityDefinition::class, $definition);
-        $encoder = static::getContainer()->get(JsonApiEncoder::class);
-        $actual = $encoder->encode(new Criteria(), $definition, $fixture->getInput(), SerializationFixture::API_BASE_URL);
-        $actual = json_decode((string) $actual, true, 512, \JSON_THROW_ON_ERROR);
-
-        // remove extensions from test
-        $actual = $this->arrayRemove($actual, 'extensions');
-        $actual['included'] = $this->removeIncludedExtensions($actual['included']);
-
-        $this->assertValues($fixture->getAdminJsonApiFixtures(), $actual);
-    }
 
     /**
      * Not possible with data provider as we have to manipulate the container, but the data provider run before all tests

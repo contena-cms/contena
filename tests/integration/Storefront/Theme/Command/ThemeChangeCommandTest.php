@@ -11,14 +11,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 use Contena\Storefront\Theme\Command\ThemeChangeCommand;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeService;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -181,27 +177,6 @@ class ThemeChangeCommandTest extends TestCase
         ]);
     }
 
-    private function getPluginRegistryMock(): Stub&StorefrontPluginRegistry
-    {
-        $storePluginConfiguration1 = new StorefrontPluginConfiguration('parentTheme');
-        $storePluginConfiguration1->setThemeConfig([
-            'any' => 'expectedConfig',
-        ]);
-
-        $storePluginConfiguration2 = new StorefrontPluginConfiguration('childTheme');
-        $storePluginConfiguration2->setThemeConfig([
-            'any' => 'unexpectedConfig',
-        ]);
-
-        $mock = static::createStub(StorefrontPluginRegistry::class);
-
-        $mock->method('getConfigurations')
-            ->willReturn(
-                new StorefrontPluginConfigurationCollection([$storePluginConfiguration1, $storePluginConfiguration2])
-            );
-
-        return $mock;
-    }
 
     /**
      * @return array<int, array<string, mixed>>

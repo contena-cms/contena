@@ -9,8 +9,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\AssignArrayTrait;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Unit\Core\Framework\Struct\Fixture\AssignTestCollection;
-use Contena\Tests\Unit\Core\Framework\Struct\Fixture\AssignTestStruct;
 
 /**
  * @internal
@@ -177,7 +175,6 @@ class AssignArrayTraitTest extends TestCase
     {
         $data = [
             ['id' => 'first-id'],
-            (new AssignTestStruct([]))->assignRecursive(['id' => 'second-id']),
             new \stdClass(),
             null,
             [],

@@ -9,9 +9,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\MissingReleaseInfo;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -35,8 +32,6 @@ class MissingReleaseInfoTest extends TestCase
     public function testSilentWithReleaseInfo(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Framework/Framework.php'),
-            new StubFile('RELEASE_INFO-6.7.md'),
         ])));
 
         (new MissingReleaseInfo())($context);

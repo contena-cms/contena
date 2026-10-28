@@ -34,8 +34,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainCollection;

@@ -13,7 +13,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Tests\Integration\Core\Content\ImportExport\AbstractImportExportTestCase;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\Messenger\TraceableMessageBus;
 

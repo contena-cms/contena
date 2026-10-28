@@ -8,8 +8,6 @@ use Contena\Core\Checkout\Customer\Event\CustomerBeforeLoginEvent;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\AclRoles;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestIntegration;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;

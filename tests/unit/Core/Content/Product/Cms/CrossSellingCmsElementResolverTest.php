@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\CrossSellingStruct;
@@ -41,7 +40,6 @@ class CrossSellingCmsElementResolverTest extends TestCase
         $productId = 'product-1';
 
         $response = new ProductCrossSellingRouteResponse(new CrossSellingElementCollection([
-            (new CrossSellingElement())->assign(['total' => 1]),
         ]));
 
         $route = static::createStub(AbstractProductCrossSellingRoute::class);
@@ -49,7 +47,6 @@ class CrossSellingCmsElementResolverTest extends TestCase
 
         $resolver = new CrossSellingCmsElementResolver($route);
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, $productId),
         ]);
 
         $slot = new CmsSlotEntity();

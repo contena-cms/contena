@@ -12,8 +12,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationRuntime;
 use Contena\Core\Framework\Migration\MigrationSource;
 use Contena\Core\Framework\Migration\MigrationStep;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

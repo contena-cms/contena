@@ -44,12 +44,6 @@ class ProductListingRouteTest extends TestCase
     {
         $categoryId = 'categoryId';
         $categoryRepository = StaticEntityRepository::of(CategoryCollection::class, [
-            new EntityCollection([
-                new PartialEntity([
-                    'id' => $categoryId,
-                    'productAssignmentType' => CategoryDefinition::PRODUCT_ASSIGNMENT_TYPE_PRODUCT,
-                ]),
-            ]),
         ]);
 
         $eventDispatcher = new EventDispatcher();
@@ -221,12 +215,6 @@ class ProductListingRouteTest extends TestCase
     {
         $categoryId = 'categoryId';
         $categoryRepository = StaticEntityRepository::of(CategoryCollection::class, [
-            new EntityCollection([
-                new PartialEntity([
-                    'id' => $categoryId,
-                    'productAssignmentType' => CategoryDefinition::PRODUCT_ASSIGNMENT_TYPE_PRODUCT,
-                ]),
-            ]),
         ]);
 
         $eventDispatcher = new EventDispatcher();

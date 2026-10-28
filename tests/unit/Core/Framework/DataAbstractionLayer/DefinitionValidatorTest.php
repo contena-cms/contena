@@ -20,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Attribute\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\FieldType;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\ForeignKey;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\ManyToMany;
-use Contena\Core\Framework\DataAbstractionLayer\Attribute\ManyToOne;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\OneToMany;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\OneToOne;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
@@ -49,12 +48,6 @@ use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture\AttributeEntityAgg;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\_fixtures\CascadingManyToOneEntity;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Validation\Fixtures\DefinitionStub;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Validation\Fixtures\DefinitionWithInheritedAssociationsStub;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Validation\Fixtures\DefinitionWithInheritedFlagWithoutInheritanceStub;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Validation\Fixtures\DefinitionWithNonStorageAwarePrimaryKeyStub;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -537,7 +530,6 @@ class DefinitionValidatorTest extends TestCase
         yield 'version reference present, nothing to report' => [PlaylistEntity::class, []];
 
         yield 'version reference missing, reported once for the many-to-one' => [
-            AlbumEntity::class,
             ['Missing version reference for foreign key column track.id for definition association album.leadSingle'],
         ];
     }
@@ -811,10 +803,6 @@ class DefinitionValidatorTest extends TestCase
         }
 
         $columns = [
-            new Column('id', Type::getType(Types::BINARY)),
-            new Column('foo', Type::getType(Types::INTEGER)),
-            new Column('created_at', Type::getType(Types::DATETIME_MUTABLE)),
-            new Column('updated_at', Type::getType(Types::DATETIME_MUTABLE)),
         ];
 
         $table = static::createStub(Table::class);
@@ -1068,8 +1056,6 @@ class PlaylistEntity extends Entity
     #[ReferenceVersion(entity: 'track')]
     public ?string $coverTrackVersionId = null;
 
-    #[ManyToOne(entity: 'track')]
-    public ?TrackEntity $coverTrack = null;
 
     /**
      * @var array<string, TrackEntity>|null
@@ -1091,8 +1077,6 @@ class AlbumEntity extends Entity
     #[ForeignKey(entity: 'track')]
     public ?string $leadSingleId = null;
 
-    #[ManyToOne(entity: 'track')]
-    public ?TrackEntity $leadSingle = null;
 
     /**
      * @var array<string, TrackEntity>|null
@@ -1202,8 +1186,6 @@ class CriterionEntity extends Entity
     #[ForeignKey(entity: 'scorecard')]
     public ?string $scorecardId = null;
 
-    #[ManyToOne(entity: 'scorecard')]
-    public ?ScorecardEntity $scorecard = null;
 
     #[ForeignKey(entity: 'criterion')]
     public ?string $parentId = null;
@@ -1211,6 +1193,4 @@ class CriterionEntity extends Entity
     #[ReferenceVersion(entity: 'criterion')]
     public ?string $parentVersionId = null;
 
-    #[ManyToOne(entity: 'criterion')]
-    public ?CriterionEntity $parent = null;
 }

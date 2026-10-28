@@ -10,8 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\RowLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\WriteOutcome;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Json;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

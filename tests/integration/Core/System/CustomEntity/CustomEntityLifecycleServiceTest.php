@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\System\CustomEntity\CustomEntityCollection;
@@ -20,7 +19,6 @@ use Contena\Core\System\CustomEntity\Schema\CustomEntitySchemaUpdater;
 use Contena\Core\System\CustomEntity\Xml\Config\CustomEntityEnrichmentService;
 use Contena\Core\System\CustomEntity\Xml\CustomEntityXmlSchemaValidator;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 use Symfony\Component\Clock\NativeClock;
 
 /**
@@ -35,7 +33,6 @@ class CustomEntityLifecycleServiceTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     /**
      * @var EntityRepository<CustomEntityCollection>

@@ -5,8 +5,6 @@ namespace Contena\Core\Checkout\Customer\Aggregate\CustomerGroup;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroupTranslation\CustomerGroupTranslationCollection;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 

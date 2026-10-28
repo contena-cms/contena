@@ -10,7 +10,6 @@ use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheKeyEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\SalesChannelRequest;
 use Symfony\Component\EventDispatcher\EventDispatcher;

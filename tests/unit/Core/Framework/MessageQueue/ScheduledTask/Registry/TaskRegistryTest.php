@@ -18,7 +18,6 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Framework\MessageQueue\ScheduledTask\Scheduler\TestScheduledTask;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 

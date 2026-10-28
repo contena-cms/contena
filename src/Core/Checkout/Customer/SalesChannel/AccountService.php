@@ -3,7 +3,6 @@
 namespace Contena\Core\Checkout\Customer\SalesChannel;
 
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartException;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\CustomerException;

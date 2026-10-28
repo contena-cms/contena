@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\Subscriber\CustomerTokenSubscriber;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Package;
@@ -37,9 +36,6 @@ class CustomerTokenSubscriberTest extends TestCase
         $subscriber = new CustomerTokenSubscriber($contextPersister, new RequestStack(), $this->sessionContextToken());
         $context = Context::createDefaultContext();
         $event = new EntityWrittenEvent('customer', [
-            new EntityWriteResult('inserted', ['id' => 'inserted', 'password' => 'hash'], 'customer', EntityWriteResult::OPERATION_INSERT),
-            new EntityWriteResult('updated-email', ['id' => 'updated-email', 'email' => 'new@example.com'], 'customer', EntityWriteResult::OPERATION_UPDATE),
-            new EntityWriteResult('updated-password', ['id' => 'updated-password', 'password' => 'hash'], 'customer', EntityWriteResult::OPERATION_UPDATE),
         ], $context);
 
         $subscriber->onCustomerWritten($event);
@@ -53,7 +49,6 @@ class CustomerTokenSubscriberTest extends TestCase
             ->with('deleted-customer');
         $subscriber = new CustomerTokenSubscriber($contextPersister, new RequestStack(), $this->sessionContextToken());
         $event = new EntityDeletedEvent('customer', [
-            new EntityWriteResult('deleted-customer', [], 'customer', EntityWriteResult::OPERATION_DELETE),
         ], Context::createDefaultContext());
 
         $subscriber->onCustomerDeleted($event);
@@ -82,7 +77,6 @@ class CustomerTokenSubscriberTest extends TestCase
 
         $subscriber = new CustomerTokenSubscriber($contextPersister, new RequestStack([$request]), $this->sessionContextToken());
         $subscriber->onCustomerWritten(new EntityWrittenEvent('customer', [
-            new EntityWriteResult('customer-id', ['id' => 'customer-id', 'password' => 'hash'], 'customer', EntityWriteResult::OPERATION_UPDATE),
         ], Context::createDefaultContext()));
 
         static::assertSame('new-token', $session->get(PlatformRequest::HEADER_CONTEXT_TOKEN));

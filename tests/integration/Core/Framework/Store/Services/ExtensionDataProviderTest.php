@@ -13,9 +13,6 @@ use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
-use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 

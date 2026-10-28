@@ -262,11 +262,4 @@ class SetOrderStateActionTest extends TestCase
         ];
     }
 
-    private function createAction(?Connection $connection = null, ?OrderService $orderService = null): SetOrderStateAction
-    {
-        return new SetOrderStateAction(
-            $connection ?? $this->connection,
-            $orderService ?? $this->orderService,
-        );
-    }
 }

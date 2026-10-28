@@ -10,5 +10,4 @@ use Contena\Core\Framework\Log\Package;
 #[Package('discovery')]
 abstract class AbstractSalesChannelDomainProvider
 {
-    abstract public function fetchSalesChannelDomains(): SalesChannelDomainCollection;
 }

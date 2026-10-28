@@ -15,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
-use Contena\Core\Test\Integration\Traits\EntityFixturesBase;
 
 /**
  * @internal

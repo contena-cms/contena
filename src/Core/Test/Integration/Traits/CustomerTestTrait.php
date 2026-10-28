@@ -3,8 +3,6 @@
 namespace Contena\Core\Test\Integration\Traits;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextPersister;
 use Contena\Core\Test\TestDefaults;

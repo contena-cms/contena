@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Payment\Payload\Struct;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Framework\App\Payload\SourcedPayloadInterface;
 use Contena\Core\Framework\Log\Package;
 
@@ -12,5 +11,4 @@ use Contena\Core\Framework\Log\Package;
 #[Package('checkout')]
 interface PaymentPayloadInterface extends SourcedPayloadInterface
 {
-    public function getOrderTransaction(): OrderTransactionEntity;
 }

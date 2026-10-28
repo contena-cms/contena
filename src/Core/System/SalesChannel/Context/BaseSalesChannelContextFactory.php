@@ -2,31 +2,21 @@
 
 namespace Contena\Core\System\SalesChannel\Context;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
-use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingCollection;
-use Contena\Core\System\Currency\Aggregate\CurrencyCountryRounding\CurrencyCountryRoundingEntity;
-use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
 use Contena\Core\System\SalesChannel\BaseSalesChannelContext;
@@ -196,120 +186,9 @@ class BaseSalesChannelContextFactory extends AbstractBaseSalesChannelContextFact
         return $this->taxRepository->search($criteria, $context)->getEntities();
     }
 
-    /**
-     * @param ContextOptions $options
-     */
-    private function getPaymentMethod(array $options, Context $context, SalesChannelEntity $salesChannel): PaymentMethodEntity
-    {
-        $id = $options[SalesChannelContextService::PAYMENT_METHOD_ID] ?? $salesChannel->getPaymentMethodId();
 
-        $criteria = new Criteria([$id]);
-        $criteria->addAssociation('media');
-        $criteria->addAssociation('appPaymentMethod');
-        $criteria->setTitle('base-context-factory::payment-method');
 
-        $paymentMethod = $this->paymentMethodRepository
-            ->search($criteria, $context)
-            ->getEntities()
-            ->get($id);
 
-        if (!$paymentMethod instanceof PaymentMethodEntity) {
-            throw SalesChannelException::unknownPaymentMethod($id);
-        }
-
-        return $paymentMethod;
-    }
-
-    /**
-     * @param ContextOptions $options
-     */
-    private function getShippingMethod(array $options, Context $context, SalesChannelEntity $salesChannel): ShippingMethodEntity
-    {
-        $id = $options[SalesChannelContextService::SHIPPING_METHOD_ID] ?? $salesChannel->getShippingMethodId();
-
-        $ids = \array_unique(array_filter([$id, $salesChannel->getShippingMethodId()]));
-
-        $criteria = new Criteria($ids);
-        $criteria->addAssociation('media');
-        $criteria->setTitle('base-context-factory::shipping-method');
-
-        $shippingMethods = $this->shippingMethodRepository->search($criteria, $context)->getEntities();
-
-        $shippingMethod = $shippingMethods->get($id) ?? $shippingMethods->get($salesChannel->getShippingMethodId());
-        if ($shippingMethod === null) {
-            throw SalesChannelException::shippingMethodNotFound($id);
-        }
-
-        return $shippingMethod;
-    }
-
-    /**
-     * @param ContextOptions $options
-     */
-    private function loadShippingLocation(array $options, Context $context, SalesChannelEntity $salesChannel): ShippingLocation
-    {
-        // allows previewing cart calculation for a specify state for not logged in customers
-        if (isset($options[SalesChannelContextService::COUNTRY_STATE_ID])) {
-            $countryStateId = $options[SalesChannelContextService::COUNTRY_STATE_ID];
-            if (!\is_string($countryStateId) || !Uuid::isValid($countryStateId)) {
-                throw SalesChannelException::invalidCountryStateId();
-            }
-
-            $criteria = new Criteria([$countryStateId]);
-            $criteria->addAssociation('country');
-
-            $criteria->setTitle('base-context-factory::country');
-
-            $state = $this->countryStateRepository->search($criteria, $context)->getEntities()->get($countryStateId);
-
-            if (!$state instanceof CountryStateEntity) {
-                throw SalesChannelException::countryStateNotFound($countryStateId);
-            }
-
-            $country = $state->getCountry();
-            if (!$country instanceof CountryEntity) {
-                throw SalesChannelException::countryNotFound($state->getCountryId());
-            }
-
-            return new ShippingLocation($country, $state, null);
-        }
-
-        $countryId = $options[SalesChannelContextService::COUNTRY_ID] ?? $salesChannel->getCountryId();
-        if (!\is_string($countryId) || !Uuid::isValid($countryId)) {
-            throw SalesChannelException::invalidCountryId();
-        }
-
-        $criteria = new Criteria([$countryId]);
-        $criteria->setTitle('base-context-factory::country');
-
-        $country = $this->countryRepository->search($criteria, $context)->getEntities()->get($countryId);
-
-        if (!$country instanceof CountryEntity) {
-            throw SalesChannelException::countryNotFound($countryId);
-        }
-
-        return ShippingLocation::createFromCountry($country);
-    }
-
-    /**
-     * @return CashRoundingConfig[]
-     */
-    private function getCashRounding(CurrencyEntity $currency, ShippingLocation $shippingLocation, Context $context): array
-    {
-        $criteria = new Criteria();
-        $criteria->setTitle('base-context-factory::cash-rounding');
-        $criteria->setLimit(1);
-        $criteria->addFilter(new EqualsFilter('currencyId', $currency->getId()));
-        $criteria->addFilter(new EqualsFilter('countryId', $shippingLocation->getCountry()->getId()));
-
-        $countryConfig = $this->currencyCountryRepository->search($criteria, $context)->getEntities()->first();
-
-        if ($countryConfig instanceof CurrencyCountryRoundingEntity) {
-            return [$countryConfig->getItemRounding(), $countryConfig->getTotalRounding()];
-        }
-
-        return [$currency->getItemRounding(), $currency->getTotalRounding()];
-    }
 
     private function getLanguageInfo(Context $context): LanguageInfo
     {

@@ -8,7 +8,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\OAuth\Scope\UserVerifiedScope;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

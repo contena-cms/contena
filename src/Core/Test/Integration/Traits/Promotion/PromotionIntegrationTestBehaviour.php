@@ -2,12 +2,6 @@
 
 namespace Contena\Core\Test\Integration\Traits\Promotion;
 
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\CartException;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\ProductLineItemFactory;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\PromotionLineItemFactory;
-use Contena\Core\Checkout\Cart\SalesChannel\CartService;
-use Contena\Core\Checkout\Promotion\Cart\PromotionProcessor;
 use Contena\Core\Checkout\Promotion\Subscriber\Storefront\StorefrontCartSubscriber;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -36,46 +30,8 @@ trait PromotionIntegrationTestBehaviour
         return $this->context;
     }
 
-    /**
-     * Adds the provided product to the cart.
-     *
-     * @throws CartException
-     */
-    public function addProduct(string $productId, int $quantity, Cart $cart, CartService $cartService, SalesChannelContext $context): Cart
-    {
-        $factory = static::getContainer()->get(ProductLineItemFactory::class);
-        $product = $factory->create(['id' => $productId, 'referencedId' => $productId, 'quantity' => $quantity], $context);
 
-        return $cartService->add($cart, $product, $context);
-    }
 
-    /**
-     * Adds the provided code to the current cart.
-     */
-    public function addPromotionCode(string $code, Cart $cart, CartService $cartService, SalesChannelContext $context): Cart
-    {
-        $lineItem = (new PromotionLineItemFactory())->create(['referencedId' => $code], $context);
-
-        $cart = $cartService->add($cart, $lineItem, $context);
-
-        return $cart;
-    }
-
-    /**
-     * Removes the provided code to the current cart.
-     */
-    public function removePromotionCode(string $code, Cart $cart, CartService $cartService, SalesChannelContext $context): Cart
-    {
-        $promotions = $cart->getLineItems()->filterType(PromotionProcessor::LINE_ITEM_TYPE);
-
-        foreach ($promotions->getElements() as $promotion) {
-            if ($promotion->getReferencedId() === $code) {
-                return $cartService->remove($cart, $promotion->getId(), $context);
-            }
-        }
-
-        return $cart;
-    }
 
     /**
      * Gets all promotion codes that have been added

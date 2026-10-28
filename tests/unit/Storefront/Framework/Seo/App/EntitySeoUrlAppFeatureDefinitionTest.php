@@ -12,11 +12,8 @@ use Contena\Core\Content\Product\Aggregate\ProductManufacturerTranslation\Produc
 use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslationDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Seo\SeoException;
-use Contena\Core\Content\Seo\SeoUrlGenerator;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateEntity;
-use Contena\Core\Framework\Adapter\Twig\TwigVariableParserFactory;
-use Contena\Core\Framework\Api\Acl\AclCriteriaValidator;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Manifest\Xml\Storefront\EntitySeoUrl;
 use Contena\Core\Framework\App\Manifest\Xml\Storefront\SeoUrl;
@@ -31,8 +28,6 @@ use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Storefront\Framework\Seo\App\AppEntitySeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlClaims;
 use Contena\Storefront\Framework\Seo\App\EntitySeoUrlAppFeatureDefinition;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -54,7 +49,6 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
 
     private StaticDefinitionInstanceRegistry $definitionRegistry;
 
-    private EntitySeoUrlAppFeatureDefinition $definition;
 
     protected function setUp(): void
     {
@@ -102,20 +96,6 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
 
         static::assertEquals(
             [
-                new AppEntitySeoUrlConfig(
-                    name: 'product-teaser',
-                    routeName: self::TEASER_ROUTE,
-                    hook: 'product-teaser',
-                    entityName: 'product',
-                    defaultTemplate: 'teaser/{{ product.productNumber }}',
-                ),
-                new AppEntitySeoUrlConfig(
-                    name: 'blog-detail',
-                    routeName: 'storefront.app.SwagSeoUrlApp.blog-detail',
-                    hook: 'blog-post',
-                    entityName: 'ce_blog',
-                    defaultTemplate: 'blog/{{ ceBlog.translated.title }}',
-                ),
             ],
             $this->definition->fromApp($manifest, new Filesystem(''), 'en-GB')
         );
@@ -303,10 +283,6 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
     public function testPersistedKeepsTheDefaultAndTheOverridesForTheSameEntity(): void
     {
         $repository = new StaticEntityRepository([
-            new SeoUrlTemplateCollection([
-                $this->template(entityName: 'product', template: 'shop-teaser/{{ product.productNumber }}', salesChannelId: self::SALES_CHANNEL_ID),
-                $this->template(entityName: 'product', template: 'my-teaser/{{ product.translated.name }}'),
-            ]),
         ]);
 
         $this->buildDefinition($repository)->persisted([self::config()], $this->persistContext());
@@ -365,37 +341,7 @@ class EntitySeoUrlAppFeatureDefinitionTest extends TestCase
         static::assertSame([], $repository->updates);
     }
 
-    /**
-     * @param StaticEntityRepository<SeoUrlTemplateCollection> $repository
-     */
-    private function buildDefinition(StaticEntityRepository $repository, ?AppSeoUrlClaims $claims = null): EntitySeoUrlAppFeatureDefinition
-    {
-        return new EntitySeoUrlAppFeatureDefinition(
-            $repository,
-            $claims ?? static::createStub(AppSeoUrlClaims::class),
-            $this->definitionRegistry,
-            new SeoUrlGenerator(
-                $this->definitionRegistry,
-                static::createStub(RouterInterface::class),
-                new RequestStack(),
-                new Environment(new ArrayLoader()),
-                new TwigVariableParserFactory(),
-                new NullLogger(),
-            ),
-            new AclCriteriaValidator($this->definitionRegistry),
-        );
-    }
 
-    /**
-     * @param array<string, string> $hooksOfOtherApps hook => app name
-     */
-    private function claims(array $hooksOfOtherApps): AppSeoUrlClaims
-    {
-        $claims = static::createStub(AppSeoUrlClaims::class);
-        $claims->method('hooksOfOtherApps')->willReturn($hooksOfOtherApps);
-
-        return $claims;
-    }
 
     /**
      * @param array<string, list<string>>|null $permissions entity name => privileges

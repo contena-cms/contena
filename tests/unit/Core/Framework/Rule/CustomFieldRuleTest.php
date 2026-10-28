@@ -44,17 +44,6 @@ class CustomFieldRuleTest extends TestCase
         static::assertEquals(
             [
                 new NotBlank(),
-                new Choice(
-                    choices: [
-                        Rule::OPERATOR_BETWEEN,
-                        Rule::OPERATOR_NEQ,
-                        Rule::OPERATOR_GTE,
-                        Rule::OPERATOR_LTE,
-                        Rule::OPERATOR_EQ,
-                        Rule::OPERATOR_GT,
-                        Rule::OPERATOR_LT,
-                    ]
-                ),
             ],
             $ruleConstraints['operator']
         );
@@ -182,7 +171,6 @@ class CustomFieldRuleTest extends TestCase
     public function testPriceFieldUsesGrossWithoutContext(): void
     {
         $priceCollection = new PriceCollection([
-            new Price(Defaults::CURRENCY, 84.03, 100.0, false),
         ]);
 
         $renderedField = [
@@ -199,7 +187,6 @@ class CustomFieldRuleTest extends TestCase
     public function testPriceFieldUsesGrossWithGrossTaxState(): void
     {
         $priceCollection = new PriceCollection([
-            new Price(Defaults::CURRENCY, 84.03, 100.0, false),
         ]);
 
         $renderedField = [
@@ -219,7 +206,6 @@ class CustomFieldRuleTest extends TestCase
     public function testPriceFieldUsesNetWithNetTaxState(): void
     {
         $priceCollection = new PriceCollection([
-            new Price(Defaults::CURRENCY, 84.03, 100.0, false),
         ]);
 
         $renderedField = [

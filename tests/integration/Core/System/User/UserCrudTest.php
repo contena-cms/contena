@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

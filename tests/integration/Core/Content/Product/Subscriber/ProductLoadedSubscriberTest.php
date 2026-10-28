@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\ListPrice;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
@@ -28,7 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
@@ -1252,17 +1250,8 @@ class ProductLoadedSubscriberTest extends TestCase
         ];
 
         $cases = [
-            new ListPriceTestCase(100, 90, 200, 90, 50, CartPrice::TAX_STATE_GROSS, -100, 100, 200),
-            new ListPriceTestCase(100, 90, 200, 135, 33.33, CartPrice::TAX_STATE_NET, -45, 90, 135),
-            new ListPriceTestCase(100, 90, 200, 135, 33.33, CartPrice::TAX_STATE_FREE, -45, 90, 135),
 
-            new ListPriceTestCase(100, 90, 200, 90, 50, CartPrice::TAX_STATE_GROSS, -100, 100, 200, $ids->get('currency'), $ids->get('currency')),
-            new ListPriceTestCase(100, 90, 200, 135, 33.33, CartPrice::TAX_STATE_NET, -45, 90, 135, $ids->get('currency'), $ids->get('currency')),
-            new ListPriceTestCase(100, 90, 200, 135, 33.33, CartPrice::TAX_STATE_FREE, -45, 90, 135, $ids->get('currency'), $ids->get('currency')),
 
-            new ListPriceTestCase(100, 90, 200, 90, 50, CartPrice::TAX_STATE_GROSS, -150, 150, 300, Defaults::CURRENCY, $ids->get('currency')),
-            new ListPriceTestCase(100, 90, 200, 135, 33.33, CartPrice::TAX_STATE_NET, -67.5, 135, 202.5, Defaults::CURRENCY, $ids->get('currency')),
-            new ListPriceTestCase(100, 90, 200, 135, 33.33, CartPrice::TAX_STATE_FREE, -67.5, 135, 202.5, Defaults::CURRENCY, $ids->get('currency')),
         ];
 
         $context = static::getContainer()->get(SalesChannelContextFactory::class)

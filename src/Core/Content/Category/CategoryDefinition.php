@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Category;
 
 use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
-use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductCategory\ProductCategoryDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductCategoryTree\ProductCategoryTreeDefinition;
@@ -20,13 +19,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ChildrenAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Deprecated;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ReverseInherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
@@ -72,7 +68,6 @@ class CategoryDefinition extends EntityDefinition
 
     final public const PRODUCT_ASSIGNMENT_TYPE_PRODUCT_STREAM = 'product_stream';
 
-    final public const CONFIG_KEY_DEFAULT_CMS_PAGE_CATEGORY = 'core.cms.default_category_cms_page';
 
     public function getEntityName(): string
     {
@@ -130,18 +125,12 @@ class CategoryDefinition extends EntityDefinition
             (new TreePathField('path', 'path'))->addFlags(new ApiAware())->setDescription('A relative URL to the category.'),
             (new ChildCountField())->addFlags(new ApiAware()),
 
-            (new StringField('type', 'type'))->addFlags(new ApiAware(), new Required(), new Choice([
-                self::TYPE_PAGE,
-                self::TYPE_LINK,
-                self::TYPE_FOLDER,
-            ]))->setDescription('Type of categories like `page`, `folder`, `link`.'),
             (new StringField('product_assignment_type', 'productAssignmentType'))->addFlags(new ApiAware(), new Required())->setDescription('Type of product assignment: Dynamic product group as or `product_stream` or Manual assignment as `product`.'),
             (new BoolField('visible', 'visible'))->addFlags(new ApiAware())->setDescription('Displays categories on category page when true.'),
             (new BoolField('active', 'active'))->addFlags(new ApiAware())->setDescription('When boolean value is `true`, the category is listed for selection.'),
 
             (new IntField('visible_child_count', 'visibleChildCount'))->addFlags(new Runtime(), new ApiAware()),
 
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             new TranslatedField('slotConfig'),
             (new TranslatedField('linkType'))->addFlags(new ApiAware()),
@@ -162,9 +151,6 @@ class CategoryDefinition extends EntityDefinition
             (new ManyToManyAssociationField('nestedProducts', ProductDefinition::class, ProductCategoryTreeDefinition::class, 'category_id', 'product_id'))->addFlags(new CascadeDelete(), new WriteProtected()),
             (new ManyToManyAssociationField('tags', TagDefinition::class, CategoryTagDefinition::class, 'category_id', 'tag_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Tags for organizing and filtering categories'),
 
-            (new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of CMS page.'),
-            (new ReferenceVersionField(CmsPageDefinition::class))->addFlags(new Required(), new ApiAware()),
-            (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('CMS page layout for the category'),
             (new FkField('product_stream_id', 'productStreamId', ProductStreamDefinition::class))->setDescription('Unique identity of product stream.'),
             new ManyToOneAssociationField('productStream', 'product_stream_id', ProductStreamDefinition::class, 'id', false),
 
@@ -181,7 +167,6 @@ class CategoryDefinition extends EntityDefinition
 
         if (!Feature::isActive('v6.8.0.0')) {
             $fields->add(
-                (new BoolField('cms_page_id_switched', 'cmsPageIdSwitched'))->addFlags(new Runtime(), new ApiAware(), new Deprecated('v6.7.9.0', 'v6.8.0.0')),
             );
         }
 

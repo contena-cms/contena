@@ -5,8 +5,6 @@ namespace Contena\Storefront\Theme\Message;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\AsyncMessageInterface;
-use Contena\Storefront\Theme\ScheduledTask\DeleteThemeFilesTask;
-use Contena\Storefront\Theme\ScheduledTask\DeleteThemeFilesTaskHandler;
 
 /**
  * used to delay the deletion of theme files

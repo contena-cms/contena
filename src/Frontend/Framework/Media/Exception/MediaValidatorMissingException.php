@@ -6,7 +6,6 @@ namespace Contena\Storefront\Framework\Media\Exception;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;
-use Contena\Storefront\Framework\StorefrontFrameworkException;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed, use {@see StorefrontFrameworkException::mediaValidatorMissing} instead

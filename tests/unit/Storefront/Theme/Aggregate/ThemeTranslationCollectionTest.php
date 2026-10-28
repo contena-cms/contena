@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Theme\Aggregate\ThemeTranslationCollection;
-use Contena\Storefront\Theme\Aggregate\ThemeTranslationEntity;
 
 /**
  * @internal
@@ -61,13 +60,4 @@ class ThemeTranslationCollectionTest extends TestCase
         static::assertSame([$match], array_values($filtered->getElements()));
     }
 
-    private static function translation(string $themeId, string $languageId): ThemeTranslationEntity
-    {
-        $translation = new ThemeTranslationEntity();
-        $translation->setUniqueIdentifier($themeId . '-' . $languageId);
-        $translation->setThemeId($themeId);
-        $translation->setLanguageId($languageId);
-
-        return $translation;
-    }
 }

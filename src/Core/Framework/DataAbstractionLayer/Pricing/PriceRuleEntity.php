@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\DataAbstractionLayer\Pricing;
 
 use Contena\Core\Framework\DataAbstractionLayer\Contract\IdAware;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 /**

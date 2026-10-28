@@ -18,7 +18,6 @@ use Contena\Core\Checkout\Customer\Validation\CustomerEmailUniqueChecker;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Adapter\Filesystem\PrefixFilesystem;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
-use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -716,21 +715,18 @@ class AdministrationControllerTest extends TestCase
             null,
             false,
             false,
-            new Context(new SystemSource(), [], Defaults::CURRENCY),
         ];
 
         yield 'english excluded terms' => [
             'en',
             false,
             Uuid::fromHexToBytes($languageId),
-            new Context(new SystemSource(), [], Defaults::CURRENCY, [$languageId]),
         ];
 
         yield 'german excluded terms' => [
             'de',
             Uuid::fromHexToBytes($languageId),
             false,
-            new Context(new SystemSource(), [], Defaults::CURRENCY, [$languageId]),
         ];
     }
 

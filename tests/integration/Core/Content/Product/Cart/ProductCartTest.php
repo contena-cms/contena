@@ -9,9 +9,7 @@ use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Integration\Traits\TestShortHands;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 

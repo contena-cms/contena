@@ -5,9 +5,6 @@ namespace Contena\Tests\Integration\Core\Content\Cookie\Hook;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cookie\Service\CookieProvider;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Generator;
 use Symfony\Component\HttpFoundation\Request;
 

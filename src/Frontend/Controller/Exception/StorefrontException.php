@@ -2,12 +2,9 @@
 
 namespace Contena\Storefront\Controller\Exception;
 
-use Contena\Core\Content\Newsletter\Exception\SalesChannelDomainNotFoundException;
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Twig\Error\Error as TwigError;
@@ -119,26 +116,5 @@ class StorefrontException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function domainNotFound(SalesChannelEntity $salesChannel): self|SalesChannelDomainNotFoundException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return new SalesChannelDomainNotFoundException($salesChannel);
-        }
 
-        return new self(
-            Response::HTTP_INTERNAL_SERVER_ERROR,
-            self::SALES_CHANNEL_DOMAIN_NOT_FOUND,
-            'No domain found for sales channel {{ salesChannel }}',
-            ['salesChannel' => $salesChannel->getTranslation('name')],
-        );
-    }
-
-    /**
-     * Throwing the custom exception allows to still catch {@see RouteNotFoundException} as usual
-     */
-    public static function routeNotFound(string $route, ?\Throwable $previous = null): StorefrontRouteNotFoundException
-    {
-        return new StorefrontRouteNotFoundException($route, $previous);
-    }
 }

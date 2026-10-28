@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\System\SalesChannel\SalesChannel;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 
 /**
  * @internal

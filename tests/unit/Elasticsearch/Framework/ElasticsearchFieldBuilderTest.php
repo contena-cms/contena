@@ -12,7 +12,6 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
-use Contena\Tests\Unit\Core\System\Language\Stubs\StaticLanguageLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

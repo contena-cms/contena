@@ -3,9 +3,7 @@
 namespace Contena\Core\Framework\App\Lifecycle\Handler;
 
 use League\MimeTypeDetection\FinfoMimeTypeDetector;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodEntity;
@@ -17,7 +15,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 
@@ -120,83 +117,8 @@ class PaymentMethodLifecycleHandler extends AbstractLifecycleHandler
         $this->deactivatePaymentMethods($existingPaymentMethods, $context->context);
     }
 
-    private function deactivatePaymentMethods(PaymentMethodCollection $toBeDisabled, Context $context): void
-    {
-        $updates = array_reduce($toBeDisabled->getElements(), static function (array $acc, PaymentMethodEntity $paymentMethod): array {
-            $appPaymentMethod = $paymentMethod->getAppPaymentMethod();
-            if (!$appPaymentMethod) {
-                return $acc;
-            }
 
-            if (!$paymentMethod->getActive() && !$appPaymentMethod->getAppId()) {
-                return $acc;
-            }
 
-            $acc[] = [
-                'id' => $paymentMethod->getId(),
-                'active' => false,
-                'appPaymentMethod' => [
-                    'id' => $appPaymentMethod->getId(),
-                    'appId' => null,
-                ],
-            ];
-
-            return $acc;
-        }, []);
-
-        if ($updates === []) {
-            return;
-        }
-
-        $this->paymentMethodRepository->update($updates, $context);
-    }
-
-    /**
-     * @param array<string, mixed> $payload
-     *
-     * @return array<string, mixed>
-     */
-    private function removeAlreadyTranslatedTexts(array $payload, PaymentMethodEntity $existing): array
-    {
-        $translated = [];
-        foreach ($existing->getTranslations() ?? [] as $translation) {
-            // DAL resolves translation payload keys through the translation code, not the formatting locale
-            $translationCode = $translation->getLanguage()?->getTranslationCode()?->getCode();
-            if ($translationCode !== null) {
-                $translated[$translationCode] = true;
-            }
-        }
-
-        foreach (['name', 'description'] as $field) {
-            $texts = \is_array($payload[$field] ?? null) ? array_diff_key($payload[$field], $translated) : [];
-
-            if ($texts === []) {
-                unset($payload[$field]);
-
-                continue;
-            }
-
-            $payload[$field] = $texts;
-        }
-
-        return $payload;
-    }
-
-    private function getExistingPaymentMethods(string $appName, string $appId, Context $context): PaymentMethodCollection
-    {
-        $criteria = new Criteria();
-        $criteria->addAssociation('media');
-        $criteria->addAssociation('appPaymentMethod.originalMedia');
-        $criteria->addAssociation('translations.language.translationCode');
-        $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, [
-            new EqualsFilter('appPaymentMethod.appName', $appName),
-            new EqualsFilter('appPaymentMethod.appId', $appId),
-        ]));
-
-        return $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($criteria) {
-            return $this->paymentMethodRepository->search($criteria, $context)->getEntities();
-        });
-    }
 
     private function updateActiveState(string $appId, Context $context, bool $currentActiveState, bool $newActiveState): void
     {

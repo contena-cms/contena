@@ -5,7 +5,6 @@ namespace Contena\Storefront\Controller\Api;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\PlatformRequest;
-use Contena\Storefront\Framework\Captcha\AbstractCaptcha;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;

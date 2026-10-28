@@ -9,7 +9,6 @@ use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Sso\TokenService\PublicKeyLoader;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Unit\Core\Framework\Sso\TokenService\_fixtures\JwksIds;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\Response;

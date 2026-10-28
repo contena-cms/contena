@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Language\LanguageDefinition;
 
 #[Package('framework')]
 abstract class EntityTranslationDefinition extends EntityDefinition
@@ -63,9 +62,7 @@ abstract class EntityTranslationDefinition extends EntityDefinition
 
         $baseFields = [
             (new FkField($entityName . '_id', $propertyBaseName . 'Id', $translatedDefinition->getEntityName(), 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
-            (new FkField('language_id', 'languageId', LanguageDefinition::ENTITY_NAME, 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             new ManyToOneAssociationField($propertyBaseName, $entityName . '_id', $translatedDefinition->getEntityName(), 'id', false),
-            new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::ENTITY_NAME, 'id', false),
         ];
 
         if ($this->isVersionAware()) {

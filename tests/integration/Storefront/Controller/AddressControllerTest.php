@@ -14,8 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\Seo\StorefrontSalesChannelTestHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Exception\InvalidUuidException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -30,7 +28,6 @@ use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Controller\AddressController;
 use Contena\Storefront\Event\StorefrontRenderEvent;
 use Contena\Storefront\Framework\Routing\RequestTransformer;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -571,7 +568,6 @@ class AddressControllerTest extends TestCase
 
         $renderEvent = null;
         EventHookDispatcher::fromContainer(static::getContainer())->on(
-            StorefrontRenderEvent::class,
             static function (StorefrontRenderEvent $event) use (&$renderEvent): void {
                 $renderEvent = $event;
             },

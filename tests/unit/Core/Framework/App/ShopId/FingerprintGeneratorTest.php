@@ -25,9 +25,6 @@ class FingerprintGeneratorTest extends TestCase
     protected function setUp(): void
     {
         $this->fingerprintGenerator = new FingerprintGenerator([
-            new FooFingerprint(),
-            new BarFingerprint(),
-            new BazFingerprint(),
         ]);
     }
 
@@ -52,9 +49,6 @@ class FingerprintGeneratorTest extends TestCase
     public function testComparesFingerPrintAndReturnsResult(array $fingerprints, FingerprintComparisonResult $result): void
     {
         $fingerprintGenerator = new FingerprintGenerator([
-            new FooFingerprint(),
-            new BarFingerprint(),
-            new BazFingerprint(),
         ]);
 
         static::assertEquals($result, $fingerprintGenerator->matchFingerprints($fingerprints));
@@ -122,7 +116,6 @@ class FingerprintGeneratorTest extends TestCase
     public function testComparesFingerPrintUsingCustomComparison(array $fingerprints, FingerprintComparisonResult $result): void
     {
         $fingerprintGenerator = new FingerprintGenerator([
-            new LevenshteinFingerprint(),
         ]);
 
         static::assertEquals($result, $fingerprintGenerator->matchFingerprints($fingerprints));

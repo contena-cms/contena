@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle\Registration;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Lifecycle\Registration\PrivateHandshake;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Kernel;
 use Symfony\Component\Clock\NativeClock;

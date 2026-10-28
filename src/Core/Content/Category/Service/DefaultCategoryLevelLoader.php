@@ -8,11 +8,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\TermsA
 use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\CountAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Bucket\TermsResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
@@ -41,13 +39,6 @@ class DefaultCategoryLevelLoader implements DefaultCategoryLevelLoaderInterface
         $criteria->addFilter(new OrFilter(
             [
                 new EqualsFilter('id', $rootId),
-                new AndFilter([
-                    new ContainsFilter('path', '|' . $rootId . '|'),
-                    new RangeFilter('level', [
-                        RangeFilter::GT => $rootLevel,
-                        RangeFilter::LTE => $rootLevel + $depth + 1,
-                    ]),
-                ]),
             ]
         ));
 

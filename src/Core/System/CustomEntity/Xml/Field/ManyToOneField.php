@@ -3,7 +3,6 @@
 namespace Contena\Core\System\CustomEntity\Xml\Field;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\CustomEntity\Xml\Field\Traits\RequiredTrait;
 
 /**
  * @internal

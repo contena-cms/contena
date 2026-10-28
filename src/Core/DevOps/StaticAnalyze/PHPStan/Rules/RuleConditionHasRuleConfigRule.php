@@ -8,15 +8,6 @@ use PHPStan\Node\InClassNode;
 use PHPStan\Rules\Rule;
 use PHPStan\Rules\RuleError;
 use PHPStan\Rules\RuleErrorBuilder;
-use Contena\Core\Checkout\Cart\Rule\AlwaysValidRule;
-use Contena\Core\Checkout\Cart\Rule\GoodsCountRule;
-use Contena\Core\Checkout\Cart\Rule\GoodsPriceRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemCustomFieldRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemGoodsTotalRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemGroupRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemWithQuantityRule;
-use Contena\Core\Checkout\Cart\Rule\LineItemWrapperRule;
 use Contena\Core\Checkout\Customer\Rule\BillingZipCodeRule;
 use Contena\Core\Checkout\Customer\Rule\CustomerCustomFieldRule;
 use Contena\Core\Checkout\Customer\Rule\ShippingZipCodeRule;
@@ -24,7 +15,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\Container;
 use Contena\Core\Framework\Rule\Container\FilterRule;
-use Contena\Core\Framework\Rule\Container\MatchAllLineItemsRule;
 use Contena\Core\Framework\Rule\Container\NotRule;
 use Contena\Core\Framework\Rule\Container\OrRule;
 use Contena\Core\Framework\Rule\Container\XorRule;
@@ -56,23 +46,13 @@ class RuleConditionHasRuleConfigRule implements Rule
         NotRule::class,
         OrRule::class,
         XorRule::class,
-        MatchAllLineItemsRule::class,
         ScriptRule::class,
         DateRangeRule::class,
         SimpleRule::class,
         TimeRangeRule::class,
-        GoodsCountRule::class,
-        GoodsPriceRule::class,
-        LineItemRule::class,
-        LineItemWithQuantityRule::class,
-        LineItemWrapperRule::class,
         BillingZipCodeRule::class,
         ShippingZipCodeRule::class,
-        AlwaysValidRule::class,
-        LineItemCustomFieldRule::class,
-        LineItemGoodsTotalRule::class,
         CustomerCustomFieldRule::class,
-        LineItemGroupRule::class,
         FalseRule::class,
         TrueRule::class,
     ];

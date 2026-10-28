@@ -4,8 +4,6 @@ namespace Contena\Storefront\Theme;
 
 use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
-use Contena\Core\Defaults;
-use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableQuery;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 
@@ -24,80 +22,8 @@ class ThemeRuntimeConfigStorage
     ) {
     }
 
-    public function getByName(string $technicalName): ?ThemeRuntimeConfig
-    {
-        $record = $this->connection->fetchAssociative(
-            <<<'SQL'
-                SELECT
-                `theme_id`,
-                `technical_name`,
-                `resolved_config`,
-                `view_inheritance`,
-                `script_files`,
-                `icon_sets`,
-                `import_map`,
-                `updated_at`
-                FROM `theme_runtime_config`
-                WHERE `technical_name` = :technicalName
-            SQL,
-            ['technicalName' => $technicalName],
-        );
 
-        if (!$record) {
-            return null;
-        }
 
-        return $this->hydrateRecord($record);
-    }
-
-    public function getById(string $themeId): ?ThemeRuntimeConfig
-    {
-        $record = $this->connection->fetchAssociative(
-            <<<'SQL'
-                SELECT
-                `theme_id`,
-                `technical_name`,
-                `resolved_config`,
-                `view_inheritance`,
-                `script_files`,
-                `icon_sets`,
-                `import_map`,
-                `updated_at`
-                FROM `theme_runtime_config`
-                WHERE `theme_id` = :themeId
-            SQL,
-            ['themeId' => Uuid::fromHexToBytes($themeId)],
-        );
-
-        if (!$record) {
-            return null;
-        }
-
-        return $this->hydrateRecord($record);
-    }
-
-    public function save(ThemeRuntimeConfig $config): void
-    {
-        $parameters = [
-            'themeId' => Uuid::fromHexToBytes($config->themeId),
-            'technicalName' => $config->technicalName,
-            'resolvedConfig' => json_encode($config->resolvedConfig, \JSON_THROW_ON_ERROR),
-            'viewInheritance' => json_encode($config->viewInheritance, \JSON_THROW_ON_ERROR),
-            'scriptFiles' => json_encode($config->scriptFiles, \JSON_THROW_ON_ERROR),
-            'iconSets' => json_encode($config->iconSets, \JSON_THROW_ON_ERROR),
-            'importMap' => $config->importMap !== null
-                ? json_encode($config->importMap, \JSON_THROW_ON_ERROR)
-                : null,
-            'updatedAt' => $config->updatedAt->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-        ];
-
-        RetryableQuery::retryable($this->connection, function () use ($parameters): void {
-            $this->connection->executeStatement(<<<'SQL'
-                REPLACE INTO `theme_runtime_config` (theme_id, technical_name, resolved_config, view_inheritance, script_files, icon_sets, import_map, updated_at)
-                VALUES (:themeId, :technicalName, :resolvedConfig, :viewInheritance, :scriptFiles, :iconSets, :importMap, :updatedAt)
-                SQL, $parameters);
-        });
-    }
 
     public function deleteByTechnicalName(string $technicalName): void
     {
@@ -221,22 +147,4 @@ class ThemeRuntimeConfigStorage
         return $technicalName === false ? null : $technicalName;
     }
 
-    /**
-     * @param array<string, mixed> $record
-     */
-    private function hydrateRecord(array $record): ThemeRuntimeConfig
-    {
-        return ThemeRuntimeConfig::fromArray([
-            'themeId' => Uuid::fromBytesToHex($record['theme_id']),
-            'technicalName' => $record['technical_name'] !== null ? (string) $record['technical_name'] : null,
-            'resolvedConfig' => json_decode($record['resolved_config'], true, 512, \JSON_THROW_ON_ERROR),
-            'viewInheritance' => json_decode($record['view_inheritance'], true, 512, \JSON_THROW_ON_ERROR),
-            'scriptFiles' => json_decode($record['script_files'], true, 512, \JSON_THROW_ON_ERROR),
-            'iconSets' => json_decode($record['icon_sets'], true, 512, \JSON_THROW_ON_ERROR),
-            'importMap' => isset($record['import_map'])
-                ? json_decode($record['import_map'], true, 512, \JSON_THROW_ON_ERROR)
-                : null,
-            'updatedAt' => \DateTime::createFromFormat(Defaults::STORAGE_DATE_TIME_FORMAT, $record['updated_at']) ?: null,
-        ]);
-    }
 }

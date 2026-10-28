@@ -68,8 +68,6 @@ class CreateHydratorCommandTest extends TestCase
 
 namespace Contena\Core\Framework\DependencyInjection;
 
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Command\AaaHydratorCommandTestHydrator;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Command\HydratorCommandTestHydrator;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
@@ -77,17 +75,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\service;
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(HydratorCommandTestHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(AaaHydratorCommandTestHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 };
 
 EOF;

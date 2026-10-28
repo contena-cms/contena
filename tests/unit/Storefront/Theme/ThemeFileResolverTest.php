@@ -18,14 +18,6 @@ use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfi
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\ThemeFileResolver;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\MockStorefront\MockStorefront;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeNotIncludingPluginJsAndCss\ThemeNotIncludingPluginJsAndCss;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeWithBundleRelativeFiles\ThemeWithBundleRelativeFiles;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeWithInvalidBundleReference\ThemeWithInvalidBundleReference;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeWithMultiInheritance\ThemeWithMultiInheritance;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeWithStorefrontBootstrapScss\ThemeWithStorefrontBootstrapScss;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeWithStorefrontSkinScss\ThemeWithStorefrontSkinScss;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

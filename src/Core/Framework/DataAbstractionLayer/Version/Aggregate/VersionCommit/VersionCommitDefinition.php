@@ -10,11 +10,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommitData\VersionCommitDataDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Version\VersionDefinition;
@@ -76,7 +74,6 @@ class VersionCommitDefinition extends EntityDefinition
             new IdField('integration_id', 'integrationId'),
             new AutoIncrementField(),
             new BoolField('is_merge', 'isMerge'),
-            (new StringField('message', 'message'))->addFlags(new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new OneToManyAssociationField('data', VersionCommitDataDefinition::class, 'version_commit_id'))->addFlags(new CascadeDelete()),
             new ManyToOneAssociationField('version', 'version_id', VersionDefinition::class, 'id', false),
         ]);

@@ -3,7 +3,6 @@
 namespace Contena\Storefront\Framework\Twig;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Framework\Twig\TokenParser\IconTokenParser;
 use Twig\Extension\AbstractExtension;
 
 #[Package('discovery')]
@@ -19,7 +18,6 @@ class IconExtension extends AbstractExtension
     public function getTokenParsers(): array
     {
         return [
-            new IconTokenParser(),
         ];
     }
 }

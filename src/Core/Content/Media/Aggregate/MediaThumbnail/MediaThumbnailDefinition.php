@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Media\Aggregate\MediaThumbnail;
 
 use Contena\Core\Content\Media\Aggregate\MediaThumbnailSize\MediaThumbnailSizeDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
@@ -12,9 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -62,8 +59,6 @@ class MediaThumbnailDefinition extends EntityDefinition
             /** @deprecated tag:v6.8.0 - Will be required */
             (new FkField('media_thumbnail_size_id', 'mediaThumbnailSizeId', MediaThumbnailSizeDefinition::class))->addFlags(new ApiAware()),
 
-            (new IntField('width', 'width'))->addFlags(new ApiAware(), new Required(), new WriteProtected(Context::SYSTEM_SCOPE))->setDescription('Width of the thumbnail.'),
-            (new IntField('height', 'height'))->addFlags(new ApiAware(), new Required(), new WriteProtected(Context::SYSTEM_SCOPE))->setDescription('Height of the thumbnail.'),
             (new StringField('url', 'url'))->addFlags(new ApiAware(), new Runtime(['path', 'updatedAt']))->setDescription('Public url of media thumbnail.'),
             (new StringField('path', 'path', 2048))->addFlags(new ApiAware()),
             new ManyToOneAssociationField('media', 'media_id', MediaDefinition::class, 'id', false),

@@ -15,7 +15,6 @@ use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOpt
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionEntity;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Content\Property\PropertyGroupDefinition;
-use Contena\Core\Content\Property\PropertyGroupEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
@@ -210,16 +209,6 @@ class PropertyFilterHandlerTest extends TestCase
                 static::assertContains('size', $criteria->getIds());
 
                 return new PropertyGroupCollection([
-                    (new PropertyGroupEntity())->assign([
-                        'id' => 'color',
-                        'sortingType' => PropertyGroupDefinition::SORTING_TYPE_POSITION,
-                        'position' => 1,
-                    ]),
-                    (new PropertyGroupEntity())->assign([
-                        'id' => 'size',
-                        'sortingType' => PropertyGroupDefinition::SORTING_TYPE_POSITION,
-                        'position' => 2,
-                    ]),
                 ]);
             },
             new PropertyGroupCollection(),

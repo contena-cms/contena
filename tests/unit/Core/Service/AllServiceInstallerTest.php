@@ -25,7 +25,6 @@ use Contena\Core\Service\ServiceStorage;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

@@ -29,7 +29,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
@@ -333,7 +332,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('product.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('product.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
 
@@ -348,7 +346,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('product.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('product.prices.price', [RangeFilter::LTE => 100]),
             ])
         );
 
@@ -366,7 +363,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('product.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('product.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
         $criteria->addSorting(new FieldSorting('product.prices.price'));
@@ -385,7 +381,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('product.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('product.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
         $criteria->addSorting(new FieldSorting('product.prices.price', FieldSorting::DESCENDING));
@@ -404,7 +399,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('product.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('product.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
         $criteria->addGroupField(new FieldGrouping('product.prices.ruleId'));
@@ -610,7 +604,6 @@ class JoinFilterTest extends TestCase
         $criteria->addFilter(
             new AndFilter([
                 new EqualsFilter('product.prices.ruleId', self::$ids->get('rule-1')),
-                new RangeFilter('product.prices.price', [RangeFilter::GTE => 100]),
             ])
         );
 

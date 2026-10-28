@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\TrustedOriginUrlGenerator;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Exception\RouteNotFoundException;
 use Symfony\Component\Routing\Loader\ClosureLoader;

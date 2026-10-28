@@ -5,7 +5,6 @@ namespace Contena\Tests\DevOps\Core\Framework\Adapter\Cache;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpKernel\DependencyInjection\ServicesResetter;

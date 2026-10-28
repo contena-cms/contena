@@ -48,11 +48,4 @@ class StorefrontScriptResponseFactoryFacadeHookFactoryTest extends TestCase
         $facade->render('@Storefront/foo.html.twig');
     }
 
-    private function buildFactory(?ScriptController $scriptController = null): StorefrontScriptResponseFactoryFacadeHookFactory
-    {
-        return new StorefrontScriptResponseFactoryFacadeHookFactory(
-            static::createStub(RouterInterface::class),
-            $scriptController ?? static::createStub(ScriptController::class),
-        );
-    }
 }

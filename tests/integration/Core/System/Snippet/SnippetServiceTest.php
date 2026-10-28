@@ -14,9 +14,6 @@ use Contena\Core\Framework\App\ActiveAppsLoader;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Snippet\Extension\StorefrontSnippetsExtension;
 use Contena\Core\System\Snippet\Files\AbstractSnippetFile;
@@ -31,7 +28,6 @@ use Contena\Core\System\Snippet\SnippetException;
 use Contena\Core\System\Snippet\SnippetService;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Tests\Integration\Core\System\Snippet\Mock\MockSnippetFile;
 use Symfony\Component\Translation\MessageCatalogue;
 use Symfony\Component\Translation\MessageCatalogueInterface;
 

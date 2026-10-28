@@ -16,7 +16,6 @@ use Contena\Core\Checkout\Customer\SalesChannel\LogoutRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\ResetPasswordRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\SendPasswordRecoveryMailRoute;
 use Contena\Core\Checkout\Customer\Service\GuestAuthenticator;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\SalesChannel\OrderRoute;
 use Contena\Core\Content\ContactForm\SalesChannel\AbstractContactFormRoute;
 use Contena\Core\Content\ContactForm\SalesChannel\ContactFormRoute;
@@ -28,13 +27,11 @@ use Contena\Core\Content\RevocationRequest\SalesChannel\RevocationRequestRoute;
 use Contena\Core\Framework\Adapter\Translation\AbstractTranslator;
 use Contena\Core\Framework\Adapter\Translation\ConstraintViolationTranslator;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\RateLimiter\Exception\RateLimitExceededException;
 use Contena\Core\Framework\RateLimiter\RateLimiter;
 use Contena\Core\Framework\Test\RateLimiter\DisableRateLimiterCompilerPass;
-use Contena\Core\Framework\Test\RateLimiter\RateLimiterTestTrait;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
@@ -43,8 +40,6 @@ use Contena\Core\SalesChannelRequest;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
-use Contena\Core\Test\Integration\Traits\OrderFixture;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Checkout\Cart\SalesChannel\StorefrontCartFacade;
 use Contena\Storefront\Checkout\Order\OrderProductAvailabilityResolver;
@@ -55,7 +50,6 @@ use Contena\Storefront\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Storefront\Page\Account\Order\AccountOrderPageLoader;
 use Contena\Storefront\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
 use Contena\Storefront\Page\GenericPageLoader;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Clock\Test\ClockSensitiveTrait;
@@ -477,35 +471,6 @@ class ControllerRateLimiterTest extends TestCase
         return $request;
     }
 
-    private function createCustomerWithOrder(): OrderEntity
-    {
-        $orderId = Uuid::randomHex();
-        $customerId = $this->createCustomer('orderTest@example.com', true);
-
-        static::getContainer()->get('customer.repository')->update([
-            [
-                'id' => $customerId,
-                'salesChannelId' => $this->ids->get('sales-channel'),
-            ],
-        ], $this->context);
-
-        $orderData = $this->getOrderData($orderId, $this->context);
-        $orderData[0]['orderCustomer']['customer'] = ['id' => $customerId];
-        $orderData[0]['orderCustomer']['email'] = 'orderTest@example.com';
-        $orderData[0]['orderCustomer']['addresses'][0]['zipcode'] = '12345';
-        $orderData[0]['addresses'][0]['zipcode'] = '12345';
-        $orderData[0]['salesChannelId'] = $this->ids->get('sales-channel');
-
-        $orderRepository = static::getContainer()->get('order.repository');
-        $orderRepository->create($orderData, $this->context);
-
-        $order = $orderRepository->search(new Criteria([$orderId]), $this->context)->getEntities()->first();
-
-        static::assertNotNull($order);
-        static::assertInstanceOf(OrderEntity::class, $order);
-
-        return $order;
-    }
 
     private function queryFromString(string $url, string $param): string
     {

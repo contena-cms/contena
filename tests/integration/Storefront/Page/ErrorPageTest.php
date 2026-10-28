@@ -3,19 +3,15 @@
 namespace Contena\Tests\Integration\Storefront\Page;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Cms\CmsPageCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Page\Navigation\Error\ErrorPageLoadedEvent;
-use Contena\Storefront\Page\Navigation\Error\ErrorPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -63,10 +59,6 @@ class ErrorPageTest extends TestCase
         static::assertSame('404 layout', $page->getCmsPage()?->getName());
     }
 
-    protected function getPageLoader(): ErrorPageLoader
-    {
-        return static::getContainer()->get(ErrorPageLoader::class);
-    }
 
     private function createPage(): string
     {

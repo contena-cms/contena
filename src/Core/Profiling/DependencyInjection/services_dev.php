@@ -3,7 +3,6 @@
 namespace Contena\Core\Profiling\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\CartPersister;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Profiling\Controller\ProfilerController;
 use Contena\Core\Profiling\Doctrine\ConnectionProfiler;
@@ -70,7 +69,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CartDataCollectorSubscriber::class)
         ->args([
-            service(CartPersister::class),
         ])
         ->tag('kernel.event_subscriber')
         ->tag('data_collector');

@@ -4,8 +4,6 @@ namespace Contena\Tests\Integration\Core\Content\Flow\Dispatching;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\ProductLineItemFactory;
-use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Checkout\Cart\Rule\CartVolumeRule;
 use Contena\Core\Checkout\Cart\Rule\LineItemRule;
 use Contena\Core\Checkout\Cart\Rule\LineItemTotalPriceRule;
@@ -16,10 +14,8 @@ use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Event\CustomerDoubleOptInRegistrationEvent;
 use Contena\Core\Checkout\Customer\Rule\CustomerGroupRule;
 use Contena\Core\Checkout\Customer\Rule\LastNameRule;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\Action\AddCustomerTagAction;
@@ -35,8 +31,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
@@ -56,7 +50,6 @@ class FlowExecutorTest extends TestCase
     use IntegrationTestBehaviour;
     use SalesChannelApiTestBehaviour;
 
-    private CartService $cartService;
 
     /**
      * @var EntityRepository<ProductCollection>
@@ -83,7 +76,6 @@ class FlowExecutorTest extends TestCase
      */
     private EntityRepository $tagRepository;
 
-    private OrderTransactionStateHandler $orderTransactionStateHandler;
 
     /**
      * @var EntityRepository<CustomerCollection>
@@ -181,24 +173,6 @@ class FlowExecutorTest extends TestCase
         $ids->set('order', $this->cartService->order($cart, $this->salesChannelContext, new RequestDataBag()));
     }
 
-    private function addProducts(Cart $cart, IdsCollection $ids): Cart
-    {
-        $taxIds = $this->salesChannelContext->getTaxRules()->getIds();
-        $ids->set('t1', (string) array_pop($taxIds));
-
-        $this->productRepository->create([
-            (new ProductBuilder($ids, 'product'))
-                ->price(100)
-                ->tax('t1')
-                ->visibility()
-                ->add('height', 3000)
-                ->add('width', 3000)
-                ->add('length', 3000)
-                ->build(),
-        ], $this->salesChannelContext->getContext());
-
-        return $this->addProductToCart($ids->get('product'), 1, $cart, $this->cartService, $this->salesChannelContext);
-    }
 
     private function changeTransactionStateToPaid(string $orderId): void
     {
@@ -360,13 +334,6 @@ class FlowExecutorTest extends TestCase
         ], $this->salesChannelContext->getContext());
     }
 
-    private function addProductToCart(string $productId, int $quantity, Cart $cart, CartService $cartService, SalesChannelContext $context): Cart
-    {
-        $factory = new ProductLineItemFactory(new PriceDefinitionFactory());
-        $product = $factory->create(['id' => $productId, 'referencedId' => $productId, 'quantity' => $quantity], $context);
-
-        return $cartService->add($cart, $product, $context);
-    }
 
     private function createCustomerAwareFlow(IdsCollection $idsCollection): void
     {

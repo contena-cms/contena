@@ -13,7 +13,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Theme\Snippet\ThemeConfigSnippetGenerator;
 use Contena\Storefront\Theme\Snippet\ThemeSnippetFileWriter;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
 
 /**
@@ -29,7 +28,6 @@ class ThemeSnippetFileWriterTest extends TestCase
 
     private LoggerInterface&MockObject $logger;
 
-    private ThemeSnippetFileWriter $writer;
 
     protected function setUp(): void
     {
@@ -155,16 +153,6 @@ class ThemeSnippetFileWriterTest extends TestCase
         static::assertSame(['snippets/administration/SwagTheme/en-GB.json'], $writtenPaths);
     }
 
-    /**
-     * @param array<string, mixed> $fields
-     */
-    private function createConfiguration(array $fields): StorefrontPluginConfiguration
-    {
-        $configuration = new StorefrontPluginConfiguration('SwagTheme');
-        $configuration->setThemeJson(['name' => 'SwagTheme', 'config' => ['fields' => $fields]]);
-
-        return $configuration;
-    }
 
     /**
      * @return array<string, mixed>

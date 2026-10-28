@@ -25,9 +25,4 @@ class MockThemeVariablesSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onAddVariables(ThemeCompilerEnrichScssVariablesEvent $event): void
-    {
-        $event->addVariable('mock-variable-black', '#000000');
-        $event->addVariable('mock-variable-special', 'Special value with quotes', true);
-    }
 }

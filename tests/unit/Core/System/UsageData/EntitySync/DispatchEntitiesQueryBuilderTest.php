@@ -38,7 +38,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(DispatchEntitiesQueryBuilder::class)]
 class DispatchEntitiesQueryBuilderTest extends TestCase
 {
-    private DispatchEntitiesQueryBuilder $queryHelper;
 
     private MockObject&Connection $connection;
 

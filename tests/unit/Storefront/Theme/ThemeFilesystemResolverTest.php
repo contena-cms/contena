@@ -10,7 +10,6 @@ use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\MockStorefront\MockStorefront;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
 
 /**

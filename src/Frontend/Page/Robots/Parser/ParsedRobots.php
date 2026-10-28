@@ -3,8 +3,6 @@
 namespace Contena\Storefront\Page\Robots\Parser;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Page\Robots\Struct\RobotsDirective;
-use Contena\Storefront\Page\Robots\Struct\RobotsUserAgentBlock;
 
 #[Package('discovery')]
 class ParsedRobots

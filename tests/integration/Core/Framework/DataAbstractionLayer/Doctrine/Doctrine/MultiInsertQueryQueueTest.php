@@ -9,7 +9,6 @@ use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

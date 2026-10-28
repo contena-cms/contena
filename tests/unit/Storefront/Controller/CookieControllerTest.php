@@ -11,7 +11,6 @@ use Contena\Core\Content\Cookie\Struct\CookieGroupCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Generator;
 use Contena\Storefront\Controller\CookieController;
-use Contena\Tests\Unit\Storefront\Controller\Stub\CookieControllerStub;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 

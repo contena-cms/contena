@@ -44,7 +44,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(EntityDeleteSubscriber::class)]
 class EntityDeleteSubscriberTest extends TestCase
 {
-    private UsageDataAllowListService $usageDataAllowListServiceMock;
 
     /**
      * @var array<string, bool>
@@ -439,8 +438,6 @@ class EntityWithSinglePrimaryKey extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey()),
-            (new NonStorageAwareField('nonStorageAwarePrimaryKey'))->addFlags(new PrimaryKey()),
-            new NonStorageAwareField('nonStorageAware'),
             new ReferenceVersionField(ProductDefinition::class, 'product_version_id'),
         ]);
     }
@@ -462,7 +459,6 @@ class IgnoredEntityDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey()),
-            new NonStorageAwareField('name'),
             new ReferenceVersionField(ProductDefinition::class, 'product_version_id'),
         ]);
     }

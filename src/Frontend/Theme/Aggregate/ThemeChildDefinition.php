@@ -2,14 +2,9 @@
 
 namespace Contena\Storefront\Theme\Aggregate;
 
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Theme\ThemeDefinition;
 
 /**
  * @codeCoverageIgnore
@@ -32,10 +27,6 @@ class ThemeChildDefinition extends MappingEntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            (new FkField('parent_id', 'parentId', ThemeDefinition::class))->addFlags(new PrimaryKey(), new Required()),
-            (new FkField('child_id', 'childId', ThemeDefinition::class))->addFlags(new PrimaryKey(), new Required()),
-            new ManyToOneAssociationField('parentTheme', 'parent_id', ThemeDefinition::class),
-            new ManyToOneAssociationField('childTheme', 'child_id', ThemeDefinition::class),
         ]);
     }
 }

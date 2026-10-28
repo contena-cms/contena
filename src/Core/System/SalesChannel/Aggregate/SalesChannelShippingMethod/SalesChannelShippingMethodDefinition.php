@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\SalesChannel\Aggregate\SalesChannelShippingMethod;
 
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
@@ -34,9 +33,7 @@ class SalesChannelShippingMethodDefinition extends MappingEntityDefinition
     {
         return new FieldCollection([
             (new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class))->addFlags(new PrimaryKey(), new Required()),
-            (new FkField('shipping_method_id', 'shippingMethodId', ShippingMethodDefinition::class))->addFlags(new PrimaryKey(), new Required()),
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false),
-            new ManyToOneAssociationField('shippingMethod', 'shipping_method_id', ShippingMethodDefinition::class, 'id', false),
         ]);
     }
 }

@@ -41,7 +41,6 @@ class ProductProxyTest extends TestCase
         );
 
         $product->setCalculatedPrices(new PriceCollection([
-            new CalculatedPrice(9, 9, new CalculatedTaxCollection(), new TaxRuleCollection()),
         ]));
 
         $context = static::createStub(SalesChannelContext::class);

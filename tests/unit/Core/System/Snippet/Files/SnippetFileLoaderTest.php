@@ -38,11 +38,6 @@ use Contena\Core\System\Snippet\Service\TranslationLoader;
 use Contena\Core\System\Snippet\SnippetDefinition;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Administration\Snippet\SnippetFixture;
-use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\BaseSnippetSet\BaseSnippetSet;
-use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\ContenaBundleWithSnippets\ContenaBundleWithSnippets;
-use Contena\Tests\Unit\Core\System\Snippet\Files\_fixtures\SnippetSet\SnippetSet;
-use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
 

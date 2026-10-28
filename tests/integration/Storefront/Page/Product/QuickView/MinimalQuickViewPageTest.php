@@ -7,13 +7,9 @@ use Contena\Core\Content\Product\Exception\ProductNotFoundException;
 use Contena\Core\Content\Product\ProductException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Storefront\Page\Product\QuickView\MinimalQuickViewPageCriteriaEvent;
 use Contena\Storefront\Page\Product\QuickView\MinimalQuickViewPageLoadedEvent;
-use Contena\Storefront\Page\Product\QuickView\MinimalQuickViewPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
-use Contena\Tests\Integration\Storefront\Page\StorefrontPageTestConstants;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -95,8 +91,4 @@ class MinimalQuickViewPageTest extends TestCase
         static::assertInstanceOf(MinimalQuickViewPageCriteriaEvent::class, $event);
     }
 
-    protected function getPageLoader(): MinimalQuickViewPageLoader
-    {
-        return static::getContainer()->get(MinimalQuickViewPageLoader::class);
-    }
 }

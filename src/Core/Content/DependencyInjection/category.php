@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Category\Cms\CategoryNameCmsElementResolver;
-use Contena\Core\Content\Category\Cms\CategoryNavigationCmsElementResolver;
 use Contena\Core\Content\Category\DataAbstractionLayer\CategoryBreadcrumbUpdater;
 use Contena\Core\Content\Category\DataAbstractionLayer\CategoryIndexer;
 use Contena\Core\Content\Category\DataAbstractionLayer\CategoryNonExistentExceptionHandler;
@@ -25,8 +23,6 @@ use Contena\Core\Content\Category\Subscriber\CategorySubscriber;
 use Contena\Core\Content\Category\Subscriber\CategoryTreeMovedSubscriber;
 use Contena\Core\Content\Category\Tree\CategoryTreePathResolver;
 use Contena\Core\Content\Category\Validation\EntryPointValidator;
-use Contena\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader;
-use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
 use Contena\Core\Content\Seo\SeoUrlRoute\EntityRouteResolver;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -101,8 +97,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->public()
         ->args([
             service('sales_channel.category.repository'),
-            service(SalesChannelCmsPageLoader::class),
-            service(EntityCmsSlotConfigInheritanceBuilder::class),
             service(SalesChannelCategoryDefinition::class),
             service(CacheTagCollector::class),
             service(ExtensionDispatcher::class),
@@ -176,15 +170,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(CategoryNonExistentExceptionHandler::class)
         ->tag('contena.dal.exception_handler');
 
-    $services->set(CategoryNavigationCmsElementResolver::class)
-        ->args([
-            service(NavigationLoader::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(CategoryNameCmsElementResolver::class)
-        ->args([
-            service(HtmlSanitizer::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 };

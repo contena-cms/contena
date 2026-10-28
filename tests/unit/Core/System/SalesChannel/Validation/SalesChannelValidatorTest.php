@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
@@ -68,16 +67,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    [
-                        'type_id' => Uuid::fromHexToBytes($typeId),
-                        'language_id' => Uuid::fromHexToBytes($languageId),
-                    ],
-                    ['id' => Uuid::fromHexToBytes($salesChannelId)],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -99,16 +88,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    [
-                        'type_id' => Uuid::randomBytes(),
-                        'language_id' => Uuid::randomBytes(),
-                    ],
-                    ['id' => Uuid::randomBytes()],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -132,26 +111,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    [
-                        'type_id' => Uuid::fromHexToBytes(Defaults::SALES_CHANNEL_TYPE_PRODUCT_COMPARISON),
-                        'language_id' => Uuid::fromHexToBytes($languageId),
-                    ],
-                    ['id' => Uuid::fromHexToBytes($salesChannelId)],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelLanguageDefinition::ENTITY_NAME),
-                    [],
-                    [
-                        'sales_channel_id' => Uuid::fromHexToBytes($salesChannelId),
-                        'language_id' => Uuid::fromHexToBytes($languageId),
-                    ],
-                    static::createStub(EntityExistence::class),
-                    '/0/languages/0'
-                ),
             ]
         );
 
@@ -238,13 +197,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    ['currency_id' => Uuid::fromHexToBytes($currencyId)],
-                    ['id' => Uuid::fromHexToBytes($salesChannelId)],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -265,16 +217,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    [
-                        'type_id' => Uuid::fromHexToBytes($typeId),
-                        'currency_id' => Uuid::fromHexToBytes(Uuid::randomHex()),
-                    ],
-                    ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -297,16 +239,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    [
-                        'type_id' => Uuid::fromHexToBytes($typeId),
-                        'currency_id' => Uuid::fromHexToBytes($currencyId),
-                    ],
-                    ['id' => Uuid::fromHexToBytes($salesChannelId)],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -341,16 +273,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    [
-                        'type_id' => Uuid::fromHexToBytes($pluginTypeId),
-                        'currency_id' => Uuid::fromHexToBytes(Uuid::randomHex()),
-                    ],
-                    ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -371,14 +293,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelCurrencyDefinition::ENTITY_NAME),
-                    [
-                        'sales_channel_id' => Uuid::fromHexToBytes($salesChannelId),
-                        'currency_id' => Uuid::fromHexToBytes($defaultId),
-                    ],
-                    static::createStub(EntityExistence::class)
-                ),
             ]
         );
 
@@ -398,13 +312,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new UpdateCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    ['currency_id' => Uuid::fromHexToBytes($newDefaultId)],
-                    ['id' => Uuid::fromHexToBytes($salesChannelId)],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -427,13 +334,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new UpdateCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelDefinition::ENTITY_NAME),
-                    ['currency_id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                    ['id' => Uuid::fromHexToBytes($salesChannelId)],
-                    static::createStub(EntityExistence::class),
-                    '/0'
-                ),
             ]
         );
 
@@ -452,14 +352,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelCurrencyDefinition::ENTITY_NAME),
-                    [
-                        'sales_channel_id' => Uuid::fromHexToBytes($salesChannelId),
-                        'currency_id' => Uuid::fromHexToBytes($defaultId),
-                    ],
-                    static::createStub(EntityExistence::class)
-                ),
             ]
         );
 
@@ -481,16 +373,6 @@ class SalesChannelValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new InsertCommand(
-                    $this->definitionRegistry->getByEntityName(SalesChannelCurrencyDefinition::ENTITY_NAME),
-                    [],
-                    [
-                        'sales_channel_id' => Uuid::fromHexToBytes($salesChannelId),
-                        'currency_id' => Uuid::fromHexToBytes($currencyId),
-                    ],
-                    static::createStub(EntityExistence::class),
-                    '/0/currencies/0'
-                ),
             ]
         );
 

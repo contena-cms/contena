@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Framework\Adapter\Cache\Http;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
-use Contena\Core\Framework\Adapter\Cache\Http\Extension\CacheHashRequiredExtension;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
@@ -45,37 +43,6 @@ class CacheHeadersService
         $response->setVary($newVaryArray);
     }
 
-    public function applyCacheHash(Request $request, SalesChannelContext $context, Cart $cart, Response $response): ?HttpCacheCookieEvent
-    {
-        $isCacheHashRequired = $this->extensions->publish(
-            CacheHashRequiredExtension::NAME,
-            new CacheHashRequiredExtension($request, $context, $cart),
-            $this->isCacheHashRequired(...),
-        );
-
-        if (!$isCacheHashRequired) {
-            if ($request->cookies->has(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE)) {
-                $response->headers->removeCookie(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE);
-                $response->headers->clearCookie(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE);
-            }
-
-            return null;
-        }
-
-        $event = $this->buildCacheHash($request, $context);
-        $newValue = $event->getHash();
-
-        if ($request->cookies->get(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, '') !== $newValue) {
-            $cookie = Cookie::create(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, $newValue);
-            $cookie->setSecureDefault($request->isSecure());
-
-            $response->headers->setCookie($cookie);
-        }
-
-        $response->headers->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, $newValue);
-
-        return $event;
-    }
 
     private function buildCacheHash(Request $request, SalesChannelContext $context): HttpCacheCookieEvent
     {
@@ -113,58 +80,4 @@ class CacheHeadersService
         return $event;
     }
 
-    private function isCacheHashRequired(Request $request, SalesChannelContext $salesChannelContext, Cart $cart): bool
-    {
-        if ($salesChannelContext->getCustomer() !== null) {
-            // cache hash is required for logged in customers
-            return true;
-        }
-
-        if ($cart->getLineItems()->count() > 0) {
-            // cache hash is required for filled carts
-            return true;
-        }
-
-        if ($salesChannelContext->getCurrencyId() !== $salesChannelContext->getSalesChannel()->getCurrencyId()) {
-            // cache hash is required for non-default currency
-            return true;
-        }
-
-        // Visitor can patch context with values that change the response for the cacheable routes
-        // (tax state, country, payment method, shipping method conditioned rules)
-        if ($salesChannelContext->getShippingLocation()->getCountry()->getId()
-            !== $salesChannelContext->getSalesChannel()->getCountryId()
-        ) {
-            return true;
-        }
-
-        if ($salesChannelContext->getPaymentMethod()->getId()
-            !== $salesChannelContext->getSalesChannel()->getPaymentMethodId()
-        ) {
-            return true;
-        }
-
-        if ($salesChannelContext->getShippingMethod()->getId()
-            !== $salesChannelContext->getSalesChannel()->getShippingMethodId()
-        ) {
-            return true;
-        }
-
-        // sw-language-id is part of the cache key, so only a persisted context language needs the hash.
-        // Storefront requests always carry the header, set from their domain.
-        if ($salesChannelContext->getLanguageId() !== $salesChannelContext->getSalesChannel()->getLanguageId()
-            && $salesChannelContext->getLanguageId() !== (string) $request->headers->get(PlatformRequest::HEADER_LANGUAGE_ID, '')
-        ) {
-            return true;
-        }
-
-        // check if cache relevant cookies are set
-        foreach ($this->cookies as $cookie) {
-            if ($request->cookies->has($cookie)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 }

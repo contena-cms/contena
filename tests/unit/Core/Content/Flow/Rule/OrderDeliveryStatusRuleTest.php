@@ -29,7 +29,6 @@ use Contena\Core\System\SalesChannel\SalesChannelContext;
 #[Group('rules')]
 class OrderDeliveryStatusRuleTest extends TestCase
 {
-    private OrderDeliveryStatusRule $rule;
 
     protected function setUp(): void
     {

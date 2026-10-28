@@ -12,7 +12,6 @@ use Contena\Core\Content\Media\Core\Strategy\FilenamePathStrategy;
 use Contena\Core\Content\Media\Core\Strategy\PlainPathStrategy;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

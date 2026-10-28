@@ -27,7 +27,6 @@ class CustomerCustomFieldRuleTest extends TestCase
 
     private Stub $customer;
 
-    private CheckoutRuleScope $scope;
 
     protected function setUp(): void
     {

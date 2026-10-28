@@ -459,8 +459,6 @@ class SalesChannelTrackingListenerTest extends TestCase
         $customerWriteResult = new EntityWriteResult($customerId, [], CustomerDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT);
 
         $event = new EntityWrittenContainerEvent($context, new NestedEventCollection([
-            new EntityWrittenEvent(OrderDefinition::ENTITY_NAME, [$orderWriteResult], $context),
-            new EntityWrittenEvent(CustomerDefinition::ENTITY_NAME, [$customerWriteResult], $context),
         ]), []);
 
         $listener->createTrackingRecords($event);

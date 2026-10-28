@@ -19,13 +19,6 @@ use Contena\Core\Content\Media\Api\MediaUploadController;
 use Contena\Core\Content\Media\Api\MediaUploadV2Controller;
 use Contena\Core\Content\Media\Api\MediaVideoCoverController;
 use Contena\Core\Content\Media\Api\PresignedUploadController;
-use Contena\Core\Content\Media\Cms\DefaultMediaResolver;
-use Contena\Core\Content\Media\Cms\ImageCmsElementResolver;
-use Contena\Core\Content\Media\Cms\Type\ImageGalleryTypeDataResolver;
-use Contena\Core\Content\Media\Cms\Type\ImageSliderTypeDataResolver;
-use Contena\Core\Content\Media\Cms\VideoCmsElementResolver;
-use Contena\Core\Content\Media\Cms\VimeoVideoCmsElementResolver;
-use Contena\Core\Content\Media\Cms\YoutubeVideoCmsElementResolver;
 use Contena\Core\Content\Media\Commands\DeleteNotUsedMediaCommand;
 use Contena\Core\Content\Media\Commands\DeleteThumbnailsCommand;
 use Contena\Core\Content\Media\Commands\GenerateMediaTypesCommand;
@@ -527,41 +520,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(AbstractMediaUrlGenerator::class),
         ]);
 
-    // region Resolver
-    $services->set(DefaultMediaResolver::class)
-        ->args([
-            service('contena.filesystem.public'),
-        ]);
 
-    $services->set(ImageCmsElementResolver::class)
-        ->args([
-            service(DefaultMediaResolver::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(ImageSliderTypeDataResolver::class)
-        ->args([
-            service(DefaultMediaResolver::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(ImageGalleryTypeDataResolver::class)
-        ->args([
-            service(DefaultMediaResolver::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(VideoCmsElementResolver::class)
-        ->args([
-            service(DefaultMediaResolver::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(YoutubeVideoCmsElementResolver::class)
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(VimeoVideoCmsElementResolver::class)
-        ->tag('contena.cms.data_resolver');
     // endregion Resolver
 
     // region DBAL

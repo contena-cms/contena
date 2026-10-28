@@ -4,9 +4,6 @@ namespace Contena\Tests\Integration\Core\System\CustomEntity\Api;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Tests\Integration\Core\System\CustomEntity\CustomEntityTest;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

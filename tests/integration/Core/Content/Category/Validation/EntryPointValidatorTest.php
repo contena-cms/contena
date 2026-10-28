@@ -11,8 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 use Contena\Core\System\SalesChannel\SalesChannelDefinition;
 use Contena\Core\Test\TestDefaults;

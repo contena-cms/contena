@@ -4,12 +4,8 @@ namespace Contena\Tests\Integration\Storefront\Page\Account;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
 use Contena\Storefront\Page\Account\Login\AccountLoginPageLoadedEvent;
-use Contena\Storefront\Page\Account\Login\AccountLoginPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
-use Contena\Tests\Integration\Storefront\Page\StorefrontPageTestConstants;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -46,8 +42,4 @@ class LoginPageTest extends TestCase
         static::assertInstanceOf(CountryStateCollection::class, $page->getCountries()->first()?->getStates());
     }
 
-    protected function getPageLoader(): AccountLoginPageLoader
-    {
-        return static::getContainer()->get(AccountLoginPageLoader::class);
-    }
 }

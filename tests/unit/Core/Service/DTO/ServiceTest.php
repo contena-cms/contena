@@ -8,7 +8,6 @@ use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Service\DTO\Service;
 use Contena\Core\Service\State;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

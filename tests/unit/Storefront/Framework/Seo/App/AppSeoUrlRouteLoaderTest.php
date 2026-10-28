@@ -9,9 +9,7 @@ use Contena\Core\Content\Seo\ConfiguredEntitySeoUrlRoute;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityWriterGateway;
-use Contena\Storefront\Framework\Seo\App\AppEntitySeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlRouteLoader;
-use Contena\Storefront\Framework\Seo\App\AppSeoUrlRouteProvider;
 use Symfony\Component\Validator\Validation;
 
 /**
@@ -67,22 +65,5 @@ class AppSeoUrlRouteLoaderTest extends TestCase
         static::assertSame([], iterator_to_array($this->loader()->load(), false));
     }
 
-    private function loader(AppEntitySeoUrlConfig ...$seoUrls): AppSeoUrlRouteLoader
-    {
-        $provider = static::createStub(AppSeoUrlRouteProvider::class);
-        $provider->method('getEntityRoutes')->willReturn(array_values($seoUrls));
 
-        return new AppSeoUrlRouteLoader($provider, $this->definitionRegistry);
-    }
-
-    private function seoUrl(string $name, string $entityName): AppEntitySeoUrlConfig
-    {
-        return new AppEntitySeoUrlConfig(
-            name: $name,
-            routeName: 'storefront.app.SwagSeoUrlApp.' . $name,
-            hook: $name,
-            entityName: $entityName,
-            defaultTemplate: '{{ ' . $entityName . '.translated.name }}',
-        );
-    }
 }

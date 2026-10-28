@@ -5,20 +5,9 @@ namespace Contena\Tests\Integration\Storefront\Theme;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Storefront;
-use Contena\Storefront\Test\Theme\ThemeRuntimeConfigTestService;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\AbstractStorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
-use Contena\Storefront\Theme\Twig\ThemeInheritanceBuilder;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\ConfigWithoutStorefrontDefined\ConfigWithoutStorefrontDefined;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\InheritanceWithConfig\InheritanceWithConfig;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\PluginWildcardAndExplicit\PluginWildcardAndExplicit;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimpleTheme\SimpleTheme;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\ThemeWithMultiInheritance\ThemeWithMultiInheritance;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\ThemeWithoutStorefront\ThemeWithoutStorefront;
 
 /**
  * @internal
@@ -28,7 +17,6 @@ class ThemeInheritanceBuilderTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private AbstractStorefrontPluginConfigurationFactory $configFactory;
 
     protected function setUp(): void
     {
@@ -157,10 +145,4 @@ class ThemeInheritanceBuilderTest extends TestCase
         return $bundle;
     }
 
-    private function createInheritanceBuilder(StorefrontPluginConfigurationCollection $configurationCollection): ThemeInheritanceBuilder
-    {
-        $themeRuntimeConfigService = new ThemeRuntimeConfigTestService($configurationCollection);
-
-        return new ThemeInheritanceBuilder($themeRuntimeConfigService);
-    }
 }

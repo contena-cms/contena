@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ListDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelType\SalesChannelTypeDefinition;

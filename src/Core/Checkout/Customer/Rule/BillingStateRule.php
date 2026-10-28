@@ -65,7 +65,6 @@ class BillingStateRule extends Rule
         $constraints = [
             'operator' => [
                 new NotBlank(),
-                new Choice(choices: [self::OPERATOR_EQ, self::OPERATOR_NEQ, self::OPERATOR_EMPTY]),
             ],
         ];
 

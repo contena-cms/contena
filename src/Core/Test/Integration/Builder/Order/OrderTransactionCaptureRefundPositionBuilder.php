@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestBuilderTrait;
 
 /**
  * @final
@@ -20,7 +19,6 @@ class OrderTransactionCaptureRefundPositionBuilder
 
     protected string $id;
 
-    protected CalculatedPrice $amount;
 
     public function __construct(
         IdsCollection $ids,
@@ -44,7 +42,6 @@ class OrderTransactionCaptureRefundPositionBuilder
                 ->add('price', new CalculatedPrice(
                     420.69,
                     420.69,
-                    new CalculatedTaxCollection(),
                     new TaxRuleCollection()
                 ))
                 ->build());

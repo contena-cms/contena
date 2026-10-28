@@ -4,8 +4,6 @@ namespace Contena\Core\Migration\V6_7;
 
 use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Migration\AddColumnTrait;
-use Contena\Core\Framework\Migration\ColumnExistsTrait;
 use Contena\Core\Framework\Migration\MigrationStep;
 
 /**

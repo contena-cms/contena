@@ -6,7 +6,6 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageTag\LandingPageTagDefinition;
 use Contena\Core\Content\LandingPage\Aggregate\LandingPageTranslation\LandingPageTranslationDefinition;
-use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IterableQuery;

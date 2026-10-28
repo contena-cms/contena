@@ -27,7 +27,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerF
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\RootDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\SubCascadeDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\SubDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

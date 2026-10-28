@@ -33,24 +33,4 @@ class ScssPhpCompiler extends AbstractScssCompiler
         $this->compiler = new Compiler($this->cacheOptions);
     }
 
-    public function compileString(AbstractCompilerConfiguration $config, string $scss, ?string $path = null): string
-    {
-        $outputStyle = $config->getValue('outputStyle');
-
-        if ($outputStyle === OutputStyle::COMPRESSED || $outputStyle === OutputStyle::EXPANDED) {
-            $this->compiler->setOutputStyle($outputStyle);
-        }
-
-        $importPaths = $config->getValue('importPaths');
-
-        if ($importPaths !== null) {
-            $this->compiler->setImportPaths($importPaths);
-        }
-
-        $css = $this->compiler->compileString($scss, $path)->getCss();
-
-        $this->reset(); // Reset compiler for multiple usage
-
-        return $css;
-    }
 }

@@ -12,10 +12,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Migration\MigrationRuntime;
 use Contena\Core\Framework\Migration\MigrationSource;
-use Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationRuntime\Migration1000000001Successful;
-use Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationRuntime\Migration1000000002Failing;
-use Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationRuntime\Migration1000000003FkFailing;
-use Contena\Tests\Unit\Core\Framework\Migration\_fixtures\MigrationRuntime\TestableMigrationRuntime;
 
 /**
  * @internal

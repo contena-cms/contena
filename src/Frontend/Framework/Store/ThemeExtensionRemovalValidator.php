@@ -13,7 +13,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\ExtensionRemovalValidatorInterface;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Storefront\Theme\ThemeCollection;
 
 /**
  * Blocks removing an extension whose theme, or a child of it, is still assigned to a sales channel.

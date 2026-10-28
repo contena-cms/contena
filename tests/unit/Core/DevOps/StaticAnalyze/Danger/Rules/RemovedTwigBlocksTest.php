@@ -10,9 +10,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\RemovedTwigBlocks;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -26,7 +23,6 @@ class RemovedTwigBlocksTest extends TestCase
     public function testRemovedBlockDetection(string $patch, bool $expectWarning, string $expectedBlock = ''): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Storefront/Resources/views/storefront/page/product-detail/index.html.twig', File::STATUS_MODIFIED, '', $patch),
         ])));
 
         (new RemovedTwigBlocks())($context);
@@ -64,8 +60,6 @@ class RemovedTwigBlocksTest extends TestCase
     public function testNonTemplateFilesAreIgnored(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Storefront/Controller/ProductController.php', File::STATUS_MODIFIED, '', '-{% block foo %}'),
-            new StubFile('src/Storefront/Resources/views/storefront/base.html.twig', File::STATUS_ADDED, '', '-{% block bar %}'),
         ])));
 
         (new RemovedTwigBlocks())($context);

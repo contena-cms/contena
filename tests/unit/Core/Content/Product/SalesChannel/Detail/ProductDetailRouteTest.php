@@ -890,29 +890,4 @@ class ProductDetailRouteTest extends TestCase
         ];
     }
 
-    /**
-     * @param (SalesChannelRepository<SalesChannelProductCollection>&MockObject)|null $productRepository
-     */
-    private function buildRoute(
-        ?SalesChannelRepository $productRepository = null,
-        ?Connection $connection = null,
-        ?CategoryBreadcrumbBuilder $breadcrumbBuilder = null,
-        ?SalesChannelCmsPageLoader $cmsPageLoader = null,
-    ): ProductDetailRoute {
-        return new ProductDetailRoute(
-            $productRepository ?? $this->productRepository,
-            $this->productTranslationRepository,
-            $this->systemConfig,
-            $connection ?? $this->connection,
-            static::createStub(ProductConfiguratorLoader::class),
-            $breadcrumbBuilder ?? $this->breadcrumbBuilder,
-            $cmsPageLoader ?? $this->cmsPageLoader,
-            static::createStub(EntityCmsSlotConfigInheritanceBuilder::class),
-            new SalesChannelProductDefinition(),
-            $this->productCloseoutFilterFactory,
-            $this->eventDispatcher,
-            static::createStub(CacheTagCollector::class),
-            new ExtensionDispatcher(new EventDispatcher()),
-        );
-    }
 }

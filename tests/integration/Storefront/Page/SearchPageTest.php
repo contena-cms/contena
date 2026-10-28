@@ -4,11 +4,8 @@ namespace Contena\Tests\Integration\Storefront\Page;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Storefront\Page\Search\SearchPageLoadedEvent;
-use Contena\Storefront\Page\Search\SearchPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -74,8 +71,4 @@ class SearchPageTest extends TestCase
         static::assertSame('Search results | Teststore', $page->getMetaInformation()?->getMetaTitle());
     }
 
-    protected function getPageLoader(): SearchPageLoader
-    {
-        return static::getContainer()->get(SearchPageLoader::class);
-    }
 }

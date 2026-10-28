@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Exception;
 
-use Contena\Core\Checkout\Cart\CartException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\ContenaHttpException;

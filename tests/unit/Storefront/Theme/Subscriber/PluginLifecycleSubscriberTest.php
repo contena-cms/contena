@@ -27,7 +27,6 @@ use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\Subscriber\PluginLifecycleSubscriber;
 use Contena\Storefront\Theme\ThemeLifecycleHandler;
 use Contena\Storefront\Theme\ThemeLifecycleService;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeAndPlugin\AsyncPlugin\AsyncPlugin;
 
 /**
  * @internal
@@ -603,20 +602,6 @@ class PluginLifecycleSubscriberTest extends TestCase
         $subscriber->pluginPostActivate($event);
     }
 
-    private function createSubscriber(
-        StorefrontPluginRegistry $registry,
-        ThemeLifecycleHandler $themeLifecycleHandler,
-        ?AbstractStorefrontPluginConfigurationFactory $factory = null,
-        ?ThemeLifecycleService $themeLifecycleService = null,
-    ): PluginLifecycleSubscriber {
-        return new PluginLifecycleSubscriber(
-            $registry,
-            '/var/www/html',
-            $factory ?? static::createStub(AbstractStorefrontPluginConfigurationFactory::class),
-            $themeLifecycleHandler,
-            $themeLifecycleService ?? static::createStub(ThemeLifecycleService::class),
-        );
-    }
 }
 
 /**

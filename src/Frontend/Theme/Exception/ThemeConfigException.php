@@ -32,13 +32,6 @@ class ThemeConfigException extends ContenaHttpException
         return Response::HTTP_BAD_REQUEST;
     }
 
-    public function add(\Throwable $exception): ThemeConfigException
-    {
-        $this->exceptions[] = $exception;
-        $this->updateMessage();
-
-        return $this;
-    }
 
     public function tryToThrow(): void
     {

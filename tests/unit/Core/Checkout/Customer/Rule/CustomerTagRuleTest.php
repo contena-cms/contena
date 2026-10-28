@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\CheckoutRuleScope;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Rule\CustomerTagRule;
 use Contena\Core\Framework\Log\Package;
@@ -14,7 +13,6 @@ use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\Constraint\ArrayOfUuid;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
@@ -153,13 +151,6 @@ class CustomerTagRuleTest extends TestCase
         yield 'operator_empty / match / no customer' => [Rule::OPERATOR_EMPTY, true, ['kyln123', 'kyln456'], 'kyln123', true];
     }
 
-    public function createScope(?CustomerEntity $customer): CheckoutRuleScope
-    {
-        $context = static::createStub(SalesChannelContext::class);
-        $context->method('getCustomer')->willReturn($customer);
-
-        return new CheckoutRuleScope($context);
-    }
 
     private function validateConstraint(string $field, mixed $value): ConstraintViolationListInterface
     {

@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\SsoUser\SsoUserInvitationMailService;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;

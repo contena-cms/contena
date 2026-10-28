@@ -2,8 +2,6 @@
 
 namespace Contena\Core\Content\Product\SalesChannel;
 
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceCollection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\MeasurementSystem\Unit\ConvertedUnitSet;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPrice\CalculatedCheapestPrice;
@@ -19,9 +17,7 @@ use Contena\Core\Framework\Log\Package;
 #[Package('inventory')]
 class SalesChannelProductEntity extends ProductEntity
 {
-    protected PriceCollection $calculatedPrices;
 
-    protected CalculatedPrice $calculatedPrice;
 
     protected ?PropertyGroupCollection $sortedProperties = null;
 
@@ -43,25 +39,9 @@ class SalesChannelProductEntity extends ProductEntity
 
     protected ?ConvertedUnitSet $measurements = null;
 
-    public function setCalculatedPrices(PriceCollection $prices): void
-    {
-        $this->calculatedPrices = $prices;
-    }
 
-    public function getCalculatedPrices(): PriceCollection
-    {
-        return $this->calculatedPrices;
-    }
 
-    public function getCalculatedPrice(): CalculatedPrice
-    {
-        return $this->calculatedPrice;
-    }
 
-    public function setCalculatedPrice(CalculatedPrice $calculatedPrice): void
-    {
-        $this->calculatedPrice = $calculatedPrice;
-    }
 
     public function getSortedProperties(): ?PropertyGroupCollection
     {

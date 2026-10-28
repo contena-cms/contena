@@ -40,17 +40,6 @@ class CustomFieldRule
             'renderedFieldValue' => self::getRenderedFieldValueConstraints($renderedField),
             'operator' => [
                 new NotBlank(),
-                new Choice(
-                    choices: [
-                        Rule::OPERATOR_BETWEEN,
-                        Rule::OPERATOR_NEQ,
-                        Rule::OPERATOR_GTE,
-                        Rule::OPERATOR_LTE,
-                        Rule::OPERATOR_EQ,
-                        Rule::OPERATOR_GT,
-                        Rule::OPERATOR_LT,
-                    ]
-                ),
             ],
         ];
     }

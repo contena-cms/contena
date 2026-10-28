@@ -16,7 +16,6 @@ use Contena\Core\Framework\Mcp\Notification\AppMcpCapabilityLifecycleSubscriber;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

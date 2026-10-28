@@ -8,13 +8,6 @@ use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinition
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\DefinitionWithJsonOverride;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\PluginExtensionForJsonOverride;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SimpleDefinition;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\OpenApi\_fixtures\ComplexDefinition;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\OpenApi\_fixtures\DefinitionWithHiddenRequiredTranslation;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\OpenApi\_fixtures\DefinitionWithHiddenRequiredTranslationTranslation;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\OpenApi\_fixtures\SimpleExtendedDefinition;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -33,12 +26,6 @@ class OpenApiDefinitionSchemaBuilderTest extends TestCase
         $this->schemaBuilder = new OpenApiDefinitionSchemaBuilder();
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                SimpleDefinition::class,
-                ComplexDefinition::class,
-                SimpleExtendedDefinition::class,
-                DefinitionWithJsonOverride::class,
-                DefinitionWithHiddenRequiredTranslation::class,
-                DefinitionWithHiddenRequiredTranslationTranslation::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

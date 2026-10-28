@@ -20,7 +20,6 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\Salutation\SalutationDefinition;
 use Contena\Core\Test\Integration\PaymentHandler\TestPaymentHandler;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;

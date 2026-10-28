@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1775460999AddParentNameToProductSearchConfig;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

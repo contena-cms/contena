@@ -3,7 +3,6 @@
 namespace Contena\Tests\Unit\Core\Framework\Struct\Fixture;
 
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\Framework\Struct\Struct;
 

@@ -9,8 +9,6 @@ use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOptionTranslation\PropertyGroupOptionTranslationCollection;
 use Contena\Core\Content\Property\PropertyGroupEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 /**

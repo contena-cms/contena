@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Content\Sitemap\Provider;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\LandingPage\LandingPageEntity;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlEntity;
@@ -18,8 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Seo\StorefrontSalesChannelTestHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Storefront\Framework\Seo\SeoUrlRoute\ProductPageSeoUrlRoute;

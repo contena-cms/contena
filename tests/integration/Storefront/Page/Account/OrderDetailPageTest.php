@@ -6,12 +6,9 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Storefront\Event\RouteRequest\OrderRouteRequestEvent;
 use Contena\Storefront\Page\Account\Order\AccountOrderDetailPageLoadedEvent;
-use Contena\Storefront\Page\Account\Order\AccountOrderDetailPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -75,8 +72,4 @@ class OrderDetailPageTest extends TestCase
         $this->getPageLoader()->load($request, $context);
     }
 
-    protected function getPageLoader(): AccountOrderDetailPageLoader
-    {
-        return static::getContainer()->get(AccountOrderDetailPageLoader::class);
-    }
 }

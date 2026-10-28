@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ReverseInherited;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
@@ -73,7 +72,6 @@ class PropertyGroupOptionDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required())->setDescription('Unique identity of property group option.'),
             (new FkField('property_group_id', 'groupId', PropertyGroupDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of property group.'),
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('position'))->addFlags(new ApiAware()),
             (new StringField('color_hex_code', 'colorHexCode'))->addFlags(new ApiAware())->setDescription('Property group options can be displayed in the form of color. For example: #98e3f5ff.'),
             (new FkField('media_id', 'mediaId', MediaDefinition::class))->addFlags(new ApiAware())->setDescription('Unique identity of media.'),

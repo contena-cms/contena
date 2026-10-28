@@ -8,8 +8,6 @@ use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDe
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Util\FloatComparator;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;

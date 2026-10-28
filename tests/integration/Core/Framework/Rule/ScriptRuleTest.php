@@ -30,8 +30,6 @@ use Contena\Core\Framework\Rule\ScriptRule;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
 use Contena\Core\Framework\Script\Execution\Script;
 use Contena\Core\Framework\Script\Execution\ScriptEnvironmentFactory;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
@@ -342,35 +340,6 @@ class ScriptRuleTest extends TestCase
         static::assertSame($value, $rule->getValues());
     }
 
-    private function getCheckoutScope(string $ruleId, string $conditionId): CheckoutRuleScope
-    {
-        $this->ruleRepository->create(
-            [['id' => $ruleId, 'name' => 'Demo rule', 'priority' => 1]],
-            $this->context
-        );
-
-        $groupId = Uuid::randomHex();
-        $this->conditionRepository->create([
-            [
-                'id' => $conditionId,
-                'type' => (new ScriptRule())->getName(),
-                'ruleId' => $ruleId,
-                'scriptId' => $this->scriptId,
-                'value' => [
-                    'customerGroupIds' => [Uuid::randomHex(), $groupId],
-                    'operator' => Rule::OPERATOR_EQ,
-                ],
-            ],
-        ], $this->context);
-
-        $salesChannelContext = static::createStub(SalesChannelContext::class);
-        $customer = new CustomerEntity();
-
-        $customer->setGroupId($groupId);
-        $salesChannelContext->method('getCustomer')->willReturn($customer);
-
-        return new CheckoutRuleScope($salesChannelContext);
-    }
 
     private function installApp(): void
     {

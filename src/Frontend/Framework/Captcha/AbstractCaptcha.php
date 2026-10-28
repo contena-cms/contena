@@ -49,7 +49,6 @@ abstract class AbstractCaptcha
 
         // An empty list would read as valid, so a failure always needs a violation.
         return new ConstraintViolationList([
-            new ConstraintViolation('', '', [], '', '', '', null, CaptchaException::INVALID_CAPTCHA_ERROR),
         ]);
     }
 

@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\Routing;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

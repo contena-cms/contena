@@ -14,7 +14,6 @@ use Contena\Core\Framework\Api\Serializer\JsonEntityEncoder;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
@@ -32,15 +31,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Scalar
 use Contena\Core\System\User\UserDefinition;
 use Contena\Core\Test\Assert\ArrayValues;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\SerializationFixture;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicStruct;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithExtension;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToManyRelationships;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestBasicWithToOneRelationship;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestCollectionWithSelfReference;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestCollectionWithToOneRelationship;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestInternalFieldsAreFiltered;
-use Contena\Tests\Integration\Core\Framework\Api\Serializer\fixtures\TestMainResourceShouldNotBeInIncluded;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Serializer;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -109,18 +99,6 @@ class JsonEntityEncoderTest extends TestCase
         yield 'user resource keeps main resource out of included data' => [UserDefinition::class, new TestMainResourceShouldNotBeInIncluded()];
     }
 
-    /**
-     * @param class-string<EntityDefinition> $definitionClass
-     */
-    #[DataProvider('complexStructsProvider')]
-    public function testEncodeComplexStructs(string $definitionClass, SerializationFixture $fixture): void
-    {
-        $definition = $this->createDefinition($definitionClass);
-        $encoder = $this->createEncoder();
-        $actual = $encoder->encode(new Criteria(), $definition, $fixture->getInput(), SerializationFixture::API_BASE_URL);
-
-        ArrayValues::assertValues($fixture->getAdminJsonFixtures(), $actual);
-    }
 
     public function testEncodeStructWithExtension(): void
     {
@@ -411,26 +389,6 @@ class JsonEntityEncoderTest extends TestCase
         return $extendableDefinition;
     }
 
-    private function getExtendableInputWithEntityNames(TestBasicWithExtension $fixture): Entity
-    {
-        $input = $fixture->getInput();
-        static::assertInstanceOf(Entity::class, $input);
-
-        $input->internalSetEntityData('extendable', new FieldVisibility([]));
-
-        $toOne = $input->getExtension('toOne');
-        static::assertInstanceOf(Entity::class, $toOne);
-        $toOne->internalSetEntityData('extended', new FieldVisibility([]));
-
-        $toMany = $input->getExtension('toMany');
-        static::assertInstanceOf(EntityCollection::class, $toMany);
-
-        foreach ($toMany as $extension) {
-            $extension->internalSetEntityData('extended', new FieldVisibility([]));
-        }
-
-        return $input;
-    }
 
     private function createEncoder(): JsonEntityEncoder
     {

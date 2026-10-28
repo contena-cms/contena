@@ -21,8 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\
 use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\StatsResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Util\Base64;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;

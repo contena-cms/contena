@@ -3,9 +3,6 @@
 namespace Contena\Storefront\Page;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Profiling\Profiler;
-use Contena\Core\SalesChannelRequest;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -22,23 +19,4 @@ class GenericPageLoader implements GenericPageLoaderInterface
     ) {
     }
 
-    public function load(Request $request, SalesChannelContext $context): Page
-    {
-        return Profiler::trace('generic-page-loader', function () use ($request, $context) {
-            $page = new Page();
-
-            $page->setMetaInformation((new MetaInformation())->assign([
-                'revisit' => '15 days',
-                'robots' => $this->systemConfigService->getString('core.basicInformation.metaRobots', $context->getSalesChannel()->getId()) ?: 'index,follow',
-                'xmlLang' => $request->attributes->get(SalesChannelRequest::ATTRIBUTE_DOMAIN_LOCALE) ?? '',
-                'metaTitle' => $this->systemConfigService->getString('core.basicInformation.shopName', $context->getSalesChannelId()),
-            ]));
-
-            $this->eventDispatcher->dispatch(
-                new GenericPageLoadedEvent($page, $context, $request)
-            );
-
-            return $page;
-        });
-    }
 }

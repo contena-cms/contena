@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearcherInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Validation\EntityExists;
 use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\Locale\LocaleDefinition;
@@ -107,10 +106,6 @@ class EntityExistsValidatorTest extends TestCase
 
         $constraint = new All(
             constraints: [
-                new EntityExists(
-                    entity: LocaleDefinition::ENTITY_NAME,
-                    context: $context,
-                ),
             ],
         );
 

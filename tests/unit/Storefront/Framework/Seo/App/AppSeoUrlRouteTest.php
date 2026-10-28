@@ -8,7 +8,6 @@ use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
-use Contena\Storefront\Framework\Seo\App\AppEntitySeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlRoute;
 
 /**
@@ -58,14 +57,4 @@ class AppSeoUrlRouteTest extends TestCase
         static::assertSame('storefront.app.SwagSeoUrlApp.imprint', AppSeoUrlRoute::buildRouteName('SwagSeoUrlApp', 'imprint'));
     }
 
-    private function seoUrl(): AppEntitySeoUrlConfig
-    {
-        return new AppEntitySeoUrlConfig(
-            name: 'product-teaser',
-            routeName: 'storefront.app.SwagSeoUrlApp.product-teaser',
-            hook: 'teaser-page',
-            entityName: 'product',
-            defaultTemplate: 'teaser/{{ product.productNumber }}',
-        );
-    }
 }

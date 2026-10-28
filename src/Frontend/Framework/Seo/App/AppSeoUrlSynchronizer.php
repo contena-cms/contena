@@ -12,11 +12,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\Routing\RouterInterface;
 
@@ -83,46 +81,8 @@ class AppSeoUrlSynchronizer
         return $seoUrls;
     }
 
-    private function write(AppSeoUrlConfig $seoUrl, string $pathInfo, SalesChannelEntity $salesChannel, Context $context): void
-    {
-        $foreignKey = Uuid::fromStringToHex($seoUrl->getRouteName());
 
-        $this->seoUrlPersister->forceUpdateSeoUrls(
-            $context,
-            $seoUrl->getRouteName(),
-            [$foreignKey],
-            [[
-                'foreignKey' => $foreignKey,
-                'pathInfo' => $pathInfo,
-                'seoPathInfo' => $this->resolvePath($seoUrl, $context->getLanguageId()),
-                'salesChannelId' => $salesChannel->getId(),
-                'isCanonical' => true,
-                'isModified' => true,
-                'isDeleted' => false,
-            ]],
-            $salesChannel
-        );
-    }
 
-    private function generatePathInfo(AppSeoUrlConfig $seoUrl): string
-    {
-        $pathInfo = $this->router->generate(AppSeoUrlRoute::TARGET_ROUTE, ['hook' => $seoUrl->getHook()]);
-        $basePath = $this->requestStack->getMainRequest()?->getBasePath() ?? '';
-
-        if ($basePath === '' || !str_starts_with($pathInfo, $basePath)) {
-            return $pathInfo;
-        }
-
-        return substr($pathInfo, \strlen($basePath));
-    }
-
-    private function resolvePath(AppSeoUrlConfig $seoUrl, string $languageId): string
-    {
-        $paths = $seoUrl->getPaths();
-        $locale = $this->languageLocaleProvider->getLocaleForLanguageId(...);
-
-        return $paths[$locale($languageId)] ?? $paths[$locale(Defaults::LANGUAGE_SYSTEM)] ?? (string) array_first($paths);
-    }
 
     private function fetchSalesChannels(): SalesChannelCollection
     {
@@ -130,7 +90,6 @@ class AppSeoUrlSynchronizer
         $criteria->setTitle('app-seo-url::static-sync');
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_AND, [
-            new EqualsFilter('typeId', Defaults::SALES_CHANNEL_TYPE_API),
         ]));
         $criteria->addAssociation('domains');
 

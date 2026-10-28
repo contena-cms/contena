@@ -9,9 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationCollection;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 use Symfony\Component\HttpFoundation\Response;
 
 /**

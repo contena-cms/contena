@@ -123,8 +123,6 @@ class ThemeAppLifecycleHandlerTest extends TestCase
 
         // the registry still lists the app's own config plus another; the app's own one must be filtered out
         $this->registry->method('getConfigurations')->willReturn(new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('ComponentTestApp'),
-            new StorefrontPluginConfiguration('OtherApp'),
         ]));
 
         $themeLifecycle = $this->createMock(ThemeLifecycleHandler::class);
@@ -185,18 +183,6 @@ class ThemeAppLifecycleHandlerTest extends TestCase
         $handler->delete(new AppRemovalContext($this->activeApp(), Context::createDefaultContext()));
     }
 
-    private function getHandler(
-        (AbstractStorefrontPluginConfigurationFactory&MockObject)|null $factory = null,
-        (ThemeLifecycleHandler&MockObject)|null $themeLifecycle = null,
-        (ThemeLifecycleService&MockObject)|null $themeService = null,
-    ): ThemeAppLifecycleHandler {
-        return new ThemeAppLifecycleHandler(
-            $this->registry,
-            $factory ?? $this->factory,
-            $themeLifecycle ?? $this->themeLifecycle,
-            $themeService ?? $this->themeService,
-        );
-    }
 
     private function activeApp(): AppEntity
     {

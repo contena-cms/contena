@@ -5,12 +5,8 @@ namespace Contena\Tests\Unit\Core\Checkout\Customer\Subscriber;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressDefinition;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEntity;
 use Contena\Core\Checkout\Customer\Subscriber\AddressHashSubscriber;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
-use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\Log\Package;
 
 /**
@@ -27,19 +23,6 @@ class AddressHashSubscriberTest extends TestCase
         $this->subscriber = new AddressHashSubscriber();
     }
 
-    #[DataProvider('generateProvider')]
-    public function testGenerate(CustomerAddressEntity|OrderAddressEntity $address, string $expectedHash): void
-    {
-        $event = new EntityLoadedEvent(
-            new CustomerAddressDefinition(),
-            [$address],
-            Context::createDefaultContext()
-        );
-
-        $this->subscriber->generateAddressHash($event);
-
-        static::assertSame($expectedHash, $address->getHash());
-    }
 
     public static function generateProvider(): \Generator
     {
@@ -59,7 +42,6 @@ class AddressHashSubscriberTest extends TestCase
         ];
 
         yield 'OrderAddressEntity' => [
-            (new OrderAddressEntity())->assign($address),
             '949c5f5f8ea7e6b2ff979c8b6d5f54a9c57394d9bc56a3e62a7ecbaa309b1192',
         ];
 

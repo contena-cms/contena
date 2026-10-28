@@ -5,8 +5,6 @@ namespace Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateTypeTranslation\MailTemplateTypeTranslationCollection;
 use Contena\Core\Content\MailTemplate\MailTemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 

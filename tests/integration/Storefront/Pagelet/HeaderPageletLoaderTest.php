@@ -8,11 +8,8 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Storefront\Pagelet\Header\HeaderPageletLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -136,10 +133,6 @@ class HeaderPageletLoaderTest extends TestCase
         ];
     }
 
-    protected function getPageLoader(): HeaderPageletLoader
-    {
-        return static::getContainer()->get(HeaderPageletLoader::class);
-    }
 
     /**
      * @param list<array{name: string, id: string}> $languages

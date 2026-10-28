@@ -6,9 +6,7 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Migration\V6_7\Migration1781508123UpdateLineItemPurchasePriceRuleConditions;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 

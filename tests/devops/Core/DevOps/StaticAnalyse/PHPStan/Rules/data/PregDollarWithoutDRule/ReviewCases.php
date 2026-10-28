@@ -67,8 +67,4 @@ class NotAFinder
 
 class FinderLookalike
 {
-    public function filter(NotAFinder $object): void
-    {
-        $object->name('/\.php$/'); // ok: not a Finder
-    }
 }

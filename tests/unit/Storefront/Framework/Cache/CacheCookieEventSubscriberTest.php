@@ -181,8 +181,4 @@ class CacheCookieEventSubscriberTest extends TestCase
         static::assertTrue($event->doNotStore);
     }
 
-    private function buildSubscriber(SessionFactory $sessionFactory): CacheCookieEventSubscriber
-    {
-        return new CacheCookieEventSubscriber($sessionFactory);
-    }
 }

@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\AfterClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductDefinition;
-use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -18,17 +17,14 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\CustomField\CustomFieldTypes;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestDefaults;
 use Contena\Elasticsearch\Framework\Command\ElasticsearchIndexingCommand;
 use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Contena\Elasticsearch\Framework\ElasticsearchOutdatedIndexDetector;
 use Contena\Elasticsearch\Framework\Indexing\CreateAliasTaskHandler;
 use Contena\Elasticsearch\Framework\Indexing\ElasticsearchIndexer;
-use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\NullOutput;
 use Symfony\Component\DependencyInjection\ContainerInterface;
@@ -500,46 +496,6 @@ class ProductSortingStreamSearchTest extends TestCase
         (new \ReflectionProperty(ElasticsearchIndexingUtils::class, 'customFieldsTypes'))->setValue($utils, []);
 
         $products = [
-            (new ProductBuilder($this->ids, 'product-1'))
-                ->name('Product Alpha')
-                ->visibility(TestDefaults::SALES_CHANNEL)
-                ->price(100)
-                ->stock(10)
-                ->customField('ss_test_int', 100)
-                ->customField('ss_test_float', 1.5)
-                ->customField('ss_test_text', 'alpha')
-                ->customField('ss_test_bool', true)
-                ->build(),
-            (new ProductBuilder($this->ids, 'product-2'))
-                ->name('Product Beta')
-                ->visibility(TestDefaults::SALES_CHANNEL)
-                ->price(200)
-                ->stock(20)
-                ->customField('ss_test_int', 200)
-                ->customField('ss_test_float', 2.5)
-                ->customField('ss_test_text', 'beta')
-                ->customField('ss_test_bool', false)
-                ->build(),
-            (new ProductBuilder($this->ids, 'product-3'))
-                ->name('Product Gamma')
-                ->visibility(TestDefaults::SALES_CHANNEL)
-                ->price(300)
-                ->stock(30)
-                ->customField('ss_test_int', 300)
-                ->customField('ss_test_float', 0.5)
-                ->customField('ss_test_text', 'alpha')
-                ->customField('ss_test_bool', true)
-                ->build(),
-            (new ProductBuilder($this->ids, 'product-4'))
-                ->name('Product Delta')
-                ->visibility(TestDefaults::SALES_CHANNEL)
-                ->price(400)
-                ->stock(40)
-                ->customField('ss_test_int', 50)
-                ->customField('ss_test_float', 3.5)
-                ->customField('ss_test_text', 'delta')
-                ->customField('ss_test_bool', false)
-                ->build(),
         ];
 
         $this->productRepository->create($products, $this->context);

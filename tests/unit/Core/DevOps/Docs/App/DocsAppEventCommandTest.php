@@ -32,7 +32,6 @@ class DocsAppEventCommandTest extends TestCase
 
     private Environment&MockObject $twig;
 
-    private DocsAppEventCommandTestable $command;
 
     private static string $fixtureDir;
 

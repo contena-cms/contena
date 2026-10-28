@@ -6,11 +6,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Test\Generator;
 use Contena\Storefront\Controller\StorybookController;
 use Contena\Storefront\Storybook\StorybookService;
-use Contena\Tests\Unit\Storefront\Controller\Stub\StorybookTwigEnvironmentStub;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Twig\Error\RuntimeError;
@@ -27,7 +25,6 @@ class StorybookControllerTest extends TestCase
 
     private const STORYBOOK_ORIGIN = 'http://localhost:6006';
 
-    private StorybookTwigEnvironmentStub $twig;
 
     private StorybookService&Stub $storybookService;
 
@@ -231,11 +228,4 @@ class StorybookControllerTest extends TestCase
         return $request;
     }
 
-    private function createController(?StorybookService $storybookService = null): StorybookController
-    {
-        return new StorybookController(
-            $this->twig,
-            $storybookService ?? $this->storybookService,
-        );
-    }
 }

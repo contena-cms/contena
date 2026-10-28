@@ -4,7 +4,6 @@ namespace Contena\Core\Checkout\Customer\SalesChannel;
 
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Extension\AccountNewsletterRecipientRouteExtension;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
 use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;

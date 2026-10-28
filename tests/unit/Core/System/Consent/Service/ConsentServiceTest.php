@@ -21,7 +21,6 @@ use Contena\Core\System\Consent\Event\ConsentAcceptedEvent;
 use Contena\Core\System\Consent\Event\ConsentRevokedEvent;
 use Contena\Core\System\Consent\Service\ConsentService;
 use Contena\Core\Test\Stub\EventDispatcher\AssertingEventDispatcher;
-use Contena\Tests\Unit\Core\System\Consent\TestDefinition;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -41,8 +40,6 @@ class ConsentServiceTest extends TestCase
     public function testList(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
-            new TestDefinition('consent-2', AdminUser::NAME),
         ]);
 
         $record1 = new ConsentStateRecord('consent-1', 'system', ConsentStatus::ACCEPTED, 'user-123', '2026-01-26 00:00:00');
@@ -69,7 +66,6 @@ class ConsentServiceTest extends TestCase
     public function testListCachesConsents(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $this->consentRepository
@@ -87,7 +83,6 @@ class ConsentServiceTest extends TestCase
     public function testResetClearsCachedStates(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $this->consentRepository
@@ -111,7 +106,6 @@ class ConsentServiceTest extends TestCase
         self::expectExceptionObject(ConsentException::cannotResolveScope(AdminUser::NAME));
 
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', AdminUser::NAME),
         ]);
 
         $context = Context::createDefaultContext();
@@ -122,7 +116,6 @@ class ConsentServiceTest extends TestCase
     public function testGetConsentStatus(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $record = new ConsentStateRecord('consent-1', ConsentScope\System::NAME, ConsentStatus::ACCEPTED, 'user-123', '2026-01-26 00:00:00');
@@ -146,7 +139,6 @@ class ConsentServiceTest extends TestCase
     public function testGetConsentStatusReturnsRequestedStateByDefault(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, latestRevision: '2026-02-01'),
         ]);
 
         $this->consentRepository
@@ -182,7 +174,6 @@ class ConsentServiceTest extends TestCase
     public function testAcceptConsentIsNoopWhenConsentAlreadyAcceptedForSameRevision(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, latestRevision: '1.0.0'),
         ]);
 
         $this->consentRepository
@@ -231,7 +222,6 @@ class ConsentServiceTest extends TestCase
     public function testAcceptConsentUpdatesWhenAcceptedRevisionIsOutdated(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, latestRevision: '2.0.0'),
         ]);
 
         $this->consentRepository
@@ -265,7 +255,6 @@ class ConsentServiceTest extends TestCase
     public function testAcceptConsentRejectsOlderExplicitRevision(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, latestRevision: '2.0.0'),
         ]);
 
         $this->consentRepository
@@ -282,7 +271,6 @@ class ConsentServiceTest extends TestCase
     public function testAcceptConsentRejectsExplicitRevisionForNonRevisionedConsent(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $this->consentRepository
@@ -329,7 +317,6 @@ class ConsentServiceTest extends TestCase
         ]);
 
         $service = $this->createService($eventDispatcher, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, latestRevision: '2026-02-01'),
         ]);
 
         $this->consentRepository
@@ -394,7 +381,6 @@ class ConsentServiceTest extends TestCase
     public function testRevokeConsentIsNoopWhenConsentAlreadyRevoked(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $this->consentRepository
@@ -415,7 +401,6 @@ class ConsentServiceTest extends TestCase
     public function testRevokeConsentIsNoopWhenConsentWasDeclined(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $this->consentRepository
@@ -440,7 +425,6 @@ class ConsentServiceTest extends TestCase
         ]);
 
         $service = $this->createService($eventDispatcher, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME),
         ]);
 
         $this->consentRepository
@@ -498,7 +482,6 @@ class ConsentServiceTest extends TestCase
     public function testConsentUpdateThrowsForInsufficientPermissions(): void
     {
         $service = $this->createService(null, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, ['permission-1', 'missing-1', 'missing-2']),
         ]);
 
         $this->consentRepository
@@ -525,7 +508,6 @@ class ConsentServiceTest extends TestCase
         ]);
 
         $service = $this->createService($eventDispatcher, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, ['permission-1'], '2026-02-01'),
         ]);
 
         $this->consentRepository
@@ -569,7 +551,6 @@ class ConsentServiceTest extends TestCase
         ]);
 
         $service = $this->createService($eventDispatcher, [
-            new TestDefinition('consent-1', ConsentScope\System::NAME, ['permission-1']),
         ]);
 
         $this->consentRepository

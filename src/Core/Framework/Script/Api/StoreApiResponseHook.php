@@ -8,9 +8,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Facade\SalesChannelRepositoryFac
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\Facade\RequestFacadeFactory;
 use Contena\Core\Framework\Script\Execution\Awareness\SalesChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
-use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;

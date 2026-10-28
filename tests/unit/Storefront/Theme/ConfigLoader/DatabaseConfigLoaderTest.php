@@ -38,7 +38,6 @@ class DatabaseConfigLoaderTest extends TestCase
      */
     private StaticEntityRepository $mediaRepository;
 
-    private DatabaseConfigLoader $databaseConfigLoader;
 
     protected function setUp(): void
     {

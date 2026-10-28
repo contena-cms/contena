@@ -4,11 +4,7 @@ namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\Facade\ScriptPriceStubs;
-use Contena\Core\Checkout\Cart\Price\QuantityPriceCalculator;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
-use Contena\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoader;
-use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
 use Contena\Core\Content\MeasurementSystem\ProductMeasurement\ProductMeasurementUnitBuilder;
 use Contena\Core\Content\MeasurementSystem\Unit\MeasurementUnitConverter;
 use Contena\Core\Content\Media\UnusedMediaPurger;
@@ -19,13 +15,7 @@ use Contena\Core\Content\Product\Aggregate\ProductCategory\ProductCategoryDefini
 use Contena\Core\Content\Product\Aggregate\ProductCategoryTree\ProductCategoryTreeDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingExceptionHandler;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSellingAssignedProducts\ProductCrossSellingAssignedProductsDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSellingTranslation\ProductCrossSellingTranslationDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductCustomFieldSet\ProductCustomFieldSetDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductDownload\ProductDownloadDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSet\ProductFeatureSetDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSetTranslation\ProductFeatureSetTranslationDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductKeywordDictionary\ProductKeywordDictionaryDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturerTranslation\ProductManufacturerTranslationDefinition;
@@ -33,7 +23,6 @@ use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductOption\ProductOptionDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductProperty\ProductPropertyDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfig\ProductSearchConfigDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfig\ProductSearchConfigExceptionHandler;
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfigField\ProductSearchConfigFieldDefinition;
@@ -45,22 +34,10 @@ use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslation
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\Api\ProductActionController;
 use Contena\Core\Content\Product\Api\ProductNumberFkResolver;
-use Contena\Core\Content\Product\Cart\ProductGateway;
-use Contena\Core\Content\Product\Cart\ProductLineItemCommandValidator;
 use Contena\Core\Content\Product\Cleanup\CleanupProductKeywordDictionaryTask;
 use Contena\Core\Content\Product\Cleanup\CleanupProductKeywordDictionaryTaskHandler;
 use Contena\Core\Content\Product\Cleanup\CleanupUnusedDownloadMediaTask;
 use Contena\Core\Content\Product\Cleanup\CleanupUnusedDownloadMediaTaskHandler;
-use Contena\Core\Content\Product\Cms\BuyBoxCmsElementResolver;
-use Contena\Core\Content\Product\Cms\CrossSellingCmsElementResolver;
-use Contena\Core\Content\Product\Cms\ManufacturerLogoCmsElementResolver;
-use Contena\Core\Content\Product\Cms\ProductBoxCmsElementResolver;
-use Contena\Core\Content\Product\Cms\ProductDescriptionReviewsCmsElementResolver;
-use Contena\Core\Content\Product\Cms\ProductListingCmsElementResolver;
-use Contena\Core\Content\Product\Cms\ProductNameCmsElementResolver;
-use Contena\Core\Content\Product\Cms\ProductSlider\ProductStreamProcessor;
-use Contena\Core\Content\Product\Cms\ProductSlider\StaticProductProcessor;
-use Contena\Core\Content\Product\Cms\ProductSliderCmsElementResolver;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPrice\CheapestPriceAccessorBuilder;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPriceQuantitySelector;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPriceUpdater;
@@ -89,7 +66,6 @@ use Contena\Core\Content\Product\ProductMaxPurchaseCalculator;
 use Contena\Core\Content\Product\ProductTypeRegistry;
 use Contena\Core\Content\Product\ProductVariationBuilder;
 use Contena\Core\Content\Product\PropertyGroupSorter;
-use Contena\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRoute;
 use Contena\Core\Content\Product\SalesChannel\Detail\AvailableCombinationLoader;
 use Contena\Core\Content\Product\SalesChannel\Detail\ProductConfiguratorLoader;
 use Contena\Core\Content\Product\SalesChannel\Detail\ProductDetailRoute;
@@ -117,9 +93,6 @@ use Contena\Core\Content\Product\SalesChannel\Price\ProductPriceCalculator;
 use Contena\Core\Content\Product\SalesChannel\ProductCloseoutFilterFactory;
 use Contena\Core\Content\Product\SalesChannel\ProductListRoute;
 use Contena\Core\Content\Product\SalesChannel\PurchaseLimit\ProductPurchaseLimitRoute;
-use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewLoader;
-use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewRoute;
-use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewSaveRoute;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductDefinition;
 use Contena\Core\Content\Product\SalesChannel\Search\ProductSearchRoute;
 use Contena\Core\Content\Product\SalesChannel\Search\ResolvedCriteriaProductSearchRoute;
@@ -142,7 +115,6 @@ use Contena\Core\Content\Product\Subscriber\ProductSubscriber;
 use Contena\Core\Content\Product\Subscriber\RepairDigitalProductStatesSubscriber;
 use Contena\Core\Content\Product\Util\VariantCombinationLoader;
 use Contena\Core\Content\ProductStream\Service\ProductStreamBuilder;
-use Contena\Core\Content\Shared\MailFlow\DataProvider\ProductProvider;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
@@ -156,8 +128,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Tokenizer;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Util\HtmlSanitizer;
-use Contena\Core\Framework\Validation\DataValidator;
-use Contena\Core\System\DeliveryTime\DeliveryTimeDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -215,8 +185,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ProductKeywordDictionaryDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(ProductReviewDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(ProductManufacturerDefinition::class)
         ->tag('contena.entity.definition');
@@ -227,8 +195,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ProductMediaDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(ProductDownloadDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(ProductTranslationDefinition::class)
         ->tag('contena.entity.definition');
@@ -239,20 +205,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ProductCategoryTreeDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(ProductCrossSellingDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(ProductCrossSellingTranslationDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(ProductCrossSellingAssignedProductsDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(ProductFeatureSetDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(ProductFeatureSetTranslationDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(ProductSortingDefinition::class)
         ->tag('contena.entity.definition');
@@ -272,11 +228,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(ProductSearchConfigExceptionHandler::class)
         ->tag('contena.dal.exception_handler');
 
-    $services->set(ProductGateway::class)
-        ->args([
-            service('sales_channel.product.repository'),
-            service('event_dispatcher'),
-        ]);
 
     $services->set(AbstractPropertyGroupSorter::class, PropertyGroupSorter::class);
 
@@ -428,71 +379,19 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ]);
 
-    $services->set(DeliveryTimeDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(ProductBoxCmsElementResolver::class)
-        ->args([
-            service(SystemConfigService::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(ProductListingCmsElementResolver::class)
-        ->args([
-            service(ProductListingRoute::class),
-            service('product_sorting.repository'),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(ProductSliderCmsElementResolver::class)
-        ->args([
-            tagged_iterator('contena.cms.product_slider.processor'),
-            service('logger'),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(StaticProductProcessor::class)
-        ->args([
-            service(SystemConfigService::class),
-            service('event_dispatcher'),
-        ])
-        ->tag('contena.cms.product_slider.processor');
 
-    $services->set(ProductStreamProcessor::class)
-        ->args([
-            service(ProductStreamBuilder::class),
-            service('sales_channel.product.repository'),
-            service('event_dispatcher'),
-            service('logger'),
-            service(SystemConfigService::class),
-            service(ProductCloseoutFilterFactory::class),
-        ])
-        ->tag('contena.cms.product_slider.processor');
 
-    $services->set(ProductNameCmsElementResolver::class)
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(ManufacturerLogoCmsElementResolver::class)
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(CrossSellingCmsElementResolver::class)
-        ->args([
-            service(ProductCrossSellingRoute::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
-    $services->set(ProductDescriptionReviewsCmsElementResolver::class)
-        ->args([
-            service(ProductReviewLoader::class),
-            service(ScriptExecutor::class),
-            service(SystemConfigService::class),
-        ])
-        ->tag('contena.cms.data_resolver');
 
     $services->set(ProductPriceCalculator::class)
         ->args([
             service('unit.repository'),
-            service(QuantityPriceCalculator::class),
             service(ExtensionDispatcher::class),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
@@ -502,7 +401,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(AppScriptProductPriceCalculator::class . '.inner'),
             service(ScriptExecutor::class),
-            service(ScriptPriceStubs::class),
         ])
         ->tag('kernel.reset', ['method' => 'reset']);
 
@@ -569,11 +467,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             param('contena.product.search_keyword.indexing'),
         ]);
 
-    $services->set(ProductLineItemCommandValidator::class)
-        ->args([
-            service(Connection::class),
-        ])
-        ->tag('kernel.event_subscriber');
 
     $services->set(ResolvedCriteriaProductSuggestRoute::class)
         ->decorate(ProductSuggestRoute::class, null, -2000)
@@ -753,8 +646,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
             service(ProductConfiguratorLoader::class),
             service(CategoryBreadcrumbBuilder::class),
-            service(SalesChannelCmsPageLoader::class),
-            service(EntityCmsSlotConfigInheritanceBuilder::class),
             service(SalesChannelProductDefinition::class),
             service(ProductCloseoutFilterFactory::class),
             service('event_dispatcher'),
@@ -770,23 +661,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ExtensionDispatcher::class),
         ]);
 
-    $services->set(ProductReviewLoader::class)
-        ->args([
-            service(ProductReviewRoute::class),
-            service(SystemConfigService::class),
-            service('event_dispatcher'),
-        ]);
 
-    $services->set(ProductReviewRoute::class)
-        ->public()
-        ->args([
-            service('product_review.repository'),
-            service(SystemConfigService::class),
-            service(CacheTagCollector::class),
-            service(ExtensionDispatcher::class),
-            param('contena.api.store.max_limit'),
-            service(CompressedCriteriaDecoder::class),
-        ]);
 
     $services->set(ProductConfiguratorLoader::class)
         ->args([
@@ -801,32 +676,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(SystemConfigService::class),
         ]);
 
-    $services->set(ProductCrossSellingRoute::class)
-        ->public()
-        ->args([
-            service('product_cross_selling.repository'),
-            service('event_dispatcher'),
-            service(ProductStreamBuilder::class),
-            service('sales_channel.product.repository'),
-            service(SystemConfigService::class),
-            service(ProductListingLoader::class),
-            service(ProductCloseoutFilterFactory::class),
-            service(CacheTagCollector::class),
-            service(Connection::class),
-            service(ExtensionDispatcher::class),
-            service('logger'),
-        ]);
 
-    $services->set(ProductReviewSaveRoute::class)
-        ->public()
-        ->args([
-            service('product_review.repository'),
-            service(DataValidator::class),
-            service(SystemConfigService::class),
-            service('event_dispatcher'),
-            service(ProductProvider::class),
-            service(ExtensionDispatcher::class),
-        ]);
 
     $services->set(ProductListRoute::class)
         ->public()
@@ -835,22 +685,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ExtensionDispatcher::class),
         ]);
 
-    $services->set(GaranLabelRoute::class)
-        ->public()
-        ->args([
-            service('sales_channel.product.repository'),
-            service(GaranLabelResolver::class),
-            service(ExtensionDispatcher::class),
-        ]);
 
     $services->alias(AbstractGaranLabelRoute::class, GaranLabelRoute::class);
 
-    $services->set(BuyBoxCmsElementResolver::class)
-        ->args([
-            service(ProductConfiguratorLoader::class),
-            service('product_review.repository'),
-        ])
-        ->tag('contena.cms.data_resolver');
 
     $services->set(TokenFilter::class)
         ->args([

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Media\Aggregate\MediaTranslation;
 
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 

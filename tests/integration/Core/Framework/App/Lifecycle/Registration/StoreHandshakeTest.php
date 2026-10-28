@@ -10,8 +10,6 @@ use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Lifecycle\Registration\StoreHandshake;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreClient;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Kernel;
 use Symfony\Component\Clock\NativeClock;

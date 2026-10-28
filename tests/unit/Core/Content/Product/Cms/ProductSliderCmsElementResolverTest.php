@@ -15,7 +15,6 @@ use Contena\Core\Content\Product\Cms\ProductSliderCmsElementResolver;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Content\Product\Cms\ProductSlider\ProductSliderFixture;
 
 /**
  * @internal
@@ -24,7 +23,6 @@ use Contena\Tests\Unit\Core\Content\Product\Cms\ProductSlider\ProductSliderFixtu
 #[CoversClass(ProductSliderCmsElementResolver::class)]
 class ProductSliderCmsElementResolverTest extends TestCase
 {
-    private FieldConfigCollection $config;
 
     private LoggerInterface&MockObject $logger;
 
@@ -148,8 +146,4 @@ class ProductSliderCmsElementResolverTest extends TestCase
         $this->getResolver()->enrich($slot, ProductSliderFixture::getResolverContext(), $data);
     }
 
-    private function getResolver(): ProductSliderCmsElementResolver
-    {
-        return new ProductSliderCmsElementResolver($this->processors, $this->logger);
-    }
 }

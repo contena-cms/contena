@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Product\Aggregate\ProductPrice;
 
 use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Content\Rule\RuleEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceRuleEntity;
 use Contena\Core\Framework\Log\Package;
 

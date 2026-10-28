@@ -7,10 +7,7 @@ use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Page\Navigation\NavigationPageLoadedEvent;
-use Contena\Storefront\Page\Navigation\NavigationPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -76,8 +73,4 @@ class NavigationPageTest extends TestCase
         static::assertSame('/', $seoUrl);
     }
 
-    protected function getPageLoader(): NavigationPageLoader
-    {
-        return static::getContainer()->get(NavigationPageLoader::class);
-    }
 }

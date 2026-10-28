@@ -934,63 +934,8 @@ class MailAttachmentsBuilderTest extends TestCase
         static::assertSame([], $attachments);
     }
 
-    private function createPdfDocumentFile(string $documentId, bool $private, string $mediaFolderId): DocumentFileEntity
-    {
-        $pdfMedia = new MediaEntity();
-        $pdfMedia->setId(Uuid::randomHex());
-        $pdfMedia->setFileName('invoice');
-        $pdfMedia->setFileExtension('pdf');
-        $pdfMedia->setMimeType('application/pdf');
-        $pdfMedia->setPrivate($private);
-        $pdfMedia->setMediaFolderId($mediaFolderId);
 
-        $pdfFile = new DocumentFileEntity();
-        $pdfFile->setId(Uuid::randomHex());
-        $pdfFile->setDocumentId($documentId);
-        $pdfFile->setMediaId($pdfMedia->getId());
-        $pdfFile->setDocumentFormat('pdf');
-        $pdfFile->setMedia($pdfMedia);
 
-        return $pdfFile;
-    }
-
-    /**
-     * @return EntityRepository<DocumentCollection>&Stub
-     */
-    private function createDocumentRepository(string $documentId, DocumentFileEntity $documentFile, Context $context): EntityRepository&Stub
-    {
-        $document = new DocumentEntity();
-        $document->setId($documentId);
-        $document->setDocumentFiles(new DocumentFileCollection([$documentFile]));
-
-        $criteria = (new Criteria([$documentId]))->addAssociation('documentFiles.media');
-        $criteria->setTitle('send-mail::load-document-files');
-
-        $documentRepository = static::createStub(EntityRepository::class);
-        $documentRepository
-            ->method('search')
-            ->willReturn(new EntitySearchResult('document', 1, new DocumentCollection([$document]), null, $criteria, $context));
-
-        return $documentRepository;
-    }
-
-    private function createHtmlDocumentFile(string $documentId): DocumentFileEntity
-    {
-        $htmlMedia = new MediaEntity();
-        $htmlMedia->setId(Uuid::randomHex());
-        $htmlMedia->setFileName('invoice');
-        $htmlMedia->setFileExtension('html');
-        $htmlMedia->setMimeType('text/html');
-
-        $htmlFile = new DocumentFileEntity();
-        $htmlFile->setId(Uuid::randomHex());
-        $htmlFile->setDocumentId($documentId);
-        $htmlFile->setMediaId($htmlMedia->getId());
-        $htmlFile->setDocumentFormat('html');
-        $htmlFile->setMedia($htmlMedia);
-
-        return $htmlFile;
-    }
 
     private function createBuilder(): MailAttachmentsBuilder
     {

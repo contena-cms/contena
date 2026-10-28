@@ -8,13 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Status;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Storefront\Framework\SystemCheck\SalesChannelsReadinessCheck;
-use Contena\Storefront\Framework\SystemCheck\Util\SalesChannelDomainProvider;
 use Contena\Storefront\Framework\SystemCheck\Util\SalesChannelDomainUtil;
 use Contena\Storefront\Framework\SystemCheck\Util\StorefrontHealthCheckResult;
 use Symfony\Component\HttpFoundation\Request;
@@ -117,13 +111,6 @@ class SalesChannelsReadinessCheckTest extends TestCase
         Request::setTrustedHosts([]);
     }
 
-    private function createCheck((SalesChannelDomainUtil&MockObject)|null $util = null): SalesChannelsReadinessCheck
-    {
-        return new SalesChannelsReadinessCheck(
-            $util ?? static::getContainer()->get(SalesChannelDomainUtil::class),
-            static::getContainer()->get(SalesChannelDomainProvider::class)
-        );
-    }
 
     private function createSalesChannels(): void
     {
@@ -153,13 +140,6 @@ class SalesChannelsReadinessCheckTest extends TestCase
         ]);
     }
 
-    private function createUtilMock(): SalesChannelDomainUtil&MockObject
-    {
-        $util = $this->createMock(SalesChannelDomainUtil::class);
-        $this->initUtilMock($util);
-
-        return $util;
-    }
 
     private function initUtilMock(SalesChannelDomainUtil&MockObject $util): void
     {

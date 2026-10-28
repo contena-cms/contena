@@ -10,8 +10,6 @@ use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\PluginWithAdditionalBundles\PluginWithAdditionalBundles;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\ThemeAndPlugin\TestTheme\TestTheme;
 use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 
 /**

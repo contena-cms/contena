@@ -8,10 +8,7 @@ use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCapture\OrderTransactionCaptureStates;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestBuilderTrait;
 
 /**
  * @final
@@ -29,7 +26,6 @@ class OrderTransactionBuilder
 
     protected string $paymentMethodId;
 
-    protected CalculatedPrice $amount;
 
     protected string $stateId;
 
@@ -78,7 +74,6 @@ class OrderTransactionBuilder
             'amount' => new CalculatedPrice(
                 420.69,
                 420.69,
-                new CalculatedTaxCollection(),
                 new TaxRuleCollection()
             ),
         ], $customParams);

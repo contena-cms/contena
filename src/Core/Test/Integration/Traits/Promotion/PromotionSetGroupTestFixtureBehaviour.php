@@ -3,9 +3,6 @@
 namespace Contena\Core\Test\Integration\Traits\Promotion;
 
 use Contena\Core\Checkout\Cart\Rule\LineItemRule;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionSetGroup\PromotionSetGroupEntity;
-use Contena\Core\Content\Rule\RuleCollection;
-use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -19,21 +16,6 @@ use Symfony\Component\DependencyInjection\ContainerInterface;
 #[Package('checkout')]
 trait PromotionSetGroupTestFixtureBehaviour
 {
-    /**
-     * @param RuleEntity[] $rules
-     */
-    private function createSetGroup(string $packagerKey, float $value, string $sorterKey, array $rules): PromotionSetGroupEntity
-    {
-        $group = new PromotionSetGroupEntity();
-        $group->setId(Uuid::randomBytes());
-
-        $group->setPackagerKey($packagerKey);
-        $group->setValue($value);
-        $group->setSorterKey($sorterKey);
-        $group->setSetGroupRules(new RuleCollection($rules));
-
-        return $group;
-    }
 
     private function createSetGroupWithRuleFixture(string $groupId, string $packagerKey, float $value, string $sorterKey, string $promotionId, string $ruleId, ContainerInterface $container): string
     {

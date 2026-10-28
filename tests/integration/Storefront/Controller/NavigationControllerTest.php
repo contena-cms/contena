@@ -11,12 +11,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Page\Navigation\NavigationPageLoadedHook;
 use Contena\Storefront\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoadedHook;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 
 /**
  * @internal

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 
@@ -20,8 +19,6 @@ class EntityCollectionTest extends TestCase
     public function testSetCustomFields(): void
     {
         $collection = new EntityCollection([
-            new MyCollectionEntity('element-1', ['foo' => 1, 'bar' => 1]),
-            new MyCollectionEntity('element-2', ['foo' => 2, 'bar' => 2]),
         ]);
 
         $collection->setCustomFields([
@@ -54,8 +51,6 @@ class EntityCollectionTest extends TestCase
         (new EntityCollection())->getCustomFieldsValue('foo');
 
         $collection = new EntityCollection([
-            new MyCollectionEntity('element-1', ['foo' => 1, 'bar' => 1]),
-            new MyCollectionEntity('element-2', ['foo' => 2]),
         ]);
 
         static::assertSame(
@@ -88,8 +83,6 @@ class EntityCollectionTest extends TestCase
         (new EntityCollection())->getCustomFieldsValues('foo');
 
         $collection = new EntityCollection([
-            new MyCollectionEntity('element-1', ['foo' => 1, 'bar' => 1]),
-            new MyCollectionEntity('element-2', ['foo' => 2, 'bar' => 2, 'baz' => 2]),
         ]);
 
         static::assertSame([

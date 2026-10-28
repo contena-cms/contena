@@ -10,8 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\Framework\Store\Struct\AccessTokenStruct;
 use Contena\Core\Framework\Store\Struct\ShopUserTokenStruct;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\User\UserEntity;
 
 /**

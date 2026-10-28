@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\EntityScoreQueryBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\SearchTermInterpreter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

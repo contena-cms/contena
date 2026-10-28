@@ -2,16 +2,10 @@
 
 namespace Contena\Storefront\Controller;
 
-use Contena\Core\Checkout\Cart\Address\Error\AddressErrorInterface;
-use Contena\Core\Checkout\Cart\Address\Error\VatIdMissingError;
-use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Error\ErrorRoute;
-use Contena\Core\Checkout\Promotion\Cart\Error\PromotionNotEligibleError;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
 use Contena\Core\Framework\Adapter\Twig\TemplateFinder;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RequestTransformerInterface;
 use Contena\Core\Framework\Script\Execution\Hook;
@@ -210,85 +204,6 @@ abstract class StorefrontController extends AbstractController
         return $params;
     }
 
-    protected function addCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-        $errors = $cart->getErrors();
-        if ($filter !== null) {
-            $errors = $errors->filter($filter);
-        }
-
-        $groups = [
-            'info' => $errors->getNotices(),
-            'warning' => $errors->getWarnings(),
-            'danger' => $errors->getErrors(),
-        ];
-
-        $request = $this->container->get('request_stack')->getMainRequest();
-        $exists = [];
-
-        /** @phpstan-ignore contena.unsafeRequestHasSession (using $skipIfUninitialized = false as session will be started intentionally later; this can take the PHP session lock and is limited to storefront flash handling inspecting the flash bag.) */
-        if ($request && $request->hasSession() && $request->getSession() instanceof FlashBagAwareSessionInterface) {
-            $exists = $request->getSession()->getFlashBag()->peekAll();
-        }
-
-        $flat = [];
-        foreach ($exists as $messages) {
-            $flat = array_merge($flat, $messages);
-        }
-
-        foreach ($groups as $type => $errorGroup) {
-            foreach ($errorGroup as $error) {
-                $parameters = [];
-
-                foreach ($error->getParameters() as $key => $value) {
-                    $parameters['%' . $key . '%'] = $value;
-                }
-
-                Feature::callSilentIfInactive('v6.8.0.0', function () use (&$parameters, $error): void {
-                    if ($error->getRoute() instanceof ErrorRoute) {
-                        $parameters['%url%'] = $this->generateUrl(
-                            $error->getRoute()->getKey(),
-                            $error->getRoute()->getParams()
-                        );
-                    }
-                });
-
-                if ($error instanceof AddressErrorInterface && $error->getAddressId() !== null) {
-                    $parameters['%url%'] = $this->generateUrl('frontend.account.address.edit.page', [
-                        'addressId' => $error->getAddressId(),
-                        'redirectTo' => $request?->attributes->get('_route'),
-                    ]);
-                }
-
-                if ($error instanceof VatIdMissingError) {
-                    $parameters['%url%'] = $this->generateUrl('frontend.account.profile.page', [
-                        'redirectTo' => 'frontend.checkout.confirm.page',
-                    ]);
-                }
-
-                $translatedMessage = $this->trans('checkout.' . $error->getMessageKey(), $parameters);
-
-                if ($error instanceof PromotionNotEligibleError && $error->getRuleIds() !== []) {
-                    foreach ($error->getRuleIds() as $ruleId) {
-                        $ruleSpecificKey = 'checkout.promotion-not-eligible-' . $ruleId;
-                        $candidate = $this->trans($ruleSpecificKey, $parameters);
-                        if ($candidate !== $ruleSpecificKey) {
-                            $translatedMessage = $candidate;
-                            break;
-                        }
-                    }
-                }
-
-                $error->setTranslatedMessage($translatedMessage);
-
-                if (\in_array($translatedMessage, $flat, true)) {
-                    continue;
-                }
-
-                $this->addFlash($type, $translatedMessage);
-            }
-        }
-    }
 
     /**
      * @param array<string, mixed> $parameters

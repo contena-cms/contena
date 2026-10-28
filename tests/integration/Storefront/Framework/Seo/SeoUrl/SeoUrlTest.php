@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductEntity;
@@ -20,10 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Seo\StorefrontSalesChannelTestHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Framework\Seo\SeoUrlRoute\ProductPageSeoUrlRoute;

@@ -8,7 +8,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Sso\Config\LoginConfigService;
 use Contena\Core\Framework\Sso\SsoException;
 use Contena\Core\Framework\Sso\TokenService\ExternalTokenService;
-use Contena\Tests\Integration\Core\Framework\Sso\Helper\FakeTokenGenerator;
 use Symfony\Component\Routing\RouterInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;

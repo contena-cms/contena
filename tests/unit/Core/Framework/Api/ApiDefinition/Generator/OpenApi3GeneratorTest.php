@@ -6,15 +6,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\BundleSchemaPathCollection;
+use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiDefinitionSchemaBuilder;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiPathBuilder;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi\OpenApiSchemaBuilder;
-use Contena\Core\Framework\Api\ApiDefinition\Generator\OpenApi3Generator;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\CustomBundleWithApiSchema\ContenaBundleWithName;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SimpleDefinition;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -28,7 +26,6 @@ class OpenApi3GeneratorTest extends TestCase
 
     private OpenApi3Generator $customApiGenerator;
 
-    private ContenaBundleWithName $customBundleSchemas;
 
     private StaticDefinitionInstanceRegistry $definitionRegistry;
 
@@ -59,7 +56,6 @@ class OpenApi3GeneratorTest extends TestCase
 
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                SimpleDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

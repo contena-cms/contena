@@ -21,7 +21,6 @@ use Contena\Core\Service\ServiceException;
 use Contena\Core\Service\ServiceLifecycle;
 use Contena\Core\Service\ServiceStorage;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;

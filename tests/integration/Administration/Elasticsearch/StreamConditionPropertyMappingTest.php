@@ -9,7 +9,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Field\AssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Elasticsearch\Framework\AbstractElasticsearchDefinition;
 use Contena\Elasticsearch\Product\ElasticsearchProductDefinition;
 

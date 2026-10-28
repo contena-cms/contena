@@ -2,22 +2,14 @@
 
 namespace Contena\Core\Content\Product;
 
-use Contena\Core\Checkout\Cart\Delivery\Struct\DeliveryDate;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerWishlistProduct\CustomerWishlistProductCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingCollection;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingCollection;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSellingAssignedProducts\ProductCrossSellingAssignedProductsCollection;
-use Contena\Core\Content\Product\Aggregate\ProductDownload\ProductDownloadCollection;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSet\ProductFeatureSetEntity;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaCollection;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaEntity;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceCollection;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewCollection;
 use Contena\Core\Content\Product\Aggregate\ProductSearchKeyword\ProductSearchKeywordCollection;
 use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslationCollection;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityCollection;
@@ -27,14 +19,11 @@ use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOpt
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetCollection;
-use Contena\Core\System\DeliveryTime\DeliveryTimeEntity;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tax\TaxEntity;
 use Contena\Core\System\Unit\UnitEntity;
@@ -92,7 +81,6 @@ class ProductEntity extends Entity implements \Stringable
 
     protected ?string $deliveryTimeId = null;
 
-    protected ?DeliveryTimeEntity $deliveryTime = null;
 
     protected ?int $restockTime = null;
 
@@ -194,7 +182,6 @@ class ProductEntity extends Entity implements \Stringable
 
     protected ?string $cmsPageId = null;
 
-    protected ?CmsPageEntity $cmsPage = null;
 
     /**
      * @var array<string, array<string, array<string, mixed>>|null>|null
@@ -233,7 +220,6 @@ class ProductEntity extends Entity implements \Stringable
      */
     protected ?array $categoryIds = null;
 
-    protected ?ProductReviewCollection $productReviews = null;
 
     protected ?float $ratingAverage = null;
 
@@ -241,15 +227,11 @@ class ProductEntity extends Entity implements \Stringable
 
     protected ?SeoUrlCollection $seoUrls = null;
 
-    protected ?OrderLineItemCollection $orderLineItems = null;
 
-    protected ?ProductCrossSellingCollection $crossSellings = null;
 
-    protected ?ProductCrossSellingAssignedProductsCollection $crossSellingAssignedProducts = null;
 
     protected ?string $featureSetId = null;
 
-    protected ?ProductFeatureSetEntity $featureSet = null;
 
     protected ?bool $customFieldSetSelectionActive = null;
 
@@ -266,7 +248,6 @@ class ProductEntity extends Entity implements \Stringable
 
     protected ?ProductStreamCollection $streams = null;
 
-    protected ?ProductDownloadCollection $downloads = null;
 
     protected ?string $openGraphMediaId = null;
 
@@ -289,15 +270,7 @@ class ProductEntity extends Entity implements \Stringable
         return (string) ($this->getTranslation('name') ?? $this->getName());
     }
 
-    public function getProductReviews(): ?ProductReviewCollection
-    {
-        return $this->productReviews;
-    }
 
-    public function setProductReviews(ProductReviewCollection $productReviews): void
-    {
-        $this->productReviews = $productReviews;
-    }
 
     public function getParentId(): ?string
     {
@@ -750,20 +723,7 @@ class ProductEntity extends Entity implements \Stringable
         $this->restockTime = $restockTime;
     }
 
-    public function getDeliveryDate(): DeliveryDate
-    {
-        return new DeliveryDate(
-            Clock::get()->now()->add(new \DateInterval('P1D')),
-            Clock::get()->now()->add(new \DateInterval('P2D'))
-        );
-    }
 
-    public function getRestockDeliveryDate(): DeliveryDate
-    {
-        $deliveryDate = $this->getDeliveryDate();
-
-        return $deliveryDate->add(new \DateInterval('P' . $this->getRestockTime() . 'D'));
-    }
 
     public function isReleased(): bool
     {
@@ -832,15 +792,7 @@ class ProductEntity extends Entity implements \Stringable
         $this->cover = $cover;
     }
 
-    public function getCmsPage(): ?CmsPageEntity
-    {
-        return $this->cmsPage;
-    }
 
-    public function setCmsPage(CmsPageEntity $cmsPage): void
-    {
-        $this->cmsPage = $cmsPage;
-    }
 
     public function getCmsPageId(): ?string
     {
@@ -1116,15 +1068,7 @@ class ProductEntity extends Entity implements \Stringable
         $this->deliveryTimeId = $deliveryTimeId;
     }
 
-    public function getDeliveryTime(): ?DeliveryTimeEntity
-    {
-        return $this->deliveryTime;
-    }
 
-    public function setDeliveryTime(?DeliveryTimeEntity $deliveryTime): void
-    {
-        $this->deliveryTime = $deliveryTime;
-    }
 
     public function getChildCount(): ?int
     {
@@ -1186,35 +1130,11 @@ class ProductEntity extends Entity implements \Stringable
         $this->seoUrls = $seoUrls;
     }
 
-    public function getOrderLineItems(): ?OrderLineItemCollection
-    {
-        return $this->orderLineItems;
-    }
 
-    public function setOrderLineItems(OrderLineItemCollection $orderLineItems): void
-    {
-        $this->orderLineItems = $orderLineItems;
-    }
 
-    public function getCrossSellings(): ?ProductCrossSellingCollection
-    {
-        return $this->crossSellings;
-    }
 
-    public function setCrossSellings(ProductCrossSellingCollection $crossSellings): void
-    {
-        $this->crossSellings = $crossSellings;
-    }
 
-    public function getCrossSellingAssignedProducts(): ?ProductCrossSellingAssignedProductsCollection
-    {
-        return $this->crossSellingAssignedProducts;
-    }
 
-    public function setCrossSellingAssignedProducts(ProductCrossSellingAssignedProductsCollection $crossSellingAssignedProducts): void
-    {
-        $this->crossSellingAssignedProducts = $crossSellingAssignedProducts;
-    }
 
     public function getFeatureSetId(): ?string
     {
@@ -1226,15 +1146,7 @@ class ProductEntity extends Entity implements \Stringable
         $this->featureSetId = $featureSetId;
     }
 
-    public function getFeatureSet(): ?ProductFeatureSetEntity
-    {
-        return $this->featureSet;
-    }
 
-    public function setFeatureSet(ProductFeatureSetEntity $featureSet): void
-    {
-        $this->featureSet = $featureSet;
-    }
 
     public function getCustomFieldSetSelectionActive(): ?bool
     {
@@ -1318,15 +1230,7 @@ class ProductEntity extends Entity implements \Stringable
         $this->categoryIds = $categoryIds;
     }
 
-    public function getDownloads(): ?ProductDownloadCollection
-    {
-        return $this->downloads;
-    }
 
-    public function setDownloads(ProductDownloadCollection $downloads): void
-    {
-        $this->downloads = $downloads;
-    }
 
     /**
      * @return array<int, string>

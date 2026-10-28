@@ -70,14 +70,4 @@ class AppSeoUrlClaimsTest extends TestCase
         static::assertSame('legal/über-uns', AppSeoUrlClaims::normalizePath('//Legal/Über-Uns'));
     }
 
-    /**
-     * @param list<array{app_name: string, payload: string}> $rows
-     */
-    private function claims(array $rows): AppSeoUrlClaims
-    {
-        $connection = static::createStub(Connection::class);
-        $connection->method('fetchAllAssociative')->willReturn($rows);
-
-        return new AppSeoUrlClaims($connection);
-    }
 }

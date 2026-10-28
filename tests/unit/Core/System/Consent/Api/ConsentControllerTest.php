@@ -41,8 +41,6 @@ class ConsentControllerTest extends TestCase
         $context = new Context($source);
 
         $consents = [
-            new ConsentState('consent-1', ConsentScope\AdminUser::NAME, $actor, ConsentStatus::ACCEPTED, $actor, '2025-12-31 23:59:59.0', '1.0.0', '1.1.0'),
-            new ConsentState('consent-2', ConsentScope\System::NAME, 'system', ConsentStatus::UNSET, null, null),
         ];
 
         $this->consentService

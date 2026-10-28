@@ -22,7 +22,6 @@ class AbstractDomainLoaderTest extends TestCase
 
         $this->expectExceptionObject(FeatureException::error(\sprintf(
             'Tried to access deprecated functionality: Relying on the default implementation of %s::loadDomains() is deprecated. Implement loadDomains() in %s.',
-            AbstractDomainLoader::class,
             $loader::class
         )));
 
@@ -48,10 +47,6 @@ class AbstractDomainLoaderTestStub extends AbstractDomainLoader
 {
     public bool $loaded = false;
 
-    public function getDecorated(): AbstractDomainLoader
-    {
-        return $this;
-    }
 
     public function load(): array
     {

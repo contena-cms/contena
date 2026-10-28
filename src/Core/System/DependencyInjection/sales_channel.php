@@ -4,12 +4,6 @@ namespace Contena\Core\System\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Cart\CartCalculator;
-use Contena\Core\Checkout\Cart\CartPersister;
-use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Cart\SalesChannel\CartService;
-use Contena\Core\Checkout\Cart\Tax\TaxDetector;
 use Contena\Core\Checkout\Customer\SalesChannel\AccountService;
 use Contena\Core\Checkout\Customer\SalesChannel\RegisterRoute;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
@@ -248,7 +242,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(Connection::class),
             service('event_dispatcher'),
-            service(CartPersister::class),
             service(ClockInterface::class),
             param('contena.api.store.context_lifetime'),
         ]);
@@ -265,7 +258,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('customer_group.repository'),
             service('customer_address.repository'),
             service('payment_method.repository'),
-            service(TaxDetector::class),
             tagged_iterator('tax.rule_type_filter'),
             service('event_dispatcher'),
             service('currency_country_rounding.repository'),
@@ -315,9 +307,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SalesChannelContextService::class)
         ->args([
             service(SalesChannelContextFactory::class),
-            service(CartCalculator::class),
             service(SalesChannelContextPersister::class),
-            service(CartService::class),
             service('event_dispatcher'),
             service(RequestStack::class),
         ]);
@@ -325,8 +315,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(SalesChannelContextRestorer::class)
         ->args([
             service(SalesChannelContextFactory::class),
-            service(CartRuleLoader::class),
-            service(OrderConverter::class),
             service('order.repository'),
             service(Connection::class),
             service('event_dispatcher'),
@@ -336,9 +324,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(SalesChannelContextFactory::class),
             service(SalesChannelContextPersister::class),
-            service(CartService::class),
-            service(CartCalculator::class),
-            service(CartPersister::class),
             service('event_dispatcher'),
             service(RequestStack::class),
         ]);

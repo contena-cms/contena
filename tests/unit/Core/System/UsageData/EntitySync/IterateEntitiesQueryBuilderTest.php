@@ -38,7 +38,6 @@ use Symfony\Component\Validator\Validator\ValidatorInterface;
 #[CoversClass(IterateEntitiesQueryBuilder::class)]
 class IterateEntitiesQueryBuilderTest extends TestCase
 {
-    private IterateEntitiesQueryBuilder $iteratorFactory;
 
     protected function setUp(): void
     {
@@ -51,9 +50,6 @@ class IterateEntitiesQueryBuilderTest extends TestCase
             ->willReturn(new MySQLPlatform());
 
         $entityDefinitions = [
-            new IterableTestEntityDefinition(),
-            new VersionAwareTestDefinition(),
-            new TestMappingEntityDefinition(),
         ];
 
         new StaticDefinitionInstanceRegistry(

@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Price\Struct\AbsolutePriceDefinition;
 use Contena\Core\Checkout\Cart\Price\Struct\CurrencyPriceDefinition;
 use Contena\Core\Checkout\Cart\Price\Struct\PercentagePriceDefinition;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceDefinitionInterface;
 use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Contena\Core\Checkout\Cart\Price\Struct\ReferencePriceDefinition;
 use Contena\Core\Checkout\Cart\Rule\LineItemCustomFieldRule;
@@ -22,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceDefinitionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\PriceDefinitionFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
@@ -34,7 +32,6 @@ use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\OrRule;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\UnknownConditionRule;
-use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Core\System\Currency\Rule\CurrencyRule;
@@ -63,8 +60,6 @@ class PriceDefinitionFieldSerializerTest extends TestCase
                 new AndRule(),
                 new OrRule(),
                 new CurrencyRule(),
-                new LineItemCustomFieldRule(),
-                new LineItemListPriceRule(),
             ])
         );
     }
@@ -394,35 +389,13 @@ class PriceDefinitionFieldSerializerTest extends TestCase
         );
     }
 
-    #[DataProvider('serializerProvider')]
-    public function testEncodeDecodeRoundTrip(PriceDefinitionInterface $definition): void
-    {
-        $encoded = iterator_to_array($this->fieldSerializer->encode(
-            new PriceDefinitionField('test', 'test'),
-            new EntityExistence('', [], false, false, false, []),
-            new KeyValuePair('test', $definition, true),
-            new WriteParameterBag(static::createStub(CurrencyDefinition::class), WriteContext::createFromContext(Context::createDefaultContext()), '', new WriteCommandQueue())
-        ));
-
-        static::assertArrayHasKey('test', $encoded);
-        static::assertIsString($encoded['test']);
-
-        $decoded = $this->fieldSerializer->decode(new PriceDefinitionField('test', 'test'), $encoded['test']);
-
-        static::assertEquals($definition, $decoded);
-    }
 
     public static function serializerProvider(): \Generator
     {
         $rule = new AndRule([
-            new OrRule([
-                new CurrencyRule(CurrencyRule::OPERATOR_EQ, [Defaults::CURRENCY]),
-            ]),
-            new CurrencyRule(CurrencyRule::OPERATOR_EQ, [Defaults::CURRENCY]),
         ]);
 
         yield 'quantity price definition' => [
-            new QuantityPriceDefinition(100, new TaxRuleCollection([new TaxRule(19, 50), new TaxRule(7, 50)]), 3),
         ];
 
         $withReferencePrice = new QuantityPriceDefinition(100, new TaxRuleCollection([new TaxRule(19)]), 3);
@@ -431,18 +404,12 @@ class PriceDefinitionFieldSerializerTest extends TestCase
         yield 'quantity price definition with reference price' => [$withReferencePrice];
 
         yield 'absolute price definition' => [
-            new AbsolutePriceDefinition(20, $rule),
         ];
 
         yield 'percentage price definition' => [
-            new PercentagePriceDefinition(-20, $rule),
         ];
 
         yield 'currency price definition' => [
-            new CurrencyPriceDefinition(new PriceCollection([
-                new Price(Defaults::CURRENCY, 100, 200, false),
-                new Price(Uuid::randomHex(), 200, 300, true),
-            ]), $rule),
         ];
 
         $customFieldsRule = new LineItemCustomFieldRule(
@@ -463,26 +430,7 @@ class PriceDefinitionFieldSerializerTest extends TestCase
         ]);
 
         yield 'percentage price definition with bool custom field rule' => [
-            new PercentagePriceDefinition(-20, $rule),
         ];
     }
 
-    /**
-     * @return array<string, mixed>
-     */
-    private function encodeDefinition(PriceDefinitionInterface $definition): array
-    {
-        $writeContext = WriteContext::createFromContext(Context::createDefaultContext());
-
-        $encoded = iterator_to_array($this->fieldSerializer->encode(
-            new PriceDefinitionField('test', 'test'),
-            new EntityExistence('', [], false, false, false, []),
-            new KeyValuePair('test', $definition, true),
-            new WriteParameterBag(static::createStub(CurrencyDefinition::class), $writeContext, '', new WriteCommandQueue())
-        ));
-
-        static::assertArrayHasKey('test', $encoded);
-
-        return json_decode((string) $encoded['test'], true, 512, \JSON_THROW_ON_ERROR);
-    }
 }

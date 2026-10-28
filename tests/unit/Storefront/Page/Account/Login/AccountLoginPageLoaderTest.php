@@ -187,8 +187,4 @@ class AccountLoginPageLoaderTest extends TestCase
  */
 class TestAccountLoginPageLoader extends AccountLoginPageLoader
 {
-    public function setMetaInformationAccess(AccountLoginPage $page): void
-    {
-        self::setMetaInformation($page);
-    }
 }

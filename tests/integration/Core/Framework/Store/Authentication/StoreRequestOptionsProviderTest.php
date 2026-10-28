@@ -10,8 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\AbstractStoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\StoreException;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

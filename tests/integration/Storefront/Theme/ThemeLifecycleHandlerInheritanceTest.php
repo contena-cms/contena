@@ -9,14 +9,11 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Theme\Exception\ThemeException;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeLifecycleHandler;
 
 /**
@@ -33,7 +30,6 @@ class ThemeLifecycleHandlerInheritanceTest extends TestCase
      */
     private EntityRepository $themeRepository;
 
-    private ThemeLifecycleHandler $handler;
 
     private Context $context;
 

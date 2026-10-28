@@ -24,7 +24,6 @@ use Contena\Core\Framework\Plugin\PluginLifecycleService;
 use Contena\Core\Framework\Plugin\PluginService;
 use Contena\Core\Framework\Plugin\Requirement\RequirementsValidator;
 use Contena\Core\Framework\Plugin\Util\VersionSanitizer;
-use Contena\Core\Framework\Test\Plugin\PluginIntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;

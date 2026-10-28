@@ -17,8 +17,6 @@ use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Store\Event\ExtensionLoadedEvent;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
 use Contena\Storefront\Framework\Store\Subscriber\ExtensionThemeDetectionSubscriber;
-use Contena\Storefront\Theme\ThemeCollection;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\MockStorefront\MockStorefront;
 
 /**
  * @internal

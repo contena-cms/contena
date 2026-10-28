@@ -21,12 +21,10 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\PluginNotFoundException;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Util\Filesystem as ThemeFilesystem;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
-use Contena\Tests\Unit\Core\Framework\Plugin\_fixtures\ExampleBundle\ExampleBundle;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
@@ -573,10 +571,6 @@ class AssetServiceTest extends TestCase
         yield 'normal copy without a manifest' => [false, false];
     }
 
-    private function getBundle(): ExampleBundle
-    {
-        return new ExampleBundle(true, __DIR__ . '/_fixtures/ExampleBundle');
-    }
 
     private function createAssetService(
         FilesystemOperator $assetFilesystem,

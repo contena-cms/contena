@@ -8,7 +8,6 @@ use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\Lifecycle\AppFeatureValidator;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal
@@ -62,17 +61,5 @@ class AppFeatureValidatorTest extends TestCase
         return $app;
     }
 
-    private function createManifestWithoutFeaturesRequiringSecret(): ManifestFixture
-    {
-        return ManifestFixture::empty();
-    }
 
-    private function createManifestWithFeaturesRequiringSecret(): ManifestFixture
-    {
-        return ManifestFixture::empty()
-            ->withAdminModule()
-            ->withPaymentMethod()
-            ->withTaxProvider()
-            ->withWebhook();
-    }
 }

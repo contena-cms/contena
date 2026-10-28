@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_6\Migration1711461580SetSystemDefaultForDefaultMailFooter;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal
@@ -22,7 +21,6 @@ class Migration1711461580SetSystemDefaultForDefaultMailFooterTest extends TestCa
 {
     use MigrationTestTrait;
 
-    private Migration1711461580SetSystemDefaultForDefaultMailFooter $migration;
 
     private Connection $connection;
 

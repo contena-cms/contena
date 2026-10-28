@@ -50,7 +50,6 @@ class CheapestPriceFacadeTest extends TestCase
         $price = $this->rampUpPriceFacade($ids, $currencyKey, $taxState);
 
         $update = new PriceCollection([
-            new Price(Defaults::CURRENCY, 2, 5, false),
             new Price($ids->get('usd'), 1, 4, false),
         ]);
 
@@ -121,7 +120,6 @@ class CheapestPriceFacadeTest extends TestCase
     private function rampUpPriceFacade(IdsCollection $ids, string $currencyKey, string $taxState): CheapestPriceFacade
     {
         $entity = new class extends Entity {
-            protected CalculatedPrice $calculatedPrice;
         };
 
         $quantityCalculator = new QuantityPriceCalculator(

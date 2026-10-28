@@ -256,10 +256,6 @@ class GoogleReCaptchaV2Test extends TestCase
         return new Request(request: $data);
     }
 
-    private function getCaptcha(?MockHandler $mockHandler = null): GoogleReCaptchaV2
-    {
-        return new GoogleReCaptchaV2($this->getClient($mockHandler));
-    }
 
     private function getClient(?MockHandler $mockHandler = null): Client
     {

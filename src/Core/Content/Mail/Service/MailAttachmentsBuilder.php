@@ -3,18 +3,11 @@
 namespace Contena\Core\Content\Mail\Service;
 
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Document\Service\DocumentGenerator;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentEntity;
 use Contena\Core\Checkout\DocumentV2\DocumentFormat;
-use Contena\Core\Checkout\DocumentV2\Service\DocumentMediaGuard;
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
 use Contena\Core\Content\MailTemplate\Subscriber\MailSendSubscriberConfig;
-use Contena\Core\Content\Media\MediaCollection;
-use Contena\Core\Content\Media\MediaService;
-use Contena\Core\Content\Shared\MailFlow\DocumentResolver;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Hasher;
@@ -27,20 +20,6 @@ use Contena\Core\Framework\Util\Hasher;
 #[Package('after-sales')]
 class MailAttachmentsBuilder
 {
-    /**
-     * @param EntityRepository<MediaCollection> $mediaRepository
-     * @param EntityRepository<DocumentCollection> $documentRepository
-     */
-    public function __construct(
-        private readonly MediaService $mediaService,
-        private readonly EntityRepository $mediaRepository,
-        private readonly DocumentGenerator $documentGenerator,
-        private readonly EntityRepository $documentRepository,
-        private readonly LoggerInterface $logger,
-        private readonly DocumentResolver $documentResolver,
-        private readonly DocumentMediaGuard $documentMediaGuard,
-    ) {
-    }
 
     /**
      * @param array<string, mixed> $eventConfig

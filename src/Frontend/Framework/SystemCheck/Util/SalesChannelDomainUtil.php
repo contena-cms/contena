@@ -4,7 +4,6 @@ namespace Contena\Storefront\Framework\SystemCheck\Util;
 
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\SystemCheck\Check\Result;
 use Contena\Core\Framework\SystemCheck\Check\Status;
@@ -88,53 +87,5 @@ readonly class SalesChannelDomainUtil
         );
     }
 
-    /**
-     * @description Records an exception that prevented a storefront page from being probed as the failed result
-     * of that page, so the check can go on with the other sales channels and still report what went wrong.
-     */
-    public function createExceptionResult(string $url, \Throwable $e, float $responseTime = 0.0, ?Request $request = null): StorefrontHealthCheckResult
-    {
-        $this->logger->error(\sprintf('Error during systemcheck: "%s"', $e->getMessage()), ['exception' => $e, 'url' => $url, 'request' => $request]);
 
-        return StorefrontHealthCheckResult::create($url, Response::HTTP_BAD_REQUEST, $responseTime, $e->getMessage());
-    }
-
-    /**
-     * @description Handles a request and follows redirects (e.g. for SEO) if necessary to return the final response.
-     */
-    public function handleRequest(Request $request): StorefrontHealthCheckResult
-    {
-        $currentRequest = $request;
-        $responseTime = 0.0;
-        $redirectCount = 0;
-
-        $response = null;
-
-        while ($redirectCount <= self::MAX_REDIRECTS) {
-            $requestStart = (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT);
-            try {
-                // don't let the kernel catch errors, so we can handle them ourselves
-                $response = $this->kernel->handle($currentRequest, catch: false);
-            } catch (\Exception $e) {
-                $responseTime += (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT) - $requestStart;
-
-                return $this->createExceptionResult($currentRequest->getUri(), $e, $responseTime, $currentRequest);
-            }
-            $responseTime += (float) $this->clock->now()->format(Defaults::MICROTIME_FORMAT) - $requestStart;
-
-            if (!$response instanceof RedirectResponse) {
-                break;
-            }
-
-            ++$redirectCount;
-
-            $currentRequest = Request::create($response->getTargetUrl());
-        }
-
-        if ($redirectCount > self::MAX_REDIRECTS) {
-            return StorefrontHealthCheckResult::create($currentRequest->getUri(), Response::HTTP_LOOP_DETECTED, $responseTime);
-        }
-
-        return StorefrontHealthCheckResult::create($currentRequest->getUri(), $response->getStatusCode(), $responseTime);
-    }
 }

@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Content\ProductExport\Tracking;
 
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 
@@ -22,7 +20,6 @@ class SalesChannelTrackingOrderEntity extends Entity
 
     protected string $salesChannelId;
 
-    protected ?OrderEntity $order = null;
 
     protected ?SalesChannelEntity $salesChannel = null;
 
@@ -56,15 +53,7 @@ class SalesChannelTrackingOrderEntity extends Entity
         $this->salesChannelId = $salesChannelId;
     }
 
-    public function getOrder(): ?OrderEntity
-    {
-        return $this->order;
-    }
 
-    public function setOrder(?OrderEntity $order): void
-    {
-        $this->order = $order;
-    }
 
     public function getSalesChannel(): ?SalesChannelEntity
     {

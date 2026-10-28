@@ -7,8 +7,6 @@ use PhpBench\Attributes as Bench;
 use Contena\Core\Content\Product\SalesChannel\Detail\ProductDetailRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
-use Contena\Tests\Bench\AbstractBenchCase;
-use Contena\Tests\Bench\Fixtures;
 use Symfony\Component\HttpFoundation\Request;
 
 /**

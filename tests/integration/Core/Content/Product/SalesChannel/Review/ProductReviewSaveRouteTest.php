@@ -16,8 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;

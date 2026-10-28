@@ -12,7 +12,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Core\Test\PHPUnit\CompletionGuard\CompletionGuard;

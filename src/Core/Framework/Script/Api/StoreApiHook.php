@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Script\Api;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\SalesChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\ScriptResponseAwareTrait;
 use Contena\Core\Framework\Script\Execution\FunctionHook;
 use Contena\Core\Framework\Script\Execution\InterfaceHook;
 use Contena\Core\Framework\Script\ScriptException;

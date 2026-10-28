@@ -20,9 +20,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\SearchConfigLoader;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Term\Filter\AbstractTokenFilter;
@@ -64,11 +61,6 @@ class ProductSearchQueryBuilderTest extends TestCase
 
         $this->tokenQueryBuilder = new TokenQueryBuilder(
             $this->getRegistry(),
-            new CustomFieldServiceStub([
-                'evolvesInt' => new IntField('evolvesInt', 'evolvesInt'),
-                'evolvesFloat' => new FloatField('evolvesFloat', 'evolvesFloat'),
-                'evolvesText' => new StringField('evolvesText', 'evolvesText'),
-            ]),
             new ExplainFieldQueryBuilder(
                 new NestedFieldQueryBuilder(
                     new TranslatedFieldQueryBuilder(

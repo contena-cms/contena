@@ -10,8 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Store\Services\ExtensionDownloader;
 use Contena\Core\Framework\Store\StoreException;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Filesystem\Filesystem;
 

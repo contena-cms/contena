@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Product\Aggregate\ProductTranslation;
 
 use Contena\Core\Content\Product\ProductEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 

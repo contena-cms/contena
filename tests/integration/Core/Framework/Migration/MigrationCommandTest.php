@@ -13,8 +13,6 @@ use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Migration\MigrationRuntime;
 use Contena\Core\Framework\Migration\MigrationSource;
-use Contena\Core\Framework\Test\Migration\MigrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;

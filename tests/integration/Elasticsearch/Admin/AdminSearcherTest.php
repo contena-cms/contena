@@ -9,13 +9,9 @@ use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Contena\Elasticsearch\Profiler\ClientProfiler;
-use Contena\Elasticsearch\Test\AdminElasticsearchTestBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

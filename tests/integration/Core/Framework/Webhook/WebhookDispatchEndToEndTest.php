@@ -18,7 +18,6 @@ use Contena\Core\Framework\App\AppLocaleProvider;
 use Contena\Core\Framework\App\Payload\AppPayloadServiceHelper;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PolicyRegistry;
@@ -38,7 +37,6 @@ use Contena\Core\Kernel;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 
 /**
  * End-to-end dispatch coverage for the outbox transport. Two smoke tests run under

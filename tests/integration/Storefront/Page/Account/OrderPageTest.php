@@ -4,10 +4,7 @@ namespace Contena\Tests\Integration\Storefront\Page\Account;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Page\Account\Order\AccountOrderPageLoadedEvent;
-use Contena\Storefront\Page\Account\Order\AccountOrderPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -57,8 +54,4 @@ class OrderPageTest extends TestCase
         self::assertPageEvent(AccountOrderPageLoadedEvent::class, $event, $context, $request, $page);
     }
 
-    protected function getPageLoader(): AccountOrderPageLoader
-    {
-        return static::getContainer()->get(AccountOrderPageLoader::class);
-    }
 }

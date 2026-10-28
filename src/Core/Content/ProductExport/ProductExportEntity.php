@@ -5,7 +5,6 @@ namespace Contena\Core\Content\ProductExport;
 use Contena\Core\Content\ProductStream\ProductStreamEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;

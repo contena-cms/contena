@@ -16,7 +16,6 @@ use Contena\Storefront\Theme\Twig\ThemeInheritanceBuilder;
 #[CoversClass(ThemeInheritanceBuilder::class)]
 class ThemeInheritanceBuilderTest extends TestCase
 {
-    private ThemeInheritanceBuilder $builder;
 
     protected function setUp(): void
     {

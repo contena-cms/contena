@@ -14,16 +14,6 @@ use Contena\Core\Framework\Api\ApiException;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\BundleWithAssociationEnrichmentPaths\BundleWithAssociationEnrichmentPaths;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\BundleWithPredeclaredSwLanguageId\BundleWithPredeclaredSwLanguageId;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\CustomBundleWithApiSchema\ContenaBundleWithName;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\DefinitionWithAssociations;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\DefinitionWithJsonOverride;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\PluginBundleWithSchema\PluginBundleWithSchema;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\PluginExtensionForJsonOverride;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SalesChannelSimpleDefinition;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SEOUrlDefinition;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SimpleDefinition;
 use Symfony\Component\ErrorHandler\ErrorHandler;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -107,10 +97,6 @@ class StoreApiGeneratorTest extends TestCase
 
         $this->definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                SimpleDefinition::class,
-                DefinitionWithAssociations::class,
-                DefinitionWithJsonOverride::class,
-                SEOUrlDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -234,9 +220,6 @@ class StoreApiGeneratorTest extends TestCase
         );
         $definitionRegistry = new StaticDefinitionInstanceRegistry(
             [
-                DefinitionWithAssociations::class,
-                SimpleDefinition::class,
-                SEOUrlDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

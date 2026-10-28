@@ -5,30 +5,14 @@ namespace Contena\Tests\Unit\Core\Framework\Mcp\Tool;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
 use Contena\Core\Framework\Mcp\Result\McpToolError;
 use Contena\Core\Framework\Mcp\Tool\OrderStateTool;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
-use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
-use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionEntity;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 
 /**
@@ -255,122 +239,6 @@ class OrderStateToolTest extends TestCase
         ($tool)(orderNumber: '10001', orderAction: 'cancel', dryRun: true);
     }
 
-    /**
-     * @param list<string> $availableActions
-     */
-    private function createTool(
-        ?OrderEntity $order,
-        array $availableActions,
-        bool $executeTransitions = false,
-        bool $throwOnGetTransitions = false,
-    ): OrderStateTool {
-        return $this->createToolWithContext($order, Context::createDefaultContext(), $availableActions, $executeTransitions, $throwOnGetTransitions);
-    }
 
-    /**
-     * @param list<string> $availableActions
-     */
-    private function createToolWithContext(
-        ?OrderEntity $order,
-        Context $context,
-        array $availableActions,
-        bool $executeTransitions = false,
-        bool $throwOnGetTransitions = false,
-        ?Connection $connection = null,
-    ): OrderStateTool {
-        $collection = new OrderCollection();
-        if ($order !== null) {
-            $collection->add($order);
-        }
 
-        $result = new EntitySearchResult('order', $collection->count(), $collection, null, new Criteria(), $context);
-
-        $repository = static::createStub(EntityRepository::class);
-        $repository->method('search')->willReturn($result);
-
-        $registry = static::createStub(DefinitionInstanceRegistry::class);
-        $registry->method('getRepository')->willReturn($repository);
-
-        $contextProvider = static::createStub(McpContextProvider::class);
-        $contextProvider->method('getContext')->willReturn($context);
-
-        $stateMachineRegistry = static::createStub(StateMachineRegistry::class);
-
-        if ($throwOnGetTransitions) {
-            $stateMachineRegistry->method('getAvailableTransitions')
-                ->willThrowException(new \RuntimeException('State machine not found'));
-        } else {
-            $transitions = [];
-            foreach ($availableActions as $action) {
-                $transition = new StateMachineTransitionEntity();
-                $transition->setId(Uuid::randomHex());
-                $transition->setActionName($action);
-                $transition->setUniqueIdentifier(Uuid::randomHex());
-                $toState = new StateMachineStateEntity();
-                $toState->setTechnicalName($action . '_target');
-                $transition->setToStateMachineState($toState);
-                $transitions[] = $transition;
-            }
-
-            $stateMachineRegistry->method('getAvailableTransitions')->willReturn($transitions);
-        }
-
-        if ($executeTransitions) {
-            $stateCollection = new StateMachineStateCollection();
-            $stateMachineRegistry->method('transition')->willReturn($stateCollection);
-        }
-
-        if ($connection === null) {
-            $connection = static::createStub(Connection::class);
-            $connection->method('transactional')->willReturnCallback(fn (callable $fn) => $fn());
-        }
-
-        return new OrderStateTool(
-            $registry,
-            $contextProvider,
-            $stateMachineRegistry,
-            $connection,
-        );
-    }
-
-    private function buildOrder(string $orderState, string $transactionState, string $deliveryState): OrderEntity
-    {
-        $orderId = Uuid::randomHex();
-
-        $state = new StateMachineStateEntity();
-        $state->setId(Uuid::randomHex());
-        $state->setTechnicalName($orderState);
-        $state->setUniqueIdentifier(Uuid::randomHex());
-
-        $txState = new StateMachineStateEntity();
-        $txState->setId(Uuid::randomHex());
-        $txState->setTechnicalName($transactionState);
-        $txState->setUniqueIdentifier(Uuid::randomHex());
-
-        $transaction = new OrderTransactionEntity();
-        $transaction->setId(Uuid::randomHex());
-        $transaction->setStateMachineState($txState);
-        $transaction->setAmount(new CalculatedPrice(99.99, 99.99, new CalculatedTaxCollection(), new TaxRuleCollection()));
-        $transaction->setUniqueIdentifier(Uuid::randomHex());
-
-        $delState = new StateMachineStateEntity();
-        $delState->setId(Uuid::randomHex());
-        $delState->setTechnicalName($deliveryState);
-        $delState->setUniqueIdentifier(Uuid::randomHex());
-
-        $delivery = new OrderDeliveryEntity();
-        $delivery->setId(Uuid::randomHex());
-        $delivery->setStateMachineState($delState);
-        $delivery->setUniqueIdentifier(Uuid::randomHex());
-
-        $order = new OrderEntity();
-        $order->setId($orderId);
-        $order->setOrderNumber('10001');
-        $order->setStateMachineState($state);
-        $order->setTransactions(new OrderTransactionCollection([$transaction]));
-        $order->setDeliveries(new OrderDeliveryCollection([$delivery]));
-        $order->setUniqueIdentifier($orderId);
-
-        return $order;
-    }
 }

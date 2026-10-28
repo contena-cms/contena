@@ -15,7 +15,6 @@ use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
 use Contena\Core\Framework\Test\Telemetry\Transport\TraceableTransport;
 use Contena\Core\Framework\Test\TestKernel;
 use Contena\Core\Framework\Util\Hasher;
-use Contena\Tests\Integration\Core\Framework\Trait\CustomKernelTestBehavior;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;

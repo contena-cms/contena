@@ -73,13 +73,6 @@ class ScriptResponseFactoryFacadeHookFactoryTest extends TestCase
         static::assertSame('ok', $response->getInner()?->getContent());
     }
 
-    private function buildFactory(?ScriptController $scriptController = null): ScriptResponseFactoryFacadeHookFactory
-    {
-        return new ScriptResponseFactoryFacadeHookFactory(
-            static::createStub(RouterInterface::class),
-            $scriptController,
-        );
-    }
 
     private function createSalesChannelContextAwareHook(SalesChannelContext $salesChannelContext): Hook&SalesChannelContextAware
     {

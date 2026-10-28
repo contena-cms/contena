@@ -8,8 +8,6 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedEvent;
 use Contena\Storefront\Page\Robots\Parser\ParsedRobots;
-use Contena\Storefront\Page\Robots\Parser\ParseIssue;
-use Contena\Storefront\Page\Robots\Parser\ParseIssueSeverity;
 use Contena\Storefront\Page\Robots\Parser\RobotsDirectiveParser;
 use Contena\Storefront\Page\Robots\RobotsConfigChangeSubscriber;
 
@@ -96,8 +94,6 @@ class RobotsConfigChangeSubscriberTest extends TestCase
     public function testLogsErrorsCorrectly(): void
     {
         $issues = [
-            new ParseIssue(1, 'Invalid line', 'Malformed line: missing colon separator', ParseIssueSeverity::ERROR),
-            new ParseIssue(3, 'Another bad', 'Another error', ParseIssueSeverity::ERROR),
         ];
 
         $parsed = new ParsedRobots([], [], $issues);
@@ -127,7 +123,6 @@ class RobotsConfigChangeSubscriberTest extends TestCase
     public function testLogsWarningsCorrectly(): void
     {
         $issues = [
-            new ParseIssue(2, 'Unknown: directive', 'Unknown directive type: \'Unknown\'', ParseIssueSeverity::WARNING),
         ];
 
         $parsed = new ParsedRobots([], [], $issues);
@@ -157,9 +152,6 @@ class RobotsConfigChangeSubscriberTest extends TestCase
     public function testLogsMixedErrorsAndWarnings(): void
     {
         $issues = [
-            new ParseIssue(1, 'Invalid line', 'Malformed line', ParseIssueSeverity::ERROR),
-            new ParseIssue(2, 'Unknown: directive', 'Unknown directive type', ParseIssueSeverity::WARNING),
-            new ParseIssue(3, 'Bad line', 'Another error', ParseIssueSeverity::ERROR),
         ];
 
         $parsed = new ParsedRobots([], [], $issues);
@@ -182,7 +174,6 @@ class RobotsConfigChangeSubscriberTest extends TestCase
     public function testLogsWithGlobalScopeWhenNoSalesChannelId(): void
     {
         $issues = [
-            new ParseIssue(1, 'Invalid line', 'Test error', ParseIssueSeverity::ERROR),
         ];
 
         $parsed = new ParsedRobots([], [], $issues);
@@ -208,7 +199,6 @@ class RobotsConfigChangeSubscriberTest extends TestCase
     public function testLogsWithSalesChannelIdWhenProvided(): void
     {
         $issues = [
-            new ParseIssue(1, 'Invalid line', 'Test error', ParseIssueSeverity::ERROR),
         ];
 
         $parsed = new ParsedRobots([], [], $issues);

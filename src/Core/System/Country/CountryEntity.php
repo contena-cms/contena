@@ -3,10 +3,7 @@
 namespace Contena\Core\System\Country;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TaxFreeConfig;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateCollection;
@@ -54,7 +51,6 @@ class CountryEntity extends Entity
 
     protected ?CountryTranslationCollection $translations = null;
 
-    protected ?OrderAddressCollection $orderAddresses = null;
 
     protected ?CustomerAddressCollection $customerAddresses = null;
 
@@ -203,15 +199,7 @@ class CountryEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getOrderAddresses(): ?OrderAddressCollection
-    {
-        return $this->orderAddresses;
-    }
 
-    public function setOrderAddresses(OrderAddressCollection $orderAddresses): void
-    {
-        $this->orderAddresses = $orderAddresses;
-    }
 
     public function getCustomerAddresses(): ?CustomerAddressCollection
     {

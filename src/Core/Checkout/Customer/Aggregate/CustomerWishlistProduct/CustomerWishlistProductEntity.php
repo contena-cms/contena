@@ -5,7 +5,6 @@ namespace Contena\Core\Checkout\Customer\Aggregate\CustomerWishlistProduct;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerWishlist\CustomerWishlistEntity;
 use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 /**

@@ -7,11 +7,8 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\Lifecycle\Handler\FlowActionLifecycleHandler;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal
@@ -31,7 +28,6 @@ class FlowActionLifecycleHandlerTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {

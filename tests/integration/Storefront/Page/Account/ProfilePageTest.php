@@ -4,10 +4,7 @@ namespace Contena\Tests\Integration\Storefront\Page\Account;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Page\Account\Profile\AccountProfilePageLoadedEvent;
-use Contena\Storefront\Page\Account\Profile\AccountProfilePageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -32,8 +29,4 @@ class ProfilePageTest extends TestCase
         self::assertPageEvent(AccountProfilePageLoadedEvent::class, $event, $context, $request, $page);
     }
 
-    protected function getPageLoader(): AccountProfilePageLoader
-    {
-        return static::getContainer()->get(AccountProfilePageLoader::class);
-    }
 }

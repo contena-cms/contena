@@ -12,7 +12,6 @@ use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Storefront\Theme\AbstractResolvedConfigLoader;
 use Contena\Storefront\Theme\ThemeConfigValueAccessor;
-use Contena\Storefront\Theme\ThemeRuntimeConfig;
 use Contena\Storefront\Theme\ThemeRuntimeConfigService;
 
 /**
@@ -607,34 +606,6 @@ class ThemeConfigValueAccessorTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<string, array{type: string, scss?: bool}> $fields
-     * @param array<string, mixed> $resolvedValues
-     */
-    private function createAccessorWithResolvedConfig(array $fields, array $resolvedValues): ThemeConfigValueAccessor
-    {
-        $configLoader = static::createStub(AbstractResolvedConfigLoader::class);
-        $configLoader->method('load')->willReturn($resolvedValues);
-
-        $runtimeConfig = ThemeRuntimeConfig::fromArray([
-            'themeId' => 'theme-id',
-            'technicalName' => 'Storefront',
-            'resolvedConfig' => ['fields' => $fields],
-            'viewInheritance' => [],
-            'scriptFiles' => null,
-            'iconSets' => [],
-            'updatedAt' => new \DateTimeImmutable(),
-        ]);
-
-        $runtimeConfigService = static::createStub(ThemeRuntimeConfigService::class);
-        $runtimeConfigService->method('getRuntimeConfig')->willReturn($runtimeConfig);
-
-        return new ThemeConfigValueAccessor(
-            $configLoader,
-            static::createStub(CacheTagCollector::class),
-            $runtimeConfigService,
-        );
-    }
 
     private function createContext(): SalesChannelContext
     {

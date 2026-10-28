@@ -15,7 +15,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\Extend
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductManufacturerExtension;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SalesChannel\Entity\SalesChannelDefinitionInstanceRegistry;
 
 /**

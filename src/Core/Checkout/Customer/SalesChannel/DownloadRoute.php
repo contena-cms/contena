@@ -4,7 +4,6 @@ namespace Contena\Core\Checkout\Customer\SalesChannel;
 
 use Contena\Core\Checkout\Customer\CustomerException;
 use Contena\Core\Checkout\Customer\Extension\DownloadRouteExtension;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItemDownload\OrderLineItemDownloadCollection;
 use Contena\Core\Content\Media\File\DownloadResponseGenerator;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

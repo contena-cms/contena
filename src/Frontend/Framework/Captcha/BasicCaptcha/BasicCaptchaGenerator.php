@@ -16,38 +16,6 @@ class BasicCaptchaGenerator extends AbstractBasicCaptchaGenerator
 
     private string $fontPath = __DIR__ . '/../../../Resources/app/storefront/dist/assets/captcha/font.ttf';
 
-    /**
-     * @param int<1, max> $length
-     */
-    public function generate(int $length = 7): BasicCaptchaImage
-    {
-        $code = $this->createCaptchaCode($length);
-
-        $filesystem = new Filesystem();
-
-        if ($filesystem->exists($this->backgroundPath)) {
-            /** @var \GdImage $img */
-            $img = imagecreatefrompng($this->backgroundPath);
-        } else {
-            /** @var \GdImage $img */
-            $img = imagecreate(self::FALLBACK_WIDTH_IMAGE, self::FALLBACK_HEIGHT_IMAGE);
-            imagecolorallocate($img, 255, 255, 255);
-        }
-
-        $codeColor = (int) imagecolorallocate($img, 0, 0, 0);
-        if ($filesystem->exists($this->fontPath)) {
-            imagettftext($img, 45, 0, 80, 55, $codeColor, $this->fontPath, $code);
-        } else {
-            imagestring($img, 5, 100, 20, $code, $codeColor);
-        }
-
-        ob_start();
-        imagepng($img, null, 9);
-        $image = (string) ob_get_clean();
-        $image = base64_encode($image);
-
-        return new BasicCaptchaImage($code, $image);
-    }
 
     public function setBackgroundPath(string $path): void
     {

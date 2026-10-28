@@ -5,10 +5,6 @@ namespace Contena\Core\Content\Product\SalesChannel\Detail;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
-use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
-use Contena\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
-use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
 use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslationCollection;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\Extension\ProductDetailRouteExtension;
@@ -18,7 +14,6 @@ use Contena\Core\Content\Product\SalesChannel\AbstractProductCloseoutFilterFacto
 use Contena\Core\Content\Product\SalesChannel\Detail\Event\ResolveVariantIdEvent;
 use Contena\Core\Content\Product\SalesChannel\ProductAvailableFilter;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductCollection;
-use Contena\Core\Content\Product\SalesChannel\SalesChannelProductDefinition;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Request\RequestParamHelper;
@@ -51,12 +46,7 @@ class ProductDetailRoute extends AbstractProductDetailRoute
     private const SKIP_CONFIGURATOR = 'skipConfigurator';
     private const SKIP_CMS_PAGE = 'skipCmsPage';
 
-    /**
-     * @internal
-     *
-     * @param SalesChannelRepository<SalesChannelProductCollection> $productRepository
-     * @param EntityRepository<ProductTranslationCollection> $productTranslationRepository
-     */
+
     public function __construct(
         private readonly SalesChannelRepository $productRepository,
         private readonly EntityRepository $productTranslationRepository,
@@ -64,15 +54,13 @@ class ProductDetailRoute extends AbstractProductDetailRoute
         private readonly Connection $connection,
         private readonly ProductConfiguratorLoader $configuratorLoader,
         private readonly CategoryBreadcrumbBuilder $breadcrumbBuilder,
-        private readonly SalesChannelCmsPageLoaderInterface $cmsPageLoader,
-        private readonly EntityCmsSlotConfigInheritanceBuilder $cmsSlotConfigInheritanceBuilder,
-        private readonly SalesChannelProductDefinition $productDefinition,
         private readonly AbstractProductCloseoutFilterFactory $productCloseoutFilterFactory,
         private readonly EventDispatcherInterface $dispatcher,
         private readonly CacheTagCollector $cacheTagCollector,
         private readonly ExtensionDispatcher $extensions,
     ) {
     }
+
 
     public static function buildName(string $parentId): string
     {
@@ -157,27 +145,6 @@ class ProductDetailRoute extends AbstractProductDetailRoute
             $loadConfigurator = !$request->query->getBoolean(self::SKIP_CONFIGURATOR);
             $configurator = $loadConfigurator ? $this->configuratorLoader->load($product, $context) : null;
 
-            $pageId = $product->getCmsPageId();
-            if ($loadCmsPage && $pageId) {
-                $slotConfig = $this->buildMergedCmsSlotConfig($product, $context);
-
-                // clone product to prevent recursion encoding (see NEXT-17603)
-                $resolverContext = new EntityResolverContext($context, $request, $this->productDefinition, clone $product);
-
-                $pages = $this->cmsPageLoader->load(
-                    $request,
-                    $this->createCriteria($pageId, $request),
-                    $context,
-                    $slotConfig,
-                    $resolverContext
-                );
-
-                $cmsPage = $pages->getEntities()->first();
-                if ($cmsPage instanceof CmsPageEntity) {
-                    $product->setCmsPage($cmsPage);
-                }
-            }
-
             return new ProductDetailRouteResponse($product, $configurator);
         });
     }
@@ -191,16 +158,6 @@ class ProductDetailRoute extends AbstractProductDetailRoute
         $this->addCloseoutFilter($context, $criteria);
     }
 
-    /**
-     * @return array<string, array<string, mixed>>|null
-     */
-    private function buildMergedCmsSlotConfig(SalesChannelProductEntity $product, SalesChannelContext $context): ?array
-    {
-        return $this->cmsSlotConfigInheritanceBuilder->build(
-            $this->loadProductTranslations($product, $context),
-            $context,
-        );
-    }
 
     private function loadProductTranslations(SalesChannelProductEntity $product, SalesChannelContext $context): ?ProductTranslationCollection
     {
@@ -391,26 +348,6 @@ class ProductDetailRoute extends AbstractProductDetailRoute
     private function isParentProductRequest(string $requestedProductId, ?string $parentProductId): bool
     {
         return $parentProductId !== null && $requestedProductId === $parentProductId;
-    }
-
-    private function createCriteria(string $pageId, Request $request): Criteria
-    {
-        $criteria = new Criteria([$pageId]);
-        $criteria->setTitle('product::cms-page');
-
-        $slots = RequestParamHelper::get($request, 'slots');
-
-        if (\is_string($slots)) {
-            $slots = explode('|', $slots);
-        }
-
-        if (\is_array($slots) && $slots !== []) {
-            $criteria
-                ->getAssociation('sections.blocks')
-                ->addFilter(new EqualsAnyFilter('slots.id', $slots));
-        }
-
-        return $criteria;
     }
 
     private function getBreadcrumbCategory(Request $request, SalesChannelProductEntity $product, SalesChannelContext $context): ?CategoryEntity

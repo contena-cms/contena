@@ -16,7 +16,6 @@ use Contena\Core\Framework\Script\Execution\Script;
 use Contena\Core\Framework\Script\Execution\ScriptEnvironmentFactory;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Script\Execution\ScriptLoader;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;

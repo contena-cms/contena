@@ -10,7 +10,6 @@ use Contena\Core\Checkout\Cart\Rule\AlwaysValidRule;
 use Contena\Core\Content\Flow\Dispatching\Action\AddOrderTagAction;
 use Contena\Core\Content\Flow\Dispatching\Action\RemoveOrderTagAction;
 use Contena\Core\Content\Flow\FlowCollection;
-use Contena\Core\Content\Test\Flow\OrderActionTrait;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

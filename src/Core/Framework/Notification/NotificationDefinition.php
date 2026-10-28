@@ -2,11 +2,8 @@
 
 namespace Contena\Core\Framework\Notification;
 
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\ReadProtection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\WriteProtection;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
@@ -59,8 +56,6 @@ class NotificationDefinition extends EntityDefinition
     protected function defineProtections(): EntityProtectionCollection
     {
         return new EntityProtectionCollection([
-            new ReadProtection(Context::SYSTEM_SCOPE),
-            new WriteProtection(Context::SYSTEM_SCOPE),
         ]);
     }
 

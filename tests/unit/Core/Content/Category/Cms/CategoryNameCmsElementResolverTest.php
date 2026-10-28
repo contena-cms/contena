@@ -4,19 +4,14 @@ namespace Contena\Tests\Unit\Core\Content\Category\Cms;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Category\Cms\CategoryNameCmsElementResolver;
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\TextStruct;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\HtmlSanitizer;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -26,7 +21,6 @@ use Symfony\Component\HttpFoundation\Request;
 #[CoversClass(CategoryNameCmsElementResolver::class)]
 class CategoryNameCmsElementResolverTest extends TestCase
 {
-    private CategoryNameCmsElementResolver $resolver;
 
     protected function setUp(): void
     {
@@ -127,15 +121,6 @@ class CategoryNameCmsElementResolverTest extends TestCase
         static::assertSame('<h1>Newsletter</h1>', $textStruct->getContent());
     }
 
-    private function createSlot(): CmsSlotEntity
-    {
-        $slot = new CmsSlotEntity();
-        $slot->setUniqueIdentifier('id');
-        $slot->setType('category-name');
-        $slot->setConfig([]);
-
-        return $slot;
-    }
 
     private function createCategory(): CategoryEntity
     {
@@ -145,18 +130,5 @@ class CategoryNameCmsElementResolverTest extends TestCase
         return $category;
     }
 
-    private function createResolverContext(): ResolverContext
-    {
-        return new ResolverContext(static::createStub(SalesChannelContext::class), new Request());
-    }
 
-    private function createResolverContextWithCategory(CategoryEntity $category): EntityResolverContext
-    {
-        return new EntityResolverContext(
-            static::createStub(SalesChannelContext::class),
-            new Request(),
-            new CategoryDefinition(),
-            $category
-        );
-    }
 }

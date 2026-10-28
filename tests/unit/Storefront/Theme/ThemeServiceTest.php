@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Notification\NotificationService;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -25,7 +24,6 @@ use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Core\Test\TestDefaults;
-use Contena\Storefront\Theme\ConfigLoader\AbstractConfigLoader;
 use Contena\Storefront\Theme\ConfigLoader\DatabaseConfigLoader;
 use Contena\Storefront\Theme\ConfigLoader\StaticFileConfigLoader;
 use Contena\Storefront\Theme\Event\ThemeAssignedEvent;
@@ -817,12 +815,6 @@ class ThemeServiceTest extends TestCase
                 1,
                 new ThemeCollection(
                     [
-                        (new ThemeEntity())->assign(
-                            [
-                                '_uniqueIdentifier' => $themeId,
-                                'salesChannels' => new SalesChannelCollection(),
-                            ]
-                        ),
                     ]
                 ),
                 null,
@@ -868,23 +860,6 @@ class ThemeServiceTest extends TestCase
                 1,
                 new ThemeCollection(
                     [
-                        (new ThemeEntity())->assign(
-                            [
-                                '_uniqueIdentifier' => $themeId,
-                                'salesChannels' => new SalesChannelCollection(),
-                                'configValues' => [
-                                    'test' => ['value' => ['no_test']],
-                                ],
-                                'baseConfig' => [
-                                    'fields' => [
-                                        'test' => [
-                                            'type' => 'string',
-                                            'value' => 'test',
-                                        ],
-                                    ],
-                                ],
-                            ]
-                        ),
                     ]
                 ),
                 null,
@@ -940,24 +915,6 @@ class ThemeServiceTest extends TestCase
                 1,
                 new ThemeCollection(
                     [
-                        (new ThemeEntity())->assign(
-                            [
-                                '_uniqueIdentifier' => $themeId,
-                                'salesChannels' => new SalesChannelCollection(),
-                                'configValues' => [
-                                    'test' => ['value' => ['no_test']],
-                                    'removed' => ['value' => ['still_here']],
-                                ],
-                                'baseConfig' => [
-                                    'fields' => [
-                                        'test' => [
-                                            'type' => 'string',
-                                            'value' => 'test',
-                                        ],
-                                    ],
-                                ],
-                            ]
-                        ),
                     ]
                 ),
                 null,
@@ -1003,11 +960,6 @@ class ThemeServiceTest extends TestCase
                 1,
                 new ThemeCollection(
                     [
-                        (new ThemeEntity())->assign(
-                            [
-                                '_uniqueIdentifier' => $themeId,
-                            ]
-                        ),
                     ]
                 ),
                 null,
@@ -1085,11 +1037,6 @@ class ThemeServiceTest extends TestCase
                 1,
                 new ThemeCollection(
                     [
-                        (new ThemeEntity())->assign(
-                            [
-                                '_uniqueIdentifier' => $themeId,
-                            ]
-                        ),
                     ]
                 ),
                 null,
@@ -1434,42 +1381,4 @@ class ThemeServiceTest extends TestCase
         static::assertSame($expectedConfig, $result);
     }
 
-    /**
-     * Builds the subject under test. Every collaborator defaults to the shared stub created in setUp; a test
-     * that needs to set call expectations passes a local createMock(...) double in for just that collaborator.
-     *
-     * @param EntityRepository<ThemeCollection>|null $themeRepository
-     * @param EntityRepository<EntityCollection<Entity>>|null $themeSalesChannelRepository
-     */
-    private function getThemeService(
-        ?StorefrontPluginRegistry $storefrontPluginRegistry = null,
-        ?EntityRepository $themeRepository = null,
-        ?EntityRepository $themeSalesChannelRepository = null,
-        ?ThemeCompiler $themeCompiler = null,
-        ?ScssPhpCompiler $scssCompiler = null,
-        ?EventDispatcher $eventDispatcher = null,
-        ?AbstractConfigLoader $configLoader = null,
-        ?Connection $connection = null,
-        ?SystemConfigService $systemConfig = null,
-        ?MessageBus $messageBus = null,
-        ?NotificationService $notificationService = null,
-        ?ThemeMergedConfigBuilder $mergedConfigBuilder = null,
-        ?ThemeRuntimeConfigService $runtimeConfigService = null,
-    ): ThemeService {
-        return new ThemeService(
-            $storefrontPluginRegistry ?? $this->storefrontPluginRegistryMock,
-            $themeRepository ?? $this->themeRepositoryMock,
-            $themeSalesChannelRepository ?? $this->themeSalesChannelRepositoryMock,
-            $themeCompiler ?? $this->themeCompilerMock,
-            $scssCompiler ?? $this->scssCompilerMock,
-            $eventDispatcher ?? $this->eventDispatcherMock,
-            $configLoader ?? $this->databaseConfigLoaderMock,
-            $connection ?? $this->connectionMock,
-            $systemConfig ?? $this->systemConfigMock,
-            $messageBus ?? $this->messageBusMock,
-            $notificationService ?? static::createStub(NotificationService::class),
-            $mergedConfigBuilder ?? $this->mergedConfigBuilderMock,
-            $runtimeConfigService ?? $this->runtimeConfigServiceMock,
-        );
-    }
 }

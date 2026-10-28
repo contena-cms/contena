@@ -8,10 +8,8 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelAnalytics\SalesChannelAnalyticsCollection;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelAnalytics\SalesChannelAnalyticsEntity;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Storefront\Event\StorefrontRenderEvent;
 use Contena\Storefront\System\SalesChannel\SalesChannelAnalyticsLoader;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -68,13 +66,4 @@ class SalesChannelAnalyticsLoaderTest extends TestCase
         static::assertNull($event->getParameters()['storefrontAnalytics']);
     }
 
-    private function getEvent(SalesChannelContext $salesChannelContext): StorefrontRenderEvent
-    {
-        return new StorefrontRenderEvent(
-            'test.html.twig',
-            [],
-            new Request(),
-            $salesChannelContext,
-        );
-    }
 }

@@ -10,7 +10,6 @@ use Contena\Core\Framework\Deprecation\BCChange\BecomesReadonly;
 use Contena\Core\Framework\Deprecation\BCChange\ClassHierarchyChange;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\StateAwareTrait;
 use Contena\Core\Framework\Struct\Struct;
 
 /**

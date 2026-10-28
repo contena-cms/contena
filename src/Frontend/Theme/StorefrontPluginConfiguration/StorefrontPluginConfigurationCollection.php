@@ -29,20 +29,8 @@ class StorefrontPluginConfigurationCollection extends Collection
         $this->set($element->getTechnicalName(), $element);
     }
 
-    public function getByTechnicalName(string $name): ?StorefrontPluginConfiguration
-    {
-        return $this->filter(static fn (StorefrontPluginConfiguration $config) => $config->getTechnicalName() === $name)->first();
-    }
 
-    public function getThemes(): StorefrontPluginConfigurationCollection
-    {
-        return $this->filter(static fn (StorefrontPluginConfiguration $configuration) => $configuration->getIsTheme() === true);
-    }
 
-    public function getNoneThemes(): StorefrontPluginConfigurationCollection
-    {
-        return $this->filter(static fn (StorefrontPluginConfiguration $configuration) => !$configuration->getIsTheme());
-    }
 
     protected function getExpectedClass(): ?string
     {

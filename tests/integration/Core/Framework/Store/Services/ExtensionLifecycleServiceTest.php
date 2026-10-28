@@ -14,12 +14,8 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\AbstractExtensionLifecycle;
 use Contena\Core\Framework\Store\Services\ExtensionLifecycleService;
 use Contena\Core\Framework\Store\StoreException;
-use Contena\Core\Framework\Test\Store\ExtensionBehaviour;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Storefront\Theme\ThemeCollection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

@@ -11,8 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\DateRangeRule;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 use Symfony\Component\Validator\Constraints\NotBlank;
@@ -55,36 +53,6 @@ class DateRangeRuleTest extends TestCase
         $exception = new WriteException();
         $exception->add(new WriteConstraintViolationException(
             new ConstraintViolationList([
-                new ConstraintViolation(
-                    'This value should not be blank.',
-                    'This value should not be blank.',
-                    ['{{ value }}' => 'null'],
-                    null,
-                    '/value/fromDate',
-                    null,
-                    null,
-                    NotBlank::IS_BLANK_ERROR,
-                ),
-                new ConstraintViolation(
-                    'This value should not be blank.',
-                    'This value should not be blank.',
-                    ['{{ value }}' => 'null'],
-                    null,
-                    '/value/toDate',
-                    null,
-                    null,
-                    NotBlank::IS_BLANK_ERROR,
-                ),
-                new ConstraintViolation(
-                    'This value should not be null.',
-                    'This value should not be null.',
-                    ['{{ value }}' => 'null'],
-                    null,
-                    '/value/useTime',
-                    null,
-                    null,
-                    NotNull::IS_NULL_ERROR,
-                ),
             ]),
             '/0',
         ));

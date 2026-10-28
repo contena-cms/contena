@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Test\Category;
 use Contena\Core\Content\Test\Cms\LayoutBuilder;
 use Contena\Core\Defaults;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestBuilderTrait;
 
 /**
  * @internal

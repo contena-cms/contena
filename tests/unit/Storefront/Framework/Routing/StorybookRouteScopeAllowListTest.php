@@ -15,7 +15,6 @@ use Contena\Storefront\Framework\Routing\StorybookRouteScopeAllowList;
 #[CoversClass(StorybookRouteScopeAllowList::class)]
 class StorybookRouteScopeAllowListTest extends TestCase
 {
-    private StorybookRouteScopeAllowList $allowList;
 
     protected function setUp(): void
     {

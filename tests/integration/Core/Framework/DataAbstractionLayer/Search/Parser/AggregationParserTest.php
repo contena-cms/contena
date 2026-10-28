@@ -20,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\AggregationParser;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

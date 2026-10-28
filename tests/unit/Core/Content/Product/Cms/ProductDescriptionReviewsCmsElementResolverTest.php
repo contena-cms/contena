@@ -6,19 +6,15 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\ProductDescriptionReviewsStruct;
 use Contena\Core\Content\Product\Cms\ProductDescriptionReviewsCmsElementResolver;
-use Contena\Core\Content\Product\SalesChannel\Review\AbstractProductReviewRoute;
-use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewLoader;
 use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewResult;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductCollection;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
@@ -74,7 +70,6 @@ class ProductDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $productId = 'product-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, $productId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -119,7 +114,6 @@ class ProductDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $productId = 'product-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, $productId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -159,7 +153,6 @@ class ProductDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $productId = 'product-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, $productId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -203,7 +196,6 @@ class ProductDescriptionReviewsCmsElementResolverTest extends TestCase
 
         $productId = 'product-1';
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, $productId),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -248,16 +240,4 @@ class ProductDescriptionReviewsCmsElementResolverTest extends TestCase
         static::assertNull($data->getProduct());
     }
 
-    private function getResolver(): ProductDescriptionReviewsCmsElementResolver
-    {
-        $productReviewLoader = new ProductReviewLoader(
-            static::createStub(AbstractProductReviewRoute::class),
-            $this->systemConfigService,
-            new EventDispatcher()
-        );
-
-        $scriptExecutor = static::createStub(ScriptExecutor::class);
-
-        return new ProductDescriptionReviewsCmsElementResolver($productReviewLoader, $scriptExecutor, $this->systemConfigService);
-    }
 }

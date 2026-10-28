@@ -132,7 +132,6 @@ class SeoUrlUpdaterTest extends TestCase
                 new SalesChannelCollection([]),
             ],
             [
-                new ProductPageSeoUrlRoute(new ProductDefinition()),
             ]
         );
 
@@ -175,7 +174,6 @@ class SeoUrlUpdaterTest extends TestCase
                 ]),
             ],
             [
-                new ProductPageSeoUrlRoute(new ProductDefinition()),
             ]
         );
 

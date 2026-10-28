@@ -10,21 +10,13 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Deprecated;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\SalesChannel\SalesChannelDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeChildDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeMediaDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeSalesChannelDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeTranslationDefinition;
 
 /**
  * @codeCoverageIgnore
@@ -59,7 +51,6 @@ class ThemeDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new ApiAware(), new PrimaryKey(), new Required()),
             (new StringField('technical_name', 'technicalName'))->addFlags(new ApiAware()),
-            (new StringField('name', 'name'))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new StringField('author', 'author'))->addFlags(new ApiAware(), new Required()),
             (new TranslatedField('description'))->addFlags(new ApiAware()),
             (new TranslatedField('labels'))->addFlags(new ApiAware(), new Deprecated('v6.7.16.0', 'v6.8.0.0')),
@@ -72,11 +63,7 @@ class ThemeDefinition extends EntityDefinition
             (new JsonField('config_values', 'configValues'))->addFlags(new ApiAware()),
             (new BoolField('active', 'active'))->addFlags(new ApiAware(), new Required()),
 
-            (new TranslationsAssociationField(ThemeTranslationDefinition::class, 'theme_id'))->addFlags(new Required()),
-            new ManyToManyAssociationField('salesChannels', SalesChannelDefinition::class, ThemeSalesChannelDefinition::class, 'theme_id', 'sales_channel_id'),
-            (new ManyToManyAssociationField('media', MediaDefinition::class, ThemeMediaDefinition::class, 'theme_id', 'media_id'))->addFlags(new ApiAware()),
             new ManyToOneAssociationField('previewMedia', 'preview_media_id', MediaDefinition::class),
-            new ManyToManyAssociationField('dependentThemes', self::class, ThemeChildDefinition::class, 'parent_id', 'child_id'),
         ]);
     }
 }

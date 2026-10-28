@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Content\Product\Hook\Pricing;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Facade\PriceFactoryFactory;
 use Contena\Core\Checkout\Cart\Facade\ScriptPriceStubs;
 use Contena\Core\Content\Product\Hook\Pricing\ProductPricingHook;
 use Contena\Core\Content\Product\Hook\Pricing\ProductProxy;
@@ -41,7 +40,6 @@ class ProductPricingHookTest extends TestCase
         static::assertSame(
             [
                 RepositoryFacadeHookFactory::class,
-                PriceFactoryFactory::class,
                 SystemConfigFacadeHookFactory::class,
                 SalesChannelRepositoryFacadeHookFactory::class,
             ],

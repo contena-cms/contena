@@ -4,8 +4,6 @@ namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Document\Service\DocumentGenerator;
-use Contena\Core\Checkout\DocumentV2\Service\DocumentMediaGuard;
 use Contena\Core\Content\Mail\Message\SendMailHandler;
 use Contena\Core\Content\Mail\Payload\MailPayloadFactory;
 use Contena\Core\Content\Mail\Service\MailAttachmentsBuilder;
@@ -104,11 +102,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->args([
             service(MediaService::class),
             service('media.repository'),
-            service(DocumentGenerator::class),
             service('document.repository'),
             service('monolog.logger.business_events'),
             service(DocumentResolver::class),
-            service(DocumentMediaGuard::class),
         ]);
 
     $services->set(MailPayloadFactory::class);

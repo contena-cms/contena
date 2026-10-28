@@ -7,14 +7,11 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\ProductStream\DataAbstractionLayer\ProductStreamIndexer;
 use Contena\Core\Content\ProductStream\ProductStreamCollection;
-use Contena\Core\Content\ProductStream\ProductStreamDefinition;
 use Contena\Core\Content\ProductStream\ProductStreamEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -22,8 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**
@@ -581,11 +576,6 @@ class ProductStreamIndexerTest extends TestCase
         return new EntityWrittenContainerEvent(
             $this->context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductStreamDefinition::ENTITY_NAME,
-                    [new EntityWriteResult($id, [], ProductStreamDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT, null)],
-                    Context::createDefaultContext()
-                ),
             ]),
             []
         );

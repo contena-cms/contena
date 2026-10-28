@@ -16,7 +16,6 @@ use Contena\Core\Checkout\Customer\Event\CustomerLoginEvent;
 use Contena\Core\Content\Flow\Dispatching\FlowFactory;
 use Contena\Core\Content\Flow\Dispatching\FlowState;
 use Contena\Core\Content\MailTemplate\Service\Event\MailSentEvent;
-use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Product\ProductEvents;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\AppCollection;
@@ -30,15 +29,12 @@ use Contena\Core\Framework\App\Privileges\Privileges;
 use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Authorization\Policy\PolicyRegistry;
@@ -56,7 +52,6 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -444,40 +439,6 @@ class WebhookManagerTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $id,
-                            [
-                                'id' => $id,
-                                'name' => 'testProduct',
-                                'productNumber' => 'SWC-1000',
-                                'stock' => 100,
-                                'manufacturer' => [
-                                    'name' => 'app creator',
-                                ],
-                                'price' => [
-                                    [
-                                        'gross' => 100,
-                                        'net' => 200,
-                                        'linked' => false,
-                                        'currencyId' => Defaults::CURRENCY,
-                                    ],
-                                ],
-                                'tax' => [
-                                    'name' => 'luxury',
-                                    'taxRate' => '25',
-                                ],
-                            ],
-                            ProductDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_INSERT,
-                            null,
-                            null
-                        ),
-                    ],
-                    $context
-                ),
             ]),
             []
         );
@@ -1768,22 +1729,6 @@ class WebhookManagerTest extends TestCase
         return new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $entityId,
-                            [
-                                'id' => $entityId,
-                            ],
-                            ProductDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_DELETE,
-                            null,
-                            null
-                        ),
-                    ],
-                    $context
-                ),
             ]),
             []
         );

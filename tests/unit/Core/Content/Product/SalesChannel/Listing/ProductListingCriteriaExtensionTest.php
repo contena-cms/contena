@@ -10,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Examples\ProductListingCriteriaExtensionExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

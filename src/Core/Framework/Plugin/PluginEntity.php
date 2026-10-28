@@ -2,10 +2,7 @@
 
 namespace Contena\Core\Framework\Plugin;
 
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
 use Contena\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationCollection;
@@ -62,7 +59,6 @@ class PluginEntity extends Entity
 
     protected ?PluginTranslationCollection $translations = null;
 
-    protected ?PaymentMethodCollection $paymentMethods = null;
 
     /**
      * @var array<string, array<string, list<string>|string>>
@@ -293,15 +289,7 @@ class PluginEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getPaymentMethods(): ?PaymentMethodCollection
-    {
-        return $this->paymentMethods;
-    }
 
-    public function setPaymentMethods(PaymentMethodCollection $paymentMethods): void
-    {
-        $this->paymentMethods = $paymentMethods;
-    }
 
     /**
      * @return array<string, array<string, list<string>|string>>

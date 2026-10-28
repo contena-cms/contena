@@ -43,7 +43,6 @@ use Contena\Storefront\Page\Product\ProductPageLoader;
 use Contena\Storefront\Page\Product\QuickView\MinimalQuickViewPage;
 use Contena\Storefront\Page\Product\QuickView\MinimalQuickViewPageLoader;
 use Contena\Storefront\Page\Product\QuickView\ProductQuickViewWidgetLoadedHook;
-use Contena\Tests\Unit\Storefront\Controller\Stub\ProductControllerStub;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Validator\ConstraintViolationList;
@@ -71,7 +70,6 @@ class ProductControllerTest extends TestCase
 
     private Stub&AbstractGaranLabelRoute $garanLabelRouteMock;
 
-    private ProductControllerStub $controller;
 
     protected function setUp(): void
     {

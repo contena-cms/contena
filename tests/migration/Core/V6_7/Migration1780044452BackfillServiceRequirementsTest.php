@@ -13,7 +13,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1780044452BackfillServiceRequirements;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

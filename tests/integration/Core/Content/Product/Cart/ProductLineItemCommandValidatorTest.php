@@ -7,8 +7,6 @@ use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItemFactoryHandler\ProductLineItemFactory;
 use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Checkout\Cart\SalesChannel\CartService;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\Exception\ProductLineItemDifferentIdException;
 use Contena\Core\Content\Product\Exception\ProductLineItemInconsistentException;
@@ -20,9 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CountryAddToSalesChannelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -46,7 +41,6 @@ class ProductLineItemCommandValidatorTest extends TestCase
      */
     private EntityRepository $repository;
 
-    private CartService $cartService;
 
     private AbstractSalesChannelContextFactory $contextFactory;
 

@@ -8,8 +8,6 @@ use Contena\Core\Checkout\Customer\CleanupCustomerRecoveryTaskHandler;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Integration\Builder\Customer\CustomerBuilder;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

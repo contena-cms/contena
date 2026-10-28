@@ -7,7 +7,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Facade\RepositoryFacadeHookFacto
 use Contena\Core\Framework\DataAbstractionLayer\Facade\SalesChannelRepositoryFacadeHookFactory;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Awareness\SalesChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\SalesChannelContextAwareTrait;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;

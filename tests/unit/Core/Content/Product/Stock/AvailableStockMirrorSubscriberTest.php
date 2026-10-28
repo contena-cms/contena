@@ -56,14 +56,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             ['stock' => 10],
             ['id' => $this->ids->getBytes('product-1')],
-            new EntityExistence(
-                ProductDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('product-1')],
-                true,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 
@@ -120,14 +112,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             ['stock' => 10],
             ['id' => $this->ids->getBytes('product-1')],
-            new EntityExistence(
-                ProductDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('product-1')],
-                false,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 
@@ -154,14 +138,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             ['stock' => 10],
             ['id' => $this->ids->getBytes('product-1')],
-            new EntityExistence(
-                ProductDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('product-1')],
-                true,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 
@@ -188,14 +164,6 @@ class AvailableStockMirrorSubscriberTest extends TestCase
             $definition,
             [],
             ['id' => $this->ids->getBytes('product-1')],
-            new EntityExistence(
-                ProductDefinition::ENTITY_NAME,
-                ['id' => $this->ids->get('product-1')],
-                true,
-                false,
-                false,
-                []
-            ),
             '/0'
         );
 

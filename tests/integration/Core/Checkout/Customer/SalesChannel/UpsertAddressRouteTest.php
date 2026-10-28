@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\Response;

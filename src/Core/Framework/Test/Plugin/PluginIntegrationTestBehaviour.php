@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use SwagTestPlugin\SwagTestPlugin;
 use SwagTestSkipRebuild\SwagTestSkipRebuild;

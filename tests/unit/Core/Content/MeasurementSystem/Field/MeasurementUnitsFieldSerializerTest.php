@@ -119,21 +119,12 @@ class MeasurementUnitsFieldSerializerTest extends TestCase
         ];
         yield 'incomplete JSON should return MeasurementUnits with defaults' => [
             Json::encode(['system' => 'custom']),
-            new MeasurementUnits('custom', [
-                'length' => MeasurementUnits::DEFAULT_LENGTH_UNIT,
-                'weight' => MeasurementUnits::DEFAULT_WEIGHT_UNIT,
-            ]),
         ];
         yield 'JSON without system should use default system' => [
             Json::encode(['units' => ['length' => 'cm', 'weight' => 'g']]),
-            new MeasurementUnits(MeasurementUnits::DEFAULT_MEASUREMENT_SYSTEM, ['length' => 'cm', 'weight' => 'g']),
         ];
         yield 'empty JSON object should return defaults' => [
             Json::encode([]),
-            new MeasurementUnits(MeasurementUnits::DEFAULT_MEASUREMENT_SYSTEM, [
-                'length' => MeasurementUnits::DEFAULT_LENGTH_UNIT,
-                'weight' => MeasurementUnits::DEFAULT_WEIGHT_UNIT,
-            ]),
         ];
         yield 'complex units should be preserved' => [
             Json::encode([

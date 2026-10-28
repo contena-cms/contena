@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Seo\MainCategory;
 use Contena\Core\Content\Category\CategoryEntity;
 use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeWidening;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;

@@ -5,7 +5,6 @@ namespace Contena\Storefront\Page\Robots\Event;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\ContenaEvent;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Page\Robots\Parser\ParseIssue;
 use Symfony\Contracts\EventDispatcher\Event;
 
 /**
@@ -28,10 +27,6 @@ class RobotsUnknownDirectiveEvent extends Event implements ContenaEvent
      */
     public bool $handled = false;
 
-    /**
-     * Set a custom issue for this directive. If set, this issue will be used instead of the default warning.
-     */
-    public ?ParseIssue $issue = null;
 
     public function __construct(
         public readonly int $lineNumber,

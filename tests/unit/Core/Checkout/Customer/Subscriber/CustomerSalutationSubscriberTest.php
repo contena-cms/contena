@@ -43,12 +43,6 @@ class CustomerSalutationSubscriberTest extends TestCase
     public function testSkip(): void
     {
         $writeResults = [
-            new EntityWriteResult(
-                'created-id',
-                ['id' => Uuid::randomHex(), 'salutationId' => Uuid::randomHex()],
-                'customer',
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(

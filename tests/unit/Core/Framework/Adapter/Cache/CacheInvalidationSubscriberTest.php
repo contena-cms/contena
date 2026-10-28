@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationDefinition;
-use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\SalesChannel\CategoryRoute;
 use Contena\Core\Content\Category\SalesChannel\NavigationRoute;
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;
@@ -21,16 +19,11 @@ use Contena\Core\Framework\Adapter\Cache\CacheInvalidationSubscriber;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGenerator;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\SalesChannel\SalesChannelDefinition;
-use Contena\Core\System\Snippet\SnippetDefinition;
 use Contena\Core\System\SystemConfig\CachedSystemConfigLoader;
 use Contena\Core\System\SystemConfig\Event\SystemConfigChangedHook;
 
@@ -79,18 +72,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateContext(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    SalesChannelDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $salesChannelId,
-                            [],
-                            SalesChannelDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -162,21 +143,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    SalesChannelDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $salesChannelId,
-                            [
-                                'navigationCategoryId' => Uuid::randomHex(),
-                                'navigationCategoryDepth' => 3,
-                            ],
-                            SalesChannelDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -201,22 +167,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $categoryId,
-                            [
-                                'parentId' => Uuid::randomHex(),
-                                'visible' => true,
-                                'active' => false,
-                            ],
-                            CategoryDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -241,18 +191,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $categoryId,
-                            [],
-                            CategoryDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_DELETE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -277,20 +215,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryTranslationDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $categoryTranslationId,
-                            [
-                                'name' => 'New Category Name',
-                            ],
-                            CategoryTranslationDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -313,20 +237,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryTranslationDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $categoryTranslationId,
-                            [
-                                'slotConfig' => ['slot-id' => ['content' => ['value' => 'new content']]],
-                            ],
-                            CategoryTranslationDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -346,18 +256,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryTranslationDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            ['categoryId' => Uuid::randomHex(), 'languageId' => Uuid::randomHex()],
-                            ['metaDescription' => 'new description'],
-                            CategoryTranslationDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -374,18 +272,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryTranslationDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            ['languageId' => Uuid::randomHex()],
-                            ['slotConfig' => ['slot-id' => ['content' => ['value' => 'new content']]]],
-                            CategoryTranslationDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -408,34 +294,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    SalesChannelDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $salesChannelId,
-                            [
-                                'footerCategoryId' => Uuid::randomHex(),
-                            ],
-                            SalesChannelDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
-                new EntityWrittenEvent(
-                    CategoryDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $categoryId,
-                            [
-                                'active' => true,
-                            ],
-                            CategoryDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -461,21 +319,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             $context,
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    CategoryDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $categoryId,
-                            [
-                                'description' => 'New description',
-                                'metaTitle' => 'New meta title',
-                            ],
-                            CategoryDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    $context,
-                ),
             ]),
             [],
         );
@@ -538,32 +381,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateStreamIds(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    'product_stream_filter',
-                    [
-                        new EntityWriteResult(
-                            Uuid::randomHex(),
-                            ['productStreamId' => $streamId],
-                            'product_stream_filter',
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                        new EntityWriteResult(
-                            Uuid::randomHex(),
-                            [],
-                            'product_stream_filter',
-                            EntityWriteResult::OPERATION_DELETE,
-                            new EntityExistence(
-                                'product_stream_filter',
-                                ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                                true,
-                                false,
-                                false,
-                                ['product_stream_id' => Uuid::fromHexToBytes($deletedStreamId)]
-                            ),
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -586,18 +403,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateProductCrossSelling(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductCrossSellingDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $crossSellingId,
-                            ['active' => true],
-                            ProductCrossSellingDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -621,18 +426,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateProductCrossSelling(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductCrossSellingAssignedProductsDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $assignedProductId,
-                            ['productId' => Uuid::randomHex()],
-                            ProductCrossSellingAssignedProductsDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_INSERT,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -656,18 +449,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateProductCrossSelling(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductCrossSellingAssignedProductsDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $assignedProductId,
-                            ['crossSellingId' => $crossSellingId],
-                            ProductCrossSellingAssignedProductsDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_INSERT,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -690,21 +471,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateProductCrossSelling(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductCrossSellingTranslationDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            [
-                                'productCrossSellingId' => Uuid::fromHexToBytes($crossSellingId),
-                                'languageId' => Uuid::randomHex(),
-                            ],
-                            ['name' => 'Accessories'],
-                            ProductCrossSellingTranslationDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_DELETE,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -727,21 +493,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         $subscriber->invalidateProductCrossSelling(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductCrossSellingTranslationDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            [
-                                'productCrossSellingId' => $crossSellingId,
-                                'languageId' => Uuid::randomHex(),
-                            ],
-                            ['name' => 'Accessories'],
-                            ProductCrossSellingTranslationDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -784,20 +535,6 @@ class CacheInvalidationSubscriberTest extends TestCase
         return new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    SnippetDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            Uuid::randomHex(),
-                            [
-                                'translationKey' => 'test',
-                            ],
-                            SnippetDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         );

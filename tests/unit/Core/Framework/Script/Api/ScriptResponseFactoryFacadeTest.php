@@ -91,15 +91,4 @@ class ScriptResponseFactoryFacadeTest extends TestCase
         static::assertSame(Response::HTTP_ACCEPTED, $response->getCode());
     }
 
-    private function buildFacade(
-        ?RouterInterface $router = null,
-        ?ScriptController $scriptController = null,
-        ?SalesChannelContext $salesChannelContext = null,
-    ): ScriptResponseFactoryFacade {
-        return new ScriptResponseFactoryFacade(
-            $router ?? static::createStub(RouterInterface::class),
-            $scriptController,
-            $salesChannelContext,
-        );
-    }
 }

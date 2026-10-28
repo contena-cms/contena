@@ -14,8 +14,6 @@ use Contena\Core\Framework\Plugin\Event\PluginPostUpdateEvent;
 use Contena\Core\Framework\Plugin\Event\PluginPreUpdateEvent;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Plugin\PluginLifecycleService;
-use Contena\Core\Framework\Test\Plugin\PluginTestsHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\AbstractStorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;

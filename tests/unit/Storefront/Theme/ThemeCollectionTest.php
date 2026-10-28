@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Theme\ThemeCollection;
-use Contena\Storefront\Theme\ThemeEntity;
 
 /**
  * @internal
@@ -25,12 +24,4 @@ class ThemeCollectionTest extends TestCase
         static::assertNull($collection->getByTechnicalName('Unknown'));
     }
 
-    private static function theme(string $technicalName): ThemeEntity
-    {
-        $theme = new ThemeEntity();
-        $theme->setUniqueIdentifier($technicalName);
-        $theme->setTechnicalName($technicalName);
-
-        return $theme;
-    }
 }

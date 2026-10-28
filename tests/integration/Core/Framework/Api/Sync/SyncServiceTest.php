@@ -6,7 +6,6 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Test\Product\ProductBuilder;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
 use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncService;
@@ -15,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
@@ -59,13 +57,6 @@ class SyncServiceTest extends TestCase
         static::getContainer()->get('product.repository')->create($products, Context::createDefaultContext());
 
         $operations = [
-            new SyncOperation(
-                'delete-products',
-                'product',
-                SyncOperation::ACTION_DELETE,
-                [],
-                [['type' => 'equals', 'field' => 'categories.id', 'value' => $ids->get('c1')]]
-            ),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());
@@ -148,30 +139,6 @@ class SyncServiceTest extends TestCase
         $product = (new ProductBuilder($ids, 'test', 1, 'tax-1'))->price(100);
 
         $operations = [
-            new SyncOperation('write', 'product_manufacturer', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('m1'), 'name' => 'first manufacturer'],
-                ['id' => $ids->create('m2'), 'name' => 'second manufacturer'],
-            ]),
-            new SyncOperation('write-tax', 'tax', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('t1'), 'name' => 'first tax', 'taxRate' => 10],
-                ['id' => $ids->create('t2'), 'name' => 'second tax', 'taxRate' => 10],
-            ]),
-            new SyncOperation('write', 'country', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('c1'), 'name' => 'first country'],
-                ['id' => $ids->create('c2'), 'name' => 'second country'],
-            ]),
-            new SyncOperation('multi-pk', 'product', SyncOperation::ACTION_UPSERT, [
-                $product->build(),
-            ]),
-            new SyncOperation('not-found', 'product', SyncOperation::ACTION_DELETE, [
-                ['id' => $ids->get('p1')],
-                ['id' => $ids->get('p2')],
-                ['id' => $ids->get('p3')],
-            ]),
-            new SyncOperation('delete-currencies', 'currency', SyncOperation::ACTION_DELETE, [
-                ['id' => $ids->get('currency-1')],
-                ['id' => $ids->get('currency-2')],
-            ]),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());
@@ -192,18 +159,6 @@ class SyncServiceTest extends TestCase
         EventHookDispatcher::fromContainer(static::getContainer())->on('country_translation.deleted', $deleteListener);
 
         $operations = [
-            new SyncOperation('manufacturers', 'product_manufacturer', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('m3'), 'name' => 'third manufacturer'],
-                ['id' => $ids->create('m4'), 'name' => 'fourth manufacturer'],
-            ]),
-            new SyncOperation('taxes', 'tax', SyncOperation::ACTION_DELETE, [
-                ['id' => $ids->get('t1')],
-                ['id' => $ids->get('t2')],
-            ]),
-            new SyncOperation('countries', 'country', SyncOperation::ACTION_DELETE, [
-                ['id' => $ids->get('c1')],
-                ['id' => $ids->get('c2')],
-            ]),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());
@@ -242,18 +197,6 @@ class SyncServiceTest extends TestCase
         EventHookDispatcher::fromContainer(static::getContainer())->on(EntityWrittenContainerEvent::class, $listener);
 
         $operations = [
-            new SyncOperation('write', 'product_manufacturer', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('m1'), 'name' => 'first manufacturer'],
-                ['id' => $ids->create('m2'), 'name' => 'second manufacturer'],
-            ]),
-            new SyncOperation('write', 'tax', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('t1'), 'name' => 'first tax', 'taxRate' => 10],
-                ['id' => $ids->create('t2'), 'name' => 'second tax', 'taxRate' => 10],
-            ]),
-            new SyncOperation('write', 'country', SyncOperation::ACTION_UPSERT, [
-                ['id' => $ids->create('c1'), 'name' => 'first country'],
-                ['id' => $ids->create('c2'), 'name' => 'second country'],
-            ]),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());
@@ -318,17 +261,6 @@ class SyncServiceTest extends TestCase
         static::getContainer()->get('product.repository')->create($products, Context::createDefaultContext());
 
         $operations = [
-            new SyncOperation('delete-mapping', 'product_category', SyncOperation::ACTION_DELETE, [], [
-                ['type' => 'or', 'queries' => [
-                    ['type' => 'equals',    'field' => 'categoryId', 'value' => $ids->get('c4')],
-                    ['type' => 'equalsAny', 'field' => 'productId',  'value' => $ids->getList(['p1', 'p2'])],
-                ]],
-            ]),
-            new SyncOperation('new-mapping', 'product_category', SyncOperation::ACTION_UPSERT, [
-                ['productId' => $ids->get('p1'), 'categoryId' => $ids->get('c1')],
-                ['productId' => $ids->get('p2'), 'categoryId' => $ids->get('c1')],
-                ['productId' => $ids->get('p3'), 'categoryId' => $ids->get('c1')],
-            ]),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());
@@ -366,21 +298,6 @@ class SyncServiceTest extends TestCase
         static::getContainer()->get('category.repository')->create($categories, Context::createDefaultContext());
 
         $operations = [
-            new SyncOperation(
-                'map-categories',
-                'product_category',
-                SyncOperation::ACTION_UPSERT,
-                [
-                    [
-                        'categoryId' => $ids->get('c1'),
-                        'productId' => ['resolver' => 'product.number', 'value' => 'p1'],
-                    ],
-                    [
-                        'categoryId' => $ids->get('c2'),
-                        'productId' => ['resolver' => 'product.number', 'value' => 'p1'],
-                    ],
-                ]
-            ),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());
@@ -408,29 +325,6 @@ class SyncServiceTest extends TestCase
         static::getContainer()->get('product.repository')->create($products, Context::createDefaultContext());
 
         $operations = [
-            new SyncOperation('delete', 'product', SyncOperation::ACTION_DELETE, [
-                ['id' => $ids->get('p1')],
-            ]),
-            new SyncOperation('create', 'product', SyncOperation::ACTION_UPSERT, [
-                [
-                    'id' => $ids->get('p1'),
-                    'price' => [
-                        ['currencyId' => Defaults::CURRENCY, 'gross' => 200, 'net' => 200, 'linked' => true],
-                    ],
-                    'tax' => ['id' => $ids->create('tax'), 'name' => 'test', 'taxRate' => 0],
-                    'productNumber' => 'test',
-                    'stock' => 10,
-                    'name' => 'test',
-                ],
-            ]),
-            new SyncOperation('update', 'product', SyncOperation::ACTION_UPSERT, [
-                [
-                    'id' => $ids->get('p1'),
-                    'price' => [
-                        ['currencyId' => Defaults::CURRENCY, 'gross' => 300, 'net' => 300, 'linked' => true],
-                    ],
-                ],
-            ]),
         ];
 
         $this->service->sync($operations, Context::createDefaultContext(), new SyncBehavior());

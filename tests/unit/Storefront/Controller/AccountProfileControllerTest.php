@@ -21,7 +21,6 @@ use Contena\Storefront\Controller\StorefrontController;
 use Contena\Storefront\Page\Account\Overview\AccountOverviewPageLoader;
 use Contena\Storefront\Page\Account\Profile\AccountProfilePage;
 use Contena\Storefront\Page\Account\Profile\AccountProfilePageLoader;
-use Contena\Tests\Unit\Storefront\Controller\Stub\AccountProfileControllerStub;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Validator\ConstraintViolationList;
 
@@ -38,7 +37,6 @@ class AccountProfileControllerTest extends TestCase
 
     private ChangePasswordRoute&Stub $changePasswordRoute;
 
-    private AccountProfileControllerStub $controller;
 
     protected function setUp(): void
     {

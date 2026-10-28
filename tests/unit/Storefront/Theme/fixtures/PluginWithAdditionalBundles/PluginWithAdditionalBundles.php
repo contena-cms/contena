@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Storefront\Theme\fixtures\PluginWithAdditionalBundl
 
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\PluginWithAdditionalBundles\SubBundle1\SubBundle1;
 
 /**
  * @internal
@@ -14,7 +13,6 @@ class PluginWithAdditionalBundles extends Plugin
     public function getAdditionalBundles(AdditionalBundleParameters $additionalBundleParameters): array
     {
         return [
-            new SubBundle1(),
         ];
     }
 }

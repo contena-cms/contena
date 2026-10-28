@@ -2,10 +2,8 @@
 
 namespace Contena\Storefront\Pagelet\Country;
 
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\SalesChannel\AbstractCountryStateRoute;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -24,20 +22,4 @@ class CountryStateDataPageletLoader
     ) {
     }
 
-    public function load(string $countryId, Request $request, SalesChannelContext $context): CountryStateDataPagelet
-    {
-        $page = new CountryStateDataPagelet();
-
-        $criteria = new Criteria();
-
-        $this->eventDispatcher->dispatch(new CountryStateDataPageletCriteriaEvent($criteria, $context, $request));
-
-        $countryRouteResponse = $this->countryStateRoute->load($countryId, $request, $criteria, $context);
-
-        $page->setStates($countryRouteResponse->getStates());
-
-        $this->eventDispatcher->dispatch(new CountryStateDataPageletLoadedEvent($page, $context, $request));
-
-        return $page;
-    }
 }

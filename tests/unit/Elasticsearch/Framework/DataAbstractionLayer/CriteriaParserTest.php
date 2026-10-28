@@ -941,75 +941,23 @@ EOT,
     public static function providerTranslatedField(): iterable
     {
         yield 'non translated field' => [
-            new FieldSorting('productNumber', FieldSorting::ASCENDING),
             new FieldSort('productNumber', FieldSorting::ASCENDING, null, []),
             null,
         ];
 
         yield 'customFields translated field' => [
-            new FieldSorting('customFields.foo', FieldSorting::DESCENDING),
-            new FieldSort('_script', FieldSorting::DESCENDING, null, [
-                'type' => 'string',
-                'script' => [
-                    'source' => static::getScriptStringSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'foo',
-                    ],
-                ],
-            ]),
             new StringField('foo', 'foo'),
         ];
 
         yield 'customFields int translated field' => [
-            new FieldSorting('customFields.foo', FieldSorting::ASCENDING),
-            new FieldSort('_script', FieldSorting::ASCENDING, null, [
-                'type' => 'number',
-                'script' => [
-                    'source' => static::getScriptIntSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'foo',
-                        'order' => FieldSort::ASC,
-                    ],
-                ],
-            ]),
             new IntField('foo', 'foo'),
         ];
 
         yield 'customFields float translated field' => [
-            new FieldSorting('customFields.foo', FieldSorting::ASCENDING),
-            new FieldSort('_script', FieldSort::ASC, null, [
-                'type' => 'number',
-                'script' => [
-                    'source' => static::getScriptIntSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'foo',
-                        'order' => FieldSort::ASC,
-                    ],
-                ],
-            ]),
             new FloatField('foo', 'foo'),
         ];
 
         yield 'non nested translated field' => [
-            new FieldSorting('name', FieldSorting::ASCENDING),
             new FieldSort('_script', FieldSort::ASC, null, [
                 'type' => 'string',
                 'script' => [
@@ -1028,7 +976,6 @@ EOT,
         ];
 
         yield 'non translated field with root prefix' => [
-            new FieldSorting('product_manufacturer.name', FieldSorting::ASCENDING),
             new FieldSort('_script', FieldSort::ASC, null, [
                 'type' => 'string',
                 'script' => [
@@ -1047,54 +994,20 @@ EOT,
         ];
 
         yield 'nested translated field' => [
-            new FieldSorting('product_manufacturer.products.name', FieldSorting::ASCENDING),
             new FieldSort('products.name.' . Defaults::LANGUAGE_SYSTEM, FieldSorting::ASCENDING, new NestedSort('products')),
             null,
         ];
 
         yield 'nested translated field with root prefix' => [
-            new FieldSorting('products.name', FieldSorting::ASCENDING),
             new FieldSort('products.name.' . Defaults::LANGUAGE_SYSTEM, FieldSorting::ASCENDING, new NestedSort('products')),
             null,
         ];
 
         yield 'customFields string translated field in descending order' => [
-            new FieldSorting('customFields.bar', FieldSorting::DESCENDING),
-            new FieldSort('_script', FieldSort::DESC, null, [
-                'type' => 'string',
-                'script' => [
-                    'source' => static::getScriptStringSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'bar',
-                    ],
-                ],
-            ]),
             new StringField('bar', 'bar'),
         ];
 
         yield 'customFields bool translated field' => [
-            new FieldSorting('customFields.boolField', FieldSorting::DESCENDING),
-            new FieldSort('_script', FieldSort::DESC, null, [
-                'type' => 'string',
-                'script' => [
-                    'source' => static::getScriptStringSortingSource(),
-                    'lang' => 'painless',
-                    'params' => [
-                        'field' => 'customFields',
-                        'languages' => [
-                            Defaults::LANGUAGE_SYSTEM,
-                            self::SECOND_LANGUAGE,
-                        ],
-                        'suffix' => 'boolField',
-                    ],
-                ],
-            ]),
             new BoolField('boolField', 'boolField'),
         ];
     }

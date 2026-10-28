@@ -20,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\TreeUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Messenger\MessageBusInterface;
 
@@ -212,8 +211,6 @@ class CategoryIndexerQueryAmplificationTest extends TestCase
         );
 
         $events = new NestedEventCollection([
-            new EntityWrittenEvent(CategoryDefinition::ENTITY_NAME, [$categoryResult], $context),
-            new EntityWrittenEvent(CategoryTranslationDefinition::ENTITY_NAME, [$translationResult], $context),
         ]);
 
         return new EntityWrittenContainerEvent($context, $events, []);

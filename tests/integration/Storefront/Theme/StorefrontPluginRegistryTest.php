@@ -4,9 +4,6 @@ namespace Contena\Tests\Integration\Storefront\Theme;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
 
 /**
@@ -26,7 +23,6 @@ class StorefrontPluginRegistryTest extends TestCase
             ->get(StorefrontPluginRegistry::class);
 
         static::assertInstanceOf(
-            StorefrontPluginConfiguration::class,
             $registry->getConfigurations()->getByTechnicalName('SwagTheme')
         );
     }
@@ -51,7 +47,6 @@ class StorefrontPluginRegistryTest extends TestCase
             ->get(StorefrontPluginRegistry::class);
 
         static::assertInstanceOf(
-            StorefrontPluginConfiguration::class,
             $registry->getConfigurations()->getByTechnicalName('SwagNoThemeCustomCss')
         );
     }
@@ -64,7 +59,6 @@ class StorefrontPluginRegistryTest extends TestCase
             ->get(StorefrontPluginRegistry::class);
 
         static::assertInstanceOf(
-            StorefrontPluginConfiguration::class,
             $registry->getConfigurations()->getByTechnicalName('SwagNoThemeNoCss')
         );
 

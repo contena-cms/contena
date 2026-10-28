@@ -20,7 +20,6 @@ use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -32,7 +31,6 @@ class ManufacturerLogoTypeCmsResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private ManufacturerLogoCmsElementResolver $manufacturerLogoCmsElementResolver;
 
     protected function setUp(): void
     {

@@ -3,10 +3,7 @@
 namespace Contena\Tests\Unit\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\NoKernelInUnitTestsRule;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 
 /**
  * @internal

@@ -6,25 +6,18 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderException;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineTransition\StateMachineTransitionActions;
 use Contena\Core\System\StateMachine\StateMachineRegistry;
 use Contena\Core\System\StateMachine\Transition;
 use Contena\Storefront\Page\Account\Order\AccountEditOrderPageLoadedEvent;
-use Contena\Storefront\Page\Account\Order\AccountEditOrderPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -201,10 +194,6 @@ class EditOrderPageTest extends TestCase
         static::assertFalse($page->isPaymentChangeable());
     }
 
-    protected function getPageLoader(): AccountEditOrderPageLoader
-    {
-        return static::getContainer()->get(AccountEditOrderPageLoader::class);
-    }
 
     private function setOrderToTransactionState(
         string $orderId,
@@ -231,19 +220,6 @@ class EditOrderPageTest extends TestCase
         );
     }
 
-    private function getOrder(string $orderId, SalesChannelContext $context): OrderEntity
-    {
-        /** @var EntityRepository<OrderCollection> $orderRepository */
-        $orderRepository = static::getContainer()->get('order.repository');
-        $criteria = new Criteria([$orderId]);
-
-        $criteria->addAssociations(['stateMachineState', 'transactions.stateMachineState']);
-
-        $order = $orderRepository->search($criteria, $context->getContext())->getEntities()->first();
-        static::assertNotNull($order);
-
-        return $order;
-    }
 
     private function createCustomPaymentWithRule(SalesChannelContext $context, string $ruleId): string
     {
@@ -269,35 +245,4 @@ class EditOrderPageTest extends TestCase
         return $paymentId;
     }
 
-    /**
-     * @param array<string, int> $options
-     */
-    private function createCustomPaymentMethod(SalesChannelContext $context, array $options): PaymentMethodEntity
-    {
-        $paymentId = Uuid::randomHex();
-
-        $data = \array_replace_recursive(
-            [
-                'id' => $paymentId,
-                'name' => 'Test Payment',
-                'technicalName' => Uuid::randomHex(),
-                'description' => 'Payment test',
-                'active' => true,
-                'afterOrderEnabled' => true,
-                'salesChannels' => [
-                    [
-                        'id' => $context->getSalesChannelId(),
-                    ],
-                ],
-            ],
-            $options
-        );
-
-        $this->paymentMethodRepository->create([$data], $context->getContext());
-
-        $paymentMethod = $this->paymentMethodRepository->search(new Criteria([$paymentId]), $context->getContext())->getEntities()->first();
-        static::assertNotNull($paymentMethod);
-
-        return $paymentMethod;
-    }
 }

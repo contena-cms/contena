@@ -3,8 +3,6 @@
 namespace Contena\Tests\Integration\Core\System\SalesChannel\Repository;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Util\AccessKeyHelper;
 use Contena\Core\Framework\Context;
@@ -12,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Currency\CurrencyCollection;

@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\SimpleDefinition;
 
 /**
  * @internal
@@ -36,10 +35,8 @@ class SimpleExtendedDefinition extends EntityDefinition
         return new FieldCollection(
             [
                 (new IdField('id', 'id'))->addFlags(new ApiAware(), new Required(), new PrimaryKey()),
-                new FkField('simple_id', 'simpleId', SimpleDefinition::class),
                 (new JsonField('extended_json_field', 'extendedJsonField'))->addFlags(new Extension()),
 
-                new OneToOneAssociationField('simpleIdField', 'simple_id', 'id_field', SimpleDefinition::class, false),
             ]
         );
     }

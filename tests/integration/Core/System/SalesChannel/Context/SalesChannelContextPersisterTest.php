@@ -11,8 +11,6 @@ use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;

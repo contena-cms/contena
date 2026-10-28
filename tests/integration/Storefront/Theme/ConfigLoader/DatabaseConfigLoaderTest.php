@@ -10,13 +10,11 @@ use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Theme\ConfigLoader\DatabaseConfigLoader;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
-use Contena\Storefront\Theme\ThemeCollection;
 
 /**
  * @internal
@@ -88,7 +86,6 @@ class DatabaseConfigLoaderTest extends TestCase
         $this->themeRepository->create($theme, Context::createDefaultContext());
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('base'),
         ]);
 
         $registry = static::createStub(StorefrontPluginRegistry::class);
@@ -136,7 +133,6 @@ class DatabaseConfigLoaderTest extends TestCase
         $this->themeRepository->create($theme, Context::createDefaultContext());
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('base'),
         ]);
 
         $registry = static::createStub(StorefrontPluginRegistry::class);
@@ -178,7 +174,6 @@ class DatabaseConfigLoaderTest extends TestCase
         $this->themeRepository->create($theme, Context::createDefaultContext());
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('base'),
         ]);
 
         $registry = static::createStub(StorefrontPluginRegistry::class);
@@ -247,9 +242,6 @@ class DatabaseConfigLoaderTest extends TestCase
         $this->themeRepository->create($themes, Context::createDefaultContext());
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('base'),
-            new StorefrontPluginConfiguration('parent'),
-            new StorefrontPluginConfiguration('child'),
         ]);
 
         $registry = static::createStub(StorefrontPluginRegistry::class);

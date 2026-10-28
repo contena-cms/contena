@@ -5,8 +5,6 @@ namespace Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain;
 use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
 use Contena\Core\Content\ProductExport\ProductExportCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\Language\LanguageEntity;

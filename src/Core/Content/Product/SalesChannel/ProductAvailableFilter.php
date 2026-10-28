@@ -5,7 +5,6 @@ namespace Contena\Core\Content\Product\SalesChannel;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Log\Package;
 
 /**
@@ -21,7 +20,6 @@ class ProductAvailableFilter extends MultiFilter
         parent::__construct(
             self::CONNECTION_AND,
             [
-                new RangeFilter('product.visibilities.visibility', [RangeFilter::GTE => $visibility]),
                 new EqualsFilter('product.visibilities.salesChannelId', $salesChannelId),
                 new EqualsFilter('product.active', true),
             ]

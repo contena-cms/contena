@@ -7,11 +7,8 @@ use Contena\Core\Checkout\Customer\CustomerException;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Storefront\Page\Account\CustomerGroupRegistration\CustomerGroupRegistrationPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -63,8 +60,4 @@ class CustomerGroupRegistrationTest extends TestCase
         static::assertSame('test', $page->getGroup()->getRegistrationTitle());
     }
 
-    protected function getPageLoader(): CustomerGroupRegistrationPageLoader
-    {
-        return static::getContainer()->get(CustomerGroupRegistrationPageLoader::class);
-    }
 }

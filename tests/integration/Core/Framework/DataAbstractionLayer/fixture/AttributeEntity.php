@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\fixture;
 
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\AllowEmptyString;
@@ -25,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Attribute\Serialized;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\State;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Translations;
 use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\PriceFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;

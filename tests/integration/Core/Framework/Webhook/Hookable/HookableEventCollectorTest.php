@@ -18,7 +18,6 @@ use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\Event\BusinessEventCollector;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Webhook\Hookable\CoreHookableEventDescriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventCollector;
 

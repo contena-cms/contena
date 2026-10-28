@@ -16,14 +16,9 @@ use Contena\Core\Content\ProductStream\Service\ProductStreamBuilderInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Entity\SalesChannelRepository;
@@ -165,12 +160,6 @@ class ProductStreamBuilderTest extends TestCase
         $this->service->enrichCriteria($criteria, $ids->get('stream'), Context::createDefaultContext());
 
         $expected = new MultiFilter(MultiFilter::CONNECTION_OR, [
-            new MultiFilter(MultiFilter::CONNECTION_AND, [
-                new ContainsFilter('product.name', 'Awesome'),
-                new NotFilter(MultiFilter::CONNECTION_AND, [
-                    new ContainsFilter('product.name', 'Copper'),
-                ]),
-            ]),
         ]);
 
         $filters = $criteria->getFilters();

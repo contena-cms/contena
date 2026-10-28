@@ -15,7 +15,6 @@ use Contena\Core\Framework\Rule\RuleConstraints;
 use Contena\Core\Framework\Rule\RuleException;
 use Contena\Core\Framework\Rule\RuleScope;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Unit\Core\Framework\Rule\Fixture\DaysSinceRuleFixture;
 
 /**
  * @internal
@@ -24,7 +23,6 @@ use Contena\Tests\Unit\Core\Framework\Rule\Fixture\DaysSinceRuleFixture;
 #[CoversClass(DaysSinceRule::class)]
 class DaysSinceRuleTest extends TestCase
 {
-    private DaysSinceRuleFixture $rule;
 
     protected function setUp(): void
     {

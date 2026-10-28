@@ -6,23 +6,16 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\Order\OrderPersister;
-use Contena\Core\Checkout\Cart\Order\OrderPersisterInterface;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Processor;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Customer\CustomerCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceCollection;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceEntity;
 use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslationDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Product\ProductEntity;
@@ -47,16 +40,11 @@ use Contena\Core\Framework\DataAbstractionLayer\VersionManager;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Collector\RuleConditionRegistry;
 use Contena\Core\Framework\Struct\ArrayEntity;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CalculatedPriceFieldTestDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\CountryAddToSalesChannelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\Tax\TaxDefinition;
 use Contena\Core\Test\Integration\PaymentHandler\TestPaymentHandler;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
@@ -98,9 +86,7 @@ class VersioningTest extends TestCase
 
     private AbstractSalesChannelContextFactory $salesChannelContextFactory;
 
-    private Processor $processor;
 
-    private OrderPersisterInterface $orderPersister;
 
     private Context $context;
 
@@ -398,13 +384,7 @@ class VersioningTest extends TestCase
         $price = new CalculatedPrice(
             100.20,
             100.30,
-            new CalculatedTaxCollection([
-                new CalculatedTax(0.19, 10, 10),
-                new CalculatedTax(0.19, 5, 10),
-            ]),
             new TaxRuleCollection([
-                new TaxRule(10.0, 50),
-                new TaxRule(5, 50),
             ])
         );
 
@@ -433,13 +413,7 @@ class VersioningTest extends TestCase
         $newPrice = new CalculatedPrice(
             500.20,
             500.30,
-            new CalculatedTaxCollection([
-                new CalculatedTax(3.50, 15, 500.20),
-                new CalculatedTax(3.50, 30, 500.20),
-            ]),
             new TaxRuleCollection([
-                new TaxRule(15, 30),
-                new TaxRule(30, 70),
             ])
         );
 
@@ -2133,41 +2107,6 @@ class VersioningTest extends TestCase
             );
     }
 
-    private function createDemoCart(SalesChannelContext $salesChannelContext): Cart
-    {
-        $cart = new Cart('a-b-c');
-
-        $id = Uuid::randomHex();
-
-        $product = [
-            'id' => $id,
-            'name' => 'test',
-            'price' => [
-                ['currencyId' => Defaults::CURRENCY, 'gross' => 119.99, 'net' => 99.99, 'linked' => false],
-            ],
-            'productNumber' => Uuid::randomHex(),
-            'manufacturer' => ['name' => 'test'],
-            'tax' => ['id' => Uuid::randomHex(), 'taxRate' => 19, 'name' => 'test'],
-            'stock' => 10,
-            'active' => true,
-            'visibilities' => [
-                ['salesChannelId' => TestDefaults::SALES_CHANNEL, 'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL],
-            ],
-        ];
-
-        static::getContainer()->get('product.repository')
-            ->create([$product], Context::createDefaultContext());
-
-        $this->addTaxDataToSalesChannel($salesChannelContext, $product['tax']);
-
-        $cart->add(
-            (new LineItem($id, LineItem::PRODUCT_LINE_ITEM_TYPE, $id, 1))
-                ->setStackable(true)
-                ->setRemovable(true)
-        );
-
-        return $cart;
-    }
 
     private function createCustomer(): string
     {

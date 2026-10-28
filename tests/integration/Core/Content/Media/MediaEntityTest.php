@@ -7,13 +7,11 @@ use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Test\Media\MediaFixtures;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

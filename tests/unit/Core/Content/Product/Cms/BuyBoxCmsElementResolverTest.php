@@ -11,7 +11,6 @@ use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\BuyBoxStruct;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewCollection;
 use Contena\Core\Content\Product\Cms\BuyBoxCmsElementResolver;
 use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Content\Product\SalesChannel\Detail\ProductConfiguratorLoader;

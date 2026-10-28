@@ -4,9 +4,6 @@ namespace Contena\Core\Content\ProductExport\Error;
 
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\AssignArrayInterface;
-use Contena\Core\Framework\Struct\AssignArrayTrait;
-use Contena\Core\Framework\Struct\CreateFromTrait;
-use Contena\Core\Framework\Struct\JsonSerializableTrait;
 
 #[Package('inventory')]
 abstract class Error extends \Exception implements \JsonSerializable, AssignArrayInterface

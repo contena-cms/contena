@@ -5,14 +5,10 @@ namespace Contena\Core\Framework\DependencyInjection;
 use Contena\Core\Content\Category\CategoryHydrator;
 use Contena\Core\Content\Media\MediaHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingHydrator;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingHydrator;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSellingAssignedProducts\ProductCrossSellingAssignedProductsHydrator;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSet\ProductFeatureSetHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductKeywordDictionary\ProductKeywordDictionaryHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceHydrator;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfig\ProductSearchConfigHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfigField\ProductSearchConfigFieldHydrator;
 use Contena\Core\Content\Product\Aggregate\ProductSearchKeyword\ProductSearchKeywordHydrator;
@@ -67,11 +63,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(ProductReviewHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
     $services->set(ProductManufacturerHydrator::class)
         ->public()
@@ -85,23 +76,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('service_container'),
         ]);
 
-    $services->set(ProductCrossSellingHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(ProductCrossSellingAssignedProductsHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
-    $services->set(ProductFeatureSetHydrator::class)
-        ->public()
-        ->args([
-            service('service_container'),
-        ]);
 
     $services->set(ProductSortingHydrator::class)
         ->public()

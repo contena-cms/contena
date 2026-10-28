@@ -20,7 +20,6 @@ use Contena\Storefront\Theme\ThemeConfigCacheInvalidator;
 #[CoversClass(ThemeConfigCacheInvalidator::class)]
 class ThemeConfigCacheInvalidatorTest extends TestCase
 {
-    private ThemeConfigCacheInvalidator $themeConfigCacheInvalidator;
 
     private MockedCacheInvalidator $cacheInvalidator;
 

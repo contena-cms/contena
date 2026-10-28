@@ -2,12 +2,10 @@
 
 namespace Contena\Storefront\Page\Address\Listing;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressCollection;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Storefront\Page\Page;
 
 #[Package('checkout')]
@@ -15,11 +13,9 @@ class AddressListingPage extends Page
 {
     protected CustomerAddressCollection $addresses;
 
-    protected SalutationCollection $salutations;
 
     protected CountryCollection $countries;
 
-    protected Cart $cart;
 
     protected ?CustomerAddressEntity $address = null;
 
@@ -33,15 +29,7 @@ class AddressListingPage extends Page
         $this->addresses = $addresses;
     }
 
-    public function getSalutations(): SalutationCollection
-    {
-        return $this->salutations;
-    }
 
-    public function setSalutations(SalutationCollection $salutations): void
-    {
-        $this->salutations = $salutations;
-    }
 
     public function getCountries(): CountryCollection
     {
@@ -53,15 +41,7 @@ class AddressListingPage extends Page
         $this->countries = $countries;
     }
 
-    public function getCart(): Cart
-    {
-        return $this->cart;
-    }
 
-    public function setCart(Cart $cart): void
-    {
-        $this->cart = $cart;
-    }
 
     public function getAddress(): ?CustomerAddressEntity
     {

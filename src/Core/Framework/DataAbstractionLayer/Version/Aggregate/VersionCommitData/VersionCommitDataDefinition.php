@@ -7,12 +7,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\AutoIncrementField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\VersionDataPayloadField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Version\Aggregate\VersionCommit\VersionCommitDefinition;
 use Contena\Core\Framework\Log\Package;
@@ -64,10 +61,7 @@ class VersionCommitDataDefinition extends EntityDefinition
             new IdField('user_id', 'userId'),
             new IdField('integration_id', 'integrationId'),
             new AutoIncrementField(),
-            (new StringField('entity_name', 'entityName'))->addFlags(new Required(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new JsonField('entity_id', 'entityId'))->addFlags(new Required()),
-            (new StringField('action', 'action'))->addFlags(new Required(), new SearchRanking(SearchRanking::LOW_SEARCH_RANKING)),
-            (new VersionDataPayloadField('payload', 'payload'))->addFlags(new Required(), new SearchRanking(SearchRanking::LOW_SEARCH_RANKING)),
         ]);
     }
 }

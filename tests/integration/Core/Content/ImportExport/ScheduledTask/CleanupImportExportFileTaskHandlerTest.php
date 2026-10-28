@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Integration\Core\Content\ImportExport\AbstractImportExportTestCase;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\TraceableMessageBus;
 

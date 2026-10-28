@@ -7,10 +7,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
-use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Maintenance\User\Service\UserProvisioner;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryEntity;
 use Contena\Core\System\User\Recovery\UserRecoveryRequestEvent;
@@ -66,9 +63,6 @@ class UserRecoveryControllerTest extends TestCase
         $logger = static::getContainer()->get('monolog.logger.business_events');
         $handlers = $logger->getHandlers();
         $logger->setHandlers([
-            new ExcludeFlowEventHandler(static::getContainer()->get(DoctrineSQLHandler::class), [
-                UserRecoveryRequestEvent::EVENT_NAME,
-            ]),
         ]);
 
         $dispatchedEvent = null;

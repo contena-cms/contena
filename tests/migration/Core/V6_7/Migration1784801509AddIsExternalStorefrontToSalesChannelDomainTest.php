@@ -9,8 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_7\Migration1784801509AddIsExternalStorefrontToSalesChannelDomain;

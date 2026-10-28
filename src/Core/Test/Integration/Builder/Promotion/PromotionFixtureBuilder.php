@@ -2,9 +2,6 @@
 
 namespace Contena\Core\Test\Integration\Builder\Promotion;
 
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionSetGroup\PromotionSetGroupCollection;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;

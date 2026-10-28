@@ -11,8 +11,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\FlowEventAware;
 use Contena\Core\Framework\Event\MailAware;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\MailAwareEvent;
-use Contena\Tests\Unit\Core\Content\Flow\Dispatching\Storer\Stub\NonMailAwareEvent;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

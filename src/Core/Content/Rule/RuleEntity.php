@@ -2,22 +2,13 @@
 
 namespace Contena\Core\Content\Rule;
 
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionSetGroup\PromotionSetGroupCollection;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
-use Contena\Core\Checkout\Shipping\Aggregate\ShippingMethodPrice\ShippingMethodPriceCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceCollection;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceCollection;
 use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\System\Tag\TagCollection;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 
 #[Package('fundamentals@after-sales')]
 class RuleEntity extends Entity
@@ -43,9 +34,7 @@ class RuleEntity extends Entity
 
     protected ?ProductPriceCollection $productPrices = null;
 
-    protected ?ShippingMethodCollection $shippingMethods = null;
 
-    protected ?PaymentMethodCollection $paymentMethods = null;
 
     protected ?RuleConditionCollection $conditions = null;
 
@@ -56,25 +45,17 @@ class RuleEntity extends Entity
      */
     protected ?array $areas = null;
 
-    protected ?ShippingMethodPriceCollection $shippingMethodPrices = null;
 
-    protected ?PromotionDiscountCollection $promotionDiscounts = null;
 
-    protected ?PromotionSetGroupCollection $promotionSetGroups = null;
 
-    protected ?ShippingMethodPriceCollection $shippingMethodPriceCalculations = null;
 
-    protected ?PromotionCollection $personaPromotions = null;
 
     protected ?FlowSequenceCollection $flowSequences = null;
 
     protected ?TagCollection $tags = null;
 
-    protected ?PromotionCollection $orderPromotions = null;
 
-    protected ?PromotionCollection $cartPromotions = null;
 
-    protected ?TaxProviderCollection $taxProviders = null;
 
     public function getName(): string
     {
@@ -136,25 +117,9 @@ class RuleEntity extends Entity
         $this->productPrices = $productPrices;
     }
 
-    public function getShippingMethods(): ?ShippingMethodCollection
-    {
-        return $this->shippingMethods;
-    }
 
-    public function setShippingMethods(ShippingMethodCollection $shippingMethods): void
-    {
-        $this->shippingMethods = $shippingMethods;
-    }
 
-    public function getPaymentMethods(): ?PaymentMethodCollection
-    {
-        return $this->paymentMethods;
-    }
 
-    public function setPaymentMethods(PaymentMethodCollection $paymentMethods): void
-    {
-        $this->paymentMethods = $paymentMethods;
-    }
 
     public function getConditions(): ?RuleConditionCollection
     {
@@ -208,63 +173,15 @@ class RuleEntity extends Entity
         $this->moduleTypes = $moduleTypes;
     }
 
-    public function getShippingMethodPrices(): ?ShippingMethodPriceCollection
-    {
-        return $this->shippingMethodPrices;
-    }
 
-    public function setShippingMethodPrices(ShippingMethodPriceCollection $shippingMethodPrices): void
-    {
-        $this->shippingMethodPrices = $shippingMethodPrices;
-    }
 
-    public function getPromotionDiscounts(): ?PromotionDiscountCollection
-    {
-        return $this->promotionDiscounts;
-    }
 
-    public function setPromotionDiscounts(PromotionDiscountCollection $promotionDiscounts): void
-    {
-        $this->promotionDiscounts = $promotionDiscounts;
-    }
 
-    public function getPromotionSetGroups(): ?PromotionSetGroupCollection
-    {
-        return $this->promotionSetGroups;
-    }
 
-    public function setPromotionSetGroups(PromotionSetGroupCollection $promotionSetGroups): void
-    {
-        $this->promotionSetGroups = $promotionSetGroups;
-    }
 
-    public function getShippingMethodPriceCalculations(): ?ShippingMethodPriceCollection
-    {
-        return $this->shippingMethodPriceCalculations;
-    }
 
-    public function setShippingMethodPriceCalculations(ShippingMethodPriceCollection $shippingMethodPriceCalculations): void
-    {
-        $this->shippingMethodPriceCalculations = $shippingMethodPriceCalculations;
-    }
 
-    /**
-     * Gets a list of all promotions where this rule
-     * is being used within the Persona Conditions
-     */
-    public function getPersonaPromotions(): ?PromotionCollection
-    {
-        return $this->personaPromotions;
-    }
 
-    /**
-     * Sets a list of all promotions where this rule should be
-     * used as Persona Condition
-     */
-    public function setPersonaPromotions(PromotionCollection $personaPromotions): void
-    {
-        $this->personaPromotions = $personaPromotions;
-    }
 
     public function getFlowSequences(): ?FlowSequenceCollection
     {
@@ -286,49 +203,9 @@ class RuleEntity extends Entity
         $this->tags = $tags;
     }
 
-    /**
-     * Gets a list of all promotions where this rule is
-     * being used within the Order Conditions.
-     */
-    public function getOrderPromotions(): ?PromotionCollection
-    {
-        return $this->orderPromotions;
-    }
 
-    /**
-     * Sets a list of all promotions where this rule should be
-     * used as Order Condition.
-     */
-    public function setOrderPromotions(PromotionCollection $orderPromotions): void
-    {
-        $this->orderPromotions = $orderPromotions;
-    }
 
-    /**
-     * Gets a list of all promotions where this rule is
-     * being used within the Cart Conditions.
-     */
-    public function getCartPromotions(): ?PromotionCollection
-    {
-        return $this->cartPromotions;
-    }
 
-    /**
-     * Sets a list of all promotions where this rule should be
-     * used as Cart Condition.
-     */
-    public function setCartPromotions(PromotionCollection $cartPromotions): void
-    {
-        $this->cartPromotions = $cartPromotions;
-    }
 
-    public function getTaxProviders(): ?TaxProviderCollection
-    {
-        return $this->taxProviders;
-    }
 
-    public function setTaxProviders(TaxProviderCollection $taxProviders): void
-    {
-        $this->taxProviders = $taxProviders;
-    }
 }

@@ -3,14 +3,11 @@
 namespace Contena\Core\System\User;
 
 use Contena\Core\Checkout\Customer\CustomerCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogCollection;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\System\Locale\LocaleEntity;
@@ -80,9 +77,7 @@ class UserEntity extends Entity
 
     protected ?\DateTimeInterface $lastUpdatedPasswordAt = null;
 
-    protected ?OrderCollection $createdOrders = null;
 
-    protected ?OrderCollection $updatedOrders = null;
 
     protected ?CustomerCollection $createdCustomers = null;
 
@@ -322,25 +317,9 @@ class UserEntity extends Entity
         $this->title = $title;
     }
 
-    public function getCreatedOrders(): ?OrderCollection
-    {
-        return $this->createdOrders;
-    }
 
-    public function setCreatedOrders(OrderCollection $createdOrders): void
-    {
-        $this->createdOrders = $createdOrders;
-    }
 
-    public function getUpdatedOrders(): ?OrderCollection
-    {
-        return $this->updatedOrders;
-    }
 
-    public function setUpdatedOrders(OrderCollection $updatedOrders): void
-    {
-        $this->updatedOrders = $updatedOrders;
-    }
 
     public function getCreatedCustomers(): ?CustomerCollection
     {

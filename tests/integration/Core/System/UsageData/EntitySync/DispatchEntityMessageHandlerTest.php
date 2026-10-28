@@ -13,7 +13,6 @@ use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\FieldType\DateInterval;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Consent\Definition\BackendData;
 use Contena\Core\System\Consent\Service\ConsentService;

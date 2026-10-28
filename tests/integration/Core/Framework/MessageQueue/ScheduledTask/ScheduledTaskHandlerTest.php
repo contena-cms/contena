@@ -16,11 +16,7 @@ use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskEntity;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskExecutor;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\DummyScheduledTaskHandler;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestRescheduleOnFailureTask;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
 use Symfony\Component\Clock\NativeClock;
 
 /**
@@ -275,13 +271,4 @@ class ScheduledTaskHandlerTest extends TestCase
         ];
     }
 
-    private function createHandler(string $taskId, bool $shouldThrowException = false, ?LoggerInterface $logger = null): DummyScheduledTaskHandler
-    {
-        $logger ??= $this->logger;
-
-        $handler = new DummyScheduledTaskHandler($this->scheduledTaskRepo, $logger, $taskId, $shouldThrowException);
-        $handler->setScheduledTaskExecutor(new ScheduledTaskExecutor($this->scheduledTaskRepo, $logger, new NativeClock()));
-
-        return $handler;
-    }
 }

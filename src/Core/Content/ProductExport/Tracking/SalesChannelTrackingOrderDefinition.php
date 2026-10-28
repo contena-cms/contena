@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\ProductExport\Tracking;
 
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
@@ -11,8 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelDefinition;
@@ -49,10 +46,7 @@ class SalesChannelTrackingOrderDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required(), new ApiAware(AdminApiSource::class)),
-            (new FkField('order_id', 'orderId', OrderDefinition::class))->addFlags(new Required(), new ApiAware(AdminApiSource::class)),
-            (new ReferenceVersionField(OrderDefinition::class, 'order_version_id'))->addFlags(new Required(), new ApiAware(AdminApiSource::class)),
             (new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class))->addFlags(new Required(), new ApiAware(AdminApiSource::class)),
-            new OneToOneAssociationField('order', 'order_id', 'id', OrderDefinition::class, false),
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false),
         ]);
     }

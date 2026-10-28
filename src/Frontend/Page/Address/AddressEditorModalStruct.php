@@ -28,7 +28,6 @@ class AddressEditorModalStruct extends Struct
 
     protected ?CustomerAddressEntity $address = null;
 
-    protected ?Page $page = null;
 
     public function isChangeBilling(): bool
     {
@@ -96,13 +95,5 @@ class AddressEditorModalStruct extends Struct
         $this->address = $address;
     }
 
-    public function getPage(): ?Page
-    {
-        return $this->page;
-    }
 
-    public function setPage(?Page $page): void
-    {
-        $this->page = $page;
-    }
 }

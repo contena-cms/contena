@@ -6,7 +6,6 @@ use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescriber;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
-use Contena\Core\Service\Event\CommercialLicenseProvidedEvent;
 
 /**
  * @internal only for use by the app-system
@@ -30,11 +29,6 @@ class ServiceHookableEventDescriber implements HookableEventDescriber
     private function getServiceEventDescriptions(): array
     {
         return [
-            new HookableEventDescription(
-                CommercialLicenseProvidedEvent::NAME,
-                'Fires when the current commercial license data is provided to services.',
-                []
-            ),
         ];
     }
 }

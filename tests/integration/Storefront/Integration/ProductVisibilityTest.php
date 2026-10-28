@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
@@ -48,9 +47,7 @@ class ProductVisibilityTest extends TestCase
 
     private string $productId4;
 
-    private SearchPageLoader $searchPageLoader;
 
-    private SuggestPageLoader $suggestPageLoader;
 
     private AbstractSalesChannelContextFactory $contextFactory;
 
@@ -59,7 +56,6 @@ class ProductVisibilityTest extends TestCase
      */
     private EntityRepository $productRepository;
 
-    private ProductPageLoader $productPageLoader;
 
     private string $categoryId;
 

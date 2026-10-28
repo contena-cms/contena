@@ -40,22 +40,18 @@ class MediaUrlGeneratorTest extends TestCase
     public static function generateProvider(): \Generator
     {
         yield 'Test with empty path' => [
-            new UrlParams('id', UrlParamsSource::MEDIA, '', null),
             'http://localhost:8000/',
         ];
 
         yield 'Test with path' => [
-            new UrlParams('id', UrlParamsSource::MEDIA, 'test.jpg', null),
             'http://localhost:8000/test.jpg',
         ];
 
         yield 'Test with longer path' => [
-            new UrlParams('id', UrlParamsSource::MEDIA, 'media/foo/3a/test.jpg', null),
             'http://localhost:8000/media/foo/3a/test.jpg',
         ];
 
         yield 'Test with date' => [
-            new UrlParams('id', UrlParamsSource::MEDIA, 'test.jpg', new \DateTimeImmutable('2021-01-01')),
             'http://localhost:8000/test.jpg?ts=1609459200',
         ];
 

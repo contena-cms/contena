@@ -23,7 +23,6 @@ use Contena\Core\System\UsageData\EntitySync\IterateEntityMessage;
 use Contena\Core\System\UsageData\EntitySync\Operation;
 use Contena\Core\System\UsageData\Services\EntityDefinitionService;
 use Contena\Core\System\UsageData\Services\EntityDispatchService;
-use Contena\Core\System\UsageData\Services\GatewayStatusService;
 use Contena\Core\System\UsageData\Services\ShopIdProvider;
 use Contena\Core\System\UsageData\Services\UsageDataAllowListService;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
@@ -42,7 +41,6 @@ class EntityDispatchServiceTest extends TestCase
 {
     private DefinitionInstanceRegistry $registry;
 
-    private ShopIdProvider $shopIdProvider;
 
     protected function setUp(): void
     {
@@ -766,11 +764,4 @@ class EntityDispatchServiceTest extends TestCase
         );
     }
 
-    private function createGatewayStatusService(bool $isAcceptingEntities): GatewayStatusService&Stub
-    {
-        $service = static::createStub(GatewayStatusService::class);
-        $service->method('isGatewayAllowsPush')->willReturn($isAcceptingEntities);
-
-        return $service;
-    }
 }

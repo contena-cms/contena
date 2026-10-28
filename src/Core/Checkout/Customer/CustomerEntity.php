@@ -7,18 +7,11 @@ use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEnti
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerRecovery\CustomerRecoveryEntity;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerWishlist\CustomerWishlistCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderCustomer\OrderCustomerCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Promotion\PromotionCollection;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Deprecation\BCChange\ParameterTypeWidening;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
-use Contena\Core\System\Salutation\SalutationEntity;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\User\UserEntity;
 
@@ -122,9 +115,7 @@ class CustomerEntity extends Entity implements \Stringable
 
     protected ?LanguageEntity $language = null;
 
-    protected ?PaymentMethodEntity $lastPaymentMethod = null;
 
-    protected ?SalutationEntity $salutation = null;
 
     protected ?CustomerAddressEntity $defaultBillingAddress = null;
 
@@ -136,7 +127,6 @@ class CustomerEntity extends Entity implements \Stringable
 
     protected ?CustomerAddressCollection $addresses = null;
 
-    protected ?OrderCustomerCollection $orderCustomers = null;
 
     protected int $autoIncrement;
 
@@ -147,11 +137,9 @@ class CustomerEntity extends Entity implements \Stringable
      */
     protected ?array $tagIds = null;
 
-    protected ?PromotionCollection $promotions = null;
 
     protected ?CustomerRecoveryEntity $recoveryCustomer = null;
 
-    protected ?ProductReviewCollection $productReviews = null;
 
     protected ?string $remoteAddress = null;
 
@@ -565,25 +553,9 @@ class CustomerEntity extends Entity implements \Stringable
         $this->language = $language;
     }
 
-    public function getLastPaymentMethod(): ?PaymentMethodEntity
-    {
-        return $this->lastPaymentMethod;
-    }
 
-    public function setLastPaymentMethod(PaymentMethodEntity $lastPaymentMethod): void
-    {
-        $this->lastPaymentMethod = $lastPaymentMethod;
-    }
 
-    public function getSalutation(): ?SalutationEntity
-    {
-        return $this->salutation;
-    }
 
-    public function setSalutation(SalutationEntity $salutation): void
-    {
-        $this->salutation = $salutation;
-    }
 
     public function getDefaultBillingAddress(): ?CustomerAddressEntity
     {
@@ -637,15 +609,7 @@ class CustomerEntity extends Entity implements \Stringable
         $this->addresses = $addresses;
     }
 
-    public function getOrderCustomers(): ?OrderCustomerCollection
-    {
-        return $this->orderCustomers;
-    }
 
-    public function setOrderCustomers(OrderCustomerCollection $orderCustomers): void
-    {
-        $this->orderCustomers = $orderCustomers;
-    }
 
     public function getAutoIncrement(): int
     {
@@ -683,33 +647,9 @@ class CustomerEntity extends Entity implements \Stringable
         $this->tagIds = $tagIds;
     }
 
-    /**
-     * Gets a list of all promotions where the customer
-     * is assigned to within the "persona" conditions.
-     */
-    public function getPromotions(): ?PromotionCollection
-    {
-        return $this->promotions;
-    }
 
-    /**
-     * Sets a list of all promotions where the customer
-     * should be assigned to within the "persona" conditions.
-     */
-    public function setPromotions(PromotionCollection $promotions): void
-    {
-        $this->promotions = $promotions;
-    }
 
-    public function getProductReviews(): ?ProductReviewCollection
-    {
-        return $this->productReviews;
-    }
 
-    public function setProductReviews(ProductReviewCollection $productReviews): void
-    {
-        $this->productReviews = $productReviews;
-    }
 
     public function getRecoveryCustomer(): ?CustomerRecoveryEntity
     {

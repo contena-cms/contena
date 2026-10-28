@@ -4,7 +4,6 @@ namespace Contena\Core\Content\Seo\SeoUrlRoute;
 
 use Contena\Core\Content\Category\CategoryEvents;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
-use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
 use Contena\Core\Content\LandingPage\LandingPageEvents;
 use Contena\Core\Content\Product\Events\ProductIndexerEvent;
 use Contena\Core\Content\Product\ProductEvents;
@@ -59,12 +58,4 @@ class StoreApiSeoUrlUpdateListener implements EventSubscriberInterface
         $this->seoUrlUpdater->update(CategoryStoreApiUrlRoute::ROUTE_NAME, array_values($event->getIds()));
     }
 
-    public function updateLandingPageUrls(LandingPageIndexerEvent $event): void
-    {
-        if (\in_array(self::LANDING_PAGE_SEO_URL_UPDATER, $event->getSkip(), true)) {
-            return;
-        }
-
-        $this->seoUrlUpdater->update(LandingPageStoreApiUrlRoute::ROUTE_NAME, array_values($event->getIds()));
-    }
 }

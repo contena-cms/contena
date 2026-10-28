@@ -27,7 +27,6 @@ use Contena\Administration\Snippet\AppLifecycleSubscriber;
 use Contena\Administration\Snippet\CachedSnippetFinder;
 use Contena\Administration\Snippet\SnippetFinder;
 use Contena\Administration\System\SalesChannel\Subscriber\SalesChannelUserConfigSubscriber;
-use Contena\Core\Checkout\Cart\Price\CashRounding;
 use Contena\Core\Checkout\Customer\Validation\CustomerEmailUniqueChecker;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
@@ -237,7 +236,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(OrderAmountService::class)
         ->args([
             service(Connection::class),
-            service(CashRounding::class),
             param('contena.dbal.time_zone_support_enabled'),
         ]);
 

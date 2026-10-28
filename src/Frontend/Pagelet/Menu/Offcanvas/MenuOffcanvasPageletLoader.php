@@ -2,12 +2,8 @@
 
 namespace Contena\Storefront\Pagelet\Menu\Offcanvas;
 
-use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Category\Service\NavigationLoaderInterface;
-use Contena\Core\Framework\DataAbstractionLayer\Exception\InconsistentCriteriaIdsException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -26,26 +22,4 @@ class MenuOffcanvasPageletLoader implements MenuOffcanvasPageletLoaderInterface
     ) {
     }
 
-    /**
-     * @throws CategoryNotFoundException
-     * @throws InconsistentCriteriaIdsException
-     * @throws RoutingException
-     */
-    public function load(Request $request, SalesChannelContext $context): MenuOffcanvasPagelet
-    {
-        $navigationId = (string) $request->query->get('navigationId', $context->getSalesChannel()->getNavigationCategoryId());
-        if ($navigationId === '') {
-            throw RoutingException::missingRequestParameter('navigationId');
-        }
-
-        $navigation = $this->navigationLoader->load($navigationId, $context, $navigationId, 1);
-
-        $pagelet = new MenuOffcanvasPagelet($navigation);
-
-        $this->eventDispatcher->dispatch(
-            new MenuOffcanvasPageletLoadedEvent($pagelet, $context, $request)
-        );
-
-        return $pagelet;
-    }
 }

@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\System\UsageData\Services;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\UsageData\Services\EntityDefinitionService;
 use Contena\Core\System\UsageData\Services\UsageDataAllowListService;
 

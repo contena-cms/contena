@@ -65,10 +65,6 @@ class SchemaUpdaterTest extends TestCase
     public function testExtendingExistingTables(): void
     {
         $schema = new Schema([
-            new Table('product', [
-                new Column('id', Type::getType(Types::BINARY)),
-                new Column('version_id', Type::getType(Types::BINARY)),
-            ]),
         ]);
 
         $customEntity = [
@@ -99,12 +95,6 @@ class SchemaUpdaterTest extends TestCase
         ];
 
         $schema = new Schema([
-            new Table('product', [
-                new Column('id', Type::getType(Types::BINARY)),
-                new Column('version_id', Type::getType(Types::BINARY)),
-            ]),
-            new Table('user', [new Column('id', Type::getType(Types::BINARY))]),
-            new Table('language', [new Column('id', Type::getType(Types::BINARY))]),
         ]);
 
         $updater = new SchemaUpdater(new CustomEntityNameValidator());

@@ -8,7 +8,6 @@ use Contena\Core\System\SalesChannel\SalesChannelContext;
 #[Package('discovery')]
 abstract class AbstractResolvedConfigLoader
 {
-    abstract public function getDecorated(): AbstractResolvedConfigLoader;
 
     /**
      * @return array<string, mixed>

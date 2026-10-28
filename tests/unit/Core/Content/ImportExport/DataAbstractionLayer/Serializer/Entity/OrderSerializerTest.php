@@ -5,22 +5,14 @@ namespace Contena\Tests\Unit\Core\Content\ImportExport\DataAbstractionLayer\Seri
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
-use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderCustomer\OrderCustomerEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderDeliveryPosition\OrderDeliveryPositionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportLog\ImportExportLogEntity;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\Entity\OrderSerializer;
 use Contena\Core\Content\ImportExport\DataAbstractionLayer\Serializer\SerializerRegistry;
@@ -30,7 +22,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateEntity;
 use Contena\Core\Test\TestDefaults;
 
 /**
@@ -321,122 +312,7 @@ class OrderSerializerTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<string, mixed> $data
-     */
-    private static function createOrderEntity(array $data = []): OrderEntity
-    {
-        $rawData = [
-            'price' => new CartPrice(
-                0,
-                0,
-                0,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-                'gross',
-            ),
-            'shippingCosts' => new CalculatedPrice(
-                0,
-                0,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'currencyId' => '',
-            'currencyFactor' => 0.0,
-            'salesChannelId' => TestDefaults::SALES_CHANNEL,
-            'customerComment' => null,
-            'affiliateCode' => null,
-            'campaignCode' => null,
-            'itemRounding' => null,
-            'totalRounding' => null,
-            'orderCustomer' => (new OrderCustomerEntity())->assign([
-                'id' => 'order-customer-id',
-                'company' => null,
-                'customFields' => null,
-                'customerId' => 'customer-id',
-                'customerNumber' => 'customer-number',
-                'email' => 'customer-email',
-                'firstName' => 'customer-first-name',
-                'lastName' => 'customer-last-name',
-                'remoteAddress' => null,
-                'salutationId' => 'customer-salutation-id',
-                'title' => null,
-                'vatIds' => null,
-            ]),
-            'orderNumber' => '10000',
-            'ruleIds' => [],
-            'addresses' => new OrderAddressCollection([
-                (new OrderAddressEntity())->assign([
-                    'id' => 'order-address-id',
-                    'city' => 'billing-address-city',
-                    'countryId' => 'billing-address-country-id',
-                    'firstName' => 'billing-address-first-name',
-                    'lastName' => 'billing-address-last-name',
-                    'salutationId' => 'billing-address-salutation-id',
-                    'street' => 'billing-address-street',
-                    'zipcode' => 'billing-address-zipcode',
-                ]),
-            ]),
-            'billingAddressVersionId' => null,
-        ];
 
-        $mergedData = array_merge_recursive($rawData, $data);
-
-        if (isset($data['itemRounding'])) {
-            $mergedData['itemRounding'] = $data['itemRounding'];
-        }
-
-        if (isset($data['totalRounding'])) {
-            $mergedData['totalRounding'] = $data['totalRounding'];
-        }
-
-        return (new OrderEntity())->assign($mergedData);
-    }
-
-    private static function createLineItems(): OrderLineItemCollection
-    {
-        $lineItem1 = (new OrderLineItemEntity())->assign([
-            '_uniqueIdentifier' => 'line-item-id-1',
-            'identifier' => 'line-item-id-1',
-            'quantity' => 3,
-            'type' => 'line-item-type-1',
-            'label' => 'line-item-label-1',
-            'good' => true,
-            'removable' => false,
-            'stackable' => false,
-            'states' => [],
-            'position' => 1,
-            'price' => new CalculatedPrice(
-                1,
-                1,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'payload' => [],
-        ]);
-
-        $lineItem2 = (new OrderLineItemEntity())->assign([
-            '_uniqueIdentifier' => 'line-item-id-2',
-            'identifier' => 'line-item-id-2',
-            'quantity' => 2,
-            'type' => 'line-item-type-2',
-            'label' => 'line-item-label-2',
-            'good' => true,
-            'removable' => false,
-            'stackable' => false,
-            'states' => [],
-            'position' => 2,
-            'price' => new CalculatedPrice(
-                1,
-                1,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'payload' => [],
-        ]);
-
-        return new OrderLineItemCollection([$lineItem1, $lineItem2]);
-    }
 
     /**
      * @param array<string, mixed> $overrided
@@ -472,8 +348,6 @@ class OrderSerializerTest extends TestCase
                     0,
                     0,
                     0,
-                    new CalculatedTaxCollection(),
-                    new TaxRuleCollection(),
                     'gross',
                 ),
                 'shippingCosts' => 0.0,
@@ -504,16 +378,6 @@ class OrderSerializerTest extends TestCase
                 'ruleIds' => [],
                 'taxCalculationType' => null,
                 'addresses' => new OrderAddressCollection([
-                    (new OrderAddressEntity())->assign([
-                        'id' => 'order-address-id',
-                        'city' => 'billing-address-city',
-                        'countryId' => 'billing-address-country-id',
-                        'firstName' => 'billing-address-first-name',
-                        'lastName' => 'billing-address-last-name',
-                        'salutationId' => 'billing-address-salutation-id',
-                        'street' => 'billing-address-street',
-                        'zipcode' => 'billing-address-zipcode',
-                    ]),
                 ]),
                 'source' => null,
                 'internalComment' => null,
@@ -530,67 +394,7 @@ class OrderSerializerTest extends TestCase
         );
     }
 
-    private static function createDeliveries(): OrderDeliveryCollection
-    {
-        $delivery1 = (new OrderDeliveryEntity())->assign([
-            'id' => 'delivery-1',
-            'positions' => new OrderDeliveryPositionCollection(),
-            'shippingCosts' => new CalculatedPrice(
-                1,
-                1,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'trackingCodes' => ['CODE-1', 'CODE-2'],
-            'shippingMethodId' => 'shipping-method-id',
-            'stateId' => '',
-        ]);
 
-        $delivery2 = (new OrderDeliveryEntity())->assign([
-            'id' => 'delivery-2',
-            'positions' => new OrderDeliveryPositionCollection(),
-            'shippingCosts' => new CalculatedPrice(
-                1,
-                1,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'trackingCodes' => ['CODE-3', 'CODE-4'],
-            'shippingMethodId' => 'shipping-method-id',
-            'stateId' => '',
-        ]);
-
-        return new OrderDeliveryCollection([$delivery1, $delivery2]);
-    }
-
-    private static function createTransactions(): OrderTransactionCollection
-    {
-        $transaction1 = (new OrderTransactionEntity())->assign([
-            'id' => 'transaction-1',
-            'amount' => new CalculatedPrice(
-                42,
-                42,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'stateMachineState' => new StateMachineStateEntity(),
-            'stateId' => null,
-        ]);
-
-        $transaction2 = (new OrderTransactionEntity())->assign([
-            'id' => 'transaction-2',
-            'amount' => new CalculatedPrice(
-                50.05,
-                50.05,
-                new CalculatedTaxCollection(),
-                new TaxRuleCollection(),
-            ),
-            'stateMachineState' => null,
-            'stateId' => null,
-        ]);
-
-        return new OrderTransactionCollection([$transaction1, $transaction2]);
-    }
 
     private static function createItemRounding(): CashRoundingConfig
     {

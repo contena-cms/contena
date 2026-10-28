@@ -251,7 +251,6 @@ class ClientTest extends TestCase
     public function testGetAllReturnsNothingWhenTheRegistryHasNoVersionedList(): void
     {
         $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => Response::HTTP_METHOD_NOT_ALLOWED]),
         ]);
 
         $registryClient = new ServiceRegistryClient('https://www.contena.cn', 'https://example.com', $client);
@@ -298,7 +297,6 @@ class ClientTest extends TestCase
     public function testSaveConsentThrowsExceptionOnFailure(): void
     {
         $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => Response::HTTP_INTERNAL_SERVER_ERROR]),
         ]);
 
         $registryClient = new ServiceRegistryClient('https://example.com', 'https://example.com', $client);
@@ -318,7 +316,6 @@ class ClientTest extends TestCase
     public function testSaveConsentThrowsExceptionOnNonAcceptedStatusCode(): void
     {
         $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => Response::HTTP_OK]), // 200 is not HTTP_ACCEPTED (202)
         ]);
 
         $registryClient = new ServiceRegistryClient('https://example.com', 'https://example.com', $client);
@@ -352,7 +349,6 @@ class ClientTest extends TestCase
     public function testRevokeConsentThrowsExceptionOnFailure(): void
     {
         $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => Response::HTTP_INTERNAL_SERVER_ERROR]),
         ]);
 
         $registryClient = new ServiceRegistryClient('https://example.com', 'https://example.com', $client);
@@ -364,7 +360,6 @@ class ClientTest extends TestCase
     public function testRevokeConsentThrowsExceptionOnNonAcceptedStatusCode(): void
     {
         $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => Response::HTTP_OK]), // 200 is not HTTP_ACCEPTED (202)
         ]);
 
         $registryClient = new ServiceRegistryClient('https://example.com', 'https://example.com', $client);
@@ -423,7 +418,6 @@ class ClientTest extends TestCase
         $zipUrl = 'https://files.example.com/missing.zip';
 
         $client = new MockHttpClient([
-            new MockResponse('', ['http_code' => Response::HTTP_NOT_FOUND]),
         ]);
 
         $registryClient = new ServiceRegistryClient('https://example.com', 'https://example.com', $client);
@@ -445,10 +439,6 @@ class ClientTest extends TestCase
         $zipUrl = 'https://files.example.com/service.zip';
 
         $client = new MockHttpClient([
-            new MockResponse($body, [
-                'http_code' => Response::HTTP_OK,
-                'response_headers' => ['Content-Type: ' . $contentType],
-            ]),
         ]);
 
         $registryClient = new ServiceRegistryClient('https://example.com', 'https://example.com', $client);

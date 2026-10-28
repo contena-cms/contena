@@ -2,7 +2,6 @@
 
 namespace Contena\Tests\Unit\Storefront\Controller\fixtures;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Storefront\Controller\StorefrontController;
@@ -62,10 +61,6 @@ class TestStorefrontController extends StorefrontController
         return $this->redirectToRoute($route, $parameters, $status);
     }
 
-    public function testAddCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-        $this->addCartErrors($cart, $filter);
-    }
 
     /**
      * @param array<string, mixed> $parameters

@@ -17,7 +17,6 @@ use Contena\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRo
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -29,7 +28,6 @@ class CrossSellingTypeDataResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private CrossSellingCmsElementResolver $crossSellingResolver;
 
     protected function setUp(): void
     {

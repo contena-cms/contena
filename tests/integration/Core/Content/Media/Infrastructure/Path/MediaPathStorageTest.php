@@ -8,8 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Infrastructure\Path\SqlMediaPathStorage;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\MultiInsertQueryQueue;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

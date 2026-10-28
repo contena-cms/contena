@@ -5,11 +5,9 @@ namespace Contena\Core\Content\Product\Aggregate\ProductVisibility;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Choice;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -69,7 +67,6 @@ class ProductVisibilityDefinition extends EntityDefinition
             (new ReferenceVersionField(ProductDefinition::class))->addFlags(new Required()),
 
             (new FkField('sales_channel_id', 'salesChannelId', SalesChannelDefinition::class))->addFlags(new Required())->setDescription('Unique identity of the sales channel.'),
-            (new IntField('visibility', 'visibility'))->addFlags(new Required(), new Choice([self::VISIBILITY_LINK, self::VISIBILITY_SEARCH, self::VISIBILITY_ALL], strict: true))->setDescription('An integer value to signify the product\'s visibility in any sales channel. `10` indicates `Hide in listings and search`, `20` indicates `Hide in listings` and `30` indicates `Visible` everywhere.'),
             new ManyToOneAssociationField('salesChannel', 'sales_channel_id', SalesChannelDefinition::class, 'id', false),
             new ManyToOneAssociationField('product', 'product_id', ProductDefinition::class, 'id', false),
         ]);

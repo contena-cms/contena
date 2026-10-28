@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\MessageQueue\ScheduledTask;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 #[Package('framework')]

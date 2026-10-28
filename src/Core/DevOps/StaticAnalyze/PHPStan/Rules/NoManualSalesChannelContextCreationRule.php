@@ -15,7 +15,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Cache\EntityCacheKeyGeneratorTest;
 
 /**
  * This PHPStan rule prevents the manual creation of a `SalesChannelContext`.

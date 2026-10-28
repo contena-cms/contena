@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Storefront\Framework\Captcha\HoneypotCaptcha;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -21,7 +20,6 @@ class HoneypotCaptchaTest extends TestCase
     private const IS_VALID = true;
     private const IS_INVALID = false;
 
-    private HoneypotCaptcha $captcha;
 
     protected function setUp(): void
     {

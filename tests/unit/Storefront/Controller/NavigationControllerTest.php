@@ -33,7 +33,6 @@ use Contena\Storefront\Pagelet\Header\HeaderPagelet;
 use Contena\Storefront\Pagelet\Header\HeaderPageletLoadedHook;
 use Contena\Storefront\Pagelet\Header\HeaderPageletLoaderInterface;
 use Contena\Storefront\Pagelet\Menu\Offcanvas\MenuOffcanvasPageletLoaderInterface;
-use Contena\Tests\Unit\Storefront\Controller\Stub\NavigationControllerStub;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -48,7 +47,6 @@ class NavigationControllerTest extends TestCase
 
     private MenuOffcanvasPageletLoaderInterface&Stub $offCanvasLoader;
 
-    private NavigationControllerStub $controller;
 
     private HeaderPageletLoaderInterface&Stub $headerLoader;
 
@@ -273,17 +271,4 @@ class NavigationControllerTest extends TestCase
         static::assertSame($footerPagelet, $this->controller->recorder()->calledHook->getPage());
     }
 
-    private function buildController(
-        ?HeaderPageletLoaderInterface $headerLoader = null,
-        ?FooterPageletLoaderInterface $footerLoader = null,
-    ): NavigationControllerStub {
-        return new NavigationControllerStub(
-            $this->pageLoader,
-            $this->offCanvasLoader,
-            $headerLoader ?? $this->headerLoader,
-            $footerLoader ?? $this->footerLoader,
-            $this->categoryUrlGenerator,
-            $this->seoUrlReplacer,
-        );
-    }
 }

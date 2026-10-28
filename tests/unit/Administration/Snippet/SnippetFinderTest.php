@@ -36,7 +36,6 @@ use Contena\Core\System\Snippet\SnippetDefinition;
 use Contena\Core\System\Snippet\Struct\TranslationConfig;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Storefront\Storefront;
-use Contena\Tests\Unit\Core\System\Snippet\Mock\TestPlugin;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Filesystem\Path;
 

@@ -23,7 +23,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\OneToO
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductExtensionSelfReferenced;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ToOneProductExtension;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageEntity;
 

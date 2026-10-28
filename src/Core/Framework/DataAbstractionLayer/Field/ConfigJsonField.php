@@ -20,7 +20,6 @@ class ConfigJsonField extends JsonField
         array $propertyMapping = []
     ) {
         $wrappedPropertyMapping = [
-            new JsonField(self::STORAGE_KEY, self::STORAGE_KEY, $propertyMapping),
         ];
         parent::__construct($storageName, $propertyName, $wrappedPropertyMapping);
     }

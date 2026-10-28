@@ -11,7 +11,6 @@ interface OpaqueDependency
 
 interface OpaqueLocator
 {
-    public function get(string $key): OpaqueDependency;
 }
 
 /**
@@ -22,9 +21,7 @@ interface OpaqueLocator
  */
 class WillReturnMapEmbeddedPropertyCases extends TestCase
 {
-    private OpaqueDependency $dependency;
 
-    private OpaqueLocator $locator;
 
     protected function setUp(): void
     {
@@ -43,12 +40,6 @@ class WillReturnMapEmbeddedPropertyCases extends TestCase
         static::assertSame('', $this->createSut()->lookup());
     }
 
-    private function createSut(): OpaqueLocatorSut
-    {
-        $this->locator->method('get')->willReturnMap([['key', $this->dependency]]);
-
-        return new OpaqueLocatorSut($this->locator);
-    }
 }
 
 /**
@@ -59,7 +50,6 @@ class WillReturnMapEmbeddedPropertyCases extends TestCase
  */
 class HelperCreatedPropertyCases extends TestCase
 {
-    private OpaqueDependency $dependency;
 
     public function testCovered(): void
     {
@@ -78,12 +68,6 @@ class HelperCreatedPropertyCases extends TestCase
         static::assertTrue(true);
     }
 
-    private function createSut(): OpaqueSut
-    {
-        $this->dependency = $this->createMock(OpaqueDependency::class);
-
-        return new OpaqueSut($this->dependency);
-    }
 }
 
 /**
@@ -93,7 +77,6 @@ class HelperCreatedPropertyCases extends TestCase
  */
 class ArrayWrappedPropertyCases extends TestCase
 {
-    private OpaqueDependency $dependency;
 
     protected function setUp(): void
     {
@@ -111,10 +94,6 @@ class ArrayWrappedPropertyCases extends TestCase
         static::assertSame('', $this->createSut()->first());
     }
 
-    private function createSut(): OpaqueCollectionSut
-    {
-        return new OpaqueCollectionSut(['dep' => $this->dependency]);
-    }
 }
 
 /**
@@ -133,12 +112,6 @@ class SelfDefaultingParamCases extends TestCase
         static::assertSame('a', $this->createSut($dependency)->run());
     }
 
-    private function createSut(?OpaqueDependency $dependency = null): OpaqueSut
-    {
-        $dependency = $dependency ?? static::createStub(OpaqueDependency::class);
-
-        return new OpaqueSut($dependency);
-    }
 }
 
 /**
@@ -148,7 +121,6 @@ class SelfDefaultingParamCases extends TestCase
  */
 class AliasFollowedPropertyCases extends TestCase
 {
-    private OpaqueDependency $dependency;
 
     protected function setUp(): void
     {
@@ -160,12 +132,6 @@ class AliasFollowedPropertyCases extends TestCase
         static::assertSame('', $this->createSut()->run());
     }
 
-    private function createSut(): OpaqueSut
-    {
-        $dependency = $this->dependency;
-
-        return new OpaqueSut($dependency);
-    }
 }
 
 /**
@@ -175,7 +141,6 @@ class AliasFollowedPropertyCases extends TestCase
  */
 class AliasExpectedPropertyCases extends TestCase
 {
-    private OpaqueDependency $dependency;
 
     protected function setUp(): void
     {
@@ -205,9 +170,6 @@ class AliasExpectedPropertyCases extends TestCase
  */
 class OpaqueSut
 {
-    public function __construct(private readonly OpaqueDependency $dependency)
-    {
-    }
 
     public function run(): string
     {
@@ -220,9 +182,6 @@ class OpaqueSut
  */
 class OpaqueLocatorSut
 {
-    public function __construct(private readonly OpaqueLocator $locator)
-    {
-    }
 
     public function lookup(): string
     {

@@ -22,7 +22,6 @@ use Twig\TwigFilter;
 #[CoversClass(UrlEncodingTwigFilter::class)]
 class UrlEncodingTwigFilterTest extends TestCase
 {
-    private UrlEncodingTwigFilter $filter;
 
     protected function setUp(): void
     {

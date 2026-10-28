@@ -7,5 +7,4 @@ use Contena\Core\Framework\Log\Package;
 #[Package('discovery')]
 abstract class AbstractBasicCaptchaGenerator
 {
-    abstract public function generate(): BasicCaptchaImage;
 }

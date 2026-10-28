@@ -10,9 +10,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\PhpstanBaselineGrowth;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -26,7 +23,6 @@ class PhpstanBaselineGrowthTest extends TestCase
     public function testBaselineGrowth(int $additions, int $deletions, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('phpstan-baseline.php', File::STATUS_MODIFIED, '', '', $additions, $deletions),
         ])));
 
         (new PhpstanBaselineGrowth())($context);

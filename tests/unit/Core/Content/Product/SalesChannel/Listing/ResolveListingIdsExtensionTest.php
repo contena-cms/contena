@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\IdSearchResult;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Examples\ResolveListingIdsExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

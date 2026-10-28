@@ -6,16 +6,12 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
-use Contena\Core\Checkout\Cart\LineItemFactoryHandler\ProductLineItemFactory;
-use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Checkout\Customer\CustomerException;
 use Contena\Core\Checkout\Customer\SalesChannel\AbstractDownloadRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\DownloadRoute;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionEntity;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutor;
 use Contena\Core\Content\Flow\Dispatching\Struct\ActionSequence;
@@ -29,7 +25,6 @@ use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Product\State;
-use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -39,15 +34,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -61,7 +53,6 @@ class GrantDownloadAccessActionTest extends TestCase
     use IntegrationTestBehaviour;
     use SalesChannelApiTestBehaviour;
 
-    private CartService $cartService;
 
     /**
      * @var EntityRepository<ProductCollection>
@@ -85,7 +76,6 @@ class GrantDownloadAccessActionTest extends TestCase
 
     private SalesChannelContext $salesChannelContext;
 
-    private OrderTransactionStateHandler $orderTransactionStateHandler;
 
     private AbstractDownloadRoute $downloadRoute;
 
@@ -387,56 +377,6 @@ class GrantDownloadAccessActionTest extends TestCase
         }
     }
 
-    /**
-     * @param array<int, string[]> $productDownloads
-     */
-    private function addProducts(Cart $cart, array $productDownloads): Cart
-    {
-        $ids = new IdsCollection();
-        $taxIds = $this->salesChannelContext->getTaxRules()->getIds();
-        $ids->set('t1', (string) array_pop($taxIds));
-        $products = [];
-
-        foreach ($productDownloads as $key => $downloadFiles) {
-            $products[] = (new ProductBuilder($ids, 'product-' . $key))
-                ->price(1.0)
-                ->tax('t1')
-                ->visibility()
-                ->type($downloadFiles === [] ? ProductDefinition::TYPE_PHYSICAL : ProductDefinition::TYPE_DIGITAL)
-                ->add('downloads', array_map(static function (string $file): array {
-                    [$fileName, $fileExtension] = explode('.', $file);
-
-                    return [
-                        'media' => [
-                            'id' => Uuid::randomHex(),
-                            'fileName' => $fileName,
-                            'fileExtension' => $fileExtension,
-                            'path' => 'media/' . $fileName . '.' . $fileExtension,
-                            'private' => true,
-                        ],
-                    ];
-                }, $downloadFiles))
-                ->build();
-        }
-
-        $this->salesChannelContext->getContext()->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($products): void {
-            $this->productRepository->create($products, $context);
-            $downloads = array_merge(...array_column($products, 'downloads'));
-
-            foreach ($downloads as $download) {
-                $media = $download['media'];
-                $mediaFile = $this->fileFetcher->fetchBlob($media['id'], $media['fileExtension'], '');
-                $this->fileSaver->persistFileToMedia($mediaFile, $media['fileName'], $media['id'], $context);
-                $this->fileFetcher->cleanUpTempFile($mediaFile);
-            }
-        });
-
-        foreach ($ids->prefixed('product-') as $id) {
-            $cart = $this->addProduct($id, 1, $cart, $this->cartService, $this->salesChannelContext);
-        }
-
-        return $cart;
-    }
 
     private function changeTransactionStateToPaid(string $orderId): void
     {
@@ -469,13 +409,6 @@ class GrantDownloadAccessActionTest extends TestCase
         $this->flowRepository->clone($flowId, $this->salesChannelContext->getContext(), null, $behavior);
     }
 
-    private function addProduct(string $productId, int $quantity, Cart $cart, CartService $cartService, SalesChannelContext $context): Cart
-    {
-        $factory = new ProductLineItemFactory(new PriceDefinitionFactory());
-        $product = $factory->create(['id' => $productId, 'referencedId' => $productId, 'quantity' => $quantity], $context);
-
-        return $cartService->add($cart, $product, $context);
-    }
 
     private function createDefaultSalesChannelContext(): SalesChannelContext
     {

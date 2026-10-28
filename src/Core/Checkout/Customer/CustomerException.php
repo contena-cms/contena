@@ -17,8 +17,6 @@ use Contena\Core\Checkout\Customer\Exception\DuplicateWishlistProductException;
 use Contena\Core\Checkout\Customer\Exception\InvalidImitateCustomerTokenException;
 use Contena\Core\Checkout\Customer\Exception\PasswordPoliciesUpdatedException;
 use Contena\Core\Checkout\Customer\Validation\Constraint\CustomerEmailUnique;
-use Contena\Core\Checkout\Order\Exception\GuestNotAuthenticatedException;
-use Contena\Core\Checkout\Order\Exception\WrongGuestCredentialsException;
 use Contena\Core\Content\Product\Exception\ProductNotFoundException;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
@@ -450,15 +448,7 @@ class CustomerException extends HttpException
         );
     }
 
-    public static function guestNotAuthenticated(): GuestNotAuthenticatedException
-    {
-        return new GuestNotAuthenticatedException();
-    }
 
-    public static function wrongGuestCredentials(): WrongGuestCredentialsException
-    {
-        return new WrongGuestCredentialsException();
-    }
 
     public static function unexpectedConstraintType(Constraint $constraint, string $expectedType): ValidatorException
     {

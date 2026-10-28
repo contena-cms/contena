@@ -21,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
@@ -391,8 +390,6 @@ class SeoActionController extends AbstractController
         } else {
             $criteria = (new Criteria())
                 ->addFilter(new OrFilter([
-                    new EqualsFilter('typeId', Defaults::SALES_CHANNEL_TYPE_STOREFRONT),
-                    new EqualsFilter('typeId', Defaults::SALES_CHANNEL_TYPE_API),
                 ]))
                 ->setLimit(1);
         }

@@ -15,7 +15,6 @@ use Contena\Core\Framework\Sso\SsoService;
 use Contena\Core\Framework\Sso\SsoUser\SsoUserInvitationMailService;
 use Contena\Core\Framework\Sso\SsoUser\SsoUserService;
 use Contena\Core\Framework\Sso\StateValidator;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Symfony\Bridge\PsrHttpMessage\Factory\PsrHttpFactory;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;

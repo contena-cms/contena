@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 use GuzzleHttp\HandlerStack;
 use Psr\Clock\ClockInterface;
-use Contena\Core\Checkout\Gateway\Command\Executor\CheckoutGatewayCommandExecutor;
-use Contena\Core\Checkout\Gateway\Command\Registry\CheckoutGatewayCommandRegistry;
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
 use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Adapter\Asset\AssetService;
@@ -30,8 +28,6 @@ use Contena\Core\Framework\App\Aggregate\AppScriptCondition\AppScriptConditionDe
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\AppShippingMethod\AppShippingMethodDefinition;
 use Contena\Core\Framework\App\Aggregate\AppTranslation\AppTranslationDefinition;
-use Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockDefinition;
-use Contena\Core\Framework\App\Aggregate\CmsBlockTranslation\AppCmsBlockTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowActionTranslation\AppFlowActionTranslationDefinition;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventDefinition;
@@ -52,7 +48,6 @@ use Contena\Core\Framework\App\AppService;
 use Contena\Core\Framework\App\AppStorage;
 use Contena\Core\Framework\App\Checkout\Gateway\AppCheckoutGateway;
 use Contena\Core\Framework\App\Checkout\Payload\AppCheckoutGatewayPayloadService;
-use Contena\Core\Framework\App\Cms\BlockTemplateLoader;
 use Contena\Core\Framework\App\Command\ActivateAppCommand;
 use Contena\Core\Framework\App\Command\AppListCommand;
 use Contena\Core\Framework\App\Command\AppPrinter;
@@ -90,7 +85,6 @@ use Contena\Core\Framework\App\Lifecycle\AppLoader;
 use Contena\Core\Framework\App\Lifecycle\AppManager;
 use Contena\Core\Framework\App\Lifecycle\AppSecretRotationService;
 use Contena\Core\Framework\App\Lifecycle\Handler\ActionButtonLifecycleHandler;
-use Contena\Core\Framework\App\Lifecycle\Handler\CmsBlockLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\CustomFieldLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\FlowActionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\FlowEventLifecycleHandler;
@@ -98,7 +92,6 @@ use Contena\Core\Framework\App\Lifecycle\Handler\ModuleLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\PaymentMethodLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\RuleConditionLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\ScriptLifecycleHandler;
-use Contena\Core\Framework\App\Lifecycle\Handler\ShippingMethodLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TaxProviderLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\TemplateLifecycleHandler;
 use Contena\Core\Framework\App\Lifecycle\Handler\WebhookLifecycleHandler;
@@ -140,7 +133,6 @@ use Contena\Core\Framework\App\Subscriber\AppLoadedSubscriber;
 use Contena\Core\Framework\App\Subscriber\AppScriptConditionConstraintsSubscriber;
 use Contena\Core\Framework\App\Subscriber\CustomFieldProtectionSubscriber;
 use Contena\Core\Framework\App\Subscriber\DiscardUnconfirmedAppSecretsListener;
-use Contena\Core\Framework\App\TaxProvider\Payload\TaxProviderPayloadService;
 use Contena\Core\Framework\App\Telemetry\AppTelemetrySubscriber;
 use Contena\Core\Framework\App\Template\TemplateDefinition;
 use Contena\Core\Framework\App\Template\TemplateLoader;
@@ -318,14 +310,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.app_lifecycle.handler', ['priority' => -500]);
 
-    $services->set(ShippingMethodLifecycleHandler::class)
-        ->args([
-            service('shipping_method.repository'),
-            service('app_shipping_method.repository'),
-            service('media.repository'),
-            service(MediaService::class),
-        ])
-        ->tag('contena.app_lifecycle.handler', ['priority' => -600]);
 
     $services->set(RuleConditionLifecycleHandler::class)
         ->args([
@@ -364,12 +348,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.app_lifecycle.handler', ['priority' => -1100]);
 
-    $services->set(CmsBlockLifecycleHandler::class)
-        ->args([
-            service('app_cms_block.repository'),
-            service(BlockTemplateLoader::class),
-        ])
-        ->tag('contena.app_lifecycle.handler', ['priority' => -1200]);
 
     $services->set(AppFeatureLifecycleHandler::class)
         ->args([
@@ -432,12 +410,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('contena.app_system.guzzle'),
         ]);
 
-    $services->set(TaxProviderPayloadService::class)
-        ->args([
-            service(AppPayloadServiceHelper::class),
-            service('contena.app_system.guzzle'),
-            service(ExceptionLogger::class),
-        ]);
 
     $services->set(AppCheckoutGatewayPayloadService::class)
         ->args([
@@ -455,8 +427,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AppCheckoutGateway::class)
         ->args([
             service(AppCheckoutGatewayPayloadService::class),
-            service(CheckoutGatewayCommandExecutor::class),
-            service(CheckoutGatewayCommandRegistry::class),
             service('app.repository'),
             service('event_dispatcher'),
             service(ExceptionLogger::class),
@@ -923,11 +893,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AppScriptConditionTranslationDefinition::class)
         ->tag('contena.entity.definition');
 
-    $services->set(AppCmsBlockDefinition::class)
-        ->tag('contena.entity.definition');
 
-    $services->set(AppCmsBlockTranslationDefinition::class)
-        ->tag('contena.entity.definition');
 
     $services->set(AppFlowActionDefinition::class)
         ->tag('contena.entity.definition');
@@ -944,7 +910,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set(AppFlowActionLoadedSubscriber::class)
         ->tag('kernel.event_subscriber');
 
-    $services->set(BlockTemplateLoader::class);
 
     $services->set(AppFlowActionProvider::class)
         ->public()

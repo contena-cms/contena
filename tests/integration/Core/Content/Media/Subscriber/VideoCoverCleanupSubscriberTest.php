@@ -7,12 +7,10 @@ use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\Service\VideoCoverService;
-use Contena\Core\Content\Test\Media\MediaFixtures;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

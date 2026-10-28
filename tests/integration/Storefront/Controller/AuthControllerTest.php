@@ -9,13 +9,6 @@ use Contena\Core\Checkout\Cart\CartPersister;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Checkout\Customer\CustomerEntity;
-use Contena\Core\Checkout\Customer\Event\CustomerAccountRecoverRequestEvent;
-use Contena\Core\Checkout\Customer\SalesChannel\AbstractLogoutRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\AbstractSendPasswordRecoveryMailRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\ConvertGuestRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\ImitateCustomerRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\LoginRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\ResetPasswordRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\SendPasswordRecoveryMailRoute;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Defaults;
@@ -25,11 +18,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\Log\Monolog\DoctrineSQLHandler;
-use Contena\Core\Framework\Log\Monolog\ExcludeFlowEventHandler;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -43,7 +33,6 @@ use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
-use Contena\Storefront\Checkout\Cart\SalesChannel\StorefrontCartFacade;
 use Contena\Storefront\Controller\AuthController;
 use Contena\Storefront\Controller\StorefrontController;
 use Contena\Storefront\Framework\Routing\ClearSiteDataListener;
@@ -51,11 +40,8 @@ use Contena\Storefront\Framework\Routing\RequestTransformer;
 use Contena\Storefront\Framework\Routing\StorefrontRouteScope;
 use Contena\Storefront\Page\Account\Login\AccountGuestLoginPageLoadedHook;
 use Contena\Storefront\Page\Account\Login\AccountLoginPageLoadedHook;
-use Contena\Storefront\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Storefront\Page\Account\RecoverPassword\AccountRecoverPasswordPage;
-use Contena\Storefront\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
 use Contena\Storefront\Test\Controller\AuthTestSubscriber;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -440,9 +426,6 @@ class AuthControllerTest extends TestCase
         $logger = static::getContainer()->get('monolog.logger.business_events');
         $handlers = $logger->getHandlers();
         $logger->setHandlers([
-            new ExcludeFlowEventHandler(static::getContainer()->get(DoctrineSQLHandler::class), [
-                CustomerAccountRecoverRequestEvent::EVENT_NAME,
-            ]),
         ]);
         $testSubscriber = new AuthTestSubscriber();
 
@@ -876,26 +859,6 @@ class AuthControllerTest extends TestCase
         return $repo->search(new Criteria([$customerId]), Context::createDefaultContext())->getEntities()->first();
     }
 
-    private function getAuthController(?AbstractSendPasswordRecoveryMailRoute $sendPasswordRecoveryMailRoute = null): AuthController
-    {
-        $sendPasswordRecoveryMailRoute ??= static::createStub(AbstractSendPasswordRecoveryMailRoute::class);
-
-        $controller = new AuthController(
-            static::getContainer()->get(AccountLoginPageLoader::class),
-            $sendPasswordRecoveryMailRoute,
-            static::getContainer()->get(ResetPasswordRoute::class),
-            static::getContainer()->get(LoginRoute::class),
-            static::createStub(AbstractLogoutRoute::class),
-            static::getContainer()->get(ImitateCustomerRoute::class),
-            static::getContainer()->get(StorefrontCartFacade::class),
-            static::getContainer()->get(AccountRecoverPasswordPageLoader::class),
-            static::getContainer()->get(ConvertGuestRoute::class),
-            static::getContainer()->get(SystemConfigService::class),
-        );
-        $controller->setContainer(static::getContainer());
-
-        return $controller;
-    }
 
     /**
      * @param array<string, mixed> $params

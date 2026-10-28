@@ -17,7 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\PartialEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\RequestCriteriaBuilder;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Twig\Environment;
 use Twig\Error\RuntimeError;

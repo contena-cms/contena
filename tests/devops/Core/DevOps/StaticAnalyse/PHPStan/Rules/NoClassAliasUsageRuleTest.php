@@ -7,7 +7,6 @@ use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\ClassAliasMap;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\NoClassAliasUsageRule;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\ClassMovedAttributeUsage;
 
 /**
  * @internal

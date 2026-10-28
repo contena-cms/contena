@@ -4,7 +4,6 @@ namespace Contena\Core\Checkout\Customer\Subscriber;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEntity;
 use Contena\Core\Checkout\Customer\CustomerEvents;
-use Contena\Core\Checkout\Order\Aggregate\OrderAddress\OrderAddressEntity;
 use Contena\Core\Checkout\Order\OrderEvents;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityLoadedEvent;
 use Contena\Core\Framework\Log\Package;

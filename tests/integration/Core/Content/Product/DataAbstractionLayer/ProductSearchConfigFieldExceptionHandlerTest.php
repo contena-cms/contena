@@ -8,7 +8,6 @@ use Contena\Core\Content\Product\Exception\DuplicateProductSearchConfigFieldExce
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

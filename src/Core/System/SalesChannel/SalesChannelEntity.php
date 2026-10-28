@@ -6,28 +6,15 @@ use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupCollecti
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerWishlist\CustomerWishlistCollection;
 use Contena\Core\Checkout\Customer\CustomerCollection;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentBaseConfig\DocumentBaseConfigDefinition;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionSalesChannel\PromotionSalesChannelCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Cms\CmsPageEntity;
-use Contena\Core\Content\LandingPage\LandingPageCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterEntity;
 use Contena\Core\Content\MeasurementSystem\MeasurementUnits;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewCollection;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityCollection;
 use Contena\Core\Content\ProductExport\ProductExportCollection;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryCollection;
 use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
@@ -74,11 +61,8 @@ class SalesChannelEntity extends Entity
      */
     protected ?array $homeSlotConfig = null;
 
-    protected ?string $homeCmsPageId = null;
 
-    protected ?string $homeCmsPageVersionId = null;
 
-    protected ?CmsPageEntity $homeCmsPage = null;
 
     protected bool $homeEnabled;
 
@@ -137,21 +121,16 @@ class SalesChannelEntity extends Entity
 
     protected ?LanguageEntity $language = null;
 
-    protected ?PaymentMethodEntity $paymentMethod = null;
 
-    protected ?ShippingMethodEntity $shippingMethod = null;
 
     protected ?CountryEntity $country = null;
 
-    protected ?OrderCollection $orders = null;
 
     protected ?CustomerCollection $customers = null;
 
     protected ?CountryCollection $countries = null;
 
-    protected ?PaymentMethodCollection $paymentMethods = null;
 
-    protected ?ShippingMethodCollection $shippingMethods = null;
 
     protected ?SalesChannelTranslationCollection $translations = null;
 
@@ -177,13 +156,9 @@ class SalesChannelEntity extends Entity
 
     protected ?CustomerGroupEntity $customerGroup = null;
 
-    protected ?NewsletterRecipientCollection $newsletterRecipients = null;
 
-    protected ?PromotionSalesChannelCollection $promotionSalesChannels = null;
 
-    protected ?DocumentBaseConfigDefinition $documentBaseConfigSalesChannels = null;
 
-    protected ?ProductReviewCollection $productReviews = null;
 
     protected ?SeoUrlCollection $seoUrls = null;
 
@@ -216,7 +191,6 @@ class SalesChannelEntity extends Entity
 
     protected ?CustomerWishlistCollection $wishlists = null;
 
-    protected ?LandingPageCollection $landingPages = null;
 
     protected MeasurementUnits $measurementUnits;
 
@@ -445,25 +419,9 @@ class SalesChannelEntity extends Entity
         $this->language = $language;
     }
 
-    public function getPaymentMethod(): ?PaymentMethodEntity
-    {
-        return $this->paymentMethod;
-    }
 
-    public function setPaymentMethod(PaymentMethodEntity $paymentMethod): void
-    {
-        $this->paymentMethod = $paymentMethod;
-    }
 
-    public function getShippingMethod(): ?ShippingMethodEntity
-    {
-        return $this->shippingMethod;
-    }
 
-    public function setShippingMethod(ShippingMethodEntity $shippingMethod): void
-    {
-        $this->shippingMethod = $shippingMethod;
-    }
 
     public function getCountry(): ?CountryEntity
     {
@@ -475,15 +433,7 @@ class SalesChannelEntity extends Entity
         $this->country = $country;
     }
 
-    public function getOrders(): ?OrderCollection
-    {
-        return $this->orders;
-    }
 
-    public function setOrders(OrderCollection $orders): void
-    {
-        $this->orders = $orders;
-    }
 
     public function getCustomers(): ?CustomerCollection
     {
@@ -535,25 +485,9 @@ class SalesChannelEntity extends Entity
         $this->translations = $translations;
     }
 
-    public function getPaymentMethods(): ?PaymentMethodCollection
-    {
-        return $this->paymentMethods;
-    }
 
-    public function setPaymentMethods(PaymentMethodCollection $paymentMethods): void
-    {
-        $this->paymentMethods = $paymentMethods;
-    }
 
-    public function getShippingMethods(): ?ShippingMethodCollection
-    {
-        return $this->shippingMethods;
-    }
 
-    public function setShippingMethods(ShippingMethodCollection $shippingMethods): void
-    {
-        $this->shippingMethods = $shippingMethods;
-    }
 
     public function getDomains(): ?SalesChannelDomainCollection
     {
@@ -609,26 +543,6 @@ class SalesChannelEntity extends Entity
     public function setHomeSlotConfig(?array $homeSlotConfig): void
     {
         $this->homeSlotConfig = $homeSlotConfig;
-    }
-
-    public function getHomeCmsPageId(): ?string
-    {
-        return $this->homeCmsPageId;
-    }
-
-    public function setHomeCmsPageId(?string $homeCmsPageId): void
-    {
-        $this->homeCmsPageId = $homeCmsPageId;
-    }
-
-    public function getHomeCmsPage(): ?CmsPageEntity
-    {
-        return $this->homeCmsPage;
-    }
-
-    public function setHomeCmsPage(?CmsPageEntity $homeCmsPage): void
-    {
-        $this->homeCmsPage = $homeCmsPage;
     }
 
     public function getHomeEnabled(): bool
@@ -711,25 +625,9 @@ class SalesChannelEntity extends Entity
         $this->customerGroup = $customerGroup;
     }
 
-    public function getNewsletterRecipients(): ?NewsletterRecipientCollection
-    {
-        return $this->newsletterRecipients;
-    }
 
-    public function setNewsletterRecipients(NewsletterRecipientCollection $newsletterRecipients): void
-    {
-        $this->newsletterRecipients = $newsletterRecipients;
-    }
 
-    public function getPromotionSalesChannels(): ?PromotionSalesChannelCollection
-    {
-        return $this->promotionSalesChannels;
-    }
 
-    public function setPromotionSalesChannels(PromotionSalesChannelCollection $promotionSalesChannels): void
-    {
-        $this->promotionSalesChannels = $promotionSalesChannels;
-    }
 
     public function getNumberRangeSalesChannels(): ?NumberRangeSalesChannelCollection
     {
@@ -781,25 +679,9 @@ class SalesChannelEntity extends Entity
         $this->serviceCategory = $serviceCategory;
     }
 
-    public function getDocumentBaseConfigSalesChannels(): ?DocumentBaseConfigDefinition
-    {
-        return $this->documentBaseConfigSalesChannels;
-    }
 
-    public function setDocumentBaseConfigSalesChannels(DocumentBaseConfigDefinition $documentBaseConfigSalesChannels): void
-    {
-        $this->documentBaseConfigSalesChannels = $documentBaseConfigSalesChannels;
-    }
 
-    public function getProductReviews(): ?ProductReviewCollection
-    {
-        return $this->productReviews;
-    }
 
-    public function setProductReviews(ProductReviewCollection $productReviews): void
-    {
-        $this->productReviews = $productReviews;
-    }
 
     public function getSeoUrls(): ?SeoUrlCollection
     {
@@ -967,15 +849,7 @@ class SalesChannelEntity extends Entity
         $this->wishlists = $wishlists;
     }
 
-    public function getLandingPages(): ?LandingPageCollection
-    {
-        return $this->landingPages;
-    }
 
-    public function setLandingPages(LandingPageCollection $landingPages): void
-    {
-        $this->landingPages = $landingPages;
-    }
 
     public function getNavigationCategoryVersionId(): string
     {
@@ -985,16 +859,6 @@ class SalesChannelEntity extends Entity
     public function setNavigationCategoryVersionId(string $navigationCategoryVersionId): void
     {
         $this->navigationCategoryVersionId = $navigationCategoryVersionId;
-    }
-
-    public function getHomeCmsPageVersionId(): ?string
-    {
-        return $this->homeCmsPageVersionId;
-    }
-
-    public function setHomeCmsPageVersionId(?string $homeCmsPageVersionId): void
-    {
-        $this->homeCmsPageVersionId = $homeCmsPageVersionId;
     }
 
     public function getFooterCategoryVersionId(): ?string

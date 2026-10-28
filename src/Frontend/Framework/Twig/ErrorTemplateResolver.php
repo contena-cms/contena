@@ -18,30 +18,4 @@ class ErrorTemplateResolver
     ) {
     }
 
-    public function resolve(\Throwable $exception, Request $request): ErrorTemplateStruct
-    {
-        $template = '@Storefront/storefront/page/error/error';
-
-        if ($request->isXmlHttpRequest()) {
-            $template .= '-ajax';
-        }
-
-        $code = $exception->getCode();
-
-        if ($exception instanceof HttpException) {
-            $code = $exception->getStatusCode();
-        }
-
-        $dedicatedTemplate = $template . '-' . $code;
-
-        if ($this->twig->getLoader()->exists($dedicatedTemplate . '.html.twig')) {
-            $template = $dedicatedTemplate;
-        } else {
-            $template .= '-std';
-        }
-
-        $template .= '.html.twig';
-
-        return new ErrorTemplateStruct($template, ['exception' => $exception]);
-    }
 }

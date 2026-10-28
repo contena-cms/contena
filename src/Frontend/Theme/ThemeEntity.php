@@ -5,12 +5,9 @@ namespace Contena\Storefront\Theme;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Storefront\Theme\Aggregate\ThemeTranslationCollection;
 
 #[Package('discovery')]
 class ThemeEntity extends Entity
@@ -61,7 +58,6 @@ class ThemeEntity extends Entity
 
     protected bool $active;
 
-    protected ?ThemeCollection $dependentThemes = null;
 
     protected ?MediaEntity $previewMedia = null;
 
@@ -69,7 +65,6 @@ class ThemeEntity extends Entity
 
     protected ?SalesChannelCollection $salesChannels = null;
 
-    protected ?ThemeTranslationCollection $translations = null;
 
     public function getTechnicalName(): ?string
     {
@@ -267,23 +262,7 @@ class ThemeEntity extends Entity
         $this->previewMedia = $previewMedia;
     }
 
-    public function getTranslations(): ?ThemeTranslationCollection
-    {
-        return $this->translations;
-    }
 
-    public function setTranslations(ThemeTranslationCollection $translations): void
-    {
-        $this->translations = $translations;
-    }
 
-    public function getDependentThemes(): ?ThemeCollection
-    {
-        return $this->dependentThemes;
-    }
 
-    public function setDependentThemes(ThemeCollection $dependentThemes): void
-    {
-        $this->dependentThemes = $dependentThemes;
-    }
 }

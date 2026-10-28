@@ -20,8 +20,6 @@ use Contena\Core\Framework\Script\Execution\ScriptAppInformation;
 use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Test\Script\Execution\TestHook;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**

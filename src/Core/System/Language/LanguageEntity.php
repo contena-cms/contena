@@ -4,26 +4,14 @@ namespace Contena\Core\System\Language;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroupTranslation\CustomerGroupTranslationCollection;
 use Contena\Core\Checkout\Customer\CustomerCollection;
-use Contena\Core\Checkout\Document\Aggregate\DocumentTypeTranslation\DocumentTypeTranslationCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
-use Contena\Core\Checkout\Payment\Aggregate\PaymentMethodTranslation\PaymentMethodTranslationCollection;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionTranslation\PromotionTranslationCollection;
-use Contena\Core\Checkout\Shipping\Aggregate\ShippingMethodTranslation\ShippingMethodTranslationCollection;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsPageTranslation\CmsPageTranslationEntity;
-use Contena\Core\Content\Cms\Aggregate\CmsSlotTranslation\CmsSlotTranslationEntity;
 use Contena\Core\Content\ImportExport\ImportExportProfileTranslationCollection;
-use Contena\Core\Content\LandingPage\Aggregate\LandingPageTranslation\LandingPageTranslationCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateType\MailTemplateTypeDefinition;
 use Contena\Core\Content\MailTemplate\MailTemplateCollection;
 use Contena\Core\Content\Media\Aggregate\MediaTranslation\MediaTranslationCollection;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSellingTranslation\ProductCrossSellingTranslationCollection;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSetTranslation\ProductFeatureSetTranslationCollection;
 use Contena\Core\Content\Product\Aggregate\ProductKeywordDictionary\ProductKeywordDictionaryCollection;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturerTranslation\ProductManufacturerTranslationCollection;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewCollection;
 use Contena\Core\Content\Product\Aggregate\ProductSearchConfig\ProductSearchConfigEntity;
 use Contena\Core\Content\Product\Aggregate\ProductSearchKeyword\ProductSearchKeywordCollection;
 use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslationCollection;
@@ -35,12 +23,9 @@ use Contena\Core\Content\Seo\SeoUrl\SeoUrlCollection;
 use Contena\Core\Framework\App\Aggregate\ActionButtonTranslation\ActionButtonTranslationCollection;
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationCollection;
 use Contena\Core\Framework\App\Aggregate\AppTranslation\AppTranslationCollection;
-use Contena\Core\Framework\App\Aggregate\CmsBlockTranslation\AppCmsBlockTranslationCollection;
 use Contena\Core\Framework\App\Aggregate\FlowActionTranslation\AppFlowActionTranslationCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationCollection;
@@ -48,7 +33,6 @@ use Contena\Core\Framework\Struct\Collection;
 use Contena\Core\System\Country\Aggregate\CountryStateTranslation\CountryStateTranslationCollection;
 use Contena\Core\System\Country\Aggregate\CountryTranslation\CountryTranslationCollection;
 use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationCollection;
-use Contena\Core\System\DeliveryTime\DeliveryTimeCollection;
 use Contena\Core\System\Locale\Aggregate\LocaleTranslation\LocaleTranslationCollection;
 use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\System\NumberRange\Aggregate\NumberRangeTranslation\NumberRangeTranslationCollection;
@@ -57,11 +41,9 @@ use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDo
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelTranslation\SalesChannelTranslationCollection;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelTypeTranslation\SalesChannelTypeTranslationCollection;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Core\System\Salutation\Aggregate\SalutationTranslation\SalutationTranslationCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationCollection;
 use Contena\Core\System\StateMachine\StateMachineTranslationCollection;
 use Contena\Core\System\Tax\Aggregate\TaxRuleTypeTranslation\TaxRuleTypeTranslationCollection;
-use Contena\Core\System\TaxProvider\Aggregate\TaxProviderTranslation\TaxProviderTranslationCollection;
 use Contena\Core\System\Unit\Aggregate\UnitTranslation\UnitTranslationCollection;
 
 /**
@@ -113,13 +95,11 @@ class LanguageEntity extends Entity
 
     protected ?MediaTranslationCollection $mediaTranslations = null;
 
-    protected ?PaymentMethodTranslationCollection $paymentMethodTranslations = null;
 
     protected ?ProductManufacturerTranslationCollection $productManufacturerTranslations = null;
 
     protected ?ProductTranslationCollection $productTranslations = null;
 
-    protected ?ShippingMethodTranslationCollection $shippingMethodTranslations = null;
 
     protected ?UnitTranslationCollection $unitTranslations = null;
 
@@ -131,7 +111,6 @@ class LanguageEntity extends Entity
 
     protected ?SalesChannelTypeTranslationCollection $salesChannelTypeTranslations = null;
 
-    protected ?SalutationTranslationCollection $salutationTranslations = null;
 
     protected ?SalesChannelDomainCollection $salesChannelDomains = null;
 
@@ -157,13 +136,9 @@ class LanguageEntity extends Entity
 
     protected ?MailHeaderFooterCollection $mailHeaderFooterTranslations = null;
 
-    protected ?DocumentTypeTranslationCollection $documentTypeTranslations = null;
 
-    protected ?DeliveryTimeCollection $deliveryTimeTranslations = null;
 
-    protected ?NewsletterRecipientCollection $newsletterRecipients = null;
 
-    protected ?OrderCollection $orders = null;
 
     protected ?NumberRangeTypeTranslationCollection $numberRangeTypeTranslations = null;
 
@@ -173,24 +148,20 @@ class LanguageEntity extends Entity
 
     protected ?MailTemplateTypeDefinition $mailTemplateTypeTranslations = null;
 
-    protected ?PromotionTranslationCollection $promotionTranslations = null;
 
     protected ?NumberRangeTranslationCollection $numberRangeTranslations = null;
 
-    protected ?ProductReviewCollection $productReviews = null;
 
     protected ?SeoUrlCollection $seoUrlTranslations = null;
 
     protected ?TaxRuleTypeTranslationCollection $taxRuleTypeTranslations = null;
 
-    protected ?ProductCrossSellingTranslationCollection $productCrossSellingTranslations = null;
 
     /**
      * @deprecated tag:v6.8.0 - Will be removed
      */
     protected ?ImportExportProfileTranslationCollection $importExportProfileTranslations = null;
 
-    protected ?ProductFeatureSetTranslationCollection $productFeatureSetTranslations = null;
 
     protected ?AppTranslationCollection $appTranslations = null;
 
@@ -200,15 +171,12 @@ class LanguageEntity extends Entity
 
     protected ?ProductSearchConfigEntity $productSearchConfig = null;
 
-    protected ?LandingPageTranslationCollection $landingPageTranslations = null;
 
-    protected ?AppCmsBlockTranslationCollection $appCmsBlockTranslations = null;
 
     protected ?AppScriptConditionTranslationCollection $appScriptConditionTranslations = null;
 
     protected ?AppFlowActionTranslationCollection $appFlowActionTranslations = null;
 
-    protected ?TaxProviderTranslationCollection $taxProviderTranslations = null;
 
     public function getMailHeaderFooterTranslations(): ?MailHeaderFooterCollection
     {
@@ -390,15 +358,7 @@ class LanguageEntity extends Entity
         $this->mediaTranslations = $mediaTranslations;
     }
 
-    public function getPaymentMethodTranslations(): ?PaymentMethodTranslationCollection
-    {
-        return $this->paymentMethodTranslations;
-    }
 
-    public function setPaymentMethodTranslations(PaymentMethodTranslationCollection $paymentMethodTranslations): void
-    {
-        $this->paymentMethodTranslations = $paymentMethodTranslations;
-    }
 
     public function getProductManufacturerTranslations(): ?ProductManufacturerTranslationCollection
     {
@@ -420,15 +380,7 @@ class LanguageEntity extends Entity
         $this->productTranslations = $productTranslations;
     }
 
-    public function getShippingMethodTranslations(): ?ShippingMethodTranslationCollection
-    {
-        return $this->shippingMethodTranslations;
-    }
 
-    public function setShippingMethodTranslations(ShippingMethodTranslationCollection $shippingMethodTranslations): void
-    {
-        $this->shippingMethodTranslations = $shippingMethodTranslations;
-    }
 
     public function getUnitTranslations(): ?UnitTranslationCollection
     {
@@ -470,15 +422,7 @@ class LanguageEntity extends Entity
         $this->salesChannelDefaultAssignments = $salesChannelDefaultAssignments;
     }
 
-    public function getSalutationTranslations(): ?SalutationTranslationCollection
-    {
-        return $this->salutationTranslations;
-    }
 
-    public function setSalutationTranslations(SalutationTranslationCollection $salutationTranslations): void
-    {
-        $this->salutationTranslations = $salutationTranslations;
-    }
 
     public function getPropertyGroupTranslations(): ?PropertyGroupTranslationCollection
     {
@@ -624,45 +568,13 @@ class LanguageEntity extends Entity
         $this->mailTemplateTranslations = $mailTemplateTranslations;
     }
 
-    public function getDocumentTypeTranslations(): ?DocumentTypeTranslationCollection
-    {
-        return $this->documentTypeTranslations;
-    }
 
-    public function setDocumentTypeTranslations(DocumentTypeTranslationCollection $documentTypeTranslations): void
-    {
-        $this->documentTypeTranslations = $documentTypeTranslations;
-    }
 
-    public function getDeliveryTimeTranslations(): ?DeliveryTimeCollection
-    {
-        return $this->deliveryTimeTranslations;
-    }
 
-    public function setDeliveryTimeTranslations(DeliveryTimeCollection $deliveryTimeTranslations): void
-    {
-        $this->deliveryTimeTranslations = $deliveryTimeTranslations;
-    }
 
-    public function getNewsletterRecipients(): ?NewsletterRecipientCollection
-    {
-        return $this->newsletterRecipients;
-    }
 
-    public function setNewsletterRecipients(NewsletterRecipientCollection $newsletterRecipients): void
-    {
-        $this->newsletterRecipients = $newsletterRecipients;
-    }
 
-    public function getOrders(): ?OrderCollection
-    {
-        return $this->orders;
-    }
 
-    public function setOrders(OrderCollection $orders): void
-    {
-        $this->orders = $orders;
-    }
 
     public function getNumberRangeTypeTranslations(): ?NumberRangeTypeTranslationCollection
     {
@@ -704,15 +616,7 @@ class LanguageEntity extends Entity
         $this->productKeywordDictionaries = $productKeywordDictionaries;
     }
 
-    public function getPromotionTranslations(): ?PromotionTranslationCollection
-    {
-        return $this->promotionTranslations;
-    }
 
-    public function setPromotionTranslations(PromotionTranslationCollection $promotionTranslations): void
-    {
-        $this->promotionTranslations = $promotionTranslations;
-    }
 
     public function getNumberRangeTranslations(): ?NumberRangeTranslationCollection
     {
@@ -724,15 +628,7 @@ class LanguageEntity extends Entity
         $this->numberRangeTranslations = $numberRangeTranslations;
     }
 
-    public function getProductReviews(): ?ProductReviewCollection
-    {
-        return $this->productReviews;
-    }
 
-    public function setProductReviews(ProductReviewCollection $productReviews): void
-    {
-        $this->productReviews = $productReviews;
-    }
 
     public function getSeoUrlTranslations(): ?SeoUrlCollection
     {
@@ -754,15 +650,7 @@ class LanguageEntity extends Entity
         $this->taxRuleTypeTranslations = $taxRuleTypeTranslations;
     }
 
-    public function getProductCrossSellingTranslations(): ?ProductCrossSellingTranslationCollection
-    {
-        return $this->productCrossSellingTranslations;
-    }
 
-    public function setProductCrossSellingTranslations(ProductCrossSellingTranslationCollection $productCrossSellingTranslations): void
-    {
-        $this->productCrossSellingTranslations = $productCrossSellingTranslations;
-    }
 
     /**
      * @deprecated tag:v6.8.0 - Will be removed
@@ -790,15 +678,7 @@ class LanguageEntity extends Entity
         $this->importExportProfileTranslations = $importExportProfileTranslations;
     }
 
-    public function getProductFeatureSetTranslations(): ?ProductFeatureSetTranslationCollection
-    {
-        return $this->productFeatureSetTranslations;
-    }
 
-    public function setProductFeatureSetTranslations(ProductFeatureSetTranslationCollection $productFeatureSetTranslations): void
-    {
-        $this->productFeatureSetTranslations = $productFeatureSetTranslations;
-    }
 
     public function getAppTranslations(): ?AppTranslationCollection
     {
@@ -840,25 +720,9 @@ class LanguageEntity extends Entity
         $this->productSearchConfig = $productSearchConfig;
     }
 
-    public function getLandingPageTranslations(): ?LandingPageTranslationCollection
-    {
-        return $this->landingPageTranslations;
-    }
 
-    public function setLandingPageTranslations(LandingPageTranslationCollection $landingPageTranslations): void
-    {
-        $this->landingPageTranslations = $landingPageTranslations;
-    }
 
-    public function getAppCmsBlockTranslations(): ?AppCmsBlockTranslationCollection
-    {
-        return $this->appCmsBlockTranslations;
-    }
 
-    public function setAppCmsBlockTranslations(AppCmsBlockTranslationCollection $appCmsBlockTranslations): void
-    {
-        $this->appCmsBlockTranslations = $appCmsBlockTranslations;
-    }
 
     public function getAppScriptConditionTranslations(): ?AppScriptConditionTranslationCollection
     {
@@ -885,13 +749,5 @@ class LanguageEntity extends Entity
         return 'language';
     }
 
-    public function getTaxProviderTranslations(): ?TaxProviderTranslationCollection
-    {
-        return $this->taxProviderTranslations;
-    }
 
-    public function setTaxProviderTranslations(TaxProviderTranslationCollection $taxProviderTranslations): void
-    {
-        $this->taxProviderTranslations = $taxProviderTranslations;
-    }
 }

@@ -5,7 +5,6 @@ namespace Contena\Storefront\Page\Address\Detail;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryCollection;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Storefront\Page\Page;
 
 #[Package('checkout')]
@@ -13,7 +12,6 @@ class AddressDetailPage extends Page
 {
     protected ?CustomerAddressEntity $address = null;
 
-    protected SalutationCollection $salutations;
 
     protected CountryCollection $countries;
 
@@ -27,15 +25,7 @@ class AddressDetailPage extends Page
         $this->address = $address;
     }
 
-    public function getSalutations(): SalutationCollection
-    {
-        return $this->salutations;
-    }
 
-    public function setSalutations(SalutationCollection $salutations): void
-    {
-        $this->salutations = $salutations;
-    }
 
     public function getCountries(): CountryCollection
     {

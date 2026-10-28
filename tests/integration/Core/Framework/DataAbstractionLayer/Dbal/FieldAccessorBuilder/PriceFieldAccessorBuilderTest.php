@@ -7,7 +7,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\FieldAccessorBuilder\PriceFieldAccessorBuilder;
 use Contena\Core\Framework\DataAbstractionLayer\Field\PriceField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

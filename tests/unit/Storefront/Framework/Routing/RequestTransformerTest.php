@@ -744,28 +744,4 @@ class RequestTransformerTest extends TestCase
         ];
     }
 
-    private function createDomainLoader(string $domainUrl): AbstractDomainLoader
-    {
-        $domains = new DomainCollection();
-        $domains->set($domainUrl, DomainStruct::fromArray([
-            'url' => $domainUrl,
-            'id' => Uuid::randomHex(),
-            'salesChannelId' => Uuid::randomHex(),
-            'typeId' => 'storefront',
-            'snippetSetId' => Uuid::randomHex(),
-            'currencyId' => Uuid::randomHex(),
-            'languageId' => Uuid::randomHex(),
-            'themeId' => Uuid::randomHex(),
-            'maintenance' => '0',
-            'maintenanceIpAllowlist' => '',
-            'locale' => 'de-DE',
-            'themeName' => 'Storefront',
-            'parentThemeName' => '',
-        ]));
-
-        $domainLoader = static::createStub(AbstractDomainLoader::class);
-        $domainLoader->method('loadDomains')->willReturn($domains);
-
-        return $domainLoader;
-    }
 }

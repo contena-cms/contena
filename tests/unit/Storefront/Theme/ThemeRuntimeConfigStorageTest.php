@@ -9,8 +9,6 @@ use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Storefront\Theme\ThemeRuntimeConfig;
 use Contena\Storefront\Theme\ThemeRuntimeConfigStorage;
 
 /**
@@ -74,17 +72,4 @@ class ThemeRuntimeConfigStorageTest extends TestCase
         $storage->save($this->createConfig());
     }
 
-    private function createConfig(): ThemeRuntimeConfig
-    {
-        return ThemeRuntimeConfig::fromArray([
-            'themeId' => Uuid::randomHex(),
-            'technicalName' => 'zenitPlatformGravity',
-            'resolvedConfig' => ['key' => 'value'],
-            'viewInheritance' => ['@Storefront'],
-            'scriptFiles' => ['app.js'],
-            'iconSets' => [],
-            'importMap' => null,
-            'updatedAt' => new \DateTimeImmutable(),
-        ]);
-    }
 }

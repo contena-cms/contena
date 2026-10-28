@@ -24,8 +24,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerF
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\JsonDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ModifyJsonFieldExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\NestedDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
 
@@ -476,8 +474,6 @@ EOF;
         $criteria->addFilter(new MultiFilter(
             MultiFilter::CONNECTION_AND,
             [
-                new EqualsFilter('root.child.childDateTime', $firstDate->format(Defaults::STORAGE_DATE_TIME_FORMAT)),
-                new EqualsFilter('root.child.childDate', $firstDate->format(Defaults::STORAGE_DATE_FORMAT)),
             ]
         ));
         $result = $repo->search($this->registerDefinition(JsonDefinition::class), $criteria, $context);

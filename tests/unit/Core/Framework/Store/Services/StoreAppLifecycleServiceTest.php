@@ -14,7 +14,6 @@ use Contena\Core\Framework\Store\Services\ExtensionRemovalValidatorInterface;
 use Contena\Core\Framework\Store\Services\StoreAppLifecycleService;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\StoreException;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

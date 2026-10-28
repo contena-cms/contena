@@ -16,7 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationService;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
 use Contena\Core\System\SystemConfig\SystemConfigService;
@@ -28,16 +27,12 @@ use Contena\Storefront\Theme\ScssPhpCompiler;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeCompiler;
 use Contena\Storefront\Theme\ThemeEntity;
 use Contena\Storefront\Theme\ThemeLifecycleService;
 use Contena\Storefront\Theme\ThemeMergedConfigBuilder;
 use Contena\Storefront\Theme\ThemeRuntimeConfigService;
 use Contena\Storefront\Theme\ThemeService;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimpleTheme\SimpleTheme;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimpleThemeConfigInheritance\SimpleThemeConfigInheritance;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\ThemeFixtures;
 use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -53,7 +48,6 @@ class ThemeTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private ThemeService $themeService;
 
     private Context $context;
 
@@ -563,7 +557,6 @@ class ThemeTest extends TestCase
         $scssCompilerMock = static::createStub(ScssPhpCompiler::class);
 
         $kernel = new class(static::getContainer()->get('kernel')) implements KernelInterface {
-            private readonly SimpleTheme $simpleTheme;
 
             public function __construct(private readonly Kernel $kernel)
             {
@@ -860,92 +853,8 @@ class ThemeTest extends TestCase
         static::assertNotNull($resetTheme->getUpdatedAt());
     }
 
-    private function createBundleTheme(StorefrontPluginConfiguration $config, ThemeEntity $parentTheme): string
-    {
-        $name = $config->getTechnicalName();
 
-        $id = Uuid::randomHex();
-        $this->themeRepository->create(
-            [
-                [
-                    'id' => $id,
-                    'parentThemeId' => $parentTheme->getId(),
-                    'name' => $name,
-                    'technicalName' => $name,
-                    'createdAt' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                    'configValues' => $parentTheme->getConfigValues(),
-                    'baseConfig' => array_merge($parentTheme->getBaseConfig() ?? [], $config->getThemeConfig() ?? []),
-                    'description' => $parentTheme->getDescription(),
-                    'author' => $parentTheme->getAuthor(),
-                    'customFields' => $parentTheme->getCustomFields(),
-                    'previewMediaId' => $parentTheme->getPreviewMediaId(),
-                    'active' => true,
-                    'salesChannels' => [],
-                ],
-            ],
-            $this->context
-        );
 
-        return $name;
-    }
-
-    /**
-     * @param array<string, mixed> $customConfig
-     * @param array<int, array<string, string>> $saleSchannels
-     */
-    private function createTheme(ThemeEntity $parentTheme, array $customConfig = [], array $saleSchannels = [], ?string $givenName = null): string
-    {
-        $name = $givenName ?? ('test' . Uuid::randomHex());
-
-        $id = Uuid::randomHex();
-        $this->themeRepository->create(
-            [
-                [
-                    'id' => $id,
-                    'type' => 'text',
-                    'parentThemeId' => $parentTheme->getId(),
-                    'name' => $name,
-                    'technicalName' => $name,
-                    'createdAt' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                    'configValues' => $parentTheme->getConfigValues(),
-                    'baseConfig' => array_merge_recursive($parentTheme->getBaseConfig() ?? [], $customConfig),
-                    'description' => $parentTheme->getDescription(),
-                    'author' => $parentTheme->getAuthor(),
-                    'customFields' => $parentTheme->getCustomFields(),
-                    'previewMediaId' => $parentTheme->getPreviewMediaId(),
-                    'active' => true,
-                    'salesChannels' => $saleSchannels,
-                ],
-            ],
-            $this->context
-        );
-
-        return $name;
-    }
-
-    private function createBlankTheme(ThemeEntity $parentTheme): string
-    {
-        $name = 'test' . Uuid::randomHex();
-
-        $id = Uuid::randomHex();
-        $this->themeRepository->create(
-            [
-                [
-                    'id' => $id,
-                    'parentThemeId' => $parentTheme->getId(),
-                    'name' => $name,
-                    'technicalName' => $name,
-                    'createdAt' => (new \DateTimeImmutable())->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                    'description' => $parentTheme->getDescription(),
-                    'author' => $parentTheme->getAuthor(),
-                    'active' => true,
-                ],
-            ],
-            $this->context
-        );
-
-        return $name;
-    }
 
     /**
      * @throws \Exception

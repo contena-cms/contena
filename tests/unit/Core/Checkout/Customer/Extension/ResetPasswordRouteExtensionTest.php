@@ -10,7 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\SuccessResponse;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Examples\ResetPasswordRouteExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

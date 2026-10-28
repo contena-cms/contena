@@ -8,7 +8,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteTypeIntendException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Integration\Core\Framework\Api\ApiDefinition\EntityDefinition\SimpleDefinition;
 
 /**
  * @internal

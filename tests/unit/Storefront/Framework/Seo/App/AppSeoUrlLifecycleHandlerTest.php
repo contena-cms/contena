@@ -7,11 +7,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateCollection;
-use Contena\Core\Content\Seo\SeoUrlTemplate\SeoUrlTemplateIndexingMessage;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Event\AppUpdatedEvent;
-use Contena\Core\Framework\App\Feature\AppFeature;
-use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppRemovalContext;
@@ -23,12 +20,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
-use Contena\Storefront\Framework\Seo\App\AppEntitySeoUrlConfig;
-use Contena\Storefront\Framework\Seo\App\AppSeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlLifecycleHandler;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlSynchronizer;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 use Symfony\Component\Messenger\Envelope;
 
 /**
@@ -182,8 +175,6 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
 
         static::assertEquals(
             [
-                new SeoUrlTemplateIndexingMessage(self::PRODUCT_TEASER_ROUTE, 'product'),
-                new SeoUrlTemplateIndexingMessage(self::CATEGORY_TEASER_ROUTE, 'category'),
             ],
             $this->dispatchedMessages()
         );
@@ -227,8 +218,6 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
 
         static::assertEquals(
             [
-                new SeoUrlTemplateIndexingMessage(self::PRODUCT_TEASER_ROUTE, 'product'),
-                new SeoUrlTemplateIndexingMessage(self::CATEGORY_TEASER_ROUTE, 'category'),
             ],
             $this->dispatchedMessages()
         );
@@ -310,56 +299,6 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
         ];
     }
 
-    /**
-     * @param list<string> $storedSeoUrls
-     * @param array<string, string> $storedEntitySeoUrls
-     */
-    private function handler(
-        array $storedSeoUrls = [],
-        array $storedEntitySeoUrls = [],
-        ?AppSeoUrlSynchronizer $synchronizer = null,
-    ): AppSeoUrlLifecycleHandler {
-        $seoUrls = array_map(
-            static fn (string $name): AppFeature => self::feature(new AppSeoUrlConfig(
-                name: $name,
-                routeName: self::ROUTE_NAME_PREFIX . $name,
-                hook: $name,
-                paths: ['en-GB' => $name],
-            )),
-            $storedSeoUrls
-        );
-
-        $entitySeoUrls = array_map(
-            static fn (string $name, string $entityName): AppFeature => self::feature(new AppEntitySeoUrlConfig(
-                name: $name,
-                routeName: self::ROUTE_NAME_PREFIX . $name,
-                hook: $name,
-                entityName: $entityName,
-                defaultTemplate: '{{ ' . $entityName . '.translated.name }}',
-            )),
-            array_keys($storedEntitySeoUrls),
-            $storedEntitySeoUrls
-        );
-
-        $storage = static::createStub(AppFeatureStorage::class);
-        $storage->method('forApp')->willReturnCallback(static function (string $appId, string $featureClass) use ($seoUrls, $entitySeoUrls): array {
-            static::assertSame(self::APP_ID, $appId);
-
-            return match ($featureClass) {
-                AppSeoUrlConfig::class => $seoUrls,
-                AppEntitySeoUrlConfig::class => $entitySeoUrls,
-                default => static::fail('Unexpected feature class ' . $featureClass),
-            };
-        });
-
-        return new AppSeoUrlLifecycleHandler(
-            $storage,
-            static::createStub(Connection::class),
-            $this->seoUrlTemplateRepository,
-            $this->messageBus,
-            $synchronizer ?? static::createStub(AppSeoUrlSynchronizer::class),
-        );
-    }
 
     /**
      * @return list<object>
@@ -372,53 +311,8 @@ class AppSeoUrlLifecycleHandlerTest extends TestCase
         ));
     }
 
-    /**
-     * @template T of AppSeoUrlConfig|AppEntitySeoUrlConfig
-     *
-     * @param T $config
-     *
-     * @return AppFeature<T>
-     */
-    private static function feature(AppSeoUrlConfig|AppEntitySeoUrlConfig $config): AppFeature
-    {
-        return new AppFeature(
-            appId: self::APP_ID,
-            appName: self::APP_NAME,
-            appActive: true,
-            appVersion: '1.0.0',
-            appHasSecret: false,
-            createdAt: new \DateTimeImmutable('2026-01-01 00:00:00'),
-            config: $config,
-        );
-    }
 
-    /**
-     * @param list<string> $seoUrls
-     * @param array<string, string> $entitySeoUrls
-     */
-    private static function manifest(array $seoUrls = [], array $entitySeoUrls = []): ManifestFixture
-    {
-        $manifest = ManifestFixture::empty()->withName(self::APP_NAME);
 
-        foreach ($seoUrls as $name) {
-            $manifest->withSeoUrl(SeoUrl::fromArray(['name' => $name, 'path' => ['en-GB' => $name]]));
-        }
-
-        foreach ($entitySeoUrls as $name => $entityName) {
-            $manifest->withEntitySeoUrl(EntitySeoUrl::fromArray([
-                'name' => $name,
-                'entity' => $entityName,
-                'defaultTemplate' => '{{ ' . $entityName . '.translated.name }}',
-            ]));
-        }
-
-        return $manifest;
-    }
-
-    private static function updateContext(ManifestFixture $manifest): AppPersistContext
-    {
-        return AppFixture::createUpdateContext(self::app(), $manifest);
-    }
 
     private static function activationContext(): AppActivationContext
     {

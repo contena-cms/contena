@@ -35,7 +35,6 @@ use Contena\Core\Framework\Rule\Container\AndRule;
 use Contena\Core\Framework\Rule\Container\OrRule;
 use Contena\Core\Framework\Rule\Rule;
 use Contena\Core\Framework\Rule\SalesChannelRule;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\Test\NullConnection;
 use Contena\Core\System\Currency\Rule\CurrencyRule;

@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\TaxProvider\TaxProviderCollection;
-use Contena\Core\System\TaxProvider\TaxProviderEntity;
 
 /**
  * @internal
@@ -33,12 +32,4 @@ class TaxProviderCollectionTest extends TestCase
         static::assertSame('tax_provider_collection', (new TaxProviderCollection())->getApiAlias());
     }
 
-    private function provider(string $id, int $priority): TaxProviderEntity
-    {
-        $provider = new TaxProviderEntity();
-        $provider->setUniqueIdentifier($id);
-        $provider->setPriority($priority);
-
-        return $provider;
-    }
 }

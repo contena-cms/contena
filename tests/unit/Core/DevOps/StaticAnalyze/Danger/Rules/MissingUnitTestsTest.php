@@ -10,9 +10,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\MissingUnitTests;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -27,7 +24,6 @@ class MissingUnitTestsTest extends TestCase
     public function testFailsForNewClassWithoutTest(): void
     {
         $context = $this->createContext([
-            new StubFile('src/Core/Checkout/Cart/CartCalculator.php', File::STATUS_ADDED, "<?php\nclass CartCalculator\n{\n}"),
         ]);
 
         (new MissingUnitTests(self::FIXTURE_CONFIG))($context);
@@ -41,12 +37,6 @@ class MissingUnitTestsTest extends TestCase
     public function testPassesWithMatchingUnitTest(): void
     {
         $context = $this->createContext([
-            new StubFile('src/Core/Checkout/Cart/CartCalculator.php', File::STATUS_ADDED, "<?php\nclass CartCalculator\n{\n}"),
-            new StubFile(
-                'tests/unit/Core/Checkout/Cart/CartCalculatorTest.php',
-                File::STATUS_ADDED,
-                "<?php\nclass CartCalculatorTest extends TestCase\n{\n}",
-            ),
         ]);
 
         (new MissingUnitTests(self::FIXTURE_CONFIG))($context);
@@ -113,12 +103,6 @@ class MissingUnitTestsTest extends TestCase
     public function testUnknownTestBaseClassDoesNotCount(): void
     {
         $context = $this->createContext([
-            new StubFile('src/Core/Checkout/Cart/CartCalculator.php', File::STATUS_ADDED, "<?php\nclass CartCalculator\n{\n}"),
-            new StubFile(
-                'tests/unit/Core/Checkout/Cart/CartCalculatorTest.php',
-                File::STATUS_ADDED,
-                "<?php\nclass CartCalculatorTest extends SomeExoticTestCase\n{\n}",
-            ),
         ]);
 
         (new MissingUnitTests(self::FIXTURE_CONFIG))($context);
@@ -130,7 +114,6 @@ class MissingUnitTestsTest extends TestCase
     public function testWarnsForUnloadablePhpunitConfig(): void
     {
         $context = $this->createContext([
-            new StubFile('src/Core/Checkout/Cart/CartEntity.php', File::STATUS_ADDED, "<?php\nclass CartEntity\n{\n}"),
         ]);
 
         // DOMDocument::load() emits an E_WARNING for the missing file; swallow it locally
@@ -162,8 +145,6 @@ class MissingUnitTestsTest extends TestCase
             XML;
 
         $context = $this->createContext([
-            new StubFile('src/Core/Checkout/Cart/CartCalculator.php', File::STATUS_ADDED, "<?php\nclass CartCalculator\n{\n}"),
-            new StubFile('phpunit.xml.dist', File::STATUS_MODIFIED, $prConfig),
         ]);
 
         (new MissingUnitTests(self::FIXTURE_CONFIG))($context);

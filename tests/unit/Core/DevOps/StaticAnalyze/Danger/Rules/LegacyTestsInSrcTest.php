@@ -10,9 +10,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\LegacyTestsInSrc;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -26,7 +23,6 @@ class LegacyTestsInSrcTest extends TestCase
     public function testLegacyTestDetection(string $fileName, string $status, string $content, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile($fileName, $status, $content),
         ])));
 
         (new LegacyTestsInSrc())($context);

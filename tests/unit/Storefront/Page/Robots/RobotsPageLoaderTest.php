@@ -7,24 +7,19 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainCollection;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Storefront\Page\Robots\Parser\RobotsDirectiveParser;
-use Contena\Storefront\Page\Robots\RobotsPage;
 use Contena\Storefront\Page\Robots\RobotsPageLoadedEvent;
 use Contena\Storefront\Page\Robots\RobotsPageLoader;
 use Contena\Storefront\Page\Robots\Struct\DomainRuleStruct;
-use Contena\Storefront\Page\Robots\Struct\RobotsDirective;
 use Contena\Storefront\Page\Robots\Struct\RobotsDirectiveType;
-use Contena\Storefront\Page\Robots\Struct\RobotsUserAgentBlock;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -45,7 +40,6 @@ class RobotsPageLoaderTest extends TestCase
 
     private StaticSystemConfigService $systemConfigService;
 
-    private RobotsPageLoader $robotsPageLoader;
 
     protected function setUp(): void
     {
@@ -447,7 +441,6 @@ class RobotsPageLoaderTest extends TestCase
             static function (Criteria $criteria): SalesChannelDomainCollection {
                 static::assertEquals([
                     new ContainsFilter('url', 'example.com'),
-                    new EqualsFilter('salesChannel.typeId', Defaults::SALES_CHANNEL_TYPE_STOREFRONT),
                 ], $criteria->getFilters());
 
                 return new SalesChannelDomainCollection();
@@ -686,52 +679,7 @@ class RobotsPageLoaderTest extends TestCase
         return $domain;
     }
 
-    /**
-     * Sets up the RobotsPageLoader with given domains and optional config
-     *
-     * @param SalesChannelDomainEntity[] $domains
-     * @param array<string, string|array<int, string>> $config
-     */
-    private function setupLoaderWithDomains(array $domains, array $config = [], ?EventDispatcherInterface $eventDispatcher = null): RobotsPageLoader
-    {
-        $this->salesChannelDomainRepository = new StaticEntityRepository([
-            new SalesChannelDomainCollection($domains),
-        ]);
 
-        foreach ($config as $key => $value) {
-            if (\is_array($value)) {
-                // Handle array config (for multiple sales channels)
-                foreach ($value as $index => $configValue) {
-                    if (isset($domains[$index]) && $domains[$index] instanceof SalesChannelDomainEntity) {
-                        $this->systemConfigService->set($key, $configValue, $domains[$index]->getSalesChannelId());
-                    }
-                }
-            } else {
-                $this->systemConfigService->set($key, $value);
-            }
-        }
-
-        return new RobotsPageLoader(
-            $eventDispatcher ?? $this->eventDispatcher,
-            $this->salesChannelDomainRepository,
-            $this->systemConfigService,
-            new RobotsDirectiveParser(new EventDispatcher())
-        );
-    }
-
-    /**
-     * Common assertions for basic page structure
-     */
-    private function assertBasicPageStructure(
-        RobotsPage $page,
-        int $expectedSitemaps,
-        int $expectedDomainRules,
-        int $expectedGlobalBlocks
-    ): void {
-        static::assertCount($expectedSitemaps, $page->getSitemaps());
-        static::assertCount($expectedDomainRules, $page->getDomainRules());
-        static::assertCount($expectedGlobalBlocks, $page->getGlobalUserAgentBlocks());
-    }
 
     /**
      * Common setup for tests that need event dispatcher expectations.
@@ -807,19 +755,4 @@ class RobotsPageLoaderTest extends TestCase
         return $allDirectiveTypes;
     }
 
-    /**
-     * Asserts that directives contain specific paths for a given directive type
-     *
-     * @param array<RobotsDirective> $directives
-     * @param list<string> $expectedPaths
-     */
-    private function assertDirectivePaths(array $directives, RobotsDirectiveType $type, array $expectedPaths): void
-    {
-        $filteredDirectives = array_filter($directives, static fn ($d) => $d->type === $type);
-        $actualPaths = array_map(static fn ($d) => $d->value, array_values($filteredDirectives));
-        sort($actualPaths);
-        sort($expectedPaths);
-
-        static::assertEquals($expectedPaths, $actualPaths);
-    }
 }

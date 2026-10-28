@@ -3,7 +3,6 @@
 namespace Contena\Storefront\Theme\Exception;
 
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
@@ -89,55 +88,7 @@ class ThemeException extends HttpException
         );
     }
 
-    public static function themeCompileException(string $themeName, string $message = '', ?\Throwable $e = null): ThemeCompileException
-    {
-        return new ThemeCompileException($themeName, $message, $e);
-    }
 
-    /**
-     * @param array<string, array<int, string>> $themeSalesChannel
-     * @param array<string, array<int, string>> $childThemeSalesChannel
-     * @param array<string, string> $assignedSalesChannels
-     */
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function themeAssignmentException(
-        string $themeName,
-        array $themeSalesChannel,
-        array $childThemeSalesChannel,
-        array $assignedSalesChannels,
-        ?\Throwable $e = null,
-    ): self|ThemeAssignmentException {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return new ThemeAssignmentException(
-                $themeName,
-                $themeSalesChannel,
-                $childThemeSalesChannel,
-                $assignedSalesChannels,
-                $e,
-            );
-        }
-
-        $parameters = ['themeName' => $themeName];
-        $message = 'Unable to deactivate or uninstall theme "{{ themeName }}".';
-        $message .= ' Remove the following assignments between theme and sales channel assignments: {{ assignments }}.';
-        $assignments = '';
-        if ($themeSalesChannel !== []) {
-            $assignments .= self::formatSalesChannelAssignments($themeSalesChannel, $assignedSalesChannels);
-        }
-
-        if ($childThemeSalesChannel !== []) {
-            $assignments .= self::formatSalesChannelAssignments($childThemeSalesChannel, $assignedSalesChannels);
-        }
-        $parameters['assignments'] = $assignments;
-
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::THEME_ASSIGNMENT,
-            $message,
-            $parameters,
-            $e
-        );
-    }
 
     public static function errorLoadingRuntimeConfig(string $themeId): self
     {
@@ -168,20 +119,6 @@ class ThemeException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function invalidThemeBundle(string $themeName): self|InvalidThemeBundleException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return new InvalidThemeBundleException($themeName);
-        }
-
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::INVALID_THEME_BUNDLE,
-            'Unable to find the theme.json for "{{ themeName }}"',
-            ['themeName' => $themeName],
-        );
-    }
 
     /**
      * @param array<string, array<int, string>> $assignmentMapping

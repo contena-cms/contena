@@ -23,7 +23,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StateMachineStateField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -130,10 +129,8 @@ class StateMachineRegistryTest extends TestCase
 
                 return new WriteResult([], [], [
                     StateMachineHistoryDefinition::ENTITY_NAME => [
-                        new EntityWriteResult($historyId, $history, StateMachineHistoryDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
                     ],
                     'order_transaction' => [
-                        new EntityWriteResult($transition->getEntityId(), ['stateId' => $toPlace->getId()], 'order_transaction', EntityWriteResult::OPERATION_UPDATE),
                     ],
                 ]);
             });
@@ -366,10 +363,8 @@ class StateMachineRegistryTest extends TestCase
             ->method('sync')
             ->willReturn(new WriteResult([], [], [
                 StateMachineHistoryDefinition::ENTITY_NAME => [
-                    new EntityWriteResult(Uuid::randomHex(), [], StateMachineHistoryDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_INSERT),
                 ],
                 'order_transaction' => [
-                    new EntityWriteResult($transition->getEntityId(), [], 'order_transaction', EntityWriteResult::OPERATION_UPDATE),
                 ],
             ]));
 
@@ -715,73 +710,6 @@ class StateMachineRegistryTest extends TestCase
         return $connection;
     }
 
-    /**
-     * @param EntityRepository<EntityCollection<Entity>>&MockObject $entityRepository
-     * @param EntityRepository<StateMachineHistoryCollection>&MockObject $historyRepository
-     */
-    private function createRegistryFixture(
-        StateMachineEntity $stateMachine,
-        StateMachineStateEntity $fromPlace,
-        EventDispatcherInterface $dispatcher,
-        EntityRepository&MockObject $entityRepository,
-        EntityRepository&MockObject $historyRepository,
-        ?StateMachineStateEntity $forcedToPlace = null
-    ): StateMachineRegistryFixture {
-        $context = Context::createDefaultContext();
-        /** @var EntityRepository<StateMachineCollection>&Stub $stateMachineRepository */
-        $stateMachineRepository = static::createStub(EntityRepository::class);
-        /** @var EntityRepository<StateMachineStateCollection>&Stub $stateMachineStateRepository */
-        $stateMachineStateRepository = static::createStub(EntityRepository::class);
-        $definitionRegistry = static::createStub(DefinitionInstanceRegistry::class);
-        $definition = new StateMachineRegistryTestEntityDefinition();
-        $definition->compile($definitionRegistry);
-        $locker = static::createStub(StateMachineLocker::class);
-        $entityWriter = $this->createMock(EntityWriterInterface::class);
-
-        $stateMachineRepository->method('search')
-            ->willReturn($this->createSearchResult('state_machine', new StateMachineCollection([$stateMachine]), $context));
-
-        $stateMachineStateRepository->method('search')
-            ->willReturnCallback(function (Criteria $criteria, Context $context) use ($fromPlace, $forcedToPlace): EntitySearchResult {
-                $state = $criteria->getIds() === [] && $forcedToPlace !== null ? $forcedToPlace : $fromPlace;
-
-                return $this->createSearchResult('state_machine_state', new StateMachineStateCollection([$state]), $context);
-            });
-
-        $entityRepository->expects($this->atLeastOnce())
-            ->method('search')
-            ->willReturnCallback(function (Criteria $criteria, Context $context) use ($fromPlace): EntitySearchResult {
-                $entity = new ArrayEntity(['id' => $criteria->getIds()[0], 'stateId' => $fromPlace->getId()]);
-                $entity->internalSetEntityData('order_transaction', new FieldVisibility([]));
-
-                return $this->createSearchResult('order_transaction', new EntityCollection([$entity]), $context);
-            });
-
-        $definitionRegistry->method('getByEntityName')
-            ->willReturnMap([['order_transaction', $definition]]);
-
-        $definitionRegistry->method('getRepository')
-            ->willReturnMap([['order_transaction', $entityRepository]]);
-
-        $locker->method('locked')
-            ->willReturnCallback(static fn (Transition $transition, Context $context, \Closure $closure): StateMachineTransitionResult => $closure());
-
-        return new StateMachineRegistryFixture(
-            new StateMachineRegistry(
-                $stateMachineRepository,
-                $stateMachineStateRepository,
-                $historyRepository,
-                $dispatcher,
-                $definitionRegistry,
-                $locker,
-                $this->createConnection(),
-                $entityWriter,
-            ),
-            $entityRepository,
-            $historyRepository,
-            $entityWriter,
-        );
-    }
 
     /**
      * @param list<StateMachineTransitionEntity> $transitions

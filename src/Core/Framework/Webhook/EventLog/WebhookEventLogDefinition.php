@@ -2,15 +2,11 @@
 
 namespace Contena\Core\Framework\Webhook\EventLog;
 
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
@@ -77,10 +73,7 @@ class WebhookEventLogDefinition extends EntityDefinition
             (new StringField('response_reason_phrase', 'responseReasonPhrase'))->setDescription('Parameter that stores the reason phrase or message associated with the response received from a webhook event.'),
             (new StringField('url', 'url', 500))->addFlags(new Required())->setDescription('A URL for the webhook event log.'),
             new BoolField('only_live_version', 'onlyLiveVersion'),
-            (new BlobField('serialized_webhook_message', 'serializedWebhookMessage'))->removeFlag(ApiAware::class)->addFlags(new Required(), new WriteProtected(Context::SYSTEM_SCOPE)),
             (new CustomFields())->setDescription('Additional fields that offer a possibility to add own fields for the different program-areas.'),
-            (new IntField('sequence', 'sequence'))->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
-            (new IdField('webhook_id', 'webhookId'))->addFlags(new WriteProtected(Context::SYSTEM_SCOPE)),
         ]);
     }
 }

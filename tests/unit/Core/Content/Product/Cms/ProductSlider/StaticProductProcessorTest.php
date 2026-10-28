@@ -29,7 +29,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[CoversClass(StaticProductProcessor::class)]
 class StaticProductProcessorTest extends TestCase
 {
-    private FieldConfigCollection $config;
 
     private SystemConfigService&MockObject $configService;
 
@@ -246,10 +245,6 @@ class StaticProductProcessorTest extends TestCase
         static::assertNull($data);
     }
 
-    private function getProcessor(): StaticProductProcessor
-    {
-        return new StaticProductProcessor($this->configService, $this->eventDispatcher);
-    }
 
     private function hideUnavailableProducts(bool $value): void
     {

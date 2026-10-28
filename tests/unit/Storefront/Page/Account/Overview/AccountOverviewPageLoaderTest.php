@@ -136,21 +136,6 @@ class AccountOverviewPageLoaderTest extends TestCase
         static::assertInstanceOf(MetaInformation::class, $page->getMetaInformation());
     }
 
-    private function createPageLoader(
-        ?GenericPageLoader $genericPageLoader = null,
-        ?OrderRoute $orderRoute = null,
-        ?AbstractTranslator $translator = null,
-    ): AccountOverviewPageLoader {
-        return new AccountOverviewPageLoader(
-            $genericPageLoader ?? $this->genericPageLoader,
-            $this->eventDispatcher,
-            $orderRoute ?? $this->orderRoute,
-            static::createStub(CustomerRoute::class),
-            static::createStub(NewsletterAccountPageletLoader::class),
-            $translator ?? $this->translator,
-            static::createStub(OrderProductAvailabilityResolver::class)
-        );
-    }
 }
 
 /**
@@ -158,8 +143,4 @@ class AccountOverviewPageLoaderTest extends TestCase
  */
 class TestAccountOverviewPageLoader extends AccountOverviewPageLoader
 {
-    public function setMetaInformationAccess(AccountOverviewPage $page): void
-    {
-        self::setMetaInformation($page);
-    }
 }

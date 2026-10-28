@@ -240,14 +240,6 @@ class A11yRenderedDocumentStorerTest extends TestCase
         }
 
         $repository = new StaticEntityRepository([
-            new EntitySearchResult(
-                DocumentDefinition::ENTITY_NAME,
-                2,
-                $documents,
-                null,
-                new Criteria(),
-                $context,
-            ),
         ]);
 
         $storer = new A11yRenderedDocumentStorer($repository, $this->dispatcher, $this->createResolver(latestByTechnicalName: $resolvedId), new DocumentFileResolver());
@@ -288,14 +280,6 @@ class A11yRenderedDocumentStorerTest extends TestCase
         $document->setDocumentFiles(new DocumentFileCollection([$htmlFile]));
 
         $repository = new StaticEntityRepository([
-            new EntitySearchResult(
-                DocumentDefinition::ENTITY_NAME,
-                1,
-                new DocumentCollection([$document]),
-                null,
-                new Criteria(),
-                $context,
-            ),
         ]);
 
         $storer = new A11yRenderedDocumentStorer($repository, $this->dispatcher, $this->createResolver(latestByTechnicalName: $documentId), new DocumentFileResolver());
@@ -346,14 +330,6 @@ class A11yRenderedDocumentStorerTest extends TestCase
         $document->setDocumentFiles(new DocumentFileCollection([$htmlFile]));
 
         $repository = new StaticEntityRepository([
-            new EntitySearchResult(
-                DocumentDefinition::ENTITY_NAME,
-                1,
-                new DocumentCollection([$document]),
-                null,
-                new Criteria(),
-                $context,
-            ),
         ]);
 
         $storer = new A11yRenderedDocumentStorer($repository, $this->dispatcher, $this->createResolver(latestByTechnicalName: $documentId), new DocumentFileResolver());
@@ -395,14 +371,6 @@ class A11yRenderedDocumentStorerTest extends TestCase
         $document->setDocumentFiles(new DocumentFileCollection([$pdfFile]));
 
         $repository = new StaticEntityRepository([
-            new EntitySearchResult(
-                DocumentDefinition::ENTITY_NAME,
-                1,
-                new DocumentCollection([$document]),
-                null,
-                new Criteria(),
-                $context,
-            ),
         ]);
 
         $storer = new A11yRenderedDocumentStorer($repository, $this->dispatcher, $this->createResolver(latestByTechnicalName: $documentId), new DocumentFileResolver());
@@ -452,14 +420,6 @@ class A11yRenderedDocumentStorerTest extends TestCase
         $document->setDocumentA11yMediaFile($a11yDocument);
 
         $repository = new StaticEntityRepository([
-            new EntitySearchResult(
-                DocumentDefinition::ENTITY_NAME,
-                1,
-                new DocumentCollection([$document]),
-                null,
-                new Criteria(),
-                Context::createDefaultContext()
-            ),
         ]);
 
         $storer = new A11yRenderedDocumentStorer($repository, $this->dispatcher, $this->createResolver(), new DocumentFileResolver());

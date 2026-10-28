@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Payment\PaymentMethodEntity;
@@ -16,13 +15,10 @@ use Contena\Core\Framework\Adapter\Cache\Event\HttpCacheCookieEvent;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheHeadersService;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheRelevantRulesResolver;
 use Contena\Core\Framework\Adapter\Cache\Http\HttpCacheKeyGenerator;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RuleAreas;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
-use Contena\Core\Framework\Test\TestCaseBase\EventDispatcherBehaviour;
 use Contena\Core\PlatformRequest;
-use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Storefront\Framework\Routing\StorefrontRouteScope;
@@ -63,72 +59,6 @@ class CacheHeadersServiceTest extends TestCase
         );
     }
 
-    #[DataProvider('cashHashProvider')]
-    public function testGenerateCashHashWithItemsInCart(?CustomerEntity $customer, Cart $cart, bool $hasCookie, ?string $hashName = null): void
-    {
-        $salesChannelContext = $this->createMock(SalesChannelContext::class);
-        $salesChannelContext->expects($this->atLeastOnce())->method('getCustomer')->willReturn($customer);
-        if ($customer !== null) {
-            $salesChannelContext->expects($this->once())
-                ->method('getRuleIdsByAreas')
-                ->with([RuleAreas::PRODUCT_AREA])
-                ->willReturn(['matched-rule']);
-        }
-
-        $request = new Request();
-        $request->attributes->set(PlatformRequest::ATTRIBUTE_SALES_CHANNEL_CONTEXT_OBJECT, $salesChannelContext);
-
-        if ($hasCookie === false) {
-            $request->cookies->set(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE, 'foo');
-        }
-
-        $response = new Response();
-
-        $this->cacheHeadersService->applyCacheHash($request, $salesChannelContext, $cart, $response);
-
-        if ($hasCookie) {
-            static::assertTrue($response->headers->has('set-cookie'));
-
-            $cookies = array_filter($response->headers->getCookies(), static fn (Cookie $cookie) => $cookie->getName() === HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE);
-
-            static::assertCount(1, $cookies);
-            $cookie = array_shift($cookies);
-
-            static::assertNotNull($cookie->getValue());
-            if ($hashName) {
-                if (!isset(self::$hashes[$hashName])) {
-                    self::$hashes[$hashName] = $cookie->getValue();
-                }
-
-                foreach (self::$hashes as $name => $value) {
-                    if ($hashName === $name) {
-                        static::assertSame(
-                            $value,
-                            $cookie->getValue(),
-                            \sprintf('Hashes for state "%s" did not match, got "%s", but expected "%s"', $hashName, $cookie->getValue(), $value)
-                        );
-                    } else {
-                        static::assertNotSame(
-                            $value,
-                            $cookie->getValue(),
-                            \sprintf('Hashes for state "%s" and state "%s" should not match, but did match.', $hashName, $name)
-                        );
-                    }
-                }
-            }
-
-            static::assertSame($cookie->getValue(), $response->headers->get(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE));
-        } else {
-            $cookies = $response->headers->getCookies();
-            static::assertNotCount(0, $cookies, 'the client cookie should be cleared');
-
-            foreach ($cookies as $cookie) {
-                static::assertSame(1, $cookie->getExpiresTime(), 'cookie should expire');
-            }
-
-            static::assertNull($response->headers->get(HttpCacheKeyGenerator::CONTEXT_CACHE_COOKIE));
-        }
-    }
 
     /**
      * @return iterable<string, array<int, CustomerEntity|Cart|bool|string|null>>
@@ -178,7 +108,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             $request,
             $this->createCacheHashContext('language-a'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -195,7 +124,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             $request,
             $this->createCacheHashContext('language-a'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -212,7 +140,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             $request,
             $this->createCacheHashContext('language-a'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -228,7 +155,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             $request,
             $this->createCacheHashContext('language-a'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -243,7 +169,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             new Request(),
             $this->createCacheHashContext(Defaults::LANGUAGE_SYSTEM, 'country-tax-free'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -255,7 +180,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             new Request(),
             $this->createCacheHashContext(Defaults::LANGUAGE_SYSTEM),
-            new Cart('empty'),
             new Response()
         );
 
@@ -268,7 +192,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             new Request(),
             $this->createCacheHashContext(Defaults::LANGUAGE_SYSTEM, paymentMethodId: 'payment-invoice'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -281,7 +204,6 @@ class CacheHeadersServiceTest extends TestCase
         $event = $this->cacheHeadersService->applyCacheHash(
             new Request(),
             $this->createCacheHashContext(Defaults::LANGUAGE_SYSTEM, shippingMethodId: 'shipping-express'),
-            new Cart('empty'),
             new Response()
         );
 
@@ -509,18 +431,5 @@ class CacheHeadersServiceTest extends TestCase
         return $salesChannelContext;
     }
 
-    private static function createShippingLocation(string $countryId = 'country-default'): ShippingLocation
-    {
-        return ShippingLocation::createFromCountry(
-            (new CountryEntity())->assign(['id' => $countryId])
-        );
-    }
 
-    private function createFilledCart(): Cart
-    {
-        $cart = new Cart('filled');
-        $cart->add(new LineItem('test', 'test', 'test'));
-
-        return $cart;
-    }
 }

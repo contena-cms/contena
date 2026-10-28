@@ -5,45 +5,10 @@ namespace Contena\Storefront\Theme\Validator;
 use ScssPhp\ScssPhp\Colors;
 use ScssPhp\ScssPhp\OutputStyle;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Theme\AbstractScssCompiler;
-use Contena\Storefront\Theme\CompilerConfiguration;
-use Contena\Storefront\Theme\Exception\ThemeException;
 
 #[Package('discovery')]
 class SCSSValidator
 {
-    /**
-     * @param array<string, mixed> $data
-     * @param array<int, string> $customAllowedRegex
-     */
-    public static function validate(AbstractScssCompiler $compiler, array $data, array $customAllowedRegex = [], bool $sanitize = false): mixed
-    {
-        // Empty values are allowed and will be set as a "null" value in SCSS.
-        // In addition, 0 or "0" can be valid values, for example for setting margins.
-        if (!\array_key_exists('value', $data)
-            || !isset($data['value'])
-            || $data['value'] === ''
-            || ($data['value'] === false && !\in_array($data['type'], ['checkbox', 'switch', 'boolean', 'bool'], true))) {
-            return null;
-        }
-
-        if (\is_string($data['value']) && self::validateCustom($data['value'], $customAllowedRegex)) {
-            return $data['value'];
-        }
-
-        /**
-         * The types textarea, url and media are not validated, because
-         * the textarea and url fields are wrapped as strings in the SCSS compiler,
-         * and the media field is just using the media url as a string.
-         */
-        return match ($data['type'] ?? 'text') {
-            'checkbox', 'switch', 'boolean', 'bool' => self::validateTypeCheckbox($data['value']),
-            'color' => self::validateTypeColor($compiler, $sanitize, $data['value'], $data['name'] ?? 'undefined', $data['type'] ?? 'undefined'),
-            'fontFamily' => self::validateFontFamily($compiler, $sanitize, $data['value'], $data['name'] ?? 'undefined', $data['type'] ?? 'undefined'),
-            'text' => self::validateTypeText($compiler, $sanitize, $data['value'], $data['name'] ?? 'undefined', $data['type'] ?? 'undefined'),
-            default => $data['value'],
-        };
-    }
 
     /**
      * @param array<int, string> $customAllowedRegex
@@ -69,106 +34,8 @@ class SCSSValidator
         return $value;
     }
 
-    private static function validateTypeColor(AbstractScssCompiler $compiler, bool $sanitize, mixed $value, string $name, string $type): mixed
-    {
-        try {
-            $css = self::initVariables($value, '#000') . \PHP_EOL;
-            $css .= 'body{background-color:' . $value . ';color: darken(' . $value . ', 10%)}';
 
-            $parsed = $compiler->compileString(
-                new CompilerConfiguration(
-                    ['outputStyle' => OutputStyle::COMPRESSED, 'importPaths' => []]
-                ),
-                $css
-            );
 
-            preg_match('/body\{background-color:(.*);/i', $parsed, $parsedValue);
-
-            /**
-             * If the parsed value is not a valid color, throw an exception.
-             */
-            if (!isset($parsedValue[1]) || !self::isValidColorName($parsedValue[1])) {
-                throw ThemeException::InvalidScssValue($value, $type, $name);
-            }
-
-            /**
-             * The SCSS compiler has an issue and compiles invalid hsl and rgb colors to hex.
-             * Therefore the compiler does not crash, and the parsed value is valid, but the original color is invalid.
-             * This could lead to compiler crashes at a later stage, for example, when using the color in a mixin.
-             */
-            if ((str_starts_with($value, 'hsl') && !self::isHSL($value))
-                || (str_starts_with($value, 'rgb') && !self::isRGB($value))) {
-                throw ThemeException::InvalidScssValue($value, $type, $name);
-            }
-
-            return $value;
-        } catch (\Throwable $exception) {
-            /**
-             * If the color could not be compiled at all, throw an exception.
-             */
-            if ($sanitize !== true) {
-                throw ThemeException::InvalidScssValue($value, $type, $name);
-            }
-
-            return '#ffffff00';
-        }
-    }
-
-    private static function validateFontFamily(AbstractScssCompiler $compiler, bool $sanitize, mixed $value, string $name, string $type): mixed
-    {
-        $value = str_replace('\'', '"', $value);
-        $css = 'body{font-family:' . $value . ';--my-font: ' . $value . '}';
-        try {
-            $parsed = $compiler->compileString(
-                new CompilerConfiguration(
-                    ['outputStyle' => OutputStyle::COMPRESSED, 'importPaths' => []]
-                ),
-                $css
-            );
-            preg_match('/body\{font-family:(.*);/i', $parsed, $parsedValue);
-
-            if (
-                isset($parsedValue[1])
-                && \is_string($parsedValue[1])
-            ) {
-                return $value;
-            }
-
-            if ($sanitize !== true) {
-                throw ThemeException::InvalidScssValue($value, $type, $name);
-            }
-
-            return 'inherit';
-        } catch (\Throwable $exception) {
-            if ($sanitize !== true) {
-                throw ThemeException::InvalidScssValue($value, $type, $name);
-            }
-
-            return 'inherit';
-        }
-    }
-
-    private static function validateTypeText(AbstractScssCompiler $compiler, bool $sanitize, mixed $value, string $name, string $type): mixed
-    {
-        $css = '$' . $name . ': ' . $value . ';';
-
-        try {
-            $compiler->compileString(
-                new CompilerConfiguration(
-                    ['outputStyle' => OutputStyle::COMPRESSED, 'importPaths' => []]
-                ),
-                $css
-            );
-
-            return $value;
-        } catch (\Throwable $exception) {
-            if ($sanitize !== true) {
-                throw ThemeException::InvalidScssValue(addslashes($value), $type, $name);
-            }
-
-            return 'inherit';
-        }
-    }
 
     private static function isValidColorName(mixed $value): bool
     {

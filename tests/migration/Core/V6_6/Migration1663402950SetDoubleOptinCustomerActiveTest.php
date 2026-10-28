@@ -11,7 +11,6 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_6\Migration1663402950SetDoubleOptinCustomerActive;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

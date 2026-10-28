@@ -36,9 +36,6 @@ class EntityScoreQueryBuilderTest extends TestCase
     {
         $this->registry = new StaticDefinitionInstanceRegistry(
             [
-                HiddenSearchRankingFieldDefinition::class,
-                HiddenTranslatedFieldDefinition::class,
-                HiddenStringFieldDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)

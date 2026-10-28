@@ -14,12 +14,6 @@ use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\Deprecation\BCChangeMarkers;
 use Contena\Core\Framework\Bundle;
 use Contena\Core\Framework\DataAbstractionLayer\Command\RefreshIndexCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexerRegistry;
-use Contena\Core\Framework\Demodata\Command\DemodataCommand;
-use Contena\Core\Framework\Demodata\DemodataContext;
-use Contena\Core\Framework\Demodata\DemodataGeneratorInterface;
-use Contena\Core\Framework\Demodata\DemodataRequest;
-use Contena\Core\Framework\Demodata\DemodataService;
-use Contena\Core\Framework\Demodata\Event\DemodataRequestCreatedEvent;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesFinal;
 use Contena\Core\Framework\Deprecation\BCChange\BecomesInternal;
 use Contena\Core\Framework\Log\Package;
@@ -49,12 +43,6 @@ class InternalClassRule implements Rule
         EntityIndexerRegistry::class,
     ];
     private const DEMO_DATA_EXCEPTIONS = [
-        DemodataContext::class,
-        DemodataGeneratorInterface::class,
-        DemodataRequest::class,
-        DemodataService::class,
-        DemodataCommand::class,
-        DemodataRequestCreatedEvent::class,
     ];
 
     public function getNodeType(): string

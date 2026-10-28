@@ -15,7 +15,6 @@ use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
 use Contena\Core\Framework\Util\Filesystem as UtilFilesystem;
 use Contena\Core\Installer\Installer;
 use Contena\Core\Test\Stub\App\StaticSourceResolver;
-use Contena\Tests\Unit\Core\Framework\Plugin\_fixtures\ExampleBundle\ExampleBundle;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Tester\CommandTester;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
@@ -135,8 +134,4 @@ class AssetInstallCommandTest extends TestCase
         $testAssetFilesystem->delete('asset-manifest.json');
     }
 
-    private function getBundle(): ExampleBundle
-    {
-        return new ExampleBundle(true, __DIR__ . '/_fixtures/ExampleBundle');
-    }
 }

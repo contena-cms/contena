@@ -9,9 +9,6 @@ use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\BarMessage;
 use Contena\Core\Framework\Test\MessageQueue\fixtures\FooMessage;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\NoHandlerMessage;
 use Symfony\Component\Messenger\MessageBusInterface;
 
 /**

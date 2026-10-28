@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Flow\Dispatching\Action;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Flow\Dispatching\DelayableAction;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Framework\Context;

@@ -16,8 +16,6 @@ use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\Category\SalesChannel\CategoryRoute;
 use Contena\Core\Content\Category\SalesChannel\NavigationRoute;
 use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
-use Contena\Core\Content\LandingPage\SalesChannel\LandingPageRoute;
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;
 use Contena\Core\Content\Media\SalesChannel\MediaRoute;
 use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingDefinition;
@@ -246,12 +244,6 @@ class CacheInvalidationSubscriber
         $this->cacheInvalidator->invalidate(array_map(CategoryRoute::buildName(...), $event->getIds()));
     }
 
-    public function invalidateIndexedLandingPages(LandingPageIndexerEvent $event): void
-    {
-        // invalidates the landing page route, if the corresponding landing page changed
-        $ids = array_map(LandingPageRoute::buildName(...), $event->getIds());
-        $this->cacheInvalidator->invalidate($ids);
-    }
 
     public function invalidateCurrencyRoute(EntityWrittenContainerEvent $event): void
     {

@@ -28,7 +28,6 @@ use Contena\Core\PlatformRequest;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SalesChannel\StoreApiCustomFieldMapper;
 use Contena\Core\System\SalesChannel\SuccessResponse;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\Salutation\SalutationDefinition;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;

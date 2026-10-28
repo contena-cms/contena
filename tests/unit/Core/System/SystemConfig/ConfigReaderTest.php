@@ -10,7 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\System\SystemConfig\SystemConfigException;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\ValidConfigPlugin\ValidConfigPlugin;
 
 /**
  * @internal
@@ -81,10 +80,6 @@ class ConfigReaderTest extends TestCase
         $this->configReader->getConfigFromBundle($this->validConfigPlugin(), "config.xml\n");
     }
 
-    private function validConfigPlugin(): ValidConfigPlugin
-    {
-        return new ValidConfigPlugin(active: true, basePath: __DIR__ . '/Service/_fixtures/ValidConfigPlugin');
-    }
 
     /**
      * @return array<mixed>

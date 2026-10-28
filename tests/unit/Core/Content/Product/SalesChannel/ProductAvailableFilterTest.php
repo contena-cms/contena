@@ -8,7 +8,6 @@ use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDe
 use Contena\Core\Content\Product\SalesChannel\ProductAvailableFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\Filter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\TestDefaults;
 
@@ -30,7 +29,6 @@ class ProductAvailableFilterTest extends TestCase
         static::assertSame($visibility, $filter->getVisibility());
         static::assertCount(3, $filter->getQueries());
         static::assertSame([
-            (new RangeFilter('product.visibilities.visibility', [RangeFilter::GTE => $visibility]))->jsonSerialize(),
             (new EqualsFilter('product.visibilities.salesChannelId', $salesChannelId))->jsonSerialize(),
             (new EqualsFilter('product.active', true))->jsonSerialize(),
         ], array_map(

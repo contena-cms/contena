@@ -6,9 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Test\Annotation\DisabledFeatures;
-use Contena\Storefront\Framework\Routing\AbstractDomainLoader;
 use Contena\Storefront\Framework\Routing\CachedDomainLoader;
-use Contena\Storefront\Framework\Routing\Struct\DomainCollection;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 
 /**
@@ -86,73 +84,5 @@ class CachedDomainLoaderTest extends TestCase
         };
     }
 
-    /**
-     * @return AbstractDomainLoader&object{loadDomainsCalls: int}
-     */
-    private function createDomainLoader(): AbstractDomainLoader
-    {
-        return new class extends AbstractDomainLoader {
-            public int $loadDomainsCalls = 0;
 
-            public function getDecorated(): AbstractDomainLoader
-            {
-                return $this;
-            }
-
-            public function load(): array
-            {
-                return [];
-            }
-
-            public function loadDomains(): DomainCollection
-            {
-                ++$this->loadDomainsCalls;
-
-                return DomainCollection::fromArray([
-                    'https://example.com/' => [
-                        'url' => 'https://example.com',
-                        'id' => 'domain-id',
-                        'salesChannelId' => 'sales-channel-id',
-                        'typeId' => 'type-id',
-                        'snippetSetId' => 'snippet-set-id',
-                        'currencyId' => 'currency-id',
-                        'languageId' => 'language-id',
-                        'themeId' => 'theme-id',
-                        'maintenance' => '0',
-                        'maintenanceIpAllowlist' => null,
-                        'locale' => 'en-GB',
-                        'themeName' => 'Storefront',
-                        'parentThemeName' => null,
-                    ],
-                ]);
-            }
-        };
-    }
-
-    /**
-     * @return AbstractDomainLoader&object{loadCalls: int}
-     */
-    private function createDomainLoaderWithLoadCounter(): AbstractDomainLoader
-    {
-        return new class extends AbstractDomainLoader {
-            public int $loadCalls = 0;
-
-            public function getDecorated(): AbstractDomainLoader
-            {
-                return $this;
-            }
-
-            public function load(): array
-            {
-                ++$this->loadCalls;
-
-                return [];
-            }
-
-            public function loadDomains(): DomainCollection
-            {
-                return DomainCollection::fromArray([]);
-            }
-        };
-    }
 }

@@ -8,7 +8,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Snippet\Files\AbstractSnippetFile;
 use Contena\Core\System\Snippet\Files\SnippetFileCollection;
 use Contena\Core\System\Snippet\SnippetException;
-use Contena\Tests\Unit\Core\System\Snippet\Mock\MockSnippetFile;
 
 /**
  * @internal

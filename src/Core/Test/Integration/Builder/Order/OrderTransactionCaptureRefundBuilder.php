@@ -8,10 +8,7 @@ use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCaptureRefund\OrderTransactionCaptureRefundStates;
 use Contena\Core\Content\Test\Product\ProductBuilder;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestBuilderTrait;
 
 /**
  * @final
@@ -25,7 +22,6 @@ class OrderTransactionCaptureRefundBuilder
 
     protected string $id;
 
-    protected CalculatedPrice $amount;
 
     protected string $stateId;
 
@@ -70,7 +66,6 @@ class OrderTransactionCaptureRefundBuilder
                 $customParams['amount'] = new CalculatedPrice(
                     $customParams['amount'],
                     $customParams['amount'],
-                    new CalculatedTaxCollection(),
                     new TaxRuleCollection()
                 );
             }
@@ -87,7 +82,6 @@ class OrderTransactionCaptureRefundBuilder
             $lineItem['orderLineItem']['price'] = new CalculatedPrice(
                 420.69,
                 420.69,
-                new CalculatedTaxCollection(),
                 new TaxRuleCollection()
             );
         }
@@ -113,7 +107,6 @@ class OrderTransactionCaptureRefundBuilder
             'amount' => new CalculatedPrice(
                 420.69,
                 420.69,
-                new CalculatedTaxCollection(),
                 new TaxRuleCollection()
             ),
             'externalReference' => null,

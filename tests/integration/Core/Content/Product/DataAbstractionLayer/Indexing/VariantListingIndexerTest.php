@@ -11,8 +11,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 
@@ -339,25 +337,6 @@ class VariantListingIndexerTest extends TestCase
         $this->runWorker();
     }
 
-    private function fetchListing(): Listing
-    {
-        $listing = $this->connection->fetchAllAssociative(
-            'SELECT LOWER(HEX(id)) as id, option_ids
-             FROM product
-             WHERE product.parent_id = :parentId
-             AND display_group IS NOT NULL
-             GROUP BY display_group',
-            ['parentId' => Uuid::fromHexToBytes($this->productId)]
-        );
-
-        $optionIds = array_map(static fn ($item) => json_decode((string) $item['option_ids'], true, 512, \JSON_THROW_ON_ERROR), $listing);
-
-        if ($optionIds !== []) {
-            $optionIds = array_merge(...$optionIds);
-        }
-
-        return new Listing(array_column($listing, 'id'), array_values($optionIds));
-    }
 }
 
 /**

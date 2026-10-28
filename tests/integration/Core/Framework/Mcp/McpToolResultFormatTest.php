@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Mcp;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * A tool result reaches the client through the central renderer: `structuredContent` for the data,

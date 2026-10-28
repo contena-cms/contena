@@ -17,35 +17,25 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Kernel;
 use Contena\Core\System\SystemConfig\Service\AppConfigReader;
 use Contena\Core\System\SystemConfig\Service\ConfigurationService;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\System\SystemConfig\Util\ConfigReader;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Event\ThemeCompilerConcatenatedStylesEvent;
 use Contena\Storefront\Theme\Event\ThemeCompilerEnrichScssVariablesEvent;
 use Contena\Storefront\Theme\MD5ThemePathBuilder;
 use Contena\Storefront\Theme\ScssPhpCompiler;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\File;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\Subscriber\ThemeCompilerEnrichScssVarSubscriber;
 use Contena\Storefront\Theme\ThemeCompiler;
 use Contena\Storefront\Theme\ThemeFileResolver;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\MockThemeCompilerConcatenatedSubscriber;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\MockThemeVariablesSubscriber;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -61,7 +51,6 @@ class ThemeCompilerTest extends TestCase
     use EnvTestBehaviour;
     use KernelTestBehaviour;
 
-    private ThemeCompiler $themeCompiler;
 
     private string $mockSalesChannelId;
 
@@ -69,7 +58,6 @@ class ThemeCompilerTest extends TestCase
 
     private Filesystem $themeFilesystem;
 
-    private MD5ThemePathBuilder $themePathBuilder;
 
     protected function setUp(): void
     {
@@ -150,13 +138,11 @@ class ThemeCompilerTest extends TestCase
     {
         $configurationService = $this->getConfigurationServiceDbException(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
         $storefrontPluginRegistry = $this->getStorefrontPluginRegistry(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
@@ -274,13 +260,11 @@ PHP_EOL;
 
         $configurationService = $this->getConfigurationService(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
         $storefrontPluginRegistry = $this->getStorefrontPluginRegistry(
             [
-                new SimplePlugin(true, __DIR__ . '/fixtures/SimplePlugin'),
             ]
         );
 
@@ -392,7 +376,6 @@ PHP_EOL;
         // every other name would need an installed app.
         $config = new StorefrontPluginConfiguration(StorefrontPluginRegistry::BASE_THEME_NAME);
         $config->setStyleFiles(new FileCollection([
-            new File($vendorDir . '/another-library.scss', ['vendor' => $vendorDir]),
         ]));
 
         $actual = $this->compileThemeAndGetCss($testScss, $config);
@@ -400,30 +383,6 @@ PHP_EOL;
         static::assertSame(trim($expectedCssOutput), trim($actual));
     }
 
-    /**
-     * Runs a full theme compilation with the given SCSS - injected via the public
-     * ThemeCompilerConcatenatedStylesEvent extension point - and returns the compiled CSS.
-     */
-    private function compileThemeAndGetCss(string $scss, StorefrontPluginConfiguration $config): string
-    {
-        $listener = static function (ThemeCompilerConcatenatedStylesEvent $event) use ($scss): void {
-            $event->setConcatenatedStyles($scss);
-        };
-        EventHookDispatcher::fromContainer(static::getContainer())->on(ThemeCompilerConcatenatedStylesEvent::class, $listener);
-
-        $this->themeCompiler->compileTheme(
-            $this->mockSalesChannelId,
-            'themeId',
-            $config,
-            new StorefrontPluginConfigurationCollection(),
-            false,
-            Context::createDefaultContext()
-        );
-
-        $themePrefix = $this->themePathBuilder->assemblePath($this->mockSalesChannelId, 'themeId');
-
-        return $this->themeFilesystem->read('theme/' . $themePrefix . '/css/all.css');
-    }
 
     /**
      * @param array<int, Plugin> $plugins
@@ -455,22 +414,6 @@ PHP_EOL;
         );
     }
 
-    /**
-     * @param array<int, Plugin> $plugins
-     */
-    private function getStorefrontPluginRegistry(array $plugins): StorefrontPluginRegistry
-    {
-        $kernel = static::createStub(Kernel::class);
-        $kernel
-            ->method('getBundles')
-            ->willReturn($plugins);
-
-        return new StorefrontPluginRegistry(
-            $kernel,
-            static::getContainer()->get(StorefrontPluginConfigurationFactory::class),
-            static::getContainer()->get(ActiveAppsLoader::class)
-        );
-    }
 }
 
 /**

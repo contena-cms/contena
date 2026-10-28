@@ -16,8 +16,6 @@ use Contena\Core\Framework\Util\Filesystem;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlClaims;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\SeoUrlAppFeatureDefinition;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal
@@ -28,7 +26,6 @@ class SeoUrlAppFeatureDefinitionTest extends TestCase
 {
     private const APP_NAME = 'SwagSeoUrlApp';
 
-    private SeoUrlAppFeatureDefinition $definition;
 
     protected function setUp(): void
     {
@@ -58,18 +55,6 @@ class SeoUrlAppFeatureDefinitionTest extends TestCase
 
         static::assertEquals(
             [
-                new AppSeoUrlConfig(
-                    name: 'imprint',
-                    routeName: 'storefront.app.SwagSeoUrlApp.imprint',
-                    hook: 'imprint',
-                    paths: ['en-GB' => 'imprint', 'de-DE' => 'impressum'],
-                ),
-                new AppSeoUrlConfig(
-                    name: 'contact',
-                    routeName: 'storefront.app.SwagSeoUrlApp.contact',
-                    hook: 'contact-form',
-                    paths: ['de-DE' => 'kontakt', 'en-GB' => 'kontakt'],
-                ),
             ],
             $this->definition->fromApp($manifest, new Filesystem(''), 'en-GB')
         );
@@ -312,36 +297,6 @@ class SeoUrlAppFeatureDefinitionTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<string, string> $pathsOfOtherApps normalized path => app name
-     * @param array<string, string> $hooksOfOtherApps hook => app name
-     * @param list<string> $blockedPaths
-     */
-    private function buildDefinition(
-        array $pathsOfOtherApps = [],
-        array $hooksOfOtherApps = [],
-        array $blockedPaths = [],
-        ?string $pathUsedBySeoUrls = null,
-    ): SeoUrlAppFeatureDefinition {
-        $claims = static::createStub(AppSeoUrlClaims::class);
-        $claims->method('pathsOfOtherApps')->willReturn($pathsOfOtherApps);
-        $claims->method('hooksOfOtherApps')->willReturn($hooksOfOtherApps);
-
-        $connection = static::createStub(Connection::class);
-        $connection->method('fetchOne')->willReturnCallback(
-            /**
-             * @param array<string, mixed> $params
-             */
-            static fn (string $sql, array $params): int|false => ($params['path'] ?? null) === $pathUsedBySeoUrls ? 1 : false
-        );
-
-        $routeBlocklist = static::createStub(RouteBlocklistService::class);
-        $routeBlocklist->method('isPathBlocked')->willReturnCallback(
-            static fn (string $path): bool => \in_array($path, $blockedPaths, true)
-        );
-
-        return new SeoUrlAppFeatureDefinition($connection, $routeBlocklist, $claims);
-    }
 
     private function persistContext(): AppPersistContext
     {
@@ -351,11 +306,4 @@ class SeoUrlAppFeatureDefinitionTest extends TestCase
         );
     }
 
-    /**
-     * @param array<string, string> $paths
-     */
-    private static function config(string $name, array $paths, ?string $hook = null): AppSeoUrlConfig
-    {
-        return new AppSeoUrlConfig($name, 'storefront.app.' . self::APP_NAME . '.' . $name, $hook ?? $name, $paths);
-    }
 }

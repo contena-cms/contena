@@ -6,8 +6,6 @@ use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceCollection;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
 use Contena\Core\Framework\App\Aggregate\FlowEvent\AppFlowEventEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 #[Package('after-sales')]

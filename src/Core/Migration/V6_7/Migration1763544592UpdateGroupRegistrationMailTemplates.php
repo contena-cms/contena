@@ -7,7 +7,6 @@ use Contena\Core\Content\MailTemplate\MailTemplateTypes;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Migration\Traits\MailUpdate;
-use Contena\Core\Migration\Traits\UpdateMailTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

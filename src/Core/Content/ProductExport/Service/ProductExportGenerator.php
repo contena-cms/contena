@@ -27,7 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\SalesChannelReposito
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityDefinitionQueryHelper;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -131,7 +130,6 @@ class ProductExportGenerator implements ProductExportGeneratorInterface
         if ($productExport->isIncludeVariants()) {
             // Only fetch variants and standalone products; parent products that have variants are skipped
             $criteria->addFilter(new OrFilter([
-                new NotFilter(NotFilter::CONNECTION_AND, [new EqualsFilter('parentId', null)]),
                 new EqualsFilter('childCount', 0),
             ]));
         } else {

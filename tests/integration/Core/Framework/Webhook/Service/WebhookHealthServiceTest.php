@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Webhook\Service;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\Service\WebhookHealthService;
 use Contena\Core\Framework\Webhook\WebhookFailureStrategy;

@@ -28,21 +28,15 @@ use Contena\Elasticsearch\Admin\AdminSearchController;
 use Contena\Elasticsearch\Admin\AdminSearcher;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Contena\Elasticsearch\Admin\Indexer\CategoryAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\CmsPageAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\CustomerAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\CustomerGroupAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\LandingPageAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\ManufacturerAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\MediaAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\NewsletterRecipientAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\OrderAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\PaymentMethodAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\ProductAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\ProductStreamAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\PromotionAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\PropertyGroupAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\SalesChannelAdminSearchIndexer;
-use Contena\Elasticsearch\Admin\Indexer\ShippingMethodAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Subscriber\RefreshIndexSubscriber;
 use Contena\Elasticsearch\ExplainFieldQueryBuilder;
 use Contena\Elasticsearch\FieldQueryBuilder;
@@ -637,15 +631,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('kernel.event_subscriber')
         ->tag('messenger.message_handler');
 
-    $services->set(CmsPageAdminSearchIndexer::class)
-        ->args([
-            service(Connection::class),
-            service(IteratorFactory::class),
-            service('cms_page.repository'),
-            service(ElasticsearchFieldBuilder::class),
-            param('elasticsearch.administration.indexing_batch_size'),
-        ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'cms_page']);
 
     $services->set(CustomerAdminSearchIndexer::class)
         ->args([
@@ -695,23 +680,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.elastic.admin-searcher-index', ['key' => 'media']);
 
-    $services->set(OrderAdminSearchIndexer::class)
-        ->args([
-            service(Connection::class),
-            service(IteratorFactory::class),
-            service('order.repository'),
-            param('elasticsearch.administration.indexing_batch_size'),
-        ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'order']);
 
-    $services->set(PaymentMethodAdminSearchIndexer::class)
-        ->args([
-            service(Connection::class),
-            service(IteratorFactory::class),
-            service('payment_method.repository'),
-            param('elasticsearch.administration.indexing_batch_size'),
-        ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'payment_method']);
 
     $services->set(ProductAdminSearchIndexer::class)
         ->args([
@@ -723,15 +692,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.elastic.admin-searcher-index', ['key' => 'product']);
 
-    $services->set(PromotionAdminSearchIndexer::class)
-        ->args([
-            service(Connection::class),
-            service(IteratorFactory::class),
-            service('promotion.repository'),
-            service(ElasticsearchFieldBuilder::class),
-            param('elasticsearch.administration.indexing_batch_size'),
-        ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'promotion']);
 
     $services->set(PropertyGroupAdminSearchIndexer::class)
         ->args([
@@ -752,14 +712,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.elastic.admin-searcher-index', ['key' => 'sales_channel']);
 
-    $services->set(ShippingMethodAdminSearchIndexer::class)
-        ->args([
-            service(Connection::class),
-            service(IteratorFactory::class),
-            service('shipping_method.repository'),
-            param('elasticsearch.administration.indexing_batch_size'),
-        ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'shipping_method']);
 
     $services->set(CategoryAdminSearchIndexer::class)
         ->args([
@@ -771,14 +723,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('contena.elastic.admin-searcher-index', ['key' => 'category']);
 
-    $services->set(NewsletterRecipientAdminSearchIndexer::class)
-        ->args([
-            service(Connection::class),
-            service(IteratorFactory::class),
-            service('newsletter_recipient.repository'),
-            param('elasticsearch.administration.indexing_batch_size'),
-        ])
-        ->tag('contena.elastic.admin-searcher-index', ['key' => 'newsletter_recipient']);
 
     $services->set(ProductStreamAdminSearchIndexer::class)
         ->args([

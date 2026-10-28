@@ -40,7 +40,6 @@ use Contena\Core\Framework\Util\Exception\ComparatorException;
 use Contena\Core\System\Currency\CurrencyDefinition;
 use Contena\Storefront\Framework\Media\Exception\MediaValidatorMissingException;
 use Contena\Storefront\Theme\Exception\InvalidThemeBundleException;
-use Contena\Storefront\Theme\Exception\ThemeAssignmentException;
 
 /**
  * Exercises the removal contract across legacy exception classes, independently of domain callers.
@@ -78,7 +77,6 @@ class DeprecatedExceptionCompatibilityTest extends TestCase
             new MappingException(),
             new SalesChannelNotFoundException('id'),
             new AuthThrottledException(10),
-            new ThemeAssignmentException('theme', [], [], []),
         ]);
 
         Feature::fake(['v6.8.0.0'], static function () use ($exceptions): void {

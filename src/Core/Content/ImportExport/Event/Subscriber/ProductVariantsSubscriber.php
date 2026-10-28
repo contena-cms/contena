@@ -6,12 +6,10 @@ use Doctrine\DBAL\ArrayParameterType;
 use Doctrine\DBAL\Connection;
 use Contena\Core\Content\ImportExport\Event\ImportExportAfterImportRecordEvent;
 use Contena\Core\Content\ImportExport\ImportExportException;
-use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Property\Aggregate\PropertyGroupOption\PropertyGroupOptionCollection;
 use Contena\Core\Content\Property\PropertyGroupCollection;
 use Contena\Core\Framework\Api\Sync\SyncBehavior;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Api\Sync\SyncServiceInterface;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
@@ -134,18 +132,6 @@ class ProductVariantsSubscriber implements EventSubscriberInterface, ResetInterf
         );
 
         $this->syncService->sync([
-            new SyncOperation(
-                'write',
-                ProductDefinition::ENTITY_NAME,
-                SyncOperation::ACTION_UPSERT,
-                $payload
-            ),
-            new SyncOperation(
-                'write',
-                ProductConfiguratorSettingDefinition::ENTITY_NAME,
-                SyncOperation::ACTION_UPSERT,
-                $configuratorSettingPayload
-            ),
         ], $context, new SyncBehavior());
     }
 

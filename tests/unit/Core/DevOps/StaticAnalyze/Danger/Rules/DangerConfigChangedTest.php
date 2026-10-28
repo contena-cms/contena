@@ -9,9 +9,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\DangerConfigChanged;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -48,9 +45,6 @@ class DangerConfigChangedTest extends TestCase
     public function testSingleNoticeForMultipleMatches(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('.danger.php'),
-            new StubFile('src/Core/DevOps/StaticAnalyze/Danger/Rules/MissingUnitTests.php'),
-            new StubFile('vendor-bin/danger-php/composer.json'),
         ])));
 
         (new DangerConfigChanged())($context);

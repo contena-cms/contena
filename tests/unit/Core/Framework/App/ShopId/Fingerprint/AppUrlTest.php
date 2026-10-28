@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\AppException;
 use Contena\Core\Framework\App\ShopId\Fingerprint\AppUrl;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

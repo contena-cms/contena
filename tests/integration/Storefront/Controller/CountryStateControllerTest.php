@@ -8,7 +8,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
@@ -19,7 +18,6 @@ use Contena\Storefront\Pagelet\Country\CountryStateDataPagelet;
 use Contena\Storefront\Pagelet\Country\CountryStateDataPageletCriteriaEvent;
 use Contena\Storefront\Pagelet\Country\CountryStateDataPageletLoadedEvent;
 use Contena\Storefront\Pagelet\Country\CountryStateDataPageletLoadedHook;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,7 +36,6 @@ class CountryStateControllerTest extends TestCase
 
     private string $countryIdAT;
 
-    private CountryStateController $countryStateController;
 
     private SalesChannelContext $salesChannelContext;
 
@@ -167,9 +164,7 @@ class CountryStateControllerTest extends TestCase
  */
 class CountryStateControllerTestSubscriber implements EventSubscriberInterface
 {
-    public ?CountryStateDataPagelet $testPagelet = null;
 
-    public ?CountryStateDataPageletCriteriaEvent $criteriaEvent = null;
 
     public static function getSubscribedEvents(): array
     {
@@ -179,13 +174,5 @@ class CountryStateControllerTestSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function onPageletLoaded(CountryStateDataPageletLoadedEvent $event): void
-    {
-        $this->testPagelet = $event->getPagelet();
-    }
 
-    public function onCriteria(CountryStateDataPageletCriteriaEvent $event): void
-    {
-        $this->criteriaEvent = $event;
-    }
 }

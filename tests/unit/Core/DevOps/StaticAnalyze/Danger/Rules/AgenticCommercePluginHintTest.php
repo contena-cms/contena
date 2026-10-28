@@ -8,9 +8,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\AgenticCommercePluginHint;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -23,9 +20,6 @@ class AgenticCommercePluginHintTest extends TestCase
     public function testWarnsForAgenticCommerceFiles(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Content/ProductExport/Tracking/TrackingEventRoute.php'),
-            new StubFile('src/Core/Content/ProductExport/Provider/OpenAiProductFeedProvider.php'),
-            new StubFile('src/Core/Content/ProductExport/ProductExportEntity.php'),
         ])));
 
         (new AgenticCommercePluginHint())($context);
@@ -43,8 +37,6 @@ class AgenticCommercePluginHintTest extends TestCase
     public function testSilentForUnrelatedFiles(): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile('src/Core/Content/ProductExport/ProductExportEntity.php'),
-            new StubFile('src/Administration/Resources/app/administration/src/module/sw-sales-channel/index.js'),
         ])));
 
         (new AgenticCommercePluginHint())($context);

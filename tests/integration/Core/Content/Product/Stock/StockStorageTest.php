@@ -13,9 +13,7 @@ use Contena\Core\Checkout\Cart\PriceDefinitionFactory;
 use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\Product\Events\ProductBackInStockEvent;
 use Contena\Core\Content\Product\Events\ProductNoLongerAvailableEvent;
@@ -29,9 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CountryAddToSalesChannelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -65,7 +60,6 @@ class StockStorageTest extends TestCase
      */
     private EntityRepository $lineItemRepository;
 
-    private CartService $cartService;
 
     /**
      * @var list<string>

@@ -19,7 +19,6 @@ use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Integration\App\GuzzleHistoryCollector;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 
 /**
  * @internal

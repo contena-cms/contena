@@ -5,7 +5,6 @@ namespace Contena\Core\System\CustomField\Aggregate\CustomFieldSet;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSetRelation\CustomFieldSetRelationCollection;
 use Contena\Core\System\CustomField\CustomFieldCollection;

@@ -9,7 +9,6 @@ use Contena\Core\Framework\Log\Package;
 #[Package('discovery')]
 abstract class AbstractAvailableThemeProvider
 {
-    abstract public function getDecorated(): AbstractAvailableThemeProvider;
 
     /**
      * @return array<string, string>

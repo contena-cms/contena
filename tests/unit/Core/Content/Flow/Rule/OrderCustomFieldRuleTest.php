@@ -11,7 +11,6 @@ use Contena\Core\Content\Flow\Rule\FlowRuleScope;
 use Contena\Core\Content\Flow\Rule\OrderCustomFieldRule;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Unit\Core\Checkout\Customer\Rule\TestRuleScope;
 
 /**
  * @internal
@@ -23,9 +22,7 @@ class OrderCustomFieldRuleTest extends TestCase
 {
     private const CUSTOM_FIELD_NAME = 'custom_test';
 
-    private OrderCustomFieldRule $rule;
 
-    private OrderEntity $order;
 
     protected function setUp(): void
     {

@@ -28,9 +28,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 #[CoversClass(ThemeNamespaceHierarchyBuilder::class)]
 class ThemeNamespaceHierarchyBuilderTest extends TestCase
 {
-    private ThemeNamespaceHierarchyBuilder $builder;
 
-    private TestInheritanceBuilder $inheritanceBuilder;
 
     protected function setUp(): void
     {
@@ -48,7 +46,6 @@ class ThemeNamespaceHierarchyBuilderTest extends TestCase
         static::assertSame([
             KernelEvents::REQUEST,
             KernelEvents::EXCEPTION,
-            DocumentTemplateRendererParameterEvent::class,
             SalesChannelFileTemplateResolveEvent::class,
         ], array_keys($events));
     }
@@ -261,24 +258,6 @@ class ThemeNamespaceHierarchyBuilderTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<string, bool> $expectation
-     */
-    private function assertThemes(array $expectation, ThemeNamespaceHierarchyBuilder $builder): void
-    {
-        $bundles = ['SomeBundle' => 1];
-        $hierarchy = $builder->buildNamespaceHierarchy($bundles);
-
-        if ($expectation === []) {
-            // Without detected themes the hierarchy is passed through untouched
-            static::assertSame($bundles, $hierarchy);
-
-            return;
-        }
-
-        // TestInheritanceBuilder maps every theme it receives to a priority
-        static::assertEquals(array_map(static fn (bool $active): int => $active ? 1 : 0, $expectation), $hierarchy);
-    }
 }
 
 /**

@@ -12,14 +12,12 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\CustomFields;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentFkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
 
@@ -67,7 +65,6 @@ class FlowSequenceDefinition extends EntityDefinition
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of flow sequence.'),
             (new FkField('flow_id', 'flowId', FlowDefinition::class))->addFlags(new Required())->setDescription('Unique identity of flow.'),
             (new FkField('rule_id', 'ruleId', RuleDefinition::class))->setDescription('Unique identity of rule.'),
-            (new StringField('action_name', 'actionName', 255))->addFlags(new SearchRanking(SearchRanking::ASSOCIATION_SEARCH_RANKING))->setDescription('Unique name of the action in the flow sequence.'),
             (new JsonField('config', 'config', [], []))->setDescription('Specifies detailed information about the component.'),
             (new IntField('position', 'position'))->setDescription('The order of the tabs of your defined flow sequence is to be displayed.'),
             (new IntField('display_group', 'displayGroup'))->setDescription('The group to which the flow sequence is visible.'),

@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\MailTemplate\Aggregate\MailTemplateTranslation;
 
 use Contena\Core\Content\MailTemplate\MailTemplateEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 

@@ -38,8 +38,6 @@ class CategoryStoreApiUrlRoute implements EntitySeoUrlRouteInterface
     {
         $criteria->addFilter(new EqualsFilter('active', true));
         $criteria->addFilter(new NotFilter(NotFilter::CONNECTION_OR, [
-            new EqualsFilter('type', CategoryDefinition::TYPE_FOLDER),
-            new EqualsFilter('type', CategoryDefinition::TYPE_LINK),
         ]));
 
         $rootCategoryIds = array_values(array_filter([

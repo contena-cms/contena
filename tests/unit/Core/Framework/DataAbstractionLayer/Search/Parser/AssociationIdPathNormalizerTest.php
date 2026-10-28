@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\MeasurementSystem\DataAbstractionLayer\MeasurementDisplayUnitEntity;
 use Contena\Core\Content\Product\Aggregate\ProductCategory\ProductCategoryDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
@@ -21,7 +20,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterfac
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelDefinition;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Search\Parser\_fixtures\MeasurementSystemCodeReferenceEntity;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -43,7 +41,6 @@ class AssociationIdPathNormalizerTest extends TestCase
                 ProductCategoryDefinition::class,
                 CategoryDefinition::class,
                 ProductPriceDefinition::class,
-                ProductCrossSellingDefinition::class,
                 'measurement_display_unit.definition' => self::attributeDefinition(MeasurementDisplayUnitEntity::class),
                 'measurement_system_code_reference.definition' => self::attributeDefinition(MeasurementSystemCodeReferenceEntity::class),
             ],

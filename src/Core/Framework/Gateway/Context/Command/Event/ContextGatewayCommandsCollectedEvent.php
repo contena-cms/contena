@@ -38,10 +38,6 @@ class ContextGatewayCommandsCollectedEvent extends Event implements CartAware
         return $this->commands;
     }
 
-    public function getCart(): Cart
-    {
-        return $this->payload->getCart();
-    }
 
     public function getSalesChannelContext(): SalesChannelContext
     {

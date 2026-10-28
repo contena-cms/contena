@@ -7,8 +7,6 @@ use Contena\Core\Content\Rule\RuleEntity;
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Contract\IdAware;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 /**

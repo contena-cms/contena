@@ -2,12 +2,10 @@
 
 namespace Contena\Tests\Unit\Storefront\Controller\Stub;
 
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\PlatformRequest;
 use Contena\Storefront\Controller\FormController;
 use Contena\Storefront\Framework\Routing\StorefrontRouteScope;
-use Contena\Tests\Unit\Storefront\Controller\StorefrontControllerRecorder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -24,12 +22,7 @@ class FormControllerStub extends FormController
      */
     public array $renderViewParameters = [];
 
-    private ?StorefrontControllerRecorder $recorder = null;
 
-    public function recorder(): StorefrontControllerRecorder
-    {
-        return $this->recorder ??= new StorefrontControllerRecorder();
-    }
 
     public function reset(): void
     {
@@ -79,9 +72,6 @@ class FormControllerStub extends FormController
         $this->recorder()->addFlash($type, $message);
     }
 
-    protected function addCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-    }
 
     /**
      * @param array<string|int, mixed> $parameters

@@ -8,10 +8,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Doctrine\FetchModeHelper;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Migration\Traits\ImportTranslationsTrait;
 use Contena\Core\Migration\Traits\Translations;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

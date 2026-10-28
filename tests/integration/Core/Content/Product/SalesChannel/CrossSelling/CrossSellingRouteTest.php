@@ -13,7 +13,6 @@ use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Content\Product\SalesChannel\AbstractProductCloseoutFilterFactory;
-use Contena\Core\Content\Product\SalesChannel\CrossSelling\AbstractProductCrossSellingRoute;
 use Contena\Core\Content\Product\SalesChannel\CrossSelling\ProductCrossSellingRoute;
 use Contena\Core\Content\Product\SalesChannel\Listing\ProductListingLoader;
 use Contena\Core\Content\ProductStream\Aggregate\ProductStreamFilter\ProductStreamFilterCollection;
@@ -28,9 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
@@ -62,7 +58,6 @@ class CrossSellingRouteTest extends TestCase
      */
     private EntityRepository $productRepository;
 
-    private AbstractProductCrossSellingRoute $route;
 
     private KernelBrowser $browser;
 

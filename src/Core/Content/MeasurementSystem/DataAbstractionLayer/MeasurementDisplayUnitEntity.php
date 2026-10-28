@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Attribute\ManyToOne;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Attribute\Translations;
 use Contena\Core\Framework\DataAbstractionLayer\Entity as EntityStruct;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 

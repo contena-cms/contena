@@ -13,7 +13,6 @@ use Contena\Core\Framework\Feature\Event\FeatureFlagToggledEvent;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Feature\FeatureFlagRegistry;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Test\Stub\Framework\Adapter\Storage\ArrayKeyValueStorage;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 

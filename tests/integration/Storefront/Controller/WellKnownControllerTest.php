@@ -4,8 +4,6 @@ namespace Contena\Tests\Integration\Storefront\Controller;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 
 /**
  * @internal

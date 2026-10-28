@@ -6,11 +6,7 @@ use Contena\Core\Framework\App\AppHandlerIdentifier;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\TaxProvider\TaxProviderCollection;
 
 /**
  * @internal only for use by the app-system
@@ -87,16 +83,4 @@ class TaxProviderLifecycleHandler extends AbstractLifecycleHandler
         $this->taxProviderRepository->upsert($upserts, $context->context);
     }
 
-    private function getExistingTaxProviders(string $appId, Context $context): TaxProviderCollection
-    {
-        $criteria = new Criteria();
-
-        $criteria->addFilter(new MultiFilter(MultiFilter::CONNECTION_OR, [
-            new EqualsFilter('appId', $appId),
-        ]));
-
-        return $context->scope(Context::SYSTEM_SCOPE, function (Context $context) use ($criteria) {
-            return $this->taxProviderRepository->search($criteria, $context)->getEntities();
-        });
-    }
 }

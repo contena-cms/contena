@@ -15,16 +15,11 @@ use Contena\Core\Content\ImportExport\Struct\Config;
 use Contena\Core\Content\Product\Aggregate\ProductTranslation\ProductTranslationDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BlobField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\DependencyInjection\Container;
 
@@ -64,21 +59,6 @@ class TranslationSerializerTest extends TestCase
     public function testSerialization(): void
     {
         $languageRepository = new StaticEntityRepository([
-            new EntitySearchResult(
-                'language',
-                1,
-                new LanguageCollection([
-                    (new LanguageEntity())->assign([
-                        'id' => Defaults::LANGUAGE_SYSTEM,
-                        'translationCode' => (new LocaleEntity())->assign([
-                            'code' => 'en-GB',
-                        ]),
-                    ]),
-                ]),
-                null,
-                new Criteria(),
-                Context::createDefaultContext()
-            ),
         ]);
 
         $translationsSerializer = $this->getTranslationSerializer($languageRepository);

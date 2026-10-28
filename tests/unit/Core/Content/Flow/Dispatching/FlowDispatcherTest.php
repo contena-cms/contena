@@ -10,7 +10,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlow;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowQueue;
@@ -280,10 +279,4 @@ class FlowDispatcherTest extends TestCase
         ]];
     }
 
-    private function createCheckoutOrderPlacedEvent(OrderEntity $order): CheckoutOrderPlacedEvent
-    {
-        $context = Generator::generateSalesChannelContext();
-
-        return new CheckoutOrderPlacedEvent($context, $order);
-    }
 }

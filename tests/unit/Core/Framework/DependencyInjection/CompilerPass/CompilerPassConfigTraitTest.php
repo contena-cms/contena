@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Core\Framework\DependencyInjection\CompilerPass;
 
 use PHPUnit\Framework\Attributes\CoversTrait;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\DependencyInjection\CompilerPass\CompilerPassConfigTrait;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Compiler\ValidateEnvPlaceholdersPass;

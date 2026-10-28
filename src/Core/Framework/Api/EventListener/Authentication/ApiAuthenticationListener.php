@@ -8,7 +8,6 @@ use Contena\Core\Framework\Api\OAuth\SymfonyBearerTokenValidator;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\ApiContextRouteScopeDependant;
 use Contena\Core\Framework\Routing\KernelListenerPriorities;
-use Contena\Core\Framework\Routing\RouteScopeCheckTrait;
 use Contena\Core\Framework\Routing\RouteScopeRegistry;
 use Contena\Core\PlatformRequest;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;

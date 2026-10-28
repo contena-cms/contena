@@ -11,9 +11,7 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Event\NestedEventCollection;
@@ -55,12 +53,6 @@ class CustomerAdminSearchIndexerTest extends TestCase
         $event = new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent('customer', [
-                    new EntityWriteResult($customerId, ['firstName' => 'Jane'], 'customer', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createDefaultContext()),
-                new EntityWrittenEvent('customer_address', [
-                    new EntityWriteResult(Uuid::randomHex(), ['firstName' => 'A'], 'customer_address', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createDefaultContext()),
             ]),
             []
         );

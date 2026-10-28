@@ -24,7 +24,6 @@ use Contena\Storefront\Controller\Exception\StorefrontException;
 use Contena\Storefront\Controller\StorefrontController;
 use Contena\Storefront\Event\StorefrontRedirectEvent;
 use Contena\Storefront\Framework\Routing\Router;
-use Contena\Tests\Unit\Storefront\Controller\fixtures\TestStorefrontController;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -51,7 +50,6 @@ use Twig\Error\SyntaxError;
 #[CoversClass(StorefrontController::class)]
 class StorefrontControllerTest extends TestCase
 {
-    private readonly TestStorefrontController $controller;
 
     protected function setUp(): void
     {

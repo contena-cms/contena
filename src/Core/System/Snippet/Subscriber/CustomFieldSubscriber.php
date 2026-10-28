@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\System\Snippet\Subscriber\CustomFieldSubscriberTest;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**

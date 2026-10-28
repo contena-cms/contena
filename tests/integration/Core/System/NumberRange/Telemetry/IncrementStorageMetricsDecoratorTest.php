@@ -10,7 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Telemetry\Metrics\Metric\Metric;
 use Contena\Core\Framework\Telemetry\Metrics\Transport\TransportCollection;
 use Contena\Core\Framework\Test\Telemetry\Transport\TraceableTransport;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\NumberRange\Telemetry\IncrementStorageMetricsDecorator;
 use Contena\Core\System\NumberRange\ValueGenerator\AbstractNumberRangeValueGenerator;
 use Contena\Core\System\NumberRange\ValueGenerator\Pattern\IncrementStorage\AbstractIncrementStorage;

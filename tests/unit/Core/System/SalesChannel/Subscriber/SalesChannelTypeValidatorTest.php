@@ -4,10 +4,8 @@ namespace Contena\Tests\Unit\Core\System\SalesChannel\Subscriber;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PreWriteValidationEvent;
@@ -39,9 +37,7 @@ class SalesChannelTypeValidatorTest extends TestCase
         $event = new PreWriteValidationEvent(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand($definition, ['id' => Uuid::fromHexToBytes(Defaults::SALES_CHANNEL_TYPE_STOREFRONT)], $existence),
                 new DeleteCommand($definition, ['id' => Uuid::randomBytes()], $existence),
-                new InsertCommand($definition, [], ['id' => Uuid::fromHexToBytes(Defaults::SALES_CHANNEL_TYPE_API)], $existence, '/sales-channel-type'),
             ],
         );
 

@@ -3,24 +3,17 @@
 namespace Contena\Core\Content\Product;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerWishlistProduct\CustomerWishlistProductDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Cms\CmsPageDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductCategory\ProductCategoryDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductCategoryTree\ProductCategoryTreeDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSellingAssignedProducts\ProductCrossSellingAssignedProductsDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductCustomFieldSet\ProductCustomFieldSetDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductDownload\ProductDownloadDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSet\ProductFeatureSetDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductOption\ProductOptionDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductPrice\ProductPriceDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductProperty\ProductPropertyDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductSearchKeyword\ProductSearchKeywordDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductStreamMapping\ProductStreamMappingDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductTag\ProductTagDefinition;
@@ -49,7 +42,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SetNullOnDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -73,7 +65,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Aggregate\CustomFieldSet\CustomFieldSetDefinition;
-use Contena\Core\System\DeliveryTime\DeliveryTimeDefinition;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\Tax\TaxDefinition;
@@ -161,12 +152,8 @@ class ProductDefinition extends EntityDefinition
             (new FkField('tax_id', 'taxId', TaxDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required())->setDescription('Unique identity of tax.'),
             (new FkField('product_media_id', 'coverId', ProductMediaDefinition::class))->addFlags(new ApiAware(), new Inherited(), new NoConstraint())->setDescription('Unique identity of a ProductMedia item used as product cover.'),
             (new ReferenceVersionField(ProductMediaDefinition::class))->addFlags(new ApiAware(), new Inherited(), new Required()),
-            (new FkField('delivery_time_id', 'deliveryTimeId', DeliveryTimeDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of delivery time.'),
-            (new FkField('product_feature_set_id', 'featureSetId', ProductFeatureSetDefinition::class))->addFlags(new Inherited())->setDescription('Unique identity of feature set.'),
             (new FkField('canonical_product_id', 'canonicalProductId', self::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of canonical product.'),
             (new ReferenceVersionField(self::class, 'canonical_product_version_id'))->addFlags(new ApiAware(), new Inherited(), new Required()),
-            (new FkField('cms_page_id', 'cmsPageId', CmsPageDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of CMS page.'),
-            (new ReferenceVersionField(CmsPageDefinition::class))->addFlags(new Inherited(), new Required(), new ApiAware()),
             (new FkField('open_graph_media_id', 'openGraphMediaId', MediaDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Media used as Open Graph image for social media sharing.'),
             (new FkField('guarantee_terms_media_id', 'guaranteeTermsMediaId', MediaDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Unique identity of the document with the producer commercial durability guarantee terms.'),
 
@@ -185,11 +172,9 @@ class ProductDefinition extends EntityDefinition
             (new StringField('display_group', 'displayGroup'))->addFlags(new ApiAware(), new WriteProtected())->setDescription('Runtime field, cannot be used as part of the criteria.'),
             (new VariantListingConfigField('variant_listing_config', 'variantListingConfig'))->addFlags(new Inherited())->setDescription('Information regarding if this variant should included in listing or not.'),
             (new JsonField('variant_restrictions', 'variantRestrictions'))->setDescription('Configuration about which variants and its combination are not available like red shirt in medium size in not available.'),
-            (new StringField('manufacturer_number', 'manufacturerNumber'))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Unique number that describes the manufacturer.'),
             (new IntField('guarantee_months', 'guaranteeMonths'))->addFlags(new ApiAware(), new Inherited())->setDescription('Commercial durability guarantee duration in months.'),
             (new BoolField('guarantee_confirmed', 'guaranteeConfirmed'))->addFlags(new ApiAware(), new Inherited())->setDescription('Merchant confirmation that the producer commercial durability guarantee information is accurate and has been made available.'),
             (new StringField('guarantee_terms_url', 'guaranteeTermsUrl', 2048))->addFlags(new ApiAware(), new Inherited())->setDescription('URL of the producer commercial durability guarantee terms.'),
-            (new StringField('ean', 'ean'))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING, false))->setDescription('Indicates EAN of the product.'),
             (new IntField('purchase_steps', 'purchaseSteps', 1))->addFlags(new ApiAware(), new Inherited())->setDescription('Specifies the scales in which the item is to be offered. For example, a scale of 2 means that your customers can purchase 2, 4, 6 products, etc., but not 1, 3 or 5.'),
             (new IntField('max_purchase', 'maxPurchase'))->addFlags(new ApiAware(), new Inherited())->setDescription('Maximum number of items that can be purchased.'),
             (new IntField('min_purchase', 'minPurchase', 1))->addFlags(new ApiAware(), new Inherited())->setDescription('Minimum number of items that can be purchased.'),
@@ -213,10 +198,8 @@ class ProductDefinition extends EntityDefinition
             (new ChildCountField())->addFlags(new ApiAware()),
             (new BoolField('custom_field_set_selection_active', 'customFieldSetSelectionActive'))->addFlags(new Inherited())->setDescription('When boolean value is `true`, the customFieldSetSelection for products gets enabled.'),
             (new IntField('sales', 'sales'))->addFlags(new ApiAware(), new WriteProtected())->setDescription('Frequency of the product sales.'),
-            (new OneToManyAssociationField('downloads', ProductDownloadDefinition::class, 'product_id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Downloadable files associated with the product (e.g., manuals, digital content)'),
 
             (new TranslatedField('metaDescription'))->addFlags(new ApiAware(), new Inherited()),
-            (new TranslatedField('name', true))->addFlags(new ApiAware(), new Inherited(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('keywords'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('description'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('descriptionTeaser'))->addFlags(new ApiAware(), new Inherited())->setDescription('Read-only, HTML-stripped excerpt of the description, derived on write.'),
@@ -225,7 +208,6 @@ class ProductDefinition extends EntityDefinition
             (new TranslatedField('packUnitPlural'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('customFields'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('slotConfig'))->addFlags(new Inherited()),
-            (new TranslatedField('customSearchKeywords'))->addFlags(new Inherited(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('ogTitle'))->addFlags(new ApiAware(), new Inherited()),
             (new TranslatedField('ogDescription'))->addFlags(new ApiAware(), new Inherited()),
 
@@ -233,7 +215,6 @@ class ProductDefinition extends EntityDefinition
             (new ParentAssociationField(self::class, 'id'))->addFlags(new ApiAware())->setDescription('Unique identity of the product.'),
             (new ChildrenAssociationField(self::class))->addFlags(new ApiAware())->setDescription('Product variants that inherit from this parent product'),
 
-            (new ManyToOneAssociationField('deliveryTime', 'delivery_time_id', DeliveryTimeDefinition::class))->addFlags(new ApiAware(), new Inherited())->setDescription('Estimated delivery time for the product'),
 
             (new ManyToOneAssociationField('tax', 'tax_id', TaxDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Tax configuration (rate and calculation rules)'),
 
@@ -247,9 +228,7 @@ class ProductDefinition extends EntityDefinition
 
             (new ManyToOneAssociationField('guaranteeTermsMedia', 'guarantee_terms_media_id', MediaDefinition::class, 'id', false))->addFlags(new ApiAware(), new Inherited())->setDescription('Document with the producer commercial durability guarantee terms'),
 
-            (new ManyToOneAssociationField('featureSet', 'product_feature_set_id', ProductFeatureSetDefinition::class, 'id'))->addFlags(new Inherited()),
 
-            (new ManyToOneAssociationField('cmsPage', 'cms_page_id', CmsPageDefinition::class, 'id', false))->addFlags(new ApiAware(), new Inherited())->setDescription('Custom CMS page layout for the product detail page'),
 
             (new ManyToOneAssociationField('canonicalProduct', 'canonical_product_id', ProductDefinition::class, 'id'))->addFlags(new ApiAware(), new Inherited())->setDescription('Canonical product reference for variant consolidation and SEO purposes'),
 
@@ -257,9 +236,7 @@ class ProductDefinition extends EntityDefinition
 
             (new OneToManyAssociationField('media', ProductMediaDefinition::class, 'product_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Product images and media gallery'),
 
-            (new OneToManyAssociationField('crossSellings', ProductCrossSellingDefinition::class, 'product_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Cross-selling configurations (related products, accessories, similar items)'),
 
-            (new OneToManyAssociationField('crossSellingAssignedProducts', ProductCrossSellingAssignedProductsDefinition::class, 'product_id'))->addFlags(new CascadeDelete()),
 
             (new OneToManyAssociationField('configuratorSettings', ProductConfiguratorSettingDefinition::class, 'product_id', 'id'))->addFlags(new ApiAware(), new CascadeDelete())->setDescription('Variant configurator settings defining available options for product variants'),
 
@@ -267,13 +244,11 @@ class ProductDefinition extends EntityDefinition
 
             (new OneToManyAssociationField('searchKeywords', ProductSearchKeywordDefinition::class, 'product_id'))->addFlags(new CascadeDelete(false)),
 
-            (new OneToManyAssociationField('productReviews', ProductReviewDefinition::class, 'product_id'))->addFlags(new ApiAware(), new CascadeDelete(false))->setDescription('Customer reviews and ratings for the product'),
 
             (new OneToManyAssociationField('mainCategories', MainCategoryDefinition::class, 'product_id'))->addFlags(new ApiAware(), new CascadeDelete(), new Inherited())->setDescription('Primary category assignments per sales channel for SEO and navigation'),
 
             (new OneToManyAssociationField('seoUrls', SeoUrlDefinition::class, 'foreign_key'))->addFlags(new ApiAware())->setDescription('SEO-friendly URLs for the product across different sales channels'),
 
-            (new OneToManyAssociationField('orderLineItems', OrderLineItemDefinition::class, 'product_id'))->addFlags(new SetNullOnDelete()),
 
             (new OneToManyAssociationField('wishlists', CustomerWishlistProductDefinition::class, 'product_id'))->addFlags(new CascadeDelete()),
 

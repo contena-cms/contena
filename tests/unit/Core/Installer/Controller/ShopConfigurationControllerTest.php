@@ -10,7 +10,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Installer\Configuration\AdminConfigurationService;
 use Contena\Core\Installer\Configuration\EnvConfigWriter;

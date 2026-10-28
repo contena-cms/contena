@@ -59,7 +59,6 @@ class ThemeCompilerEnrichScssVarSubscriberTest extends TestCase
         $this->configurationService->method('getResolvedSystemConfigDefinition')->willThrowException($exception);
         $this->storefrontPluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('test'),
             ])
         );
 
@@ -80,7 +79,6 @@ class ThemeCompilerEnrichScssVarSubscriberTest extends TestCase
         $this->configurationService->method('getResolvedSystemConfigDefinition')->willThrowException(TestExceptionFactory::createException('test'));
         $this->storefrontPluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('test'),
             ])
         );
         $subscriber = new ThemeCompilerEnrichScssVarSubscriber($this->configurationService, $this->storefrontPluginRegistry);
@@ -119,7 +117,6 @@ class ThemeCompilerEnrichScssVarSubscriberTest extends TestCase
 
         $this->storefrontPluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('test'),
             ])
         );
         $subscriber = new ThemeCompilerEnrichScssVarSubscriber($this->configurationService, $this->storefrontPluginRegistry);
@@ -170,7 +167,6 @@ class ThemeCompilerEnrichScssVarSubscriberTest extends TestCase
 
         $this->storefrontPluginRegistry->method('getConfigurations')->willReturn(
             new StorefrontPluginConfigurationCollection([
-                new StorefrontPluginConfiguration('test'),
             ])
         );
         $subscriber = new ThemeCompilerEnrichScssVarSubscriber($this->configurationService, $this->storefrontPluginRegistry);

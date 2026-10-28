@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Category\Aggregate\CategoryTranslation;
 
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageEntity;

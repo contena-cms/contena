@@ -5,10 +5,8 @@ namespace Contena\Tests\Integration\Core\Framework\DataAbstractionLayer\Dbal\Fie
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeDefinition;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentDefinition;
 use Contena\Core\Checkout\DocumentV2\DocumentEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Product\ProductCollection;
@@ -23,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
@@ -31,7 +28,6 @@ use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Stub\Doctrine\QueryBuilderDataExtractor;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
-use Contena\Tests\Integration\Core\Checkout\Document\DocumentTrait;
 
 /**
  * @internal

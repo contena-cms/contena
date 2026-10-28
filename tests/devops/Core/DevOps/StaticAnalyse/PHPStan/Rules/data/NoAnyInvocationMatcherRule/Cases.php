@@ -33,20 +33,8 @@ class NotATestCase
         return new \stdClass();
     }
 
-    public function configureStatic(MockObject&SomeService $mock): void
-    {
-        $mock->expects(static::any())->method('doIt')->willReturn('x');
-    }
 
-    public function configureSelf(MockObject&SomeService $mock): void
-    {
-        $mock->expects(self::any())->method('doIt')->willReturn('x');
-    }
 
-    public function configureNever(MockObject&SomeService $mock): void
-    {
-        $mock->expects(static::never())->method('doIt');
-    }
 }
 
 /**

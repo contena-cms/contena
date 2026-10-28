@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Storefront\Framework\Twig\Extension;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Content\Media\MediaUrlPlaceholderHandlerInterface;
 use Contena\Core\Content\Seo\SeoUrlPlaceholderHandlerInterface;
 use Contena\Core\Framework\Adapter\Twig\Extension\NodeExtension;
@@ -44,7 +43,6 @@ class IconCacheTwigFilterTest extends TestCase
     {
         $twig = $this->createFinder([
             new BundleFixture('StorefrontTest', __DIR__ . '/fixtures/Storefront/'),
-            new BundleFixture('Storefront', (new Storefront())->getPath()),
         ]);
 
         $container = $this->buildContainer();
@@ -187,10 +185,6 @@ class TestController extends StorefrontController
         $this->templateFinder = $templateFinder;
     }
 
-    protected function addCartErrors(Cart $cart, ?\Closure $filter = null): void
-    {
-        parent::addCartErrors($cart, $filter);
-    }
 
     /**
      * @param string $message

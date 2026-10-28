@@ -4,14 +4,12 @@ namespace Contena\Tests\Integration\Core\System\SalesChannel\Context;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\AbstractCartPersister;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartCalculator;
 use Contena\Core\Checkout\Cart\CartPersister;
 use Contena\Core\Checkout\Cart\Event\BeforeCartMergeEvent;
 use Contena\Core\Checkout\Cart\Event\CartMergedEvent;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItem\LineItemCollection;
 use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscount\PromotionDiscountEntity;
@@ -20,7 +18,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\AbstractSalesChannelContextFactory;
@@ -31,7 +28,6 @@ use Contena\Core\System\SalesChannel\Event\SalesChannelContextRestoredEvent;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Integration\Builder\Promotion\PromotionFixtureBuilder;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Core\Test\Integration\Traits\Promotion\PromotionIntegrationTestBehaviour;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -50,9 +46,7 @@ class CartRestorerTest extends TestCase
 
     private CartRestorer $cartRestorer;
 
-    private CartService $cartService;
 
-    private AbstractCartPersister $cartPersister;
 
     /**
      * @var array<string, Event>
@@ -697,40 +691,7 @@ class CartRestorerTest extends TestCase
         return $entity;
     }
 
-    private function createLineItem(
-        SalesChannelContext $context,
-        ?int $quantity = null
-    ): LineItem {
-        $productId = $this->createProduct($context->getContext());
 
-        $productLineItem = new LineItem($productId, LineItem::PRODUCT_LINE_ITEM_TYPE, $productId);
-        $productLineItem->setStackable(true);
-
-        if ($quantity !== null) {
-            $productLineItem->setQuantity($quantity);
-        }
-
-        return $productLineItem;
-    }
-
-    /**
-     * Create a new cart with the provided line items and save it to the database. The cart must contain at least one
-     * $lineItems, else it won't be saved and the included assertion will fail.
-     */
-    private function createAndSaveUnmodifiedCart(SalesChannelContext $context, LineItem ...$lineItems): Cart
-    {
-        $cart = new Cart($context->getToken());
-
-        $cart->addLineItems(new LineItemCollection($lineItems));
-        $cart->markUnmodified();
-
-        $this->cartPersister->save($cart, $context);
-
-        static::assertTrue($this->cartExists($context->getToken()));
-        static::assertTrue($this->contextExists($context->getToken()));
-
-        return $cart;
-    }
 
     /**
      * @return array{context:SalesChannelContext, cart:Cart}

@@ -25,7 +25,6 @@ use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerF
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ManyToOneProductDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ToOneProductExtension;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;

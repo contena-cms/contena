@@ -18,9 +18,7 @@ use Contena\Core\Framework\Test\Script\Execution\DeprecatedTestHook;
 use Contena\Core\Framework\Test\Script\Execution\FunctionWillBeRequiredTestHook;
 use Contena\Core\Framework\Test\Script\Execution\StoppableTestHook;
 use Contena\Core\Framework\Test\Script\Execution\TestHook;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\SalesChannelRequest;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
 

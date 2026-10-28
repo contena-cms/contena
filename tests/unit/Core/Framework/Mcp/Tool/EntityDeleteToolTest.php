@@ -19,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeletedEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Context\McpContextProvider;
@@ -133,9 +132,6 @@ class EntityDeleteToolTest extends TestCase
         $key = ['productId' => '0198c0de000070008000000000000001', 'categoryId' => '0198c0de000070008000000000000002'];
         $events = static::createStub(EntityWrittenContainerEvent::class);
         $events->method('getEvents')->willReturn(new NestedEventCollection([
-            new EntityDeletedEvent('product_category', [new EntityWriteResult($key, [], 'product_category', EntityWriteResult::OPERATION_DELETE)], $context),
-            new EntityWrittenEvent('product', [new EntityWriteResult('0198c0de000070008000000000000001', [], 'product', EntityWriteResult::OPERATION_UPDATE)], $context),
-            new EntityWrittenEvent('category', [new EntityWriteResult('0198c0de000070008000000000000002', [], 'category', EntityWriteResult::OPERATION_UPDATE)], $context),
         ]));
 
         $repository = $this->createMock(EntityRepository::class);

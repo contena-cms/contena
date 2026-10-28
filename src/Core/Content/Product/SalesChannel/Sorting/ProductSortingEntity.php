@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\Product\SalesChannel\Sorting;
 
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Deprecation\BCChange\NewOptionalParameter;
 use Contena\Core\Framework\Log\Package;

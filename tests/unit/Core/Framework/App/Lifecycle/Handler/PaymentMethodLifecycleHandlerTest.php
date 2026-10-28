@@ -4,14 +4,10 @@ namespace Contena\Tests\Unit\Core\Framework\App\Lifecycle\Handler;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Payment\Aggregate\PaymentMethodTranslation\PaymentMethodTranslationCollection;
-use Contena\Core\Checkout\Payment\Aggregate\PaymentMethodTranslation\PaymentMethodTranslationEntity;
 use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaService;
-use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodEntity;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\App\Lifecycle\Context\AppActivationContext;
 use Contena\Core\Framework\App\Lifecycle\Context\AppPersistContext;
@@ -21,8 +17,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
 
@@ -267,57 +261,7 @@ class PaymentMethodLifecycleHandlerTest extends TestCase
         return $app;
     }
 
-    /**
-     * @param array<string, string> $currentNames texts the shop has right now, keyed by translation code
-     */
-    private function buildExistingPaymentMethod(string $appId, string $identifier, array $currentNames = []): PaymentMethodEntity
-    {
-        $appPaymentMethod = new AppPaymentMethodEntity();
-        $appPaymentMethod->setUniqueIdentifier(Uuid::randomHex());
-        $appPaymentMethod->setId(Uuid::randomHex());
-        $appPaymentMethod->setAppId($appId);
-        $appPaymentMethod->setAppName('paymentPersister');
-        $appPaymentMethod->setIdentifier($identifier);
 
-        $paymentMethod = new PaymentMethodEntity();
-        $paymentMethod->setUniqueIdentifier(Uuid::randomHex());
-        $paymentMethod->setId(Uuid::randomHex());
-        $paymentMethod->setHandlerIdentifier(\sprintf('app\\paymentPersister_%s', $identifier));
-        $paymentMethod->setAppPaymentMethod($appPaymentMethod);
-        $paymentMethod->setTranslations(new PaymentMethodTranslationCollection(
-            array_map($this->buildTranslation(...), array_keys($currentNames), $currentNames)
-        ));
-
-        return $paymentMethod;
-    }
-
-    private function buildTranslation(string $translationCode, string $name): PaymentMethodTranslationEntity
-    {
-        $locale = new LocaleEntity();
-        $locale->setUniqueIdentifier(Uuid::randomHex());
-        $locale->setId(Uuid::randomHex());
-        $locale->setCode($translationCode);
-
-        // a shop can format in one locale and translate in another, the payload keys follow the translation code
-        $formattingLocale = new LocaleEntity();
-        $formattingLocale->setUniqueIdentifier(Uuid::randomHex());
-        $formattingLocale->setId(Uuid::randomHex());
-        $formattingLocale->setCode('en-US');
-
-        $language = new LanguageEntity();
-        $language->setUniqueIdentifier(Uuid::randomHex());
-        $language->setId(Uuid::randomHex());
-        $language->setLocale($formattingLocale);
-        $language->setTranslationCode($locale);
-
-        $translation = new PaymentMethodTranslationEntity();
-        $translation->setUniqueIdentifier(Uuid::randomHex());
-        $translation->setLanguageId($language->getId());
-        $translation->setLanguage($language);
-        $translation->setName($name);
-
-        return $translation;
-    }
 
     /**
      * @param array<string, mixed> $payload

@@ -29,7 +29,6 @@ use Symfony\Component\HttpFoundation\Request;
 #[CoversClass(ProductListingCmsElementResolver::class)]
 class ProductListingTypeDataResolverTest extends TestCase
 {
-    private ProductListingCmsElementResolver $listingResolver;
 
     protected function setUp(): void
     {

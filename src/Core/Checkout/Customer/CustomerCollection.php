@@ -4,7 +4,6 @@ namespace Contena\Core\Checkout\Customer;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressCollection;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
@@ -104,12 +103,6 @@ class CustomerCollection extends EntityCollection
         );
     }
 
-    public function getLastPaymentMethods(): PaymentMethodCollection
-    {
-        return new PaymentMethodCollection(
-            $this->fmap(static fn (CustomerEntity $customer) => $customer->getLastPaymentMethod())
-        );
-    }
 
     public function getDefaultBillingAddress(): CustomerAddressCollection
     {

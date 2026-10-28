@@ -26,9 +26,6 @@ use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Contena\Core\System\SalesChannel\SalesChannel\AbstractContextSwitchRoute;
 use Contena\Core\Test\Generator;
 use Contena\Storefront\Controller\AddressController;
-use Contena\Storefront\Page\Address\Detail\AddressDetailPageLoader;
-use Contena\Storefront\Page\Address\Listing\AddressListingPageLoader;
-use Contena\Tests\Unit\Storefront\Controller\Stub\AddressControllerStub;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,7 +41,6 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 #[CoversClass(AddressController::class)]
 class AddressControllerTest extends TestCase
 {
-    private AddressControllerStub $controller;
 
     private Stub&AccountService $accountService;
 
@@ -685,33 +681,4 @@ class AddressControllerTest extends TestCase
         );
     }
 
-    private function buildController(
-        ?AccountService $accountService = null,
-        ?AbstractListAddressRoute $listAddressRoute = null,
-        ?AbstractUpsertAddressRoute $abstractUpsertAddressRoute = null,
-        ?AbstractDeleteAddressRoute $deleteAddressRoute = null,
-        ?AbstractContextSwitchRoute $contextSwitchRoute = null,
-        ?SalesChannelContextService $salesChannelContextService = null,
-    ): AddressControllerStub {
-        $controller = new AddressControllerStub(
-            static::createStub(AddressListingPageLoader::class),
-            static::createStub(AddressDetailPageLoader::class),
-            $accountService ?? $this->accountService,
-            $listAddressRoute ?? $this->listAddressRoute,
-            $abstractUpsertAddressRoute ?? $this->abstractUpsertAddressRoute,
-            $deleteAddressRoute ?? $this->deleteAddressRoute,
-            $contextSwitchRoute ?? $this->contextSwitchRoute,
-            $salesChannelContextService ?? $this->salesChannelContextService
-        );
-
-        $translator = static::createStub(TranslatorInterface::class);
-
-        $translator->method('trans')->willReturnCallback(static fn (string $key): string => $key);
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->set('request_stack', new RequestStack());
-        $containerBuilder->set('translator', $translator);
-        $controller->setContainer($containerBuilder);
-
-        return $controller;
-    }
 }

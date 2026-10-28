@@ -5,14 +5,12 @@ namespace Contena\Core\Framework\DataAbstractionLayer\FieldSerializer;
 use Contena\Core\Checkout\Cart\Price\Struct\AbsolutePriceDefinition;
 use Contena\Core\Checkout\Cart\Price\Struct\CurrencyPriceDefinition;
 use Contena\Core\Checkout\Cart\Price\Struct\PercentagePriceDefinition;
-use Contena\Core\Checkout\Cart\Price\Struct\PriceDefinitionInterface;
 use Contena\Core\Checkout\Cart\Price\Struct\QuantityPriceDefinition;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\Price;
-use Contena\Core\Framework\DataAbstractionLayer\Pricing\PriceCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Write\DataStack\KeyValuePair;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
@@ -135,40 +133,6 @@ class PriceDefinitionFieldSerializer extends JsonFieldSerializer
         yield from parent::encode($field, $existence, $data, $parameters);
     }
 
-    #[ExceptionChange(version: 'v6.8.0', newExceptions: [DataAbstractionLayerException::class], description: 'Invalid price definition types use the DAL domain exception instead of InvalidPriceFieldTypeException.')]
-    public function decode(Field $field, mixed $value): ?PriceDefinitionInterface
-    {
-        if ($value === null) {
-            return null;
-        }
-
-        $decoded = parent::decode($field, $value);
-        if (!\is_array($decoded)) {
-            return null;
-        }
-
-        if (!\array_key_exists('type', $decoded)) {
-            throw DataAbstractionLayerException::invalidPriceFieldType('none');
-        }
-
-        switch ($decoded['type']) {
-            case QuantityPriceDefinition::TYPE:
-                return QuantityPriceDefinition::fromArray($decoded);
-            case AbsolutePriceDefinition::TYPE:
-                return new AbsolutePriceDefinition($decoded['price'], $this->decodeFilter($decoded));
-            case CurrencyPriceDefinition::TYPE:
-                $collection = new PriceCollection();
-                foreach ($decoded['price'] as $price) {
-                    $collection->add(new Price($price['currencyId'], (float) $price['net'], (float) $price['gross'], (bool) $price['linked']));
-                }
-
-                return new CurrencyPriceDefinition($collection, $this->decodeFilter($decoded));
-            case PercentagePriceDefinition::TYPE:
-                return new PercentagePriceDefinition($decoded['percentage'], $this->decodeFilter($decoded));
-        }
-
-        throw DataAbstractionLayerException::invalidPriceFieldType($decoded['type']);
-    }
 
     /**
      * @param array<string, mixed> $decoded

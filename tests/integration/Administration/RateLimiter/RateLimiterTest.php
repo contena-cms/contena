@@ -8,8 +8,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\RateLimiter\DisableRateLimiterCompilerPass;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Component\HttpFoundation\Response;
 

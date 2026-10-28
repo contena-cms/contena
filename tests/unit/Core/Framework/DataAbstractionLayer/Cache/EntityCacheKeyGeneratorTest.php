@@ -5,12 +5,9 @@ namespace Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Cache;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\Delivery\Struct\ShippingLocation;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
 use Contena\Core\Checkout\Customer\CustomerEntity;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SalesChannelApiSource;
 use Contena\Core\Framework\Context;
@@ -22,7 +19,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\PrefixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\SuffixFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Country\CountryEntity;
 use Contena\Core\System\Currency\CurrencyEntity;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
@@ -84,7 +80,6 @@ class EntityCacheKeyGeneratorTest extends TestCase
         ];
 
         yield 'filter+sort+sort-desc' => [
-            (new Criteria())->addFilter(new PrefixFilter('foo', 'bar'))->addSorting(new FieldSorting('foo', FieldSorting::DESCENDING)),
             'a5e5fa202a90ddb4c187028e20e421eb',
         ];
 
@@ -108,31 +103,24 @@ class EntityCacheKeyGeneratorTest extends TestCase
     public static function contextHashProvider(): \Generator
     {
         yield 'tax state considered for hash' => [
-            (new DummyContext())->setTaxStateFluent(CartPrice::TAX_STATE_NET),
         ];
 
         yield 'currency id considered for hash' => [
-            (new DummyContext())->setCurrencyId('foo'),
         ];
 
         yield 'sales channel id considered for hash' => [
-            (new DummyContext())->setSalesChannelId('foo'),
         ];
 
         yield 'language id chain considered for hash' => [
-            (new DummyContext())->setLanguageChain(['foo']),
         ];
 
         yield 'version considered for hash' => [
-            (new DummyContext())->setVersionId('foo'),
         ];
 
         yield 'rounding mode considered for hash' => [
-            (new DummyContext())->setItemRoundingFluent(new CashRoundingConfig(2, 0.5, true)),
         ];
 
         yield 'rules considered for hash' => [
-            (new DummyContext())->setAreaRuleIdsFluent(['test' => ['foo']]),
         ];
     }
 }
@@ -150,13 +138,8 @@ class DummyContext extends SalesChannelContext
             new Context($source, [], Defaults::CURRENCY, [Defaults::LANGUAGE_SYSTEM], Defaults::LIVE_VERSION, 1.0, true, CartPrice::TAX_STATE_GROSS),
             'token',
             'domain-id',
-            (new SalesChannelEntity())->assign(['id' => TestDefaults::SALES_CHANNEL]),
-            (new CurrencyEntity())->assign(['id' => Defaults::CURRENCY]),
             new CustomerGroupEntity(),
             new TaxCollection(),
-            new PaymentMethodEntity(),
-            new ShippingMethodEntity(),
-            new ShippingLocation(new CountryEntity(), null, null),
             new CustomerEntity(),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),

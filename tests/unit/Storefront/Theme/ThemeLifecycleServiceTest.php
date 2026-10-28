@@ -5,27 +5,17 @@ namespace Contena\Tests\Unit\Storefront\Theme;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
-use Contena\Core\Content\Media\File\FileNameProvider;
-use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Language\LanguageEntity;
-use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Storefront\Theme\Snippet\ThemeSnippetFileWriter;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\AbstractStorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
-use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeEntity;
-use Contena\Storefront\Theme\ThemeFilesystemResolver;
 use Contena\Storefront\Theme\ThemeLifecycleService;
 use Contena\Storefront\Theme\ThemeRuntimeConfigService;
 
@@ -131,62 +121,5 @@ class ThemeLifecycleServiceTest extends TestCase
         return StaticEntityRepository::of(ThemeCollection::class, [new ThemeCollection([$theme])]);
     }
 
-    private function createConfigurationWithLegacyLabels(): StorefrontPluginConfiguration
-    {
-        $configuration = new StorefrontPluginConfiguration('ExampleTheme');
-        $configuration->setName('Example');
-        $configuration->setAuthor('Author');
-        $configuration->setThemeJson(null);
-        $configuration->setThemeConfig([
-            'fields' => [
-                'sw-logo' => [
-                    'type' => 'media',
-                    'label' => ['en-GB' => 'Logo'],
-                    'helpText' => ['en-GB' => 'Header logo'],
-                ],
-            ],
-        ]);
 
-        return $configuration;
-    }
-
-    /**
-     * @param EntityRepository<ThemeCollection> $themeRepository
-     * @param EntityRepository<EntityCollection<Entity>> $themeChildRepository
-     */
-    private function createService(
-        EntityRepository $themeRepository,
-        EntityRepository $themeChildRepository,
-        ThemeRuntimeConfigService $runtimeConfig,
-        ThemeSnippetFileWriter $snippetFileWriter,
-    ): ThemeLifecycleService {
-        $language = new LanguageEntity();
-        $language->setUniqueIdentifier('language-id');
-        $locale = new LocaleEntity();
-        $locale->setCode('en-GB');
-        $language->setTranslationCode($locale);
-
-        $registry = static::createStub(StorefrontPluginRegistry::class);
-        $registry->method('getConfigurations')->willReturn(new StorefrontPluginConfigurationCollection());
-
-        $connection = static::createStub(Connection::class);
-        $connection->method('fetchAllAssociative')->willReturn([]);
-
-        return new ThemeLifecycleService(
-            $registry,
-            $themeRepository,
-            new StaticEntityRepository([]),
-            StaticEntityRepository::of(MediaFolderCollection::class, [[]]),
-            new StaticEntityRepository([]),
-            static::createStub(FileSaver::class),
-            static::createStub(FileNameProvider::class),
-            static::createStub(ThemeFilesystemResolver::class),
-            new StaticEntityRepository([new LanguageCollection([$language])]),
-            $themeChildRepository,
-            $connection,
-            static::createStub(AbstractStorefrontPluginConfigurationFactory::class),
-            $runtimeConfig,
-            $snippetFileWriter,
-        );
-    }
 }

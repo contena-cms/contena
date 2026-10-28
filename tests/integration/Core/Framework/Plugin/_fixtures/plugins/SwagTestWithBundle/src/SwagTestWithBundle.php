@@ -4,7 +4,6 @@ namespace SwagTestWithBundle;
 
 use Contena\Core\Framework\Parameter\AdditionalBundleParameters;
 use Contena\Core\Framework\Plugin;
-use Contena\Tests\Integration\Core\Framework\Plugin\_fixtures\bundles\FooBarBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
 
 class SwagTestWithBundle extends Plugin

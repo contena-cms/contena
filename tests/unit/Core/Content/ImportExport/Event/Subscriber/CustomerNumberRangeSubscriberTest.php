@@ -124,18 +124,6 @@ class CustomerNumberRangeSubscriberTest extends TestCase
         $subscriber->onAfterImport($this->createBatchEvent(
             $context,
             new EntityWriteResult(
-                'customer-id-1',
-                ['customerNumber' => '100014'],
-                CustomerDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
-                'customer-id-2',
-                ['customerNumber' => '100015'],
-                CustomerDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
                 'customer-id-3',
                 ['customerNumber' => '100013'],
                 CustomerDefinition::ENTITY_NAME,
@@ -239,18 +227,6 @@ class CustomerNumberRangeSubscriberTest extends TestCase
 
         $subscriber->onAfterImport($this->createBatchEvent(
             $context,
-            new EntityWriteResult(
-                'customer-id-1',
-                ['customerNumber' => '100014', 'salesChannelId' => $firstSalesChannelId],
-                CustomerDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
-            new EntityWriteResult(
-                'customer-id-2',
-                ['customerNumber' => '100016', 'salesChannelId' => $firstSalesChannelId],
-                CustomerDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT,
-            ),
             new EntityWriteResult(
                 'customer-id-3',
                 ['customerNumber' => '200010', 'salesChannelId' => $secondSalesChannelId],

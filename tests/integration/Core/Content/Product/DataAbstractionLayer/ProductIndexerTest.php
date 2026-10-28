@@ -22,15 +22,12 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -204,11 +201,6 @@ class ProductIndexerTest extends TestCase
         }
 
         return new NestedEventCollection([
-            new EntityWrittenEvent(
-                ProductDefinition::ENTITY_NAME,
-                $results,
-                $context
-            ),
         ]);
     }
 }

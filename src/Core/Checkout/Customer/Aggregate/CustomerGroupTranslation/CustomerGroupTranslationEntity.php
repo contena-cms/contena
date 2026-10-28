@@ -3,8 +3,6 @@
 namespace Contena\Core\Checkout\Customer\Aggregate\CustomerGroupTranslation;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 

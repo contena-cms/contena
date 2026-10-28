@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Service\Event\PermissionsGrantedEvent;
 use Contena\Core\Service\Event\PermissionsRevokedEvent;
 use Contena\Core\Service\Permission\PermissionsService;

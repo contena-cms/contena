@@ -15,8 +15,6 @@ use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Event\FirstRunWizardFinishedEvent;
 use Contena\Core\Framework\Store\Event\FirstRunWizardStartedEvent;
 use Contena\Core\Framework\Store\Services\FirstRunWizardService;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\QueryDataBag;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;

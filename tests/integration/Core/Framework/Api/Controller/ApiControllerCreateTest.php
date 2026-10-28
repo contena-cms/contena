@@ -17,14 +17,9 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Extension;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
@@ -761,7 +756,6 @@ class ApiControllerCreateTest extends TestCase
         $criteria->addFilter(new NotFilter(
             MultiFilter::CONNECTION_AND,
             [
-                new EqualsFilter('id', Defaults::LANGUAGE_SYSTEM),
             ]
         ));
         $criteria->setLimit(1);

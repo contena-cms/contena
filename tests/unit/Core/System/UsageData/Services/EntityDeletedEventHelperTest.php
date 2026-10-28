@@ -24,8 +24,6 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\UsageData\Services\EntityDeleteEventHelper;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Unit\Core\System\UsageData\Subscriber\DeletedEvent;
-use Contena\Tests\Unit\Core\System\UsageData\Subscriber\NonStorageAwareField;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**
@@ -173,10 +171,8 @@ class EntityWithSinglePrimaryKey extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey()),
-            (new NonStorageAwareField('nonStorageAwarePrimaryKey'))->addFlags(new PrimaryKey()),
             (new StringField('storage_aware_primary_key', 'storageAwarePrimaryKey'))->addFlags(new PrimaryKey()),
             (new VersionField())->addFlags(),
-            new NonStorageAwareField('nonStorageAware'),
             new ReferenceVersionField(ProductDefinition::class, 'product_version_id'),
         ]);
     }

@@ -11,7 +11,6 @@ use Contena\Core\Content\ProductExport\Command\ProductExportGenerateCommand;
 use Contena\Core\Content\ProductExport\DataAbstractionLayer\ProductExportExceptionHandler;
 use Contena\Core\Content\ProductExport\EventListener\ProductExportEventListener;
 use Contena\Core\Content\ProductExport\ProductExportDefinition;
-use Contena\Core\Content\ProductExport\Provider\AgenticCommerceProductExportProviderRegistry;
 use Contena\Core\Content\ProductExport\Provider\GoogleProductExportProvider;
 use Contena\Core\Content\ProductExport\Provider\OpenAiProductExportProvider;
 use Contena\Core\Content\ProductExport\SalesChannel\ExportController;
@@ -23,7 +22,6 @@ use Contena\Core\Content\ProductExport\Service\ProductExportFileHandler;
 use Contena\Core\Content\ProductExport\Service\ProductExportGenerator;
 use Contena\Core\Content\ProductExport\Service\ProductExportRenderer;
 use Contena\Core\Content\ProductExport\Service\ProductExportValidator;
-use Contena\Core\Content\ProductExport\Subscriber\AgenticCommerceProductExportProviderContextSubscriber;
 use Contena\Core\Content\ProductExport\Validator\FeedLabelValidator;
 use Contena\Core\Content\ProductExport\Validator\GoogleProductExportValidator;
 use Contena\Core\Content\ProductExport\Validator\JsonlRowParser;
@@ -180,11 +178,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.product_export.validator')
         ->tag('contena.inactiveFeature', ['flag' => 'v6.8.0.0']);
 
-    $services->set(AgenticCommerceProductExportProviderRegistry::class)
-        ->args([
-            tagged_iterator('contena.product_export.provider'),
-        ])
-        ->tag('contena.inactiveFeature', ['flag' => 'v6.8.0.0']);
 
     $services->set(OpenAiProductExportProvider::class)
         ->args([
@@ -213,12 +206,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_subscriber');
 
-    $services->set(AgenticCommerceProductExportProviderContextSubscriber::class)
-        ->args([
-            service(AgenticCommerceProductExportProviderRegistry::class),
-        ])
-        ->tag('kernel.event_subscriber')
-        ->tag('contena.inactiveFeature', ['flag' => 'v6.8.0.0']);
 
     $services->set(ExportController::class)
         ->public()

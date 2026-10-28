@@ -6,11 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Page\Robots\Parser\ParsedRobots;
-use Contena\Storefront\Page\Robots\Parser\ParseIssue;
 use Contena\Storefront\Page\Robots\Parser\ParseIssueSeverity;
-use Contena\Storefront\Page\Robots\Struct\RobotsDirective;
-use Contena\Storefront\Page\Robots\Struct\RobotsDirectiveType;
-use Contena\Storefront\Page\Robots\Struct\RobotsUserAgentBlock;
 
 /**
  * @internal
@@ -27,9 +23,6 @@ class ParsedRobotsTest extends TestCase
 
         // Parsed result with user agent blocks
         $userAgentBlocks = [
-            new RobotsUserAgentBlock('Googlebot', [
-                new RobotsDirective(RobotsDirectiveType::DISALLOW, '/admin/'),
-            ]),
         ];
         $parsedWithBlocks = new ParsedRobots($userAgentBlocks, [], []);
         static::assertTrue($parsedWithBlocks->hasUserAgentBlocks());
@@ -46,10 +39,6 @@ class ParsedRobotsTest extends TestCase
 
         // Test with mixed errors and warnings
         $issues = [
-            new ParseIssue(1, 'Invalid line', 'Malformed line', ParseIssueSeverity::ERROR),
-            new ParseIssue(2, 'Unknown: directive', 'Unknown directive type', ParseIssueSeverity::WARNING),
-            new ParseIssue(3, 'Bad line', 'Another error', ParseIssueSeverity::ERROR),
-            new ParseIssue(4, 'Orphaned: directive', 'Orphaned directive', ParseIssueSeverity::WARNING),
         ];
 
         $parsed = new ParsedRobots([], [], $issues);

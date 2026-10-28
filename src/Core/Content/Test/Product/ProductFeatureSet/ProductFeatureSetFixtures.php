@@ -4,9 +4,7 @@ namespace Contena\Core\Content\Test\Product\ProductFeatureSet;
 
 use PHPUnit\Framework\Attributes\Before;
 use Contena\Core\Content\Product\Aggregate\ProductFeatureSet\ProductFeatureSetDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductFeatureSet\ProductFeatureSetEntity;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Integration\Traits\EntityFixturesBase;
 
 /**
  * @internal
@@ -52,26 +50,6 @@ trait ProductFeatureSetFixtures
         ];
     }
 
-    public function getBasicFeatureSet(): ProductFeatureSetEntity
-    {
-        return $this->getFeatureSetFixture('FeatureSetBasic');
-    }
 
-    public function getCompleteFeatureSet(): ProductFeatureSetEntity
-    {
-        return $this->getFeatureSetFixture('FeatureSetComplete');
-    }
 
-    private function getFeatureSetFixture(string $fixtureName): ProductFeatureSetEntity
-    {
-        $template = $this->createFixture(
-            $fixtureName,
-            $this->featureSetFixtures,
-            self::getFixtureRepository(ProductFeatureSetDefinition::ENTITY_NAME)
-        );
-
-        static::assertInstanceOf(ProductFeatureSetEntity::class, $template);
-
-        return $template;
-    }
 }

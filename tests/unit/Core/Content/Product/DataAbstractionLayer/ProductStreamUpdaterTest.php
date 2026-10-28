@@ -10,21 +10,14 @@ use Contena\Core\Content\Product\DataAbstractionLayer\ProductStreamMappingIndexi
 use Contena\Core\Content\Product\DataAbstractionLayer\ProductStreamUpdater;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductDefinition;
-use Contena\Core\Content\ProductStream\Aggregate\ProductStreamFilter\ProductStreamFilterDefinition;
-use Contena\Core\Content\ProductStream\ProductStreamDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -66,9 +59,6 @@ class ProductStreamUpdaterTest extends TestCase
         $containerEvent = new EntityWrittenContainerEvent(
             Context::createCLIContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent('product_stream', [
-                    new EntityWriteResult('product-1', [], 'test', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createCLIContext()),
             ]),
             []
         );
@@ -110,20 +100,6 @@ class ProductStreamUpdaterTest extends TestCase
         $containerEvent = new EntityWrittenContainerEvent(
             Context::createCLIContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, [
-                    new EntityWriteResult('product-stream-filter-1', [
-                        'productStreamId' => $updatedStreamId,
-                        'operator' => 'and',
-                    ], ProductStreamFilterDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE),
-                    new EntityWriteResult('product-stream-filter-2', [], ProductStreamFilterDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_DELETE, new EntityExistence(
-                        ProductStreamFilterDefinition::ENTITY_NAME,
-                        ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                        true,
-                        false,
-                        false,
-                        ['product_stream_id' => Uuid::fromHexToBytes($deletedStreamId)]
-                    )),
-                ], Context::createCLIContext()),
             ]),
             []
         );
@@ -155,9 +131,6 @@ class ProductStreamUpdaterTest extends TestCase
         $containerEvent = new EntityWrittenContainerEvent(
             Context::createCLIContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(ProductStreamDefinition::ENTITY_NAME, [
-                    new EntityWriteResult('product-1', [], 'test', EntityWriteResult::OPERATION_UPDATE),
-                ], Context::createCLIContext()),
             ]),
             []
         );
@@ -476,12 +449,6 @@ class ProductStreamUpdaterTest extends TestCase
                     ]]),
                 ],
             ],
-            (new Criteria())->addFilter(
-                new MultiFilter(MultiFilter::CONNECTION_OR, [
-                    new RangeFilter('product.price', [RangeFilter::LTE => 50]),
-                    new RangeFilter('product.prices.price', [RangeFilter::LTE => 50]),
-                ]),
-            ),
         ];
 
         yield 'Nested price filter' => [
@@ -502,14 +469,6 @@ class ProductStreamUpdaterTest extends TestCase
                     ]]),
                 ],
             ],
-            (new Criteria())->addFilter(
-                new MultiFilter(MultiFilter::CONNECTION_AND, [
-                    new MultiFilter(MultiFilter::CONNECTION_OR, [
-                        new RangeFilter('product.price', [RangeFilter::LTE => 50]),
-                        new RangeFilter('product.prices.price', [RangeFilter::LTE => 50]),
-                    ]),
-                ]),
-            ),
         ];
 
         yield 'Nested price percentage filter' => [
@@ -530,14 +489,6 @@ class ProductStreamUpdaterTest extends TestCase
                     ]]),
                 ],
             ],
-            (new Criteria())->addFilter(
-                new MultiFilter(MultiFilter::CONNECTION_AND, [
-                    new MultiFilter(MultiFilter::CONNECTION_OR, [
-                        new RangeFilter('product.price.percentage', [RangeFilter::LTE => 50]),
-                        new RangeFilter('product.prices.price.percentage', [RangeFilter::LTE => 50]),
-                    ]),
-                ]),
-            ),
         ];
     }
 

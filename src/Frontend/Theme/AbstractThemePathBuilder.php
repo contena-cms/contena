@@ -11,7 +11,6 @@ use Contena\Core\Framework\Log\Package;
 #[Package('discovery')]
 abstract class AbstractThemePathBuilder
 {
-    abstract public function getDecorated(): AbstractThemePathBuilder;
 
     /**
      * `assemblePath()` should return the path to the theme files for the given sales channel and theme.

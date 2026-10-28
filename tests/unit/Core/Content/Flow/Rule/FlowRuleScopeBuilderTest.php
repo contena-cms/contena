@@ -32,7 +32,6 @@ class FlowRuleScopeBuilderTest extends TestCase
 
     private MockObject&CartDataCollectorInterface $cartDataCollector;
 
-    private FlowRuleScopeBuilder $scopeBuilder;
 
     protected function setUp(): void
     {

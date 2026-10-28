@@ -30,7 +30,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\WriteCommandExc
 use Contena\Core\Framework\Event\OrderAware;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Event\StateMachineTransitionEvent;
 use Contena\Core\Test\Integration\Builder\Order\OrderBuilder;

@@ -12,16 +12,8 @@ use Contena\Core\Framework\Adapter\Storage\AbstractKeyValueStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\FilesystemBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Elasticsearch\Product\ElasticsearchOptimizeSwitch;
-use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**

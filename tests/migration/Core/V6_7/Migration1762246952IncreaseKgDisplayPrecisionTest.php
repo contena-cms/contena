@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Migration\V6_7\Migration1742199549MeasurementSystemTable;
 use Contena\Core\Migration\V6_7\Migration1742199550MeasurementDisplayUnitTable;
 use Contena\Core\Migration\V6_7\Migration1762246952IncreaseKgDisplayPrecision;

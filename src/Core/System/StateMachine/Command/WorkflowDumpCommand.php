@@ -32,8 +32,6 @@ class WorkflowDumpCommand extends Command
     {
         $this
             ->setDefinition([
-                new InputArgument('name', InputArgument::REQUIRED, 'A state machine name'),
-                new InputOption('label', 'l', InputOption::VALUE_REQUIRED, 'Labels a graph'),
             ])
             ->setHelp(
                 <<<'EOF'

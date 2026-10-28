@@ -15,7 +15,6 @@ use Contena\Core\Content\Seo\SeoUrlRoute\LandingPageStoreApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\ProductStoreApiUrlRoute;
 use Contena\Core\Content\Seo\SeoUrlRoute\SeoUrlRouteRegistry;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Storefront\Framework\Seo\SeoUrlRoute\NavigationPageSeoUrlRoute;
 use Symfony\Component\Routing\RouterInterface;

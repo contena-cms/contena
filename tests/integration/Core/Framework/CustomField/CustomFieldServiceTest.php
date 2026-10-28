@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\LongTextField;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\CustomField\CustomFieldCollection;
 use Contena\Core\System\CustomField\CustomFieldService;

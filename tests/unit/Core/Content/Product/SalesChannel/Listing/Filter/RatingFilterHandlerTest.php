@@ -7,8 +7,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\SalesChannel\Listing\Filter;
 use Contena\Core\Content\Product\SalesChannel\Listing\Filter\RatingListingFilterHandler;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Bucket\FilterAggregation;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Aggregation\Metric\MaxAggregation;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
@@ -43,11 +41,6 @@ class RatingFilterHandlerTest extends TestCase
             'rating',
             true,
             [
-                new FilterAggregation(
-                    'rating-exists',
-                    new MaxAggregation('rating', 'product.ratingAverage'),
-                    [new RangeFilter('product.ratingAverage', [RangeFilter::GTE => 0])]
-                ),
             ],
             new RangeFilter('product.ratingAverage', [
                 RangeFilter::GTE => $input,

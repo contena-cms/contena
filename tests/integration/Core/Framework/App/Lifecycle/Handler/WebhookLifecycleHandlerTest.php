@@ -15,7 +15,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Webhook\Service\WebhookManager;
 use Contena\Core\Framework\Webhook\Validation\WebhookTargetValidator;
@@ -24,8 +23,6 @@ use Contena\Core\Framework\Webhook\WebhookCollection;
 use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 
 /**
  * @internal
@@ -39,7 +36,6 @@ class WebhookLifecycleHandlerTest extends TestCase
 
     private Connection $connection;
 
-    private AppFixture $appFixture;
 
     protected function setUp(): void
     {

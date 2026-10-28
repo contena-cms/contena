@@ -12,12 +12,10 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 

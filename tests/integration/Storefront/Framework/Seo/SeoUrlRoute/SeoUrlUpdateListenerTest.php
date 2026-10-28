@@ -24,9 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteTypeIntendExc
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\Seo\StorefrontSalesChannelTestHelper;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Framework\Seo\SeoUrlRoute\ProductPageSeoUrlRoute;

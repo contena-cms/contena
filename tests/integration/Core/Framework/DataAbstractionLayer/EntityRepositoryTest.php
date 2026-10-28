@@ -46,7 +46,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Container\AndRule;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\CallableClass;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;

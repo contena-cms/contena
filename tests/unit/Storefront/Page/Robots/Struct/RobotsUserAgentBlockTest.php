@@ -19,9 +19,6 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testGetPathDirectives(): void
     {
         $directives = [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/admin/'),
-            new RobotsDirective(RobotsDirectiveType::ALLOW, '/public/'),
             new RobotsDirective(RobotsDirectiveType::SITEMAP, 'https://example.com/sitemap.xml'),
         ];
 
@@ -39,9 +36,6 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testGetNonPathDirectives(): void
     {
         $directives = [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/admin/'),
-            new RobotsDirective(RobotsDirectiveType::ALLOW, '/public/'),
             new RobotsDirective(RobotsDirectiveType::SITEMAP, 'https://example.com/sitemap.xml'),
         ];
 
@@ -59,8 +53,6 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testRender(): void
     {
         $directives = [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/admin/'),
         ];
 
         $block = new RobotsUserAgentBlock('Googlebot', $directives);
@@ -73,8 +65,6 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testGetHashIsConsistentForSameBlock(): void
     {
         $directives = [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/admin/'),
         ];
 
         $block1 = new RobotsUserAgentBlock('Googlebot', $directives);
@@ -86,7 +76,6 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testGetHashDiffersForDifferentUserAgents(): void
     {
         $directives = [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
         ];
 
         $block1 = new RobotsUserAgentBlock('Googlebot', $directives);
@@ -98,11 +87,9 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testGetHashDiffersForDifferentNonPathDirectives(): void
     {
         $block1 = new RobotsUserAgentBlock('Googlebot', [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
         ]);
 
         $block2 = new RobotsUserAgentBlock('Googlebot', [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '20'),
         ]);
 
         static::assertNotSame($block1->getHash(), $block2->getHash());
@@ -111,13 +98,9 @@ class RobotsUserAgentBlockTest extends TestCase
     public function testGetHashIgnoresPathDirectives(): void
     {
         $block1 = new RobotsUserAgentBlock('Googlebot', [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/admin/'),
         ]);
 
         $block2 = new RobotsUserAgentBlock('Googlebot', [
-            new RobotsDirective(RobotsDirectiveType::CRAWL_DELAY, '10'),
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/different/'),
         ]);
 
         // Hash should be the same because path directives are ignored

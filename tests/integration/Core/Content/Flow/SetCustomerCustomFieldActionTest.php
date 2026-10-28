@@ -8,12 +8,10 @@ use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Event\CustomerLoginEvent;
 use Contena\Core\Content\Flow\Dispatching\Action\SetCustomerCustomFieldAction;
 use Contena\Core\Content\Flow\FlowCollection;
-use Contena\Core\Content\Test\Flow\OrderActionTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 

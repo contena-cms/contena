@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Elasticsearch\Migration\Traits\ElasticsearchTriggerTrait;
 
 /**
  * @internal

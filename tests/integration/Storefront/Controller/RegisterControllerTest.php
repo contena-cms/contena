@@ -4,14 +4,10 @@ namespace Contena\Tests\Integration\Storefront\Controller;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Cart\LineItem\LineItem;
-use Contena\Core\Checkout\Cart\LineItemFactoryRegistry;
 use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Event\CustomerDoubleOptInRegistrationEvent;
-use Contena\Core\Checkout\Customer\SalesChannel\RegisterConfirmRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\RegisterRoute;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -21,8 +17,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\MailTemplateTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\DataBag;
@@ -37,18 +31,11 @@ use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Controller\RegisterController;
-use Contena\Storefront\Framework\Guard\DoubleSubmitGuard;
 use Contena\Storefront\Framework\Routing\RequestTransformer;
 use Contena\Storefront\Framework\Routing\StorefrontRouteScope;
 use Contena\Storefront\Page\Account\CustomerGroupRegistration\CustomerGroupRegistrationPageLoadedHook;
-use Contena\Storefront\Page\Account\CustomerGroupRegistration\CustomerGroupRegistrationPageLoader;
-use Contena\Storefront\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Storefront\Page\Account\Register\AccountRegisterPageLoadedHook;
 use Contena\Storefront\Page\Checkout\Register\CheckoutRegisterPageLoadedHook;
-use Contena\Storefront\Page\Checkout\Register\CheckoutRegisterPageLoader;
-use Contena\Storefront\Pagelet\Footer\FooterPageletLoader;
-use Contena\Storefront\Pagelet\Header\HeaderPageletLoader;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DomCrawler\Crawler;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -559,34 +546,6 @@ class RegisterControllerTest extends TestCase
         return array_values($customerRepository->search($criteria, Context::createDefaultContext())->getEntities()->getIds());
     }
 
-    private function createProductLineItem(): LineItem
-    {
-        $productId = Uuid::randomHex();
-
-        static::getContainer()->get('product.repository')->create([
-            [
-                'id' => $productId,
-                'name' => 'Double submit product',
-                'productNumber' => 'double-submit-' . $productId,
-                'stock' => 1,
-                'taxId' => $this->getValidTaxId(),
-                'price' => [
-                    ['currencyId' => Defaults::CURRENCY, 'gross' => 15.99, 'net' => 10, 'linked' => false],
-                ],
-                'visibilities' => [
-                    [
-                        'salesChannelId' => TestDefaults::SALES_CHANNEL,
-                        'visibility' => ProductVisibilityDefinition::VISIBILITY_ALL,
-                    ],
-                ],
-            ],
-        ], Context::createDefaultContext());
-
-        return static::getContainer()->get(LineItemFactoryRegistry::class)->create(
-            ['type' => LineItem::PRODUCT_LINE_ITEM_TYPE, 'referencedId' => $productId],
-            $this->salesChannelContext
-        );
-    }
 
     /**
      * @param array<string|int, mixed> $customerData
@@ -719,27 +678,4 @@ class RegisterControllerTest extends TestCase
         static::getContainer()->get('product.repository')->create([$product], $context);
     }
 
-    /**
-     * @param EntityRepository<CustomerCollection> $customerRepository
-     */
-    private function getRegisterController(
-        ContainerInterface $container,
-        SystemConfigService $systemConfigService,
-        EntityRepository $customerRepository
-    ): RegisterController {
-        return new RegisterController(
-            $container->get(AccountLoginPageLoader::class),
-            $container->get(RegisterRoute::class),
-            $container->get(RegisterConfirmRoute::class),
-            $container->get(CartService::class),
-            $container->get(CheckoutRegisterPageLoader::class),
-            $systemConfigService,
-            $customerRepository,
-            static::createStub(CustomerGroupRegistrationPageLoader::class),
-            $container->get('sales_channel_domain.repository'),
-            $container->get(HeaderPageletLoader::class),
-            $container->get(FooterPageletLoader::class),
-            $container->get(DoubleSubmitGuard::class),
-        );
-    }
 }

@@ -10,7 +10,6 @@ use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
 use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Storefront\Event\ThemeCompilerConcatenatedStylesEvent;
@@ -22,8 +21,6 @@ use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfi
 use Contena\Storefront\Theme\ThemeCompiler;
 use Contena\Storefront\Theme\ThemeFileResolver;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\MockThemeCompilerConcatenatedSubscriber;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\MockThemeVariablesSubscriber;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -36,7 +33,6 @@ class ThemeCompilerEventSubscriberTest extends TestCase
 {
     use KernelTestBehaviour;
 
-    private ThemeCompiler $themeCompiler;
 
     private Filesystem $filesystem;
 

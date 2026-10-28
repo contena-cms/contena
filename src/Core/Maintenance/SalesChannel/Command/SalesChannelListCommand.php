@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Maintenance\SalesChannel\Command;
 
-use Contena\Core\Framework\Console\OutputFormatTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

@@ -23,7 +23,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -35,7 +34,6 @@ class VideoTypeDataResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private VideoCmsElementResolver $videoResolver;
 
     private FilesystemOperator $publicFilesystem;
 

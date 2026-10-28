@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\ProductListingStruct;
@@ -54,7 +53,6 @@ class ProductListingCmsElementResolverTest extends TestCase
     public function testEnrichHandlesDefaultSorting(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('filters', FieldConfig::SOURCE_STATIC, ['filter' => true]),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -103,7 +101,6 @@ class ProductListingCmsElementResolverTest extends TestCase
     public function testEnrichHandlesAvailableSorting(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('filters', FieldConfig::SOURCE_STATIC, ['filter' => true]),
         ]);
 
         $slot = new CmsSlotEntity();

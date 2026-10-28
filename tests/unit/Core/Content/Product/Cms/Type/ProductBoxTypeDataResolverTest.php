@@ -6,13 +6,7 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockEntity;
-use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionEntity;
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
-use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
@@ -40,7 +34,6 @@ use Symfony\Component\HttpFoundation\Request;
 #[CoversClass(ProductBoxCmsElementResolver::class)]
 class ProductBoxTypeDataResolverTest extends TestCase
 {
-    private ProductBoxCmsElementResolver $productBoxResolver;
 
     private Stub&SystemConfigService $systemConfig;
 
@@ -285,31 +278,4 @@ class ProductBoxTypeDataResolverTest extends TestCase
         static::assertNull($criteriaCollection);
     }
 
-    protected function enrichProductWithCmsConfig(SalesChannelProductEntity $product): CmsSlotEntity
-    {
-        $fieldConfig = new FieldConfigCollection();
-        $fieldConfig->add(new FieldConfig('product', FieldConfig::SOURCE_STATIC, $product->getId()));
-
-        $slot = new CmsSlotEntity();
-        $slot->setUniqueIdentifier('id');
-        $slot->setSlot('product-box');
-        $slot->setType('product-box');
-        $slot->setFieldConfig($fieldConfig);
-        $slot->getFieldConfig();
-
-        $cmsBlock = new CmsBlockEntity();
-        $cmsBlock->setUniqueIdentifier('block1');
-        $cmsBlock->setSlots(new CmsSlotCollection([$slot]));
-
-        $cmsSection = new CmsSectionEntity();
-        $cmsSection->setUniqueIdentifier('section1');
-        $cmsSection->setBlocks(new CmsBlockCollection([$cmsBlock]));
-
-        $cmsPage = new CmsPageEntity();
-        $cmsPage->setSections(new CmsSectionCollection([$cmsSection]));
-
-        $product->setCmsPage($cmsPage);
-
-        return $slot;
-    }
 }

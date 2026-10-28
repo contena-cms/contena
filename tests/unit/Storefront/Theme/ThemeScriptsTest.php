@@ -32,7 +32,6 @@ class ThemeScriptsTest extends TestCase
 
     private LoggerInterface&Stub $logger;
 
-    private ThemeScripts $themeScripts;
 
     protected function setUp(): void
     {
@@ -283,15 +282,4 @@ class ThemeScriptsTest extends TestCase
         static::assertSame($devMap, $themeScripts->getDevImportMap());
     }
 
-    private function createThemeScripts(
-        ?ThemeRuntimeConfigService $themeRuntimeConfigService = null,
-        ?LoggerInterface $logger = null,
-    ): ThemeScripts {
-        return new ThemeScripts(
-            $this->requestStack,
-            $themeRuntimeConfigService ?? $this->themeRuntimeConfigService,
-            $this->tempFilesystem,
-            $logger ?? $this->logger,
-        );
-    }
 }

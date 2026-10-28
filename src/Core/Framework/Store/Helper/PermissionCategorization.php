@@ -149,10 +149,6 @@ use Contena\Core\System\Unit\UnitDefinition;
 use Contena\Core\System\User\Aggregate\UserAccessKey\UserAccessKeyDefinition;
 use Contena\Core\System\User\Aggregate\UserRecovery\UserRecoveryDefinition;
 use Contena\Core\System\User\UserDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeMediaDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeSalesChannelDefinition;
-use Contena\Storefront\Theme\Aggregate\ThemeTranslationDefinition;
-use Contena\Storefront\Theme\ThemeDefinition;
 
 /**
  * @internal

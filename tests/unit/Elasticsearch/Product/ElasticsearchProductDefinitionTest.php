@@ -30,8 +30,6 @@ use Contena\Elasticsearch\Framework\ElasticsearchFieldMapper;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Contena\Elasticsearch\Product\ElasticsearchProductDefinition;
 use Contena\Elasticsearch\Product\ProductSearchQueryBuilder;
-use Contena\Tests\Unit\Core\System\Language\Stubs\StaticLanguageLoader;
-use Contena\Tests\Unit\Core\System\Language\Stubs\StaticSalesChannelLanguageLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\Validator\Validator\ValidatorInterface;

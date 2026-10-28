@@ -174,7 +174,6 @@ class ProductVariantsSubscriberTest extends TestCase
             new EntityWrittenContainerEvent(
                 $this->context,
                 new NestedEventCollection([
-                    new EntityWrittenEvent(ProductDefinition::ENTITY_NAME, [$writeResult], $this->context),
                 ]),
                 []
             )

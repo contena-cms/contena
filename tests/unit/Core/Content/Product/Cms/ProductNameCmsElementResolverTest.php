@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\TextStruct;
@@ -45,7 +44,6 @@ class ProductNameCmsElementResolverTest extends TestCase
     public function testEnrichStaticContent(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('content', FieldConfig::SOURCE_STATIC, 'my-value'),
         ]);
 
         $slot = new CmsSlotEntity();

@@ -7,8 +7,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
 use Contena\Core\Framework\Log\Package;
@@ -46,11 +44,6 @@ class SitemapSalesChannelLoader
 
         $criteria->addAssociation('type');
         $criteria->addFilter(new OrFilter([
-            new EqualsFilter('type.id', Defaults::SALES_CHANNEL_TYPE_STOREFRONT),
-            new AndFilter([
-                new EqualsFilter('type.id', Defaults::SALES_CHANNEL_TYPE_API),
-                new EqualsFilter('domains.isExternalStorefront', true),
-            ]),
         ]));
 
         $this->eventDispatcher->dispatch(new SitemapSalesChannelCriteriaEvent($criteria, $context));

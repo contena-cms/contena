@@ -2,17 +2,7 @@
 
 namespace Contena\Core\Content\Media;
 
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentBaseConfig\DocumentBaseConfigCollection;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentFile\DocumentFileEntity;
-use Contena\Core\Checkout\DocumentV2\DocumentCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItem\OrderLineItemCollection;
-use Contena\Core\Checkout\Order\Aggregate\OrderLineItemDownload\OrderLineItemDownloadCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionCollection;
-use Contena\Core\Content\Cms\CmsPageCollection;
 use Contena\Core\Content\MailTemplate\Aggregate\MailTemplateMedia\MailTemplateMediaCollection;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderEntity;
 use Contena\Core\Content\Media\Aggregate\MediaThumbnail\MediaThumbnailCollection;
@@ -21,7 +11,6 @@ use Contena\Core\Content\Media\MediaType\MediaType;
 use Contena\Core\Content\Media\MediaType\SpatialMediaTypeInterface;
 use Contena\Core\Content\Media\MediaType\SpatialObjectType;
 use Contena\Core\Content\Product\Aggregate\ProductConfiguratorSetting\ProductConfiguratorSettingCollection;
-use Contena\Core\Content\Product\Aggregate\ProductDownload\ProductDownloadCollection;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerCollection;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaCollection;
 use Contena\Core\Content\Product\ProductCollection;
@@ -30,8 +19,6 @@ use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodCollec
 use Contena\Core\Framework\App\Aggregate\AppShippingMethod\AppShippingMethodEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\User\UserCollection;
@@ -117,30 +104,17 @@ class MediaEntity extends Entity
 
     protected ?string $path = null;
 
-    protected ?DocumentBaseConfigCollection $documentBaseConfigs = null;
 
-    protected ?ShippingMethodCollection $shippingMethods = null;
 
-    protected ?PaymentMethodCollection $paymentMethods = null;
 
     protected ?ProductConfiguratorSettingCollection $productConfiguratorSettings = null;
 
-    protected ?OrderLineItemCollection $orderLineItems = null;
 
-    protected ?CmsBlockCollection $cmsBlocks = null;
 
-    protected ?CmsSectionCollection $cmsSections = null;
 
-    protected ?CmsPageCollection $cmsPages = null;
 
-    protected ?DocumentCollection $documents = null;
 
-    protected ?DocumentCollection $a11yDocuments = null;
 
-    /**
-     * @internal
-     */
-    protected ?DocumentFileEntity $documentFile = null;
 
     protected ?AppPaymentMethodCollection $appPaymentMethods = null;
 
@@ -149,9 +123,7 @@ class MediaEntity extends Entity
      */
     protected ?EntityCollection $appShippingMethods = null;
 
-    protected ?ProductDownloadCollection $productDownloads = null;
 
-    protected ?OrderLineItemDownloadCollection $orderLineItemDownloads = null;
 
     /**
      * @experimental stableVersion:v6.8.0 feature:SPATIAL_BASES
@@ -260,21 +232,7 @@ class MediaEntity extends Entity
         $this->uploadedAt = $uploadedAt;
     }
 
-    /**
-     * @internal
-     */
-    public function getDocumentFile(): ?DocumentFileEntity
-    {
-        return $this->documentFile;
-    }
 
-    /**
-     * @internal
-     */
-    public function setDocumentFile(?DocumentFileEntity $documentFile): void
-    {
-        $this->documentFile = $documentFile;
-    }
 
     public function getAlt(): ?string
     {
@@ -508,35 +466,11 @@ class MediaEntity extends Entity
         $this->thumbnailsRo = $thumbnailsRo;
     }
 
-    public function getDocumentBaseConfigs(): ?DocumentBaseConfigCollection
-    {
-        return $this->documentBaseConfigs;
-    }
 
-    public function setDocumentBaseConfigs(DocumentBaseConfigCollection $documentBaseConfigs): void
-    {
-        $this->documentBaseConfigs = $documentBaseConfigs;
-    }
 
-    public function getShippingMethods(): ?ShippingMethodCollection
-    {
-        return $this->shippingMethods;
-    }
 
-    public function setShippingMethods(ShippingMethodCollection $shippingMethods): void
-    {
-        $this->shippingMethods = $shippingMethods;
-    }
 
-    public function getPaymentMethods(): ?PaymentMethodCollection
-    {
-        return $this->paymentMethods;
-    }
 
-    public function setPaymentMethods(PaymentMethodCollection $paymentMethods): void
-    {
-        $this->paymentMethods = $paymentMethods;
-    }
 
     /**
      * @return array<string, mixed>
@@ -560,45 +494,7 @@ class MediaEntity extends Entity
         $this->productConfiguratorSettings = $productConfiguratorSettings;
     }
 
-    public function getOrderLineItems(): ?OrderLineItemCollection
-    {
-        return $this->orderLineItems;
-    }
 
-    public function setOrderLineItems(OrderLineItemCollection $orderLineItems): void
-    {
-        $this->orderLineItems = $orderLineItems;
-    }
-
-    public function getCmsBlocks(): ?CmsBlockCollection
-    {
-        return $this->cmsBlocks;
-    }
-
-    public function setCmsBlocks(CmsBlockCollection $cmsBlocks): void
-    {
-        $this->cmsBlocks = $cmsBlocks;
-    }
-
-    public function getCmsSections(): ?CmsSectionCollection
-    {
-        return $this->cmsSections;
-    }
-
-    public function setCmsSections(CmsSectionCollection $cmsSections): void
-    {
-        $this->cmsSections = $cmsSections;
-    }
-
-    public function getCmsPages(): ?CmsPageCollection
-    {
-        return $this->cmsPages;
-    }
-
-    public function setCmsPages(CmsPageCollection $cmsPages): void
-    {
-        $this->cmsPages = $cmsPages;
-    }
 
     public function isPrivate(): bool
     {
@@ -610,25 +506,9 @@ class MediaEntity extends Entity
         $this->private = $private;
     }
 
-    public function getDocuments(): ?DocumentCollection
-    {
-        return $this->documents;
-    }
 
-    public function setDocuments(DocumentCollection $documents): void
-    {
-        $this->documents = $documents;
-    }
 
-    public function getA11yDocuments(): ?DocumentCollection
-    {
-        return $this->a11yDocuments;
-    }
 
-    public function setA11yDocuments(DocumentCollection $a11yDocuments): void
-    {
-        $this->a11yDocuments = $a11yDocuments;
-    }
 
     public function getAppPaymentMethods(): ?AppPaymentMethodCollection
     {
@@ -656,25 +536,9 @@ class MediaEntity extends Entity
         $this->appShippingMethods = $appShippingMethods;
     }
 
-    public function getProductDownloads(): ?ProductDownloadCollection
-    {
-        return $this->productDownloads;
-    }
 
-    public function setProductDownloads(ProductDownloadCollection $productDownloads): void
-    {
-        $this->productDownloads = $productDownloads;
-    }
 
-    public function getOrderLineItemDownloads(): ?OrderLineItemDownloadCollection
-    {
-        return $this->orderLineItemDownloads;
-    }
 
-    public function setOrderLineItemDownloads(OrderLineItemDownloadCollection $orderLineItemDownloads): void
-    {
-        $this->orderLineItemDownloads = $orderLineItemDownloads;
-    }
 
     public function hasPath(): bool
     {

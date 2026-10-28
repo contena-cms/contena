@@ -7,7 +7,6 @@ use Psr\Clock\ClockInterface;
 use Contena\Core\Content\Category\CategoryDefinition;
 use Contena\Core\Content\Category\Service\CategoryBreadcrumbBuilder;
 use Contena\Core\Content\Category\Service\CategoryUrlGenerator;
-use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Seo\Api\SeoActionController;
 use Contena\Core\Content\Seo\EmptyPathInfoResolver;
@@ -119,7 +118,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(LandingPageStoreApiUrlRoute::class)
         ->args([
-            service(LandingPageDefinition::class),
         ])
         ->tag('contena.entity.seo_url.route');
 

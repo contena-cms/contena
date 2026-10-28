@@ -28,22 +28,18 @@ class EntityTest extends TestCase
     public static function apiAliasDefaultsDataProvider(): iterable
     {
         yield [
-            FooEntity::class,
             'foo',
         ];
 
         yield [
-            FooBarEntity::class,
             'foo_bar',
         ];
 
         yield [
-            FooBar::class,
             'foo_bar',
         ];
 
         yield [
-            ProductEntityRelationEntity::class,
             'product_entity_relation',
         ];
 

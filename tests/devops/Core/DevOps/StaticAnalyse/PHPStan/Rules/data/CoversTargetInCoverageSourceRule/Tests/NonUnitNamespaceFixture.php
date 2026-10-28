@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\DevOps\StaticAnalyse\PHPStan\Rules\data
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\CoversTargetInCoverageSourceRule\project\src\Boilerplate\ExcludedEntity;
 
 #[CoversClass(ExcludedEntity::class)]
 class NonUnitNamespaceFixture extends TestCase

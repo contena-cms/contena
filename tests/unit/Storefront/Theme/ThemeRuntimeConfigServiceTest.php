@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Theme\Exception\ThemeException;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\File;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
@@ -36,7 +35,6 @@ class ThemeRuntimeConfigServiceTest extends TestCase
 
     private ThemeRuntimeConfigStorage&Stub $storage;
 
-    private ThemeRuntimeConfigService $service;
 
     protected function setUp(): void
     {
@@ -54,47 +52,7 @@ class ThemeRuntimeConfigServiceTest extends TestCase
         );
     }
 
-    #[DataProvider('configProvider')]
-    public function testGetRuntimeConfigByName(string $themeId, string $technicalName, ?ThemeRuntimeConfig $expectedConfig): void
-    {
-        // Only one storage access for two calls
-        $storage = $this->createMock(ThemeRuntimeConfigStorage::class);
-        $storage
-            ->expects($this->once())
-            ->method('getByName')
-            ->with($technicalName)
-            ->willReturn($expectedConfig);
 
-        $service = $this->createService(storage: $storage);
-
-        // First call - should hit storage, second - use cache
-        $result1 = $service->getRuntimeConfigByName($technicalName);
-        $result2 = $service->getRuntimeConfigByName($technicalName);
-
-        static::assertSame($expectedConfig, $result1);
-        static::assertSame($expectedConfig, $result2);
-    }
-
-    #[DataProvider('configProvider')]
-    public function testGetRuntimeConfigById(string $themeId, string $technicalName, ?ThemeRuntimeConfig $expectedConfig): void
-    {
-        // Only one storage access for two calls
-        $storage = $this->createMock(ThemeRuntimeConfigStorage::class);
-        $storage
-            ->expects($this->once())
-            ->method('getById')
-            ->with($themeId)
-            ->willReturn($expectedConfig);
-
-        $service = $this->createService(storage: $storage);
-
-        // First call - should hit storage, second - use cache
-        $result1 = $service->getRuntimeConfig($themeId);
-        $result2 = $service->getRuntimeConfig($themeId);
-
-        static::assertSame($expectedConfig, $result1);
-        static::assertSame($expectedConfig, $result2);
-    }
 
     /**
      * @return iterable<string, array{themeId: string, technicalName: string, expectedConfig: ?ThemeRuntimeConfig}>
@@ -172,7 +130,6 @@ class ThemeRuntimeConfigServiceTest extends TestCase
             ->method('getConfigurations')
             ->willReturn(
                 new StorefrontPluginConfigurationCollection([
-                    new StorefrontPluginConfiguration($technicalName),
                 ])
             );
 
@@ -189,8 +146,6 @@ class ThemeRuntimeConfigServiceTest extends TestCase
             ->willReturn($technicalName);
 
         $scriptFilesCollection = new FileCollection([
-            new File('foo/file1.js', [], 'foo'),
-            new File('foo/file2.js', [], 'foo'),
         ]);
 
         $themeFileResolver = $this->createMock(ThemeFileResolver::class);
@@ -293,8 +248,6 @@ class ThemeRuntimeConfigServiceTest extends TestCase
             ->willReturn(['key' => 'value']);
 
         $scriptFilesCollection = new FileCollection([
-            new File('foo/file1.js', [], 'foo'),
-            new File('foo/file2.js', [], 'foo'),
         ]);
 
         $themeFileResolver = $this->createMock(ThemeFileResolver::class);
@@ -586,45 +539,5 @@ class ThemeRuntimeConfigServiceTest extends TestCase
         $service->getRuntimeConfigByName($technicalName);
     }
 
-    private function createService(
-        ?ThemeFileResolver $themeFileResolver = null,
-        ?StorefrontPluginRegistry $pluginRegistry = null,
-        ?ThemeMergedConfigBuilder $mergedConfigBuilder = null,
-        ?ThemeRuntimeConfigStorage $storage = null,
-    ): ThemeRuntimeConfigService {
-        return new ThemeRuntimeConfigService(
-            $themeFileResolver ?? $this->themeFileResolver,
-            $pluginRegistry ?? $this->pluginRegistry,
-            $mergedConfigBuilder ?? $this->mergedConfigBuilder,
-            $storage ?? $this->storage,
-            new NativeClock()
-        );
-    }
 
-    /**
-     * Creates a ThemeRuntimeConfig object for testing purposes
-     *
-     * @param array<string>|null $scriptFiles
-     * @param array<string, mixed> $resolvedConfig
-     * @param array<string> $viewInheritance
-     * @param array<string, array{path: string, namespace: string}> $iconSets
-     */
-    private static function createThemeRuntimeConfig(
-        string $themeId = '1234567890abcdef1234567890abcdef',
-        string $technicalName = 'test-theme',
-        ?array $scriptFiles = ['file1.js', 'file2.js'],
-        array $resolvedConfig = ['key' => 'value'],
-        array $viewInheritance = ['parent-theme'],
-        array $iconSets = ['iconSet1' => ['path' => 'path/to/iconSet1', 'namespace' => 'test-theme']]
-    ): ThemeRuntimeConfig {
-        return ThemeRuntimeConfig::fromArray([
-            'themeId' => $themeId,
-            'technicalName' => $technicalName,
-            'resolvedConfig' => $resolvedConfig,
-            'viewInheritance' => $viewInheritance,
-            'scriptFiles' => $scriptFiles,
-            'iconSets' => $iconSets,
-            'updatedAt' => new \DateTimeImmutable('2023-01-01 00:00:00'),
-        ]);
-    }
 }

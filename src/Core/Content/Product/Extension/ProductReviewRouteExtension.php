@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Product\Extension;
 
-use Contena\Core\Content\Product\SalesChannel\Review\ProductReviewRouteResponse;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Extensions\Extension;
 use Contena\Core\Framework\Log\Package;

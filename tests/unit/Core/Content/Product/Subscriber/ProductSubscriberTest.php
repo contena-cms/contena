@@ -116,13 +116,11 @@ class ProductSubscriberTest extends TestCase
     {
         yield 'It does not set cms page id if no product entity given' => [
             (new CategoryEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => 'own-id']),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'own-id',
         ];
 
         yield 'It does not set cms page id if already given' => [
             (new ProductEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => 'own-id']),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'own-id',
         ];
 
@@ -134,13 +132,11 @@ class ProductSubscriberTest extends TestCase
 
         yield 'It sets cms page id if none is given and default is provided' => [
             (new ProductEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => null]),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'config-id',
         ];
 
         yield 'It does not set cms page id if already given with partial entity' => [
             (new PartialEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => 'own-id']),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'own-id',
         ];
 
@@ -152,7 +148,6 @@ class ProductSubscriberTest extends TestCase
 
         yield 'It sets cms page id if none is given and default is provided with partial entity' => [
             (new PartialEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => null]),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'config-id',
         ];
     }
@@ -161,7 +156,6 @@ class ProductSubscriberTest extends TestCase
     {
         yield 'It does not set cms page id if already given' => [
             (new SalesChannelProductEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => 'own-id']),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'own-id',
         ];
 
@@ -173,13 +167,11 @@ class ProductSubscriberTest extends TestCase
 
         yield 'It sets cms page id if none is given and default is provided' => [
             (new SalesChannelProductEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => null]),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'config-id',
         ];
 
         yield 'It does not set cms page id if already given with partial entity' => [
             (new PartialEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => 'own-id']),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'own-id',
         ];
 
@@ -191,7 +183,6 @@ class ProductSubscriberTest extends TestCase
 
         yield 'It sets cms page id if none is given and default is provided with partial entity' => [
             (new PartialEntity())->assign(['id' => Uuid::randomHex(), 'cmsPageId' => null]),
-            new StaticSystemConfigService([self::CONFIG => 'config-id']),
             'config-id',
         ];
     }

@@ -3,7 +3,6 @@
 namespace Contena\Storefront\Theme;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Util\Hasher;
 
 /**
@@ -28,8 +27,4 @@ class MD5ThemePathBuilder extends AbstractThemePathBuilder
         // do nothing, as this implementation does not support seeding
     }
 
-    public function getDecorated(): AbstractThemePathBuilder
-    {
-        throw new DecorationPatternException(self::class);
-    }
 }

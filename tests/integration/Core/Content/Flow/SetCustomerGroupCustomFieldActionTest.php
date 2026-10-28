@@ -8,13 +8,10 @@ use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
 use Contena\Core\Checkout\Customer\Event\CustomerGroupRegistrationAccepted;
 use Contena\Core\Content\Flow\Dispatching\Action\SetCustomerGroupCustomFieldAction;
 use Contena\Core\Content\Flow\FlowCollection;
-use Contena\Core\Content\Test\Flow\OrderActionTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 

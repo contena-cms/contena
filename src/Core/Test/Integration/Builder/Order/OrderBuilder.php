@@ -4,16 +4,12 @@ namespace Contena\Core\Test\Integration\Builder\Order;
 
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Core\Test\TestBuilderTrait;
 use Contena\Core\Test\TestDefaults;
 
 /**
@@ -38,9 +34,7 @@ class OrderBuilder
 
     protected string $orderDateTime;
 
-    protected CartPrice $price;
 
-    protected CalculatedPrice $shippingCosts;
 
     /**
      * @var array<mixed>
@@ -98,7 +92,6 @@ class OrderBuilder
             $amount,
             $amount,
             $amount,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection(),
             CartPrice::TAX_STATE_FREE
         );
@@ -111,7 +104,6 @@ class OrderBuilder
         $this->shippingCosts = new CalculatedPrice(
             $amount,
             $amount,
-            new CalculatedTaxCollection(),
             new TaxRuleCollection()
         );
 
@@ -128,7 +120,6 @@ class OrderBuilder
                 $customParams['amount'] = new CalculatedPrice(
                     $customParams['amount'],
                     $customParams['amount'],
-                    new CalculatedTaxCollection(),
                     new TaxRuleCollection()
                 );
             }
@@ -141,7 +132,6 @@ class OrderBuilder
             'amount' => new CalculatedPrice(
                 420.69,
                 420.69,
-                new CalculatedTaxCollection(),
                 new TaxRuleCollection()
             ),
             'stateId' => $this->getStateMachineState(

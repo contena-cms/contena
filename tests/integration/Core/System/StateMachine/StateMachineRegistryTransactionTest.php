@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEven
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\PostWriteValidationEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\WriteCommandExceptionEvent;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\StateMachine\Event\StateMachineTransitionEvent;
 use Contena\Core\System\StateMachine\StateMachineRegistry;

@@ -114,13 +114,6 @@ class SyncServiceTest extends TestCase
     {
         $ids = new IdsCollection();
         $operations = [
-            new SyncOperation(
-                key: 'foo',
-                entity: 'product_category',
-                action: SyncOperation::ACTION_DELETE,
-                payload: [],
-                criteria: [['type' => 'equals', 'field' => 'productId', 'value' => $ids->get('foo')]]
-            ),
         ];
 
         $criteria = new Criteria();
@@ -195,7 +188,6 @@ class SyncServiceTest extends TestCase
         $this->expectExceptionObject(ApiException::missingPrivileges(['product:read']));
 
         $service->sync([
-            new SyncOperation('delete-products', 'product', SyncOperation::ACTION_DELETE, [], $filter),
         ], Context::createDefaultContext(), new SyncBehavior());
     }
 

@@ -6,14 +6,11 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\CartBehavior;
-use Contena\Core\Checkout\Cart\CartFactory;
 use Contena\Core\Checkout\Cart\CartRuleLoader;
-use Contena\Core\Checkout\Cart\Event\CartCreatedEvent;
 use Contena\Core\Checkout\Cart\RuleLoaderResult;
 use Contena\Core\Checkout\CheckoutPermissions;
 use Contena\Core\Content\Rule\RuleCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Generator;
@@ -31,7 +28,6 @@ class SalesChannelDomainContextFactoryTest extends TestCase
 {
     private IdsCollection $ids;
 
-    private SalesChannelDomain $domain;
 
     private SalesChannelContext $context;
 
@@ -44,7 +40,6 @@ class SalesChannelDomainContextFactoryTest extends TestCase
 
     private ?string $contextSalesChannelId = null;
 
-    private ?Cart $createdCart = null;
 
     protected function setUp(): void
     {
@@ -103,24 +98,4 @@ class SalesChannelDomainContextFactoryTest extends TestCase
         static::assertSame([$this->ids->get('always-valid-rule')], $context->getRuleIds());
     }
 
-    private function createFactory(CartRuleLoader $ruleLoader): SalesChannelDomainContextFactory
-    {
-        $contextFactory = static::createStub(SalesChannelContextFactory::class);
-        $contextFactory->method('create')->willReturnCallback(
-            function (string $token, string $salesChannelId, array $options = []): SalesChannelContext {
-                $this->contextToken = $token;
-                $this->contextSalesChannelId = $salesChannelId;
-                $this->contextOptions = $options;
-
-                return $this->context;
-            }
-        );
-
-        $dispatcher = new EventDispatcher();
-        $dispatcher->addListener(CartCreatedEvent::class, function (CartCreatedEvent $event): void {
-            $this->createdCart = $event->getCart();
-        });
-
-        return new SalesChannelDomainContextFactory($contextFactory, $ruleLoader, new CartFactory($dispatcher));
-    }
 }

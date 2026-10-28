@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\ProductStream\ProductStreamDefinition;
 use Contena\Core\Framework\Api\Controller\SyncController;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

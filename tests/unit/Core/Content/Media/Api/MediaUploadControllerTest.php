@@ -291,7 +291,6 @@ class MediaUploadControllerTest extends TestCase
 
 namespace Contena\Core\Content\Media\Api;
 
-use Contena\Tests\Unit\Core\Content\Media\Api\MediaUploadControllerTest;
 
 function tempnam(string $dir, string $prefix): string|false
 {

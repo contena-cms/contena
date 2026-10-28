@@ -12,7 +12,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\PluginEntity;
 use Contena\Core\Framework\Store\Event\ExtensionLoadedEvent;
 use Contena\Storefront\Framework\ThemeInterface;
-use Contena\Storefront\Theme\ThemeCollection;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Contracts\Service\ResetInterface;
 

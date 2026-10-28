@@ -99,13 +99,4 @@ class ThemeSnippetsSubscriberTest extends TestCase
         );
     }
 
-    private function createSubscriber(
-        ?ThemeRuntimeConfigService $themeRuntimeConfigService = null,
-        ?DatabaseSalesChannelThemeLoader $salesChannelThemeLoader = null
-    ): ThemeSnippetsSubscriber {
-        return new ThemeSnippetsSubscriber(
-            $themeRuntimeConfigService ?? $this->themeRuntimeConfigService,
-            $salesChannelThemeLoader ?? $this->salesChannelThemeLoader
-        );
-    }
 }

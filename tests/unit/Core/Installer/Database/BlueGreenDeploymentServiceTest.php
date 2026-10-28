@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Installer\Database\BlueGreenDeploymentService;
 use Contena\Core\Test\Stub\Doctrine\TestExceptionFactory;
 use Symfony\Component\HttpFoundation\Session\Session;

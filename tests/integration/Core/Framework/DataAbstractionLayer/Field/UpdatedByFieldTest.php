@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
 use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
@@ -17,8 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 

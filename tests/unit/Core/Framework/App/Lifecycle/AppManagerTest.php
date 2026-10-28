@@ -46,8 +46,6 @@ use Contena\Core\Test\Stub\App\StaticSourceResolver;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
-use Contena\Tests\Unit\Core\Framework\App\Manifest\ManifestFixture;
 use Symfony\Component\Clock\NativeClock;
 
 /**

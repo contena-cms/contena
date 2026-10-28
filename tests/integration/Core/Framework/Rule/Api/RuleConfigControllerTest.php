@@ -7,7 +7,6 @@ use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefiniti
 use Contena\Core\Checkout\Customer\Rule\CustomerGroupRule;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\RuleConfig;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 
 /**
  * @internal

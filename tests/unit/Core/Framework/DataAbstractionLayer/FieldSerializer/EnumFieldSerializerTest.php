@@ -24,8 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteParameterBag;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Validation\WriteConstraintViolationException;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field\EnumField\TestIntegerEnum;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Field\EnumField\TestStringEnum;
 use Symfony\Component\Validator\ConstraintValidatorFactory;
 use Symfony\Component\Validator\Context\ExecutionContextFactory;
 use Symfony\Component\Validator\Mapping\Factory\BlackHoleMetadataFactory;

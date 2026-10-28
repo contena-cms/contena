@@ -11,10 +11,7 @@ use Contena\Core\Framework\Increment\AbstractIncrementer;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Integration\Core\Framework\MessageQueue\fixtures\TestTask;
 
 /**
  * @internal

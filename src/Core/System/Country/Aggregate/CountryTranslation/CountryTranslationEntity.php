@@ -2,7 +2,6 @@
 
 namespace Contena\Core\System\Country\Aggregate\CountryTranslation;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\CountryEntity;

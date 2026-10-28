@@ -12,14 +12,8 @@ use Contena\Core\Framework\Sso\TokenService\TokenResult;
 use Contena\Core\Framework\Sso\UserService\ExternalAuthUser;
 use Contena\Core\Framework\Sso\UserService\Token;
 use Contena\Core\Framework\Sso\UserService\UserService;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserEntity;
-use Contena\Tests\Integration\Core\Framework\Sso\Helper\FakeTokenGenerator;
-use Contena\Tests\Integration\Core\Framework\Sso\Helper\FakeUserInstaller;
-use Contena\Tests\Integration\Core\Framework\Sso\Helper\ValidUserServiceCreator;
-use Contena\Tests\Unit\Core\Framework\Sso\TokenService\_fixtures\JwksIds;
 
 /**
  * @internal

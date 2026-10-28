@@ -26,7 +26,6 @@ class SeoUrlUpdateListenerTest extends TestCase
 {
     private SeoUrlUpdater&MockObject $seoUrlUpdater;
 
-    private SeoUrlUpdateListener $listener;
 
     protected function setUp(): void
     {

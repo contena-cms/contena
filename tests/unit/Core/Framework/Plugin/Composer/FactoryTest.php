@@ -6,7 +6,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Composer\Factory;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

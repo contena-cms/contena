@@ -4,11 +4,6 @@ namespace Contena\Tests\Unit\Core\Content\Product\Cms\ProductSlider;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
-use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
-use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Product\Cms\ProductSlider\AbstractProductSliderProcessor;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\Product\ProductEntity;
@@ -84,25 +79,13 @@ class AbstractProductSliderProcessorTest extends TestCase
  */
 class TestAbstractProductSliderProcessor extends AbstractProductSliderProcessor
 {
-    public function getDecorated(): AbstractProductSliderProcessor
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
     public function getSource(): string
     {
         return 'test';
     }
 
-    public function collect(CmsSlotEntity $slot, FieldConfigCollection $config, ResolverContext $resolverContext): ?CriteriaCollection
-    {
-        return null;
-    }
 
-    public function enrich(CmsSlotEntity $slot, ElementDataCollection $result, ResolverContext $resolverContext): void
-    {
-        // nth
-    }
 
     public function publicFilterOutOutOfStockHiddenCloseoutProducts(ProductCollection $products): ProductCollection
     {

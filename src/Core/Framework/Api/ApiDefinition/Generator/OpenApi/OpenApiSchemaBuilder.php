@@ -64,12 +64,10 @@ class OpenApiSchemaBuilder
 
         if ($this->shouldUseRelativeServerUrl($url)) {
             return [
-                new Server(['url' => self::API[$api]['url']]),
             ];
         }
 
         return [
-            new Server(['url' => rtrim($url, '/') . self::API[$api]['url']]),
         ];
     }
 

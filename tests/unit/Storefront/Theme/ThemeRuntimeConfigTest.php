@@ -137,32 +137,5 @@ class ThemeRuntimeConfigTest extends TestCase
         static::assertSame($originalConfig->importMap, $newConfig->importMap);
     }
 
-    private function getTestConfig(): ThemeRuntimeConfig
-    {
-        return ThemeRuntimeConfig::fromArray([
-            'themeId' => '12345',
-            'technicalName' => 'testTheme',
-            'resolvedConfig' => ['key' => 'value'],
-            'viewInheritance' => ['parentTheme'],
-            'scriptFiles' => ['file1.js', 'file2.js'],
-            'iconSets' => ['iconSet1' => ['path' => 'path/to/iconSet1', 'namespace' => 'testTheme']],
-            'updatedAt' => new \DateTimeImmutable(),
-        ]);
-    }
 
-    private function getTestConfigWithImportMap(): ThemeRuntimeConfig
-    {
-        return ThemeRuntimeConfig::fromArray([
-            'themeId' => '12345',
-            'technicalName' => 'testTheme',
-            'resolvedConfig' => ['key' => 'value'],
-            'viewInheritance' => ['parentTheme'],
-            'scriptFiles' => ['file1.js'],
-            'iconSets' => [],
-            'importMap' => [
-                'imports' => ['contena' => '/bundles/storefront/storefront/contena-cms/contena.js'],
-            ],
-            'updatedAt' => new \DateTimeImmutable(),
-        ]);
-    }
 }

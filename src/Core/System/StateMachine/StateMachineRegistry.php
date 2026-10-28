@@ -9,7 +9,6 @@ use Contena\Core\Framework\Adapter\Database\ReplicaConnection;
 use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\Api\Context\AdminSalesChannelApiSource;
 use Contena\Core\Framework\Api\Context\ContextSource;
-use Contena\Core\Framework\Api\Sync\SyncOperation;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Doctrine\RetryableTransaction;
@@ -252,18 +251,6 @@ class StateMachineRegistry implements ResetInterface
         $stateMachineHistoryEntity['id'] = Uuid::randomHex();
 
         $operations = [
-            new SyncOperation(
-                'state-machine-history',
-                StateMachineHistoryDefinition::ENTITY_NAME,
-                SyncOperation::ACTION_UPSERT,
-                [$stateMachineHistoryEntity],
-            ),
-            new SyncOperation(
-                'state-machine-state',
-                $transition->getEntityName(),
-                SyncOperation::ACTION_UPSERT,
-                $data,
-            ),
         ];
 
         RetryableWriteTransaction::retryable($this->connection, function () use ($operations, $context): void {

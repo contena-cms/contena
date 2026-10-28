@@ -7,7 +7,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Migration\V6_6\Migration1712309989DropLanguageLocaleUnique;
 use Contena\Core\System\Language\LanguageDefinition;

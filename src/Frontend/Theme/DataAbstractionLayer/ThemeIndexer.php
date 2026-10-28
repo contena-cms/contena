@@ -15,7 +15,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Storefront\Theme\Event\ThemeIndexerEvent;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeDefinition;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 

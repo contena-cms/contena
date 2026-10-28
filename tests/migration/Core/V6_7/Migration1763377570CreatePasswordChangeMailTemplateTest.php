@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\Event\CustomerPasswordChangedEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Migration\V6_7\Migration1763377570CreatePasswordChangeMailTemplate;
 
 /**

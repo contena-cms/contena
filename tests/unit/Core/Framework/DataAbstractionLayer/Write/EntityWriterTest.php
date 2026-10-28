@@ -23,8 +23,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageLoaderInterface;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write\_fixtures\CoverChildDefinition;
-use Contena\Tests\Unit\Core\Framework\DataAbstractionLayer\Write\_fixtures\CoverParentDefinition;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 /**

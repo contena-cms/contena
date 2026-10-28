@@ -14,14 +14,11 @@ use Contena\Core\Content\Product\DataAbstractionLayer\RatingAverageUpdater;
 use Contena\Core\Content\Product\DataAbstractionLayer\SearchKeywordUpdater;
 use Contena\Core\Content\Product\DataAbstractionLayer\StatesUpdater;
 use Contena\Core\Content\Product\DataAbstractionLayer\VariantListingUpdater;
-use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Product\Stock\AbstractStockStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ChildCountUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\InheritanceUpdater;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\ManyToManyIdFieldUpdater;
@@ -149,11 +146,6 @@ class ProductIndexerTest extends TestCase
     private function writtenEvent(Context $context, string $productId, array $payload = []): EntityWrittenContainerEvent
     {
         return new EntityWrittenContainerEvent($context, new NestedEventCollection([
-            new EntityWrittenEvent(
-                ProductDefinition::ENTITY_NAME,
-                [new EntityWriteResult($productId, $payload, ProductDefinition::ENTITY_NAME, EntityWriteResult::OPERATION_UPDATE)],
-                $context
-            ),
         ]), []);
     }
 }

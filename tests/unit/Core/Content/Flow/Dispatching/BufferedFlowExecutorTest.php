@@ -6,10 +6,8 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Cart\Event\CheckoutOrderPlacedEvent;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\Flow\Dispatching\AbstractFlowLoader;
-use Contena\Core\Content\Flow\Dispatching\BufferedFlow;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowExecutor;
 use Contena\Core\Content\Flow\Dispatching\BufferedFlowQueue;
 use Contena\Core\Content\Flow\Dispatching\FlowExecutor;
@@ -18,7 +16,6 @@ use Contena\Core\Content\Flow\Dispatching\StorableFlow;
 use Contena\Core\Content\Flow\Dispatching\Struct\Flow;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Generator;
 
 /**
  * @internal
@@ -150,12 +147,4 @@ class BufferedFlowExecutorTest extends TestCase
         );
     }
 
-    private function createBufferedFlow(OrderEntity $order): BufferedFlow
-    {
-        $context = Generator::generateSalesChannelContext();
-
-        $event = new CheckoutOrderPlacedEvent($context, $order);
-
-        return new BufferedFlow($event->getName(), $event->getContext(), []);
-    }
 }

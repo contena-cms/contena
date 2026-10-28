@@ -16,7 +16,6 @@ use Contena\Core\Content\Product\Cms\ProductNameCmsElementResolver;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductDefinition;
 use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -28,7 +27,6 @@ class ProductNameTypeCmsElementResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private ProductNameCmsElementResolver $productNameCmsElementResolver;
 
     protected function setUp(): void
     {

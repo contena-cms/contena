@@ -11,8 +11,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Feature\FeatureException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginLoader\KernelPluginLoader;
-use Contena\Core\Framework\Plugin\KernelPluginLoader\StaticKernelPluginLoader;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Kernel;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Symfony\Component\Config\Loader\LoaderInterface;
@@ -265,21 +263,6 @@ class KernelTest extends TestCase
         static::assertContains([$confDir . '/{routes}' . Kernel::CONFIG_EXTS, 'glob'], $captured);
     }
 
-    /**
-     * @param list<PluginInfo> $plugins
-     */
-    private function createKernel(string $environment = 'fooBar', string $projectDir = self::PROJECT_DIR, array $plugins = []): KernelStub
-    {
-        return new KernelStub(
-            $environment,
-            true,
-            new StaticKernelPluginLoader(new ClassLoader(), null, $plugins),
-            'cacheId',
-            '6.6.6',
-            static::createStub(Connection::class),
-            $projectDir,
-        );
-    }
 
     /**
      * @return PluginInfo

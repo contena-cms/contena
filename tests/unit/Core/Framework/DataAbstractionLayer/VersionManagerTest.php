@@ -15,15 +15,12 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\CloneProtection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityProtection\EntityProtectionCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ResetOnClone;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
@@ -86,7 +83,6 @@ class VersionManagerTest extends TestCase
 
         $entityWriterMock->expects($this->once())->method('insert')->willReturn([
             'product' => [
-                new EntityWriteResult('1', ['languageId' => '1'], 'product', EntityWriteResult::OPERATION_INSERT),
             ],
         ]);
 
@@ -102,7 +98,6 @@ class VersionManagerTest extends TestCase
 
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                VersionManagerTestDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -136,7 +131,6 @@ class VersionManagerTest extends TestCase
 
         $registry = new StaticDefinitionInstanceRegistry(
             [
-                VersionManagerTestDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -305,7 +299,6 @@ class VersionManagerTest extends TestCase
     public function testCloneOmitsFieldsMarkedAsResetOnClone(): void
     {
         $this->assertCloneOverwriteResult(
-            VersionManagerResetOnCloneTestDefinition::class,
             'reset_on_clone_test',
             ['name' => 'Original', 'resetValue' => 'Derived from original'],
             [],
@@ -316,7 +309,6 @@ class VersionManagerTest extends TestCase
     public function testCloneAllowsExplicitOverwriteForResetOnCloneField(): void
     {
         $this->assertCloneOverwriteResult(
-            VersionManagerResetOnCloneTestDefinition::class,
             'reset_on_clone_test',
             ['name' => 'Original', 'resetValue' => 'Derived from original'],
             ['resetValue' => 'Explicit overwrite'],
@@ -748,7 +740,6 @@ class VersionManagerRootTestDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
-            (new OneToManyAssociationField('children', CloneProtectedVersionManagerChildTestDefinition::class, 'parent_id'))->addFlags(new CascadeDelete()),
         ]);
     }
 }
@@ -772,7 +763,6 @@ class CloneProtectedVersionManagerChildTestDefinition extends EntityDefinition
     {
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new Required(), new PrimaryKey()),
-            new FkField('parent_id', 'parentId', VersionManagerRootTestDefinition::class),
         ]);
     }
 }

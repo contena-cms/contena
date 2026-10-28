@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\PregDollarWithoutDRule;
 use Contena\Core\DevOps\Test\AnnotationTagVersionSchema;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\App\Command\CreateAppCommandTest;
 
 /**
  * The files allowlisted for the unresolved identifier of PregDollarWithoutDRule are the calls the rule cannot read.

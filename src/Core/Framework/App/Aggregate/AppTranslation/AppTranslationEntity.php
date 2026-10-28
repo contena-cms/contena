@@ -4,8 +4,6 @@ namespace Contena\Core\Framework\App\Aggregate\AppTranslation;
 
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Language\LanguageEntity;
 

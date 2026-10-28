@@ -9,7 +9,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_6\Migration1735112885AddDefaultSearchResultSorting;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

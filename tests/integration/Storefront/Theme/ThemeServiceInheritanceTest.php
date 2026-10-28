@@ -11,8 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Notification\NotificationService;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
@@ -22,9 +20,7 @@ use Contena\Storefront\Theme\Message\CompileThemeMessage;
 use Contena\Storefront\Theme\ScssPhpCompiler;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeCompilerInterface;
 use Contena\Storefront\Theme\ThemeFileResolver;
 use Contena\Storefront\Theme\ThemeMergedConfigBuilder;
@@ -45,15 +41,11 @@ class ThemeServiceInheritanceTest extends TestCase
     use DatabaseTransactionBehaviour;
     use KernelTestBehaviour;
 
-    private ThemeService $service;
 
-    private ThemeRuntimeConfigService $runtimeService;
 
-    private ThemeRuntimeConfigStorage $storage;
 
     private ThemeCompilerInterface&MockObject $compiler;
 
-    private StorefrontPluginConfigurationCollection $configurations;
 
     /**
      * @var EntityRepository<ThemeCollection>

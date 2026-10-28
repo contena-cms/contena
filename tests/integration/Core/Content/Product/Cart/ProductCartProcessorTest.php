@@ -28,7 +28,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\CustomField\CustomFieldTypes;
@@ -58,9 +57,7 @@ class ProductCartProcessorTest extends TestCase
 
     private IdsCollection $ids;
 
-    private CartService $cartService;
 
-    private QuantityPriceCalculator $calculator;
 
     protected function setUp(): void
     {
@@ -1016,17 +1013,6 @@ class ProductCartProcessorTest extends TestCase
         return $customerId;
     }
 
-    private function getProductCart(): Cart
-    {
-        $context = $this->getContext();
-
-        $product = static::getContainer()->get(ProductLineItemFactory::class)
-            ->create(['id' => $this->ids->get('product'), 'referencedId' => $this->ids->get('product')], $context);
-
-        $cart = $this->cartService->getCart($context->getToken(), $context);
-
-        return $this->cartService->add($cart, $product, $context);
-    }
 
     private function getContext(): SalesChannelContext
     {

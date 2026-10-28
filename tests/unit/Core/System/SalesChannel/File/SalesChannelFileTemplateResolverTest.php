@@ -112,7 +112,6 @@ class SalesChannelFileTemplateResolverTest extends TestCase
     {
         return $this->createResolverWithHierarchyBuilder(
             $templates,
-            new SalesChannelFileTemplateResolverTestHierarchyBuilder($hierarchy),
             new EventDispatcher(),
         );
     }

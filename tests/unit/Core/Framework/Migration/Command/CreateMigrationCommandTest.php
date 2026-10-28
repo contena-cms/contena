@@ -9,8 +9,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\Command\CreateMigrationCommand;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin as SimplePluginIntegration;
-use Contena\Tests\Unit\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**

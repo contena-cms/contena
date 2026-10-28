@@ -16,11 +16,9 @@ use Contena\Core\Framework\Script\Execution\ScriptExecutor;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Test\Script\Execution\SalesChannelTestHook;
 use Contena\Core\Framework\Test\Script\Execution\TestHook;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\Facade\SystemConfigFacadeHookFactory;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Generator;
 use Contena\Core\Test\TestDefaults;
 

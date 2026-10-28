@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle;
 use Doctrine\DBAL\Connection;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Media\File\FileLoader;
 use Contena\Core\Defaults;
@@ -15,7 +14,6 @@ use Contena\Core\Framework\Api\Context\AdminApiSource;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonCollection;
 use Contena\Core\Framework\App\Aggregate\ActionButton\ActionButtonEntity;
 use Contena\Core\Framework\App\Aggregate\AppShippingMethod\AppShippingMethodEntity;
-use Contena\Core\Framework\App\Aggregate\CmsBlock\AppCmsBlockCollection;
 use Contena\Core\Framework\App\Aggregate\FlowAction\AppFlowActionCollection;
 use Contena\Core\Framework\App\AppCollection;
 use Contena\Core\Framework\App\AppEntity;
@@ -50,7 +48,6 @@ use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LocaleCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 
 /**
  * @internal

@@ -3,7 +3,6 @@
 namespace Contena\Tests\Integration\Core\Content\Category\SalesChannel\fixtures;
 
 use PHPUnit\Framework\Attributes\Group;
-use Contena\Tests\Integration\Core\Content\Category\SalesChannel\CategoryRouteTest;
 
 /**
  * @internal

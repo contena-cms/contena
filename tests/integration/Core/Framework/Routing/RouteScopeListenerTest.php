@@ -13,7 +13,6 @@ use Contena\Core\Framework\Routing\ApiRouteScope;
 use Contena\Core\Framework\Routing\Exception\InvalidRouteScopeException;
 use Contena\Core\Framework\Routing\RouteScopeListener;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
 use Symfony\Bundle\WebProfilerBundle\Controller\ProfilerController;

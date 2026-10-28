@@ -20,11 +20,6 @@ use Contena\Core\Framework\Deprecation\BCChange\PropertyTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Deprecation\BCChange\VisibilityChange;
 use Contena\Core\Framework\Feature;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\DirectHierarchyMethodTrait;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\ExperimentalReplacementTarget;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\NewHierarchyParent;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\OldHierarchyParent;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\BCChangeAttributeUsageRule\StableReplacementTarget;
 use Symfony\Component\Routing\Attribute\Route;
 
 #[BecomesFinal(version: 'v6.8.0')]

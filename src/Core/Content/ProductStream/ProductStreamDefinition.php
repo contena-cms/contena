@@ -3,7 +3,6 @@
 namespace Contena\Core\Content\ProductStream;
 
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductStreamMapping\ProductStreamMappingDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\ProductExport\ProductExportDefinition;
@@ -16,7 +15,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\WriteProtected;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
@@ -75,14 +73,12 @@ class ProductStreamDefinition extends EntityDefinition
             (new JsonField('api_filter', 'apiFilter'))->addFlags(new WriteProtected())->setDescription('Internal field.'),
             (new BoolField('invalid', 'invalid'))->addFlags(new WriteProtected())->setDescription('When the boolean value is `true`, the ProductStream is no more available for usage.'),
 
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new TranslatedField('description'))->addFlags(new ApiAware()),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             (new BoolField('internal', 'internal'))->addFlags(new ApiAware())->setDescription('When the boolean value is `true` indicating that it is for internal use only and will not appear in product stream listings.'),
             (new BoolField('display_as_group', 'displayAsGroup'))->addFlags(new ApiAware())->setDescription('When enabled, matching variants are grouped according to the product presentation setting. Disable to show them individually.'),
             (new TranslationsAssociationField(ProductStreamTranslationDefinition::class, 'product_stream_id'))->addFlags(new Required()),
             (new OneToManyAssociationField('filters', ProductStreamFilterDefinition::class, 'product_stream_id'))->addFlags(new CascadeDelete()),
-            new OneToManyAssociationField('productCrossSellings', ProductCrossSellingDefinition::class, 'product_stream_id'),
             (new OneToManyAssociationField('productExports', ProductExportDefinition::class, 'product_stream_id', 'id'))->addFlags(new RestrictDelete()),
             new OneToManyAssociationField('categories', CategoryDefinition::class, 'product_stream_id'),
 

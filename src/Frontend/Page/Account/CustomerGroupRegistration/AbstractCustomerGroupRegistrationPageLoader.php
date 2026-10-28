@@ -3,7 +3,6 @@
 namespace Contena\Storefront\Page\Account\CustomerGroupRegistration;
 
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -12,7 +11,5 @@ use Symfony\Component\HttpFoundation\Request;
 #[Package('discovery')]
 abstract class AbstractCustomerGroupRegistrationPageLoader
 {
-    abstract public function getDecorated(): AbstractCustomerGroupRegistrationPageLoader;
 
-    abstract public function load(Request $request, SalesChannelContext $salesChannelContext): CustomerGroupRegistrationPage;
 }

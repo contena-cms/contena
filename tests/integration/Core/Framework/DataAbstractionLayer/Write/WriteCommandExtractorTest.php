@@ -14,7 +14,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Write\Entity\DefaultsChildDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Write\Entity\DefaultsChildTranslationDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Write\Entity\DefaultsDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**

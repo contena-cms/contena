@@ -6,7 +6,6 @@ namespace Contena\Storefront\Theme\ConfigLoader;
 use League\Flysystem\FilesystemOperator;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 
 #[Package('discovery')]
 class StaticFileAvailableThemeProvider extends AbstractAvailableThemeProvider
@@ -20,10 +19,6 @@ class StaticFileAvailableThemeProvider extends AbstractAvailableThemeProvider
     {
     }
 
-    public function getDecorated(): AbstractAvailableThemeProvider
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
     public function load(Context $context, bool $activeOnly): array
     {

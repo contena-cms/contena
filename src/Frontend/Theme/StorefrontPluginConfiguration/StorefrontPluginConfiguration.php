@@ -27,9 +27,7 @@ class StorefrontPluginConfiguration extends Struct
 
     protected ?bool $isTheme = null;
 
-    protected FileCollection $styleFiles;
 
-    protected FileCollection $scriptFiles;
 
     protected ?string $storefrontEntryFilepath = null;
 
@@ -99,25 +97,9 @@ class StorefrontPluginConfiguration extends Struct
         $this->isTheme = $isTheme;
     }
 
-    public function getStyleFiles(): FileCollection
-    {
-        return $this->styleFiles;
-    }
 
-    public function setStyleFiles(FileCollection $styleFiles): void
-    {
-        $this->styleFiles = $styleFiles;
-    }
 
-    public function getScriptFiles(): FileCollection
-    {
-        return $this->scriptFiles;
-    }
 
-    public function setScriptFiles(FileCollection $scriptFiles): void
-    {
-        $this->scriptFiles = $scriptFiles;
-    }
 
     public function getStorefrontEntryFilepath(): ?string
     {

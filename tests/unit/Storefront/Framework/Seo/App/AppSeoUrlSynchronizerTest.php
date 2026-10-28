@@ -7,12 +7,9 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Seo\SeoUrlPersister;
 use Contena\Core\Defaults;
-use Contena\Core\Framework\App\Feature\AppFeature;
-use Contena\Core\Framework\App\Feature\AppFeatureStorage;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Locale\LanguageLocaleCodeProvider;
@@ -21,7 +18,6 @@ use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDo
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 use Contena\Core\System\SalesChannel\SalesChannelEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Storefront\Framework\Seo\App\AppSeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlSynchronizer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -309,7 +305,6 @@ class AppSeoUrlSynchronizerTest extends TestCase
                 static::assertEquals(
                     [
                         new EqualsFilter('active', true),
-                        new NotFilter(NotFilter::CONNECTION_AND, [new EqualsFilter('typeId', Defaults::SALES_CHANNEL_TYPE_API)]),
                     ],
                     $criteria->getFilters()
                 );
@@ -377,35 +372,6 @@ class AppSeoUrlSynchronizerTest extends TestCase
         yield 'a generated path outside of the base path is used as it is' => ['/shop', '/storefront/script/imprint', '/storefront/script/imprint'];
     }
 
-    /**
-     * @param list<AppFeature<AppSeoUrlConfig>> $features
-     * @param StaticEntityRepository<SalesChannelCollection> $salesChannelRepository
-     */
-    private function synchronizer(array $features, StaticEntityRepository $salesChannelRepository, ?RouterInterface $router = null): AppSeoUrlSynchronizer
-    {
-        $storage = static::createStub(AppFeatureStorage::class);
-        $storage->method('forActiveApps')->willReturnCallback(static function (string $featureClass) use ($features): array {
-            static::assertSame(AppSeoUrlConfig::class, $featureClass);
-
-            return $features;
-        });
-
-        if ($router === null) {
-            $router = static::createStub(RouterInterface::class);
-            $router->method('generate')->willReturnCallback(
-                static fn (string $name, array $parameters): string => '/storefront/script/' . $parameters['hook']
-            );
-        }
-
-        return new AppSeoUrlSynchronizer(
-            $storage,
-            $salesChannelRepository,
-            $this->seoUrlPersister,
-            $this->languageLocaleProvider,
-            $router,
-            $this->requestStack,
-        );
-    }
 
     /**
      * @return StaticEntityRepository<SalesChannelCollection>
@@ -425,34 +391,7 @@ class AppSeoUrlSynchronizerTest extends TestCase
         ]);
     }
 
-    /**
-     * @return AppFeature<AppSeoUrlConfig>
-     */
-    private function feature(AppSeoUrlConfig $seoUrl, string $appId = self::APP_ID): AppFeature
-    {
-        return new AppFeature(
-            appId: $appId,
-            appName: 'SwagSeoUrlApp',
-            appActive: true,
-            appVersion: '1.0.0',
-            appHasSecret: false,
-            createdAt: new \DateTimeImmutable('2026-01-01 00:00:00'),
-            config: $seoUrl,
-        );
-    }
 
-    /**
-     * @param array<string, string> $paths
-     */
-    private function seoUrl(string $name, array $paths, ?string $hook = null): AppSeoUrlConfig
-    {
-        return new AppSeoUrlConfig(
-            name: $name,
-            routeName: 'storefront.app.SwagSeoUrlApp.' . $name,
-            hook: $hook ?? $name,
-            paths: $paths,
-        );
-    }
 
     private function salesChannel(string $id, SalesChannelDomainEntity ...$domains): SalesChannelEntity
     {

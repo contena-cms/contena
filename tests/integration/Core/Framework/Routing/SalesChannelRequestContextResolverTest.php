@@ -16,7 +16,6 @@ use Contena\Core\Framework\Routing\Event\SalesChannelContextResolvedEvent;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Routing\SalesChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\PlatformRequest;
@@ -28,7 +27,6 @@ use Contena\Core\System\SalesChannel\Context\SalesChannelContextServiceInterface
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextServiceParameters;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Core\Test\Integration\Traits\CustomerTestTrait;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\TestDefaults;
 use Symfony\Component\HttpFoundation\Request;

@@ -11,7 +11,6 @@ use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationCollection;
 use Contena\Core\Framework\Migration\MigrationCollectionLoader;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_3\Migration1536233560BasicData;
 

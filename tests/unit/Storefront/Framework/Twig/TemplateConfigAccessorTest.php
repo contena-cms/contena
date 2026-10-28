@@ -29,7 +29,6 @@ class TemplateConfigAccessorTest extends TestCase
 
     private ThemeScripts&Stub $themeScripts;
 
-    private TemplateConfigAccessor $accessor;
 
     protected function setUp(): void
     {
@@ -389,17 +388,4 @@ class TemplateConfigAccessorTest extends TestCase
         static::assertSame(['sw-color-brand-primary' => '#0042a0'], $result);
     }
 
-    private function createAccessor(
-        ?SystemConfigService $systemConfigService = null,
-        ?ThemeConfigValueAccessor $themeConfigAccessor = null,
-        ?ThemeScripts $themeScripts = null,
-        string $env = 'prod',
-    ): TemplateConfigAccessor {
-        return new TemplateConfigAccessor(
-            $systemConfigService ?? $this->systemConfigService,
-            $themeConfigAccessor ?? $this->themeConfigAccessor,
-            $themeScripts ?? $this->themeScripts,
-            $env,
-        );
-    }
 }

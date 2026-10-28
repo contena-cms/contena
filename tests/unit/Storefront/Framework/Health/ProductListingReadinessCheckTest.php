@@ -16,7 +16,6 @@ use Contena\Core\Framework\SystemCheck\Check\Status;
 use Contena\Core\Framework\SystemCheck\Check\SystemCheckExecutionContext;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Generator;
-use Contena\Core\Test\Stub\DataAbstractionLayer\StaticSalesChannelRepository;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Framework\SystemCheck\ProductListingReadinessCheck;
 use Contena\Storefront\Framework\SystemCheck\Util\AbstractSalesChannelDomainProvider;
@@ -258,22 +257,6 @@ class ProductListingReadinessCheckTest extends TestCase
         ], array_map(static fn (SalesChannelDomain $domain) => $domain->id, $this->contextDomains));
     }
 
-    /**
-     * @param array<callable(Criteria, SalesChannelContext): (CategoryCollection|array{})|CategoryCollection|array{}> $searchResults
-     */
-    private function createCheck(array $searchResults = []): ProductListingReadinessCheck
-    {
-        /** @var StaticSalesChannelRepository<CategoryCollection> $categoryRepository */
-        $categoryRepository = new StaticSalesChannelRepository($searchResults);
-
-        return new ProductListingReadinessCheck(
-            $this->util,
-            $this->connection,
-            $this->domainProvider,
-            $categoryRepository,
-            $this->contextFactory
-        );
-    }
 
     /**
      * @return list<CategoryCollection>
@@ -380,16 +363,6 @@ class ProductListingReadinessCheckTest extends TestCase
         $this->domainProvider->method('fetchSalesChannelDomains')->willReturn($collection);
     }
 
-    private function domain(string $key, string $url): SalesChannelDomain
-    {
-        return SalesChannelDomain::create(
-            $this->ids->get($key),
-            $url,
-            $this->ids->get('domain-' . $key),
-            $this->ids->get('language-' . $key),
-            $this->ids->get('currency-' . $key),
-        );
-    }
 
     private function initCreateEmptyResult(): void
     {

@@ -4,14 +4,9 @@ namespace Contena\Core\Content\Flow\Dispatching\Storer;
 
 use Contena\Core\Content\Flow\Dispatching\Aware\NewsletterRecipientAware;
 use Contena\Core\Content\Flow\Dispatching\StorableFlow;
-use Contena\Core\Content\Flow\Events\BeforeLoadStorableFlowDataEvent;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientCollection;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientEntity;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\NewsletterRecipientProvider;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Event\FlowEventAware;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
@@ -58,33 +53,4 @@ class NewsletterRecipientStorer extends FlowStorer
         );
     }
 
-    private function lazyLoad(StorableFlow $storableFlow): ?NewsletterRecipientEntity
-    {
-        $id = $storableFlow->getStore(NewsletterRecipientAware::NEWSLETTER_RECIPIENT_ID);
-        if ($id === null) {
-            return null;
-        }
-
-        if (!Feature::isActive('v6.8.0.0')) {
-            $criteria = $this->newsletterRecipientProvider->getCriteria($id, $storableFlow->getContext());
-
-            $event = new BeforeLoadStorableFlowDataEvent(
-                NewsletterRecipientDefinition::ENTITY_NAME,
-                $criteria,
-                $storableFlow->getContext(),
-            );
-
-            $this->dispatcher->dispatch($event, $event->getName());
-
-            $newsletterRecipient = $this->newsletterRecipientRepository->search($criteria, $storableFlow->getContext())->getEntities()->get($id);
-
-            if ($newsletterRecipient) {
-                return $newsletterRecipient;
-            }
-
-            return null;
-        }
-
-        return $this->newsletterRecipientProvider->getData($id, $storableFlow->getContext());
-    }
 }

@@ -46,7 +46,6 @@ use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 #[CoversClass(ProductStreamProcessor::class)]
 class ProductStreamProcessorTest extends TestCase
 {
-    private FieldConfigCollection $config;
 
     private ProductStreamBuilder&MockObject $productStreamBuilder;
 
@@ -619,17 +618,6 @@ class ProductStreamProcessorTest extends TestCase
         ]);
     }
 
-    private function getProcessor(): ProductStreamProcessor
-    {
-        return new ProductStreamProcessor(
-            $this->productStreamBuilder,
-            $this->productRepository,
-            $this->eventDispatcher,
-            $this->logger,
-            $this->systemConfigService,
-            new ProductCloseoutFilterFactory(),
-        );
-    }
 
     private function configureProductStreamBuilder(bool $displayAsGroup = true, ?InvocationOrder $enrichCriteriaCalls = null): void
     {

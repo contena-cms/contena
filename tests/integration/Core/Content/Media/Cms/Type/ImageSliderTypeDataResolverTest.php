@@ -8,7 +8,6 @@ use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
-use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\Struct\ImageSliderStruct;
 use Contena\Core\Content\Media\Cms\DefaultMediaResolver;
@@ -16,17 +15,13 @@ use Contena\Core\Content\Media\Cms\Type\ImageSliderTypeDataResolver;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Media\MediaEntity;
-use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerEntity;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaCollection;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductMedia\ProductMediaEntity;
-use Contena\Core\Content\Product\SalesChannel\SalesChannelProductDefinition;
-use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -38,7 +33,6 @@ class ImageSliderTypeDataResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private ImageSliderTypeDataResolver $imageSliderResolver;
 
     private FilesystemOperator $publicFilesystem;
 
@@ -439,50 +433,7 @@ class ImageSliderTypeDataResolverTest extends TestCase
         return new ProductMediaCollection($productMedia);
     }
 
-    protected function getResolverContext(ProductMediaCollection $productMediaCollection, ?string $coverId = null): EntityResolverContext
-    {
-        $manufacturer = new ProductManufacturerEntity();
-        $manufacturer->setId('manufacturer_01');
 
-        $product = new SalesChannelProductEntity();
-        $product->setId('product_01');
-        $product->setManufacturer($manufacturer);
-        $product->setMedia($productMediaCollection);
-
-        if ($coverId) {
-            $product->setCoverId($coverId);
-        }
-
-        if (\is_string($coverId) && $productMediaCollection->has($coverId)) {
-            $cover = new ProductMediaEntity();
-            $cover->setId($coverId);
-            $product->setCover($cover);
-        }
-
-        return new EntityResolverContext(
-            static::createStub(SalesChannelContext::class),
-            new Request(),
-            static::getContainer()->get(SalesChannelProductDefinition::class),
-            $product
-        );
-    }
-
-    protected function getResolverContextWithoutMedia(): EntityResolverContext
-    {
-        $manufacturer = new ProductManufacturerEntity();
-        $manufacturer->setId('manufacturer_01');
-
-        $product = new SalesChannelProductEntity();
-        $product->setId('product_01');
-        $product->setManufacturer($manufacturer);
-
-        return new EntityResolverContext(
-            static::createStub(SalesChannelContext::class),
-            new Request(),
-            static::getContainer()->get(SalesChannelProductDefinition::class),
-            $product
-        );
-    }
 
     protected function getProductMediaCollectionWithoutAssociatedMedia(): ProductMediaCollection
     {
@@ -501,18 +452,4 @@ class ImageSliderTypeDataResolverTest extends TestCase
         return new ProductMediaCollection($productMedia);
     }
 
-    protected function getEntitySearchResult(ProductMediaCollection $productMediaCollection, EntityResolverContext $resolverContext): ElementDataCollection
-    {
-        $result = new ElementDataCollection();
-        $result->add('media_id', new EntitySearchResult(
-            'media',
-            5,
-            $productMediaCollection->getMedia(),
-            null,
-            new Criteria(),
-            $resolverContext->getSalesChannelContext()->getContext()
-        ));
-
-        return $result;
-    }
 }

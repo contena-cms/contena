@@ -8,7 +8,6 @@ use Contena\Core\Checkout\Payment\PaymentMethodCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Aggregate\PluginTranslation\PluginTranslationCollection;
 use Contena\Core\Framework\Plugin\PluginEntity;
-use Contena\Tests\Unit\Core\Framework\Plugin\_fixtures\ExampleBundle\ExampleBundle;
 
 /**
  * @internal

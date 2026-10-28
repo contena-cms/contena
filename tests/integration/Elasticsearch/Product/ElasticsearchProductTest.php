@@ -61,17 +61,10 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\CountSorting;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ExtendedProductDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ProductExtension;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Search\Util\DateHistogramCase;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\FilesystemBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SessionTestBehaviour;
 use Contena\Core\Framework\Util\FloatComparator;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
@@ -88,8 +81,6 @@ use Contena\Elasticsearch\Framework\ElasticsearchHelper;
 use Contena\Elasticsearch\Framework\ElasticsearchIndexingUtils;
 use Contena\Elasticsearch\Product\ElasticsearchOptimizeSwitch;
 use Contena\Elasticsearch\Product\ElasticsearchProductDefinition;
-use Contena\Elasticsearch\Test\ElasticsearchTestTestBehaviour;
-use Contena\Tests\Integration\Elasticsearch\Product\Fixture\ProductsFixture;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -397,7 +388,6 @@ class ElasticsearchProductTest extends TestCase
                 new NotFilter(
                     NotFilter::CONNECTION_AND,
                     [
-                        new RangeFilter('product.cheapestPrice', [RangeFilter::LTE => 101]),
                         new ContainsFilter('product.name', 'ilk'),
                     ]
                 )

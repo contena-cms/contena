@@ -33,7 +33,6 @@ use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsCollection;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\Migration\MigrationInfo;
 use Contena\Core\Framework\Test\Store\StaticInAppPurchaseFactory;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;

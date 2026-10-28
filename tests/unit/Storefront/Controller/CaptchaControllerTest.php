@@ -9,7 +9,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Storefront\Controller\CaptchaController;
 use Contena\Storefront\Framework\Captcha\AbstractCaptcha;
 use Contena\Storefront\Framework\Captcha\BasicCaptcha;
-use Contena\Storefront\Pagelet\Captcha\AbstractBasicCaptchaPageletLoader;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\MockArraySessionStorage;
@@ -48,7 +47,6 @@ class CaptchaControllerTest extends TestCase
         $captcha->expects($this->once())
             ->method('validate')
             ->willReturn(new ConstraintViolationList([
-                new ConstraintViolation('', '', [], '', '/' . BasicCaptcha::CAPTCHA_REQUEST_PARAMETER, '', null, BasicCaptcha::INVALID_CAPTCHA_CODE),
             ]));
 
         $request = $this->createRequest();
@@ -69,11 +67,4 @@ class CaptchaControllerTest extends TestCase
         return $request;
     }
 
-    private function createController(AbstractCaptcha $captcha): CaptchaController
-    {
-        return new CaptchaController(
-            static::createStub(AbstractBasicCaptchaPageletLoader::class),
-            $captcha
-        );
-    }
 }

@@ -13,7 +13,6 @@ use Contena\Core\Framework\Routing\SalesChannelRequestContextResolver;
 use Contena\Core\Framework\Routing\SessionContextTokenAccessor;
 use Contena\Core\Framework\Routing\SessionContextTokenSubscriber;
 use Contena\Core\Framework\Routing\StoreApiRouteScope;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\PlatformRequest;
 use Contena\Core\System\SalesChannel\SalesChannelContext;

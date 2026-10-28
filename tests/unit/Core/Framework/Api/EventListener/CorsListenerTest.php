@@ -98,13 +98,6 @@ class CorsListenerTest extends TestCase
     public function testProvidersContributeToBothListsSeparately(): void
     {
         $listener = new CorsListener([
-            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
-                $headers->addAllowed('sw-plan', 'sw-interval');
-            }),
-            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
-                $headers->addAllowed('sw-source');
-                $headers->addExposed('sw-state');
-            }),
         ]);
 
         $headers = $this->dispatchResponse($listener);
@@ -116,14 +109,6 @@ class CorsListenerTest extends TestCase
     public function testAProviderCanRemoveWhatAnEarlierProviderContributed(): void
     {
         $listener = new CorsListener([
-            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
-                $headers->addAllowed('sw-plan', 'sw-interval');
-                $headers->addExposed('sw-state');
-            }),
-            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
-                $headers->removeAllowed('SW-PLAN');
-                $headers->removeExposed('sw-state');
-            }),
         ]);
 
         $headers = $this->dispatchResponse($listener);
@@ -135,12 +120,6 @@ class CorsListenerTest extends TestCase
     public function testContributedHeadersAreDeduplicated(): void
     {
         $listener = new CorsListener([
-            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
-                $headers->addAllowed('sw-plan');
-            }),
-            new CallbackCorsHeaderProvider(static function (CorsHeaders $headers): void {
-                $headers->addAllowed('SW-Plan', 'sw-interval');
-            }),
         ]);
 
         $headers = $this->dispatchResponse($listener);

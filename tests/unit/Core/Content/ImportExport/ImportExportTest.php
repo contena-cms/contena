@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Checkout\Customer\CustomerDefinition;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Content\ImportExport\Aggregate\ImportExportFile\ImportExportFileEntity;
@@ -36,7 +35,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\EntitySearchResult;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
@@ -560,7 +558,6 @@ class ImportExportTest extends TestCase
                 OrderDefinition::ENTITY_NAME,
                 1,
                 new EntityCollection([
-                    (new OrderEntity())->assign(['id' => Uuid::randomHex(), 'language' => new LanguageEntity()]),
                 ]),
                 null,
                 new Criteria(),

@@ -55,7 +55,6 @@ class SearchControllerTest extends TestCase
 
     private AbstractProductSearchRoute&Stub $productSearchRoute;
 
-    private SearchController $searchController;
 
     private ContainerInterface $container;
 
@@ -444,25 +443,4 @@ class SearchControllerTest extends TestCase
         static::assertSame(Response::HTTP_OK, $response->getStatusCode());
     }
 
-    /**
-     * @param list<string>|null $redirectOnSingleHitFields
-     */
-    private function createSearchController(?SearchPageLoader $searchPageLoader = null, ?array $redirectOnSingleHitFields = null): SearchController
-    {
-        $controller = $redirectOnSingleHitFields === null
-            ? new SearchController(
-                $searchPageLoader ?? $this->searchPageLoader,
-                $this->suggestPageLoader,
-                $this->productSearchRoute,
-            )
-            : new SearchController(
-                $searchPageLoader ?? $this->searchPageLoader,
-                $this->suggestPageLoader,
-                $this->productSearchRoute,
-                $redirectOnSingleHitFields,
-            );
-        $controller->setContainer($this->container);
-
-        return $controller;
-    }
 }

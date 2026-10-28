@@ -60,7 +60,6 @@ class SalesChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new SalesChannelFileRendererTestHierarchyBuilder(['Ucp' => 0, 'Framework' => -1]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 
@@ -113,7 +112,6 @@ class SalesChannelFileRendererTest extends TestCase
         $scopeDetector = static::createStub(TemplateScopeDetector::class);
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new SalesChannelFileRendererTestHierarchyBuilder(['Ucp' => 0, 'Framework' => -1]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
         $twig->addExtension(new NodeExtension($templateFinder, $scopeDetector));
@@ -280,7 +278,6 @@ class SalesChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new SalesChannelFileRendererTestHierarchyBuilder(['Ucp' => 0, 'Framework' => -1]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 
@@ -332,7 +329,6 @@ class SalesChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new SalesChannelFileRendererTestHierarchyBuilder(['Framework' => 0]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 
@@ -384,7 +380,6 @@ class SalesChannelFileRendererTest extends TestCase
         $scopeDetector->method('getScopes')->willReturn([TemplateScopeDetector::DEFAULT_SCOPE]);
 
         $hierarchyBuilder = new NamespaceHierarchyBuilder([
-            new SalesChannelFileRendererTestHierarchyBuilder(['Framework' => 0]),
         ]);
         $templateFinder = new TemplateFinder($twig, $loader, '', $hierarchyBuilder, $scopeDetector);
 

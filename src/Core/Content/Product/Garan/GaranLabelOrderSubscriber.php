@@ -3,11 +3,8 @@
 namespace Contena\Core\Content\Product\Garan;
 
 use Contena\Core\Checkout\Cart\Order\CartConvertedEvent;
-use Contena\Core\Content\Product\Cart\ProductCartProcessor;
 use Contena\Core\Content\Product\ProductCollection;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -36,43 +33,4 @@ class GaranLabelOrderSubscriber implements EventSubscriberInterface
         ];
     }
 
-    public function storeLabels(CartConvertedEvent $event): void
-    {
-        $order = $event->getConvertedCart();
-        $productIds = [];
-
-        foreach ($order['lineItems'] ?? [] as $key => $lineItem) {
-            if (!\is_string($lineItem['productId'] ?? null)) {
-                continue;
-            }
-
-            // a new order keeps the label its cart showed, an edited order keeps the label it was placed with
-            if (\array_key_exists(GaranLabelResolver::PAYLOAD_KEY, $lineItem['payload'] ?? [])) {
-                continue;
-            }
-
-            $productIds[$key] = $lineItem['productId'];
-        }
-
-        // empty criteria would load every product
-        if ($productIds === []) {
-            return;
-        }
-
-        $criteria = new Criteria(array_values(array_unique($productIds)));
-        $criteria->addAssociation('manufacturer');
-
-        // variants inherit the guarantee and manufacturer
-        $products = $event->getContext()->enableInheritance(
-            fn (Context $context): ProductCollection => $this->productRepository->search($criteria, $context)->getEntities()
-        );
-
-        foreach ($productIds as $key => $productId) {
-            $product = $products->get($productId);
-
-            $order['lineItems'][$key]['payload'][GaranLabelResolver::PAYLOAD_KEY] = $product !== null ? $this->resolver->resolveSnapshot($product) : null;
-        }
-
-        $event->setConvertedCart($order);
-    }
 }

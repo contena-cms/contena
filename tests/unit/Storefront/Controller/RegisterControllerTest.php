@@ -10,9 +10,7 @@ use Contena\Core\Checkout\Cart\Cart;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupEntity;
-use Contena\Core\Checkout\Customer\SalesChannel\RegisterConfirmRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\RegisterRoute;
-use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Routing\RoutingException;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -23,7 +21,6 @@ use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Storefront\Controller\RegisterController;
 use Contena\Storefront\Framework\AffiliateTracking\AffiliateTrackingListener;
-use Contena\Storefront\Framework\Guard\DoubleSubmitGuard;
 use Contena\Storefront\Framework\Routing\RequestTransformer;
 use Contena\Storefront\Page\Account\CustomerGroupRegistration\CustomerGroupRegistrationPage;
 use Contena\Storefront\Page\Account\CustomerGroupRegistration\CustomerGroupRegistrationPageLoadedHook;
@@ -34,9 +31,6 @@ use Contena\Storefront\Page\Account\Register\AccountRegisterPageLoadedHook;
 use Contena\Storefront\Page\Checkout\Register\CheckoutRegisterPage;
 use Contena\Storefront\Page\Checkout\Register\CheckoutRegisterPageLoadedHook;
 use Contena\Storefront\Page\Checkout\Register\CheckoutRegisterPageLoader;
-use Contena\Storefront\Pagelet\Footer\FooterPageletLoaderInterface;
-use Contena\Storefront\Pagelet\Header\HeaderPageletLoaderInterface;
-use Contena\Tests\Unit\Storefront\Controller\Stub\RegisterControllerStub;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -56,7 +50,6 @@ use Symfony\Component\Validator\ConstraintViolationList;
 #[CoversClass(RegisterController::class)]
 class RegisterControllerTest extends TestCase
 {
-    private RegisterControllerStub $controller;
 
     private AccountLoginPageLoader&Stub $accountLoginPageLoader;
 
@@ -379,38 +372,6 @@ class RegisterControllerTest extends TestCase
         static::assertSame('affiliate-campaign', $dataBag->get('campaignCode'));
     }
 
-    private function createController(
-        ?AccountLoginPageLoader $accountLoginPageLoader = null,
-        ?RegisterRoute $registerRoute = null,
-        ?CartService $cartService = null,
-        ?CheckoutRegisterPageLoader $checkoutRegisterPageLoader = null,
-        ?CustomerGroupRegistrationPageLoader $customerGroupRegistrationPageLoader = null,
-    ): RegisterControllerStub {
-        $registerConfirmRoute = static::createStub(RegisterConfirmRoute::class);
-        $customerRepository = static::createStub(EntityRepository::class);
-        $domainRepository = static::createStub(EntityRepository::class);
-
-        $doubleSubmitGuard = new DoubleSubmitGuard(
-            new LockFactory(new InMemoryStore()),
-            new ArrayAdapter(),
-            new NullLogger(),
-        );
-
-        return new RegisterControllerStub(
-            $accountLoginPageLoader ?? $this->accountLoginPageLoader,
-            $registerRoute ?? $this->registerRoute,
-            $registerConfirmRoute,
-            $cartService ?? $this->cartService,
-            $checkoutRegisterPageLoader ?? $this->checkoutRegisterPageLoader,
-            $this->systemConfigService,
-            $customerRepository,
-            $customerGroupRegistrationPageLoader ?? $this->customerGroupRegistrationPageLoader,
-            $domainRepository,
-            static::createStub(HeaderPageletLoaderInterface::class),
-            static::createStub(FooterPageletLoaderInterface::class),
-            $doubleSubmitGuard,
-        );
-    }
 
     private function createRegisterRequest(): Request
     {

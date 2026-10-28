@@ -19,9 +19,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\CreatedAtField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToManyIdField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\UpdatedAtField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\VersionField;
@@ -44,8 +42,6 @@ use Contena\Core\System\UsageData\Services\UsageDataAllowListService;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticDefinitionInstanceRegistry;
 use Contena\Core\Test\Stub\Doctrine\FakeResultFactory;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Unit\Core\System\UsageData\Services\ManyToManyMappingEntityDefinition;
-use Contena\Tests\Unit\Core\System\UsageData\Services\MockEntityDefinition;
 use Symfony\Component\Messenger\Exception\UnrecoverableMessageHandlingException;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -74,7 +70,6 @@ class DispatchEntityMessageHandlerTest extends TestCase
 
         $handler = new DispatchEntityMessageHandler(
             new EntityDefinitionService([], new UsageDataAllowListService()),
-            new ManyToManyAssociationService($connection),
             new UsageDataAllowListService(),
             $connection,
             $entityDispatcher,
@@ -821,7 +816,6 @@ class EntityEncoderEntity extends EntityDefinition
         $fields = [
             new StringField('string', 'string'),
             new IntField('int', 'int'),
-            new OneToOneAssociationField('oneToOne', 'one_to_one', 'id', EntityEncoderEntity::class, false),
             new BlobField('blob', 'blob'),
         ];
 
@@ -844,7 +838,6 @@ class EntityWithManyToManyAssociationField extends EntityDefinition
     protected function defineFields(): FieldCollection
     {
         return new FieldCollection([
-            new ManyToManyAssociationField('manyToManyAssociationFieldProperty', MockEntityDefinition::class, ManyToManyMappingEntityDefinition::class, 'manyToMany', 'manyToMany'),
         ]);
     }
 }

@@ -5,8 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Routing;
 use PHPUnit\Framework\TestCase;
 use Contena\Administration\Controller\AdministrationController;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Storefront\Controller\ProductController;
 use Symfony\Component\HttpFoundation\Response;

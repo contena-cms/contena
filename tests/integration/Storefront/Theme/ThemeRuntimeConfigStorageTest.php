@@ -4,15 +4,10 @@ namespace Contena\Tests\Integration\Storefront\Theme;
 
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Storefront\Theme\ThemeCollection;
-use Contena\Storefront\Theme\ThemeRuntimeConfig;
 use Contena\Storefront\Theme\ThemeRuntimeConfigStorage;
 
 /**
@@ -26,7 +21,6 @@ class ThemeRuntimeConfigStorageTest extends TestCase
     use DatabaseTransactionBehaviour;
     use KernelTestBehaviour;
 
-    private ThemeRuntimeConfigStorage $storage;
 
     /**
      * @var EntityRepository<ThemeCollection>
@@ -317,44 +311,7 @@ class ThemeRuntimeConfigStorageTest extends TestCase
         static::assertNull($retrieved->importMap);
     }
 
-    /**
-     * @param ThemeRuntimeConfigArrayOverrides $overrides
-     */
-    private function createThemeRuntimeConfig(array $overrides = []): ThemeRuntimeConfig
-    {
-        $defaults = [
-            'themeId' => Uuid::randomHex(),
-            'technicalName' => 'default-theme',
-            'resolvedConfig' => ['key' => 'default-value'],
-            'viewInheritance' => ['view' => 'default-inheritance'],
-            'scriptFiles' => ['default.js'],
-            'iconSets' => [
-                'default-set' => [
-                    'path' => 'path/to/icons',
-                    'namespace' => 'default-theme',
-                ],
-            ],
-            'updatedAt' => new \DateTimeImmutable(),
-        ];
 
-        return ThemeRuntimeConfig::fromArray($defaults)->with($overrides);
-    }
-
-    private function assertThemeRuntimeConfigEquals(ThemeRuntimeConfig $expected, ThemeRuntimeConfig $actual): void
-    {
-        static::assertNotSame($expected, $actual); // we want to make sure we do not compare the same object
-        static::assertSame($expected->themeId, $actual->themeId);
-        static::assertSame($expected->technicalName, $actual->technicalName);
-        static::assertSame($expected->resolvedConfig, $actual->resolvedConfig);
-        static::assertSame($expected->viewInheritance, $actual->viewInheritance);
-        static::assertSame($expected->scriptFiles, $actual->scriptFiles);
-        static::assertSame($expected->iconSets, $actual->iconSets);
-        static::assertSame($expected->importMap, $actual->importMap);
-        static::assertSame(
-            $expected->updatedAt->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-            $actual->updatedAt->format(Defaults::STORAGE_DATE_TIME_FORMAT)
-        );
-    }
 
     private function createTheme(?string $parentThemeId = null, ?string $technicalName = null): string
     {

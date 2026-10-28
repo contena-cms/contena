@@ -9,7 +9,6 @@ use Contena\Core\Content\Sitemap\SalesChannel\SitemapFileRoute;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Tests\Examples\GetSitemapFileExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 

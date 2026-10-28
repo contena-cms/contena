@@ -6,12 +6,10 @@ use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Storefront\Page\Search\SearchPageLoadedHook;
 use Contena\Storefront\Page\Search\SearchWidgetLoadedHook;
 use Contena\Storefront\Page\Suggest\SuggestPageLoadedHook;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 
 /**
  * @internal

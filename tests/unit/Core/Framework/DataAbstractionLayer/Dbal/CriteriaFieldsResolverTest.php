@@ -12,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ListField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
@@ -34,8 +33,6 @@ class CriteriaFieldsResolverTest extends TestCase
     {
         $this->registry = new StaticDefinitionInstanceRegistry(
             [
-                TestDefinition::class,
-                RelatedTestDefinition::class,
             ],
             static::createStub(ValidatorInterface::class),
             static::createStub(EntityWriteGatewayInterface::class)
@@ -91,7 +88,6 @@ class TestDefinition extends EntityDefinition
             new StringField('name', 'name'),
             (new StringField('resolved_name', 'resolvedName'))->addFlags(new Runtime()),
             (new ListField('variation', 'variation', StringField::class))->addFlags(new Runtime(['relation.name'])),
-            new ManyToOneAssociationField('relation', 'relation_id', RelatedTestDefinition::class, 'id'),
         ]);
     }
 }

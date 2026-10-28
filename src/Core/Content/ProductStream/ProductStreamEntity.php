@@ -3,14 +3,11 @@
 namespace Contena\Core\Content\ProductStream;
 
 use Contena\Core\Content\Category\CategoryCollection;
-use Contena\Core\Content\Product\Aggregate\ProductCrossSelling\ProductCrossSellingCollection;
 use Contena\Core\Content\Product\ProductCollection;
 use Contena\Core\Content\ProductExport\ProductExportCollection;
 use Contena\Core\Content\ProductStream\Aggregate\ProductStreamFilter\ProductStreamFilterCollection;
 use Contena\Core\Content\ProductStream\Aggregate\ProductStreamTranslation\ProductStreamTranslationCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 
 /**
@@ -43,7 +40,6 @@ class ProductStreamEntity extends Entity
 
     protected ?ProductExportCollection $productExports = null;
 
-    protected ?ProductCrossSellingCollection $productCrossSellings = null;
 
     protected ?CategoryCollection $categories = null;
 
@@ -145,15 +141,7 @@ class ProductStreamEntity extends Entity
         $this->productExports = $productExports;
     }
 
-    public function getProductCrossSellings(): ?ProductCrossSellingCollection
-    {
-        return $this->productCrossSellings;
-    }
 
-    public function setProductCrossSellings(ProductCrossSellingCollection $productCrossSellings): void
-    {
-        $this->productCrossSellings = $productCrossSellings;
-    }
 
     public function getCategories(): ?CategoryCollection
     {

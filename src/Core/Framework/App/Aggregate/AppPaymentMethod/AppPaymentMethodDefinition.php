@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\App\Aggregate\AppPaymentMethod;
 
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Framework\App\AppDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -11,7 +10,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\Log\Package;
@@ -63,8 +61,6 @@ class AppPaymentMethodDefinition extends EntityDefinition
             (new FkField('original_media_id', 'originalMediaId', MediaDefinition::class))->setDescription('Unique identity of original media.'),
             new ManyToOneAssociationField('originalMedia', 'original_media_id', MediaDefinition::class),
 
-            (new FkField('payment_method_id', 'paymentMethodId', PaymentMethodDefinition::class))->addFlags(new Required())->setDescription('Unique identity of payment method.'),
-            new OneToOneAssociationField('paymentMethod', 'payment_method_id', 'id', PaymentMethodDefinition::class, false),
         ]);
     }
 }

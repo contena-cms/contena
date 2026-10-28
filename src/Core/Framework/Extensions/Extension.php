@@ -4,7 +4,6 @@ namespace Contena\Core\Framework\Extensions;
 
 use Psr\EventDispatcher\StoppableEventInterface;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Struct\ExtendableTrait;
 
 /**
  * @template TResultType

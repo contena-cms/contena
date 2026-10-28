@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\ApiDefinition\Generator\BundleSchemaPathCollection;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\Framework\Api\ApiDefinition\Generator\_fixtures\CustomBundleWithApiSchema\ContenaBundleWithName;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**

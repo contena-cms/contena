@@ -6,7 +6,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\SalesChannel\Sorting\ProductSortingCollection;
 use Contena\Core\Content\Product\SalesChannel\Sorting\ProductSortingEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\Test\TestDefaults;

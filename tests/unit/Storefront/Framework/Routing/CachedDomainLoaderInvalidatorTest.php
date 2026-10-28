@@ -14,7 +14,6 @@ use Contena\Core\System\SalesChannel\SalesChannelDefinition;
 use Contena\Storefront\Framework\Routing\CachedDomainLoader;
 use Contena\Storefront\Framework\Routing\CachedDomainLoaderInvalidator;
 use Contena\Storefront\Theme\Aggregate\ThemeSalesChannelDefinition;
-use Contena\Tests\Unit\Storefront\Theme\MockedCacheInvalidator;
 
 /**
  * @internal

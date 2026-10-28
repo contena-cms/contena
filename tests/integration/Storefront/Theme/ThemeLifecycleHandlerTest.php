@@ -12,29 +12,21 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Storefront;
 use Contena\Storefront\Theme\Exception\ThemeException;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\AbstractStorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeEntity;
 use Contena\Storefront\Theme\ThemeLifecycleHandler;
 use Contena\Storefront\Theme\ThemeLifecycleService;
 use Contena\Storefront\Theme\ThemeSalesChannel;
 use Contena\Storefront\Theme\ThemeSalesChannelCollection;
 use Contena\Storefront\Theme\ThemeService;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\InheritanceWithConfig\InheritanceWithConfig;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\PluginWithAdditionalBundles\PluginWithAdditionalBundles;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePlugin\SimplePlugin;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimplePluginWithoutCompilation\SimplePluginWithoutCompilation;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimpleTheme\SimpleTheme;
 
 /**
  * @internal
@@ -48,9 +40,7 @@ class ThemeLifecycleHandlerTest extends TestCase
 
     private MockObject&StorefrontPluginRegistry $configurationRegistryMock;
 
-    private ThemeLifecycleHandler $themeLifecycleHandler;
 
-    private AbstractStorefrontPluginConfigurationFactory $configFactory;
 
     protected function setUp(): void
     {

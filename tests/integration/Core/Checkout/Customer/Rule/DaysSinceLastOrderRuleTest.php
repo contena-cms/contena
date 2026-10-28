@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Core\Checkout\Customer\Rule;
 
 use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Checkout\CheckoutRuleScope;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Rule\DaysSinceLastOrderRule;
@@ -16,11 +15,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Rule\Rule;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Core\Test\Integration\Traits\OrderFixture;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Type;
 
@@ -136,16 +131,6 @@ class DaysSinceLastOrderRuleTest extends TestCase
         static::assertFalse($rule->match($scope));
     }
 
-    private function createRealTestScope(): CheckoutRuleScope
-    {
-        $checkoutContext = static::createStub(SalesChannelContext::class);
-        $customer = $this->createTestOrderAndReturnCustomer();
-
-        $checkoutContext->method('getCustomer')
-            ->willReturn($customer);
-
-        return new CheckoutRuleScope($checkoutContext);
-    }
 
     private function createTestOrderAndReturnCustomer(): CustomerEntity
     {

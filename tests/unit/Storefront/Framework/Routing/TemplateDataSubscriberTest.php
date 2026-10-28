@@ -40,7 +40,6 @@ class TemplateDataSubscriberTest extends TestCase
 
     private ActiveAppsLoader&Stub $activeAppsLoader;
 
-    private TemplateDataSubscriber $subscriber;
 
     private ThemeRuntimeConfigService&Stub $themeRuntimeConfigService;
 
@@ -410,17 +409,4 @@ class TemplateDataSubscriberTest extends TestCase
         static::assertSame($themeConfig->iconSets, $event->getParameters()['themeIconConfig']);
     }
 
-    private function buildSubscriber(
-        ?HreflangLoaderInterface $hreflangLoader = null,
-        ?ShopIdProvider $shopIdProvider = null,
-        ?ActiveAppsLoader $activeAppsLoader = null,
-        ?ThemeRuntimeConfigService $themeRuntimeConfigService = null,
-    ): TemplateDataSubscriber {
-        return new TemplateDataSubscriber(
-            $hreflangLoader ?? $this->hreflangLoader,
-            $shopIdProvider ?? $this->shopIdProvider,
-            $activeAppsLoader ?? $this->activeAppsLoader,
-            $themeRuntimeConfigService ?? $this->themeRuntimeConfigService,
-        );
-    }
 }

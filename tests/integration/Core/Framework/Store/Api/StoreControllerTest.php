@@ -17,8 +17,6 @@ use Contena\Core\Framework\Store\Services\AbstractExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreClient;
 use Contena\Core\Framework\Store\StoreException;
 use Contena\Core\Framework\Store\Struct\PluginDownloadDataStruct;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserCollection;
 use Contena\Core\System\User\UserEntity;

@@ -16,14 +16,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\AppSystemTestBehaviour;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
 use Contena\Storefront\Theme\Exception\ThemeAssignmentException;
 use Contena\Storefront\Theme\Exception\ThemeException;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeService;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
@@ -36,7 +33,6 @@ class AppLifecycleThemeTest extends TestCase
     use AppSystemTestBehaviour;
     use IntegrationTestBehaviour;
 
-    private ThemeService $themeService;
 
     /**
      * @var EntityRepository<AppCollection>

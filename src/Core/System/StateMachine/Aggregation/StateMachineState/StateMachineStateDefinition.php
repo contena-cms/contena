@@ -2,22 +2,15 @@
 
 namespace Contena\Core\System\StateMachine\Aggregation\StateMachineState;
 
-use Contena\Core\Checkout\Order\Aggregate\OrderDelivery\OrderDeliveryDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCapture\OrderTransactionCaptureDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransactionCaptureRefund\OrderTransactionCaptureRefundDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\CascadeDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -59,8 +52,6 @@ class StateMachineStateDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required())->setDescription('Unique identity of state machine state.'),
 
-            (new StringField('technical_name', 'technicalName'))->addFlags(new ApiAware(), new Required(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING))->setDescription('Technical name of StateMachineState.'),
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
 
             (new FkField('state_machine_id', 'stateMachineId', StateMachineDefinition::class))->addFlags(new Required())->setDescription('Unique identity of StateMachine.'),
             new ManyToOneAssociationField('stateMachine', 'state_machine_id', StateMachineDefinition::class, 'id', false),
@@ -68,11 +59,6 @@ class StateMachineStateDefinition extends EntityDefinition
             new OneToManyAssociationField('toStateMachineTransitions', StateMachineTransitionDefinition::class, 'to_state_id'),
 
             (new TranslationsAssociationField(StateMachineStateTranslationDefinition::class, 'state_machine_state_id'))->addFlags(new Required(), new CascadeDelete()),
-            new OneToManyAssociationField('orderTransactions', OrderTransactionDefinition::class, 'state_id'),
-            new OneToManyAssociationField('orderDeliveries', OrderDeliveryDefinition::class, 'state_id'),
-            new OneToManyAssociationField('orders', OrderDefinition::class, 'state_id'),
-            new OneToManyAssociationField('orderTransactionCaptures', OrderTransactionCaptureDefinition::class, 'state_id'),
-            new OneToManyAssociationField('orderTransactionCaptureRefunds', OrderTransactionCaptureRefundDefinition::class, 'state_id'),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             new OneToManyAssociationField('toStateMachineHistoryEntries', StateMachineHistoryDefinition::class, 'to_state_id'),
             new OneToManyAssociationField('fromStateMachineHistoryEntries', StateMachineHistoryDefinition::class, 'from_state_id'),

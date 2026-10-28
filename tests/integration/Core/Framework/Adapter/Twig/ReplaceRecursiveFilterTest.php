@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\Framework\Adapter\Twig;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Adapter\Twig\Filter\ReplaceRecursiveFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Twig\TwigFilter;
 
 /**

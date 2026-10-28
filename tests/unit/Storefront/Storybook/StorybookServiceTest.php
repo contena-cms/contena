@@ -239,17 +239,6 @@ class StorybookServiceTest extends TestCase
         static::assertNull($result['product']);
     }
 
-    private function createService(?ThemeRuntimeConfigStorage $themeRuntimeConfigStorage = null): StorybookService
-    {
-        return new StorybookService(
-            $this->productRepository,
-            $this->mediaRepository,
-            $this->salesChannelRepository,
-            $this->contextFactory,
-            $this->themeLoader,
-            $themeRuntimeConfigStorage ?? $this->themeRuntimeConfigStorage,
-        );
-    }
 
     private function createSalesChannelIdSearchResult(string $salesChannelId): IdSearchResult
     {

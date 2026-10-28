@@ -14,7 +14,6 @@ use Contena\Core\Content\Product\ProductEntity;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**
@@ -45,11 +44,6 @@ class EntityPipeTest extends TestCase
             'productNumber' => 'P101',
             'active' => true,
             'translations' => new ProductTranslationCollection([
-                (new ProductTranslationEntity())->assign([
-                    'languageId' => Defaults::LANGUAGE_SYSTEM,
-                    'name' => 'test product',
-                    '_uniqueIdentifier' => $id . '_' . Defaults::LANGUAGE_SYSTEM,
-                ]),
             ]),
         ]);
         $product->setUniqueIdentifier($id);

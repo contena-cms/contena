@@ -22,7 +22,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Tool\McpEntityIncludes;
-use Contena\Tests\Unit\Core\Framework\Mcp\Tool\Stub\McpEntityIncludesStub;
 
 /**
  * @internal
@@ -31,7 +30,6 @@ use Contena\Tests\Unit\Core\Framework\Mcp\Tool\Stub\McpEntityIncludesStub;
 #[CoversTrait(McpEntityIncludes::class)]
 class McpEntityIncludesTest extends TestCase
 {
-    private McpEntityIncludesStub $includes;
 
     protected function setUp(): void
     {

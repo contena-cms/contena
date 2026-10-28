@@ -7,7 +7,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Framework\Uuid\Uuid;
 
 #[Package('discovery')]
@@ -20,10 +19,6 @@ class DatabaseAvailableThemeProvider extends AbstractAvailableThemeProvider
     {
     }
 
-    public function getDecorated(): AbstractAvailableThemeProvider
-    {
-        throw new DecorationPatternException(self::class);
-    }
 
     public function load(Context $context, bool $activeOnly): array
     {

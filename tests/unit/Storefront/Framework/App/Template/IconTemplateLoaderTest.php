@@ -21,7 +21,6 @@ use Symfony\Component\Filesystem\Filesystem as SymfonyFilesystem;
 #[CoversClass(IconTemplateLoader::class)]
 class IconTemplateLoaderTest extends TestCase
 {
-    private IconTemplateLoader $templateLoader;
 
     private Manifest $manifest;
 

@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Storefront\Framework\Twig;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Storefront\Framework\Twig\TwigAppVariable;
 use Symfony\Bridge\Twig\AppVariable;

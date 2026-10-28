@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Cms\DefaultMediaResolver;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal
@@ -17,7 +16,6 @@ class DefaultMediaResolverTest extends TestCase
 {
     use IntegrationTestBehaviour;
 
-    private DefaultMediaResolver $mediaResolver;
 
     private FilesystemOperator $publicFilesystem;
 

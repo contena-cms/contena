@@ -9,7 +9,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\Salutation\SalutationDefinition;
 use Symfony\Contracts\Service\ResetInterface;
 

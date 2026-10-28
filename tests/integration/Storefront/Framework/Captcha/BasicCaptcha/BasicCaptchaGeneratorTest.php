@@ -4,7 +4,6 @@ namespace Contena\Tests\Integration\Storefront\Framework\Captcha\BasicCaptcha;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Storefront\Framework\Captcha\BasicCaptcha\BasicCaptchaGenerator;
 
 /**
@@ -15,7 +14,6 @@ class BasicCaptchaGeneratorTest extends TestCase
 {
     use KernelTestBehaviour;
 
-    private BasicCaptchaGenerator $captcha;
 
     protected function setUp(): void
     {

@@ -54,11 +54,4 @@ class StorefrontPluginConfigurationCollectionTest extends TestCase
         static::assertSame([$plugin], array_values($collection->getNoneThemes()->getElements()));
     }
 
-    private static function configuration(string $technicalName, bool $isTheme): StorefrontPluginConfiguration
-    {
-        $configuration = new StorefrontPluginConfiguration($technicalName);
-        $configuration->setIsTheme($isTheme);
-
-        return $configuration;
-    }
 }

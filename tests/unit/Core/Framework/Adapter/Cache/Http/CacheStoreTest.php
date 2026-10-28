@@ -16,7 +16,6 @@ use Contena\Core\Framework\Routing\MaintenanceModeResolver;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
-use Contena\Tests\Unit\Core\Framework\Adapter\Cache\Message\RefreshHttpCacheMessageTest;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Symfony\Component\Cache\Adapter\TagAwareAdapter;
 use Symfony\Component\Clock\MockClock;

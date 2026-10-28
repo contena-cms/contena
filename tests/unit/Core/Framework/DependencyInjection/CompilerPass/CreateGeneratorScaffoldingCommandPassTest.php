@@ -28,7 +28,6 @@ class CreateGeneratorScaffoldingCommandPassTest extends TestCase
     {
         $builder = new ContainerBuilder();
         $builder->setDefinition(
-            DemoScaffoldingGenerator::class,
             (new Definition(DemoScaffoldingGenerator::class))
                 ->addTag('contena.scaffold.generator')
         );
@@ -43,7 +42,6 @@ class CreateGeneratorScaffoldingCommandPassTest extends TestCase
     {
         $builder = new ContainerBuilder();
         $builder->setDefinition(
-            DemoScaffoldingGenerator::class,
             (new Definition(DemoScaffoldingGenerator::class))
                 ->addTag('contena.scaffold.generator')
                 ->setDeprecated('test', '1.0.0', '"%service_id%')

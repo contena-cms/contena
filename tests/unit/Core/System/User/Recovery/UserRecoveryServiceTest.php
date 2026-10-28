@@ -9,9 +9,7 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Context\SystemSource;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotEqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
@@ -250,7 +248,6 @@ class UserRecoveryServiceTest extends TestCase
             static function (Criteria $criteria, Context $context) use ($salesChannelEntity) {
                 static::assertCount(1, $criteria->getFilters());
                 static::assertEquals([
-                    new NotEqualsFilter('typeId', Defaults::SALES_CHANNEL_TYPE_PRODUCT_COMPARISON),
                 ], $criteria->getFilters());
 
                 return new SalesChannelCollection([$salesChannelEntity]);

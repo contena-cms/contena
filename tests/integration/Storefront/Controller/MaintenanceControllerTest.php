@@ -11,13 +11,11 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Debugging\ScriptTraces;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\System\SalesChannel\SalesChannelCollection;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Page\Maintenance\MaintenancePageLoadedHook;
-use Contena\Storefront\Test\Controller\StorefrontControllerTestBehaviour;
 
 /**
  * @internal

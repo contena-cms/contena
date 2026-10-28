@@ -16,8 +16,6 @@ use Contena\Core\Framework\Log\ScheduledTask\LogCleanupTask;
 use Contena\Core\Framework\Log\ScheduledTask\LogCleanupTaskHandler;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\Registry\TaskRegistry;
 use Contena\Core\Framework\MessageQueue\ScheduledTask\ScheduledTaskCollection;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 
 /**

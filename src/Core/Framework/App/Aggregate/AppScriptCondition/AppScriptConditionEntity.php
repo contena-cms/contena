@@ -6,7 +6,6 @@ use Contena\Core\Content\Rule\Aggregate\RuleCondition\RuleConditionCollection;
 use Contena\Core\Framework\App\Aggregate\AppScriptConditionTranslation\AppScriptConditionTranslationCollection;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\CustomField\Xml\CustomFieldTypes\CustomFieldType;
 use Symfony\Component\Validator\Constraint;

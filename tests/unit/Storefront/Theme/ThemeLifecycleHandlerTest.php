@@ -17,10 +17,8 @@ use Contena\Storefront\Theme\StorefrontPluginConfiguration\FileCollection;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
-use Contena\Storefront\Theme\ThemeCollection;
 use Contena\Storefront\Theme\ThemeLifecycleHandler;
 use Contena\Storefront\Theme\ThemeLifecycleService;
-use Contena\Storefront\Theme\ThemeSalesChannel;
 use Contena\Storefront\Theme\ThemeSalesChannelCollection;
 use Contena\Storefront\Theme\ThemeService;
 
@@ -44,7 +42,6 @@ class ThemeLifecycleHandlerTest extends TestCase
 
     private Connection&Stub $connectionMock;
 
-    private ThemeLifecycleHandler $themeLifecycleHandler;
 
     private Context $context;
 
@@ -154,8 +151,6 @@ class ThemeLifecycleHandlerTest extends TestCase
             [$salesChannelId => 'Storefront DE', $childSalesChannelId => 'Storefront EN'],
         );
         $this->themeServiceMock->method('getThemeDependencyMapping')->willReturn(new ThemeSalesChannelCollection([
-            new ThemeSalesChannel($themeId, $salesChannelId),
-            new ThemeSalesChannel($childId, $childSalesChannelId),
         ]));
         $this->expectExceptionObject(ThemeException::themeAssignmentException(
             'Simple Theme',
@@ -178,7 +173,6 @@ class ThemeLifecycleHandlerTest extends TestCase
         $failure = new \RuntimeException('Cannot load assignment names');
         $this->connectionMock->method('fetchAllKeyValue')->willThrowException($failure);
         $this->themeServiceMock->method('getThemeDependencyMapping')->willReturn(new ThemeSalesChannelCollection([
-            new ThemeSalesChannel($themeId, Uuid::randomHex()),
         ]));
         $this->expectExceptionObject(ThemeException::themeAssignmentException($themeId, [], [], [], $failure));
 
@@ -272,22 +266,4 @@ class ThemeLifecycleHandlerTest extends TestCase
         static::assertSame([$firstThemeId => false, $lastThemeId => true], $notifyOnAsyncCompletion);
     }
 
-    /**
-     * @param (EntityRepository<ThemeCollection>&MockObject)|null $themeRepository
-     */
-    private function buildHandler(
-        ?ThemeLifecycleService $themeLifecycleService = null,
-        ?ThemeService $themeService = null,
-        ?EntityRepository $themeRepository = null,
-        ?StorefrontPluginRegistry $configurationRegistry = null,
-        ?Connection $connection = null
-    ): ThemeLifecycleHandler {
-        return new ThemeLifecycleHandler(
-            $themeLifecycleService ?? $this->themeLifecycleServiceMock,
-            $themeService ?? $this->themeServiceMock,
-            $themeRepository ?? $this->themeRepositoryMock,
-            $configurationRegistry ?? $this->configurationRegistryMock,
-            $connection ?? $this->connectionMock
-        );
-    }
 }

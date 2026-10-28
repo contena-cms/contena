@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Migration\MigrationStep;
 use Contena\Core\Migration\Traits\MailUpdate as MailData;
-use Contena\Core\Migration\Traits\UpdateMailTrait;
 use Symfony\Component\Filesystem\Filesystem;
 
 /**

@@ -198,14 +198,4 @@ class SalesChannelDomainUtilTest extends TestCase
         static::assertSame('Currency not found', $result->errorMessage);
     }
 
-    private function getUtil(?RouterInterface $router = null, ?LoggerInterface $logger = null): SalesChannelDomainUtil
-    {
-        return new SalesChannelDomainUtil(
-            $router ?? $this->router,
-            $this->requestStack,
-            $this->kernel,
-            $logger ?? new NullLogger(),
-            new NativeClock()
-        );
-    }
 }

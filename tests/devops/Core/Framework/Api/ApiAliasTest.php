@@ -11,7 +11,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Aggrega
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Struct;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * @internal

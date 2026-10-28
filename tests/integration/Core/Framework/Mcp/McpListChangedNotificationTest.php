@@ -7,8 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotificationSet;
 use Contena\Core\Framework\Mcp\Notification\McpListChangedNotifier;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
 /**

@@ -7,10 +7,8 @@ use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslat
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationEntity;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Content\Category\CategoryEntity;
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotDefinition;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
-use Contena\Core\Content\Cms\CmsPageCollection;
 use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Media\MediaDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductManufacturer\ProductManufacturerDefinition;
@@ -29,7 +27,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Pricing\CashRoundingConfig;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteException;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Currency\Aggregate\CurrencyTranslation\CurrencyTranslationDefinition;
 use Contena\Core\System\Currency\CurrencyCollection;

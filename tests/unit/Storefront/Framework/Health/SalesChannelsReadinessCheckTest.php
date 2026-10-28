@@ -17,7 +17,6 @@ use Contena\Storefront\Framework\SystemCheck\Util\SalesChannelDomainUtil;
 #[CoversClass(SalesChannelsReadinessCheck::class)]
 class SalesChannelsReadinessCheckTest extends TestCase
 {
-    private SalesChannelsReadinessCheck $salesChannelReadinessCheck;
 
     protected function setUp(): void
     {

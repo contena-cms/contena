@@ -13,10 +13,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\AggregationResult\Metric\
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\AndFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\OrFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\MessageQueueException;
@@ -117,34 +115,12 @@ readonly class TaskScheduler
                     // all regular tasks that have reached their next execution time
                     new AndFilter(
                         [
-                            new RangeFilter(
-                                'nextExecutionTime',
-                                [
-                                    RangeFilter::LT => $this->clock->now()->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                                ]
-                            ),
-                            new EqualsAnyFilter('status', [
-                                ScheduledTaskDefinition::STATUS_SCHEDULED,
-                                ScheduledTaskDefinition::STATUS_SKIPPED,
-                            ]),
                         ]
                     ),
                     // requeue tasks that are stuck in "running" or "queued" state for more than 12 hours
                     // we assume that either the message was lost or the worker crashed
                     new AndFilter(
                         [
-                            new RangeFilter(
-                                'updatedAt',
-                                [
-                                    RangeFilter::LT => $this->clock->now()
-                                        ->modify(\sprintf('-%d hours', $this->requeueTimeout))
-                                        ->format(Defaults::STORAGE_DATE_TIME_FORMAT),
-                                ]
-                            ),
-                            new EqualsAnyFilter('status', [
-                                ScheduledTaskDefinition::STATUS_QUEUED,
-                                ScheduledTaskDefinition::STATUS_RUNNING,
-                            ]),
                         ]
                     ),
                 ]
@@ -218,8 +194,6 @@ readonly class TaskScheduler
         $criteria = new Criteria();
         $criteria->addFilter(
             new NotFilter(NotFilter::CONNECTION_OR, [
-                new EqualsFilter('status', ScheduledTaskDefinition::STATUS_INACTIVE),
-                new EqualsFilter('status', ScheduledTaskDefinition::STATUS_SKIPPED),
             ])
         )
         ->addAggregation(new MinAggregation('runInterval', 'runInterval'));

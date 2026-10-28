@@ -6,8 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Media\Aggregate\MediaFolder\MediaFolderCollection;
-use Contena\Core\Content\Media\File\FileNameProvider;
-use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Content\Media\MediaEntity;
 use Contena\Core\Defaults;
@@ -19,30 +17,17 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\CloneBehavior;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\CacheTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Language\LanguageEntity;
 use Contena\Core\System\Locale\LocaleCollection;
-use Contena\Core\System\Locale\LocaleEntity;
 use Contena\Storefront\Theme\Aggregate\ThemeTranslationCollection;
-use Contena\Storefront\Theme\Aggregate\ThemeTranslationEntity;
-use Contena\Storefront\Theme\Snippet\ThemeSnippetFileWriter;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
-use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationFactory;
 use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\ThemeCollection;
-use Contena\Storefront\Theme\ThemeEntity;
 use Contena\Storefront\Theme\ThemeFilesystemResolver;
-use Contena\Storefront\Theme\ThemeLifecycleService;
 use Contena\Storefront\Theme\ThemeRuntimeConfigService;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\SimpleTheme\SimpleTheme;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\ThemeWithFileAssociations\ThemeWithFileAssociations;
-use Contena\Tests\Integration\Storefront\Theme\fixtures\ThemeWithLabels\ThemeWithLabels;
 
 /**
  * @internal
@@ -54,7 +39,6 @@ class ThemeLifecycleServiceTest extends TestCase
     use DatabaseTransactionBehaviour;
     use KernelTestBehaviour;
 
-    private ThemeLifecycleService $themeLifecycleService;
 
     private Context $context;
 
@@ -75,7 +59,6 @@ class ThemeLifecycleServiceTest extends TestCase
 
     private Connection $connection;
 
-    private ThemeFilesystemResolver $themeFilesystemResolver;
 
     private ThemeRuntimeConfigService&Stub $themeRuntimeConfigService;
 
@@ -502,51 +485,10 @@ class ThemeLifecycleServiceTest extends TestCase
         }
     }
 
-    private function getThemeConfig(): StorefrontPluginConfiguration
-    {
-        $factory = static::getContainer()->get(StorefrontPluginConfigurationFactory::class);
 
-        return $factory->createFromBundle(new ThemeWithFileAssociations());
-    }
 
-    private function getThemeConfigWithLabels(): StorefrontPluginConfiguration
-    {
-        $factory = static::getContainer()->get(StorefrontPluginConfigurationFactory::class);
 
-        return $factory->createFromBundle(new ThemeWithLabels());
-    }
 
-    private function getSimpleThemeConfig(): StorefrontPluginConfiguration
-    {
-        $factory = static::getContainer()->get(StorefrontPluginConfigurationFactory::class);
-
-        return $factory->createFromBundle(new SimpleTheme());
-    }
-
-    private function getTheme(StorefrontPluginConfiguration $bundle, bool $withChild = false): ThemeEntity
-    {
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('technicalName', $bundle->getTechnicalName()));
-        $criteria->addAssociation('media');
-        $criteria->addAssociation('translations.language.locale');
-
-        if ($withChild) {
-            $criteria->addAssociation('dependentThemes');
-        }
-
-        $theme = $this->themeRepository->search($criteria, $this->context)->getEntities()->first();
-        static::assertInstanceOf(ThemeEntity::class, $theme);
-
-        return $theme;
-    }
-
-    private function hasTheme(StorefrontPluginConfiguration $bundle): bool
-    {
-        $criteria = new Criteria();
-        $criteria->addFilter(new EqualsFilter('technicalName', $bundle->getTechnicalName()));
-
-        return $this->themeRepository->searchIds($criteria, $this->context)->getTotal() > 0;
-    }
 
     private function getMedia(string $fileName): MediaEntity
     {
@@ -580,49 +522,8 @@ class ThemeLifecycleServiceTest extends TestCase
         ]], $this->context);
     }
 
-    private function addPinkLogoToTheme(StorefrontPluginConfiguration $bundle): void
-    {
-        $config = $bundle->getThemeConfig();
-        $config['fields']['contenaLogoPink'] = [
-            'label' => [
-                'en-GB' => 'contena_logo_pink',
-                'de-DE' => 'contena_logo_pink',
-            ],
-            'type' => 'media',
-            'value' => 'app/storefront/src/assets/image/contena_logo_pink.svg',
-        ];
 
-        $bundle->setThemeConfig($config);
-    }
 
-    private function addPinkLogoToThemeChanged(StorefrontPluginConfiguration $bundle): void
-    {
-        $config = $bundle->getThemeConfig();
-        $config['fields']['contenaLogoPink'] = [
-            'label' => [
-                'en-GB' => 'contena_logo_pink',
-                'de-DE' => 'contena_logo_pink',
-            ],
-            'type' => 'media',
-            'value' => 'app/storefront/src/assets/image/contena_logo_pink2.svg',
-        ];
-
-        $bundle->setThemeConfig($config);
-    }
-
-    private function addPinkLogoToThemeWithoutValue(StorefrontPluginConfiguration $bundle): void
-    {
-        $config = $bundle->getThemeConfig();
-        $config['fields']['contenaLogoPink'] = [
-            'label' => [
-                'en-GB' => 'contena_logo_pink',
-                'de-DE' => 'contena_logo_pink',
-            ],
-            'type' => 'media',
-        ];
-
-        $bundle->setThemeConfig($config);
-    }
 
     private function deleteLanguageForLocale(string $locale): void
     {
@@ -663,21 +564,6 @@ class ThemeLifecycleServiceTest extends TestCase
         ], $context);
     }
 
-    private function getTranslationByLocale(string $locale, ThemeTranslationCollection $translations): ThemeTranslationEntity
-    {
-        $entity = $translations->filter(static function (ThemeTranslationEntity $translation) use ($locale): bool {
-            static::assertInstanceOf(LanguageEntity::class, $translation->getLanguage());
-            static::assertInstanceOf(LocaleEntity::class, $translation->getLanguage()->getLocale());
-
-            return $locale === $translation->getLanguage()->getLocale()->getCode();
-        })->first();
-
-        if ($entity === null) {
-            throw new \RuntimeException('Translation not found.');
-        }
-
-        return $entity;
-    }
 
     private function getThemeMediaDefaultFolderId(): string
     {
@@ -695,23 +581,4 @@ class ThemeLifecycleServiceTest extends TestCase
         return $defaultFolder->first()->getId();
     }
 
-    private function createThemeLifecycleService(ThemeRuntimeConfigService $runtimeConfigService): ThemeLifecycleService
-    {
-        return new ThemeLifecycleService(
-            static::getContainer()->get(StorefrontPluginRegistry::class),
-            $this->themeRepository,
-            $this->mediaRepository,
-            $this->mediaFolderRepository,
-            static::getContainer()->get('theme_media.repository'),
-            static::getContainer()->get(FileSaver::class),
-            static::getContainer()->get(FileNameProvider::class),
-            $this->themeFilesystemResolver,
-            static::getContainer()->get('language.repository'),
-            static::getContainer()->get('theme_child.repository'),
-            $this->connection,
-            static::getContainer()->get(StorefrontPluginConfigurationFactory::class),
-            $runtimeConfigService,
-            static::getContainer()->get(ThemeSnippetFileWriter::class),
-        );
-    }
 }

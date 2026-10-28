@@ -17,13 +17,11 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Framework\Adapter\Database\MySQLFactory;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Database\Column;
 use Contena\Core\Framework\Util\Database\Index;
 use Contena\Core\Framework\Util\Database\TableHelper;
 use Contena\Core\Framework\Util\Database\TableHelperException;
 use Contena\Core\Framework\Util\UtilException;
-use Contena\Tests\Integration\Core\Framework\Util\Database\TableHelper\ExceptionThrowingMiddleware;
 
 /**
  * @internal

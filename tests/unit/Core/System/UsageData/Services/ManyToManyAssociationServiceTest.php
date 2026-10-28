@@ -85,8 +85,6 @@ class ManyToManyAssociationServiceTest extends TestCase
 
         $associationField = new ManyToManyAssociationField(
             'propertyName',
-            ToManyDefinition::class,
-            MappingDefinition::class,
             'localColumn',
             'referenceColumn',
         );
@@ -134,7 +132,6 @@ class MappingDefinition extends MappingEntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey()),
             (new ReferenceVersionField(ProductDefinition::class))->addFlags(new PrimaryKey()),
-            new ManyToManyAssociationField('manyToMany', MockEntityDefinition::class, ManyToManyMappingEntityDefinition::class, 'manyToMany', 'manyToMany'),
         ]);
     }
 }

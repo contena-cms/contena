@@ -9,25 +9,18 @@ use Psr\Log\LoggerInterface;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminApiTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\QueueTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\Test\Integration\Traits\OrderFixture;
 use Contena\Elasticsearch\Admin\AdminElasticsearchHelper;
 use Contena\Elasticsearch\Admin\AdminIndexingBehavior;
 use Contena\Elasticsearch\Admin\AdminSearchRegistry;
 use Contena\Elasticsearch\Admin\Indexer\OrderAdminSearchIndexer;
 use Contena\Elasticsearch\Admin\Indexer\PromotionAdminSearchIndexer;
 use Contena\Elasticsearch\Framework\ElasticsearchFieldBuilder;
-use Contena\Elasticsearch\Test\AdminElasticsearchTestBehaviour;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -202,14 +195,6 @@ class AdminSearchRegistryTest extends TestCase
         static::assertCount(0, $c->fetchAllAssociative('SELECT `index` FROM `admin_elasticsearch_index_task`'));
 
         $this->registry->refresh(new EntityWrittenContainerEvent(Context::createDefaultContext(), new NestedEventCollection([
-            new EntityWrittenEvent('promotion', [
-                new EntityWriteResult(
-                    'c1a28776116d4431a2208eb2960ec340',
-                    [],
-                    'promotion',
-                    EntityWriteResult::OPERATION_INSERT
-                ),
-            ], Context::createDefaultContext()),
         ]), []));
 
         $this->runWorker();

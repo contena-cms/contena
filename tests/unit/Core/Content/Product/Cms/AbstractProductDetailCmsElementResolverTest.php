@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\DataResolver\CriteriaCollection;
 use Contena\Core\Content\Cms\DataResolver\Element\ElementDataCollection;
-use Contena\Core\Content\Cms\DataResolver\FieldConfig;
 use Contena\Core\Content\Cms\DataResolver\FieldConfigCollection;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\ResolverContext;
@@ -31,7 +30,6 @@ class AbstractProductDetailCmsElementResolverTest extends TestCase
     public function testCollectReturnsNullIfEntityResolverContextProvided(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, 'product-id-1'),
         ]);
 
         $slot = new CmsSlotEntity();
@@ -68,7 +66,6 @@ class AbstractProductDetailCmsElementResolverTest extends TestCase
     public function testCollectProductCriteria(): void
     {
         $config = new FieldConfigCollection([
-            new FieldConfig('product', FieldConfig::SOURCE_STATIC, 'product-id-1'),
         ]);
 
         $slot = new CmsSlotEntity();

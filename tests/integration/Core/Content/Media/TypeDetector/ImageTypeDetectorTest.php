@@ -11,7 +11,6 @@ use Contena\Core\Content\Media\MediaType\VideoType;
 use Contena\Core\Content\Media\TypeDetector\ImageTypeDetector;
 use Contena\Core\DevOps\Environment\EnvironmentHelper;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

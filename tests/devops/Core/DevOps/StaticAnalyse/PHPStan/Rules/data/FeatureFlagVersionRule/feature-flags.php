@@ -3,7 +3,6 @@
 namespace Contena\Core\DevOps\MyFakeNamespace;
 
 use Contena\Core\Framework\Feature;
-use Contena\Core\Framework\Feature as Alias;
 
 const THREE_PART_FEATURE = 'v6.9.0';
 

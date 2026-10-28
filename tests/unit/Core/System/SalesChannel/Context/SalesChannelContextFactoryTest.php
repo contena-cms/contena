@@ -88,8 +88,6 @@ class SalesChannelContextFactoryTest extends TestCase
             new CustomerGroupEntity(),
             new TaxCollection(),
             $basePaymentMethod,
-            new ShippingMethodEntity(),
-            new ShippingLocation($country, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),
@@ -97,7 +95,6 @@ class SalesChannelContextFactoryTest extends TestCase
         );
 
         $paymentMethodRepository = StaticEntityRepository::of(
-            PaymentMethodCollection::class,
             [
                 static function (Criteria $criteria, Context $context) use ($baseContext) {
                     static::assertCount(2, $criteria->getFilters());
@@ -216,8 +213,6 @@ class SalesChannelContextFactoryTest extends TestCase
             new CustomerGroupEntity(),
             new TaxCollection(),
             $basePaymentMethod,
-            new ShippingMethodEntity(),
-            new ShippingLocation($country, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),
@@ -321,8 +316,6 @@ class SalesChannelContextFactoryTest extends TestCase
             new CustomerGroupEntity(),
             new TaxCollection(),
             $basePaymentMethod,
-            new ShippingMethodEntity(),
-            new ShippingLocation($country, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),
@@ -443,7 +436,6 @@ class SalesChannelContextFactoryTest extends TestCase
             $currency,
             new CustomerGroupEntity(),
             new TaxCollection(),
-            new PaymentMethodEntity(),
             new ShippingMethodEntity(),
             $baseShippingLocation,
             new CashRoundingConfig(2, 0.01, true),
@@ -685,9 +677,6 @@ class SalesChannelContextFactoryTest extends TestCase
             $currency,
             new CustomerGroupEntity(),
             new TaxCollection(),
-            new PaymentMethodEntity(),
-            new ShippingMethodEntity(),
-            new ShippingLocation($salesChannelCountry, null, null),
             new CashRoundingConfig(2, 0.01, true),
             new CashRoundingConfig(2, 0.01, true),
             Generator::createLanguageInfo(),

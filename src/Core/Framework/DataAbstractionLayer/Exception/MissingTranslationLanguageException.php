@@ -23,16 +23,6 @@ class MissingTranslationLanguageException extends WriteConstraintViolationExcept
     ) {
         $template = 'Translation requires a language id.';
         $constraintViolationList = new ConstraintViolationList([
-            new ConstraintViolation(
-                $template,
-                $template,
-                [],
-                null,
-                "/{$translationIndex}",
-                null,
-                null,
-                self::VIOLATION_MISSING_TRANSLATION_LANGUAGE
-            ),
         ]);
         parent::__construct($constraintViolationList, $path);
     }

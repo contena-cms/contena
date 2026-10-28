@@ -12,8 +12,6 @@ use Contena\Core\Framework\Store\Services\AbstractExtensionStoreLicensesService;
 use Contena\Core\Framework\Store\Services\ExtensionDataProvider;
 use Contena\Core\Framework\Store\Services\StoreService;
 use Contena\Core\Framework\Store\Struct\ReviewStruct;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\TestDefaults;

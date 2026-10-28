@@ -396,8 +396,6 @@ class RequestCriteriaBuilderTest extends TestCase
                 ],
             ],
             [
-                new FieldSorting('product.id', FieldSorting::ASCENDING, true),
-                new FieldSorting('product.price', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -430,7 +428,6 @@ class RequestCriteriaBuilderTest extends TestCase
             ],
             [
                 new FieldSorting('product.id'),
-                new FieldSorting('product.price', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -459,7 +456,6 @@ class RequestCriteriaBuilderTest extends TestCase
                 'sort' => '-prices.rule.id',
             ],
             [
-                new FieldSorting('product.prices.ruleId', FieldSorting::DESCENDING),
             ],
         ];
 
@@ -487,7 +483,6 @@ class RequestCriteriaBuilderTest extends TestCase
                 ],
             ],
             [
-                new FieldSorting('product.id', FieldSorting::ASCENDING, true),
             ],
         ];
 

@@ -6,9 +6,7 @@ use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Product\ProductEntity;
-use Contena\Core\Content\Test\Product\ProductFeatureSet\ProductFeatureSetFixtures;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

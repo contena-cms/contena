@@ -39,7 +39,6 @@ class AccountProfilePageLoaderTest extends TestCase
 {
     private CollectingEventDispatcher $eventDispatcher;
 
-    private AccountProfilePageLoader $pageLoader;
 
     private AbstractTranslator&Stub $translator;
 
@@ -186,8 +185,4 @@ class AccountProfilePageLoaderTest extends TestCase
  */
 class TestAccountProfilePageLoader extends AccountProfilePageLoader
 {
-    public function setMetaInformationAccess(AccountProfilePage $page): void
-    {
-        self::setMetaInformation($page);
-    }
 }

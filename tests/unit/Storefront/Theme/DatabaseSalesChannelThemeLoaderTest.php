@@ -20,7 +20,6 @@ class DatabaseSalesChannelThemeLoaderTest extends TestCase
 {
     private Connection&MockObject $connection;
 
-    private DatabaseSalesChannelThemeLoader $themeLoader;
 
     protected function setUp(): void
     {

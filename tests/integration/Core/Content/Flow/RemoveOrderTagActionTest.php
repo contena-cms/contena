@@ -13,7 +13,6 @@ use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\Order\OrderStates;
 use Contena\Core\Content\Flow\Dispatching\Action\RemoveOrderTagAction;
 use Contena\Core\Content\Flow\FlowCollection;
-use Contena\Core\Content\Test\Flow\OrderActionTrait;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;

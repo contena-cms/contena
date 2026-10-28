@@ -27,8 +27,6 @@ use Contena\Core\System\SalesChannel\Context\SalesChannelContextServiceParameter
 use Contena\Core\System\SalesChannel\ContextTokenResponse;
 use Contena\Core\System\SalesChannel\SalesChannel\AbstractContextSwitchRoute;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\_fixture\StubAllCommandsGatewayCommandHandler;
-use Contena\Tests\Unit\Core\Framework\Gateway\Context\Command\_fixture\StubContextGatewayCommand;
 
 /**
  * @internal

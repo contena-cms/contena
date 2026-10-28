@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Product\SalesChannel\Sorting\ProductSortingDefinition;
 use Contena\Core\Content\ProductStream\Aggregate\ProductStreamFilter\ProductStreamFilterDefinition;
 use Contena\Core\Framework\Context;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -50,18 +49,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.test_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -88,12 +75,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['name' => 'Test Stream'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -141,19 +122,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.test_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                        ['field' => 'product.name', 'order' => 'asc', 'priority' => 0, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -179,15 +147,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
 
         // Payload without 'fields' - e.g., only updating priority
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 2,
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -232,12 +191,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $productStreamFilterId,
-                ['name' => 'Test Stream Filter'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -281,18 +234,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $productStreamFilterId1,
-                ['name' => 'Stream Filter 1'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
-            new EntityWriteResult(
-                $productStreamFilterId2,
-                ['name' => 'Stream Filter 2'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -323,19 +264,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'product.name', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                        ['field' => 'product.price', 'order' => 'desc', 'priority' => 0, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -369,12 +297,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $productStreamFilterId,
-                ['name' => 'Test Stream Filter'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -426,30 +348,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'sorting-1',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.field1', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'sorting-2',
-                    'priority' => 2,
-                    'fields' => [
-                        ['field' => 'customFields.field2', 'order' => 'desc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -496,16 +394,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'customFields.updated_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -546,18 +434,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.nonexistent_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -603,12 +479,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $productStreamFilterId,
-                ['name' => 'Updated Stream Filter'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -641,12 +511,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $productStreamFilterId,
-                ['name' => 'Stream Filter without custom fields'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_UPDATE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -693,30 +557,12 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
 
         // Process product sorting event
         $sortingWriteResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.sorting_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $sortingEvent = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $sortingWriteResults, Context::createDefaultContext());
         $updater->productSortingWritten($sortingEvent);
 
         $results = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                ['name' => 'Stream Filter with custom field'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $results, Context::createDefaultContext());
@@ -763,19 +609,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.same_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                        ['field' => 'customFields.same_field', 'order' => 'desc', 'priority' => 0, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -822,18 +655,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.combined_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -858,12 +679,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_DELETE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -891,12 +706,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_DELETE
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -997,22 +806,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'test-sorting',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.int_field', 'order' => 'asc', 'priority' => 5, 'naturalSorting' => false],
-                        ['field' => 'customFields.float_field', 'order' => 'asc', 'priority' => 4, 'naturalSorting' => false],
-                        ['field' => 'customFields.bool_field', 'order' => 'asc', 'priority' => 3, 'naturalSorting' => false],
-                        ['field' => 'customFields.datetime_field', 'order' => 'asc', 'priority' => 2, 'naturalSorting' => false],
-                        ['field' => 'customFields.json_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1056,18 +849,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'urlKey' => 'sorting-only',
-                    'priority' => 1,
-                    'fields' => [
-                        ['field' => 'customFields.sorting_only_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1109,12 +890,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                $productStreamFilterId,
-                ['name' => 'Filter only stream filter'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1139,16 +914,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                ['id' => Uuid::randomHex(), 'versionId' => Uuid::randomHex()],
-                [
-                    'fields' => [
-                        ['field' => 'customFields.test_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1173,12 +938,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                ['id' => Uuid::randomHex(), 'versionId' => Uuid::randomHex()],
-                ['name' => 'Test Filter'],
-                ProductStreamFilterDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductStreamFilterDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1226,16 +985,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'customFields.valid_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1270,16 +1019,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'customFields.some_field', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());
@@ -1316,16 +1055,6 @@ class ProductCustomFieldsUsedUpdaterTest extends TestCase
         );
 
         $writeResults = [
-            new EntityWriteResult(
-                Uuid::randomHex(),
-                [
-                    'fields' => [
-                        ['field' => 'product.name', 'order' => 'asc', 'priority' => 1, 'naturalSorting' => false],
-                    ],
-                ],
-                ProductSortingDefinition::ENTITY_NAME,
-                EntityWriteResult::OPERATION_INSERT
-            ),
         ];
 
         $event = new EntityWrittenEvent(ProductSortingDefinition::ENTITY_NAME, $writeResults, Context::createDefaultContext());

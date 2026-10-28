@@ -10,9 +10,6 @@ use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\DevOps\StaticAnalyze\Danger\Rules\RouteSnapshotExtension;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubFile;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPlatform;
-use Contena\Tests\Unit\Core\DevOps\StaticAnalyze\Danger\Stub\StubPullRequest;
 
 /**
  * @internal
@@ -28,7 +25,6 @@ class RouteSnapshotExtensionTest extends TestCase
     public function testSnapshotGrowth(int $additions, int $deletions, bool $expectFailure): void
     {
         $context = new Context(new StubPlatform(new StubPullRequest([
-            new StubFile(self::SNAPSHOT_PATH, File::STATUS_MODIFIED, '', '', $additions, $deletions),
         ])));
 
         (new RouteSnapshotExtension())($context);

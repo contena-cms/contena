@@ -7,7 +7,6 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\HandlerStack;
 use Monolog\Handler\NullHandler;
-use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionStateHandler;
 use Contena\Core\Content\Media\File\TrustedUrlResolver;
 use Contena\Core\Content\Test\Category\Service\CountingEntityReader;
 use Contena\Core\Content\Test\Category\Service\CountingEntitySearcher;
@@ -73,7 +72,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(TestPaymentHandler::class)
         ->args([
-            service(OrderTransactionStateHandler::class),
         ])
         ->tag('contena.payment.method');
 

@@ -16,9 +16,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSet;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\ChangeSetAware;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\DeleteCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriteGatewayInterface;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Log\Package;
@@ -68,13 +65,6 @@ class ProductReviewSubscriberTest extends TestCase
         $event = EntityDeleteEvent::create(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand(
-                    $this->definitionInstanceRegistry->get(ProductReviewDefinition::class),
-                    [
-                        'id' => $ids->getBytes('foo'),
-                    ],
-                    new EntityExistence(ProductReviewDefinition::ENTITY_NAME, ['id' => $ids->get('foo')], true, false, false, [])
-                ),
             ]
         );
 
@@ -98,20 +88,6 @@ class ProductReviewSubscriberTest extends TestCase
         $event = EntityDeleteEvent::create(
             WriteContext::createFromContext(Context::createDefaultContext()),
             [
-                new DeleteCommand(
-                    $this->definitionInstanceRegistry->get(ProductDefinition::class),
-                    [
-                        'id' => $ids->getBytes('foo'),
-                    ],
-                    new EntityExistence(ProductDefinition::ENTITY_NAME, ['id' => $ids->get('foo')], true, false, false, [])
-                ),
-                new InsertCommand(
-                    $this->definitionInstanceRegistry->get(ProductReviewDefinition::class),
-                    ['id' => $ids->getBytes('foo')],
-                    ['id' => $ids->getBytes('foo')],
-                    new EntityExistence(ProductReviewDefinition::ENTITY_NAME, ['id' => $ids->get('foo')], true, false, false, []),
-                    '/bar'
-                ),
             ]
         );
 
@@ -138,7 +114,6 @@ class ProductReviewSubscriberTest extends TestCase
                     ['id' => 'id'],
                     ProductReviewDefinition::ENTITY_NAME,
                     EntityWriteResult::OPERATION_DELETE,
-                    new EntityExistence(ProductReviewDefinition::ENTITY_NAME, ['id' => 'id'], true, false, false, []),
                     new ChangeSet(['customer_id' => 'customer_id'], [], true)
                 ),
                 // should not trigger update as it has empty changeset
@@ -147,7 +122,6 @@ class ProductReviewSubscriberTest extends TestCase
                     ['id' => 'id'],
                     ProductReviewDefinition::ENTITY_NAME,
                     EntityWriteResult::OPERATION_DELETE,
-                    new EntityExistence(ProductReviewDefinition::ENTITY_NAME, ['id' => 'id'], true, false, false, []),
                     new ChangeSet([], [], true)
                 ),
                 // should not trigger update as it has wrong entity
@@ -156,7 +130,6 @@ class ProductReviewSubscriberTest extends TestCase
                     ['id' => 'id'],
                     ProductDefinition::ENTITY_NAME,
                     EntityWriteResult::OPERATION_DELETE,
-                    new EntityExistence(ProductDefinition::ENTITY_NAME, ['id' => 'id'], true, false, false, []),
                     new ChangeSet(['customer_id' => 'customer_id'], [], true)
                 ),
             ],

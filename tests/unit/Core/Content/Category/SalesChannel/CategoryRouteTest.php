@@ -18,14 +18,7 @@ use Contena\Core\Content\Category\Exception\CategoryNotFoundException;
 use Contena\Core\Content\Category\Extension\CategoryRouteExtension;
 use Contena\Core\Content\Category\SalesChannel\CategoryRoute;
 use Contena\Core\Content\Category\SalesChannel\CategoryRouteResponse;
-use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsBlock\CmsBlockEntity;
-use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsSection\CmsSectionEntity;
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotCollection;
-use Contena\Core\Content\Cms\Aggregate\CmsSlot\CmsSlotEntity;
 use Contena\Core\Content\Cms\CmsPageCollection;
-use Contena\Core\Content\Cms\CmsPageEntity;
 use Contena\Core\Content\Cms\DataResolver\ResolverContext\EntityResolverContext;
 use Contena\Core\Content\Cms\SalesChannel\SalesChannelCmsPageLoaderInterface;
 use Contena\Core\Content\Cms\Service\EntityCmsSlotConfigInheritanceBuilder;
@@ -153,9 +146,6 @@ class CategoryRouteTest extends TestCase
         $categoryRoute = new CategoryRoute(
             $categoryRepositoryMock,
             $cmsPageLoader,
-            new EntityCmsSlotConfigInheritanceBuilder(
-                $this->createConnectionWithParentLanguageIds($languageCodeChain),
-            ),
             new CategoryDefinition(),
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher(new EventDispatcher()),
@@ -251,7 +241,6 @@ class CategoryRouteTest extends TestCase
         $categoryRoute = new CategoryRoute(
             $categoryRepository,
             $cmsPageLoader,
-            new EntityCmsSlotConfigInheritanceBuilder($this->createConnectionWithParentLanguageIds(['en'])),
             new CategoryDefinition(),
             $cacheTagCollector,
             new ExtensionDispatcher(new EventDispatcher()),
@@ -287,29 +276,6 @@ class CategoryRouteTest extends TestCase
         static::assertSame($response, $route->load($navigationId, $request, $context));
     }
 
-    private function buildCmsPage(): CmsPageEntity
-    {
-        $cmsSlot = new CmsSlotEntity();
-        $cmsSlot->setId($this->ids->create('slot'));
-        $cmsSlot->setUniqueIdentifier('slot');
-        $cmsSlot->setSlot('content');
-
-        $cmsBlock = new CmsBlockEntity();
-        $cmsBlock->setUniqueIdentifier('block');
-        $cmsBlock->setSlots(new CmsSlotCollection([$cmsSlot]));
-
-        $cmsSection = new CmsSectionEntity();
-        $cmsSection->setUniqueIdentifier('section');
-        $cmsSection->setBlocks(new CmsBlockCollection([$cmsBlock]));
-
-        $cmsPage = new CmsPageEntity();
-        $cmsPage->setId($this->ids->get('cms-page'));
-        $cmsPage->setUniqueIdentifier('cms-page');
-        $cmsPage->setType('landingpage');
-        $cmsPage->setSections(new CmsSectionCollection([$cmsSection]));
-
-        return $cmsPage;
-    }
 
     /**
      * @param non-empty-list<string> $languageCodeChain
@@ -384,9 +350,6 @@ class CategoryRouteTest extends TestCase
         $categoryRoute = new CategoryRoute(
             $categoryRepositoryMock,
             static::createStub(SalesChannelCmsPageLoaderInterface::class),
-            new EntityCmsSlotConfigInheritanceBuilder(
-                $this->createConnectionWithParentLanguageIds(['en']),
-            ),
             new CategoryDefinition(),
             static::createStub(CacheTagCollector::class),
             new ExtensionDispatcher(new EventDispatcher()),

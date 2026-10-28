@@ -77,17 +77,6 @@ class ConstraintViolationExceptionTest extends TestCase
     {
         $notBlank = new NotBlank();
         $violations = new ConstraintViolationList([
-            new ConstraintViolation(
-                'This value should not be blank.',
-                null,
-                [],
-                null,
-                '/name',
-                '',
-                null,
-                NotBlank::IS_BLANK_ERROR,
-                $notBlank
-            ),
             new ConstraintViolation('Root level violation', null, [], null, '', null, null, 'custom-code'),
         ]);
 

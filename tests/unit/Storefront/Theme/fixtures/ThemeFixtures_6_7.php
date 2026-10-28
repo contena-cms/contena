@@ -3,10 +3,7 @@
 namespace Contena\Tests\Unit\Storefront\Theme\fixtures;
 
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Core\System\SalesChannel\SalesChannelCollection;
-use Contena\Storefront\Theme\StorefrontPluginRegistry;
 use Contena\Storefront\Theme\ThemeCollection;
-use Contena\Storefront\Theme\ThemeEntity;
 
 /**
  * @deprecated tag:v6.8.0 - Will be removed in v6.8.0, use ThemeFixtures instead
@@ -215,70 +212,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'parentThemeId' => $parentThemeId,
-                            'labels' => [
-                                'fields.extend-parent-custom-config' => 'EN',
-                            ],
-                            'helpTexts' => [
-                                'fields.extend-parent-custom-config' => 'EN Helptext',
-                            ],
-                            'baseConfig' => [
-                                'configInheritance' => [
-                                    '@ParentTheme',
-                                ],
-                                'config' => self::getThemeJsonConfig(),
-                                'fields' => [
-                                    'extend-parent-custom-config' => [
-                                        'type' => 'int',
-                                        'value' => '20',
-                                        'editable' => true,
-                                    ],
-                                ],
-                            ],
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $parentThemeId,
-                            'technicalName' => 'ParentTheme',
-                            'parentThemeId' => $baseThemeId,
-                            '_uniqueIdentifier' => $parentThemeId,
-                            'labels' => [
-                                'fields.parent-custom-config' => 'EN',
-                            ],
-                            'helpTexts' => [
-                                'fields.parent-custom-config' => 'EN Helptext',
-                            ],
-                            'baseConfig' => [
-                                'configInheritance' => [
-                                    '@Storefront',
-                                ],
-                                'fields' => [
-                                    'parent-custom-config' => [
-                                        'type' => 'int',
-                                        'value' => '20',
-                                        'editable' => true,
-                                    ],
-                                ],
-                            ],
-                        ],
-                    ),
                 ]
             ),
             'expected' => [
@@ -305,45 +238,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'parentThemeId' => $parentThemeId,
-                            'labels' => [
-                                'testlabel',
-                            ],
-                            'helpTexts' => [
-                                'testHelp',
-                            ],
-                            'baseConfig' => [
-                                'configInheritance' => [
-                                    '@ParentTheme',
-                                ],
-                                'config' => self::getThemeJsonConfig(),
-                            ],
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $parentThemeId,
-                            'technicalName' => 'ParentTheme',
-                            'parentThemeId' => $baseThemeId,
-                            '_uniqueIdentifier' => $parentThemeId,
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -370,47 +264,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'parentThemeId' => $parentThemeId,
-                            'labels' => [],
-                            'helpTexts' => [
-                                'firstHelp',
-                                'testHelp',
-                            ],
-                            'baseConfig' => [
-                                'fields' => [
-                                    'first' => [],
-                                    'test' => [],
-                                ],
-                                'configInheritance' => [
-                                    '@ParentTheme',
-                                ],
-                            ],
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $parentThemeId,
-                            'technicalName' => 'ParentTheme',
-                            'parentThemeId' => $baseThemeId,
-                            '_uniqueIdentifier' => $parentThemeId,
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -436,32 +289,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'parentThemeId' => $parentThemeId,
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $parentThemeId,
-                            'parentThemeId' => $baseThemeId,
-                            '_uniqueIdentifier' => $parentThemeId,
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -487,35 +314,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'parentThemeId' => $parentThemeId,
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $parentThemeId,
-                            'parentThemeId' => $baseThemeId,
-                            '_uniqueIdentifier' => $parentThemeId,
-                            'baseConfig' => [
-                                'fields' => false,
-                            ],
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -541,35 +339,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'parentThemeId' => $parentThemeId,
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $parentThemeId,
-                            'parentThemeId' => $baseThemeId,
-                            '_uniqueIdentifier' => $parentThemeId,
-                            'baseConfig' => [
-                                'fields' => [],
-                            ],
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -595,24 +364,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -638,25 +389,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            '_uniqueIdentifier' => $themeId,
-                            'salesChannels' => new SalesChannelCollection(),
-                            'technicalName' => 'Test',
-                            'configValues' => [],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                            'configValues' => [
-                                'test' => ['value' => ['no_test']],
-                            ],
-                        ]
-                    ),
                 ]
             ),
             'expected' => [
@@ -682,47 +414,6 @@ class ThemeFixtures_6_7
             ],
             'themeCollection' => new ThemeCollection(
                 [
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $themeId,
-                            'technicalName' => 'Theme',
-                            '_uniqueIdentifier' => $themeId,
-                            'baseConfig' => [
-                                'fields' => [
-                                    'sw-color-brand-primary' => [
-                                        'value' => '#adbd00',
-                                    ],
-                                    'test-something-with-options' => [
-                                        'type' => 'text',
-                                        'editable' => true,
-                                        'block' => 'media',
-                                        'order' => 600,
-                                        'value' => 'Hello',
-                                        'fullWidth' => null,
-                                        'custom' => [
-                                            'componentName' => 'sw-single-select',
-                                            'options' => [
-                                                [
-                                                    'value' => 'Hello',
-                                                ],
-                                                [
-                                                    'value' => 'World',
-                                                ],
-                                            ],
-                                        ],
-                                    ],
-                                ],
-                            ],
-                        ]
-                    ),
-                    (new ThemeEntity())->assign(
-                        [
-                            'id' => $baseThemeId,
-                            'technicalName' => StorefrontPluginRegistry::BASE_THEME_NAME,
-                            '_uniqueIdentifier' => $baseThemeId,
-                            'baseConfig' => self::getThemeJsonConfig(),
-                        ]
-                    ),
                 ]
             ),
             'expected' => [

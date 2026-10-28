@@ -21,7 +21,6 @@ use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
-use Contena\Tests\Examples\ResolveListingExample;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**

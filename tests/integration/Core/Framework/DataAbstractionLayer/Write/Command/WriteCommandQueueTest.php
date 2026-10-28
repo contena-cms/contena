@@ -11,9 +11,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\Command\InsertCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\JsonUpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\UpdateCommand;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 
 /**
@@ -54,17 +52,6 @@ class WriteCommandQueueTest extends TestCase
                 'id' => Uuid::fromHexToBytes($orderDeliveryId),
                 'version_id' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
             ],
-            new EntityExistence(
-                $orderDeliveryDefinition->getEntityName(),
-                [
-                    'id' => $orderDeliveryId,
-                    'version_id' => Defaults::LIVE_VERSION,
-                ],
-                true,
-                false,
-                false,
-                $orderDeliveryPayload
-            ),
             '/0/deliveries/0'
         ));
 
@@ -78,17 +65,6 @@ class WriteCommandQueueTest extends TestCase
                 'id' => Uuid::fromHexToBytes($orderDeliveryId),
                 'version_id' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
             ],
-            new EntityExistence(
-                $orderDeliveryDefinition->getEntityName(),
-                [
-                    'id' => $orderDeliveryId,
-                    'version_id' => Defaults::LIVE_VERSION,
-                ],
-                true,
-                false,
-                false,
-                $orderDeliveryPayload
-            ),
             '/0/deliveries/0'
         ));
 
@@ -99,17 +75,6 @@ class WriteCommandQueueTest extends TestCase
                 'id' => Uuid::fromHexToBytes($orderDeliveryId),
                 'version_id' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
             ],
-            new EntityExistence(
-                $orderDeliveryDefinition->getEntityName(),
-                [
-                    'id' => $orderDeliveryId,
-                    'version_id' => Defaults::LIVE_VERSION,
-                ],
-                false,
-                false,
-                false,
-                $orderDeliveryPayload
-            ),
             '/0/deliveries/0'
         ));
 
@@ -120,17 +85,6 @@ class WriteCommandQueueTest extends TestCase
                 'id' => Uuid::fromHexToBytes($orderId),
                 'version_id' => Uuid::fromHexToBytes(Defaults::LIVE_VERSION),
             ],
-            new EntityExistence(
-                $orderDefinition->getEntityName(),
-                [
-                    'id' => $orderId,
-                    'version_id' => Defaults::LIVE_VERSION,
-                ],
-                false,
-                false,
-                false,
-                $orderPayload
-            ),
             '/0'
         ));
 

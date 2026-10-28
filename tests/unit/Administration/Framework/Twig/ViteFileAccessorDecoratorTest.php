@@ -160,7 +160,6 @@ class ViteFileAccessorDecoratorTest extends TestCase
         // plain Symfony bundle (not ContenaBundle) always returns []
         $kernel = new StubKernel([
             new BundleFixture('Administration', __DIR__ . '/Fixtures/Administration'),
-            new PlainSymfonyBundle('PlainBundle', __DIR__ . '/Fixtures/Administration'),
         ]);
 
         $decorator = new ViteFileAccessorDecorator(

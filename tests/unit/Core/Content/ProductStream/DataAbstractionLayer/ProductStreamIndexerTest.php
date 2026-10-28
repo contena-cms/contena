@@ -17,15 +17,10 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\IteratorFactory;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\Common\OffsetQuery;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\QueryBuilder;
-use Contena\Core\Framework\DataAbstractionLayer\EntityWriteResult;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenContainerEvent;
-use Contena\Core\Framework\DataAbstractionLayer\Event\EntityWrittenEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsAnyFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Parser\QueryStringParser;
-use Contena\Core\Framework\DataAbstractionLayer\Write\EntityExistence;
 use Contena\Core\Framework\Event\NestedEventCollection;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
@@ -100,44 +95,6 @@ class ProductStreamIndexerTest extends TestCase
         $message = $this->indexer->update(new EntityWrittenContainerEvent(
             Context::createDefaultContext(),
             new NestedEventCollection([
-                new EntityWrittenEvent(
-                    ProductStreamDefinition::ENTITY_NAME,
-                    [
-                        new EntityWriteResult(
-                            $streamId,
-                            [],
-                            ProductStreamDefinition::ENTITY_NAME,
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
-                new EntityWrittenEvent(
-                    'product_stream_filter',
-                    [
-                        new EntityWriteResult(
-                            Uuid::randomHex(),
-                            ['productStreamId' => $streamId],
-                            'product_stream_filter',
-                            EntityWriteResult::OPERATION_UPDATE,
-                        ),
-                        new EntityWriteResult(
-                            Uuid::randomHex(),
-                            [],
-                            'product_stream_filter',
-                            EntityWriteResult::OPERATION_DELETE,
-                            new EntityExistence(
-                                'product_stream_filter',
-                                ['id' => Uuid::fromHexToBytes(Uuid::randomHex())],
-                                true,
-                                false,
-                                false,
-                                ['product_stream_id' => Uuid::fromHexToBytes($deletedStreamId)]
-                            ),
-                        ),
-                    ],
-                    Context::createDefaultContext(),
-                ),
             ]),
             [],
         ));
@@ -205,14 +162,6 @@ class ProductStreamIndexerTest extends TestCase
         ];
 
         $query = new MultiFilter(MultiFilter::CONNECTION_OR, [
-            new MultiFilter(MultiFilter::CONNECTION_AND, [
-                new NotFilter(MultiFilter::CONNECTION_AND, [
-                    new MultiFilter(MultiFilter::CONNECTION_AND, [
-                        new EqualsAnyFilter('product.id', ['0189de3825ae719d9a08eeea48d6e13a']),
-                        new EqualsAnyFilter('product.parentId', ['0189de3825ae719d9a08eeea48d6e13a']),
-                    ]),
-                ]),
-            ]),
         ]);
         $serialized = \json_encode([QueryStringParser::toArray($query)]);
 

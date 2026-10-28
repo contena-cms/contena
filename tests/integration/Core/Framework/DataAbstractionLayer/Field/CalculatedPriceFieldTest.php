@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\ListPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Read\EntityReaderInterface;
@@ -15,9 +14,7 @@ use Contena\Core\Framework\DataAbstractionLayer\Write\EntityWriter;
 use Contena\Core\Framework\DataAbstractionLayer\Write\WriteContext;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
-use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\CalculatedPriceFieldTestDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 
 /**
@@ -46,7 +43,6 @@ class CalculatedPriceFieldTest extends TestCase
             'price' => new CalculatedPrice(
                 100,
                 100,
-                new CalculatedTaxCollection([]),
                 new TaxRuleCollection([]),
                 1,
                 null,

@@ -11,10 +11,6 @@ use Contena\Core\Framework\Log\Package;
 #[Package('discovery')]
 class ThemeCollection extends EntityCollection
 {
-    public function getByTechnicalName(string $technicalName): ?ThemeEntity
-    {
-        return $this->filter(static fn (ThemeEntity $theme) => $theme->getTechnicalName() === $technicalName)->first();
-    }
 
     protected function getExpectedClass(): string
     {

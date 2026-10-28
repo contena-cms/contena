@@ -8,7 +8,6 @@ use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Cart\LineItem\LineItem;
 use Contena\Core\Checkout\Cart\Rule\LineItemScope;
-use Contena\Core\Checkout\CheckoutRuleScope;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Rule\CustomerBirthdayRule;
 use Contena\Core\Framework\Log\Package;
@@ -190,11 +189,4 @@ class CustomerBirthdayRuleTest extends TestCase
         ];
     }
 
-    public function createScope(CustomerEntity $customer): CheckoutRuleScope
-    {
-        $context = static::createStub(SalesChannelContext::class);
-        $context->method('getCustomer')->willReturn($customer);
-
-        return new CheckoutRuleScope($context);
-    }
 }

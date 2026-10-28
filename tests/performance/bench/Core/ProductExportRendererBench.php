@@ -11,7 +11,6 @@ use Contena\Core\Content\ProductExport\ProductExportEntity;
 use Contena\Core\Content\ProductExport\Service\ProductExportRenderer;
 use Contena\Core\Framework\Struct\ArrayStruct;
 use Contena\Core\Framework\Uuid\Uuid;
-use Contena\Tests\Bench\AbstractBenchCase;
 
 /**
  * @internal - only for performance benchmarks

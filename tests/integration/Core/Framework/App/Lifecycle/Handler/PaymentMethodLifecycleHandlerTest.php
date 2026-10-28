@@ -4,8 +4,6 @@ namespace Contena\Tests\Integration\Core\Framework\App\Lifecycle\Handler;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Payment\Aggregate\PaymentMethodTranslation\PaymentMethodTranslationEntity;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
 use Contena\Core\Content\Media\MediaCollection;
 use Contena\Core\Framework\App\Aggregate\AppPaymentMethod\AppPaymentMethodEntity;
 use Contena\Core\Framework\App\AppCollection;
@@ -18,11 +16,8 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\Framework\Util\Filesystem;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 
 /**
  * @internal
@@ -37,7 +32,6 @@ class PaymentMethodLifecycleHandlerTest extends TestCase
     private const MEDIA_FILE_NAME = 'payment_app_test_paymentWithIcon';
     private const PAYMENT_TECHNICAL_NAME = 'payment_test_paymentWithIcon';
 
-    private AppFixture $appFixture;
 
     private PaymentMethodLifecycleHandler $handler;
 
@@ -254,17 +248,6 @@ class PaymentMethodLifecycleHandlerTest extends TestCase
         return $this->getPaymentMethod(Context::createDefaultContext())->getAppPaymentMethod()?->getAppId();
     }
 
-    private function getPaymentMethod(Context $context): PaymentMethodEntity
-    {
-        $criteria = (new Criteria())->addFilter(new EqualsFilter('technicalName', self::PAYMENT_TECHNICAL_NAME));
-        $criteria->addAssociation('appPaymentMethod');
-        $criteria->addAssociation('translations.language.translationCode');
-
-        $paymentMethod = $this->paymentMethodRepository->search($criteria, $context)->getEntities()->first();
-        static::assertNotNull($paymentMethod);
-
-        return $paymentMethod;
-    }
 
     /**
      * @return array<string, string|null>

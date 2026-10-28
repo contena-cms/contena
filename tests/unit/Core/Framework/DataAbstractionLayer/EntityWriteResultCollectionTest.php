@@ -61,7 +61,6 @@ class EntityWriteResultCollectionTest extends TestCase
     public function testEmptyFiltersMatchNoResults(): void
     {
         $results = new EntityWriteResultCollection([
-            new EntityWriteResult('product-id', ['active' => true], 'product', EntityWriteResult::OPERATION_UPDATE),
         ]);
 
         static::assertTrue($results->only()->isEmpty());
@@ -72,15 +71,8 @@ class EntityWriteResultCollectionTest extends TestCase
     public function testReturnsPrimaryKeys(): void
     {
         $stringResults = new EntityWriteResultCollection([
-            new EntityWriteResult('product-id', [], 'product', EntityWriteResult::OPERATION_UPDATE),
         ]);
         $compositeResults = new EntityWriteResultCollection([
-            new EntityWriteResult(
-                ['productId' => 'product-id', 'versionId' => 'version-id'],
-                [],
-                'product_translation',
-                EntityWriteResult::OPERATION_UPDATE,
-            ),
         ]);
 
         static::assertSame(['product-id'], $stringResults->getPrimaryKeys());

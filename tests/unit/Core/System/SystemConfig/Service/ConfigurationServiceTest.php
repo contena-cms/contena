@@ -11,7 +11,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\Framework\Util\UtilException;
 use Contena\Core\System\System;
 use Contena\Core\System\SystemConfig\DTO\SystemConfigCard;
@@ -24,9 +23,6 @@ use Contena\Core\System\SystemConfig\Util\ConfigReader;
 use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\BrokenConfigPlugin\BrokenConfigPlugin;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\SwagExample\SwagExample;
-use Contena\Tests\Unit\Core\System\SystemConfig\Service\_fixtures\ValidConfigPlugin\ValidConfigPlugin;
 
 /**
  * @internal
@@ -456,7 +452,6 @@ class ConfigurationServiceTest extends TestCase
         $systemConfigService = new StaticSystemConfigService([]);
         $service = new ConfigurationService(
             [
-                new SwagExample(true, ''),
             ],
             $configReader,
             static::createStub(AppConfigReader::class),
@@ -513,7 +508,6 @@ class ConfigurationServiceTest extends TestCase
         $appRepository = new StaticEntityRepository([new AppCollection()]);
         $service = new ConfigurationService(
             [
-                new SwagExample(true, ''),
             ],
             $configReader,
             static::createStub(AppConfigReader::class),
@@ -573,7 +567,6 @@ class ConfigurationServiceTest extends TestCase
         $systemConfigService = new StaticSystemConfigService(['SwagExample.email' => 'foo']);
         $service = new ConfigurationService(
             [
-                new SwagExample(true, ''),
             ],
             $configReader,
             static::createStub(AppConfigReader::class),
@@ -631,7 +624,6 @@ class ConfigurationServiceTest extends TestCase
 
         $service = new ConfigurationService(
             [
-                new SwagExample(true, ''),
             ],
             $configReader,
             static::createStub(AppConfigReader::class),
@@ -652,7 +644,6 @@ class ConfigurationServiceTest extends TestCase
     public function testCheckConfigurationReturnsFalseForBrokenConfigXml(): void
     {
         $configurationService = $this->createConfigurationService([
-            new BrokenConfigPlugin(active: true, basePath: __DIR__ . '/_fixtures/BrokenConfigPlugin'),
         ]);
 
         // Should return false instead of throwing UtilXmlParsingException
@@ -664,7 +655,6 @@ class ConfigurationServiceTest extends TestCase
     public function testCheckConfigurationReturnsTrueForValidConfigXml(): void
     {
         $configurationService = $this->createConfigurationService([
-            new ValidConfigPlugin(active: true, basePath: __DIR__ . '/_fixtures/ValidConfigPlugin'),
         ]);
 
         static::assertTrue(
@@ -676,7 +666,6 @@ class ConfigurationServiceTest extends TestCase
     public function testGetConfigurationThrowsExceptionForBrokenConfigXml(): void
     {
         $configurationService = $this->createConfigurationService([
-            new BrokenConfigPlugin(active: true, basePath: __DIR__ . '/_fixtures/BrokenConfigPlugin'),
         ]);
 
         // getConfiguration should still throw the exception (only checkConfiguration catches it)
@@ -687,7 +676,6 @@ class ConfigurationServiceTest extends TestCase
     public function testGetSystemConfigDefinitionThrowsExceptionForBrokenConfigXml(): void
     {
         $configurationService = $this->createConfigurationService([
-            new BrokenConfigPlugin(active: true, basePath: __DIR__ . '/_fixtures/BrokenConfigPlugin'),
         ]);
 
         // getSystemConfigDefinition should still throw the exception (only checkConfiguration catches it)
@@ -699,7 +687,6 @@ class ConfigurationServiceTest extends TestCase
     public function testGetResolvedConfigurationReturnsEmptyArrayForBrokenConfigXml(): void
     {
         $configurationService = $this->createConfigurationService([
-            new BrokenConfigPlugin(active: true, basePath: __DIR__ . '/_fixtures/BrokenConfigPlugin'),
         ]);
 
         // getResolvedConfiguration uses checkConfiguration, so it should return empty array
@@ -714,7 +701,6 @@ class ConfigurationServiceTest extends TestCase
     public function testGetResolvedSystemConfigDefinitionReturnsEmptyArrayForBrokenConfigXml(): void
     {
         $configurationService = $this->createConfigurationService([
-            new BrokenConfigPlugin(active: true, basePath: __DIR__ . '/_fixtures/BrokenConfigPlugin'),
         ]);
 
         // getResolvedSystemConfigDefinition uses checkConfiguration, so it should return empty array

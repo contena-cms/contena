@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Framework\DataAbstractionLayer\Command;
 
-use Contena\Core\Framework\Console\OutputFormatTrait;
 use Contena\Core\Framework\DataAbstractionLayer\DefinitionValidator;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;

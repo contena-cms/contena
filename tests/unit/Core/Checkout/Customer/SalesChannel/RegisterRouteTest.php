@@ -1624,66 +1624,6 @@ class RegisterRouteTest extends TestCase
         return $repository;
     }
 
-    /**
-     * @param EntityRepository<SalutationCollection>|null $salutationRepository
-     * @param EntityRepository<CustomerCollection>|StaticEntityRepository<CustomerCollection>|null $customerRepository
-     * @param SalesChannelRepository<CountryCollection>|null $countryRepository
-     */
-    private function createRegisterRoute(
-        ?DataValidator $dataValidator = null,
-        ?EventDispatcherInterface $eventDispatcher = null,
-        ?DataValidationFactoryInterface $addressValidationFactory = null,
-        ?StoreApiCustomFieldMapper $customFieldMapper = null,
-        ?EntityRepository $salutationRepository = null,
-        ?StaticSystemConfigService $systemConfigService = null,
-        EntityRepository|StaticEntityRepository|null $customerRepository = null,
-        ?DataValidationFactoryInterface $accountValidationFactory = null,
-        ?CustomerNewsletterSalesChannelsUpdater $customerNewsletterSalesChannelsUpdater = null,
-        ?DoubleOptInService $doubleOptInService = null,
-        ?SalesChannelRepository $countryRepository = null,
-    ): RegisterRoute {
-        $dataValidator ??= static::createStub(DataValidator::class);
-        $eventDispatcher ??= new EventDispatcher();
-        $accountValidationFactory ??= static::createStub(DataValidationFactoryInterface::class);
-        $addressValidationFactory ??= static::createStub(DataValidationFactoryInterface::class);
-        $customFieldMapper ??= static::createStub(StoreApiCustomFieldMapper::class);
-        $salutationRepository ??= static::createStub(EntityRepository::class);
-        $systemConfigService ??= new StaticSystemConfigService([
-            TestDefaults::SALES_CHANNEL => [
-                'core.loginRegistration.passwordMinLength' => '8',
-            ],
-            'core.systemWideLoginRegistration.isCustomerBoundToSalesChannel' => true,
-        ]);
-        $customerRepository ??= $this->createCustomerRepository();
-        $customerNewsletterSalesChannelsUpdater ??= static::createStub(CustomerNewsletterSalesChannelsUpdater::class);
-        $countryRepository ??= static::createStub(SalesChannelRepository::class);
-
-        if ($doubleOptInService === null) {
-            $doubleOptInService = static::createStub(DoubleOptInService::class);
-            $doubleOptInService->method('mapCustomerDoubleOptInData')->willReturnArgument(0);
-        }
-
-        return new RegisterRoute(
-            $eventDispatcher,
-            static::createStub(NumberRangeValueGeneratorInterface::class),
-            $dataValidator,
-            $accountValidationFactory,
-            $addressValidationFactory,
-            $systemConfigService,
-            $customerRepository,
-            static::createStub(SalesChannelContextPersister::class),
-            $countryRepository,
-            static::createStub(Connection::class),
-            static::createStub(SalesChannelContextService::class),
-            $customFieldMapper,
-            $salutationRepository,
-            static::createStub(DataValidationFactoryInterface::class),
-            $doubleOptInService,
-            $customerNewsletterSalesChannelsUpdater,
-            new NativeClock(),
-            new ExtensionDispatcher(new EventDispatcher()),
-        );
-    }
 
     /**
      * @param array<string, mixed> $overrides

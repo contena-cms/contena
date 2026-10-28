@@ -14,7 +14,6 @@ use Contena\Core\Framework\Migration\MigrationCollectionLoader;
 use Contena\Core\Framework\Migration\MigrationException;
 use Contena\Core\Framework\Migration\MigrationRuntime;
 use Contena\Core\Framework\Migration\MigrationSource;
-use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 
 /**
  * @internal

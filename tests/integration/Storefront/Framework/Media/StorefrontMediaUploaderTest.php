@@ -4,15 +4,10 @@ declare(strict_types=1);
 namespace Contena\Tests\Integration\Storefront\Framework\Media;
 
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Content\Media\File\FileSaver;
 use Contena\Core\Content\Media\MediaException;
-use Contena\Core\Content\Media\MediaService;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Storefront\Framework\Media\StorefrontMediaUploader;
-use Contena\Storefront\Framework\Media\StorefrontMediaValidatorRegistry;
 use Contena\Storefront\Framework\StorefrontFrameworkException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
@@ -83,14 +78,6 @@ class StorefrontMediaUploaderTest extends TestCase
         return new UploadedFile(self::FIXTURE_DIR . '/' . $filename, $filename, null, null, true);
     }
 
-    private function getUploadService(): StorefrontMediaUploader
-    {
-        return new StorefrontMediaUploader(
-            static::getContainer()->get(MediaService::class),
-            static::getContainer()->get(FileSaver::class),
-            static::getContainer()->get(StorefrontMediaValidatorRegistry::class)
-        );
-    }
 
     private function removeMedia(string $ids): void
     {

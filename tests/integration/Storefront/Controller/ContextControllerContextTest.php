@@ -6,11 +6,9 @@ use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Event\SalesChannelContextSwitchEvent;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
-use Contena\Storefront\Framework\Routing\Router;
 use Contena\Storefront\Framework\Seo\SeoUrlRoute\ProductPageSeoUrlRoute;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
@@ -31,7 +29,6 @@ class ContextControllerContextTest extends TestCase
 
     private string $languageId;
 
-    private Router $router;
 
     protected function setUp(): void
     {

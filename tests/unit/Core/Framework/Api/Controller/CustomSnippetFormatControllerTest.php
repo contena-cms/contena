@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Api\Controller\CustomSnippetFormatController;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\KernelPluginCollection;
-use Contena\Tests\Unit\Core\Framework\Api\Controller\Fixtures\BundleWithCustomSnippet\BundleWithCustomSnippet;
 use Symfony\Component\HttpFoundation\Request;
 use Twig\Environment;
 

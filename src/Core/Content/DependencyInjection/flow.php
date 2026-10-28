@@ -3,13 +3,6 @@
 namespace Contena\Core\Content\DependencyInjection;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Cart\Delivery\DeliveryBuilder;
-use Contena\Core\Checkout\Cart\Order\OrderConverter;
-use Contena\Core\Checkout\Cart\RuleLoader;
-use Contena\Core\Checkout\Document\Service\DocumentGenerator;
-use Contena\Core\Checkout\DocumentV2\Generation\DocumentGenerator as DocumentV2Generator;
-use Contena\Core\Checkout\DocumentV2\Service\DocumentFileResolver;
-use Contena\Core\Checkout\Order\SalesChannel\OrderService;
 use Contena\Core\Content\Flow\Aggregate\FlowSequence\FlowSequenceDefinition;
 use Contena\Core\Content\Flow\Aggregate\FlowTemplate\FlowTemplateDefinition;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
@@ -21,7 +14,6 @@ use Contena\Core\Content\Flow\Dispatching\Action\AddOrderAffiliateAndCampaignCod
 use Contena\Core\Content\Flow\Dispatching\Action\AddOrderTagAction;
 use Contena\Core\Content\Flow\Dispatching\Action\ChangeCustomerGroupAction;
 use Contena\Core\Content\Flow\Dispatching\Action\ChangeCustomerStatusAction;
-use Contena\Core\Content\Flow\Dispatching\Action\GenerateDocumentAction;
 use Contena\Core\Content\Flow\Dispatching\Action\GrantDownloadAccessAction;
 use Contena\Core\Content\Flow\Dispatching\Action\RemoveCustomerTagAction;
 use Contena\Core\Content\Flow\Dispatching\Action\RemoveOrderTagAction;
@@ -60,17 +52,6 @@ use Contena\Core\Content\Flow\Indexing\FlowBuilder;
 use Contena\Core\Content\Flow\Indexing\FlowIndexer;
 use Contena\Core\Content\Flow\Indexing\FlowIndexerSubscriber;
 use Contena\Core\Content\Flow\Indexing\FlowPayloadUpdater;
-use Contena\Core\Content\Flow\Rule\FlowRuleScopeBuilder;
-use Contena\Core\Content\Flow\Rule\OrderCreatedByAdminRule;
-use Contena\Core\Content\Flow\Rule\OrderCustomFieldRule;
-use Contena\Core\Content\Flow\Rule\OrderDaysSincePlacedRule;
-use Contena\Core\Content\Flow\Rule\OrderDeliveryStatusRule;
-use Contena\Core\Content\Flow\Rule\OrderDocumentTypeRule;
-use Contena\Core\Content\Flow\Rule\OrderDocumentTypeSentRule;
-use Contena\Core\Content\Flow\Rule\OrderStatusRule;
-use Contena\Core\Content\Flow\Rule\OrderTagRule;
-use Contena\Core\Content\Flow\Rule\OrderTrackingCodeRule;
-use Contena\Core\Content\Flow\Rule\OrderTransactionStatusRule;
 use Contena\Core\Content\Flow\Telemetry\FlowMetricsInstrumentor;
 use Contena\Core\Content\Flow\Telemetry\TriggerGroupResolver;
 use Contena\Core\Content\Mail\Service\MailService;
@@ -144,21 +125,12 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('kernel.event_subscriber');
 
-    $services->set(FlowRuleScopeBuilder::class)
-        ->args([
-            service(OrderConverter::class),
-            service(DeliveryBuilder::class),
-            tagged_iterator('contena.cart.collector'),
-        ])
-        ->tag('kernel.reset', ['method' => 'reset']);
 
     $services->set(FlowExecutor::class)
         ->public()
         ->args([
             service('event_dispatcher'),
             service(AppFlowActionProvider::class),
-            service(RuleLoader::class),
-            service(FlowRuleScopeBuilder::class),
             service(Connection::class),
             service(ExtensionDispatcher::class),
             service('logger'),
@@ -230,18 +202,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ])
         ->tag('flow.action', ['priority' => 500, 'key' => 'action.mail.send']);
 
-    $services->set(GenerateDocumentAction::class)
-        ->args([
-            service(DocumentGenerator::class),
-            service(DocumentV2Generator::class),
-            service('logger'),
-        ])
-        ->tag('flow.action', ['priority' => 620, 'key' => 'action.generate.document']);
 
     $services->set(SetOrderStateAction::class)
         ->args([
             service(Connection::class),
-            service(OrderService::class),
         ])
         ->tag('flow.action', ['priority' => 400, 'key' => 'action.set.order.state']);
 
@@ -358,7 +322,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service('document.repository'),
             service('event_dispatcher'),
             service(DocumentResolver::class),
-            service(DocumentFileResolver::class),
         ])
         ->tag('flow.storer');
 
@@ -437,35 +400,15 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             tagged_iterator('flow.storer'),
         ]);
 
-    $services->set(OrderTagRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderTrackingCodeRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDaysSincePlacedRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDeliveryStatusRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderCreatedByAdminRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderTransactionStatusRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderStatusRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderCustomFieldRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDocumentTypeRule::class)
-        ->tag('contena.rule.definition');
 
-    $services->set(OrderDocumentTypeSentRule::class)
-        ->tag('contena.rule.definition');
 
     $services->set(FlowTemplateDefinition::class)
         ->tag('contena.entity.definition');

@@ -2,7 +2,6 @@
 
 namespace Contena\Core\Content\Product\SalesChannel\Sorting;
 
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\DataAbstractionLayer\TranslationEntity;
 use Contena\Core\Framework\Log\Package;
 

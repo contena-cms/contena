@@ -6,7 +6,6 @@ use Doctrine\DBAL\Connection;
 use GuzzleHttp\Client;
 use Psr\Clock\ClockInterface;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Checkout\Cart\SalesChannel\CartService;
 use Contena\Core\Content\Category\Event\CategoryIndexerEvent;
 use Contena\Core\Content\LandingPage\Event\LandingPageIndexerEvent;
 use Contena\Core\Content\Media\Event\MediaIndexerEvent;
@@ -16,7 +15,6 @@ use Contena\Core\Content\Sitemap\Event\SitemapGeneratedEvent;
 use Contena\Core\Framework\Adapter\Cache\CacheClearer;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidationSubscriber;
 use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Adapter\Cache\CacheStateSubscriber;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollection;
 use Contena\Core\Framework\Adapter\Cache\CacheTagCollector;
 use Contena\Core\Framework\Adapter\Cache\Http\CacheControlListener;
@@ -71,12 +69,6 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_lo
 return static function (ContainerConfigurator $containerConfigurator): void {
     $services = $containerConfigurator->services();
 
-    $services->set(CacheStateSubscriber::class)
-        ->args([
-            service(CartService::class),
-        ])
-        ->tag('kernel.event_subscriber')
-        ->tag('contena.inactiveFeature', ['flag' => 'v6.8.0.0']);
 
     $services->set(StampedeProtectionConfigurator::class)
         ->public()
@@ -256,7 +248,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(CacheResponseSubscriber::class)
         ->args([
-            service(CartService::class),
             param('contena.http.cache.default_ttl'),
             param('contena.http.cache.enabled'),
             service(MaintenanceModeResolver::class),

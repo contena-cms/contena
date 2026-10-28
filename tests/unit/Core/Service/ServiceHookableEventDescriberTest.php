@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\App\Manifest\Manifest;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
-use Contena\Core\Service\Event\CommercialLicenseProvidedEvent;
 use Contena\Core\Service\ServiceHookableEventDescriber;
 
 /**
@@ -37,11 +36,6 @@ class ServiceHookableEventDescriberTest extends TestCase
     private function expectedDescriptions(): array
     {
         return [
-            new HookableEventDescription(
-                CommercialLicenseProvidedEvent::NAME,
-                'Fires when the current commercial license data is provided to services.',
-                []
-            ),
         ];
     }
 

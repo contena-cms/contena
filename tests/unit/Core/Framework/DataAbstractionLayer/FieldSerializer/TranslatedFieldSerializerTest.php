@@ -13,7 +13,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\TranslatedField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\TranslationsAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
 use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\TranslatedFieldSerializer;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Command\WriteCommandQueue;
@@ -33,7 +32,6 @@ class TranslatedFieldSerializerTest extends TestCase
 
     private WriteContext $writeContext;
 
-    private TranslatedSerializerDefinition $definition;
 
     protected function setUp(): void
     {
@@ -128,7 +126,6 @@ class TranslatedSerializerDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             new TranslatedField('name'),
-            (new TranslationsAssociationField(TranslatedSerializerTranslationDefinition::class, 'translated_serializer_id'))->addFlags(new Required()),
         ]);
     }
 }

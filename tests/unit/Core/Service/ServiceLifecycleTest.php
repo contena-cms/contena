@@ -41,7 +41,6 @@ use Contena\Core\Service\ServiceSourceResolver;
 use Contena\Core\Service\ServiceStorage;
 use Contena\Core\Test\Stub\DataAbstractionLayer\StaticEntityRepository;
 use Contena\Core\Test\Stub\Framework\Util\StaticFilesystem;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
 
 /**

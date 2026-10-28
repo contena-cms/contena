@@ -2,8 +2,6 @@
 
 namespace Contena\Core\System\Currency;
 
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionDiscountPrice\PromotionDiscountPriceDefinition;
 use Contena\Core\Content\ProductExport\ProductExportDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Field\BoolField;
@@ -14,7 +12,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\RestrictDelete;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Runtime;
-use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\SearchRanking;
 use Contena\Core\Framework\DataAbstractionLayer\Field\FloatField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IntField;
@@ -66,18 +63,14 @@ class CurrencyDefinition extends EntityDefinition
             (new FloatField('factor', 'factor'))->addFlags(new ApiAware(), new Required())->setDescription('Currency exchange rate.'),
             (new StringField('symbol', 'symbol'))->addFlags(new ApiAware(), new Required())->setDescription('A currency symbol is a graphical representation used as shorthand for a currency\'s name, for example US Dollar - $'),
             (new StringField('iso_code', 'isoCode', 3))->addFlags(new ApiAware(), new Required())->setDescription('Standard international three digit code to represent currency. For example, USD.'),
-            (new TranslatedField('shortName'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::MIDDLE_SEARCH_RANKING)),
-            (new TranslatedField('name'))->addFlags(new ApiAware(), new SearchRanking(SearchRanking::HIGH_SEARCH_RANKING)),
             (new IntField('position', 'position'))->addFlags(new ApiAware())->setDescription('The order of the tabs for multiple currencies defined.'),
             (new BoolField('is_system_default', 'isSystemDefault'))->addFlags(new ApiAware(), new Runtime()),
             (new FloatField('tax_free_from', 'taxFreeFrom'))->addFlags(new ApiAware())->setDescription('The value from which the tax must be exempted.'),
             (new TranslatedField('customFields'))->addFlags(new ApiAware()),
             (new TranslationsAssociationField(CurrencyTranslationDefinition::class, 'currency_id'))->addFlags(new Required()),
             (new OneToManyAssociationField('salesChannelDefaultAssignments', SalesChannelDefinition::class, 'currency_id', 'id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('orders', OrderDefinition::class, 'currency_id', 'id'))->addFlags(new RestrictDelete()),
             new ManyToManyAssociationField('salesChannels', SalesChannelDefinition::class, SalesChannelCurrencyDefinition::class, 'currency_id', 'sales_channel_id'),
             (new OneToManyAssociationField('salesChannelDomains', SalesChannelDomainDefinition::class, 'currency_id'))->addFlags(new RestrictDelete()),
-            (new OneToManyAssociationField('promotionDiscountPrices', PromotionDiscountPriceDefinition::class, 'currency_id', 'id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('productExports', ProductExportDefinition::class, 'currency_id', 'id'))->addFlags(new RestrictDelete()),
             (new CashRoundingConfigField('item_rounding', 'itemRounding'))->addFlags(new ApiAware(), new Required())->setDescription('The cash rounding applied on net prices.'),
             (new CashRoundingConfigField('total_rounding', 'totalRounding'))->addFlags(new ApiAware(), new Required())->setDescription('The cash rounding applied on cart’s total net prices.'),

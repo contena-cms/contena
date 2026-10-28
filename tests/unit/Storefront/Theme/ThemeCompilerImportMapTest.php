@@ -8,16 +8,10 @@ use League\Flysystem\InMemory\InMemoryFilesystemAdapter;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Contena\Core\Framework\Adapter\Cache\CacheInvalidator;
-use Contena\Core\Framework\Adapter\Filesystem\Plugin\CopyBatchInputFactory;
 use Contena\Core\Framework\Log\Package;
-use Contena\Storefront\Theme\AbstractScssCompiler;
-use Contena\Storefront\Theme\AbstractThemePathBuilder;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfiguration;
 use Contena\Storefront\Theme\StorefrontPluginConfiguration\StorefrontPluginConfigurationCollection;
 use Contena\Storefront\Theme\ThemeCompiler;
-use Contena\Storefront\Theme\ThemeFileResolver;
-use Contena\Storefront\Theme\ThemeFilesystemResolver;
 use Symfony\Component\Asset\UrlPackage;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
@@ -31,7 +25,6 @@ class ThemeCompilerImportMapTest extends TestCase
 {
     private Filesystem $assetFilesystem;
 
-    private ThemeCompiler $compiler;
 
     protected function setUp(): void
     {
@@ -85,8 +78,6 @@ class ThemeCompilerImportMapTest extends TestCase
             ]
         );
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('MyExtension'),
         ]);
 
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
@@ -109,8 +100,6 @@ class ThemeCompilerImportMapTest extends TestCase
             ['manifest' => [], 'vendorMap' => ['@vendor/chunk' => 'vendor/chunk-HASH.js']]
         );
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('MyExtension'),
         ]);
 
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
@@ -132,8 +121,6 @@ class ThemeCompilerImportMapTest extends TestCase
         $this->assetFilesystem->createDirectory('bundles/brokenextension/storefront/components/.vite');
         $this->assetFilesystem->write($path, '{invalid json');
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('BrokenExtension'),
         ]);
 
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
@@ -150,8 +137,6 @@ class ThemeCompilerImportMapTest extends TestCase
             ['manifest' => 'invalid', 'vendorMap' => 'invalid']
         );
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('InvalidMeta'),
         ]);
 
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
@@ -169,8 +154,6 @@ class ThemeCompilerImportMapTest extends TestCase
             ['manifest' => [], 'vendorMap' => ['@cached/chunk' => 'vendor/chunk-one.js']]
         );
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('CachedExtension'),
         ]);
 
         $firstResult = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
@@ -210,8 +193,6 @@ class ThemeCompilerImportMapTest extends TestCase
         );
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('MyExtension'),
         ]);
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
 
@@ -243,7 +224,6 @@ class ThemeCompilerImportMapTest extends TestCase
         );
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
         ]);
 
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
@@ -287,8 +267,6 @@ class ThemeCompilerImportMapTest extends TestCase
         );
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('MyExtension'),
         ]);
         $result = $this->compiler->buildComponentImportMap($collection);
 
@@ -339,8 +317,6 @@ class ThemeCompilerImportMapTest extends TestCase
         );
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('MyExtension'),
         ]);
 
         $result = $this->compiler->buildComponentImportMap($collection);
@@ -449,8 +425,6 @@ class ThemeCompilerImportMapTest extends TestCase
         );
 
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
-            new StorefrontPluginConfiguration('EmptyExtension'),
         ]);
         $result = $this->assertImportMap($this->compiler->buildComponentImportMap($collection));
 
@@ -473,7 +447,6 @@ class ThemeCompilerImportMapTest extends TestCase
             'asset' => new UrlPackage('https://cdn.example.com/asset', new EmptyVersionStrategy()),
         ]);
         $collection = new StorefrontPluginConfigurationCollection([
-            new StorefrontPluginConfiguration('Storefront'),
         ]);
 
         $result = $this->assertImportMap($compiler->buildComponentImportMap($collection));
@@ -521,38 +494,6 @@ class ThemeCompilerImportMapTest extends TestCase
         return $result;
     }
 
-    /**
-     * @param array<string, UrlPackage> $packages
-     */
-    private function createCompilerForBundleBuildMeta(array $packages = []): ThemeCompiler
-    {
-        $themePathBuilder = static::createStub(AbstractThemePathBuilder::class);
-        $themePathBuilder->method('assemblePath')->willReturn('theme-path');
-        if ($packages === []) {
-            $packages = [
-                'asset' => new UrlPackage('https://cdn.example.com', new EmptyVersionStrategy()),
-            ];
-        }
-
-        return new ThemeCompiler(
-            static::createStub(FilesystemOperator::class),
-            static::createStub(FilesystemOperator::class),
-            $this->assetFilesystem,
-            new CopyBatchInputFactory(),
-            static::createStub(ThemeFileResolver::class),
-            true,
-            static::createStub(EventDispatcherInterface::class),
-            static::createStub(ThemeFilesystemResolver::class),
-            $packages,
-            static::createStub(CacheInvalidator::class),
-            static::createStub(LoggerInterface::class),
-            $themePathBuilder,
-            static::createStub(AbstractScssCompiler::class),
-            [],
-            false,
-            'public',
-        );
-    }
 
     /**
      * @param array<string, mixed> $data

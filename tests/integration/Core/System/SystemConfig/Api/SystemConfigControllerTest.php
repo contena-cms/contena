@@ -5,7 +5,6 @@ namespace Contena\Tests\Integration\Core\System\SystemConfig\Api;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\SystemConfig\Api\SystemConfigController;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Symfony\Component\HttpFoundation\Request;

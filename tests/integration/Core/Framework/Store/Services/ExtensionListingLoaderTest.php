@@ -10,8 +10,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\ExtensionListingLoader;
 use Contena\Core\Framework\Store\Struct\ExtensionCollection;
 use Contena\Core\Framework\Store\Struct\ExtensionStruct;
-use Contena\Core\Framework\Test\Store\StoreClientBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 
 /**
  * @internal

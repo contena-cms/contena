@@ -7,8 +7,6 @@ use PHPStan\Symfony\XmlServiceMapFactory;
 use PHPStan\Testing\RuleTestCase;
 use Contena\Core\DevOps\StaticAnalyze\PHPStan\Rules\TaggedServiceContractRule;
 use Contena\Core\Framework\Log\Package;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\TaggedServiceContractRule\Contract;
-use Contena\Tests\DevOps\Core\DevOps\StaticAnalyse\PHPStan\Rules\data\TaggedServiceContractRule\WrongContract;
 
 /**
  * @internal

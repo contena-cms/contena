@@ -4,18 +4,10 @@ namespace Contena\Core\System\Tag;
 
 use Contena\Core\Checkout\Customer\Aggregate\CustomerTag\CustomerTagDefinition;
 use Contena\Core\Checkout\Customer\CustomerDefinition;
-use Contena\Core\Checkout\Order\Aggregate\OrderTag\OrderTagDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Shipping\Aggregate\ShippingMethodTag\ShippingMethodTagDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Content\Category\Aggregate\CategoryTag\CategoryTagDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\LandingPage\Aggregate\LandingPageTag\LandingPageTagDefinition;
-use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\Media\Aggregate\MediaTag\MediaTagDefinition;
 use Contena\Core\Content\Media\MediaDefinition;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipientTag\NewsletterRecipientTagDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductTag\ProductTagDefinition;
 use Contena\Core\Content\Product\ProductDefinition;
 use Contena\Core\Content\Rule\Aggregate\RuleTag\RuleTagDefinition;
@@ -71,10 +63,6 @@ class TagDefinition extends EntityDefinition
             (new ManyToManyAssociationField('media', MediaDefinition::class, MediaTagDefinition::class, 'tag_id', 'media_id'))->addFlags(new CascadeDelete()),
             (new ManyToManyAssociationField('categories', CategoryDefinition::class, CategoryTagDefinition::class, 'tag_id', 'category_id'))->addFlags(new CascadeDelete()),
             (new ManyToManyAssociationField('customers', CustomerDefinition::class, CustomerTagDefinition::class, 'tag_id', 'customer_id'))->addFlags(new CascadeDelete()),
-            (new ManyToManyAssociationField('orders', OrderDefinition::class, OrderTagDefinition::class, 'tag_id', 'order_id'))->addFlags(new CascadeDelete()),
-            (new ManyToManyAssociationField('shippingMethods', ShippingMethodDefinition::class, ShippingMethodTagDefinition::class, 'tag_id', 'shipping_method_id'))->addFlags(new CascadeDelete()),
-            (new ManyToManyAssociationField('newsletterRecipients', NewsletterRecipientDefinition::class, NewsletterRecipientTagDefinition::class, 'tag_id', 'newsletter_recipient_id'))->addFlags(new CascadeDelete()),
-            (new ManyToManyAssociationField('landingPages', LandingPageDefinition::class, LandingPageTagDefinition::class, 'tag_id', 'landing_page_id'))->addFlags(new CascadeDelete()),
             (new ManyToManyAssociationField('rules', RuleDefinition::class, RuleTagDefinition::class, 'tag_id', 'rule_id'))->addFlags(new CascadeDelete()),
         ]);
 

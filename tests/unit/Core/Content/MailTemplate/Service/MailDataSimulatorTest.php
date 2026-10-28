@@ -10,11 +10,9 @@ use Contena\Core\Content\MailTemplate\Service\Event\MailDataSimulatorFieldEvent;
 use Contena\Core\Content\MailTemplate\Service\Event\MailDataSimulatorFormDataEvent;
 use Contena\Core\Content\MailTemplate\Service\MailDataSimulator;
 use Contena\Core\Content\Shared\MailFlow\DataProvider\AbstractProvider;
-use Contena\Core\Content\Shared\MailFlow\DataProvider\SalesChannelProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\AttributeEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Dbal\EntityHydrator;
-use Contena\Core\Framework\DataAbstractionLayer\DefinitionInstanceRegistry;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
 use Contena\Core\Framework\DataAbstractionLayer\EntityCollection;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
@@ -23,7 +21,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\Field;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\ApiAware;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ManyToOneAssociationField;
-use Contena\Core\Framework\DataAbstractionLayer\Field\OneToManyAssociationField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ParentFkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\StringField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldCollection;
@@ -31,9 +28,6 @@ use Contena\Core\Framework\DataAbstractionLayer\FieldSerializer\StringFieldSeria
 use Contena\Core\Framework\DataAbstractionLayer\MappingEntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Event\A11yRenderedDocumentAware;
-use Contena\Core\Framework\Event\BusinessEventCollector;
-use Contena\Core\Framework\Event\BusinessEventCollectorResponse;
-use Contena\Core\Framework\Event\BusinessEventDefinition;
 use Contena\Core\Framework\Event\EventData\EntityType;
 use Contena\Core\Framework\Event\EventData\FormDataObjectType;
 use Contena\Core\Framework\Event\EventData\MailRecipientStruct;
@@ -44,7 +38,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\ArrayEntity;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\NumberRange\DataAbstractionLayer\NumberRangeField;
-use Contena\Core\System\SalesChannel\SalesChannelDefinition;
 use Symfony\Component\Clock\NativeClock;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Contracts\EventDispatcher\EventDispatcherInterface;
@@ -127,7 +120,6 @@ class MailDataSimulatorTest extends TestCase
     public function testGenerateFieldDataReturnsNullForUnknownFieldType(): void
     {
         $definition = new TestMailTemplateEntityDefinition(new FieldCollection([
-            (new UnknownTestField('unknown'))->addFlags(new ApiAware()),
         ]));
 
         $simulator = $this->createSimulator(
@@ -163,7 +155,6 @@ class MailDataSimulatorTest extends TestCase
         });
 
         $definition = new TestMailTemplateEntityDefinition(new FieldCollection([
-            (new CustomStringField('custom_string', 'customString'))->addFlags(new ApiAware()),
         ]));
 
         $simulator = $this->createSimulator(
@@ -425,7 +416,6 @@ class MailDataSimulatorTest extends TestCase
     public function testMappingDefinitionDoesNotThrowException(): void
     {
         $definition = new TestMailTemplateEntityDefinition(new FieldCollection([
-            (new OneToManyAssociationField('mappingChildren', TestMappingDefinition::class, 'test_mail_template_entity_id'))->addFlags(new ApiAware()),
         ]));
 
         $provider = new TestMailTemplateProvider(
@@ -532,79 +522,6 @@ class MailDataSimulatorTest extends TestCase
         ];
     }
 
-    /**
-     * @param array<string, mixed> $eventData
-     * @param iterable<string, AbstractProvider<Entity, EntityCollection<Entity>>> $dataProviders
-     * @param list<EntityDefinition> $additionalDefinitions
-     * @param class-string<MailAware> $eventClass
-     */
-    private function createSimulator(
-        array $eventData,
-        ?TestMailTemplateEntityDefinition $eventEntityDefinition = null,
-        ?EventDispatcherInterface $dispatcher = null,
-        iterable $dataProviders = [],
-        array $additionalDefinitions = [],
-        string $eventClass = TestMailAwareEvent::class,
-    ): MailDataSimulator {
-        $response = new BusinessEventCollectorResponse();
-        $response->set('test.flow', new BusinessEventDefinition('test.flow', $eventClass, $eventData));
-
-        $businessEventCollector = static::createStub(BusinessEventCollector::class);
-        $businessEventCollector->method('collect')->willReturn($response);
-
-        $salesChannelDefinition = new TestSalesChannelDefinition();
-        $definitions = [
-            $salesChannelDefinition,
-        ];
-
-        if ($eventEntityDefinition !== null) {
-            $definitions[] = $eventEntityDefinition;
-        }
-
-        $definitions = [...$definitions, ...$additionalDefinitions];
-
-        $definitionRegistry = static::createStub(DefinitionInstanceRegistry::class);
-
-        foreach ($definitions as $definition) {
-            $definition->compile($definitionRegistry);
-        }
-
-        $definitionMap = [];
-        foreach ($definitions as $definition) {
-            $definitionMap[$definition->getEntityName()] = $definition;
-
-            if (!isset($definitionMap[$definition->getClass()])) {
-                $definitionMap[$definition->getClass()] = $definition;
-            }
-        }
-
-        $definitionMap[SalesChannelDefinition::class] = $salesChannelDefinition;
-
-        $definitionRegistry->method('getByClassOrEntityName')
-            ->willReturnCallback(function (string $definitionClassOrEntityName) use ($definitionMap) {
-                if (!isset($definitionMap[$definitionClassOrEntityName])) {
-                    throw new \RuntimeException(\sprintf('Unknown definition %s', $definitionClassOrEntityName));
-                }
-
-                return $definitionMap[$definitionClassOrEntityName];
-            });
-
-        $providerDispatcher = static::createStub(EventDispatcherInterface::class);
-        $providerContainer = static::createStub(ContainerInterface::class);
-        /** @var array<string, AbstractProvider<Entity, EntityCollection<Entity>>> $providerMap */
-        $providerMap = [
-            SalesChannelDefinition::ENTITY_NAME => new SalesChannelProvider($providerDispatcher, $providerContainer),
-            ...$dataProviders,
-        ];
-
-        return new MailDataSimulator(
-            $businessEventCollector,
-            $definitionRegistry,
-            $dispatcher ?? static::createStub(EventDispatcherInterface::class),
-            $providerMap,
-            new NativeClock(),
-        );
-    }
 }
 
 /**

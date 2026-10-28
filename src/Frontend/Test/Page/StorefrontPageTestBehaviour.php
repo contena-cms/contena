@@ -17,8 +17,6 @@ use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Routing\RoutingException;
-use Contena\Core\Framework\Struct\Struct;
-use Contena\Core\Framework\Test\TestCaseBase\TaxAddToSalesChannelTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Validation\DataBag\RequestDataBag;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
@@ -27,8 +25,6 @@ use Contena\Core\System\SalesChannel\Entity\SalesChannelRepository;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\TestDefaults;
-use Contena\Storefront\Page\PageLoadedEvent;
-use Contena\Storefront\Pagelet\PageletLoadedEvent;
 use Contena\Tests\Integration\Storefront\Page\StorefrontPageTestConstants;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpFoundation\Request;
@@ -41,45 +37,7 @@ trait StorefrontPageTestBehaviour
 {
     use TaxAddToSalesChannelTestBehaviour;
 
-    /**
-     * @template TEvent of PageLoadedEvent
-     *
-     * @param class-string<TEvent> $expectedClass
-     * @param TEvent|null $event
-     */
-    public static function assertPageEvent(
-        string $expectedClass,
-        ?PageLoadedEvent $event,
-        SalesChannelContext $salesChannelContext,
-        Request $request,
-        Struct $page
-    ): void {
-        TestCase::assertInstanceOf($expectedClass, $event);
-        TestCase::assertSame($salesChannelContext, $event->getSalesChannelContext());
-        TestCase::assertSame($salesChannelContext->getContext(), $event->getContext());
-        TestCase::assertSame($request, $event->getRequest());
-        TestCase::assertSame($page, $event->getPage());
-    }
 
-    /**
-     * @template TEvent of PageletLoadedEvent
-     *
-     * @param class-string<TEvent> $expectedClass
-     * @param TEvent $event
-     */
-    public static function assertPageletEvent(
-        string $expectedClass,
-        PageletLoadedEvent $event,
-        SalesChannelContext $salesChannelContext,
-        Request $request,
-        Struct $page
-    ): void {
-        TestCase::assertInstanceOf($expectedClass, $event);
-        TestCase::assertSame($salesChannelContext, $event->getSalesChannelContext());
-        TestCase::assertSame($salesChannelContext->getContext(), $event->getContext());
-        TestCase::assertSame($request, $event->getRequest());
-        TestCase::assertSame($page, $event->getPagelet());
-    }
 
     abstract protected function getPageLoader();
 

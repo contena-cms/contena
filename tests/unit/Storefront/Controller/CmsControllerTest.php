@@ -30,7 +30,6 @@ use Contena\Core\Test\Generator;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Contena\Storefront\Controller\CmsController;
-use Contena\Tests\Unit\Storefront\Controller\Stub\CmsControllerStub;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -48,7 +47,6 @@ class CmsControllerTest extends TestCase
 
     private Stub&ProductListingRoute $productListingRouteMock;
 
-    private CmsControllerStub $controller;
 
     protected function setUp(): void
     {

@@ -8,7 +8,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Migration\V6_6\Migration1730059142AddNewSitemapConfigForExcludingHiddenProducts;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

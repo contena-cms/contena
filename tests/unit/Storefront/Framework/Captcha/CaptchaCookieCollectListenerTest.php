@@ -28,7 +28,6 @@ class CaptchaCookieCollectListenerTest extends TestCase
 
     private StaticSystemConfigService $systemConfigService;
 
-    private CaptchaCookieCollectListener $listener;
 
     protected function setUp(): void
     {

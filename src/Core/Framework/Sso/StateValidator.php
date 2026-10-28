@@ -57,7 +57,6 @@ class StateValidator
         $violations = $validator->validate($storedState, [
             new NotNull(),
             new NotBlank(),
-            new Length(self::RANDOM_LENGTH),
         ]);
 
         if ($violations->count() > 0) {

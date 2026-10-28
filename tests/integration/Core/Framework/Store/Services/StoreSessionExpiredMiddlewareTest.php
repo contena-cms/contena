@@ -17,7 +17,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Authentication\StoreRequestOptionsProvider;
 use Contena\Core\Framework\Store\Exception\StoreSessionExpiredException;
 use Contena\Core\Framework\Store\Services\StoreSessionExpiredMiddleware;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\User\UserCollection;
 use Symfony\Component\HttpFoundation\Request;

@@ -8,7 +8,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Webhook\Hookable\HookableEventDescription;
 use Contena\Core\System\Consent\ConsentDefinitionRegistry;
 use Contena\Core\System\Consent\Event\ConsentHookableEventDescriber;
-use Contena\Tests\Unit\Core\System\Consent\TestDefinition;
 
 /**
  * @internal
@@ -20,8 +19,6 @@ class ConsentHookableEventDescriberTest extends TestCase
     public function testResolveReturnsConsentWebhookPrivileges(): void
     {
         $resolver = new ConsentHookableEventDescriber(new ConsentDefinitionRegistry([
-            new TestDefinition('backend_data', 'system'),
-            new TestDefinition('product_analytics', 'admin_user'),
         ]));
 
         static::assertEquals([

@@ -28,7 +28,6 @@ use Symfony\Component\Filesystem\Filesystem as Io;
 #[CoversClass(StorefrontSnippetStorage::class)]
 class StorefrontSnippetStorageTest extends TestCase
 {
-    private SnippetSnapshotAdapter $adapter;
 
     private Filesystem $filesystem;
 

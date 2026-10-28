@@ -4,10 +4,7 @@ namespace Contena\Tests\Integration\Storefront\Page;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Page\Wishlist\GuestWishlistPageLoadedEvent;
-use Contena\Storefront\Page\Wishlist\GuestWishlistPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -32,8 +29,4 @@ class GuestWishlistPageTest extends TestCase
         self::assertPageEvent(GuestWishlistPageLoadedEvent::class, $event, $context, $request, $page);
     }
 
-    protected function getPageLoader(): GuestWishlistPageLoader
-    {
-        return static::getContainer()->get(GuestWishlistPageLoader::class);
-    }
 }

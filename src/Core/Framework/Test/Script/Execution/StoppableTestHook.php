@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\Script\Execution;
 
 use Contena\Core\Framework\Script\Execution\Awareness\StoppableHook;
-use Contena\Core\Framework\Script\Execution\Awareness\StoppableHookTrait;
 
 /**
  * @internal

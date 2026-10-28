@@ -9,9 +9,7 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Event\EntityDeleteEvent;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\ContainsFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\MultiFilter;
-use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\NotFilter;
 use Contena\Core\Framework\Log\Package;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
@@ -53,9 +51,7 @@ class VideoCoverCleanupSubscriber implements EventSubscriberInterface
         }
 
         $filters = [
-            new NotFilter(MultiFilter::CONNECTION_AND, [new EqualsFilter('metaData', null)]),
             new ContainsFilter('mimeType', 'video/'),
-            new MultiFilter(MultiFilter::CONNECTION_OR, $coverIdFilters),
         ];
 
         $criteria = (new Criteria())->addFilter(new MultiFilter(MultiFilter::CONNECTION_AND, $filters));

@@ -20,15 +20,4 @@ class CaptchaException extends HttpException
     // No reCAPTCHA token was submitted, for a reason the server cannot narrow down.
     public const RECAPTCHA_TOKEN_REQUIRED_VIOLATION = 'VIOLATION::RECAPTCHA_TOKEN_REQUIRED';
 
-    public static function invalid(AbstractCaptcha $captcha): self
-    {
-        return new self(
-            Response::HTTP_FORBIDDEN,
-            self::INVALID_CAPTCHA_ERROR,
-            'The provided value for captcha "{{ captcha }}" is not valid.',
-            [
-                'captcha' => $captcha::class,
-            ]
-        );
-    }
 }

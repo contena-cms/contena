@@ -6,7 +6,6 @@ namespace Contena\Tests\Integration\Core\Framework\Util;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\HtmlSanitizer;
 
 /**

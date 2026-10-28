@@ -14,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Hasher;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogCollection;
@@ -26,7 +25,6 @@ use Contena\Core\Framework\Webhook\Subscriber\RetryWebhookMessageFailedSubscribe
 use Contena\Core\Framework\Webhook\WebhookEntity;
 use Contena\Core\Framework\Webhook\WebhookFailureStrategy;
 use Contena\Core\Test\Assert\Serialization;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\Event\WorkerMessageFailedEvent;
 

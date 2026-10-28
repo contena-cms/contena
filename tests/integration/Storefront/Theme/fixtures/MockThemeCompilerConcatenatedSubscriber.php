@@ -19,8 +19,4 @@ class MockThemeCompilerConcatenatedSubscriber implements EventSubscriberInterfac
         ];
     }
 
-    public function onGetConcatenatedStyles(ThemeCompilerConcatenatedStylesEvent $event): void
-    {
-        $event->setConcatenatedStyles($event->getConcatenatedStyles() . self::STYLES_CONCAT);
-    }
 }

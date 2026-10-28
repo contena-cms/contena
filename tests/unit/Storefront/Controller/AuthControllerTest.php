@@ -8,11 +8,8 @@ use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Checkout\Customer\Exception\BadCredentialsException;
-use Contena\Core\Checkout\Customer\SalesChannel\AbstractConvertGuestRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\AbstractImitateCustomerRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\AbstractLoginRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\AbstractLogoutRoute;
-use Contena\Core\Checkout\Customer\SalesChannel\AbstractResetPasswordRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\AbstractSendPasswordRecoveryMailRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\ConvertGuestRoute;
 use Contena\Core\Checkout\Customer\SalesChannel\ImitateCustomerRoute;
@@ -36,7 +33,6 @@ use Contena\Storefront\Page\Account\Login\AccountLoginPage;
 use Contena\Storefront\Page\Account\Login\AccountLoginPageLoadedHook;
 use Contena\Storefront\Page\Account\Login\AccountLoginPageLoader;
 use Contena\Storefront\Page\Account\RecoverPassword\AccountRecoverPasswordPageLoader;
-use Contena\Tests\Unit\Storefront\Controller\Stub\AuthControllerStub;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
@@ -50,7 +46,6 @@ use Symfony\Component\Validator\Validation;
 #[CoversClass(AuthController::class)]
 class AuthControllerTest extends TestCase
 {
-    private AuthControllerStub $controller;
 
     private AccountLoginPageLoader&Stub $accountLoginPageLoader;
 
@@ -301,38 +296,4 @@ class AuthControllerTest extends TestCase
         static::assertSame('frontend.account.convert.page', $this->controller->recorder()->forwardToRoute);
     }
 
-    private function createController(
-        ?AccountLoginPageLoader $accountLoginPageLoader = null,
-        ?AbstractSendPasswordRecoveryMailRoute $passwordRecoveryPageLoader = null,
-        ?AbstractLoginRoute $loginRoute = null,
-    ): AuthControllerStub {
-        $resetPasswordRoute = static::createStub(AbstractResetPasswordRoute::class);
-        $loginRoute ??= static::createStub(AbstractLoginRoute::class);
-        $logoutRoute = static::createStub(AbstractLogoutRoute::class);
-        $imitateCustomerRoute = static::createStub(AbstractImitateCustomerRoute::class);
-        $cartFacade = static::createStub(StorefrontCartFacade::class);
-        $recoverPasswordRoute = static::createStub(AccountRecoverPasswordPageLoader::class);
-
-        $abstractConvertGuestRoute = static::createStub(AbstractConvertGuestRoute::class);
-        $systemConfigService = static::createStub(SystemConfigService::class);
-
-        $controller = new AuthControllerStub(
-            $accountLoginPageLoader ?? $this->accountLoginPageLoader,
-            $passwordRecoveryPageLoader ?? $this->passwordRecoveryPageLoader,
-            $resetPasswordRoute,
-            $loginRoute,
-            $logoutRoute,
-            $imitateCustomerRoute,
-            $cartFacade,
-            $recoverPasswordRoute,
-            $abstractConvertGuestRoute,
-            $systemConfigService
-        );
-
-        $containerBuilder = new ContainerBuilder();
-        $containerBuilder->set('request_stack', new RequestStack());
-        $controller->setContainer($containerBuilder);
-
-        return $controller;
-    }
 }

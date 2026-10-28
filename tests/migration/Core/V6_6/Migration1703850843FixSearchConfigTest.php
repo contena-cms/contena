@@ -12,7 +12,6 @@ use Contena\Core\Framework\Test\TestCaseBase\KernelLifecycleManager;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Migration\V6_6\Migration1703850843FixSearchConfig;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
-use Contena\Tests\Migration\MigrationTestTrait;
 
 /**
  * @internal

@@ -14,10 +14,8 @@ use Contena\Core\Framework\DataAbstractionLayer\Indexing\EntityIndexingMessage;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\Exception\DecorationPatternException;
 use Contena\Core\Test\Stub\MessageBus\CollectingMessageBus;
-use Contena\Storefront\Framework\Seo\App\AppEntitySeoUrlConfig;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlIndexer;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlIndexingMessage;
-use Contena\Storefront\Framework\Seo\App\AppSeoUrlRouteProvider;
 use Contena\Storefront\Framework\Seo\App\AppSeoUrlSynchronizer;
 use Symfony\Component\Messenger\Envelope;
 
@@ -50,7 +48,6 @@ class AppSeoUrlIndexerTest extends TestCase
 
     private SeoUrlUpdater $seoUrlUpdater;
 
-    private AppSeoUrlSynchronizer $synchronizer;
 
     /**
      * @var list<array{routeName: string, ids: list<string>}>
@@ -399,24 +396,7 @@ class AppSeoUrlIndexerTest extends TestCase
         $this->indexer()->getDecorated();
     }
 
-    private function indexer(AppEntitySeoUrlConfig ...$entitySeoUrls): AppSeoUrlIndexer
-    {
-        $routes = static::createStub(AppSeoUrlRouteProvider::class);
-        $routes->method('getEntityRoutes')->willReturn($entitySeoUrls);
 
-        return new AppSeoUrlIndexer($routes, $this->seoUrlUpdater, $this->messageBus, $this->synchronizer);
-    }
-
-    private function entitySeoUrl(string $name, string $entityName): AppEntitySeoUrlConfig
-    {
-        return new AppEntitySeoUrlConfig(
-            name: $name,
-            routeName: 'storefront.app.SwagSeoUrlApp.' . $name,
-            hook: $name,
-            entityName: $entityName,
-            defaultTemplate: '{{ ' . $entityName . '.translated.name }}',
-        );
-    }
 
     /**
      * @param array<string, list<string|array<string, string>>> $primaryKeysByEntity

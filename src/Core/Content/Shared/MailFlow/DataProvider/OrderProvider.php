@@ -2,9 +2,7 @@
 
 namespace Contena\Core\Content\Shared\MailFlow\DataProvider;
 
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Log\Package;

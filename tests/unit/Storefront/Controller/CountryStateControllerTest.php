@@ -13,7 +13,6 @@ use Contena\Core\Test\Generator;
 use Contena\Storefront\Controller\CountryStateController;
 use Contena\Storefront\Pagelet\Country\CountryStateDataPagelet;
 use Contena\Storefront\Pagelet\Country\CountryStateDataPageletLoader;
-use Contena\Tests\Unit\Storefront\Controller\Stub\CountryStateControllerStub;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -25,7 +24,6 @@ class CountryStateControllerTest extends TestCase
 {
     private CountryStateDataPageletLoader&MockObject $pageletLoader;
 
-    private CountryStateControllerStub $controller;
 
     protected function setUp(): void
     {

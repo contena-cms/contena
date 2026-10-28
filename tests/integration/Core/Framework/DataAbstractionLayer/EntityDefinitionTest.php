@@ -24,7 +24,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Field\JsonField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\ReferenceVersionField;
 use Contena\Core\Framework\DataAbstractionLayer\FieldVisibility;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateDefinition;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateTranslationDefinition;
 use Contena\Core\System\StateMachine\StateMachineDefinition;

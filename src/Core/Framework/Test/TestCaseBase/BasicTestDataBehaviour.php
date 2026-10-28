@@ -3,12 +3,7 @@
 namespace Contena\Core\Framework\Test\TestCaseBase;
 
 use Doctrine\DBAL\Connection;
-use Contena\Core\Checkout\Document\Aggregate\DocumentType\DocumentTypeCollection;
 use Contena\Core\Checkout\Order\OrderStates;
-use Contena\Core\Checkout\Payment\PaymentMethodCollection;
-use Contena\Core\Checkout\Payment\PaymentMethodEntity;
-use Contena\Core\Checkout\Shipping\ShippingMethodCollection;
-use Contena\Core\Checkout\Shipping\ShippingMethodEntity;
 use Contena\Core\Content\Category\CategoryCollection;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
@@ -19,7 +14,6 @@ use Contena\Core\Framework\DataAbstractionLayer\Search\Sorting\FieldSorting;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Country\CountryCollection;
 use Contena\Core\System\Language\LanguageCollection;
-use Contena\Core\System\Salutation\SalutationCollection;
 use Contena\Core\System\Snippet\Aggregate\SnippetSet\SnippetSetCollection;
 use Contena\Core\System\StateMachine\Aggregation\StateMachineState\StateMachineStateCollection;
 use Contena\Core\System\Tax\TaxCollection;
@@ -82,27 +76,6 @@ trait BasicTestDataBehaviour
         return $id;
     }
 
-    protected function getAvailablePaymentMethod(?string $salesChannelId = null): PaymentMethodEntity
-    {
-        /** @var EntityRepository<PaymentMethodCollection> $repository */
-        $repository = static::getContainer()->get('payment_method.repository');
-
-        $criteria = (new Criteria())
-            ->setLimit(1)
-            ->addFilter(new EqualsFilter('active', true))
-            ->addFilter(new EqualsFilter('availabilityRuleId', null));
-
-        if ($salesChannelId) {
-            $criteria->addFilter(new EqualsFilter('salesChannels.id', $salesChannelId));
-        }
-
-        $paymentMethod = $repository->search($criteria, Context::createDefaultContext())->getEntities()->first();
-        if ($paymentMethod === null) {
-            throw new \LogicException('No available Payment method configured');
-        }
-
-        return $paymentMethod;
-    }
 
     protected function getValidShippingMethodId(?string $salesChannelId = null): string
     {
@@ -124,31 +97,6 @@ trait BasicTestDataBehaviour
         return $id;
     }
 
-    protected function getAvailableShippingMethod(?string $salesChannelId = null): ShippingMethodEntity
-    {
-        /** @var EntityRepository<ShippingMethodCollection> $repository */
-        $repository = static::getContainer()->get('shipping_method.repository');
-
-        $criteria = (new Criteria())
-            ->addAssociation('prices')
-            ->addFilter(new EqualsFilter('shipping_method.prices.calculation', 1))
-            ->addFilter(new EqualsFilter('active', true))
-            ->addSorting(new FieldSorting('name'));
-
-        if ($salesChannelId) {
-            $criteria->addFilter(new EqualsFilter('salesChannels.id', $salesChannelId));
-        }
-
-        $shippingMethods = $repository->search($criteria, Context::createDefaultContext())->getEntities();
-
-        foreach ($shippingMethods as $shippingMethod) {
-            if ($shippingMethod->getAvailabilityRuleId() !== null) {
-                return $shippingMethod;
-            }
-        }
-
-        throw new \LogicException('No available ShippingMethod configured');
-    }
 
     protected function getValidSalutationId(): string
     {

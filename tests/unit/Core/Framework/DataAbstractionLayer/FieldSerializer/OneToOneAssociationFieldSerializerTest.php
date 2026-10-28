@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
-use Contena\Core\Framework\DataAbstractionLayer\Field\FkField;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\PrimaryKey;
 use Contena\Core\Framework\DataAbstractionLayer\Field\Flag\Required;
 use Contena\Core\Framework\DataAbstractionLayer\Field\IdField;
@@ -116,15 +115,7 @@ class CustomerRecoveryDefinition extends EntityDefinition
         return new FieldCollection([
             (new IdField('id', 'id'))->addFlags(new PrimaryKey(), new Required()),
             (new StringField('hash', 'hash'))->addFlags(new Required()),
-            (new FkField('customer_id', 'customerId', TestCustomerDefinition::class))->addFlags(new Required()),
 
-            new OneToOneAssociationField(
-                'customer',
-                'customer_id',
-                'id',
-                TestCustomerDefinition::class,
-                false
-            ),
         ]);
     }
 }
@@ -146,13 +137,6 @@ class TestCustomerDefinition extends EntityDefinition
             (new StringField('first_name', 'first_name'))->addFlags(new Required()),
             (new StringField('last_name', 'last_name'))->addFlags(new Required()),
 
-            new OneToOneAssociationField(
-                'recoveryCustomer',
-                'id',
-                'customer_id',
-                CustomerRecoveryDefinition::class,
-                false
-            ),
         ]);
     }
 }

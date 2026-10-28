@@ -11,7 +11,6 @@ use Contena\Core\Content\Sitemap\Service\SitemapSalesChannelLoader;
 use Contena\Core\Content\Sitemap\Struct\SitemapGenerationResult;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelFunctionalTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\SalesChannelContext;

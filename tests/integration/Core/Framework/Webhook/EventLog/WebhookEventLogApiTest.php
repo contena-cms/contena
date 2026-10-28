@@ -7,12 +7,10 @@ use PHPUnit\Framework\TestCase;
 use Contena\Core\Defaults;
 use Contena\Core\Framework\App\AppEntity;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\AdminFunctionalTestBehaviour;
 use Contena\Core\Framework\Test\TestCaseHelper\TestUser;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Framework\Webhook\EventLog\WebhookEventLogDefinition;
 use Contena\Core\Test\Integration\Builder\Webhook\WebhookBuilder;
-use Contena\Tests\Integration\Core\Framework\App\AppFixture;
 
 /**
  * @internal

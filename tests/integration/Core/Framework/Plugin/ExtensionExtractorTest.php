@@ -8,7 +8,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Plugin\ExtensionExtractor;
 use Contena\Core\Framework\Plugin\PluginException;
 use Contena\Core\Framework\Plugin\PluginManagementService;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 

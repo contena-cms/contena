@@ -6,19 +6,9 @@ use Contena\Core\Checkout\Customer\Aggregate\CustomerGroup\CustomerGroupDefiniti
 use Contena\Core\Checkout\Customer\Aggregate\CustomerGroupRegistrationSalesChannel\CustomerGroupRegistrationSalesChannelDefinition;
 use Contena\Core\Checkout\Customer\Aggregate\CustomerWishlist\CustomerWishlistDefinition;
 use Contena\Core\Checkout\Customer\CustomerDefinition;
-use Contena\Core\Checkout\DocumentV2\Aggregate\DocumentBaseConfigSalesChannel\DocumentBaseConfigSalesChannelDefinition;
-use Contena\Core\Checkout\Order\OrderDefinition;
-use Contena\Core\Checkout\Payment\PaymentMethodDefinition;
-use Contena\Core\Checkout\Promotion\Aggregate\PromotionSalesChannel\PromotionSalesChannelDefinition;
-use Contena\Core\Checkout\Shipping\ShippingMethodDefinition;
 use Contena\Core\Content\Category\CategoryDefinition;
-use Contena\Core\Content\Cms\CmsPageDefinition;
-use Contena\Core\Content\LandingPage\Aggregate\LandingPageSalesChannel\LandingPageSalesChannelDefinition;
-use Contena\Core\Content\LandingPage\LandingPageDefinition;
 use Contena\Core\Content\MailTemplate\Aggregate\MailHeaderFooter\MailHeaderFooterDefinition;
 use Contena\Core\Content\MeasurementSystem\Field\MeasurementUnitsField;
-use Contena\Core\Content\Newsletter\Aggregate\NewsletterRecipient\NewsletterRecipientDefinition;
-use Contena\Core\Content\Product\Aggregate\ProductReview\ProductReviewDefinition;
 use Contena\Core\Content\Product\Aggregate\ProductVisibility\ProductVisibilityDefinition;
 use Contena\Core\Content\ProductExport\ProductExportDefinition;
 use Contena\Core\Content\Seo\MainCategory\MainCategoryDefinition;
@@ -60,8 +50,6 @@ use Contena\Core\System\SalesChannel\Aggregate\SalesChannelCurrency\SalesChannel
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainDefinition;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelFile\SalesChannelFileDefinition;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelLanguage\SalesChannelLanguageDefinition;
-use Contena\Core\System\SalesChannel\Aggregate\SalesChannelPaymentMethod\SalesChannelPaymentMethodDefinition;
-use Contena\Core\System\SalesChannel\Aggregate\SalesChannelShippingMethod\SalesChannelShippingMethodDefinition;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelTranslation\SalesChannelTranslationDefinition;
 use Contena\Core\System\SalesChannel\Aggregate\SalesChannelType\SalesChannelTypeDefinition;
 use Contena\Core\System\SystemConfig\SystemConfigDefinition;
@@ -112,8 +100,6 @@ class SalesChannelDefinition extends EntityDefinition
             (new FkField('language_id', 'languageId', LanguageDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of language used.'),
             (new FkField('customer_group_id', 'customerGroupId', CustomerGroupDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of customer group.'),
             (new FkField('currency_id', 'currencyId', CurrencyDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of currency used.'),
-            (new FkField('payment_method_id', 'paymentMethodId', PaymentMethodDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of payment method used.'),
-            (new FkField('shipping_method_id', 'shippingMethodId', ShippingMethodDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of shipping method.'),
             (new FkField('country_id', 'countryId', CountryDefinition::class))->addFlags(new ApiAware(), new Required())->setDescription('Unique identity of country.'),
             (new FkField('analytics_id', 'analyticsId', SalesChannelAnalyticsDefinition::class))->setDescription('Unique identity of country.'),
 
@@ -144,23 +130,15 @@ class SalesChannelDefinition extends EntityDefinition
             new ManyToManyAssociationField('currencies', CurrencyDefinition::class, SalesChannelCurrencyDefinition::class, 'sales_channel_id', 'currency_id'),
             new ManyToManyAssociationField('languages', LanguageDefinition::class, SalesChannelLanguageDefinition::class, 'sales_channel_id', 'language_id'),
             new ManyToManyAssociationField('countries', CountryDefinition::class, SalesChannelCountryDefinition::class, 'sales_channel_id', 'country_id'),
-            new ManyToManyAssociationField('paymentMethods', PaymentMethodDefinition::class, SalesChannelPaymentMethodDefinition::class, 'sales_channel_id', 'payment_method_id'),
             (new ManyToManyIdField('payment_method_ids', 'paymentMethodIds', 'paymentMethods'))->setDescription('Unique identity of payment method.'),
-            new ManyToManyAssociationField('shippingMethods', ShippingMethodDefinition::class, SalesChannelShippingMethodDefinition::class, 'sales_channel_id', 'shipping_method_id'),
             new ManyToOneAssociationField('type', 'type_id', SalesChannelTypeDefinition::class, 'id', false),
             (new ManyToOneAssociationField('language', 'language_id', LanguageDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default language for the sales channel'),
             new ManyToOneAssociationField('customerGroup', 'customer_group_id', CustomerGroupDefinition::class, 'id', false),
             (new ManyToOneAssociationField('currency', 'currency_id', CurrencyDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default currency for the sales channel'),
-            (new ManyToOneAssociationField('paymentMethod', 'payment_method_id', PaymentMethodDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default payment method for the sales channel'),
-            (new ManyToOneAssociationField('shippingMethod', 'shipping_method_id', ShippingMethodDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default shipping method for the sales channel'),
             (new ManyToOneAssociationField('country', 'country_id', CountryDefinition::class, 'id', false))->addFlags(new ApiAware())->setDescription('Default country for the sales channel'),
-            new OneToManyAssociationField('orders', OrderDefinition::class, 'sales_channel_id', 'id'),
 
             new OneToManyAssociationField('customers', CustomerDefinition::class, 'sales_channel_id', 'id'),
 
-            (new FkField('home_cms_page_id', 'homeCmsPageId', CmsPageDefinition::class))->setDescription('Unique identity of home CMS page.'),
-            (new ReferenceVersionField(CmsPageDefinition::class, 'home_cms_page_version_id'))->addFlags(new Required()),
-            new ManyToOneAssociationField('homeCmsPage', 'home_cms_page_id', CmsPageDefinition::class, 'id', false),
             new TranslatedField('homeSlotConfig'),
             new TranslatedField('homeEnabled'),
             new TranslatedField('homeName'),
@@ -177,11 +155,7 @@ class SalesChannelDefinition extends EntityDefinition
             (new OneToManyAssociationField('productVisibilities', ProductVisibilityDefinition::class, 'sales_channel_id'))->addFlags(new CascadeDelete()),
             (new OneToOneAssociationField('hreflangDefaultDomain', 'hreflang_default_domain_id', 'id', SalesChannelDomainDefinition::class, false))->addFlags(new ApiAware()),
             new ManyToOneAssociationField('mailHeaderFooter', 'mail_header_footer_id', MailHeaderFooterDefinition::class, 'id', false),
-            new OneToManyAssociationField('newsletterRecipients', NewsletterRecipientDefinition::class, 'sales_channel_id', 'id'),
             (new OneToManyAssociationField('numberRangeSalesChannels', NumberRangeSalesChannelDefinition::class, 'sales_channel_id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('promotionSalesChannels', PromotionSalesChannelDefinition::class, 'sales_channel_id', 'id'))->addFlags(new CascadeDelete()),
-            (new OneToManyAssociationField('documentBaseConfigSalesChannels', DocumentBaseConfigSalesChannelDefinition::class, 'sales_channel_id', 'id'))->addFlags(new CascadeDelete()),
-            new OneToManyAssociationField('productReviews', ProductReviewDefinition::class, 'sales_channel_id', 'id'),
             (new OneToManyAssociationField('seoUrls', SeoUrlDefinition::class, 'sales_channel_id', 'id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('seoUrlTemplates', SeoUrlTemplateDefinition::class, 'sales_channel_id'))->addFlags(new CascadeDelete()),
             (new OneToManyAssociationField('mainCategories', MainCategoryDefinition::class, 'sales_channel_id'))->addFlags(new CascadeDelete()),
@@ -189,7 +163,6 @@ class SalesChannelDefinition extends EntityDefinition
             (new OneToManyAssociationField('salesChannelFiles', SalesChannelFileDefinition::class, 'sales_channel_id', 'id'))->addFlags(new ApiAware(AdminApiSource::class), new CascadeDelete()),
             (new OneToOneAssociationField('analytics', 'analytics_id', 'id', SalesChannelAnalyticsDefinition::class, false))->addFlags(new CascadeDelete()),
             new ManyToManyAssociationField('customerGroupsRegistrations', CustomerGroupDefinition::class, CustomerGroupRegistrationSalesChannelDefinition::class, 'sales_channel_id', 'customer_group_id', 'id', 'id'),
-            new ManyToManyAssociationField('landingPages', LandingPageDefinition::class, LandingPageSalesChannelDefinition::class, 'sales_channel_id', 'landing_page_id', 'id', 'id'),
             new OneToManyAssociationField('boundCustomers', CustomerDefinition::class, 'bound_sales_channel_id', 'id'),
             (new OneToManyAssociationField('wishlists', CustomerWishlistDefinition::class, 'sales_channel_id'))->addFlags(new CascadeDelete()),
         ]);

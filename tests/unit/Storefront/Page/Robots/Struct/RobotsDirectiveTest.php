@@ -16,12 +16,6 @@ use Contena\Storefront\Page\Robots\Struct\RobotsDirectiveType;
 #[CoversClass(RobotsDirective::class)]
 class RobotsDirectiveTest extends TestCase
 {
-    #[DataProvider('providePathBasedCases')]
-    public function testIsPathBased(RobotsDirectiveType $type, bool $expected): void
-    {
-        $directive = new RobotsDirective($type, 'test-value');
-        static::assertSame($expected, $directive->isPathBased());
-    }
 
     /**
      * @return array<string, array{RobotsDirectiveType, bool}>

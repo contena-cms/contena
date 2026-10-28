@@ -4,7 +4,6 @@ namespace Contena\Tests\Unit\Storefront\Framework\Seo\App;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\TestCase;
-use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Struct\Serializer\StructNormalizer;
 use Contena\Core\Test\Assert\Serialization;
@@ -83,20 +82,6 @@ class AppSeoUrlIndexingMessageTest extends TestCase
         static::assertEquals($message->getContext(), $restored->getContext());
     }
 
-    private function message(): AppSeoUrlIndexingMessage
-    {
-        $message = new AppSeoUrlIndexingMessage(
-            [self::PRODUCT_ID, self::OTHER_PRODUCT_ID, self::BLOG_ID],
-            null,
-            Context::createDefaultContext()
-        );
-        $message->setIdsByEntity([
-            'product' => [self::PRODUCT_ID, self::OTHER_PRODUCT_ID],
-            'ce_blog' => [self::BLOG_ID],
-        ]);
-
-        return $message;
-    }
 
     private function messengerSerializer(): Serializer
     {

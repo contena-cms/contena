@@ -18,7 +18,6 @@ use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Store\Services\StoreClient;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Kernel;
 use Contena\Core\System\SystemConfig\SystemConfigService;

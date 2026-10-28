@@ -593,14 +593,6 @@ class DoubleSubmitGuardTest extends TestCase
         return Generator::generateSalesChannelContext(token: self::TOKEN);
     }
 
-    private function createGuard(
-        LockFactory $lockFactory,
-        CacheItemPoolInterface $cache,
-        LoggerInterface $logger,
-        float $lockWaitTimeout = 0.0,
-    ): DoubleSubmitGuard {
-        return new DoubleSubmitGuard($lockFactory, $cache, $logger, $lockWaitTimeout);
-    }
 
     private function createLockFactory(SharedLockInterface $lock): LockFactory
     {

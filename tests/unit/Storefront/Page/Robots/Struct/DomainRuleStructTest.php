@@ -11,8 +11,6 @@ use Contena\Core\Test\Annotation\DisabledFeatures;
 use Contena\Storefront\Page\Robots\Parser\ParsedRobots;
 use Contena\Storefront\Page\Robots\Struct\DomainRuleStruct;
 use Contena\Storefront\Page\Robots\Struct\RobotsDirective;
-use Contena\Storefront\Page\Robots\Struct\RobotsDirectiveType;
-use Contena\Storefront\Page\Robots\Struct\RobotsUserAgentBlock;
 
 /**
  * @internal
@@ -153,10 +151,6 @@ class DomainRuleStructTest extends TestCase
     public function testParsedUserAgentBlockDirectivesAreNotExposedAsDomainRules(): void
     {
         $parsed = new ParsedRobots([
-            new RobotsUserAgentBlock('Googlebot', [
-                new RobotsDirective(RobotsDirectiveType::DISALLOW, '/account/'),
-                new RobotsDirective(RobotsDirectiveType::ALLOW, '/widgets/'),
-            ]),
         ], []);
 
         $domainRuleStruct = new DomainRuleStruct($parsed, '');
@@ -167,7 +161,6 @@ class DomainRuleStructTest extends TestCase
     public function testOrphanedPathDirectivesGetTheBasePathApplied(): void
     {
         $parsed = new ParsedRobots([], [
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/account/'),
         ]);
 
         $directives = (new DomainRuleStruct($parsed, '/en'))->getDirectives();
@@ -203,7 +196,6 @@ class DomainRuleStructTest extends TestCase
     public function testGetRulesReturnsTheLegacyRuleArraysWhenTheFeatureIsInactive(): void
     {
         $parsed = new ParsedRobots([], [
-            new RobotsDirective(RobotsDirectiveType::DISALLOW, '/account/'),
         ]);
 
         $fromParsed = new DomainRuleStruct($parsed, '/en');

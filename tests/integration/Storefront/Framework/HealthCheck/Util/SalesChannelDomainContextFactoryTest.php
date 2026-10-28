@@ -16,9 +16,6 @@ use Contena\Core\Defaults;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Extensions\ExtensionDispatcher;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\DatabaseTransactionBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\Test\Integration\EventDispatcher\EventHookDispatcher;
 use Contena\Core\Test\Stub\Framework\IdsCollection;
 use Contena\Storefront\Framework\SystemCheck\Util\SalesChannelDomain;
@@ -36,7 +33,6 @@ class SalesChannelDomainContextFactoryTest extends TestCase
 
     private IdsCollection $ids;
 
-    private SalesChannelDomain $domain;
 
     protected function setUp(): void
     {
@@ -81,7 +77,6 @@ class SalesChannelDomainContextFactoryTest extends TestCase
         static::getContainer()->get(CartRuleLoader::class)->invalidate();
 
         EventHookDispatcher::fromContainer(static::getContainer())->on(
-            CartCreatedEvent::class,
             static function (CartCreatedEvent $event): void {
                 $lineItem = new LineItem('seeded-by-an-extension', LineItem::CUSTOM_LINE_ITEM_TYPE);
                 $lineItem->setLabel('seeded');

@@ -3,18 +3,15 @@
 namespace Contena\Core\System\SalesChannel;
 
 use Mcp\Exception\ResourceNotFoundException;
-use Contena\Core\Checkout\Cart\CartException;
 use Contena\Core\Checkout\Customer\Exception\CustomerNotFoundByIdException;
-use Contena\Core\Checkout\Order\OrderException;
 use Contena\Core\Checkout\Payment\PaymentException;
 use Contena\Core\Framework\Api\Exception\MissingPrivilegeException;
+use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\Framework\DataAbstractionLayer\Write\Validation\RestrictDeleteViolationException;
-use Contena\Core\Framework\Deprecation\BCChange\ReturnTypeNarrowing;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\HttpException;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Mcp\McpException;
-use Contena\Core\Framework\ContenaHttpException;
 use Contena\Core\System\SalesChannel\Exception\NoContextDataException;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -108,20 +105,6 @@ class SalesChannelException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function orderNotFound(string $orderId): self|OrderException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return OrderException::orderNotFound($orderId);
-        }
-
-        return new self(
-            Response::HTTP_NOT_FOUND,
-            self::ORDER_NOT_FOUND_CODE,
-            self::$couldNotFindMessage,
-            ['entity' => 'order', 'field' => 'id', 'value' => $orderId]
-        );
-    }
 
     public static function noContextData(string $salesChannelId): self
     {
@@ -229,10 +212,6 @@ class SalesChannelException extends HttpException
         );
     }
 
-    public static function customerNotLoggedIn(): CartException
-    {
-        return CartException::customerNotLoggedIn();
-    }
 
     public static function contextPermissionsLocked(): self
     {
@@ -302,20 +281,6 @@ class SalesChannelException extends HttpException
         );
     }
 
-    #[ReturnTypeNarrowing(version: 'v6.8.0', newType: 'self')]
-    public static function missingAssociation(string $association): self|OrderException
-    {
-        if (!Feature::isActive('v6.8.0.0')) {
-            return OrderException::missingAssociation($association);
-        }
-
-        return new self(
-            Response::HTTP_BAD_REQUEST,
-            self::MISSING_ORDER_ASSOCIATION_CODE,
-            'The required association "{{ association }}" is missing .',
-            ['association' => $association]
-        );
-    }
 
     public static function invalidMappingOperation(string $message): self
     {

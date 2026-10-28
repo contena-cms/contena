@@ -5,8 +5,6 @@ namespace Contena\Core\Content\MailTemplate\Service;
 use Psr\Clock\ClockInterface;
 use Contena\Core\Checkout\Cart\Price\Struct\CalculatedPrice;
 use Contena\Core\Checkout\Cart\Price\Struct\CartPrice;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTax;
-use Contena\Core\Checkout\Cart\Tax\Struct\CalculatedTaxCollection;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRule;
 use Contena\Core\Checkout\Cart\Tax\Struct\TaxRuleCollection;
 use Contena\Core\Checkout\DocumentV2\DocumentFormat;
@@ -469,11 +467,6 @@ class MailDataSimulator
                 return new CalculatedPrice(
                     Random::getInteger(100, 1000000) / 100,
                     Random::getInteger(100, 1000000) / 100,
-                    new CalculatedTaxCollection([new CalculatedTax(
-                        Random::getInteger(100, 100000) / 100,
-                        Random::getInteger(100, 1000000) / 100,
-                        19.0,
-                    )]),
                     new TaxRuleCollection([new TaxRule(
                         19.0,
                     )]),
@@ -484,11 +477,6 @@ class MailDataSimulator
                     Random::getInteger(100, 1000000) / 100,
                     Random::getInteger(100, 1000000) / 100,
                     Random::getInteger(100, 1000000) / 100,
-                    new CalculatedTaxCollection([new CalculatedTax(
-                        Random::getInteger(100, 100000) / 100,
-                        Random::getInteger(100, 1000000) / 100,
-                        19.0,
-                    )]),
                     new TaxRuleCollection([new TaxRule(
                         19.0,
                     )]),

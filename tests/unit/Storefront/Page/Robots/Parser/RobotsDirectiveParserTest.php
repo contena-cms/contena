@@ -23,7 +23,6 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 #[CoversClass(RobotsDirectiveParser::class)]
 class RobotsDirectiveParserTest extends TestCase
 {
-    private RobotsDirectiveParser $parser;
 
     protected function setUp(): void
     {
@@ -389,7 +388,6 @@ TXT;
         $eventDispatched = false;
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->addListener(
-            RobotsDirectiveParsingEvent::class,
             static function () use (&$eventDispatched): void {
                 $eventDispatched = true;
             }
@@ -408,7 +406,6 @@ TXT;
 
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->addListener(
-            RobotsUnknownDirectiveEvent::class,
             static function (RobotsUnknownDirectiveEvent $event) use (&$eventDispatched, &$unknownDirectiveType): void {
                 $eventDispatched = true;
                 $unknownDirectiveType = $event->directiveType;
@@ -427,7 +424,6 @@ TXT;
     {
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->addListener(
-            RobotsUnknownDirectiveEvent::class,
             static function (RobotsUnknownDirectiveEvent $event): void {
                 if ($event->directiveType === 'Clean-param') {
                     $event->handled = true; // Mark as handled to prevent warning
@@ -445,7 +441,6 @@ TXT;
     {
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->addListener(
-            RobotsUnknownDirectiveEvent::class,
             static function (RobotsUnknownDirectiveEvent $event): void {
                 if ($event->directiveType === 'Test-Directive') {
                     $customIssue = new ParseIssue(
@@ -471,18 +466,11 @@ TXT;
     {
         $eventDispatcher = new EventDispatcher();
         $eventDispatcher->addListener(
-            RobotsDirectiveParsingEvent::class,
             static function (RobotsDirectiveParsingEvent $event): void {
                 // Add a custom issue via the event
                 $parsedResult = $event->parsedResult;
                 $newIssues = array_values([
                     ...$parsedResult->issues,
-                    new ParseIssue(
-                        0,
-                        '',
-                        'Custom validation failed',
-                        ParseIssueSeverity::WARNING
-                    ),
                 ]);
                 $modifiedResult = new ParsedRobots(
                     $parsedResult->userAgentBlocks,

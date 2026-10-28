@@ -3,7 +3,6 @@
 namespace Contena\Core\Framework\Test\Script\Execution;
 
 use Contena\Core\Framework\Script\Execution\Awareness\SalesChannelContextAware;
-use Contena\Core\Framework\Script\Execution\Awareness\SalesChannelContextAwareTrait;
 use Contena\Core\Framework\Script\Execution\Hook;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
 

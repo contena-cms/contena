@@ -9,11 +9,7 @@ use Contena\Core\Content\Product\SalesChannel\Listing\ProductListingRoute;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\EqualsFilter;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Filter\RangeFilter;
-use Contena\Core\Framework\Test\TestCaseBase\BasicTestDataBehaviour;
-use Contena\Core\Framework\Test\TestCaseBase\SalesChannelApiTestBehaviour;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
-use Contena\Tests\Bench\AbstractBenchCase;
-use Contena\Tests\Bench\Fixtures;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\KernelInterface;
 

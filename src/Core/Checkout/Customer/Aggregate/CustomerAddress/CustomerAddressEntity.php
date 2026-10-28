@@ -4,12 +4,9 @@ namespace Contena\Core\Checkout\Customer\Aggregate\CustomerAddress;
 
 use Contena\Core\Checkout\Customer\CustomerEntity;
 use Contena\Core\Framework\DataAbstractionLayer\Entity;
-use Contena\Core\Framework\DataAbstractionLayer\EntityCustomFieldsTrait;
-use Contena\Core\Framework\DataAbstractionLayer\EntityIdTrait;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\System\Country\Aggregate\CountryState\CountryStateEntity;
 use Contena\Core\System\Country\CountryEntity;
-use Contena\Core\System\Salutation\SalutationEntity;
 
 #[Package('checkout')]
 class CustomerAddressEntity extends Entity
@@ -51,7 +48,6 @@ class CustomerAddressEntity extends Entity
 
     protected ?CountryStateEntity $countryState = null;
 
-    protected ?SalutationEntity $salutation = null;
 
     protected ?CustomerEntity $customer = null;
 
@@ -231,15 +227,7 @@ class CustomerAddressEntity extends Entity
         $this->countryState = $countryState;
     }
 
-    public function getSalutation(): ?SalutationEntity
-    {
-        return $this->salutation;
-    }
 
-    public function setSalutation(SalutationEntity $salutation): void
-    {
-        $this->salutation = $salutation;
-    }
 
     public function getCustomer(): ?CustomerEntity
     {

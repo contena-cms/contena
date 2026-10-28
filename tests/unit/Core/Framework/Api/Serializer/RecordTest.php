@@ -15,7 +15,6 @@ use Contena\Core\System\Tag\TagCollection;
 use Contena\Core\System\Tag\TagDefinition;
 use Contena\Core\System\Tag\TagEntity;
 use Contena\Core\System\Tax\TaxEntity;
-use Contena\Tests\Unit\Core\Framework\Api\Serializer\_fixtures\TestAttributeEntity;
 
 /**
  * @internal

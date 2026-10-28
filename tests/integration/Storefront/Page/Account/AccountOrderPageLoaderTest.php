@@ -4,19 +4,15 @@ namespace Contena\Tests\Integration\Storefront\Page\Account;
 
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Checkout\Customer\CustomerCollection;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextFactory;
 use Contena\Core\System\SalesChannel\Context\SalesChannelContextService;
 use Contena\Core\System\SalesChannel\SalesChannelContext;
-use Contena\Storefront\Page\Account\Order\AccountOrderPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -140,8 +136,4 @@ class AccountOrderPageLoaderTest extends TestCase
         static::assertSame($deepLinkCode, $order->getDeepLinkCode());
     }
 
-    protected function getPageLoader(): AccountOrderPageLoader
-    {
-        return static::getContainer()->get(AccountOrderPageLoader::class);
-    }
 }

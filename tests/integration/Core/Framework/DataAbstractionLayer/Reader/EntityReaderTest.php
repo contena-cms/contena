@@ -10,7 +10,6 @@ use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressColl
 use Contena\Core\Checkout\Customer\Aggregate\CustomerAddress\CustomerAddressEntity;
 use Contena\Core\Checkout\Customer\CustomerCollection;
 use Contena\Core\Checkout\Customer\CustomerEntity;
-use Contena\Core\Checkout\Order\OrderCollection;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationCollection;
 use Contena\Core\Content\Category\Aggregate\CategoryTranslation\CategoryTranslationEntity;
 use Contena\Core\Content\Category\CategoryCollection;
@@ -47,7 +46,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\DataAbstractionLayerFieldTestBehaviour;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\ConsistsOfManyToManyDefinition;
 use Contena\Core\Framework\Test\DataAbstractionLayer\Field\TestDefinition\NonIdFieldNamePrimaryKeyTestDefinition;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\Language\LanguageCollection;
 use Contena\Core\System\Language\LanguageEntity;

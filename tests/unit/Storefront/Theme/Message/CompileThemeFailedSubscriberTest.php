@@ -126,16 +126,6 @@ class CompileThemeFailedSubscriberTest extends TestCase
         ]);
     }
 
-    private function assignMessage(string $themeId, ?Context $context = null): CompileThemeMessage
-    {
-        return new CompileThemeMessage(
-            TestDefaults::SALES_CHANNEL,
-            $themeId,
-            true,
-            $context ?? Context::createDefaultContext(),
-            true
-        );
-    }
 
     private function failedEvent(object $message, bool $willRetry = false): WorkerMessageFailedEvent
     {

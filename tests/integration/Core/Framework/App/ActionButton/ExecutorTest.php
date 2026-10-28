@@ -23,8 +23,6 @@ use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Random;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
-use Contena\Core\Test\AppSystemTestBehaviour;
-use Contena\Tests\Integration\Core\Framework\App\GuzzleTestClientBehaviour;
 
 /**
  * @internal

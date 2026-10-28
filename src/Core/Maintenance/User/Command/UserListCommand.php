@@ -4,7 +4,6 @@ namespace Contena\Core\Maintenance\User\Command;
 
 use Contena\Core\Defaults;
 use Contena\Core\Framework\Api\Acl\Role\AclRoleEntity;
-use Contena\Core\Framework\Console\OutputFormatTrait;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\DataAbstractionLayer\EntityRepository;
 use Contena\Core\Framework\DataAbstractionLayer\Search\Criteria;

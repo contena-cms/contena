@@ -11,7 +11,6 @@ use Contena\Core\Framework\App\Mcp\Feature\McpToolConfig;
 use Contena\Core\Framework\App\Mcp\Feature\McpToolFeatureDefinition;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Util\Filesystem;
-use Contena\Tests\Unit\Core\Framework\App\AppFixture;
 
 /**
  * @internal

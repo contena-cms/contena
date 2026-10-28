@@ -10,10 +10,7 @@ use Contena\Core\Checkout\Order\Aggregate\OrderTransaction\OrderTransactionState
 use Contena\Core\Checkout\Order\OrderEntity;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Storefront\Page\Account\Overview\AccountOverviewPageLoadedEvent;
-use Contena\Storefront\Page\Account\Overview\AccountOverviewPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -95,8 +92,4 @@ class OverviewPageTest extends TestCase
         self::assertPageEvent(AccountOverviewPageLoadedEvent::class, $event, $context, $request, $page);
     }
 
-    protected function getPageLoader(): AccountOverviewPageLoader
-    {
-        return static::getContainer()->get(AccountOverviewPageLoader::class);
-    }
 }

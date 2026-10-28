@@ -32,8 +32,6 @@ use Contena\Core\Framework\Log\ExceptionLogger;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\Test\Generator;
-use Contena\Tests\Unit\Core\Checkout\Gateway\Command\_fixture\StubCheckoutGatewayCommand;
-use Contena\Tests\Unit\Core\Checkout\Gateway\Command\_fixture\StubCheckoutGatewayHandler;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -202,8 +200,4 @@ class AppCheckoutGatewayTest extends TestCase
         $gateway->process(new CheckoutGatewayPayloadStruct(new Cart('hatoken'), $context, new PaymentMethodCollection(), new ShippingMethodCollection()));
     }
 
-    private function getRegistry(): CheckoutGatewayCommandRegistry
-    {
-        return new CheckoutGatewayCommandRegistry([new StubCheckoutGatewayHandler()]);
-    }
 }

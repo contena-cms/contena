@@ -13,12 +13,9 @@ use Contena\Core\Content\Product\ProductException;
 use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\IntegrationTestBehaviour;
 use Contena\Core\Framework\Uuid\Uuid;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Storefront\Page\Product\ProductPageLoadedEvent;
-use Contena\Storefront\Page\Product\ProductPageLoader;
-use Contena\Storefront\Test\Page\StorefrontPageTestBehaviour;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -290,8 +287,4 @@ class ProductPageTest extends TestCase
         );
     }
 
-    protected function getPageLoader(): ProductPageLoader
-    {
-        return static::getContainer()->get(ProductPageLoader::class);
-    }
 }

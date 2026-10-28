@@ -51,7 +51,6 @@ use Contena\Core\System\CustomField\CustomFieldSetPersister;
 use Contena\Core\System\CustomField\Xml\CustomFields;
 use Contena\Core\System\SystemConfig\SystemConfigService;
 use Contena\Core\Test\Stub\EventDispatcher\CollectingEventDispatcher;
-use Contena\Tests\Unit\Core\Framework\Plugin\_fixtures\WebRequestPluginLifecycleService;
 use Symfony\Component\Cache\CacheItem;
 use Symfony\Component\Clock\MockClock;
 use Symfony\Component\Clock\NativeClock;

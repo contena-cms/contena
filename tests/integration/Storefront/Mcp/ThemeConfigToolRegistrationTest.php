@@ -6,7 +6,6 @@ use Mcp\Capability\RegistryInterface;
 use Mcp\Server;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Framework\Log\Package;
-use Contena\Core\Framework\Test\TestCaseBase\KernelTestBehaviour;
 
 /**
  * Checks the theme config tool as the admin MCP server publishes it.
