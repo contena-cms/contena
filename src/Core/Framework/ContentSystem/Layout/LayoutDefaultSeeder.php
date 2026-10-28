@@ -1,0 +1,90 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Layout;
+
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredDefaultProvider;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * Seeds an element forest's type defaults into stored properties at the DAL write boundary, so every tree written to
+ * content_layout carries its type defaults regardless of how it was built (direct DAL write, Sync API, import,
+ * fixtures) — the paths that never pass through the layout mutations. Per node it fills each primitive property and
+ * nested object member of the node's component type whose default is non-null and whose key is absent, then recurses
+ * every slot's children; an existing value is never overwritten and an unregistered component is left untouched (the
+ * write gate reports that separately).
+ *
+ * A {@see StoredElement} is immutable, so seeding it rebuilds the subtree through its `with*()` methods and hands
+ * back a new forest rather than filling the one it was given. Shares the per-type rule with the layout mutations
+ * via {@see StoredDefaultProvider}.
+ *
+ * @phpstan-import-type PropertyDefault from StoredDefaultProvider
+ *
+ * @internal
+ *
+ * @final
+ */
+#[Package('framework')]
+class LayoutDefaultSeeder
+{
+    public function __construct(
+        private readonly AbstractContentSystemElementTypeRegistry $registry,
+        private readonly StoredDefaultProvider $storedDefaultProvider,
+    ) {
+    }
+
+    /**
+     * @param list<StoredElement> $forest
+     *
+     * @return list<StoredElement>
+     */
+    public function seed(array $forest): array
+    {
+        $seeded = [];
+
+        foreach ($forest as $element) {
+            $seeded[] = $this->seedElement($element);
+        }
+
+        return $seeded;
+    }
+
+    /**
+     * Rebuilds the element with the missing defaults filled in and every slot child seeded the same way. A key
+     * the element already carries keeps its value, an authored null included: the key being present is what
+     * decides, so seeding never replaces something the author put there.
+     */
+    private function seedElement(StoredElement $element): StoredElement
+    {
+        $properties = $element->properties();
+
+        foreach ($this->defaultsFor($element->component) as $key => $default) {
+            if (\array_key_exists($key, $properties)) {
+                continue;
+            }
+
+            $properties[$key] = StoredValue::fromDecoded($default);
+        }
+
+        $slots = [];
+        foreach ($element->slots as $name => $children) {
+            $slots[$name] = array_map($this->seedElement(...), $children);
+        }
+
+        return $element->withProperties($properties)->withSlots($slots);
+    }
+
+    /**
+     * @return array<string, PropertyDefault>
+     */
+    private function defaultsFor(string $component): array
+    {
+        if (!$this->registry->has($component)) {
+            return [];
+        }
+
+        return $this->storedDefaultProvider->forType($this->registry, $component);
+    }
+}

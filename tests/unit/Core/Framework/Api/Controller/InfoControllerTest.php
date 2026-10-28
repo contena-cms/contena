@@ -4,12 +4,14 @@ namespace Contena\Tests\Unit\Core\Framework\Api\Controller;
 
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\TestDox;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Contena\Core\Content\Flow\Api\FlowActionCollector;
 use Contena\Core\Content\Media\Event\MediaFileExtensionWhitelistEvent;
 use Contena\Core\Content\Media\Upload\MediaFileExtensionListProvider;
+use Contena\Core\Content\Product\SalesChannel\SalesChannelProductEntity;
 use Contena\Core\Framework\Api\ApiDefinition\DefinitionService;
 use Contena\Core\Framework\Api\Controller\InfoController;
 use Contena\Core\Framework\Api\Event\AdminInfoConfigEvent;
@@ -22,19 +24,34 @@ use Contena\Core\Framework\App\ShopId\ShopIdProvider;
 use Contena\Core\Framework\App\Url\AppUrlVerifier;
 use Contena\Core\Framework\App\Url\VerificationState;
 use Contena\Core\Framework\App\Url\VerificationStatus;
-use Contena\Core\Framework\Context;
+use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
+use Contena\Core\Framework\ContentSystem\Binding\Registry\AbstractContentSystemBindingSpecificationRegistry;
+use Contena\Core\Framework\ContentSystem\Binding\Specification\BindingSpecification;
+use Contena\Core\Framework\ContentSystem\Hydration\DataContext\ContextType;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderProvider;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Context\Distribution\DistributionStrategy;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\AbstractContentSystemStyleOptionRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Specification\StyleOptionValueType;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\AbstractContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\AbstractContentSystemElementTypeRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\ContentSystemElementTypeSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Specification\CopilotSpecification;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
+use Contena\Core\Framework\ContentSystem\Resolution\ProvidedContext;
+use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderSchemaGenerator;use Contena\Core\Framework\Context;
 use Contena\Core\Framework\Event\BusinessEventCollector;
-use Contena\Core\Framework\Feature;
 use Contena\Core\Framework\Increment\IncrementGatewayRegistry;
-use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsEntity;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageStatsResponseEntity;
 use Contena\Core\Framework\MessageQueue\Stats\Entity\MessageTypeStatsCollection;
 use Contena\Core\Framework\MessageQueue\Stats\StatsService;
 use Contena\Core\Framework\Migration\MigrationInfo;
 use Contena\Core\Framework\Test\Store\StaticInAppPurchaseFactory;
+use Contena\Core\Framework\Test\TestCaseBase\EnvTestBehaviour;
 use Contena\Core\PlatformRequest;
 use Contena\Core\Test\Annotation\DisabledFeatures;
+use Contena\Core\Test\Stub\ContentSystem\ContentSystemElementTypeSpecificationBuilder;
 use Contena\Core\Test\Stub\SystemConfigService\StaticSystemConfigService;
 use Symfony\Bundle\FrameworkBundle\Routing\AttributeRouteControllerLoader;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBag;
@@ -44,7 +61,6 @@ use Symfony\Component\HttpFoundation\Request;
 /**
  * @internal
  */
-#[Package('framework')]
 #[CoversClass(InfoController::class)]
 class InfoControllerTest extends TestCase
 {
@@ -73,6 +89,286 @@ class InfoControllerTest extends TestCase
         $this->shopIdProvider->method('getShopId')->willReturn($shopId);
     }
 
+    #[TestDox('returns content system element types as JSON')]
+    public function testContentSystemElementTypes(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $spec = $this->alertTypeSpecification();
+
+        $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $registry->method('all')->willReturn(['Sw:Alert' => $spec]);
+
+        $controller = $this->createController(elementTypeRegistry: $registry);
+        $response = $controller->getContentSystemElementTypes();
+
+        static::assertSame(200, $response->getStatusCode());
+        $content = $response->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertArrayHasKey('types', $data);
+        static::assertCount(1, $data['types']);
+        static::assertSame('Sw:Alert', $data['types'][0]['name']);
+        static::assertSame('core', $data['types'][0]['source']);
+    }
+
+    #[TestDox('returns content system entity types as JSON')]
+    public function testContentSystemEntityTypes(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $expected = ['entityTypes' => ['product', 'category', 'landing_page']];
+
+        $rootSourceRegistry = static::createStub(RootSourceRegistry::class);
+        $rootSourceRegistry->method('entityRootSources')->willReturn(['product', 'category', 'landing_page']);
+
+        $controller = $this->createController(rootSourceRegistry: $rootSourceRegistry);
+        $response = $controller->contentSystemEntityTypes();
+
+        static::assertSame(200, $response->getStatusCode());
+        $content = $response->getContent();
+        static::assertIsString($content);
+        static::assertSame($expected, json_decode($content, true, 512, \JSON_THROW_ON_ERROR));
+    }
+
+    #[TestDox('returns one root-source entry per known root source, in order, with its kind and provided context')]
+    public function testContentSystemRootSources(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $rootSourceRegistry = static::createStub(RootSourceRegistry::class);
+        $rootSourceRegistry->method('knownRootSources')->willReturn(['product', 'header', 'none']);
+        $rootSourceRegistry->method('entityRootSources')->willReturn(['product']);
+        $rootSourceRegistry->method('resolve')->willReturnCallback(
+            static fn (string $rootSource): array => $rootSource === 'product' ? [new ProvidedContext(
+                contextKey: 'product',
+                fqcn: SalesChannelProductEntity::class,
+                contextType: ContextType::Single,
+                providerElementId: null,
+                distribution: DistributionStrategy::Broadcast,
+                path: null,
+                root: true,
+            )] : []
+        );
+
+        $controller = $this->createController(rootSourceRegistry: $rootSourceRegistry);
+        $response = $controller->contentSystemRootSources(Context::createDefaultContext());
+
+        static::assertSame(200, $response->getStatusCode());
+        $content = $response->getContent();
+        static::assertIsString($content);
+
+        static::assertSame([
+            'rootSources' => [
+                [
+                    'id' => 'product',
+                    'kind' => 'entity',
+                    'providedContext' => [[
+                        'contextKey' => 'product',
+                        'fqcn' => SalesChannelProductEntity::class,
+                        'contextType' => 'single',
+                        'distribution' => 'broadcast',
+                    ]],
+                ],
+                [
+                    'id' => 'header',
+                    'kind' => 'section',
+                    'providedContext' => [],
+                ],
+                [
+                    'id' => 'none',
+                    'kind' => 'none',
+                    'providedContext' => [],
+                ],
+            ],
+        ], json_decode($content, true, 512, \JSON_THROW_ON_ERROR));
+    }
+
+    #[TestDox('returns the registered style options keyed by wire name with their derived schema')]
+    public function testContentSystemStyleOptionsReturnsRegisteredOptionsKeyedByWireName(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $registry = static::createStub(AbstractContentSystemStyleOptionRegistry::class);
+        $registry->method('allResolved')->willReturn(['col-span' => $this->styleOption()]);
+
+        $controller = $this->createController(styleOptionRegistry: $registry);
+        $response = $controller->getContentSystemStyleOptions();
+
+        static::assertSame(200, $response->getStatusCode());
+        $content = $response->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertSame([
+            'col-span' => [
+                'type' => 'integer',
+                'enum' => null,
+                'range' => ['min' => 1, 'max' => 12],
+                'maxLength' => null,
+                'default' => null,
+                'breakpointAware' => true,
+                'adminUI' => null,
+            ],
+        ], $data['styleOptions']);
+    }
+
+    #[DataProvider('aclProtectedRouteProvider')]
+    public function testRouteRequiresMessageQueueStatsReadPrivilege(string $routeName): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $route = (new AttributeRouteControllerLoader())->load(InfoController::class)->get($routeName);
+
+        static::assertNotNull($route, \sprintf('Route "%s" is not defined on %s', $routeName, InfoController::class));
+        static::assertSame(['message_queue_stats:read'], $route->getDefault(PlatformRequest::ATTRIBUTE_ACL));
+    }
+
+    #[TestDox('returns current shop id when shop id fingerprints have changed')]
+    public function testReturnsCurrentShopIdIfShopIdFingerprintsHaveChanged(): void
+    {
+        $this->shopIdProvider
+            ->expects($this->atLeastOnce())
+            ->method('getShopId')
+            ->willThrowException(new ShopIdChangeSuggestedException(ShopId::v2('current-shop-id'), new FingerprintComparisonResult([], [], 75)));
+
+        $content = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
+        static::assertArrayHasKey('shopId', $data);
+        static::assertSame('current-shop-id', $data['shopId']);
+    }
+
+    #[TestDox('folds the registered binding specifications into the matching element type entry, keyed by source-qualified id')]
+    public function testContentSystemElementTypesFoldsInBindingSpecifications(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $imageSpec = new ContentSystemElementTypeSpecification(
+            name: 'Sw:Media:Image',
+            label: 'Image',
+            description: 'Image component',
+            icon: null,
+            category: null,
+            copilot: new CopilotSpecification('Image summary', []),
+            properties: [],
+            slots: [],
+            source: 'core',
+        );
+        $alertSpec = $this->alertTypeSpecification();
+
+        $elementTypeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $elementTypeRegistry->method('all')->willReturn(['Sw:Media:Image' => $imageSpec, 'Sw:Alert' => $alertSpec]);
+
+        $bindingSpecificationRegistry = static::createStub(AbstractContentSystemBindingSpecificationRegistry::class);
+        $bindingSpecificationRegistry->method('all')->willReturn(['core:media-picker' => $this->bindingSpecification('Sw:Media:Image')]);
+
+        $controller = $this->createController(elementTypeRegistry: $elementTypeRegistry, bindingSpecificationRegistry: $bindingSpecificationRegistry);
+        $response = $controller->getContentSystemElementTypes();
+
+        $content = $response->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        $typesByName = [];
+        foreach ($data['types'] as $type) {
+            $typesByName[$type['name']] = $type;
+        }
+
+        static::assertSame([
+            'core:media-picker' => [
+                'id' => 'media-picker',
+                'type' => 'Sw:Media:Image',
+                'label' => 'Media Picker',
+                'default' => false,
+                'resolves' => [],
+                'inputs' => [],
+            ],
+        ], $typesByName['Sw:Media:Image']['bindingSpecifications']);
+        // A type with no applicable specification carries an empty map, not the Image entry's specifications.
+        static::assertSame([], $typesByName['Sw:Alert']['bindingSpecifications']);
+    }
+
+    #[TestDox('folds the resolved storage schema into each element type entry, keyed by stored key')]
+    public function testContentSystemElementTypesFoldsInStorageSchema(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $textSpec = ContentSystemElementTypeSpecificationBuilder::create('Sw:Content:Text')
+            ->primitive('text', 'string', default: '<p>Lorem ipsum</p>')
+            ->build();
+        $alertSpec = $this->alertTypeSpecification();
+
+        $elementTypeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $elementTypeRegistry->method('all')->willReturn(['Sw:Content:Text' => $textSpec, 'Sw:Alert' => $alertSpec]);
+
+        $controller = $this->createController(elementTypeRegistry: $elementTypeRegistry);
+        $response = $controller->getContentSystemElementTypes();
+
+        $content = $response->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        $typesByName = [];
+        foreach ($data['types'] as $type) {
+            $typesByName[$type['name']] = $type;
+        }
+
+        static::assertSame([
+            'text' => ['kind' => 'property', 'type' => 'string', 'required' => false, 'default' => '<p>Lorem ipsum</p>'],
+        ], $typesByName['Sw:Content:Text']['storageSchema']);
+        // A type that stores nothing carries an empty map, not the Text entry's storage schema.
+        static::assertSame([], $typesByName['Sw:Alert']['storageSchema']);
+    }
+
+    #[TestDox('folds the registered style options into the element types response')]
+    public function testContentSystemElementTypesFoldsInStyleOptions(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $styleOptionRegistry = static::createStub(AbstractContentSystemStyleOptionRegistry::class);
+        $styleOptionRegistry->method('allResolved')->willReturn(['col-span' => $this->styleOption()]);
+
+        $controller = $this->createController(styleOptionRegistry: $styleOptionRegistry);
+        $response = $controller->getContentSystemElementTypes();
+
+        $content = $response->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertArrayHasKey('styleOptions', $data);
+        // The folded section must carry the derived toSchema() shape, not raw option values
+        static::assertSame('integer', $data['styleOptions']['col-span']['type']);
+        static::assertSame(['min' => 1, 'max' => 12], $data['styleOptions']['col-span']['range']);
+        static::assertTrue($data['styleOptions']['col-span']['breakpointAware']);
+    }
+
+    #[TestDox('preserves floating-point precision in message stats response')]
+    public function testMessageStatsPreservesFloatingPointPrecision(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
+
+        $this->statsService->method('getStats')->willReturn(
+            new MessageStatsResponseEntity(
+                true,
+                new MessageStatsEntity(1, new \DateTime('2024-01-15 10:00:00'), 1.00, new MessageTypeStatsCollection())
+            )
+        );
+        $content = $this->createController()->messageStats()->getContent();
+        static::assertIsString($content);
+
+        $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
+        static::assertIsArray($data);
+        static::assertArrayHasKey('stats', $data);
+        static::assertArrayHasKey('averageTimeInQueue', $data['stats']);
+
+        // Check that the floating point precision is preserved for zero-padded decimal values
+        static::assertSame(1.00, $data['stats']['averageTimeInQueue']);
+    }
+
+    #[TestDox('returns the complete admin config payload with all expected keys and values')]
     public function testConfig(): void
     {
         $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
@@ -81,7 +377,11 @@ class InfoControllerTest extends TestCase
             'APP_URL' => 'https://app.url',
         ]);
 
-        $content = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
+        $appUrlVerifier = static::createStub(AppUrlVerifier::class);
+        $appUrlVerifier->method('isAppUrlReachable')->willReturn(true);
+        $appUrlVerifier->method('hasAppsThatNeedAppUrl')->willReturn(false);
+
+        $content = $this->createController(appUrlVerifier: $appUrlVerifier)->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
         static::assertIsString($content);
 
         $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
@@ -99,10 +399,6 @@ class InfoControllerTest extends TestCase
         $workerConfig = $data['adminWorker'];
         static::assertArrayHasKey('enableAdminWorker', $workerConfig);
         static::assertTrue($workerConfig['enableAdminWorker']);
-        if (!Feature::isActive('v6.8.0.0')) {
-            static::assertArrayHasKey('enableQueueStatsWorker', $workerConfig);
-            static::assertTrue($workerConfig['enableQueueStatsWorker']);
-        }
         static::assertArrayHasKey('enableNotificationWorker', $workerConfig);
         static::assertTrue($workerConfig['enableNotificationWorker']);
         static::assertArrayHasKey('transports', $workerConfig);
@@ -116,14 +412,11 @@ class InfoControllerTest extends TestCase
         static::assertArrayHasKey('enableUrlFeature', $settings);
         static::assertTrue($settings['enableUrlFeature']);
         static::assertArrayHasKey('appUrlReachable', $settings);
-        static::assertFalse($settings['appUrlReachable']);
+        static::assertTrue($settings['appUrlReachable']);
         static::assertArrayHasKey('appsRequireAppUrl', $settings);
         static::assertFalse($settings['appsRequireAppUrl']);
         static::assertArrayHasKey('firstMigrationDate', $settings);
-        static::assertTrue(
-            $settings['firstMigrationDate'] === null
-            || \is_string($settings['firstMigrationDate'])
-        );
+        static::assertNull($settings['firstMigrationDate']);
         static::assertArrayHasKey('private_allowed_extensions', $settings);
         static::assertSame(['pdf', 'epub'], $settings['private_allowed_extensions']);
         static::assertArrayHasKey('private_allowed_mime_types_by_extension', $settings);
@@ -145,19 +438,21 @@ class InfoControllerTest extends TestCase
         static::assertSame(['SwagApp_premium'], $inAppPurchases['SwagApp']);
     }
 
-    public function testReturnsCurrentShopIdIfShopIdFingerprintsHaveChanged(): void
+    public function testConfigExtension(): void
     {
-        $this->shopIdProvider
-            ->expects($this->once())
-            ->method('getShopId')
-            ->willThrowException(new ShopIdChangeSuggestedException(ShopId::v2('current-shop-id'), new FingerprintComparisonResult([], [], 75)));
+        $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
+
+        $this->eventDispatcher->addListener(AdminInfoConfigEvent::class, static function (AdminInfoConfigEvent $event): void {
+            $event->addConfig('foo', 'bar');
+        });
 
         $content = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
         static::assertIsString($content);
 
         $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
-        static::assertArrayHasKey('shopId', $data);
-        static::assertSame('current-shop-id', $data['shopId']);
+        static::assertIsArray($data);
+        static::assertArrayHasKey('foo', $data);
+        static::assertSame('bar', $data['foo']);
     }
 
     #[DisabledFeatures(['WEBHOOKS_REWORK'])]
@@ -189,94 +484,117 @@ class InfoControllerTest extends TestCase
         static::assertSame(['webhook', 'async', 'low_priority'], $data['adminWorker']['transports']);
     }
 
-    public function testConfigExtension(): void
+    #[DataProvider('returnsFirstMigrationDateProvider')]
+    #[TestDox('returns first migration date as $_dataName')]
+    public function testConfigReturnsFirstMigrationDate(?string $migrationDate, mixed $expected): void
+    {
+        $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
+        $this->migrationInfo->method('getFirstMigrationDate')->willReturn($migrationDate);
+
+        $data = $this->getConfigData();
+
+        static::assertSame($expected, $data['settings']['firstMigrationDate']);
+    }
+
+    #[DisabledFeatures(['v6.8.0.0'])]
+    #[TestDox('includes queue stats worker flag when legacy feature is inactive')]
+    public function testConfigIncludesQueueStatsWorkerWhenLegacyFlagInactive(): void
     {
         $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
 
-        $this->eventDispatcher->addListener(AdminInfoConfigEvent::class, static function (AdminInfoConfigEvent $event): void {
-            $event->addConfig('foo', 'bar');
-        });
+        $data = $this->getConfigData();
 
-        $content = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'))->getContent();
-        static::assertIsString($content);
-
-        $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
-        static::assertIsArray($data);
-        static::assertArrayHasKey('foo', $data);
-        static::assertSame('bar', $data['foo']);
+        static::assertTrue($data['adminWorker']['enableQueueStatsWorker']);
     }
 
-    public function testMessageStatsPreservesFloatingPointPrecision(): void
+    #[TestDox('returns disabled message stats when stats service is not enabled')]
+    public function testMessageStatsReturnsDisabledWhenNotEnabled(): void
     {
         $this->shopIdProvider->expects($this->never())->method('getShopId');
 
         $this->statsService->method('getStats')->willReturn(
-            new MessageStatsResponseEntity(
-                true,
-                new MessageStatsEntity(1, new \DateTime(), 1.00, new MessageTypeStatsCollection())
-            )
+            new MessageStatsResponseEntity(enabled: false)
         );
+
         $content = $this->createController()->messageStats()->getContent();
         static::assertIsString($content);
 
         $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
-        static::assertIsArray($data);
-        static::assertArrayHasKey('stats', $data);
-        static::assertArrayHasKey('averageTimeInQueue', $data['stats']);
-
-        // Check that the floating point precision is preserved for zero-padded decimal values
-        static::assertSame(1.00, $data['stats']['averageTimeInQueue']);
+        static::assertFalse($data['enabled']);
+        static::assertNull($data['stats']);
     }
 
-    public function testConfigReturnsNullFirstMigrationDateWhenMigrationInfoReturnsNull(): void
+    #[TestDox('returns empty types array when no element types are registered')]
+    public function testContentSystemElementTypesReturnsEmptyWhenNoTypesRegistered(): void
     {
-        $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
 
-        $this->migrationInfo->method('getFirstMigrationDate')->willReturn(null);
+        $registry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $registry->method('all')->willReturn([]);
 
-        $response = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'));
+        $controller = $this->createController(elementTypeRegistry: $registry);
+        $response = $controller->getContentSystemElementTypes();
+
         $content = $response->getContent();
         static::assertIsString($content);
 
-        $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
-
-        static::assertArrayHasKey('settings', $data);
-        static::assertArrayHasKey('firstMigrationDate', $data['settings']);
-        static::assertNull($data['settings']['firstMigrationDate']);
+        $data = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
+        static::assertSame([], $data['types']);
     }
 
-    public function testConfigReturnsNullFirstMigrationDateWhenMigrationInfoReturnsNullAgain(): void
+    #[TestDox('encodes the folded per-type binding specification set as a JSON object when the type has none')]
+    public function testContentSystemElementTypesEncodesEmptyBindingSpecificationsAsObject(): void
     {
-        $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
 
-        $this->migrationInfo->method('getFirstMigrationDate')->willReturn(null);
+        $spec = $this->alertTypeSpecification();
 
-        $response = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'));
+        $elementTypeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $elementTypeRegistry->method('all')->willReturn(['Sw:Alert' => $spec]);
+
+        $controller = $this->createController(elementTypeRegistry: $elementTypeRegistry);
+        $response = $controller->getContentSystemElementTypes();
+
         $content = $response->getContent();
         static::assertIsString($content);
-
-        $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
-
-        static::assertArrayHasKey('settings', $data);
-        static::assertArrayHasKey('firstMigrationDate', $data['settings']);
-        static::assertNull($data['settings']['firstMigrationDate']);
+        // Assert the raw encoding: json_decode would erase the {} vs [] distinction
+        static::assertStringContainsString('"bindingSpecifications":{}', $content);
     }
 
-    public function testConfigReturnsFirstMigrationDateFromMigrationInfo(): void
+    #[TestDox('encodes the folded per-type storage schema as a JSON object when the type stores nothing')]
+    public function testContentSystemElementTypesEncodesEmptyStorageSchemaAsObject(): void
     {
-        $this->shopIdProvider->expects($this->atLeastOnce())->method('getShopId');
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
 
-        $this->migrationInfo->method('getFirstMigrationDate')->willReturn('2020-01-01T00:00:00.123+00:00');
+        $spec = $this->alertTypeSpecification();
 
-        $response = $this->createController()->config(Context::createDefaultContext(), Request::create('http://localhost'));
+        $elementTypeRegistry = static::createStub(AbstractContentSystemElementTypeRegistry::class);
+        $elementTypeRegistry->method('all')->willReturn(['Sw:Alert' => $spec]);
+
+        $controller = $this->createController(elementTypeRegistry: $elementTypeRegistry);
+        $response = $controller->getContentSystemElementTypes();
+
         $content = $response->getContent();
         static::assertIsString($content);
+        // Assert the raw encoding: json_decode would erase the {} vs [] distinction
+        static::assertStringContainsString('"storageSchema":{}', $content);
+    }
 
-        $data = json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
+    #[TestDox('encodes the folded empty style option set as a JSON object on the element types response')]
+    public function testContentSystemElementTypesEncodesEmptyStyleOptionsAsObject(): void
+    {
+        $this->shopIdProvider->expects($this->never())->method('getShopId');
 
-        static::assertArrayHasKey('settings', $data);
-        static::assertArrayHasKey('firstMigrationDate', $data['settings']);
-        static::assertSame('2020-01-01T00:00:00.123+00:00', $data['settings']['firstMigrationDate']);
+        $registry = static::createStub(AbstractContentSystemStyleOptionRegistry::class);
+        $registry->method('allResolved')->willReturn([]);
+
+        $controller = $this->createController(styleOptionRegistry: $registry);
+        $response = $controller->getContentSystemElementTypes();
+
+        $content = $response->getContent();
+        static::assertIsString($content);
+        // Assert the raw encoding: json_decode would erase the {} vs [] distinction
+        static::assertStringContainsString('"styleOptions":{}', $content);
     }
 
     public function testConfigReportsTheStatusCodeOfAFailedAppUrlCheck(): void
@@ -330,15 +648,29 @@ class InfoControllerTest extends TestCase
         static::assertTrue($data['settings']['hideUpdateModule']);
     }
 
-    #[DataProvider('aclProtectedRouteProvider')]
-    public function testRouteRequiresMessageQueueStatsReadPrivilege(string $routeName): void
-    {
+    #[TestDox('encodes an empty style option set as a JSON object, not an array')]
+    public function testContentSystemStyleOptionsEncodesEmptySetAsObject(): void    {
         $this->shopIdProvider->expects($this->never())->method('getShopId');
 
-        $route = (new AttributeRouteControllerLoader())->load(InfoController::class)->get($routeName);
+        $registry = static::createStub(AbstractContentSystemStyleOptionRegistry::class);
+        $registry->method('allResolved')->willReturn([]);
 
-        static::assertNotNull($route, \sprintf('Route "%s" is not defined on %s', $routeName, InfoController::class));
-        static::assertSame(['message_queue_stats:read'], $route->getDefault(PlatformRequest::ATTRIBUTE_ACL));
+        $controller = $this->createController(styleOptionRegistry: $registry);
+        $response = $controller->getContentSystemStyleOptions();
+
+        $content = $response->getContent();
+        static::assertIsString($content);
+        // Assert the raw encoding: json_decode would erase the {} vs [] distinction
+        static::assertStringContainsString('"styleOptions":{}', $content);
+    }
+
+    /**
+     * @return iterable<string, array{string|null, string|null}>
+     */
+    public static function returnsFirstMigrationDateProvider(): iterable
+    {
+        yield 'null when migration info returns null' => [null, null];
+        yield 'date string from migration info' => ['2020-01-01T00:00:00.123+00:00', '2020-01-01T00:00:00.123+00:00'];
     }
 
     public static function aclProtectedRouteProvider(): \Generator
@@ -368,11 +700,63 @@ class InfoControllerTest extends TestCase
         );
     }
 
+    private function bindingSpecification(string $type = 'media-gallery'): BindingSpecification
+    {
+        return new BindingSpecification('media-picker', $type, 'Media Picker', [], [], 'core');
+    }
+
+    private function alertTypeSpecification(): ContentSystemElementTypeSpecification
+    {
+        return new ContentSystemElementTypeSpecification(
+            name: 'Sw:Alert',
+            label: 'Alert',
+            description: 'Alert component',
+            icon: null,
+            category: null,
+            copilot: new CopilotSpecification('Alert summary', []),
+            properties: [],
+            slots: [],
+            source: 'core',
+        );
+    }
+
+    private function styleOption(): StyleOptionSpecification
+    {
+        return new StyleOptionSpecification(
+            'col-span',
+            new StyleOptionValueType(StyleOptionValueType::TYPE_INTEGER, null, ['min' => 1, 'max' => 12], null, null),
+            true,
+            null,
+            'core',        );
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function getConfigData(): array    {
+        $content = $this->createController()
+            ->config(Context::createDefaultContext(), Request::create('http://localhost'))
+            ->getContent();
+
+        static::assertIsString($content);
+
+        return json_decode($content, true, flags: \JSON_THROW_ON_ERROR);
+    }
+
     /**
      * @param list<string> $adminWorkerTransports
      */
-    private function createController(array $adminWorkerTransports = ['slow'], bool $hideUpdateModule = false): InfoController
-    {
+    private function createController(
+        array $adminWorkerTransports = ['slow'],
+        ?ContentSystemDataLoaderSchemaGenerator $dataLoaderSchemaGenerator = null,
+        ?AbstractContentSystemElementTypeRegistry $elementTypeRegistry = null,
+        ?AbstractContentSystemStyleOptionRegistry $styleOptionRegistry = null,
+        ?RootSourceRegistry $rootSourceRegistry = null,
+        ?AbstractContentSystemBindingSpecificationRegistry $bindingSpecificationRegistry = null,
+        ?StoredSchemaResolver $storedSchemaResolver = null,
+        ?AbstractContentSystemLayoutPresetRegistry $layoutPresetRegistry = null,
+        ?AppUrlVerifier $appUrlVerifier = null,
+    ): InfoController {
         $parameterBag = new ParameterBag([
             'contena.html_sanitizer.enabled' => true,
             'contena.filesystem.allowed_extensions' => [],
@@ -395,15 +779,24 @@ class InfoControllerTest extends TestCase
             static::createStub(BusinessEventCollector::class),
             static::createStub(IncrementGatewayRegistry::class),
             $this->migrationInfo,
-            $this->appUrlVerifier,
-            static::createStub(ActiveAppsLoader::class),
-            static::createStub(FlowActionCollector::class),
+            $appUrlVerifier ?? $this->appUrlVerifier,
+            static::createStub(ActiveAppsLoader::class),            static::createStub(FlowActionCollector::class),
             new StaticSystemConfigService(),
             static::createStub(ApiRouteInfoResolver::class),
             StaticInAppPurchaseFactory::createWithFeatures(['SwagApp' => ['SwagApp_premium']]),
             $this->shopIdProvider,
             $this->statsService,
             $this->eventDispatcher,
+            $dataLoaderSchemaGenerator ?? static::createStub(ContentSystemDataLoaderSchemaGenerator::class),
+            $elementTypeRegistry ?? static::createStub(AbstractContentSystemElementTypeRegistry::class),
+            $styleOptionRegistry ?? static::createStub(AbstractContentSystemStyleOptionRegistry::class),
+            $rootSourceRegistry ?? static::createStub(RootSourceRegistry::class),
+            $bindingSpecificationRegistry ?? static::createStub(AbstractContentSystemBindingSpecificationRegistry::class),
+            $storedSchemaResolver ?? new StoredSchemaResolver(
+                static::createStub(AbstractContentSystemBindingSpecificationRegistry::class),
+                static::createStub(DataLoaderProvider::class),
+            ),
+            $layoutPresetRegistry ?? static::createStub(AbstractContentSystemLayoutPresetRegistry::class),
             null,
             new MediaFileExtensionListProvider($this->eventDispatcher, [], ['pdf', 'epub']),
         );

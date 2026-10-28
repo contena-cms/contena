@@ -1,0 +1,242 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Core\Framework\ContentSystem\Layout\Scaffolding;
+
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeyKind;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\ConfigKeySpecification;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderConfigSerializerProvider;
+use Contena\Core\Framework\ContentSystem\Hydration\DataLoader\DataLoaderProvider;
+use Contena\Core\Framework\ContentSystem\Layout\Element\DataRequirement\DataRequirement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredElement;
+use Contena\Core\Framework\ContentSystem\Layout\Element\StoredValue;
+use Contena\Core\Framework\ContentSystem\Output\PartialRenderer;
+use Contena\Core\Framework\ContentSystem\PlaceholderValues;
+use Contena\Core\Framework\ContentSystem\RenderingMode;
+use Contena\Core\Framework\ContentSystem\RenderingSpecification;
+use Contena\Core\Framework\Log\Package;
+
+/**
+ * Brings a stored forest into the state the rendering steps require, and hands stored forests back. Its
+ * steps are ordered and internal: a caller asks for a prepared tree, never for one of the steps.
+ *
+ * The order is placeholder resolution, then the virtual-root wrap, then the partial prune, and finally the
+ * scaffolding the finishing steps read. Placeholder resolution runs in FULL mode only. The skeleton response
+ * carries a tree's structure and its style, never a property value, so resolving into values it discards is
+ * work no reader can observe.
+ *
+ * @internal
+ */
+#[Package('framework')]
+final class StoredTreePreparer
+{
+    public function __construct(
+        private readonly VirtualRootWrapper $virtualRootWrapper,
+        private readonly PartialRenderer $partialRenderer,
+        private readonly DataLoaderConfigSerializerProvider $configSerializerProvider,
+        private readonly DataLoaderProvider $dataLoaderProvider,
+    ) {
+    }
+
+    /**
+     * @param list<StoredElement> $tree
+     */
+    public function prepare(array $tree, RenderingSpecification $specification, RenderingMode $mode): TreePreparationResult
+    {
+        $tree = $this->resolveTreePlaceholders($tree, $specification, $mode);
+
+        $virtualRootWrapped = $this->virtualRootWrapper->requiresWrapping($specification, $tree);
+
+        if ($virtualRootWrapped) {
+            $tree = [$this->virtualRootWrapper->wrap($tree, $specification)];
+        }
+
+        $prePruneForest = $tree;
+
+        $extractTargetId = $this->extractTargetId($specification);
+        $tree = $this->pruneToTarget($tree, $extractTargetId);
+
+        return new TreePreparationResult(
+            $tree,
+            $prePruneForest,
+            $this->deriveScaffolding($tree, $extractTargetId, $virtualRootWrapped)
+        );
+    }
+
+    /**
+     * @param list<StoredElement> $tree
+     *
+     * @return list<StoredElement>
+     */
+    private function resolveTreePlaceholders(array $tree, RenderingSpecification $specification, RenderingMode $mode): array
+    {
+        if ($mode !== RenderingMode::FULL) {
+            return $tree;
+        }
+
+        return array_map(
+            fn (StoredElement $element): StoredElement => $this->resolvePlaceholders($element, $specification->placeholderValues),
+            $tree
+        );
+    }
+
+    /**
+     * The id a partial render extracts, or null when the request addresses the whole layout.
+     */
+    private function extractTargetId(RenderingSpecification $specification): ?string
+    {
+        $targetElementId = $specification->targetElementId;
+
+        if ($targetElementId === null || $targetElementId === '') {
+            return null;
+        }
+
+        return $targetElementId;
+    }
+
+    /**
+     * Prunes the layout tree to the target element and its dependencies when the `elementId` parameter is present.
+     *
+     * Pre-hydration tree pruning keeps context-dependent ancestors to preserve data flow; the pipeline's
+     * partial extract removes those ancestors after hydration.
+     *
+     * It runs on the stored forest, before the lowering, so the discarded subtrees never reach the render
+     * model at all.
+     *
+     * @param list<StoredElement> $elements
+     *
+     * @return list<StoredElement>
+     */
+    private function pruneToTarget(array $elements, ?string $extractTargetId): array
+    {
+        if ($extractTargetId === null) {
+            return $elements;
+        }
+
+        return $this->partialRenderer->pruneToTarget($elements, $extractTargetId);
+    }
+
+    /**
+     * Records what the finishing steps need to know about the tree these steps produced.
+     *
+     * `virtualRootSurvivedPrune` is read off the post-prune forest, because the wrap decision alone
+     * does not answer whether the virtual root is still there: a partial render addressed at an
+     * element that needs no page-level context prunes it away. Element ids are unique across roots,
+     * so pruning leaves at most one surviving root whenever a target is set and the first root
+     * decides. `$extractTargetId` is passed in already normalised — the prune ran on it.
+     *
+     * @param list<StoredElement> $elements
+     */
+    private function deriveScaffolding(array $elements, ?string $extractTargetId, bool $virtualRootWrapped): RenderScaffolding
+    {
+        $virtualRootSurvivedPrune = $virtualRootWrapped
+            && $elements !== []
+            && $this->virtualRootWrapper->isVirtualRoot($elements[0]);
+
+        return new RenderScaffolding($virtualRootSurvivedPrune, $extractTargetId);
+    }
+
+    /**
+     * Rewrites the string values of an element's own property map and recurses into its slot children.
+     *
+     * A list or map value is handed on untouched, string leaves inside it included: a placeholder is a
+     * property of the authored value, and reaching into a container would resolve tokens the authoring
+     * surface never offered to resolve.
+     */
+    private function resolvePlaceholders(StoredElement $element, PlaceholderValues $values): StoredElement
+    {
+        $properties = [];
+        foreach ($element->properties() as $key => $value) {
+            if ($value->isString()) {
+                $substituted = $this->substitute($value->asString(), $values);
+                $value = $substituted === null ? StoredValue::ofNull() : StoredValue::ofString($substituted);
+            }
+
+            $properties[$key] = $value;
+        }
+
+        $dataRequirements = [];
+        foreach ($element->dataRequirements as $key => $requirement) {
+            $dataRequirements[$key] = $this->resolveRequirementPlaceholders($requirement, $values);
+        }
+
+        $slots = [];
+        foreach ($element->slots as $slotName => $children) {
+            $slots[$slotName] = array_map(
+                fn (StoredElement $child): StoredElement => $this->resolvePlaceholders($child, $values),
+                $children
+            );
+        }
+
+        return $element->withProperties($properties)->withDataRequirements($dataRequirements)->withSlots($slots);
+    }
+
+    private function resolveRequirementPlaceholders(DataRequirement $requirement, PlaceholderValues $values): DataRequirement
+    {
+        $literalKeys = $this->literalConfigKeys($requirement->source);
+
+        if ($literalKeys === []) {
+            return $requirement;
+        }
+
+        $config = $this->configSerializerProvider->encode($requirement->source, $requirement->config);
+        $substitutedConfig = [];
+        foreach ($config as $key => $value) {
+            if (!\in_array($key, $literalKeys, true) || !\is_string($value)) {
+                continue;
+            }
+
+            $newValue = $this->substitute($value, $values);
+
+            if ($newValue === $value) {
+                continue;
+            }
+
+            $substitutedConfig[$key] = $newValue;
+        }
+
+        if ($substitutedConfig === []) {
+            return $requirement;
+        }
+
+        foreach ($substitutedConfig as $key => $value) {
+            if ($value === null) {
+                unset($config[$key], $substitutedConfig[$key]);
+            }
+        }
+
+        $newConfig = $this->configSerializerProvider->decode($requirement->source, array_merge($config, $substitutedConfig));
+
+        return new DataRequirement($requirement->key, $requirement->source, $newConfig);
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function literalConfigKeys(string $source): array
+    {
+        $specification = $this->dataLoaderProvider->get($source)->configSpecification();
+
+        return array_map(
+            static fn (ConfigKeySpecification $key): string => $key->name,
+            $specification->keysOfKind(ConfigKeyKind::Literal)
+        );
+    }
+
+    /**
+     * One pass over the declared keys, no recursion into what a substitution produced. A value that is
+     * entirely a single unresolved `{{token}}` collapses to null; an unresolved token embedded in other text
+     * stays verbatim.
+     */
+    private function substitute(string $input, PlaceholderValues $values): ?string
+    {
+        foreach ($values->all() as $key => $value) {
+            $input = str_replace('{{' . $key . '}}', (string) $value, $input);
+        }
+
+        if (preg_match('/^\{\{[^{}]+\}\}$/', $input) === 1) {
+            return null;
+        }
+
+        return $input;
+    }
+}

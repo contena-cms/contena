@@ -30,6 +30,7 @@ class Storefront extends Bundle implements ThemeInterface
 
         $loader = new PhpFileLoader($container, new FileLocator(__DIR__ . '/DependencyInjection'));
         $loader->load('services.php');
+        $loader->load('content-system.php');
         $loader->load('captcha.php');
         $loader->load('seo.php');
         $loader->load('controller.php');

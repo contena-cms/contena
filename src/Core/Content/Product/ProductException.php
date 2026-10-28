@@ -17,6 +17,7 @@ use Symfony\Component\HttpFoundation\Response;
 class ProductException extends HttpException
 {
     public const PRODUCT_INVALID_CHEAPEST_PRICE_FACADE = 'PRODUCT_INVALID_CHEAPEST_PRICE_FACADE';
+    final public const INVALID_FIELD_VALUE_TYPE = 'PRODUCT__INVALID_FIELD_VALUE_TYPE';
     public const PRODUCT_PROXY_MANIPULATION_NOT_ALLOWED_CODE = 'PRODUCT_PROXY_MANIPULATION_NOT_ALLOWED';
     public const PRODUCT_INVALID_PRICE_DEFINITION_CODE = 'PRODUCT_INVALID_PRICE_DEFINITION';
     public const PRODUCT_NOT_FOUND = 'PRODUCT_PRODUCT_NOT_FOUND';
@@ -168,4 +169,15 @@ class ProductException extends HttpException
             ['parameterName' => $name]
         );
     }
+
+    public static function invalidFieldValueType(string $fieldName, string $expectedType, string $actualType): self
+    {
+        return new self(
+            Response::HTTP_INTERNAL_SERVER_ERROR,
+            self::INVALID_FIELD_VALUE_TYPE,
+            'Field {{ fieldName }} expected {{ expectedType }}, got {{ actualType }}',
+            ['fieldName' => $fieldName, 'expectedType' => $expectedType, 'actualType' => $actualType]
+        );
+    }
+
 }

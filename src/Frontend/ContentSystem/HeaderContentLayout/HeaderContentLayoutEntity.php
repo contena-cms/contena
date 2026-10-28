@@ -1,0 +1,38 @@
+<?php declare(strict_types=1);
+
+namespace Contena\Storefront\ContentSystem\HeaderContentLayout;
+
+use Contena\Core\Framework\ContentSystem\Adapter\Entity\AbstractContentLayoutAssignmentEntity;
+use Contena\Core\Framework\Log\Package;
+use Contena\Core\System\SalesChannel\Aggregate\SalesChannelDomain\SalesChannelDomainEntity;
+
+/**
+ * @final
+ */
+#[Package('framework')]
+class HeaderContentLayoutEntity extends AbstractContentLayoutAssignmentEntity
+{
+    protected ?string $domainId = null;
+
+    protected ?SalesChannelDomainEntity $domain = null;
+
+    public function getDomainId(): ?string
+    {
+        return $this->domainId;
+    }
+
+    public function setDomainId(?string $domainId): void
+    {
+        $this->domainId = $domainId;
+    }
+
+    public function getDomain(): ?SalesChannelDomainEntity
+    {
+        return $this->domain;
+    }
+
+    public function setDomain(?SalesChannelDomainEntity $domain): void
+    {
+        $this->domain = $domain;
+    }
+}

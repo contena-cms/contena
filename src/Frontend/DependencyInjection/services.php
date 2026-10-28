@@ -2,6 +2,7 @@
 
 namespace Contena\Storefront\DependencyInjection;
 
+use Contena\Storefront\Framework\Routing\ContentSystemPreviewToolbarSubscriber;
 use Doctrine\DBAL\Connection;
 use Psr\Clock\ClockInterface;
 use Contena\Storefront\Framework\Cookie\CookieProvider;
@@ -141,4 +142,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
+
+    $services->set(ContentSystemPreviewToolbarSubscriber::class)
+        ->tag('kernel.event_subscriber');
 };

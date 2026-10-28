@@ -72,4 +72,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set(LanguageRule::class)
         ->tag('contena.rule.definition');
+
+    // Content System
+    $services->alias(Contena\Core\System\Language\SalesChannel\AbstractLanguageRoute::class, Contena\Core\System\Language\SalesChannel\LanguageRoute::class);
+
+    $services->set(Contena\Core\System\Language\ContentSystem\DataLoader\LanguageDataLoader::class)
+        ->args([
+            service(Contena\Core\System\Language\SalesChannel\AbstractLanguageRoute::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\System\Language\ContentSystem\DataLoader\LanguageLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
 };

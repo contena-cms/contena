@@ -2,6 +2,10 @@
 
 namespace Contena\Storefront\DependencyInjection;
 
+use Doctrine\DBAL\Connection;
+use Contena\Core\Framework\ContentSystem\Api\ContentPreviewPageBuilder;
+use Contena\Core\Framework\ContentSystem\Api\ContentPreviewPayloadStore;
+use Contena\Storefront\Controller\ContentSystemPreviewController;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
@@ -45,4 +49,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
 
 
+
+    $services->set(ContentSystemPreviewController::class)
+        ->public()
+        ->args([
+            service(ContentPreviewPayloadStore::class),
+            service(ContentPreviewPageBuilder::class),
+            service(Connection::class),
+        ])
+        ->call('setContainer', [service('service_container')]);
 };

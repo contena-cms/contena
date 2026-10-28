@@ -10,6 +10,7 @@ use Contena\Core\Content\Cms\DataAbstractionLayer\Field\SlotConfigField;
 use Contena\Core\Content\Flow\DataAbstractionLayer\Field\FlowTemplateConfigField;
 use Contena\Core\Content\MeasurementSystem\Field\MeasurementUnitsField;
 use Contena\Core\Content\Product\DataAbstractionLayer\CheapestPrice\CheapestPriceField;
+use Contena\Core\Framework\ContentSystem\Layout\Field\StoredElementListField;
 use Contena\Core\Framework\DataAbstractionLayer\DataAbstractionLayerException;
 use Contena\Core\Framework\DataAbstractionLayer\EntityDefinition;
 use Contena\Core\Framework\DataAbstractionLayer\EntityTranslationDefinition;
@@ -122,6 +123,8 @@ class SchemaBuilder
         FlowTemplateConfigField::class => Types::JSON,
         CheapestPriceField::class => Types::JSON,
         MeasurementUnitsField::class => Types::JSON,
+
+        StoredElementListField::class => Types::JSON,
 
         ChildCountField::class => Types::INTEGER,
         IntField::class => Types::INTEGER,

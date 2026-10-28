@@ -731,4 +731,61 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ])
         ->tag('contena.sync.fk_resolver');
+    // Content System
+    $services->set(Contena\Core\Content\Product\Aggregate\ProductContentLayout\ProductContentLayoutDefinition::class)
+        ->args([
+            service(Contena\Core\Framework\ContentSystem\Helper\ContentLayoutMetadataDeriver::class),
+        ])
+        ->tag('contena.entity.definition');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductListingDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Product\SalesChannel\Listing\ProductListingRoute::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductListingLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductConfiguratorDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Product\SalesChannel\Detail\PartialProductConfiguratorLoader::class),
+            service('sales_channel.product.repository'),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Product\SalesChannel\Detail\PartialProductConfiguratorLoader::class)
+        ->args([
+            service(Contena\Core\Content\Product\SalesChannel\Detail\ProductConfiguratorLoader::class),
+        ]);
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductConfiguratorLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductSearchDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Product\SalesChannel\Search\ProductSearchRoute::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductSearchLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductSuggestDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Product\SalesChannel\Suggest\ProductSuggestRoute::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Product\ContentSystem\DataLoader\ProductSuggestLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
+
+    $services->set(Contena\Core\Content\Product\Aggregate\ProductContentLayout\ProductSpecificationSource::class)
+        ->args([
+            service('product_content_layout.repository'),
+            service(Contena\Core\Content\Product\Aggregate\ProductContentLayout\ProductContentLayoutDefinition::class),
+            service(Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\EntityLayoutContextFactory::class),
+            service('sales_channel.product.repository'),
+        ])
+        ->tag('content_system.entity_specification_source', ['priority' => 100]);
 };

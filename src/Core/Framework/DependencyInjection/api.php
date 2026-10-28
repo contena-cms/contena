@@ -43,6 +43,13 @@ use Contena\Core\Framework\Api\Controller\FeatureFlagController;
 use Contena\Core\Framework\Api\Controller\HealthCheckController;
 use Contena\Core\Framework\Api\Controller\IndexingController;
 use Contena\Core\Framework\Api\Controller\InfoController;
+use Contena\Core\Framework\ContentSystem\Adapter\RootSourceRegistry;
+use Contena\Core\Framework\ContentSystem\Binding\Registry\ContentSystemBindingSpecificationRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Element\Style\Registry\ContentSystemStyleOptionRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Preset\Registry\ContentSystemLayoutPresetRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\Registry\ContentSystemElementTypeRegistry;
+use Contena\Core\Framework\ContentSystem\Layout\Type\StoredSchemaResolver;
+use Contena\Core\Framework\ContentSystem\Schema\ContentSystemDataLoaderSchemaGenerator;
 use Contena\Core\Framework\Api\Controller\IntegrationController;
 use Contena\Core\Framework\Api\Controller\OAuthAuthorizeController;
 use Contena\Core\Framework\Api\Controller\SyncController;
@@ -336,6 +343,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(ShopIdProvider::class),
             service(StatsService::class),
             service('event_dispatcher'),
+            service(ContentSystemDataLoaderSchemaGenerator::class),
+            service(ContentSystemElementTypeRegistry::class),
+            service(ContentSystemStyleOptionRegistry::class),
+            service(RootSourceRegistry::class),
+            service(ContentSystemBindingSpecificationRegistry::class),
+            service(StoredSchemaResolver::class),
+            service(ContentSystemLayoutPresetRegistry::class),
             service(PresignedMediaUploadService::class)->nullOnInvalid(),
             service(MediaFileExtensionListProvider::class),
         ])

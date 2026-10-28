@@ -68,4 +68,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(Connection::class),
         ])
         ->tag('contena.sync.fk_resolver');
+
+    // Content System
+    $services->alias(Contena\Core\System\Currency\SalesChannel\AbstractCurrencyRoute::class, Contena\Core\System\Currency\SalesChannel\CurrencyRoute::class);
+
+    $services->set(Contena\Core\System\Currency\ContentSystem\DataLoader\CurrencyDataLoader::class)
+        ->args([
+            service(Contena\Core\System\Currency\SalesChannel\AbstractCurrencyRoute::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\System\Currency\ContentSystem\DataLoader\CurrencyLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
 };

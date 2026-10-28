@@ -2,9 +2,12 @@
 
 namespace Contena\Tests\Unit\Storefront\Controller;
 
+use Contena\Core\Framework\ContentSystem\Output\Struct\ContentPage;
 use Contena\Core\Framework\Log\Package;
 use Contena\Core\Framework\Script\Execution\Hook;
+use Contena\Core\System\SalesChannel\SalesChannelContext;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 /**
@@ -26,6 +29,10 @@ final class StorefrontControllerRecorder
     public array $renderStorefrontParameters;
 
     public Hook $calledHook;
+
+    public ?ContentPage $contentPage = null;
+
+    public ?string $loadedContentPath = null;
 
     public string $forwardToRoute;
 
@@ -95,6 +102,21 @@ final class StorefrontControllerRecorder
     public function hook(Hook $hook): void
     {
         $this->calledHook = $hook;
+    }
+
+    public function loadContentPage(string $path, Request $request, SalesChannelContext $context): ?ContentPage
+    {
+        $this->loadedContentPath = $path;
+
+        return $this->contentPage;
+    }
+
+    /**
+     * @param array<string, mixed> $parameters
+     */
+    public function trans(string $snippet, array $parameters = []): string
+    {
+        return $snippet;
     }
 
     public function addFlash(string $type, mixed $message): void

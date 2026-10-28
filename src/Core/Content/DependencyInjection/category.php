@@ -171,4 +171,40 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->tag('contena.dal.exception_handler');
 
 
+    // Content System
+    $services->set(Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutDefinition::class)
+        ->args([
+            service(Contena\Core\Framework\ContentSystem\Helper\ContentLayoutMetadataDeriver::class),
+        ])
+        ->tag('contena.entity.definition');
+
+    $services->alias(Contena\Core\Content\Category\Service\NavigationLoaderInterface::class, Contena\Core\Content\Category\Service\NavigationLoader::class);
+
+    $services->set(Contena\Core\Content\Category\ContentSystem\DataLoader\NavigationDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Category\Service\NavigationLoaderInterface::class),
+            service(Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Category\ContentSystem\DataLoader\NavigationLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
+
+    $services->set(Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Category\Service\NavigationLoaderInterface::class),
+            service(Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\NavigationAliasResolver::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Category\ContentSystem\DataLoader\ServiceMenuLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
+
+    $services->set(Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategorySpecificationSource::class)
+        ->args([
+            service('category_content_layout.repository'),
+            service(Contena\Core\Content\Category\Aggregate\CategoryContentLayout\CategoryContentLayoutDefinition::class),
+            service(Contena\Core\Framework\ContentSystem\Adapter\FactoryHelper\EntityLayoutContextFactory::class),
+        ])
+        ->tag('content_system.entity_specification_source', ['priority' => 100]);
 };

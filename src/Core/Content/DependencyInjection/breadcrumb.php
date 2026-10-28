@@ -20,4 +20,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             service(CacheTagCollector::class),
             service(ExtensionDispatcher::class),
         ]);
+    // Content System
+    $services->set(Contena\Core\Content\Breadcrumb\ContentSystem\DataLoader\BreadcrumbDataLoader::class)
+        ->args([
+            service(Contena\Core\Content\Breadcrumb\SalesChannel\BreadcrumbRoute::class),
+        ])
+        ->tag('content_system.data_loader');
+
+    $services->set(Contena\Core\Content\Breadcrumb\ContentSystem\DataLoader\BreadcrumbLoaderConfigSerializer::class)
+        ->tag('content_system.config_serializer');
 };
